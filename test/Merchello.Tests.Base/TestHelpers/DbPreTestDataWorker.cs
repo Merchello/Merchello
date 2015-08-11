@@ -134,7 +134,7 @@ namespace Merchello.Tests.Base.TestHelpers
         public void DeleteAllEntityCollections()
         {
             var collections = ((EntityCollectionService)_serviceContext.EntityCollectionService).GetAll();
-            EntityCollectionService.Delete(collections);
+            ((EntityCollectionService)EntityCollectionService).Delete(collections);
         }
 
         public IEntityCollectionService EntityCollectionService

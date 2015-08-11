@@ -21,7 +21,7 @@
     /// <summary>
     /// Represents a CachedCustomerQuery.
     /// </summary>
-    internal class CachedCustomerQuery : CachedQueryBase<ICustomer, CustomerDisplay>, ICachedCustomerQuery
+    internal class CachedCustomerQuery : CachedCollectionQueryBase<ICustomer, CustomerDisplay>, ICachedCustomerQuery
     {
         /// <summary>
         /// The customer service.
@@ -235,28 +235,43 @@
             string sortBy = "loginName",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<ICustomer>>(collectionKey);
-
-
-            if (!attempt.Success)
-            {
-                LogHelper.Error<CachedInvoiceQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
-                return new QueryResultDisplay();
-            }
-
-            var provider = attempt.Result;
-
-            if (!provider.EnsureEntityType(EntityType.Customer))
-            {
-                var invalid =
-                    new InvalidCastException(
-                        "Attempted to query a product collection with a provider that does not handle the invoice entity type");
-                LogHelper.Error<CachedInvoiceQuery>("Invalid query operation", invalid);
-                throw invalid;
-            }
+            var provider = this.GetEntityCollectionProvider(collectionKey);
 
             return
                 this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
+        }
+
+        /// <summary>
+        /// The get not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "loginName",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return
+                this.GetQueryResultDisplay(
+                    _customerService.GetKeysNotInCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>

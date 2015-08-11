@@ -1555,7 +1555,7 @@ angular.module('merchello')
             $scope.provider = {};
             $scope.dialogData = {};
             $scope.entityCollectionProviders = [];
-            $scope.nodePath = [];
+
 
             // exposed methods
             $scope.save = save;
@@ -1563,8 +1563,6 @@ angular.module('merchello')
             function init() {
                 $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
                 $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
-                $scope.nodePath = treeService.getPath($scope.currentNode);
-                console.info($scope.nodePath);
                 loadProviders();
             }
 
@@ -1599,13 +1597,11 @@ angular.module('merchello')
                     promise.then(function() {
                         navigationService.hideNavigation();
 
-
                         var reloadNodePromise = treeService.reloadNode($scope.currentNode);
                         reloadNodePromise.then(function() {
                             var promise = treeService.loadNodeChildren({ node: $scope.currentNode });
                             promise.then(function() {
                                 notificationsService.success('New collection added.');
-
                             });
                         });
 
@@ -1649,7 +1645,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Dele
             var promise = entityCollectionResource.deleteEntityCollection($scope.dialogData.collectionKey);
             promise.then(function(){
                 navigationService.hideNavigation();
-                //navigationService.syncTree({tree: 'merchello', path: ["-1",$scope.dialogData.entityType], forceReload: true});
                 treeService.removeNode($scope.currentNode);
                 notificationsService.success('Collection deleted');
             }, function(reason) {
@@ -1676,11 +1671,12 @@ angular.module('merchello')
 
             $scope.loaded = false;
             $scope.name = '';
-            $scope.wasFormSubmitted = false;
             $scope.entityType = '';
             $scope.dialogData = {};
             $scope.entityCollectionProviders = [];
             $scope.entityCollections = [];
+            $scope.isRootNode = false;
+            $scope.nodePath = [];
 
             // exposed methods
             $scope.save = save;
@@ -1693,9 +1689,11 @@ angular.module('merchello')
                 } else {
                     loadParentCollection();
                 }
+                $scope.nodePath = treeService.getPath($scope.currentNode);
             }
 
             function loadRootLevelCollections() {
+                $scope.isRootNode = true;
                 var parentPromise = entityCollectionResource.getRootCollectionsByEntityType($scope.entityType);
                 parentPromise.then(function(collections) {
                     if (!angular.isArray(collections)) {
@@ -1719,21 +1717,30 @@ angular.module('merchello')
                 });
             }
 
+            /**
+             * @ngdoc method
+             * @name save
+             * @function
+             *
+             * @description - Saves the newly sorted nodes and updates the tree UI.
+             */
             function save() {
-                $scope.wasFormSubmitted = true;
+
+                // set the sorts here
                 for(var i = 0; i < $scope.entityCollections.length; i++) {
                     $scope.entityCollections[i].sortOrder = i;
                 }
-
+                // save updated sort orders
                 var promise = entityCollectionResource.updateSortOrders($scope.entityCollections);
                 promise.then(function() {
-                    var reloadNodePromise = treeService.reloadNode($scope.currentNode);
-                    reloadNodePromise.then(function() {
-                        var promise = treeService.loadNodeChildren({ node: $scope.currentNode });
-                        promise.then(function() {
-                            navigationService.hideNavigation();
-                            notificationsService.success('Collections sorted success.');
-                        });
+
+                    // reload the children of the parent
+                    var childPromise = treeService.loadNodeChildren({ node: $scope.currentNode });
+                    childPromise.then(function(children) {
+                        navigationService.hideNavigation();
+                        notificationsService.success('Collections sorted success.');
+                    }, function(reason) {
+                        notificationsService.error('failed to load node children ' + reason)
                     });
                 });
             }
@@ -2353,6 +2360,7 @@ angular.module('merchello')
              * Edit an address and update the associated lists.
              */
             function processAddEditAddressDialog(dialogData) {
+                console.info('Got here');
                 var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
                 if(dialogData.customerAddress.key !== '') {
                     $scope.customer.addresses =_.reject($scope.customer.addresses, function(address) {
@@ -2459,6 +2467,8 @@ angular.module('merchello')
         ['$scope',
         function($scope) {
 
+            $scope.wasFormSubmitted = false;
+
             // exposed methods
             $scope.updateProvinceList = updateProvinceList;
             $scope.toTitleCase = toTitleCase;
@@ -2480,11 +2490,13 @@ angular.module('merchello')
             }
 
             function save() {
+                $scope.wasFormSubmitted = true;
                 if($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode.$valid) {
                     if($scope.dialogData.selectedCountry.hasProvinces()) {
                         $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
                     }
                     $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                    $scope.submit($scope.dialogData);
                 }
             }
 
@@ -2580,7 +2592,6 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardC
         function init() {
             var promise = settingsResource.getMerchelloVersion();
             promise.then(function(version) {
-                console.info(version);
               $scope.merchelloVersion = version.replace(/['"]+/g, '');
                 $scope.loaded = true;
             });
@@ -5656,12 +5667,12 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                    if ($scope.product.hasVariants()) {
+                  /*  if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    }
+                    } */
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);
@@ -6097,8 +6108,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
 
 
     angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
-        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $timeout, notificationsService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $timeout, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;

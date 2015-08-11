@@ -25,7 +25,7 @@
     /// <summary>
     /// Represents a CachedProductQuery
     /// </summary>
-    internal class CachedProductQuery : CachedQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
+    internal class CachedProductQuery : CachedCollectionQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
     {
         /// <summary>
         /// The product service.
@@ -261,27 +261,43 @@
             string sortBy = "name",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<IProduct>>(collectionKey);
-
-            if (!attempt.Success)
-            {
-                LogHelper.Error<CachedProductQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
-                return new QueryResultDisplay();
-            }
-
-            var provider = attempt.Result;
-
-            if (!provider.EnsureEntityType(EntityType.Product))
-            {
-                var invalid =
-                    new InvalidCastException(
-                        "Attempted to query a product collection with a provider that does not handle the product entity type");
-                LogHelper.Error<CachedProductQuery>("Invalid query operation", invalid);
-                throw invalid;
-            }
+            var provider = this.GetEntityCollectionProvider(collectionKey);
 
             return
                 this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
+        }
+
+        /// <summary>
+        /// The get not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "name",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return
+                this.GetQueryResultDisplay(
+                    _productService.GetKeysNotInCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -821,7 +837,7 @@
         {
             return result.ToProductDisplay(GetVariantsByProduct);
         }
-
+     
 
         /// <summary>
         /// Initializes the lazy

@@ -22,7 +22,7 @@
     /// <summary>
     /// Responsible for invoice related queries - caches via lucene
     /// </summary>
-    internal class CachedInvoiceQuery : CachedQueryBase<IInvoice, InvoiceDisplay>, ICachedInvoiceQuery
+    internal class CachedInvoiceQuery : CachedCollectionQueryBase<IInvoice, InvoiceDisplay>, ICachedInvoiceQuery
     {
         /// <summary>
         /// The invoice service.
@@ -207,9 +207,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         public QueryResultDisplay Search(DateTime invoiceDateStart, DateTime invoiceDateEnd, long page, long itemsPerPage, string sortBy = "invoiceDate", SortDirection sortDirection = SortDirection.Descending, bool customerOnly = false)
-        {
-            
-
+        {            
             var query = customerOnly ? 
                 Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd && x.CustomerKey != null ):
                 Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd);
@@ -518,28 +516,43 @@
             string sortBy = "invoiceNumber",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<IInvoice>>(collectionKey);
-
-
-            if (!attempt.Success)
-            {
-                LogHelper.Error<CachedInvoiceQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
-                return new QueryResultDisplay();
-            }
-
-            var provider = attempt.Result;
-
-            if (!provider.EnsureEntityType(EntityType.Invoice))
-            {
-                var invalid =
-                    new InvalidCastException(
-                        "Attempted to query a product collection with a provider that does not handle the invoice entity type");
-                LogHelper.Error<CachedInvoiceQuery>("Invalid query operation", invalid);
-                throw invalid;
-            }
+            var provider = this.GetEntityCollectionProvider(collectionKey);
 
             return
                 this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
+        }
+
+        /// <summary>
+        /// The get not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "invoiceNumber",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return
+                this.GetQueryResultDisplay(
+                    _invoiceService.GetKeysNotInCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>

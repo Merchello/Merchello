@@ -25,6 +25,11 @@
         #region Fields
 
         /// <summary>
+        /// The valid sort fields.
+        /// </summary>
+        private static readonly string[] ValidSortFields = { "name", "sortOrder" };
+
+        /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
@@ -38,13 +43,6 @@
         /// The repository factory.
         /// </summary>
         private readonly RepositoryFactory _repositoryFactory;
-
-
-        /// <summary>
-        /// The valid sort fields.
-        /// </summary>
-        private static readonly string[] ValidSortFields = { "name", "sortOrder" };
-
 
         #endregion
 
@@ -254,7 +252,9 @@
                 return;
             }
 
-            Delete(entityCollection.ChildCollections());
+            DeleteAllChildCollections(entityCollection);
+
+            UpdateSiblingSortOrders(entityCollection);
 
             using (new WriteLock(Locker))
             {
@@ -267,46 +267,7 @@
             }
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IEntityCollection>(entityCollection), this);
-        }
-
-        /// <summary>
-        /// Deletes a collection of entity collections.
-        /// </summary>
-        /// <param name="entityCollections">
-        /// The entity collections.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// Optional boolean indicating whether or not to raise events.
-        /// </param>
-        public void Delete(IEnumerable<IEntityCollection> entityCollections, bool raiseEvents = true)
-        {
-            var collectionsArray = entityCollections as IEntityCollection[] ?? entityCollections.ToArray();
-            if (!collectionsArray.Any()) return;
-            if (raiseEvents)
-            Deleting.RaiseEvent(new DeleteEventArgs<IEntityCollection>(collectionsArray), this);
-
-            foreach (var collection in collectionsArray)
-            {
-                this.DeleteAllChildCollections(collection);
-            }
-
-            using (new WriteLock(Locker))
-            {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
-                {
-                    foreach (var collection in collectionsArray)
-                    {
-                        repository.Delete(collection);
-                    }
-
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents)
-            Deleted.RaiseEvent(new DeleteEventArgs<IEntityCollection>(collectionsArray), this);
-        }
+        }        
 
         /// <summary>
         /// The get by key.
@@ -493,7 +454,7 @@
             using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
-                return repository.GetPage(page, itemsPerPage, query, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -527,6 +488,45 @@
         public bool HasChildEntityCollections(Guid collectionKey)
         {
             return this.ChildEntityCollectionCount(collectionKey) > 0;
+        }
+
+        /// <summary>
+        /// Deletes a collection of entity collections.
+        /// </summary>
+        /// <param name="entityCollections">
+        /// The entity collections.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
+        internal void Delete(IEnumerable<IEntityCollection> entityCollections, bool raiseEvents = true)
+        {
+            var collectionsArray = entityCollections as IEntityCollection[] ?? entityCollections.ToArray();
+            if (!collectionsArray.Any()) return;
+            if (raiseEvents)
+                Deleting.RaiseEvent(new DeleteEventArgs<IEntityCollection>(collectionsArray), this);
+
+            foreach (var collection in collectionsArray)
+            {
+                this.DeleteAllChildCollections(collection);
+            }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = _uowProvider.GetUnitOfWork();
+                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                {
+                    foreach (var collection in collectionsArray)
+                    {
+                        repository.Delete(collection);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents)
+                Deleted.RaiseEvent(new DeleteEventArgs<IEntityCollection>(collectionsArray), this);
         }
 
         /// <summary>
@@ -662,7 +662,7 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private string ValidateSortByField(string sortBy)
+        private static string ValidateSortByField(string sortBy)
         {
             return ValidSortFields.Contains(sortBy.ToLowerInvariant()) ? sortBy : "name";
         }
@@ -678,6 +678,28 @@
             if (!this.HasChildEntityCollections(collection.Key)) return;
 
             Delete(collection.ChildCollections());
+        }
+
+        /// <summary>
+        /// Updates sibling sort orders for deletions.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        private void UpdateSiblingSortOrders(IEntityCollection collection)
+        {
+            var siblings = collection.ParentKey == null
+                               ? this.GetRootLevelEntityCollections(collection.EntityType)
+                               : this.GetChildren(collection.ParentKey.Value);
+
+            var updates = siblings.Where(x => x.SortOrder > collection.SortOrder).ToArray();
+            
+            foreach (var update in updates)
+            {
+                ((EntityCollection)update).SortOrder -= 1;
+            }
+
+            Save(updates);
         }
     }
 }
