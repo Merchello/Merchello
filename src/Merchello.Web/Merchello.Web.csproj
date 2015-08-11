@@ -333,6 +333,7 @@
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
     <Compile Include="Reporting\ReportController.cs" />
     <Compile Include="Reporting\ReportApiControllerResolver.cs" />
+    <Compile Include="Search\CachedCollectionQueryBase.cs" />
     <Compile Include="Search\CachedCustomerQuery.cs" />
     <Compile Include="Search\CachedOrderQuery.cs" />
     <Compile Include="Search\CachedProductQuery.cs" />

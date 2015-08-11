@@ -80,6 +80,34 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending);
+            
+        /// <summary>
         /// Gets entity from collection.
         /// </summary>
         /// <param name="collectionKey">

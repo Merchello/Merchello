@@ -2360,6 +2360,7 @@ angular.module('merchello')
              * Edit an address and update the associated lists.
              */
             function processAddEditAddressDialog(dialogData) {
+                console.info('Got here');
                 var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
                 if(dialogData.customerAddress.key !== '') {
                     $scope.customer.addresses =_.reject($scope.customer.addresses, function(address) {
@@ -2466,6 +2467,8 @@ angular.module('merchello')
         ['$scope',
         function($scope) {
 
+            $scope.wasFormSubmitted = false;
+
             // exposed methods
             $scope.updateProvinceList = updateProvinceList;
             $scope.toTitleCase = toTitleCase;
@@ -2487,11 +2490,13 @@ angular.module('merchello')
             }
 
             function save() {
+                $scope.wasFormSubmitted = true;
                 if($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode.$valid) {
                     if($scope.dialogData.selectedCountry.hasProvinces()) {
                         $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
                     }
                     $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                    $scope.submit($scope.dialogData);
                 }
             }
 
@@ -5662,12 +5667,12 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                    if ($scope.product.hasVariants()) {
+                  /*  if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    }
+                    } */
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);
@@ -6103,8 +6108,8 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
 
 
     angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
-        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $timeout, notificationsService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $timeout, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
