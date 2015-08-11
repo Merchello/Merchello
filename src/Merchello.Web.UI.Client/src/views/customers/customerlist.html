@@ -77,7 +77,7 @@
                         <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.loginName}}</a></td>
                         <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
                         <td><!--customer-location address="customer.getPrimaryLocation()"></customer-location--></td>
-                        <td><localize key="merchelloGeneral_moneySymbol" />{{customer.getLastInvoice().total}}</td>
+                        <td>{{ customer.getLastInvoice().total | currency : getCurrencySymbol(customer.getLastInvoice()) }}</td>
                     </tr>
                     </tbody>
                 </table>

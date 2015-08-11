@@ -18,7 +18,7 @@ angular.module('merchello')
             $scope.provider = {};
             $scope.dialogData = {};
             $scope.entityCollectionProviders = [];
-            $scope.nodePath = [];
+
 
             // exposed methods
             $scope.save = save;
@@ -26,8 +26,6 @@ angular.module('merchello')
             function init() {
                 $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
                 $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
-                $scope.nodePath = treeService.getPath($scope.currentNode);
-                console.info($scope.nodePath);
                 loadProviders();
             }
 
@@ -62,13 +60,11 @@ angular.module('merchello')
                     promise.then(function() {
                         navigationService.hideNavigation();
 
-
                         var reloadNodePromise = treeService.reloadNode($scope.currentNode);
                         reloadNodePromise.then(function() {
                             var promise = treeService.loadNodeChildren({ node: $scope.currentNode });
                             promise.then(function() {
                                 notificationsService.success('New collection added.');
-
                             });
                         });
 

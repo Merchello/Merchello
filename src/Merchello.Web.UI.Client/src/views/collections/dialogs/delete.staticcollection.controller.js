@@ -30,7 +30,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Dele
             var promise = entityCollectionResource.deleteEntityCollection($scope.dialogData.collectionKey);
             promise.then(function(){
                 navigationService.hideNavigation();
-                //navigationService.syncTree({tree: 'merchello', path: ["-1",$scope.dialogData.entityType], forceReload: true});
                 treeService.removeNode($scope.currentNode);
                 notificationsService.success('Collection deleted');
             }, function(reason) {

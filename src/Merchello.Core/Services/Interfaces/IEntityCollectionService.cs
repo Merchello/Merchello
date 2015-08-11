@@ -136,16 +136,19 @@
         /// </param>
         void Delete(IEntityCollection entityCollection, bool raiseEvents = true);
 
-        /// <summary>
-        /// Deletes a collection of entity collections.
-        /// </summary>
-        /// <param name="entityCollections">
-        /// The entity collections.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// Optional boolean indicating whether or not to raise events.
-        /// </param>
-        void Delete(IEnumerable<IEntityCollection> entityCollections, bool raiseEvents = true);
+        ///// <summary>
+        ///// Deletes a collection of entity collections.
+        ///// </summary>
+        ///// <param name="entityCollections">
+        ///// The entity collections.
+        ///// </param>
+        ///// <param name="raiseEvents">
+        ///// Optional boolean indicating whether or not to raise events.
+        ///// </param>
+        ///// <remarks>
+        ///// This has to be internal due to resetting of sort orders
+        ///// </remarks>
+        //void Delete(IEnumerable<IEntityCollection> entityCollections, bool raiseEvents = true);
 
         /// <summary>
         /// The get by key.
