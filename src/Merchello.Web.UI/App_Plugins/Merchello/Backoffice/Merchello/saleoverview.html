@@ -7,8 +7,14 @@
                 </div>
             </div>
             <div class="span5">
+
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <button type="button" class="btn btn-danger pull-right" data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete" data-ng-click="openDeleteInvoiceDialog()"><localize key="merchelloButtons_delete" /></button>
+                    <div class="btn-group" >
+                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
+                        <ul class="dropdown-menu merchello-action-menu">
+                            <li data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete"><a data-ng-click="openDeleteInvoiceDialog()"><localize key="general_delete" /></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <merchello-tabs invoice="invoice" tabs="tabs"></merchello-tabs>
