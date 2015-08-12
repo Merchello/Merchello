@@ -43,6 +43,7 @@ angular.module('merchello')
                     } else {
                         $scope.entityCollections = entityCollectionDisplayBuilder.transform(collections);
                     }
+                    console.info(treeService._getTreeCache());
                     $scope.loaded = true;
                 });
             }
@@ -55,6 +56,7 @@ angular.module('merchello')
                     } else {
                         $scope.entityCollections = entityCollectionDisplayBuilder.transform(collections);
                     }
+                    console.info(treeService._getTreeCache());
                     $scope.loaded = true;
                 });
             }
@@ -77,10 +79,16 @@ angular.module('merchello')
                 promise.then(function() {
 
                     // reload the children of the parent
+
                     var childPromise = treeService.loadNodeChildren({ node: $scope.currentNode });
                     childPromise.then(function(children) {
-                        navigationService.hideNavigation();
-                        notificationsService.success('Collections sorted success.');
+                        var reloadPromise = treeService.reloadNode($scope.currentNode);
+                        reloadPromise.then(function() {
+                            console.info(treeService._getTreeCache());
+                            navigationService.hideNavigation();
+                            notificationsService.success('Collections sorted success.');
+                        });
+
                     }, function(reason) {
                         notificationsService.error('failed to load node children ' + reason)
                     });

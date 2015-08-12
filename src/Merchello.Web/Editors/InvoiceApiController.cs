@@ -115,8 +115,9 @@
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
             var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
 
-            var isTermSearch = term != null && !String.IsNullOrEmpty(term.Value);
-            var isDateSearch = invoiceDateStart != null && !String.IsNullOrEmpty(invoiceDateStart.Value);
+            var isTermSearch = term != null && !string.IsNullOrEmpty(term.Value);
+
+            var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value);
 
             var startDate = DateTime.MinValue;
             var endDate = DateTime.MaxValue;
@@ -159,19 +160,20 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            else if(isTermSearch)
+            
+            if (isTermSearch)
             {
-                return _merchello.Query.Invoice.Search(
+                return this._merchello.Query.Invoice.Search(
                     term.Value,
                     query.CurrentPage + 1,
                     query.ItemsPerPage,
                     query.SortBy,
                     query.SortDirection);
             }
-            else if (isDateSearch)
+            
+            if (isDateSearch)
             {
-
-                return _merchello.Query.Invoice.Search(
+                return this._merchello.Query.Invoice.Search(
                     startDate,
                     endDate,
                     query.CurrentPage + 1,
@@ -179,15 +181,13 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            else
-            {
-                return _merchello.Query.Invoice.Search(
-                    query.CurrentPage + 1,
-                    query.ItemsPerPage,
-                    query.SortBy,
-                    query.SortDirection);
-            }
-        }
+            
+            return this._merchello.Query.Invoice.Search(
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
+        }    
 
         /// <summary>
         /// Gets a collection of invoices associated with a customer.

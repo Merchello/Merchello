@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Web.Search
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using Core.Persistence.Querying;
     using Models.ContentEditing;
@@ -10,7 +9,7 @@
     /// <summary>
     /// Defines the CachedInvoiceQuery.
     /// </summary>
-    public interface ICachedInvoiceQuery
+    public interface ICachedInvoiceQuery : ICachedCollectionQuery
     {
         /// <summary>
         /// Gets an <see cref="InvoiceDisplay"/> by it's key
@@ -323,35 +322,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay SearchByCustomer(Guid customerKey, Guid invoiceStatusKey, long page, long itemsPerPage, string sortBy = "invoiceNumber", SortDirection sortDirection = SortDirection.Descending);
-
-
-        /// <summary>
-        /// Gets products from a collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        QueryResultDisplay GetFromCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "invoiceNumber",
-            SortDirection sortDirection = SortDirection.Ascending);
+        
 
         /// <summary>
         /// Gets the collection of all customer invoices
@@ -363,7 +334,5 @@
         /// The collection of customer invoices.
         /// </returns>
         IEnumerable<InvoiceDisplay> GetByCustomerKey(Guid customerKey);
-
-
     }
 }

@@ -158,14 +158,14 @@
             // Products
             if (id == "products")
             {
-                menu.Items.Add<NewEntityAction>(
+                menu.Items.Add<ManageEntitiesAction>(
                     _textService.Localize(string.Format("merchelloVariant/newProduct"), _culture),
                     false).NavigateToRoute("merchello/merchello/productedit/create");
             }
 
             if (id == "customers")
             {
-                menu.Items.Add<NewEntityAction>(
+                menu.Items.Add<ManageEntitiesAction>(
                     _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture), false)
                     .LaunchDialogView(_dialogsPath + "customer.newcustomer.html", _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture));
             }
@@ -173,11 +173,11 @@
             if (id == "marketing")
             {
                 menu.Items.Add<NewOfferSettingsAction>(
-                    _textService.Localize(string.Format("merchelloMarketing/newOffer"), _culture),
+                    _textService.Localize("merchelloMarketing/newOffer", _culture),
                     false)
                     .LaunchDialogView(
                         _dialogsPath + "marketing.newofferproviderselection.html",
-                        _textService.Localize(string.Format("merchelloMarketing/newOffer"), _culture));
+                        _textService.Localize("merchelloMarketing/newOffer", _culture));
             }
 
             //// child nodes will have an id separated with a hypen and key
@@ -186,14 +186,29 @@
 
             if (_collectiontrees.Contains(splitId.CollectionId))
             {
-
                 menu.Items.Add<NewCollectionAction>(
-                    _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture),
-                    false,
+                    _textService.Localize("merchelloCollections/newCollection", _culture),
+                    _collectiontrees.Contains(id),
                     new Dictionary<string, object>()
                         {
                             { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/newCollection"), _culture));                
+                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize("merchelloCollections/newCollection", _culture));
+
+                menu.Items.Add<ManageEntitiesAction>(
+                    _textService.Localize("merchelloCollections/manageEntities", _culture),
+                    false,
+                    new Dictionary<string, object>()
+                        {
+                            { "dialogData", new { entityType = splitId.CollectionId, collectionKey = splitId.CollectionKey } }
+                        }).LaunchDialogView(_dialogsPath + "addentity.staticcollection.html", _textService.Localize("merchelloCollections/manageEntities", _culture));
+
+                menu.Items.Add<SortCollectionAction>(
+                    _textService.Localize("actions/sort", _culture),
+                    false,
+                    new Dictionary<string, object>()
+                        {
+                             { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
+                        }).LaunchDialogView(_dialogsPath + "sort.staticcollection.html", _textService.Localize("merchelloCollections/sortCollections", _culture));                
 
                 if (splitId.IsChildCollection)
                 {
@@ -206,15 +221,7 @@
                                 { "dialogData", new { entityType = splitId.CollectionId, collectionKey = splitId.CollectionKey } }
                             })
                         .LaunchDialogView(_dialogsPath + "delete.staticcollection.html", _textService.Localize("actions/delete", _culture));
-                }
-
-                menu.Items.Add<SortCollectionAction>(
-                    _textService.Localize("actions/sort", _culture),
-                    true,
-                    new Dictionary<string, object>()
-                        {
-                             { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "sort.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/sortCollections"), _culture));                
+                }                
             }
 
             menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), id != "gateways");

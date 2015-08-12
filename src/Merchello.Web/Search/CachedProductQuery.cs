@@ -13,19 +13,16 @@
     using global::Examine.Providers;
 
     using Merchello.Core.Chains;
-    using Merchello.Core.EntityCollections;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
 
     using Models.ContentEditing;
     using Models.Querying;
 
-    using Umbraco.Core.Logging;
-
     /// <summary>
     /// Represents a CachedProductQuery
     /// </summary>
-    internal class CachedProductQuery : CachedCollectionQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
+    internal class CachedProductQuery : CachedQueryableCollectionQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
     {
         /// <summary>
         /// The product service.
@@ -232,74 +229,7 @@
         {
             return GetQueryResultDisplay(_productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
         }
-
-        /// <summary>
-        /// The get products from collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        public QueryResultDisplay GetFromCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            var provider = this.GetEntityCollectionProvider(collectionKey);
-
-            return
-                this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
-        }
-
-        /// <summary>
-        /// The get not in collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        public QueryResultDisplay GetNotInCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            return
-                this.GetQueryResultDisplay(
-                    _productService.GetKeysNotInCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection));
-        }
-
+        
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names
         /// </summary>

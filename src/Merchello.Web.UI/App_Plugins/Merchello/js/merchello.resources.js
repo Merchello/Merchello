@@ -225,6 +225,24 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to add an entity collection');
                 },
+                getCollectionEntities : function(query) {
+                    var url = baseUrl + 'PostGetCollectionEntities';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            query
+                        ),
+                        'Failed to get colleciton entities');
+                },
+                getEntitiesNotInCollection: function(query) {
+                    var url = baseUrl + 'PostGetEntitiesNotInCollection';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            query
+                        ),
+                        'Failed to get colleciton entities');
+                },
                 updateSortOrders : function(entityCollections) {
                     var url = baseUrl + 'PutUpdateSortOrders';
                     return umbRequestHelper.resourcePromise(
@@ -1105,7 +1123,6 @@ angular.module('merchello.resources')
                             query
                         ),
                         'Failed to search products');
-
                 }
             };
     }]);

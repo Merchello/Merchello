@@ -98,7 +98,7 @@
         bool ExistsInCollection(Guid entityKey, Guid collectionKey);
 
         /// <summary>
-        /// The get invoices from collection.
+        /// Gets an entity from a collection.
         /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
@@ -120,6 +120,38 @@
         /// </returns>
         Page<T> GetFromCollection(
             Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// Gets an entity from a collection filtered by a search term
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<T> GetFromCollection(
+            Guid collectionKey,
+            string searchTerm,
             long page,
             long itemsPerPage,
             string sortBy = "",

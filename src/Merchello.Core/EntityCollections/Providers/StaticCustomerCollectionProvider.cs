@@ -13,7 +13,7 @@
     /// The static customer collection provider.
     /// </summary>
     [EntityCollectionProvider("A389D41B-C8F1-4289-BD2E-5FFF01DBBDB1", "1607D643-E5E8-4A93-9393-651F83B5F1A9", "Static Customer Collection", "A static customer collection that could be used for categorizing or grouping sales", false)]
-    internal sealed class StaticCustomerCollectionProvider : CachedEntityCollectionProviderBase<ICustomer>
+    internal sealed class StaticCustomerCollectionProvider : CachedQueryableEntityCollectionProviderBase<ICustomer>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StaticCustomerCollectionProvider"/> class.
@@ -102,6 +102,116 @@
                     itemsPerPage,
                     sortBy,
                     sortDirection);
+        }
+
+        /// <summary>
+        /// Get paged entity keys not in collection.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return ((CustomerService)this.MerchelloContext.Services.CustomerService).GetKeysNotInCollection(
+                    this.CollectionKey,
+                    page,
+                    itemsPerPage,
+                    sortBy,
+                    sortDirection);
+        }
+
+        /// <summary>
+        /// Gets get paged entity keys included in the collection
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        protected override Page<Guid> PerformGetPagedEntityKeys(
+            Dictionary<string, object> args,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            if (!args.ContainsKey("searchTerm")) return new Page<Guid>();
+
+            return ((CustomerService)this.MerchelloContext.Services.CustomerService).GetKeysFromCollection(
+            this.CollectionKey,
+            args["searchTerm"].ToString(),
+            page,
+            itemsPerPage,
+            sortBy,
+            sortDirection);
+        }        
+
+        /// <summary>
+        /// Get paged entity keys not in collection.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
+            Dictionary<string, object> args,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            if (!args.ContainsKey("searchTerm")) return new Page<Guid>();
+
+            return ((CustomerService)this.MerchelloContext.Services.CustomerService).GetKeysNotInCollection(
+            this.CollectionKey,
+            args["searchTerm"].ToString(),
+            page,
+            itemsPerPage,
+            sortBy,
+            sortDirection);
         }
     }
 }
