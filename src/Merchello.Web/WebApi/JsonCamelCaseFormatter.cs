@@ -1,38 +1,50 @@
 ﻿namespace Merchello.Web.WebApi
 {
-    using System;
-    using System.Linq;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Net.Http;
     using System.Net.Http.Formatting;
-    using System.Web.Http.Controllers;
+    using System.Web.Http.Filters;
+
     using Newtonsoft.Json.Serialization;
 
     /// <summary>
     /// Applying this attribute to any WebAPI controller will ensure that it only contains one JSON formatter compatible with the angular JSON vulnerability prevention.
     /// </summary>
-    public class JsonCamelCaseFormatter : Attribute, IControllerConfiguration
+    /// <remarks>
+    /// http://issues.merchello.com/youtrack/issue/M-247
+    /// </remarks>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1627:DocumentationTextMustNotBeEmpty", Justification = "Reviewed. Suppression is OK here.")]
+    public class JsonCamelCaseFormatter : ActionFilterAttribute 
     {
         /// <summary>
-        /// The initialize.
+        /// The _camel casing formatter.
         /// </summary>
-        /// <param name="controllerSettings">
-        /// The controller settings.
-        /// </param>
-        /// <param name="controllerDescriptor">
-        /// The controller descriptor.
-        /// </param>
-        public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
+        private static readonly JsonMediaTypeFormatter CamelCasingFormatter = new JsonMediaTypeFormatter();
+
+        /// <summary>
+        /// Initializes static members of the <see cref="JsonCamelCaseFormatter"/> class.
+        /// </summary>
+        static JsonCamelCaseFormatter()
         {
-            ////http://issues.merchello.com/youtrack/issue/M-247
-         
-            var formatter = controllerSettings.Formatters.OfType<JsonMediaTypeFormatter>().Single();
-            controllerSettings.Formatters.Remove(formatter);
+            CamelCasingFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        }
 
-            formatter = new JsonMediaTypeFormatter
+        /// <summary>
+        /// The on action executed.
+        /// </summary>
+        /// <param name="httpActionExecutedContext">
+        /// The http action executed context.
+        /// </param>
+        public override void OnActionExecuted(HttpActionExecutedContext httpActionExecutedContext)
+        {
+            var objectContent = httpActionExecutedContext.Response.Content as ObjectContent;
+            if (objectContent != null)
             {
-                SerializerSettings = { ContractResolver = new CamelCasePropertyNamesContractResolver() }
-            };
-
-            controllerSettings.Formatters.Add(formatter);            
+                if (objectContent.Formatter is JsonMediaTypeFormatter)
+                {
+                    httpActionExecutedContext.Response.Content = new ObjectContent(objectContent.ObjectType, objectContent.Value, CamelCasingFormatter);
+                }
+            }
         }
     }
 }
