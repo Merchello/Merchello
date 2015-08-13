@@ -1041,26 +1041,14 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="yourHistory" version="7.0">Your recent history</key>
     <key alias="sessionExpires" version="7.0">Session expires in</key>
   </area>
-  <area alias="merchelloButtons">
-    <key alias="void">Void</key>
-    <key alias="refund">Refund</key>
-    <key alias="delete">Delete</key>
-    <key alias="select">Select</key>
-    <key alias="remove">Remove</key>
-  </area>
-  <area alias="merchelloHeadline">
-    <key alias="catalog">Catalog</key>
-  </area>
-    <area alias="merchelloValidation">
-    <key alias="nameFieldRequired">The name field is required</key>
-  </area>
-    <area alias="merchelloTableCaptions">
-    <key alias="name">Name</key>
-    <key alias="alias">Alias</key>
-    <key alias="startDate">Start Date</key>
-    <key alias="endDate">End Date</key>
-    <key alias="active">Active</key>
-    <key alias="sortOrder">Sort Order</key>
+  <area alias="merchelloTree">
+    <key alias="products">Products</key>
+    <key alias="sales">Sales</key>
+    <key alias="customers">Customers</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Collections</key>
+    <key alias="reports">Reports</key>
+    <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
@@ -1074,40 +1062,64 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="product">Product Collections</key>
     <key alias="customer">Customer Collections</key>
     <key alias="invoice">Invoice Collections</key>
-    <key alias="emptyCollection">This collection is empty.</key>
+    <key alias="emptyCollection">The collection is empty.</key>
     <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
+  </area>
+  <area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+    <key alias="delete">Delete</key>
+    <key alias="select">Select</key>
+    <key alias="remove">Remove</key>
+  </area>
+  <area alias="merchelloHeadline">
+    <key alias="catalog">Catalog</key>
+  </area>
+  <area alias="merchelloValidation">
+    <key alias="nameFieldRequired">The name field is required</key>
+  </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Name</key>
+    <key alias="alias">Alias</key>
+    <key alias="startDate">Start Date</key>
+    <key alias="endDate">End Date</key>
+    <key alias="active">Active</key>
+    <key alias="sortOrder">Sort Order</key>
+  </area>
+  <area alias="merchelloProducts">
+    <key alias="emptyProductCollection">There are currently no products in this collection</key>
+  </area>
+  <area alias="merchelloSales">
+    <key alias="noSales">
+      <![CDATA[
+        <h5>You Have No Sales Yet</h5>
+        <p>But you will soon!</p>
+      ]]>
+    </key>
+    <key alias="emptySalesCollection">There are currently no sales in this collection</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>
   </area>
-  <area alias="merchelloTree">
-    <key alias="products">Products</key>
-    <key alias="sales">Sales</key>
-    <key alias="customers">Customers</key>
-    <key alias="marketing">Marketing</key>
-    <key alias="collections">Collections</key>
-    <key alias="reports">Reports</key>
-    <key alias="gateways">Gateway Providers</key>
-  </area>
-    <area alias="merchelloMarketing">
-      <key alias="currentOffers">Current Offers</key>
-      <key alias="offerCode">Offer Code</key>
-      <key alias="newOffer">New Offer</key>
-      <key alias="noOffer">No current offers</key>
-      <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
-      <key alias="offerInfo">Offer Settings</key>
-      <key alias="configOffer">Configure this offer</key>
-      <key alias="offerType">Type of Offer</key>
-      <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
+  <area alias="merchelloMarketing">
+    <key alias="currentOffers">Current Offers</key>
+    <key alias="offerCode">Offer Code</key>
+    <key alias="newOffer">New Offer</key>
+    <key alias="noOffer">No current offers</key>
+    <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
+    <key alias="offerInfo">Offer Settings</key>
+    <key alias="configOffer">Configure this offer</key>
+    <key alias="offerType">Type of Offer</key>
     <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
-      <key alias="offerValidDates">Offer Valid Dates</key>
-      <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
-      <key alias="offerNeverExpires">Does not expire.</key>
-      <key alias="offerConstraintsInfo">Constraints</key>
-      <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
-      <key alias="offerRewardsInfo">Rewards</key>
-      <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
-    </area>
+    <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
+    <key alias="offerNeverExpires">Does not expire.</key>
+    <key alias="offerValidDates">Offer Valid Dates</key>
+    <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
+    <key alias="offerConstraintsInfo">Constraints</key>
+    <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
+    <key alias="offerRewardsInfo">Rewards</key>
+    <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+  </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Product</key>
@@ -1170,7 +1182,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="orderNumber">Order #</key>
     <key alias="paymentStatus">Payment Status</key>
     <key alias="fulfillmentStatus">Fulfillment Status</key>
-    <key alias="lineItems"> Line Items</key>
+    <key alias="lineItems">Line Items</key>
     <key alias="orderName">[Order Name]</key>
     <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
@@ -1192,6 +1204,10 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="processedBy">Processed by</key>
     <key alias="refundMethod">Refund method</key>
     <key alias="resetFilters">Reset Filters</key>
+    <key alias="archiveSales">Archive Sales</key>
+    <key alias="unarchiveSales">Unarchive Sales</key>
+    <key alias="noSalesYet">You have no sales yet</key>
+    <key alias="butSoonYouWill">but soon you will!</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -1302,7 +1318,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="globalShippable">All items are shippable</key>
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
-    <key alias="globalTaxationApplication">Taxes should be applied to</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
   </area>
 
   <area alias="merchelloShippingCountry">
@@ -1365,7 +1381,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="notificationSettingsHelper" >Set who to send your notification to and when</key>
     <key alias="description" >Description</key>
     <key alias="attachedEvent" >Attached Event</key>
-    <key alas="resourceType"></key>
+    <key alias="resourceType"></key>
     <key alias="eventAlias" >Event Alias:</key>
     <key alias="sendTo" ><![CDATA[Send To <small>(i.e. orders@yourdomain.com)</small>]]></key>
     <key alias="replyTo" ><![CDATA[Reply To <small>(i.e. reply@yourdomain.com)</small>]]></key>
@@ -1473,6 +1489,6 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
     <key alias="orderCreated">Order %0% was created</key>
     <key alias="shipmentCreated">Shipment was created with %0% line items</key>
-    <key alas="shipmentStatusChanged">Shipment status was changed to %0%</key>
+    <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
   </area>
 </language>

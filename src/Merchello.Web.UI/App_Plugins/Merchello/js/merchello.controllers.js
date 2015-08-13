@@ -2190,14 +2190,14 @@ angular.module('merchello')
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'queryDisplayBuilder',
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'entityCollectionResource', 'queryDisplayBuilder',
             'queryResultDisplayBuilder', 'customerDisplayBuilder',
-        function($scope, dialogService, notificationsService, merchelloTabsFactory, dialogDataFactory, customerResource,
+        function($scope, $routeParams, dialogService, notificationsService, settingsResource, merchelloTabsFactory, dialogDataFactory, customerResource, entityCollectionResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, customerDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
-
+            $scope.collectionKey = '';
             $scope.currentPage = 0;
             $scope.customers = [];
             $scope.filterText = '';
@@ -2211,7 +2211,7 @@ angular.module('merchello')
                 },
                 bulkActionDropdown: false
             };
-
+            $scope.currencySymbol = '';
 
             // exposed methods
             $scope.loadCustomers = loadCustomers;
@@ -2221,8 +2221,11 @@ angular.module('merchello')
             $scope.limitChanged = limitChanged;
             $scope.changePage = changePage;
             $scope.changeSortOrder = changeSortOrder;
+            $scope.getCurrencySymbol = getCurrencySymbol;
 
             var maxPages = 0;
+            var globalCurrency = '';
+            var allCurrencies = [];
 
             /**
              * @ngdoc method
@@ -2233,10 +2236,31 @@ angular.module('merchello')
              * initialized when the scope loads.
              */
             function init() {
-                loadCustomers($scope.filterText);
+                if($routeParams.id !== 'manage') {
+                    $scope.collectionKey = $routeParams.id;
+                }
+                loadSettings();
                 $scope.tabs = merchelloTabsFactory.createCustomerListTabs();
                 $scope.tabs.setActive('customerlist');
                 $scope.loaded = true;
+            }
+
+            function loadSettings() {
+                // currency matching
+                var currenciesPromise = settingsResource.getAllCurrencies();
+                currenciesPromise.then(function(currencies) {
+                    allCurrencies = currencies;
+                    // default currency
+                    var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                    currencySymbolPromise.then(function (currencySymbol) {
+                        globalCurrency = currencySymbol;
+                        loadCustomers($scope.filterText);
+                    }, function (reason) {
+                        notificationService.error('Failed to load the currency symbol', reason.message);
+                    });
+                }, function(reason) {
+                    notificationService.error('Failed to load all currencies', reason.message);
+                });
             }
 
             /**
@@ -2260,14 +2284,24 @@ angular.module('merchello')
                 }
                 query.addFilterTermParam(filterText);
 
-                var promiseAllCustomers = customerResource.searchCustomers(query);
-                promiseAllCustomers.then(function (customersResponse) {
+                var promise;
+                if ($scope.collectionKey !== '') {
+                    query.addCollectionKeyParam($scope.collectionKey);
+                    query.addEntityTypeParam('Customer');
+                    promise = entityCollectionResource.getCollectionEntities(query);
+                } else {
+                    promise = customerResource.searchCustomers(query);
+                }
+
+                promise.then(function (customersResponse) {
                     $scope.customers = [];
                     var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
                     $scope.customers = queryResult.items;
                     maxPages = queryResult.totalPages;
                     if(query.parameters.length >= 0) {
-                        $scope.currentFilters = query.parameters;
+                        $scope.currentFilters = _.filter(query.parameters, function(params) {
+                            return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
+                        });
                     } else {
                         $scope.currentFilters = [];
                     }
@@ -2380,7 +2414,7 @@ angular.module('merchello')
                 var promiseSaveCustomer = customerResource.AddCustomer(customer);
                 promiseSaveCustomer.then(function (customerResponse) {
                     notificationsService.success("Customer Saved", "");
-                    init();
+                    loadCustomers($scope.filterText);
                 }, function (reason) {
                     notificationsService.error("Customer Save Failed", reason.message);
                 });
@@ -2413,6 +2447,32 @@ angular.module('merchello')
                 return {
                     sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
                     sortDirection: sortDirection
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Utility method to get the currency symbol for an invoice
+             */
+            function getCurrencySymbol(invoice) {
+
+                console.info(invoice);
+                if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
+                    return invoice.currency.symbol;
+                }
+
+                var currencyCode = invoice.getCurrencyCode();
+                var currency = _.find(allCurrencies, function(currency) {
+                    return currency.currencyCode === currencyCode;
+                });
+                if(currency === null || currency === undefined) {
+                    return globalCurrency;
+                } else {
+                    return currency.symbol;
                 }
             }
 
@@ -6163,9 +6223,11 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
+        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
             'queryDisplayBuilder', 'queryResultDisplayBuilder',
-        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
+        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, entityCollectionResource,
+                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
         queryDisplayBuilder, queryResultDisplayBuilder) {
 
             $scope.filterText = '';
@@ -6177,6 +6239,9 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             $scope.limitAmount = 25;
             $scope.currentPage = 0;
             $scope.maxPages = 0;
+
+            // collections
+            $scope.collectionKey = '';
 
             // exposed methods
             $scope.getEditUrl = getEditUrl;
@@ -6196,6 +6261,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
+                if($routeParams.id !== 'manage') {
+                    $scope.collectionKey = $routeParams.id;
+                }
+
                 loadProducts();
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createProductListTabs();
@@ -6212,7 +6281,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * in Merchello models and add to the scope via the products collection.
              */
             function loadProducts() {
-
                 var page = $scope.currentPage;
                 var perPage = $scope.limitAmount;
                 var sortBy = $scope.sortProperty.replace("-", "");
@@ -6224,9 +6292,19 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
                 query.addFilterTermParam($scope.filterText);
-                $scope.currentFilters = query.parameters;
+                $scope.currentFilters = _.filter(query.parameters, function(params) {
+                    return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
+                });
 
-                var promise = productResource.searchProducts(query);
+                var promise;
+                if ($scope.collectionKey !== '') {
+                    query.addCollectionKeyParam($scope.collectionKey);
+                    query.addEntityTypeParam('Product');
+                    var promise = entityCollectionResource.getCollectionEntities(query);
+                } else {
+                    var promise = productResource.searchProducts(query);
+                }
+
                 promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
                     $scope.products = queryResult.items;
@@ -6236,7 +6314,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });
-
             }
 
             /**
@@ -6297,7 +6374,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              * direction if the property is already the current sort column.
              */
             function changeSortOrder(propertyToSort) {
-
                 if ($scope.sortProperty == propertyToSort) {
                     if ($scope.sortOrder == "Ascending") {
                         $scope.sortProperty = "-" + propertyToSort;
@@ -6310,7 +6386,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "Ascending";
                 }
-
                 loadProducts();
             }
 
@@ -6330,7 +6405,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 loadProducts();
             }
 
-
             //--------------------------------------------------------------------------------------
             // Calculations
             //--------------------------------------------------------------------------------------
@@ -6345,7 +6419,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
              */
             function numberOfPages() {
                 return $scope.maxPages;
-                //return Math.ceil($scope.products.length / $scope.limitAmount);
             }
 
             /**
@@ -6361,7 +6434,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                 $scope.currentFilters = [];
                 $scope.filterText = '';
                 loadProducts();
-
             }
 
             function getEditUrl(product) {
@@ -8096,9 +8168,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
+    ['$scope', '$element', '$log', '$routeParams', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
+        'invoiceResource', 'entityCollectionResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
+        function($scope, $element, $log, $routeParams, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource, entityCollectionResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, settingDisplayBuilder)
         {
 
@@ -8123,6 +8195,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.visible.bulkActionDropdown = false;
             $scope.currentFilters = [];
             $scope.dateFilterOpen = false;
+            $scope.collectionKey = '';
+            $scope.showDateFilter = true;
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;
@@ -8263,6 +8337,10 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             // PRIVATE
             function init() {
                 $scope.currencySymbol = '$';
+                if($routeParams.id !== 'manage') {
+                    $scope.collectionKey = $routeParams.id;
+                    $scope.showDateFilter = false;
+                }
                 resetFilters();
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
@@ -8274,7 +8352,12 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.salesLoaded = false;
                 $scope.salesLoaded = false;
 
-                var promise = invoiceResource.searchInvoices(query);
+                var promise;
+                if ($scope.collectionKey !== '') {
+                    promise = entityCollectionResource.getCollectionEntities(query);
+                } else {
+                    promise = invoiceResource.searchInvoices(query);
+                }
                 promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, invoiceDisplayBuilder);
                     $scope.invoices = queryResult.items;
@@ -8300,7 +8383,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              */
             function resetFilters() {
                 var query = buildQuery();
-                toggleDateFilterOpen();
+                $scope.dateFilterOpen = false;
                 $scope.currentFilters = [];
                 $scope.filterText = '';
                 setDefaultDates(new Date());
@@ -8375,7 +8458,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 }
 
                 var dateSearch = false;
-                if (startDate !== undefined && endDate !== undefined) {
+                if (startDate !== undefined && endDate !== undefined && $scope.collectionKey === '') {
                     $scope.filterStartDate = startDate;
                     $scope.filterEndDate = endDate;
                     dateSearch = true;
@@ -8393,10 +8476,17 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     query.addInvoiceDateParam(endDate, 'end');
                 }
 
+                if($scope.collectionKey !== '') {
+                    query.addCollectionKeyParam($scope.collectionKey);
+                    query.addEntityTypeParam('Invoice');
+                }
+
                 query.addFilterTermParam(filterText);
 
                 if (query.parameters.length > 0) {
-                    $scope.currentFilters = query.parameters;
+                    $scope.currentFilters = _.filter(query.parameters, function(params) {
+                        return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
+                    });
                 }
                 return query;
             };

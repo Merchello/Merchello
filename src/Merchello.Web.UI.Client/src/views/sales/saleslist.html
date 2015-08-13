@@ -34,7 +34,7 @@
 
                 <!-- Order Filters -->
                 <div class="well row-fluid left invoice-filter">
-                    <filter-invoices filter-start-date="filterStartDate" date-filter-open="dateFilterOpen" filter-end-date="filterEndDate" filter-text="filterText" filter-term-callback="termFilterInvoices(filterText)" filter-callback="filterInvoices(filterStartDate, filterEndDate, filterText)" toggle-date-filter-open="toggleDateFilterOpen()"></filter-invoices>
+                    <filter-invoices show-date-filter="showDateFilter" filter-start-date="filterStartDate" date-filter-open="dateFilterOpen" filter-end-date="filterEndDate" filter-text="filterText" filter-term-callback="termFilterInvoices(filterText)" filter-callback="filterInvoices(filterStartDate, filterEndDate, filterText)" toggle-date-filter-open="toggleDateFilterOpen()"></filter-invoices>
                 </div>
                 <div class="clear"></div>
 
@@ -106,11 +106,12 @@
                 <merchello-pager></merchello-pager>
 
                 <!-- Prompt to create products if no products in the catalog -->
-                <div class="pager well" data-ng-show="salesLoaded && invoices.length == 0">
-                    <h5>You Have No Sales Yet</h5>
-                    <p>But you will soon!</p>
+                <div class="pager well" data-ng-show="salesLoaded && invoices.length == 0 && collectionKey===''">
+                    <localize key="merchelloSales_noSales" />
                 </div>
-
+                <div class="pager well" data-ng-show="salesLoaded && invoices.length == 0 && collectionKey!==''">
+                    <localize key="merchelloSales_emptySalesCollection" />
+                </div>
             </div>
         </merchello-panel>
     </umb-panel>

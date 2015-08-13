@@ -1167,6 +1167,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                 filterStartDate: '=',
                 filterEndDate: '=',
                 filterText: '=',
+                showDateFilter: '=',
                 filterButtonText: '@filterButtonText',
                 dateFilterOpen: '=',
                 filterCallback: '&',

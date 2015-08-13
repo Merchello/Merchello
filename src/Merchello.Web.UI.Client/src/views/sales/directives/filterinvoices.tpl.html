@@ -7,8 +7,8 @@
         <button data-ng-click="changeTermFilter()" class="btn" data-ng-show="!dateFilterOpen" style="margin-top: -10px"><localize key="merchelloOrder_filter" /></button>
     </div>
 
-    <a data-ng-click="toggleDateFilterOpen()" data-ng-show="!dateFilterOpen"><localize key="merchelloOrder_addDateFilters" /></a>
-    <a data-ng-click="toggleDateFilterOpen()" data-ng-show="dateFilterOpen"><localize key="merchelloOrder_removeDateFilters"  /></a><br />
+    <a data-ng-click="toggleDateFilterOpen()" data-ng-show="!dateFilterOpen && showDateFilter"><localize key="merchelloOrder_addDateFilters" /></a>
+    <a data-ng-click="toggleDateFilterOpen()" data-ng-show="dateFilterOpen && showDateFilter"><localize key="merchelloOrder_removeDateFilters"  /></a><br />
 
     <merchello-slide-open-panel hide-close="true" is-open="dateFilterOpen">
     <p style="margin-top: 20px">Show items for sales between</p>

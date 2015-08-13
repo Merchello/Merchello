@@ -1,5 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="en_us" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+  <area alias="merchelloTree">
+    <key alias="products">Products</key>
+    <key alias="sales">Sales</key>
+    <key alias="customers">Customers</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Collections</key>
+    <key alias="reports">Reports</key>
+    <key alias="gateways">Gateway Providers</key>
+  </area>
+  <area alias="merchelloCollections">
+    <key alias="providers">Collection Providers</key>
+    <key alias="newCollection">New Collection</key>
+    <key alias="manageCollection">Manage Collection</key>
+    <key alias="addEntities">Add new collection items</key>
+    <key alias="removeEntities">Remove collection items</key>
+    <key alias="sortCollections">Sort Collections</key>
+    <key alias="staticProviders">Static Collections</key>
+    <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
+    <key alias="product">Product Collections</key>
+    <key alias="customer">Customer Collections</key>
+    <key alias="invoice">Invoice Collections</key>
+    <key alias="emptyCollection">The collection is empty.</key>
+    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
+  </area>
   <area alias="merchelloButtons">
     <key alias="void">Void</key>
     <key alias="refund">Refund</key>
@@ -21,32 +45,18 @@
     <key alias="active">Active</key>
     <key alias="sortOrder">Sort Order</key>
   </area>
-  <area alias="merchelloCollections">
-    <key alias="providers">Collection Providers</key>
-    <key alias="newCollection">New Collection</key>
-    <key alias="manageCollection">Manage Collection</key>
-    <key alias="addEntities">Add new collection items</key>
-    <key alias="removeEntities">Remove collection items</key>
-    <key alias="sortCollections">Sort Collections</key>
-    <key alias="staticProviders">Static Collections</key>
-    <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
-    <key alias="product">Product Collections</key>
-    <key alias="customer">Customer Collections</key>
-    <key alias="invoice">Invoice Collections</key>
-    <key alias="emptyCollection">The collection is empty.</key>
-    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
+  <area alias="merchelloProducts">
+    <key alias="emptyProductCollection">There are currently no products in this collection</key>
+  </area>
+  <area alias="merchelloSales">
+    <key alias="noSales"><![CDATA[
+        <h5>You Have No Sales Yet</h5>
+        <p>But you will soon!</p>
+      ]]></key>
+    <key alias="emptySalesCollection">There are currently no sales in this collection</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>
-  </area>
-  <area alias="merchelloTree">
-    <key alias="products">Products</key>
-    <key alias="sales">Sales</key>
-    <key alias="customers">Customers</key>
-    <key alias="marketing">Marketing</key>
-    <key alias="collections">Collections</key>
-    <key alias="reports">Reports</key>
-    <key alias="gateways">Gateway Providers</key>
   </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
