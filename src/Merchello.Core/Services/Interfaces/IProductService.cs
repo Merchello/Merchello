@@ -3,7 +3,11 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Persistence.Querying;
+
     using Models;
+
+    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
@@ -34,7 +38,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
@@ -86,7 +90,7 @@
         /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
+        /// <param name="keys">List of GUID keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
 

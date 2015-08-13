@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Tests.IntegrationTests.EntityCollections
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
@@ -39,6 +40,7 @@
         public void Setup()
         {
             DbPreTestDataWorker.DeleteAllEntityCollections();
+            DbPreTestDataWorker.DeleteAllProducts();
         }
 
         [Test]
@@ -151,5 +153,59 @@
 
             Assert.IsFalse(collection1.ChildCollections().Any());
         }
+
+        [Test]
+        public void Can_Filter_CollectionProducts()
+        {
+            //// Arrange
+            var products = new List<IProduct>();
+            var p1 = MockProductDataMaker.MockProductForInserting("Tester one", "tester-one", 10M);
+            var p2 = MockProductDataMaker.MockProductForInserting("Tester two ", "tester-two", 10M);
+            var p3 = MockProductDataMaker.MockProductForInserting("Mock one", "mock-two", 10M);
+            var p4 = MockProductDataMaker.MockProductForInserting("Cat", "cat", 10M);
+            var p5 = MockProductDataMaker.MockProductForInserting("Excluded on", "excluded-one", 10M);
+            products.Add(p1);
+            products.Add(p2);
+            products.Add(p3);
+            products.Add(p4);
+
+            _productService.Save(products);
+            _productService.Save(p5);
+
+            var collection = _entityCollectionService.CreateEntityCollectionWithKey(
+               EntityType.Product,
+               _providerKey,
+               "Filter Collection Test");
+
+            //// Act
+            foreach (var p in products)
+            {
+                p.AddToCollection(collection.Key);
+            }
+
+            //// Act
+            var cats = new List<IProduct>();
+            var testers = _productService.GetFromCollection(collection.Key, "tester", 1, long.MaxValue);
+            Assert.IsTrue(testers.Items.Any());
+            cats.AddRange(testers.Items.Where(x => x.Sku == "cat"));
+
+            var ones = _productService.GetFromCollection(collection.Key, "one", 1, long.MaxValue);
+            Assert.IsTrue(ones.Items.Any());
+            cats.AddRange(ones.Items.Where(x => x.Sku == "cat"));
+
+            var notOnes = ((ProductService)_productService).GetKeysNotInCollection(
+                collection.Key,
+                "one",
+                1,
+                long.MaxValue);
+
+            
+            //// Assert
+            Assert.AreEqual(2, testers.TotalItems);
+            Assert.AreEqual(2, ones.TotalItems);
+            Assert.AreEqual(1, notOnes.TotalItems);
+            Assert.IsFalse(cats.Any());
+        }
+
     }
 }

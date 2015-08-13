@@ -61,7 +61,11 @@
                 .ForMember(
                     dest => dest.EntityTypeField,
                     opt =>
-                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()));
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
+                .ForMember(
+                    dest => dest.ParentKey,
+                    opt =>
+                        opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()));
 
             AutoMapper.Mapper.CreateMap<EntityCollectionProviderAttribute, EntityCollectionProviderDisplay>()
                 .ForMember(

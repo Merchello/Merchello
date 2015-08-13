@@ -11,17 +11,13 @@
     using global::Examine;
     using global::Examine.Providers;
 
-    using Merchello.Core.EntityCollections;
-
     using Models.ContentEditing;
     using Models.Querying;
-
-    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a CachedCustomerQuery.
     /// </summary>
-    internal class CachedCustomerQuery : CachedCollectionQueryBase<ICustomer, CustomerDisplay>, ICachedCustomerQuery
+    internal class CachedCustomerQuery : CachedQueryableCollectionQueryBase<ICustomer, CustomerDisplay>, ICachedCustomerQuery
     {
         /// <summary>
         /// The customer service.
@@ -207,72 +203,94 @@
             return GetQueryResultDisplay(_customerService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
         }
 
-        /// <summary>
-        /// Gets customers from a collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        public QueryResultDisplay GetFromCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "loginName",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            var provider = this.GetEntityCollectionProvider(collectionKey);
+        ///// <summary>
+        ///// Gets customers from a collection.
+        ///// </summary>
+        ///// <param name="collectionKey">
+        ///// The collection key.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The sort by.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="QueryResultDisplay"/>.
+        ///// </returns>
+        //public QueryResultDisplay GetFromCollection(
+        //    Guid collectionKey,
+        //    long page,
+        //    long itemsPerPage,
+        //    string sortBy = "loginName",
+        //    SortDirection sortDirection = SortDirection.Ascending)
+        //{
+        //    var provider = this.GetEntityCollectionProvider(collectionKey);
 
-            return
-                this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
-        }
+        //    return
+        //        this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
+        //}
 
-        /// <summary>
-        /// The get not in collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        public QueryResultDisplay GetNotInCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "loginName",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            return
-                this.GetQueryResultDisplay(
-                    _customerService.GetKeysNotInCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection));
-        }
+        //public QueryResultDisplay GetFromCollection(
+        //    Guid collectionKey,
+        //    string searchTerm,
+        //    long page,
+        //    long itemsPerPage,
+        //    string sortBy = "",
+        //    SortDirection sortDirection = SortDirection.Ascending)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        ///// <summary>
+        ///// The get not in collection.
+        ///// </summary>
+        ///// <param name="collectionKey">
+        ///// The collection key.
+        ///// </param>
+        ///// <param name="page">
+        ///// The page.
+        ///// </param>
+        ///// <param name="itemsPerPage">
+        ///// The items per page.
+        ///// </param>
+        ///// <param name="sortBy">
+        ///// The sort by.
+        ///// </param>
+        ///// <param name="sortDirection">
+        ///// The sort direction.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="QueryResultDisplay"/>.
+        ///// </returns>
+        //public QueryResultDisplay GetNotInCollection(
+        //    Guid collectionKey,
+        //    long page,
+        //    long itemsPerPage,
+        //    string sortBy = "loginName",
+        //    SortDirection sortDirection = SortDirection.Ascending)
+        //{
+        //    return
+        //        this.GetQueryResultDisplay(
+        //            _customerService.GetKeysNotInCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection));
+        //}
+
+        //public QueryResultDisplay GetNotInCollection(
+        //    Guid collectionKey,
+        //    string searchTerm,
+        //    long page,
+        //    long itemsPerPage,
+        //    string sortBy = "",
+        //    SortDirection sortDirection = SortDirection.Ascending)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         /// <summary>
         /// Re-indexes the <see cref="ICustomer"/>

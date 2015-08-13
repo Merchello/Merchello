@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines a CachedProductQuery.
     /// </summary>
-    public interface ICachedProductQuery
+    public interface ICachedProductQuery : ICachedCollectionQuery
     {
         /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's key
@@ -99,62 +99,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay Search(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending);
-
-        /// <summary>
-        /// Gets products from a collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        QueryResultDisplay GetFromCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending);
-
-        /// <summary>
-        /// The get not in collection.
-        /// </summary>
-        /// <param name="collectionKey">
-        /// The collection key.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="QueryResultDisplay"/>.
-        /// </returns>
-        QueryResultDisplay GetNotInCollection(
-            Guid collectionKey,
-            long page,
-            long itemsPerPage,
-            string sortBy = "name",
-            SortDirection sortDirection = SortDirection.Ascending);
+        
 
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names

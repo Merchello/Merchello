@@ -11,18 +11,29 @@
     using Merchello.Core;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Collections;
+    using Merchello.Web.Models.Querying;
+    using Merchello.Web.Search;
     using Merchello.Web.WebApi;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Web;
+    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// The entity collection api controller.
     /// </summary>
+    [PluginController("Merchello")]
     public class EntityCollectionApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The <see cref="MerchelloHelper"/>
+        /// </summary>
+        private readonly MerchelloHelper _merchello;
+
         /// <summary>
         /// The <see cref="IEntityCollectionService"/>.
         /// </summary>
@@ -74,6 +85,8 @@
             _entityCollectionService = merchelloContext.Services.EntityCollectionService;
             
             _resolver = EntityCollectionProviderResolver.Current;
+
+            _merchello = new MerchelloHelper(merchelloContext.Services, false);
 
             this.Initialize();
         }
@@ -173,6 +186,178 @@
         }
 
         /// <summary>
+        /// Gets the entities in the collection.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if either the collection key or entity type is not found in query parameters
+        /// </exception>
+        [HttpPost]
+        public QueryResultDisplay PostGetCollectionEntities(QueryDisplay query)
+        {
+            var collectionKey = query.Parameters.FirstOrDefault(x => x.FieldName == "collectionKey");
+            var entityTypeName = query.Parameters.FirstOrDefault(x => x.FieldName == "entityType");
+            if (collectionKey == null || entityTypeName == null) throw new NullReferenceException("collectionKey and entityType must be included as a parameter");
+
+            var key = new Guid(collectionKey.Value);
+
+            var entityType = (EntityType)Enum.Parse(typeof(EntityType), entityTypeName.Value);
+
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
+
+            var cachedQuery = this.GetCachedQueryByEntityType(entityType);
+
+            return term != null && !string.IsNullOrEmpty(term.Value)
+              ?
+               cachedQuery.GetFromCollection(
+                  key,
+                  term.Value,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection)
+              :
+              cachedQuery.GetFromCollection(
+                  key,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection);
+        }
+
+        /// <summary>
+        /// Gets entities not in the collection.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if either the collection key or entity type is not found in query parameters
+        /// </exception>
+        [HttpPost]
+        public QueryResultDisplay PostGetEntitiesNotInCollection(QueryDisplay query)
+        {
+            var collectionKey = query.Parameters.FirstOrDefault(x => x.FieldName == "collectionKey");
+            var entityTypeName = query.Parameters.FirstOrDefault(x => x.FieldName == "entityType");
+            if (collectionKey == null || entityTypeName == null) throw new NullReferenceException("collectionKey and entityType must be included as a parameter");
+
+            var key = new Guid(collectionKey.Value);
+
+            var entityType = (EntityType)Enum.Parse(typeof(EntityType), entityTypeName.Value);
+
+            var term = query.Parameters.FirstOrDefault(x => x.FieldName == "term");
+
+            var cachedQuery = this.GetCachedQueryByEntityType(entityType);
+
+            return term != null && !string.IsNullOrEmpty(term.Value)
+              ?
+               cachedQuery.GetNotInCollection(
+                  key,
+                  term.Value,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection)
+              :
+              cachedQuery.GetNotInCollection(
+                  key,
+                  query.CurrentPage + 1,
+                  query.ItemsPerPage,
+                  query.SortBy,
+                  query.SortDirection);
+        }
+
+        /// <summary>
+        /// Adds an entity to a collection.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage PostAddEntityToCollection(Entity2CollectionModel model)
+        {
+            var collection = _entityCollectionService.GetByKey(model.CollectionKey);
+            if (collection == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            var provider = collection.ResolveProvider();
+            var entityType = provider.EntityCollection.EntityType;
+            switch (entityType)
+            {
+                case EntityType.Customer:
+                    MerchelloContext.Services.CustomerService.AddToCollection(model.EntityKey, model.CollectionKey);
+                    break;
+                case EntityType.Invoice:
+                    MerchelloContext.Services.InvoiceService.AddToCollection(model.EntityKey, model.CollectionKey);
+                    break;
+                case EntityType.Product:
+                    MerchelloContext.Services.ProductService.AddToCollection(model.EntityKey, model.CollectionKey);
+                    break;
+                default:
+                    var invalid =
+                        new InvalidOperationException("Merchello service could not be found for the entity type");
+                    LogHelper.Error<EntityCollectionApiController>("An attempt was made to add an entity to a collection", invalid);
+                    return Request.CreateResponse(HttpStatusCode.NotImplemented);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Deletes an entity from a collection.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpDelete, HttpPost]
+        public HttpResponseMessage DeleteEntityFromCollection(Entity2CollectionModel model)
+        {
+            var collection = _entityCollectionService.GetByKey(model.CollectionKey);
+            if (collection == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            var provider = collection.ResolveProvider();
+            var entityType = provider.EntityCollection.EntityType;
+            switch (entityType)
+            {
+                case EntityType.Customer:
+                    MerchelloContext.Services.CustomerService.RemoveFromCollection(model.EntityKey, model.CollectionKey);
+                    break;
+                case EntityType.Invoice:
+                    MerchelloContext.Services.InvoiceService.RemoveFromCollection(model.EntityKey, model.CollectionKey);
+                    break;
+                case EntityType.Product:
+                    MerchelloContext.Services.ProductService.RemoveFromCollection(model.EntityKey, model.CollectionKey);
+                    break;
+                default:
+                    var invalid =
+                        new InvalidOperationException("Merchello service could not be found for the entity type");
+                    LogHelper.Error<EntityCollectionApiController>("An attempt was made to remove an entity to a collection", invalid);
+                    return Request.CreateResponse(HttpStatusCode.NotImplemented);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);        
+        }
+
+        /// <summary>
         /// The post add entity collection.
         /// </summary>
         /// <param name="collection">
@@ -253,6 +438,30 @@
             _entityCollectionService.Delete(collectionToDelete);
 
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// The get cached query by entity type.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICachedCollectionQuery"/>.
+        /// </returns>
+        private ICachedCollectionQuery GetCachedQueryByEntityType(EntityType entityType)
+        {
+            switch (entityType)
+            {
+                case EntityType.Customer:
+                    return _merchello.Query.Customer;
+                case EntityType.Invoice:
+                    return _merchello.Query.Invoice;
+                case EntityType.Product:
+                    return _merchello.Query.Product;
+                default:
+                    throw new NotSupportedException("Customer, Invoice and Product queries are only supported.");
+            }
         }
 
         /// <summary>

@@ -5,24 +5,24 @@
     /// <summary>
     /// The manage entities action.
     /// </summary>
-    public class NewEntityAction : IAction
+    public class ManageEntitiesAction : IAction
     {
         /// <summary>
         /// The local singleton instance.
         /// </summary>
-        private static readonly NewEntityAction LocalInstance = new NewEntityAction();
+        private static readonly ManageEntitiesAction LocalInstance = new ManageEntitiesAction();
 
         /// <summary>
-        /// Prevents a default instance of the <see cref="NewEntityAction"/> class from being created.
+        /// Prevents a default instance of the <see cref="ManageEntitiesAction"/> class from being created.
         /// </summary>
-        private NewEntityAction()
+        private ManageEntitiesAction()
         {            
         }
 
         /// <summary>
         /// Gets the singleton instance.
         /// </summary>
-        public static NewEntityAction Instance
+        public static ManageEntitiesAction Instance
         {
             get { return LocalInstance; }
         }
@@ -67,7 +67,7 @@
         {
             get
             {
-                return "add";
+                return "item-arrangement";
             } 
         }
 

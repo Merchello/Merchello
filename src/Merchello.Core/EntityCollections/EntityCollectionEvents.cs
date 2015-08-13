@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Core.EntityCollections
 {
-    using System;
-
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
 
@@ -30,7 +28,26 @@
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
             EntityCollectionService.Created += EntityCollectionServiceOnCreated;
+            EntityCollectionService.Saved += EntityCollectionServiceOnSaved;
             EntityCollectionService.Deleted += EntityCollectionServiceOnDeleted;
+        }
+
+        /// <summary>
+        /// The entity collection service on saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void EntityCollectionServiceOnSaved(IEntityCollectionService sender, SaveEventArgs<IEntityCollection> e)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent) return;
+            foreach (var collection in e.SavedEntities)
+            {
+                EntityCollectionProviderResolver.Current.AddOrUpdateCache(collection);
+            }
         }
 
         /// <summary>

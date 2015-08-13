@@ -362,3 +362,14 @@
 	.active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
     .error { color: #fff; background: #9d261d; display: inline-block; padding: 2px 8px; margin-bottom: 2px; }
 }
+
+.merchello-context-panel {
+    .umb-panel-body { top: 120px; }
+    padding: 1em;
+    h4 { white-space: normal; }
+    strong { display: block; }
+    .active, .active:hover { background-color: $active; }
+    .active td { @extend .active; border-top: solid 1px darken($active, 10%); } //add the .active style to child table cells
+    .error { color: #fff; background: #9d261d; display: inline-block; padding: 2px 8px; margin-bottom: 2px; }
+    .padTop { padding-top: 1em;}
+}

@@ -122,7 +122,6 @@
                             query
                         ),
                         'Failed to search products');
-
                 }
             };
     }]);

@@ -1293,6 +1293,11 @@
             Useful for debugging
             </remarks>
         </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Editors.EntityCollectionApiController._entityCollectionService">
             <summary>
             The <see cref="T:Merchello.Core.Services.IEntityCollectionService"/>.
@@ -1395,6 +1400,56 @@
             The <see cref="T:System.Collections.IEnumerable"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetCollectionEntities(Merchello.Web.Models.Querying.QueryDisplay)">
+            <summary>
+            Gets the entities in the collection.
+            </summary>
+            <param name="query">
+            The query.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if either the collection key or entity type is not found in query parameters
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetEntitiesNotInCollection(Merchello.Web.Models.Querying.QueryDisplay)">
+            <summary>
+            Gets entities not in the collection.
+            </summary>
+            <param name="query">
+            The query.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if either the collection key or entity type is not found in query parameters
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityToCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
+            <summary>
+            Adds an entity to a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityFromCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
+            <summary>
+            Deletes an entity from a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
             <summary>
             The post add entity collection.
@@ -1426,6 +1481,17 @@
             </param>
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetCachedQueryByEntityType(Merchello.Core.EntityType)">
+            <summary>
+            The get cached query by entity type.
+            </summary>
+            <param name="entityType">
+            The entity type.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Search.ICachedCollectionQuery"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.Initialize">
@@ -1695,6 +1761,21 @@
         <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.SortOrder">
             <summary>
             Gets or sets the sort order.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel">
+            <summary>
+            The add entity to collection model.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.EntityKey">
+            <summary>
+            Gets or sets the entity key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.CollectionKey">
+            <summary>
+            Gets or sets the collection key.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay">
@@ -2587,6 +2668,22 @@
             </param>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.EntityCollectionNullableParentKeyResolver">
+            <summary>
+            The entity collection nullable parent key resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityCollections.EntityCollectionNullableParentKeyResolver.ResolveCore(Merchello.Core.Models.Interfaces.IEntityCollection)">
+            <summary>
+            Asserts the ParentKey returns null when an empty GUID or null.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The nullable Guid.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.EntityTypeFieldResolver">
@@ -4654,7 +4751,7 @@
             Gets the resolved values.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Search.CachedCollectionQueryBase`2">
+        <member name="T:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2">
             <summary>
             The cached collection query base.
             </summary>
@@ -4824,9 +4921,112 @@
             Gets the key field in index.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Search.CachedCollectionQueryBase`2.#ctor(Merchello.Core.Services.IPageCachedService{`0},Examine.Providers.BaseIndexProvider,Examine.Providers.BaseSearchProvider,System.Boolean)">
+        <member name="T:Merchello.Web.Search.ICachedCollectionQuery">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Search.CachedCollectionQueryBase`2"/> class.
+            The CachedCollectionQuery interface.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities from a collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetFromCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities in the collection filtered by a search term.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in the collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetNotInCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in the collection filtered by a search term.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.#ctor(Merchello.Core.Services.IPageCachedService{`0},Examine.Providers.BaseIndexProvider,Examine.Providers.BaseSearchProvider,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2"/> class.
             </summary>
             <param name="service">
             The service.
@@ -4841,7 +5041,105 @@
             The enable data modifiers.
             </param>
         </member>
-        <member name="M:Merchello.Web.Search.CachedCollectionQueryBase`2.GetEntityCollectionProvider(System.Guid)">
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get products from collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetFromCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities from the collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetNotInCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetEntityCollectionProvider(System.Guid)">
             <summary>
             The get entity collection provider.
             </summary>
@@ -4857,6 +5155,17 @@
             <exception cref="T:System.InvalidCastException">
             Throws an invalid cast exception if the provider returned does not match the entity type of the collection
             </exception>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.BuildSearchTermArgs(System.String)">
+            <summary>
+            Builds the search term args.
+            </summary>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Web.Media.EmbedProviders.Settings.Dictionary"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Search.CachedCustomerQuery">
             <summary>
@@ -4931,29 +5240,6 @@
             </param>
             <param name="lastActivityDateEnd">
             The customer date end.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.ICachedCustomerQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            Gets customers from a collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
             </param>
             <param name="page">
             The page.
@@ -5097,52 +5383,6 @@
             </param>
             <param name="lastActivityDateEnd">
             The customer date end.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.CachedCustomerQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            Gets customers from a collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.CachedCustomerQuery.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            The get not in collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
             </param>
             <param name="page">
             The page.
@@ -5767,52 +6007,6 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            Gets products from a collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.ICachedProductQuery.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            The get not in collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
         <member name="M:Merchello.Web.Search.ICachedProductQuery.GetProductsWithOption(System.String,System.Collections.Generic.IEnumerable{System.String},System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
             <summary>
             Gets products with that have an option with name and a collection of choice names
@@ -6214,52 +6408,6 @@
             </summary>
             <param name="term">
             The term.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.CachedProductQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            The get products from collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.CachedProductQuery.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            The get not in collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
             </param>
             <param name="page">
             The page.
@@ -6949,29 +7097,6 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            Gets products from a collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
         <member name="M:Merchello.Web.Search.ICachedInvoiceQuery.GetByCustomerKey(System.Guid)">
             <summary>
             Gets the collection of all customer invoices
@@ -7355,52 +7480,6 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            The get invoices from collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Search.CachedInvoiceQuery.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
-            <summary>
-            The get not in collection.
-            </summary>
-            <param name="collectionKey">
-            The collection key.
-            </param>
-            <param name="page">
-            The page.
-            </param>
-            <param name="itemsPerPage">
-            The items per page.
-            </param>
-            <param name="sortBy">
-            The sort by.
-            </param>
-            <param name="sortDirection">
-            The sort direction.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
-            </returns>
-        </member>
         <member name="M:Merchello.Web.Search.CachedInvoiceQuery.GetByCustomerKey(System.Guid)">
             <summary>
             Gets the collection of all customer invoices
@@ -7647,6 +7726,61 @@
             Gets the icon.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Trees.Actions.ManageEntitiesAction">
+            <summary>
+            The manage entities action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.ManageEntitiesAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.ManageEntitiesAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.ManageEntitiesAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Trees.Actions.NewOfferSettingsAction">
             <summary>
             The create collection action.
@@ -7755,6 +7889,11 @@
         <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Icon">
             <summary>
             Gets the icon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewEntityAction">
+            <summary>
+            The manage entities action.
             </summary>
         </member>
         <member name="F:Merchello.Web.Trees.Actions.NewEntityAction.LocalInstance">
@@ -13676,7 +13815,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
             <remarks>
-            Valid sortBy parameters  "sku", "name", "price" 
+            Valid sortBy parameters  "SKU", "name", "price" 
             </remarks>
         </member>
         <member name="M:Merchello.Web.Editors.ProductApiController.AddProduct(Merchello.Web.Models.ContentEditing.ProductDisplay)">
@@ -14046,16 +14185,26 @@
             <summary>
             Applying this attribute to any WebAPI controller will ensure that it only contains one JSON formatter compatible with the angular JSON vulnerability prevention.
             </summary>
+            <remarks>
+            http://issues.merchello.com/youtrack/issue/M-247
+            </remarks>
         </member>
-        <member name="M:Merchello.Web.WebApi.JsonCamelCaseFormatter.Initialize(System.Web.Http.Controllers.HttpControllerSettings,System.Web.Http.Controllers.HttpControllerDescriptor)">
+        <member name="F:Merchello.Web.WebApi.JsonCamelCaseFormatter.CamelCasingFormatter">
             <summary>
-            The initialize.
+            The _camel casing formatter.
             </summary>
-            <param name="controllerSettings">
-            The controller settings.
-            </param>
-            <param name="controllerDescriptor">
-            The controller descriptor.
+        </member>
+        <member name="M:Merchello.Web.WebApi.JsonCamelCaseFormatter.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Merchello.Web.WebApi.JsonCamelCaseFormatter"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.JsonCamelCaseFormatter.OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            The on action executed.
+            </summary>
+            <param name="httpActionExecutedContext">
+            The http action executed context.
             </param>
         </member>
         <member name="T:Merchello.Web.Workflow.Basket">
