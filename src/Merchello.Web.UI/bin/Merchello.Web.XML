@@ -1428,6 +1428,28 @@
             Throws a null reference exception if either the collection key or entity type is not found in query parameters
             </exception>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityToCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
+            <summary>
+            Adds an entity to a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityFromCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
+            <summary>
+            Deletes an entity from a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
             <summary>
             The post add entity collection.
@@ -1739,6 +1761,21 @@
         <member name="P:Merchello.Web.Models.ContentEditing.BackOfficeTreeDisplay.SortOrder">
             <summary>
             Gets or sets the sort order.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel">
+            <summary>
+            The add entity to collection model.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.EntityKey">
+            <summary>
+            Gets or sets the entity key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.CollectionKey">
+            <summary>
+            Gets or sets the collection key.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay">
@@ -7689,6 +7726,61 @@
             Gets the icon.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Trees.Actions.ManageEntitiesAction">
+            <summary>
+            The manage entities action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.ManageEntitiesAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.ManageEntitiesAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.ManageEntitiesAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Trees.Actions.NewOfferSettingsAction">
             <summary>
             The create collection action.
@@ -7799,57 +7891,57 @@
             Gets the icon.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Trees.Actions.ManageEntitiesAction">
+        <member name="T:Merchello.Web.Trees.Actions.NewEntityAction">
             <summary>
             The manage entities action.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Trees.Actions.ManageEntitiesAction.LocalInstance">
+        <member name="F:Merchello.Web.Trees.Actions.NewEntityAction.LocalInstance">
             <summary>
             The local singleton instance.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Trees.Actions.ManageEntitiesAction.#ctor">
+        <member name="M:Merchello.Web.Trees.Actions.NewEntityAction.#ctor">
             <summary>
-            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.ManageEntitiesAction"/> class from being created.
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewEntityAction"/> class from being created.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Instance">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Instance">
             <summary>
             Gets the singleton instance.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Letter">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Letter">
             <summary>
             Gets the letter.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.ShowInNotifier">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.ShowInNotifier">
             <summary>
             Gets a value indicating whether show in notifier.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.CanBePermissionAssigned">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.CanBePermissionAssigned">
             <summary>
             Gets a value indicating whether can be permission assigned.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Icon">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Icon">
             <summary>
             Gets the icon.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Alias">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Alias">
             <summary>
             Gets the alias.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsFunctionName">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsFunctionName">
             <summary>
             Gets the JS function name.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsSource">
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsSource">
             <summary>
             Gets the JS source.
             </summary>

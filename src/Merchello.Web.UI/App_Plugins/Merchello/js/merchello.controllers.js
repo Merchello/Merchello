@@ -1537,23 +1537,27 @@ angular.module('merchello').controller('Merchello.Backoffice.CollectionProviderL
 
 
 angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddEntityStaticCollectionController',
-    ['$scope',  'treeService', 'notificationsService', 'navigationService', 'entityCollectionHelper',
-        'settingsResource', 'entityCollectionResource', 'productDisplayBuilder', 'invoiceDisplayBuilder', 'customerDisplayBuilder',
+    ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'entityCollectionHelper', 'merchelloTabsFactory',
+        'settingsResource', 'entityCollectionResource', 'settingDisplayBuilder', 'productDisplayBuilder', 'invoiceDisplayBuilder', 'customerDisplayBuilder',
         'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($scope, treeService, notificationsService, navigationService, entityCollectionHelper,
-        settingsResource, entityCollectionResource, productDisplayBuilder, invoiceDisplayBuilder, customerDisplayBuilder,
+    function($scope, treeService, notificationsService, navigationService, assetsService, entityCollectionHelper, merchelloTabsFactory,
+        settingsResource, entityCollectionResource, settingDisplayBuilder, productDisplayBuilder, invoiceDisplayBuilder, customerDisplayBuilder,
         queryDisplayBuilder, queryResultDisplayBuilder) {
 
         $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.addToCollection = true;
         $scope.wasFormSubmitted = false;
         $scope.collectionKey = '';
         $scope.entityType = '';
         $scope.dialogData = {};
+        $scope.settings = {};
+
 
         $scope.sortProperty = '';
         $scope.sortOrder = 'Ascending';
         $scope.filterText = '';
-        $scope.limitAmount = 10;
+        $scope.limitAmount = 5;
         $scope.currentPage = 0;
         $scope.maxPages = 0;
         $scope.invoices = [];
@@ -1566,12 +1570,17 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
         $scope.changeSortOrder = changeSortOrder;
         $scope.getFilteredEntities = getFilteredEntities;
         $scope.numberOfPages = numberOfPages;
+        $scope.toggleMode = toggleMode;
+        $scope.handleEntity = handleEntity;
 
         function init() {
-            $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
-            $scope.collectionKey = $scope.dialogData.collectionKey;
-            $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
-            loadSettings();
+            var cssPromise = assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
+            cssPromise.then(function() {
+                $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
+                $scope.collectionKey = $scope.dialogData.collectionKey;
+                $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
+                loadSettings();
+            });
         }
 
         /**
@@ -1583,17 +1592,25 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
          * Load the settings from the settings service to get the currency symbol
          */
         function loadSettings() {
-            var currencySymbolPromise = settingsResource.getCurrencySymbol();
-            currencySymbolPromise.then(function (currencySymbol) {
-                $scope.currencySymbol = currencySymbol;
-                loadEntities();
-            }, function (reason) {
-                notificationsService.error("Settings Load Failed", reason.message);
+            // this is needed for the date format
+            var settingsPromise = settingsResource.getAllSettings();
+            settingsPromise.then(function(allSettings) {
+                $scope.settings = settingDisplayBuilder.transform(allSettings);
+                console.info($scope.settings);
+                var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                currencySymbolPromise.then(function (currencySymbol) {
+                    $scope.currencySymbol = currencySymbol;
+                    loadEntities();
+                }, function (reason) {
+                    notificationsService.error("Settings Load Failed", reason.message);
+                });
+            }, function(reason) {
+                notificationService.error('Failed to load all settings', reason.message);
             });
         }
 
         function loadEntities() {
-
+            $scope.preValuesLoaded = false;
             var page = $scope.currentPage;
             var perPage = $scope.limitAmount;
             var sortBy = $scope.sortProperty.replace("-", "");
@@ -1607,17 +1624,25 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
             query.addCollectionKeyParam($scope.collectionKey);
             query.addEntityTypeParam($scope.entityType);
 
-            var promise = entityCollectionResource.getEntitiesNotInCollection(query);
-            promise.then(function(queryResult) {
-                console.info(queryResult);
+            if ($scope.addToCollection) {
+                var promise = entityCollectionResource.getEntitiesNotInCollection(query);
+            } else {
+                var promise = entityCollectionResource.getCollectionEntities(query);
+            }
+            promise.then(function(results) {
+                var queryResult;
                 switch($scope.entityType) {
                     case 'Invoice' :
-                        $scope.invoices = queryResultDisplayBuilder.transform(queryResult, invoiceDisplayBuilder);
+                        queryResult = queryResultDisplayBuilder.transform(results, invoiceDisplayBuilder);
+                        $scope.invoices = queryResult.items;
                         break;
                     case 'Customer' :
-                        $scope.customers = queryDisplayBuilder.transform(queryResult, customerDisplayBuilder);
+                        queryResult = queryResultDisplayBuilder.transform(results, customerDisplayBuilder);
+                        $scope.customers = queryResult.items;
+                        break;
                     default :
-                        $scope.products = queryResultDisplayBuilder.transform(queryResult, productDisplayBuilder);
+                        queryResult = queryResultDisplayBuilder.transform(results, productDisplayBuilder);
+                        $scope.products = queryResult.items;
                         break
                 };
                 $scope.maxPages = queryResult.totalPages;
@@ -1628,6 +1653,25 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
             });
         }
 
+        function handleEntity(entity) {
+            var promise;
+            if ($scope.addToCollection) {
+                promise = entityCollectionResource.addEntityToCollection(entity.key, $scope.collectionKey);
+            } else {
+                promise = entityCollectionResource.removeEntityFromCollection(entity.key, $scope.collectionKey);
+            }
+
+            promise.then(function() {
+              loadEntities();
+            }, function(reason) {
+                notificationsService.error('Failed to add entity to collection ' + reason);
+            });
+        }
+
+        function toggleMode() {
+            $scope.currentPage = 0;
+            loadEntities();
+        }
 
         //--------------------------------------------------------------------------------------
         // Events methods

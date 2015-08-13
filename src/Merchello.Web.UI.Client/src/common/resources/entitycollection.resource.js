@@ -58,6 +58,22 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to add an entity collection');
                 },
+                addEntityToCollection : function(entityKey, collectionKey) {
+                    var url = baseUrl + 'PostAddEntityToCollection';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { entityKey: entityKey, collectionKey: collectionKey }
+                        ),
+                        'Failed to add an entity to a collection');
+                },
+                removeEntityFromCollection : function(entityKey, collectionKey) {
+                    var url = baseUrl + 'DeleteEntityFromCollection';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { entityKey: entityKey, collectionKey: collectionKey }
+                        ),
+                        'Failed to remove an entity from a collection');
+                },
                 getCollectionEntities : function(query) {
                     var url = baseUrl + 'PostGetCollectionEntities';
                     return umbRequestHelper.resourcePromise(

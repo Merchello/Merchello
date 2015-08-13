@@ -1046,6 +1046,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="refund">Refund</key>
     <key alias="delete">Delete</key>
     <key alias="select">Select</key>
+    <key alias="remove">Remove</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
@@ -1061,7 +1062,9 @@ To manage your website, simply open the Umbraco back office and start adding con
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
     <key alias="newCollection">New Collection</key>
-    <key alias="manageEntities">Manage Collection Entities</key>
+    <key alias="manageCollection">Manage Collection</key>
+    <key alias="addEntities">Add new collection items</key>
+    <key alias="removeEntities">Remove collection items</key>
     <key alias="sortCollections">Sort Collections</key>
     <key alias="staticProviders">Static Collections</key>
     <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>

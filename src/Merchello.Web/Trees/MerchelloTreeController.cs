@@ -158,14 +158,14 @@
             // Products
             if (id == "products")
             {
-                menu.Items.Add<ManageEntitiesAction>(
+                menu.Items.Add<NewCollectionAction>(
                     _textService.Localize(string.Format("merchelloVariant/newProduct"), _culture),
                     false).NavigateToRoute("merchello/merchello/productedit/create");
             }
 
             if (id == "customers")
             {
-                menu.Items.Add<ManageEntitiesAction>(
+                menu.Items.Add<NewCollectionAction>(
                     _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture), false)
                     .LaunchDialogView(_dialogsPath + "customer.newcustomer.html", _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture));
             }
@@ -194,13 +194,14 @@
                             { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
                         }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize("merchelloCollections/newCollection", _culture));
 
+                if (!_collectiontrees.Contains(id)) // don't show this on root nodes
                 menu.Items.Add<ManageEntitiesAction>(
-                    _textService.Localize("merchelloCollections/manageEntities", _culture),
+                    _textService.Localize("merchelloCollections/manageCollection", _culture),
                     false,
                     new Dictionary<string, object>()
                         {
                             { "dialogData", new { entityType = splitId.CollectionId, collectionKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "addentity.staticcollection.html", _textService.Localize("merchelloCollections/manageEntities", _culture));
+                        }).LaunchDialogView(_dialogsPath + "addentity.staticcollection.html", _textService.Localize("merchelloCollections/manageCollection", _culture));
 
                 menu.Items.Add<SortCollectionAction>(
                     _textService.Localize("actions/sort", _culture),

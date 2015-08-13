@@ -4280,6 +4280,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
