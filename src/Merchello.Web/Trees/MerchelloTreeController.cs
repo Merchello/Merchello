@@ -201,7 +201,7 @@
                     new Dictionary<string, object>()
                         {
                             { "dialogData", new { entityType = splitId.CollectionId, collectionKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "addentity.staticcollection.html", _textService.Localize("merchelloCollections/manageCollection", _culture));
+                        }).LaunchDialogView(_dialogsPath + "manage.staticcollection.html", _textService.Localize("merchelloCollections/manageCollection", _culture));
 
                 menu.Items.Add<SortCollectionAction>(
                     _textService.Localize("actions/sort", _culture),

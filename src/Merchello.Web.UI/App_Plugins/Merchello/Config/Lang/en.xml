@@ -10,6 +10,9 @@
   <area alias="merchelloHeadline">
     <key alias="catalog">Catalog</key>
   </area>
+  <area alias="merchelloValidation">
+    <key alias="nameFieldRequired">The name field is required</key>
+  </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
     <key alias="alias">Alias</key>
@@ -30,6 +33,8 @@
     <key alias="product">Product Collections</key>
     <key alias="customer">Customer Collections</key>
     <key alias="invoice">Invoice Collections</key>
+    <key alias="emptyCollection">The collection is empty.</key>
+    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>

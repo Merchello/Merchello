@@ -58,6 +58,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to add an entity collection');
                 },
+                saveEntityCollection : function(collection) {
+                    var url = baseUrl + 'PutEntityCollection';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            collection
+                        ),
+                        'Failed to save an entity collection');
+                },
                 addEntityToCollection : function(entityKey, collectionKey) {
                     var url = baseUrl + 'PostAddEntityToCollection';
                     return umbRequestHelper.resourcePromise(

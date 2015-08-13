@@ -1,4 +1,22 @@
-<div class="umb-panel merchello-context-panel constraint-product-selector" ng-controller="Merchello.EntityCollections.Dialogs.AddEntityStaticCollectionController" data-ng-show="loaded">
+<div class="umb-panel merchello-context-panel constraint-product-selector" ng-controller="Merchello.EntityCollections.Dialogs.ManageStaticCollectionController" data-ng-show="loaded">
+    <form id="entitycollectionForm" name="entitycollectionForm" class="form-horizontal">
+        <div class="row-fluid">
+            <div class="col-xs-10 span10">
+                <h3 data-ng-hide="editCollection">{{ collection.name }}</h3>
+                <div class="form-group" data-ng-show="editCollection">
+                    <label for="name">Name:</label>
+                    <input name="name" type="text" class="span8" data-ng-model="collection.name" required />
+                    <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+                    <button id="editName" class="btn" data-ng-click="saveCollection()"><localize key="buttons_save" /></button>
+                </div>
+            </div>
+            <a href data-ng-click="editCollection = !editCollection" class="btn btn-link">
+                <span data-ng-show="editCollection"><localize key="general_cancel" /></span>
+                <span data-ng-hide="editCollection"><localize key="general_edit" /></span>
+            </a>
+        </div>
+    </form>
+    <hr />
     <h4>
         <span data-ng-show="addToCollection"><localize key="merchelloCollections_addEntities" /></span>
         <span data-ng-hide="addToCollection"><localize key="merchelloCollections_removeEntities" /></span>
@@ -130,6 +148,11 @@
             </tbody>
         </table>
 
+    <!-- Prompt to create products if no products in the catalog -->
+    <div class="pager well" data-ng-show="preValuesLoaded && entityCount == 0">
+        <h5 data-ng-show="addToCollection"><localize key="merchelloCollections_noQualifyingEntities" /></h5>
+        <h5 data-ng-hide="addToCollection"><localize key="merchelloCollections_emptyCollection" /></h5>
+    </div>
 
     <div class="umb-el-wrap umb-panel-buttons">
         <div class="btn-toolbar umb-btn-toolbar pull-right">

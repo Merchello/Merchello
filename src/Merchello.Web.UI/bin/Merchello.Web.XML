@@ -1461,6 +1461,20 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
+            <summary>
+            Saves the entity collection.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the collection is not found
+            </exception>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutUpdateSortOrders(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay})">
             <summary>
             Updates sort orders.

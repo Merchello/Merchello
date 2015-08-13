@@ -1,11 +1,11 @@
 
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddEntityStaticCollectionController',
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.ManageStaticCollectionController',
     ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'entityCollectionHelper', 'merchelloTabsFactory',
         'settingsResource', 'entityCollectionResource', 'settingDisplayBuilder', 'productDisplayBuilder', 'invoiceDisplayBuilder', 'customerDisplayBuilder',
-        'queryDisplayBuilder', 'queryResultDisplayBuilder',
+        'queryDisplayBuilder', 'queryResultDisplayBuilder', 'entityCollectionDisplayBuilder',
     function($scope, treeService, notificationsService, navigationService, assetsService, entityCollectionHelper, merchelloTabsFactory,
         settingsResource, entityCollectionResource, settingDisplayBuilder, productDisplayBuilder, invoiceDisplayBuilder, customerDisplayBuilder,
-        queryDisplayBuilder, queryResultDisplayBuilder) {
+        queryDisplayBuilder, queryResultDisplayBuilder, entityCollectionDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -15,7 +15,9 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
         $scope.entityType = '';
         $scope.dialogData = {};
         $scope.settings = {};
-
+        $scope.entityCount = 0;
+        $scope.collection = {};
+        $scope.editCollection = false;
 
         $scope.sortProperty = '';
         $scope.sortOrder = 'Ascending';
@@ -35,6 +37,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
         $scope.numberOfPages = numberOfPages;
         $scope.toggleMode = toggleMode;
         $scope.handleEntity = handleEntity;
+        $scope.saveCollection = saveCollection;
 
         function init() {
             var cssPromise = assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
@@ -63,12 +66,22 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     $scope.currencySymbol = currencySymbol;
-                    loadEntities();
+                    loadCollection();
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
                 });
             }, function(reason) {
                 notificationService.error('Failed to load all settings', reason.message);
+            });
+        }
+
+        function loadCollection() {
+            var promise = entityCollectionResource.getByKey($scope.collectionKey);
+            promise.then(function(collection) {
+                $scope.collection = entityCollectionDisplayBuilder.transform(collection);
+                loadEntities();
+            }, function(reason) {
+                notificationsService.error('Failed to load the collection ' + reason);
             });
         }
 
@@ -109,6 +122,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
                         break
                 };
                 $scope.maxPages = queryResult.totalPages;
+                $scope.entityCount = queryResult.totalItems;
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             }, function(reason) {
@@ -129,6 +143,20 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.AddE
             }, function(reason) {
                 notificationsService.error('Failed to add entity to collection ' + reason);
             });
+        }
+
+        function saveCollection() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.entitycollectionForm.name.$valid) {
+                var promise = entityCollectionResource.saveEntityCollection($scope.collection);
+                promise.then(function(result) {
+                    $scope.collection = entityCollectionDisplayBuilder.transform(result);
+                    $scope.editCollection = false;
+                    treeService.reloadNode($scope.currentNode);
+                }, function(reason) {
+                  notificationsService.error('Failed to save entity collection');
+                });
+            }
         }
 
         function toggleMode() {
