@@ -92,6 +92,23 @@
         }
 
         /// <summary>
+        /// The get sortable provider keys.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Guid[]"/>.
+        /// </returns>
+        [HttpGet]
+        public Guid[] GetSortableProviderKeys()
+        {
+            return new[]
+                       {
+                           _resolver.GetProviderKey<StaticProductCollectionProvider>(),
+                           _resolver.GetProviderKey<StaticInvoiceCollectionProvider>(),
+                           _resolver.GetProviderKey<StaticCustomerCollectionProvider>()
+                       };
+        }
+
+        /// <summary>
         /// Gets an entity collection by its key.
         /// </summary>
         /// <param name="key">
@@ -381,6 +398,30 @@
             _entityCollectionService.Save(ec);
 
             return ec.ToEntityCollectionDisplay();
+        }
+
+        /// <summary>
+        /// Saves the entity collection.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the collection is not found
+        /// </exception>
+        [HttpPut, HttpPost]
+        public EntityCollectionDisplay PutEntityCollection(EntityCollectionDisplay collection)
+        {
+            var destination = _entityCollectionService.GetByKey(collection.Key);
+            if (destination == null) throw new NullReferenceException("Collection was not found");
+
+            destination = collection.ToEntityCollection(destination);
+            _entityCollectionService.Save(destination);
+
+            return destination.ToEntityCollectionDisplay();
         }
 
         /// <summary>

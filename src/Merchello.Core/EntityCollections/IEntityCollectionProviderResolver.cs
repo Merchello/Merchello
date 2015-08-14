@@ -74,6 +74,7 @@
         /// </returns>
         Attempt<EntityCollectionProviderBase> GetProviderForCollection(Guid collectionKey);
 
+
         /// <summary>
         /// The get provider for collection.
         /// </summary>

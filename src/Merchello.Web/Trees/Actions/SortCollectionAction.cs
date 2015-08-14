@@ -67,7 +67,7 @@
         {
             get
             {
-                return "sortMerchCollection";
+                return "sortCollections";
             }
         }
 

@@ -37,7 +37,7 @@
         /// </param>
         public override void OnActionExecuted(HttpActionExecutedContext httpActionExecutedContext)
         {
-            var objectContent = httpActionExecutedContext.Response.Content as ObjectContent;
+            var objectContent = (ObjectContent)httpActionExecutedContext.Response.Content;
             if (objectContent != null)
             {
                 if (objectContent.Formatter is JsonMediaTypeFormatter)

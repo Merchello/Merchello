@@ -47,6 +47,14 @@
         public bool ManagesUniqueCollection { get; set; }
 
         /// <summary>
+        /// Gets or sets the localization name key.
+        /// </summary>
+        /// <remarks>
+        /// e.g. "merchelloProviders/providerNameKey"
+        /// </remarks>
+        public string LocalizedNameKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the entity type.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]

@@ -159,5 +159,22 @@
                 this["subTree"] = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the self managed entity collection provider collections.
+        /// </summary>
+        [ConfigurationProperty("selfManagedEntityCollectionProviders", IsRequired = false), ConfigurationCollection(typeof(SelfManagedEntityCollectionProviderCollection), AddItemName = "entityCollectionProvider")]
+        public SelfManagedEntityCollectionProviderCollection SelfManagedEntityCollectionProviderCollections
+        {
+            get
+            {
+                return (SelfManagedEntityCollectionProviderCollection)this["selfManagedEntityCollectionProviders"];
+            }
+
+            set
+            {
+                this["selfManagedEntityCollectionProviders"] = value;
+            }
+        }
     }
 }

@@ -115,10 +115,17 @@
         {
             var provider = this.GetEntityCollectionProvider(collectionKey);
 
+            if (!(provider is CachedQueryableEntityCollectionProviderBase<TEntity>))
+            {
+                LogHelper.Error(typeof(CachedQueryableEntityCollectionProviderBase<TEntity>), "Provider cannot be cast to Cached Queryable Provider", new InvalidOperationException("Provider cannot execute query.  Returning an empty result."));
+                return new QueryResultDisplay();
+            }
+
+
             var args = this.BuildSearchTermArgs(searchTerm);
 
             return
-                this.GetQueryResultDisplay(provider.GetPagedEntityKeys(args, page, itemsPerPage, sortBy, sortDirection));
+                this.GetQueryResultDisplay(((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeys(args, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -151,8 +158,14 @@
         {
             var provider = this.GetEntityCollectionProvider(collectionKey);
 
+            if (!(provider is CachedQueryableEntityCollectionProviderBase<TEntity>))
+            {
+                LogHelper.Error(typeof(CachedQueryableEntityCollectionProviderBase<TEntity>), "Provider cannot be cast to Cached Queryable Provider", new InvalidOperationException("Provider cannot execute query.  Returning an empty result."));
+                return new QueryResultDisplay();
+            }
+
             return
-                this.GetQueryResultDisplay(provider.GetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection));
+                this.GetQueryResultDisplay(((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -189,10 +202,17 @@
         {
             var provider = this.GetEntityCollectionProvider(collectionKey);
 
+            if (!(provider is CachedQueryableEntityCollectionProviderBase<TEntity>))
+            {
+                LogHelper.Error(typeof(CachedQueryableEntityCollectionProviderBase<TEntity>), "Provider cannot be cast to Cached Queryable Provider", new InvalidOperationException("Provider cannot execute query.  Returning an empty result."));
+                return new QueryResultDisplay();
+            }
+
+
             var args = this.BuildSearchTermArgs(searchTerm);
 
             return
-                this.GetQueryResultDisplay(provider.GetPagedEntityKeysNotInCollection(args, page, itemsPerPage, sortBy, sortDirection));
+                this.GetQueryResultDisplay(((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(args, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -210,9 +230,9 @@
         /// <exception cref="InvalidCastException">
         /// Throws an invalid cast exception if the provider returned does not match the entity type of the collection
         /// </exception>
-        internal CachedQueryableEntityCollectionProviderBase<TEntity> GetEntityCollectionProvider(Guid collectionKey)
+        internal CachedEntityCollectionProviderBase<TEntity> GetEntityCollectionProvider(Guid collectionKey)
         {
-            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedQueryableEntityCollectionProviderBase<TEntity>>(collectionKey);
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection<CachedEntityCollectionProviderBase<TEntity>>(collectionKey);
 
             if (attempt.Success) return attempt.Result;
             

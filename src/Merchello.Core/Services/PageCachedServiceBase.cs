@@ -1,7 +1,10 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
@@ -85,6 +88,31 @@
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// The get page from key page.
+        /// </summary>
+        /// <param name="keyPage">
+        /// The key page.
+        /// </param>
+        /// <param name="getter">
+        /// The getter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{TEntity}"/>.
+        /// </returns>
+        internal Page<TEntity> GetPageFromKeyPage(Page<Guid> keyPage, Func<IEnumerable<TEntity>> getter)
+        {
+            return new Page<TEntity>()
+                       {
+                           Context = keyPage.Context,
+                           CurrentPage = keyPage.CurrentPage,
+                           ItemsPerPage = keyPage.ItemsPerPage,
+                           TotalItems = keyPage.TotalItems,
+                           TotalPages = keyPage.TotalPages,
+                           Items = getter.Invoke().ToList()
+                       };
+        } 
 
         /// <summary>
         /// Gets a page.

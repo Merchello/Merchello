@@ -1337,6 +1337,14 @@
             The umbraco context.
             </param>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetSortableProviderKeys">
+            <summary>
+            The get sortable provider keys.
+            </summary>
+            <returns>
+            The <see cref="!:Guid[]"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetByKey(System.Guid)">
             <summary>
             Gets an entity collection by its key.
@@ -1460,6 +1468,20 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
+            <summary>
+            Saves the entity collection.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the collection is not found
+            </exception>
         </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutUpdateSortOrders(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay})">
             <summary>
@@ -1887,6 +1909,14 @@
             <summary>
             Gets or sets a value indicating whether manages unique collection.
             </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.LocalizedNameKey">
+            <summary>
+            Gets or sets the localization name key.
+            </summary>
+            <remarks>
+            e.g. "merchelloProviders/providerNameKey"
+            </remarks>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityType">
             <summary>
@@ -4638,6 +4668,58 @@
             </param>
             <returns>
             The <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider">
+            <summary>
+            The unpaid invoice collection provider.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider.#ctor(Merchello.Core.IMerchelloContext,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider.PerformExists(Merchello.Core.Models.IInvoice)">
+            <summary>
+            Checks if the invoice exists in the collection
+            </summary>
+            <param name="entity">
+            The entity.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider.PerformGetPagedEntities(System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets a page of unpaid invoices
+            </summary>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Persistence.Page`1"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Reporting.IReportApiController">
@@ -15164,7 +15246,7 @@
             The collection trees.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Trees.MerchelloTreeController._resolver">
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._entityCollectionProviderResolver">
             <summary>
             The <see cref="T:Merchello.Core.EntityCollections.EntityCollectionProviderResolver"/>.
             </summary>
@@ -15215,6 +15297,7 @@
         </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.MakeCollectionRoutePathId(System.String,System.String)">
             <summary>
+            Makes a route path id
             </summary>
             <param name="collectionId">
             The collection id.
@@ -15243,6 +15326,24 @@
             <param name="collectionRoots">
             Indicates this is a collection root node
             </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodeForConfigurationEntityCollectionProviders(Merchello.Core.Configuration.Outline.TreeElement,Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,System.Net.Http.Formatting.FormDataCollection,System.String)">
+            <summary>
+            The get tree node from configuration element.
+            </summary>
+            <param name="tree">
+            The tree.
+            </param>
+            <param name="info">
+            The info.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <param name="parentRouteId">The parent route id</param>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
