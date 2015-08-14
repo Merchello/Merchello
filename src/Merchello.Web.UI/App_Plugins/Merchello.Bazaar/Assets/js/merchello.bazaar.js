@@ -186,7 +186,7 @@
                 
                 $.each($('.add-to-cart.has-variants'), function(index, elem) {
 
-                    var key = $(elem).children('.variant-pricing').attr('id');
+                    var key = $(elem).find('.variant-pricing').attr('id');
 
                     // initialize the price
                     merchello.bazaar.products.getVariantPriceAndInventory(elem, key);
