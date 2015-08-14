@@ -14,7 +14,7 @@
     /// <typeparam name="T">
     /// The type of entity
     /// </typeparam>
-    internal abstract class CachedQueryableEntityCollectionProviderBase<T> : CachedEntityCollectionProviderBase<T>, ICachedQueryableEntityCollectionProvider
+    public abstract class CachedQueryableEntityCollectionProviderBase<T> : CachedEntityCollectionProviderBase<T>, ICachedQueryableEntityCollectionProvider
         where T : class, IEntity
     {
         /// <summary>

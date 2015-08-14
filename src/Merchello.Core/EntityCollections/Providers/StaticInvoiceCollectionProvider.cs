@@ -169,7 +169,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            if (!args.ContainsKey("searchTerm")) return new Page<Guid>();
+            if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
 
             return
                 ((InvoiceService)MerchelloContext.Services.InvoiceService).GetKeysFromCollection(
@@ -209,7 +209,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            if (!args.ContainsKey("searchTerm")) return new Page<Guid>();
+            if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection);
 
             return
                 ((InvoiceService)MerchelloContext.Services.InvoiceService).GetKeysNotInCollection(
