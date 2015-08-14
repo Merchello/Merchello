@@ -64,7 +64,9 @@
         /// <summary>
         /// The <see cref="EntityCollectionProviderResolver"/>.
         /// </summary>
-        private readonly EntityCollectionProviderResolver _resolver = EntityCollectionProviderResolver.Current;
+        private readonly EntityCollectionProviderResolver _entityCollectionProviderResolver = EntityCollectionProviderResolver.Current;
+
+        private Guid[] _validSortKeys;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloTreeController"/> class.
@@ -187,21 +189,21 @@
             if (_collectiontrees.Contains(splitId.CollectionId))
             {
                 menu.Items.Add<NewCollectionAction>(
-                    _textService.Localize("merchelloCollections/newCollection", _culture),
+                    _textService.Localize(string.Format("merchelloCollections/{0}", NewCollectionAction.Instance.Alias), _culture),
                     _collectiontrees.Contains(id),
                     new Dictionary<string, object>()
                         {
                             { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize("merchelloCollections/newCollection", _culture));
+                        }).LaunchDialogView(_dialogsPath + "create.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/{0}", NewCollectionAction.Instance.Alias), _culture));
 
                 if (!_collectiontrees.Contains(id)) // don't show this on root nodes
                 menu.Items.Add<ManageEntitiesAction>(
-                    _textService.Localize("merchelloCollections/manageCollection", _culture),
+                    _textService.Localize(string.Format("merchelloCollections/{0}", ManageEntitiesAction.Instance.Alias), _culture),
                     false,
                     new Dictionary<string, object>()
                         {
                             { "dialogData", new { entityType = splitId.CollectionId, collectionKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "manage.staticcollection.html", _textService.Localize("merchelloCollections/manageCollection", _culture));
+                        }).LaunchDialogView(_dialogsPath + "manage.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/{0}", ManageEntitiesAction.Instance.Alias), _culture));
 
                 menu.Items.Add<SortCollectionAction>(
                     _textService.Localize("actions/sort", _culture),
@@ -209,7 +211,7 @@
                     new Dictionary<string, object>()
                         {
                              { "dialogData", new { entityType = splitId.CollectionId, parentKey = splitId.CollectionKey } }
-                        }).LaunchDialogView(_dialogsPath + "sort.staticcollection.html", _textService.Localize("merchelloCollections/sortCollections", _culture));                
+                        }).LaunchDialogView(_dialogsPath + "sort.staticcollection.html", _textService.Localize(string.Format("merchelloCollections/{0}", SortCollectionAction.Instance.Alias), _culture));                
 
                 if (splitId.IsChildCollection)
                 {
@@ -225,13 +227,14 @@
                 }                
             }
 
-            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), id != "gateways");
+            menu.Items.Add<RefreshNode, ActionRefresh>(_textService.Localize(string.Format("actions/{0}", ActionRefresh.Instance.Alias), _culture), id != "gateways" && !id.StartsWith("resolved"));
             
             return menu;
         }
 
 
         /// <summary>
+        /// Makes a route path id
         /// </summary>
         /// <param name="collectionId">
         /// The collection id.
@@ -272,7 +275,6 @@
         /// </returns>
         private IEnumerable<TreeNode> GetTreeNodesFromCollection(string collectionId, string parentRouteId, FormDataCollection queryStrings, bool collectionRoots = true)
         {
-
             var info = this.GetCollectionProviderInfo(collectionId);
             var splitId = new SplitRoutePath(parentRouteId);
             
@@ -281,20 +283,106 @@
                                   : info.ManagedCollections.Where(x => x.ParentKey == splitId.CollectionKeyAsGuid())
                                         .OrderBy(x => x.SortOrder);
 
+            var treeNodes = new List<TreeNode>();
 
-            if (!collections.Any()) return new TreeNode[] { };
+            // UI made collections are added before the resolved collections
+            if (collections.Any())
+            {
+                treeNodes.AddRange(
+                    collections.Select(
+                        collection =>
+                        CreateTreeNode(
+                            MakeCollectionRoutePathId(collectionId, collection.Key.ToString()),
+                            parentRouteId,
+                            queryStrings,
+                            collection.Name,
+                            "icon-list",
+                            info.ManagedCollections.Any(x => x.ParentKey == collection.Key),
+                            string.Format("/merchello/merchello/{0}/{1}", info.ViewName, collection.Key))));
+            }
 
-            return
-                collections.Select(
-                    collection =>
-                    CreateTreeNode(
-                        MakeCollectionRoutePathId(collectionId, collection.Key.ToString()),
+
+            //// if this is a child collection just return
+            if (splitId.IsChildCollection) return treeNodes;
+            
+            // add any configured dynamic collections
+            var currentTree = _rootTrees.FirstOrDefault(x => x.Id == splitId.CollectionId && x.Visible);
+            if (currentTree == null) return treeNodes;
+
+            // if there are no self managed providers - return 
+            if (currentTree.SelfManagedEntityCollectionProviderCollections == null
+                || 
+                !currentTree.SelfManagedEntityCollectionProviderCollections.EntityCollectionProviders().Any()) 
+                return treeNodes;          
+
+           treeNodes.AddRange(this.GetTreeNodeForConfigurationEntityCollectionProviders(currentTree, info, queryStrings, parentRouteId));
+
+            return treeNodes;
+        }
+
+        /// <summary>
+        /// The get tree node from configuration element.
+        /// </summary>
+        /// <param name="tree">
+        /// The tree.
+        /// </param>
+        /// <param name="info">
+        /// The info.
+        /// </param>
+        /// <param name="queryStrings">
+        /// The query strings.
+        /// </param>
+        /// <param name="parentRouteId">The parent route id</param>
+        /// <returns>
+        /// The <see cref="IEnumerable{TreeNode}"/>.
+        /// </returns>
+        private IEnumerable<TreeNode> GetTreeNodeForConfigurationEntityCollectionProviders(TreeElement tree, CollectionProviderInfo info, FormDataCollection queryStrings, string parentRouteId)
+        {
+            // get the self managed providers
+            var grouping = new List<Tuple<EntityCollectionProviderElement, EntityCollectionProviderDisplay>>();
+            foreach (var element in
+                tree.SelfManagedEntityCollectionProviderCollections.EntityCollectionProviders())
+            {
+                Guid elementKey;
+                if (!Guid.TryParse(element.Key, out elementKey))
+                {
+                    continue;
+                }
+
+                var providerDisplay =
+                    this._entityCollectionProviderResolver.GetProviderAttributes()
+                        .First(x => x.Key == elementKey)
+                        .ToEntityCollectionProviderDisplay();
+                if (providerDisplay != null)
+                {
+                    grouping.Add(new Tuple<EntityCollectionProviderElement, EntityCollectionProviderDisplay>(element, providerDisplay));
+                }
+            }
+
+            if (!grouping.Any()) return Enumerable.Empty<TreeNode>();
+
+            var treeNodes = new List<TreeNode>();
+
+            foreach (var g in grouping)
+            {
+                if (!g.Item2.ManagedCollections.Any()) continue;
+
+                var element = g.Item1;
+                var provider = g.Item2;
+                var collection = g.Item2.ManagedCollections.First();
+
+                treeNodes.Add(
+                    this.CreateTreeNode(
+                        "resolved_" + collection.Key,
                         parentRouteId,
                         queryStrings,
-                        collection.Name,
-                        "icon-list",
-                        info.ManagedCollections.Any(x => x.ParentKey == collection.Key),
+                        provider.LocalizedNameKey.IsNullOrWhiteSpace() ? provider.Name : this._textService.Localize(provider.LocalizedNameKey, this._culture),
+                        element.Icon,
+                        false,
                         string.Format("/merchello/merchello/{0}/{1}", info.ViewName, collection.Key)));
+            }
+
+            return treeNodes;
         }
 
         /// <summary>
@@ -317,7 +405,9 @@
             var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
 
             if (tree.Id == "reports" && hasSubs == false) hasSubs = ReportApiControllerResolver.Current.ResolvedTypes.Any();
-            if (_collectiontrees.Contains(tree.Id)) hasSubs = this.GetCollectionProviderInfo(tree.Id).ManagedCollections.Any();
+            if (_collectiontrees.Contains(tree.Id))
+                hasSubs = this.GetCollectionProviderInfo(tree.Id).ManagedCollections.Any()
+                          || tree.SelfManagedEntityCollectionProviderCollections.EntityCollectionProviders().Any();
 
             return CreateTreeNode(
                 tree.Id,
@@ -394,19 +484,19 @@
             {
                 case "sales":
                     info.ManagedCollections =
-                        _resolver.GetProviderAttribute<StaticInvoiceCollectionProvider>()
+                        this._entityCollectionProviderResolver.GetProviderAttribute<StaticInvoiceCollectionProvider>()
                             .ToEntityCollectionProviderDisplay().ManagedCollections;
                     info.ViewName = "saleslist";
                     break;
                 case "customers":
                     info.ManagedCollections =
-                        _resolver.GetProviderAttribute<StaticCustomerCollectionProvider>()
+                        this._entityCollectionProviderResolver.GetProviderAttribute<StaticCustomerCollectionProvider>()
                             .ToEntityCollectionProviderDisplay().ManagedCollections;
                     info.ViewName = "customerlist";
                     break;
                 default:
                     info.ManagedCollections =
-                        _resolver.GetProviderAttribute<StaticProductCollectionProvider>()
+                        this._entityCollectionProviderResolver.GetProviderAttribute<StaticProductCollectionProvider>()
                             .ToEntityCollectionProviderDisplay().ManagedCollections;
                     info.ViewName = "productlist";
                     break;

@@ -78,7 +78,7 @@
         {
             get
             {
-                return "createMerchEntity";
+                return "manageCollection";
             }
         }
 

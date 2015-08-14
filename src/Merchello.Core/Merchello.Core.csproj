@@ -254,8 +254,10 @@
     <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
+    <Compile Include="Configuration\Outline\EntityCollectionProviderElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
     <Compile Include="Configuration\Outline\PluggableObjectElement.cs" />
+    <Compile Include="Configuration\Outline\SelfManagedEntityCollectionProviderCollection.cs" />
     <Compile Include="Configuration\Outline\StrategyElement.cs" />
     <Compile Include="Configuration\Outline\TreeCollection.cs" />
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
@@ -276,8 +278,13 @@
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
     <Compile Include="EntityCollections\ICachedQueryableEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IQueryableEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\Providers\DynamicUnpaidInvoiceCollectionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EntityCollections\Providers\StaticCustomerCollectionProvider.cs" />
-    <Compile Include="EntityCollections\Providers\StaticEntityCollectionCollectionProvider.cs" />
+    <Compile Include="EntityCollections\Providers\StaticEntityCollectionCollectionProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EntityCollections\Providers\StaticInvoiceCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="EntityCollections\QueryableEntityCollectionProviderBase.cs" />

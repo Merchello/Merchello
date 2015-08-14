@@ -13,7 +13,7 @@
     /// <typeparam name="T">
     /// The type of entity
     /// </typeparam>
-    internal abstract class CachedEntityCollectionProviderBase<T> : EntityCollectionProviderBase<T>, ICachedEntityCollectionProvider
+    public abstract class CachedEntityCollectionProviderBase<T> : EntityCollectionProviderBase<T>, ICachedEntityCollectionProvider
         where T : class, IEntity
     {
         /// <summary>

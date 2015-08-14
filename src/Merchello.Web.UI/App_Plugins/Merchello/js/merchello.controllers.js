@@ -1936,6 +1936,7 @@ angular.module('merchello')
             $scope.dialogData = {};
             $scope.entityCollectionProviders = [];
             $scope.entityCollections = [];
+            $scope.sortableProviderKeys = [];
             $scope.isRootNode = false;
             $scope.nodePath = [];
 
@@ -1945,24 +1946,40 @@ angular.module('merchello')
             function init() {
                 $scope.dialogData = $scope.$parent.currentAction.metaData.dialogData;
                 $scope.entityType = entityCollectionHelper.getEntityTypeByTreeId($scope.dialogData.entityType);
-                if ($scope.dialogData.parentKey == undefined || $scope.dialogData.parentKey == '') {
-                    loadRootLevelCollections();
-                } else {
-                    loadParentCollection();
-                }
+                loadValidSortableProviderKeys();
                 $scope.nodePath = treeService.getPath($scope.currentNode);
+            }
+
+            function loadValidSortableProviderKeys() {
+                var promise = entityCollectionResource.getSortableProviderKeys();
+                promise.then(function(keys) {
+                    $scope.sortableProviderKeys = keys;
+                    if ($scope.dialogData.parentKey == undefined || $scope.dialogData.parentKey == '') {
+                        loadRootLevelCollections();
+                    } else {
+                        loadParentCollection();
+                    }
+                });
             }
 
             function loadRootLevelCollections() {
                 $scope.isRootNode = true;
                 var parentPromise = entityCollectionResource.getRootCollectionsByEntityType($scope.entityType);
                 parentPromise.then(function(collections) {
+                    var transformed = [];
                     if (!angular.isArray(collections)) {
-                        $scope.entityCollections.push(entityCollectionDisplayBuilder.transform(collections));
+                        transformed.push(entityCollectionDisplayBuilder.transform(collections));
                     } else {
-                        $scope.entityCollections = entityCollectionDisplayBuilder.transform(collections);
+                        transformed = entityCollectionDisplayBuilder.transform(collections);
                     }
-                    console.info(treeService._getTreeCache());
+
+                    // we need to weed out the non static providers if any
+                    $scope.entityCollections = _.filter(transformed, function(c) {
+
+                        return _.find($scope.sortableProviderKeys, function(k) {
+                            return k === c.providerKey;
+                        }) !== undefined;
+                    });
                     $scope.loaded = true;
                 });
             }

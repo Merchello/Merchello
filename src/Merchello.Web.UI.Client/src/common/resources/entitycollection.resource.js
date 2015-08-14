@@ -14,7 +14,6 @@ angular.module('merchello.resources').factory('entityCollectionResource',
             var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloEntityCollectionApiBaseUrl'];
 
             return {
-
                 getByKey : function(key) {
                     return umbRequestHelper.resourcePromise(
                         $http({
@@ -23,6 +22,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             params: { key: key }
                         }),
                         'Failed to get entity collection by key');
+                },
+                getSortableProviderKeys : function() {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetSortableProviderKeys',
+                            method: "GET"
+                        }),
+                        'Failed to get valid sortable provider keys');
                 },
                 getRootCollectionsByEntityType : function(entityType) {
                     return umbRequestHelper.resourcePromise(

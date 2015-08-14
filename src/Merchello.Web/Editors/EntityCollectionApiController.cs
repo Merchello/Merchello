@@ -92,6 +92,23 @@
         }
 
         /// <summary>
+        /// The get sortable provider keys.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Guid[]"/>.
+        /// </returns>
+        [HttpGet]
+        public Guid[] GetSortableProviderKeys()
+        {
+            return new[]
+                       {
+                           _resolver.GetProviderKey<StaticProductCollectionProvider>(),
+                           _resolver.GetProviderKey<StaticInvoiceCollectionProvider>(),
+                           _resolver.GetProviderKey<StaticCustomerCollectionProvider>()
+                       };
+        }
+
+        /// <summary>
         /// Gets an entity collection by its key.
         /// </summary>
         /// <param name="key">

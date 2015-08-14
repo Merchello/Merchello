@@ -67,7 +67,7 @@
         {
             get
             {
-                return "newMerchCollection";
+                return "newCollection";
             }
         }
 

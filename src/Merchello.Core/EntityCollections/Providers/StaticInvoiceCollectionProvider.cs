@@ -12,7 +12,7 @@
     /// <summary>
     /// The static invoice collection provider.
     /// </summary>
-    [EntityCollectionProvider("1AEF5650-242D-4566-ADCA-AC0C90538B47", "454539B9-D753-4C16-8ED5-5EB659E56665", "Static Invoice Collection", "A static invoice collection that could be used for categorizing or grouping sales", false)]
+    [EntityCollectionProvider("240023BB-80F0-445C-84D5-29F5892B2FB8", "454539B9-D753-4C16-8ED5-5EB659E56665", "Static Invoice Collection", "A static invoice collection that could be used for categorizing or grouping sales", false)]
     internal sealed class StaticInvoiceCollectionProvider : CachedQueryableEntityCollectionProviderBase<IInvoice>
     {
         /// <summary>

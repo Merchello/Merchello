@@ -68,6 +68,9 @@
         /// <param name="managesUniqueCollection">
         /// The manages unique collection.
         /// </param>
+        /// <param name="localizedNameKey">
+        /// The localization key for the name of the provide.  Used in cases where provider is referenced in Merchello back office tree.
+        /// </param>
         /// <remarks>
         /// If managesUniqueCollection is true, the boot manager will automatically add the collection to the merchEntityCollection table if it does not exist.
         /// Likewise, if the provider is removed, it will remove itself from the merchEntityCollection table
@@ -77,7 +80,8 @@
             string entityTfKey,
             string name,
             string description,
-            bool managesUniqueCollection)
+            bool managesUniqueCollection, 
+            string localizedNameKey = "")
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
             Mandate.ParameterNotNullOrEmpty(entityTfKey, "entityTfKey");
@@ -87,6 +91,7 @@
             this.Name = name;
             this.Description = description;
             this.ManagesUniqueCollection = managesUniqueCollection;
+            this.LocalizedNameKey = localizedNameKey;
         }
 
         /// <summary>
@@ -108,6 +113,14 @@
         /// Gets the description.
         /// </summary>
         public string Description { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the localization name key.
+        /// </summary>
+        /// <remarks>
+        /// e.g. "merchelloProviders/providerNameKey"
+        /// </remarks>
+        public string LocalizedNameKey { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether manages unique collection.

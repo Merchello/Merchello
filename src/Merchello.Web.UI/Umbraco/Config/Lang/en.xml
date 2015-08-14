@@ -1041,6 +1041,34 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="yourHistory" version="7.0">Your recent history</key>
     <key alias="sessionExpires" version="7.0">Session expires in</key>
   </area>
+  <area alias="merchelloGeneral">
+    <key alias="apply">Apply</key>
+    <key alias="price">Price</key>
+    <key alias="customer">Customer</key>
+    <key alias="total">Total</key>
+    <key alias="salePrice">Sale Price</key>
+    <key alias="filter">Filter</key>
+    <key alias="filterBy">Filter By</key>
+    <key alias="chooseMedia">Choose Media</key>
+    <key alias="multipleOptions">Multiple Options</key>
+    <key alias="optional">(optional)</key>
+    <key alias="percentSymbol" >%</key>
+    <key alias="moneySymbol" >$</key>
+    <key alias="trackingNumber" >Tracking # </key>
+    <key alias="shipment" >Shipment</key>
+    <key alias="sku" >SKU</key>
+    <key alias="quantity" >Qty</key>
+    <key alias="fulfill"> Fulfill</key>
+    <key alias="status"> Status</key>
+    <key alias="type"> Type</key>
+    <key alias="amount"> Amount</key>
+    <key alias="via">Via</key>
+    <key alias="options">Options</key>
+    <key alias="select">Select</key>
+    <key alias="all">All</key>
+    <key alias="none">None</key>
+    <key alias="expired">Expired</key>
+  </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
     <key alias="sales">Sales</key>
@@ -1049,6 +1077,14 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="collections">Collections</key>
     <key alias="reports">Reports</key>
     <key alias="gateways">Gateway Providers</key>
+  </area>
+  <area alias="merchelloProviders">
+    <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
+    <key alias="partialPaidInvoiceCollection">Partially paid invoices</key>
+    <key alias="paidInvoiceCollection">Paid invoices</key>
+    <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
+    <key alias="openOrderCollection">Open orders</key>
+    <key alias="fulfilledOrderCollection">Fulfilled orders</key>
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
@@ -1097,9 +1133,26 @@ To manage your website, simply open the Umbraco back office and start adding con
       ]]>
     </key>
     <key alias="emptySalesCollection">There are currently no sales in this collection</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="paymentStatus">Payment status</key>
+    <key alias="fulfillmentStatus">Fulfillment status</key>
+
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>
+    <key alias="noCustomers">
+      <![CDATA[
+        <h5>You Have No Customers</h5>
+        <p>But you will soon!</p>
+      ]]>
+    </key>
+    <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
+    <key alias="customerNotes">
+      <![CDATA[
+      Customer Notes
+      <small>Notes about the customer (not sale specific)</small>
+      ]]>
+    </key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="currentOffers">Current Offers</key>
@@ -1274,34 +1327,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="addStyle">Add a style...</key>
     <key alias="enterOffer">Enter a name for the offer</key>
   </area>
-  <area alias="merchelloGeneral">
-    <key alias="apply">Apply</key>
-    <key alias="price">Price</key>
-    <key alias="customer">Customer</key>
-    <key alias="total">Total</key>
-    <key alias="salePrice">Sale Price</key>
-    <key alias="filter">Filter</key>
-    <key alias="filterBy">Filter By</key>
-    <key alias="chooseMedia">Choose Media</key>
-    <key alias="multipleOptions">Multiple Options</key>
-    <key alias="optional">(optional)</key>
-    <key alias="percentSymbol" >%</key>
-    <key alias="moneySymbol" >$</key>
-    <key alias="trackingNumber" >Tracking # </key>
-    <key alias="shipment" >Shipment</key>
-    <key alias="sku" >SKU</key>
-    <key alias="quantity" >Qty</key>
-    <key alias="fulfill"> Fulfill</key>
-    <key alias="status"> Status</key>
-    <key alias="type"> Type</key>
-    <key alias="amount"> Amount</key>
-    <key alias="via">Via</key>
-    <key alias="options">Options</key>
-    <key alias="select">Select</key>
-    <key alias="all">All</key>
-    <key alias="none">None</key>
-    <key alias="expired">Expired</key>
-  </area>
+
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Store Defaults</key>
     <key alias="setDefaultSettingsHelper">Set the default settings</key>
