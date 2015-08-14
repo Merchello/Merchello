@@ -831,7 +831,7 @@
                     this.ValidateSortByField(sortBy),
                     sortDirection);
             }
-        }
+        }       
 
         /// <summary>
         /// The get invoice keys from static collection.
@@ -915,6 +915,189 @@
                     sortDirection);
             }
         }
+
+        #endregion
+
+        #region Filter Queries
+
+
+        /// <summary>
+        /// Gets invoices matching the search term and the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<IInvoice> GetInvoicesMatching(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoicesMatching(
+                    searchTerm,
+                    invoiceStatusKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetInvoiceKeysMatching(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysMatching(
+                    searchTerm,
+                    invoiceStatusKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets invoices matching the search term but not the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<IInvoice> GetInvoicesMatchingTermNotInvoiceStatus(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoicesMatchingTermNotInvoiceStatus(
+                    searchTerm,
+                    invoiceStatusKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term but not the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetInvoiceKeysMatchingTermNotInvoiceStatus(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateInvoiceRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetInvoiceKeysMatchingTermNotInvoiceStatus(
+                    searchTerm,
+                    invoiceStatusKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+
         #endregion
 
         /// <summary>

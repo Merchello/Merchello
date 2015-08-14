@@ -11,9 +11,6 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
-    using umbraco;
-    using umbraco.cms.presentation;
-
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Persistence;
@@ -82,7 +79,7 @@
         /// </returns>
         public override Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
-            var sql = this.BuildInvoiceSearchSql(searchTerm);
+            var sql = BuildInvoiceSearchSql(searchTerm);
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -116,7 +113,7 @@
         /// </returns>
         public Page<Guid> SearchKeys(string searchTerm, DateTime startDate, DateTime endDate, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
-            var sql = this.BuildInvoiceSearchSql(searchTerm);
+            var sql = BuildInvoiceSearchSql(searchTerm);
             sql.Where("invoiceDate BETWEEN @start AND @end", new { @start = startDate, @end = endDate });
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -272,7 +269,7 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var sql = this.BuildInvoiceSearchSql(term);
+            var sql = BuildInvoiceSearchSql(term);
             sql.Append("AND [merchInvoice].[pk] IN (")
                 .Append("SELECT DISTINCT([invoiceKey])")
                 .Append("FROM [merchInvoice2EntityCollection]")
@@ -282,7 +279,7 @@
                 .Append(")");
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-        }
+        }        
 
         /// <summary>
         /// The get keys not in collection.
@@ -356,7 +353,7 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var sql = this.BuildInvoiceSearchSql(term);
+            var sql = BuildInvoiceSearchSql(term);
             sql.Append("AND [merchInvoice].[pk] NOT IN (")
                 .Append("SELECT DISTINCT([invoiceKey])")
                 .Append("FROM [merchInvoice2EntityCollection]")
@@ -454,6 +451,185 @@
 
         #endregion
 
+        #region Filter Queries
+
+        /// <summary>
+        /// Gets invoices matching the search term and the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesMatching(
+           string searchTerm,
+           Guid invoiceStatusKey,
+           long page,
+           long itemsPerPage,
+           string orderExpression,
+           SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetInvoiceKeysMatching(
+                searchTerm,
+                invoiceStatusKey,
+                page,
+                itemsPerPage,
+                orderExpression,
+                sortDirection);
+
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatching(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(searchTerm);
+            sql.Append("AND [merchInvoice].[invoiceStatusKey] = @invsk", new { @invsk = invoiceStatusKey });
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets invoices matching the search term but not the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesMatchingTermNotInvoiceStatus(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetInvoiceKeysMatchingTermNotInvoiceStatus(
+                searchTerm,
+                invoiceStatusKey,
+                page,
+                itemsPerPage,
+                orderExpression,
+                sortDirection);
+
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term but not the invoice status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="invoiceStatusKey">
+        /// The invoice status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingTermNotInvoiceStatus(
+            string searchTerm,
+            Guid invoiceStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(searchTerm);
+            sql.Append("AND [merchInvoice].[invoiceStatusKey] != @invsk", new { @invsk = invoiceStatusKey });
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        #endregion
 
         /// <summary>
         /// Gets an <see cref="IInvoice"/>.
@@ -627,6 +803,55 @@
         }
 
         /// <summary>
+        /// Builds an invoice search query.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private static Sql BuildInvoiceSearchSql(string searchTerm)
+        {
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var numbers = new List<int>();
+            var terms = new List<string>();
+
+            foreach (var term in invidualTerms.Where(x => !string.IsNullOrEmpty(x)))
+            {
+                int invoiceNumber;
+                if (int.TryParse(term, out invoiceNumber))
+                {
+                    numbers.Add(invoiceNumber);
+                }
+                else
+                {
+                    terms.Add(term);
+                }
+            }
+
+
+            var sql = new Sql();
+            sql.Select("*").From<InvoiceDto>();
+            if (numbers.Any() && terms.Any())
+            {
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @invNo = numbers.ToArray() });
+            }
+            else if (numbers.Any())
+            {
+                sql.Where("invoiceNumber IN (@invNo)", new { @invNo = numbers.ToArray() });
+            }
+            else
+            {
+                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
+            }
+
+            return sql;
+        }
+
+        /// <summary>
         /// The get line item collection.
         /// </summary>
         /// <param name="invoiceKey">
@@ -675,55 +900,6 @@
             }
 
             return collection;            
-        }
-
-        /// <summary>
-        /// Builds an invoice search query.
-        /// </summary>
-        /// <param name="searchTerm">
-        /// The search term.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Sql"/>.
-        /// </returns>
-        private Sql BuildInvoiceSearchSql(string searchTerm)
-        {
-            searchTerm = searchTerm.Replace(",", " ");
-            var invidualTerms = searchTerm.Split(' ');
-
-            var numbers = new List<int>();
-            var terms = new List<string>();
-
-            foreach (var term in invidualTerms.Where(x => !string.IsNullOrEmpty(x)))
-            {
-                int invoiceNumber;
-                if (int.TryParse(term, out invoiceNumber))
-                {
-                    numbers.Add(invoiceNumber);
-                }
-                else
-                {
-                    terms.Add(term);
-                }
-            }
-
-
-            var sql = new Sql();
-            sql.Select("*").From<InvoiceDto>();
-            if (numbers.Any() && terms.Any())
-            {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @invNo = numbers.ToArray() });
-            }
-            else if (numbers.Any())
-            {
-                sql.Where("invoiceNumber IN (@invNo)", new { @invNo = numbers.ToArray() });
-            }
-            else
-            {
-                sql.Where("billToName LIKE @term OR billToEmail LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
-            }
-
-            return sql;
-        }
+        }       
     }
 }
