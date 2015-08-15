@@ -152,7 +152,7 @@
                   query.ItemsPerPage,
                   query.SortBy,
                   query.SortDirection);
-        }
+        }       
 
         /// <summary>
         /// The search by date range.

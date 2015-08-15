@@ -10,14 +10,14 @@
     using Examine;
     using global::Examine;
     using global::Examine.Providers;
+
     using Models.ContentEditing;
     using Models.Querying;
-    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// Responsible for invoice related queries - caches via lucene
     /// </summary>
-    internal class CachedInvoiceQuery : CachedQueryBase<IInvoice, InvoiceDisplay>, ICachedInvoiceQuery
+    internal class CachedInvoiceQuery : CachedQueryableCollectionQueryBase<IInvoice, InvoiceDisplay>, ICachedInvoiceQuery
     {
         /// <summary>
         /// The invoice service.
@@ -202,9 +202,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         public QueryResultDisplay Search(DateTime invoiceDateStart, DateTime invoiceDateEnd, long page, long itemsPerPage, string sortBy = "invoiceDate", SortDirection sortDirection = SortDirection.Descending, bool customerOnly = false)
-        {
-            
-
+        {            
             var query = customerOnly ? 
                 Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd && x.CustomerKey != null ):
                 Query<IInvoice>.Builder.Where(x => x.InvoiceDate >= invoiceDateStart && x.InvoiceDate <= invoiceDateEnd);
@@ -483,7 +481,7 @@
             var query = Query<IInvoice>.Builder.Where(x => x.CustomerKey == customerKey && x.InvoiceStatusKey == invoiceStatusKey);
 
             return GetQueryResultDisplay(_invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection));
-        }
+        }       
 
         /// <summary>
         /// Gets the collection of all customer invoices

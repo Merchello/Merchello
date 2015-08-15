@@ -7,14 +7,14 @@
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'queryDisplayBuilder',
+        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'entityCollectionResource', 'queryDisplayBuilder',
             'queryResultDisplayBuilder', 'customerDisplayBuilder',
-        function($scope, dialogService, notificationsService, merchelloTabsFactory, dialogDataFactory, customerResource,
+        function($scope, $routeParams, dialogService, notificationsService, settingsResource, merchelloTabsFactory, dialogDataFactory, customerResource, entityCollectionResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, customerDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
-
+            $scope.collectionKey = '';
             $scope.currentPage = 0;
             $scope.customers = [];
             $scope.filterText = '';
@@ -28,7 +28,7 @@
                 },
                 bulkActionDropdown: false
             };
-
+            $scope.currencySymbol = '';
 
             // exposed methods
             $scope.loadCustomers = loadCustomers;
@@ -38,8 +38,11 @@
             $scope.limitChanged = limitChanged;
             $scope.changePage = changePage;
             $scope.changeSortOrder = changeSortOrder;
+            $scope.getCurrencySymbol = getCurrencySymbol;
 
             var maxPages = 0;
+            var globalCurrency = '';
+            var allCurrencies = [];
 
             /**
              * @ngdoc method
@@ -50,10 +53,31 @@
              * initialized when the scope loads.
              */
             function init() {
-                loadCustomers($scope.filterText);
+                if($routeParams.id !== 'manage') {
+                    $scope.collectionKey = $routeParams.id;
+                }
+                loadSettings();
                 $scope.tabs = merchelloTabsFactory.createCustomerListTabs();
                 $scope.tabs.setActive('customerlist');
                 $scope.loaded = true;
+            }
+
+            function loadSettings() {
+                // currency matching
+                var currenciesPromise = settingsResource.getAllCurrencies();
+                currenciesPromise.then(function(currencies) {
+                    allCurrencies = currencies;
+                    // default currency
+                    var currencySymbolPromise = settingsResource.getCurrencySymbol();
+                    currencySymbolPromise.then(function (currencySymbol) {
+                        globalCurrency = currencySymbol;
+                        loadCustomers($scope.filterText);
+                    }, function (reason) {
+                        notificationService.error('Failed to load the currency symbol', reason.message);
+                    });
+                }, function(reason) {
+                    notificationService.error('Failed to load all currencies', reason.message);
+                });
             }
 
             /**
@@ -77,14 +101,24 @@
                 }
                 query.addFilterTermParam(filterText);
 
-                var promiseAllCustomers = customerResource.searchCustomers(query);
-                promiseAllCustomers.then(function (customersResponse) {
+                var promise;
+                if ($scope.collectionKey !== '') {
+                    query.addCollectionKeyParam($scope.collectionKey);
+                    query.addEntityTypeParam('Customer');
+                    promise = entityCollectionResource.getCollectionEntities(query);
+                } else {
+                    promise = customerResource.searchCustomers(query);
+                }
+
+                promise.then(function (customersResponse) {
                     $scope.customers = [];
                     var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
                     $scope.customers = queryResult.items;
                     maxPages = queryResult.totalPages;
                     if(query.parameters.length >= 0) {
-                        $scope.currentFilters = query.parameters;
+                        $scope.currentFilters = _.filter(query.parameters, function(params) {
+                            return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
+                        });
                     } else {
                         $scope.currentFilters = [];
                     }
@@ -197,7 +231,7 @@
                 var promiseSaveCustomer = customerResource.AddCustomer(customer);
                 promiseSaveCustomer.then(function (customerResponse) {
                     notificationsService.success("Customer Saved", "");
-                    init();
+                    loadCustomers($scope.filterText);
                 }, function (reason) {
                     notificationsService.error("Customer Save Failed", reason.message);
                 });
@@ -230,6 +264,32 @@
                 return {
                     sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
                     sortDirection: sortDirection
+                }
+            }
+
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Utility method to get the currency symbol for an invoice
+             */
+            function getCurrencySymbol(invoice) {
+
+                console.info(invoice);
+                if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
+                    return invoice.currency.symbol;
+                }
+
+                var currencyCode = invoice.getCurrencyCode();
+                var currency = _.find(allCurrencies, function(currency) {
+                    return currency.currencyCode === currencyCode;
+                });
+                if(currency === null || currency === undefined) {
+                    return globalCurrency;
+                } else {
+                    return currency.symbol;
                 }
             }
 

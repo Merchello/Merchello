@@ -5,6 +5,7 @@
     using Gateways;
 
     using Merchello.Core.Chains.OfferConstraints;
+    using Merchello.Core.EntityCollections;
 
     using Observation;
     using Umbraco.Core;
@@ -68,6 +69,20 @@
         internal static IEnumerable<Type> ResolveOfferConstraintChains(this PluginManager pluginManager)
         {
             return pluginManager.ResolveTypesWithAttribute<IOfferProcessor, OfferConstraintChainForAttribute>();
-        } 
+        }
+
+        /// <summary>
+        /// The resolve entity collection providers.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Type}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveEnityCollectionProviders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<IEntityCollectionProvider, EntityCollectionProviderAttribute>();
+        }
     }
 }

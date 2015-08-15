@@ -8,12 +8,11 @@
     using Models;
 
     using Umbraco.Core.Persistence;
-    using Umbraco.Core.Services;
 
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
     /// </summary>
-    public interface IProductService : IPageCachedService<IProduct>
+    public interface IProductService : IStaticCollectionService<IProduct>, IPageCachedService<IProduct>
     {
         /// <summary>
         /// Creates a Product without saving it to the database
@@ -22,7 +21,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
@@ -39,7 +38,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
@@ -91,7 +90,7 @@
         /// <summary>
         /// Gets list of <see cref="IProduct"/> objects given a list of Unique keys
         /// </summary>
-        /// <param name="keys">List of Guid keys for Product objects to retrieve</param>
+        /// <param name="keys">List of GUID keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
 
@@ -150,6 +149,7 @@
         /// <param name="sku">The SKU to be tested</param>
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
+
 
         //#region Filter Queries
 

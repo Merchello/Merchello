@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Web;
     using System.Web.Http;
     using Merchello.Core;
     using Merchello.Core.Models;
@@ -13,6 +14,7 @@
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
 
+    using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
@@ -162,7 +164,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         /// <remarks>
-        /// Valid sortBy parameters  "sku", "name", "price" 
+        /// Valid sortBy parameters  "SKU", "name", "price" 
         /// </remarks>
         [HttpPost]
         public QueryResultDisplay SearchProducts(QueryDisplay query)
@@ -183,8 +185,7 @@
                   query.ItemsPerPage,
                   query.SortBy,
                   query.SortDirection);
-        }
-
+        }        
 
         /// <summary>
         /// Creates a new product with variants

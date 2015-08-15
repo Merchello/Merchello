@@ -75,8 +75,9 @@
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
     public enum EntityType
     {
-        CampaignOffer,
+        CampaignOffer, // todo double check to remove CampaignOffer
         Customer,
+        EntityCollection,
         GatewayProvider,
         Invoice,
         ItemCache,

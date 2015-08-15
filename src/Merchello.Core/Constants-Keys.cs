@@ -2,6 +2,9 @@
 {
     using System;
 
+    using Merchello.Core.Cache;
+    using Merchello.Core.Models.Rdbms;
+
     /// <summary>
     /// Merchello constant Guids (keys)
     /// </summary>
@@ -12,6 +15,20 @@
         /// </summary>
         public static class DefaultKeys
         {
+            /// <summary>
+            /// The detached published content type.
+            /// </summary>
+            public static class DetachedPublishedContentType
+            {
+                /// <summary>
+                /// Gets the default product variant detached published content type key.
+                /// </summary>
+                public static Guid DefaultProductVariantDetachedPublishedContentTypeKey
+                {
+                    get { return new Guid("1B291A7A-417D-41D1-A044-9051E6F30A15"); }
+                }
+            }
+
             /// <summary>
             /// The default warehouse keys
             /// </summary>
@@ -178,6 +195,53 @@
         /// </summary>
         public static class ProviderKeys
         {
+            /// <summary>
+            /// The entity collection.
+            /// </summary>
+            public static class EntityCollection
+            {
+                /// <summary>
+                /// Gets the static product collection provider key.
+                /// </summary>
+                public static Guid StaticProductCollectionProviderKey
+                {
+                    get { return new Guid("4700456D-A872-4721-8455-1DDAC19F8C16"); }
+                }
+
+                /// <summary>
+                /// Gets the static invoice collection provider key.
+                /// </summary>
+                public static Guid StaticInvoiceCollectionProviderKey
+                {
+                    get
+                    {
+                        return new Guid("1AEF5650-242D-4566-ADCA-AC0C90538B47");
+                    }
+                }
+
+                /// <summary>
+                /// Gets the static customer collection provider key.
+                /// </summary>
+                public static Guid StaticCustomerCollectionProviderKey
+                {
+                    get
+                    {
+                        return new Guid("A389D41B-C8F1-4289-BD2E-5FFF01DBBDB1");
+                    }
+                }
+
+                /// <summary>
+                /// Gets the static entity collection collection provider.
+                /// </summary>
+                public static Guid StaticEntityCollectionCollectionProvider
+                {
+                    get
+                    {
+                        return new Guid("A8120A01-E9BF-4204-ADDD-D9553F6F24FE");
+                    }
+                }
+            }
+
             /// <summary>
             /// The shipping gateway providers keys.
             /// </summary>
@@ -417,6 +481,17 @@
                 public static Guid CustomerKey
                 {
                     get { return new Guid("1607D643-E5E8-4A93-9393-651F83B5F1A9"); }
+                }
+
+                /// <summary>
+                /// Gets the entity collection key.
+                /// </summary>
+                public static Guid EntityCollectionKey
+                {
+                    get
+                    {
+                        return new Guid("A3C60219-2687-4044-A85C-CC7D6FFCA298");
+                    }
                 }
 
                 /// <summary>

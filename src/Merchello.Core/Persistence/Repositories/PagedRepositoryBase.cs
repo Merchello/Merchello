@@ -171,7 +171,7 @@
         /// The items per page.
         /// </param>
         /// <param name="sql">
-        /// The sql.
+        /// The SQL.
         /// </param>
         /// <param name="orderExpression">
         /// The order expression.

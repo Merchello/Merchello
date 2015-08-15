@@ -9,8 +9,10 @@
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <!-- ACTION: Delete Customer -->
-                        <a class="btn-danger btn" data-ng-click="openDeleteCustomerDialog()">Delete</a>
+                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
+                        <ul class="dropdown-menu merchello-action-menu">
+                            <li><a data-ng-click="openDeleteCustomerDialog()"><localize key="general_delete" /></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -92,11 +94,11 @@
                             <thead>
                                 <tr>
                                     <th data-ng-show="false"><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
-                                    <th>Order</th>
-                                    <th>Date</th>
-                                    <th>Payment Status</th>
-                                    <th>Fulfillment Status</th>
-                                    <th>Total</th>
+                                    <th><localize key="merchelloSales_invoiceNumber" /></th>
+                                    <th><localize key="general_date" /></th>
+                                    <th><localize key="merchelloSales_paymentStatus" /></th>
+                                    <th><localize key="merchelloSales_fulfillmentStatus" /></th>
+                                    <th><localize key="merchelloGeneral_total" /></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -121,8 +123,7 @@
 
                 <div class="control-group umb-control-group">
                     <label class="merchello-section-label" for="customer-note">
-                        Customer Notes
-                        <small>Notes about the customer (not order specific)</small>
+                        <localize key="merchelloCustomer_customerNotes" />
                     </label>
                     <div class="merchello-controls">
                         <div class="well new-note row-fluid">

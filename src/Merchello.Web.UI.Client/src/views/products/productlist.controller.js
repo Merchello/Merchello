@@ -7,9 +7,11 @@
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
+        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
             'queryDisplayBuilder', 'queryResultDisplayBuilder',
-        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
+        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, entityCollectionResource,
+                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
         queryDisplayBuilder, queryResultDisplayBuilder) {
 
             $scope.filterText = '';
@@ -21,6 +23,9 @@
             $scope.limitAmount = 25;
             $scope.currentPage = 0;
             $scope.maxPages = 0;
+
+            // collections
+            $scope.collectionKey = '';
 
             // exposed methods
             $scope.getEditUrl = getEditUrl;
@@ -40,6 +45,10 @@
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
+                if($routeParams.id !== 'manage') {
+                    $scope.collectionKey = $routeParams.id;
+                }
+
                 loadProducts();
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createProductListTabs();
@@ -56,7 +65,6 @@
              * in Merchello models and add to the scope via the products collection.
              */
             function loadProducts() {
-
                 var page = $scope.currentPage;
                 var perPage = $scope.limitAmount;
                 var sortBy = $scope.sortProperty.replace("-", "");
@@ -68,20 +76,28 @@
                 query.sortBy = sortBy;
                 query.sortDirection = sortDirection;
                 query.addFilterTermParam($scope.filterText);
-                $scope.currentFilters = query.parameters;
+                $scope.currentFilters = _.filter(query.parameters, function(params) {
+                    return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
+                });
 
-                var promise = productResource.searchProducts(query);
+                var promise;
+                if ($scope.collectionKey !== '') {
+                    query.addCollectionKeyParam($scope.collectionKey);
+                    query.addEntityTypeParam('Product');
+                    var promise = entityCollectionResource.getCollectionEntities(query);
+                } else {
+                    var promise = productResource.searchProducts(query);
+                }
+
                 promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
                     $scope.products = queryResult.items;
-                    console.info($scope.products);
                     $scope.maxPages = queryResult.totalPages;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function(reason) {
                     notificationsService.success("Products Load Failed:", reason.message);
                 });
-
             }
 
             /**
@@ -142,7 +158,6 @@
              * direction if the property is already the current sort column.
              */
             function changeSortOrder(propertyToSort) {
-
                 if ($scope.sortProperty == propertyToSort) {
                     if ($scope.sortOrder == "Ascending") {
                         $scope.sortProperty = "-" + propertyToSort;
@@ -155,7 +170,6 @@
                     $scope.sortProperty = propertyToSort;
                     $scope.sortOrder = "Ascending";
                 }
-
                 loadProducts();
             }
 
@@ -175,7 +189,6 @@
                 loadProducts();
             }
 
-
             //--------------------------------------------------------------------------------------
             // Calculations
             //--------------------------------------------------------------------------------------
@@ -190,7 +203,6 @@
              */
             function numberOfPages() {
                 return $scope.maxPages;
-                //return Math.ceil($scope.products.length / $scope.limitAmount);
             }
 
             /**
@@ -206,12 +218,12 @@
                 $scope.currentFilters = [];
                 $scope.filterText = '';
                 loadProducts();
-
             }
 
             function getEditUrl(product) {
-                return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
-                    "#/merchello/merchello/productedit/" + product.key;
+                return "#/merchello/merchello/productedit/" + product.key;
+                //return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
+                //    "#/merchello/merchello/productedit/" + product.key;
             }
 
             // Initialize the controller

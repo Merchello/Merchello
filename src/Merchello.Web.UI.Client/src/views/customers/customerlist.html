@@ -84,6 +84,12 @@
                 <!-- Pagination -->
                 <merchello-pager></merchello-pager>
             </div>
+            <div class="pager well" data-ng-show="preValuesLoaded && customers.length == 0 && collectionKey===''">
+                <localize key="merchelloCustomers_noCustomers" />
+            </div>
+            <div class="pager well" data-ng-show="preValuesLoaded && customers.length == 0 && collectionKey!==''">
+                <localize key="merchelloCustomers_emptyCustomerCollection" />
+            </div>
         </merchello-panel>
     </umb-panel>
 </div>

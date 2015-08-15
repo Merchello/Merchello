@@ -1,0 +1,28 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SortStaticCollectionController" data-ng-show="loaded">
+
+    <div class="form-group row-fluid" style="padding: 1em">
+        <table class="table entity-collection-table">
+            <thead>
+            <tr>
+                <th><localize key="merchelloTableCaptions_name" /></th>
+                <th><localize key="merchelloTableCaptions_sortOrder" /></th>
+            </tr>
+            </thead>
+            <tbody data-ng-show="entityCollections.length > 0" ui-sortable="sortableCollections" data-ng-model="entityCollections">
+            <tr class="entity-collections sortable" data-ng-repeat="collection in entityCollections">
+                <td>{{ collection.name }}</td>
+                <td>{{ collection.sortOrder }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <!-- ACTION: Cancel -->
+            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+            <!-- ACTION: Submit DialogData -->
+            <button class="btn btn-primary" data-ng-click="save()" data-ng-show="entityCollections.length > 0"><localize key="buttons_save" /></button>
+
+        </div>
+    </div>
+</div>

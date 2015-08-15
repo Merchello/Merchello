@@ -13,7 +13,7 @@
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>
+    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>, IStaticEntityCollectionRepository<IProduct>
     {
         /// <summary>
         /// Gets or sets a value Indicating whether or not a SKU is already exists in the database

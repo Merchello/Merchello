@@ -3,8 +3,11 @@
     using Core.Gateways;
     using Core.Models;
 
+    using Merchello.Core.EntityCollections;
     using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.ContentEditing.Collections;
+    using Merchello.Web.Models.MapperResolvers.EntityCollections;
     using Merchello.Web.Models.MapperResolvers.Offers;
     using Merchello.Web.Models.SaleHistory;
 
@@ -53,6 +56,26 @@
 
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
+            // Entity Collection
+            AutoMapper.Mapper.CreateMap<IEntityCollection, EntityCollectionDisplay>()
+                .ForMember(
+                    dest => dest.EntityTypeField,
+                    opt =>
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
+                .ForMember(
+                    dest => dest.ParentKey,
+                    opt =>
+                        opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()));
+
+            AutoMapper.Mapper.CreateMap<EntityCollectionProviderAttribute, EntityCollectionProviderDisplay>()
+                .ForMember(
+                    dest => dest.EntityTypeField,
+                    opt =>
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
+                .ForMember(
+                    dest => dest.ManagedCollections,
+                    opt =>
+                    opt.ResolveUsing<ManagedCollectionsResolver>().ConstructedBy(() => new ManagedCollectionsResolver()));
 
             // Gateway Provider    
             AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()

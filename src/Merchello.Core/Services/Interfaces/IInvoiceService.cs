@@ -8,7 +8,7 @@
     /// <summary>
     /// Defines the InvoiceService
     /// </summary>
-    public interface IInvoiceService : IPageCachedService<IInvoice>
+    public interface IInvoiceService : IStaticCollectionService<IInvoice>, IPageCachedService<IInvoice>
     {
         /// <summary>
         /// Creates a <see cref="IInvoice"/> without saving it to the database
@@ -145,7 +145,7 @@
         ///// <returns>
         ///// The <see cref="Page{IInvoice}"/>.
         ///// </returns>
-        //Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+        //Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);        
 
         #region InvoiceStatus
 

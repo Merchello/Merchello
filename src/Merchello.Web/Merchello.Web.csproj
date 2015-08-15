@@ -247,9 +247,14 @@
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardVisitor.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponRewardAdjustmentAudit.cs" />
+    <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
+    <Compile Include="LocalizationHelper.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Collections\Entity2CollectionModel.cs" />
+    <Compile Include="Models\ContentEditing\Collections\EntityCollectionDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Collections\EntityCollectionProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\ExtendedDataExtensions.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferProviderDisplay.cs" />
@@ -265,6 +270,9 @@
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\EntityCollections\EntityCollectionNullableParentKeyResolver.cs" />
+    <Compile Include="Models\MapperResolvers\EntityTypeFieldResolver.cs" />
+    <Compile Include="Models\MapperResolvers\EntityCollections\ManagedCollectionsResolver.cs" />
     <Compile Include="Models\MapperResolvers\GatewayProviders\TaxationByProductValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentExtendedDataResolver.cs" />
     <Compile Include="Models\MapperResolvers\Offers\OfferComponentTypeGroupingResolver.cs" />
@@ -323,22 +331,31 @@
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
+    <Compile Include="Providers\DynamicCollection\UnpaidInvoiceCollectionProvider.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
     <Compile Include="Reporting\ReportController.cs" />
     <Compile Include="Reporting\ReportApiControllerResolver.cs" />
+    <Compile Include="Search\CachedQueryableCollectionQueryBase.cs" />
     <Compile Include="Search\CachedCustomerQuery.cs" />
     <Compile Include="Search\CachedOrderQuery.cs" />
     <Compile Include="Search\CachedProductQuery.cs" />
     <Compile Include="Search\CachedQueryBase.cs" />
     <Compile Include="Search\CachedInvoiceQuery.cs" />
     <Compile Include="Search\CachedQueryProvider.cs" />
+    <Compile Include="Search\ICachedCollectionQuery.cs" />
     <Compile Include="Search\ICachedCustomerQuery.cs" />
     <Compile Include="Search\ICachedInvoiceQuery.cs" />
     <Compile Include="Search\ICachedOrderQuery.cs" />
     <Compile Include="Search\ICachedProductQuery.cs" />
     <Compile Include="Search\ICachedQueryProvider.cs" />
     <Compile Include="Search\QueryResultFactory.cs" />
+    <Compile Include="Trees\Actions\DeleteCollectionAction.cs" />
+    <Compile Include="Trees\Actions\ManageEntitiesAction.cs" />
+    <Compile Include="Trees\Actions\NewOfferSettingsAction.cs" />
+    <Compile Include="Trees\Actions\NewCollectionAction.cs" />
+    <Compile Include="Trees\Actions\NewEntityAction.cs" />
+    <Compile Include="Trees\Actions\SortCollectionAction.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
     <Compile Include="Models\ContentEditing\BackofficeAddItemModel.cs" />
@@ -464,9 +481,7 @@
     <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>

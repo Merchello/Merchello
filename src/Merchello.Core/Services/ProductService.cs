@@ -6,6 +6,7 @@
     using System.Threading;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
@@ -484,6 +485,188 @@
         }
 
         /// <summary>
+        /// The add product to collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void AddToCollection(IProduct product, IEntityCollection collection)
+        {
+            this.AddToCollection(product, collection.Key);
+        }
+
+        /// <summary>
+        /// The add product to collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(IProduct product, Guid collectionKey)
+        {
+            this.AddToCollection(product.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The add product to collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(Guid productKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollection(productKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The exists in collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid productKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(productKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void RemoveFromCollection(IProduct product, IEntityCollection collection)
+        {
+            this.RemoveFromCollection(product, collection.Key);
+        }
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(IProduct product, Guid collectionKey)
+        {
+            this.RemoveFromCollection(product.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(Guid productKey, Guid collectionKey)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollection(productKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// Gets products from a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets products from a collection filtered by a search term.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
         /// Gets all the products
         /// </summary>
         /// <returns>
@@ -494,6 +677,150 @@
             using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
+            }
+        }
+
+        /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysNotInCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            } 
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysNotInCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -816,7 +1143,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         internal Page<Guid> GetProductsByBarcode(
             IEnumerable<string> barcodes,

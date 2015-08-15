@@ -82,20 +82,6 @@
         }
 
         /// <summary>
-        /// Returns an instance of the <see cref="ITaxMethodRepository"/>
-        /// </summary>
-        /// <param name="uow">
-        /// The database unit of work
-        /// </param>
-        /// <returns>
-        /// The <see cref="ITaxMethodRepository"/>.
-        /// </returns>
-        internal virtual ITaxMethodRepository CreateTaxMethodRepository(IDatabaseUnitOfWork uow)
-        {
-            return new TaxMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
-        }
-
-        /// <summary>
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>
         /// <param name="uow">
@@ -149,6 +135,20 @@
         internal virtual IDigitalMediaRepository CreateDigitalMediaRepository(IDatabaseUnitOfWork uow)
         {
             return new DigitalMediaRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// The create entity collection repository.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntityCollectionRepository"/>.
+        /// </returns>
+        internal virtual IEntityCollectionRepository CreateEntityCollectionRepository(IDatabaseUnitOfWork uow)
+        {
+            return new EntityCollectionRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@
         }
 
         /// <summary>
-        /// Gets an instance of teh <see cref="IOrderLineItemRepository"/>
+        /// Gets an instance of the <see cref="IOrderLineItemRepository"/>
         /// </summary>
         /// <param name="uow">
         /// The database unit of work
@@ -453,7 +453,7 @@
         /// Returns an instance of the <see cref="IShipmentStatusRepository"/>
         /// </summary>
         /// <param name="uow">
-        /// The uow.
+        /// The unit of work.
         /// </param>
         /// <returns>
         /// The <see cref="IShipmentStatusRepository"/>.
@@ -475,6 +475,20 @@
         internal virtual IStoreSettingRepository CreateStoreSettingRepository(IDatabaseUnitOfWork uow)
         {
             return new StoreSettingRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="ITaxMethodRepository"/>
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITaxMethodRepository"/>.
+        /// </returns>
+        internal virtual ITaxMethodRepository CreateTaxMethodRepository(IDatabaseUnitOfWork uow)
+        {
+            return new TaxMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
         }
 
         /// <summary>

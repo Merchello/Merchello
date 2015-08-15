@@ -42,6 +42,40 @@
         }
 
         /// <summary>
+        /// Gets or sets the localize area.
+        /// </summary>
+        [ConfigurationProperty("localizeArea", IsRequired = false, DefaultValue = "merchelloTree")]
+        public string LocalizeArea
+        {
+            get
+            {
+                return (string)this["localizeArea"];
+            }
+
+            set
+            {
+                this["localizeArea"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the localize area.
+        /// </summary>
+        [ConfigurationProperty("localizeName", IsRequired = false, DefaultValue = "")]
+        public string LocalizeName
+        {
+            get
+            {
+                return (string)this["localizeName"];
+            }
+
+            set
+            {
+                this["localizeName"] = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the icon.
         /// </summary>
         [ConfigurationProperty("icon", IsRequired = true)]
@@ -112,6 +146,24 @@
         /// <summary>
         /// Gets or sets the sub tree.
         /// </summary>
+        [ConfigurationProperty("childSettings", IsRequired = false), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
+        public SettingsCollection ChildSettings
+        {
+            get
+            {
+                return (SettingsCollection)this["childSettings"];
+            }
+
+            set
+            {
+                this["childSettings"] = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the sub tree.
+        /// </summary>
         [ConfigurationProperty("subTree", IsRequired = false), ConfigurationCollection(typeof(TreeCollection), AddItemName = "tree")]
         public TreeCollection SubTree
         {
@@ -123,6 +175,23 @@
             set
             {
                 this["subTree"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the self managed entity collection provider collections.
+        /// </summary>
+        [ConfigurationProperty("selfManagedEntityCollectionProviders", IsRequired = false), ConfigurationCollection(typeof(SelfManagedEntityCollectionProviderCollection), AddItemName = "entityCollectionProvider")]
+        public SelfManagedEntityCollectionProviderCollection SelfManagedEntityCollectionProviderCollections
+        {
+            get
+            {
+                return (SelfManagedEntityCollectionProviderCollection)this["selfManagedEntityCollectionProviders"];
+            }
+
+            set
+            {
+                this["selfManagedEntityCollectionProviders"] = value;
             }
         }
     }

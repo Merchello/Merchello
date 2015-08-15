@@ -8,9 +8,9 @@
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$log', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
-        'invoiceResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $element, $log, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource,
+    ['$scope', '$element', '$log', '$routeParams', 'angularHelper', 'assetsService', 'notificationsService', 'merchelloTabsFactory', 'settingsResource',
+        'invoiceResource', 'entityCollectionResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
+        function($scope, $element, $log, $routeParams, angularHelper, assetsService, notificationService, merchelloTabsFactory, settingsResource, invoiceResource, entityCollectionResource,
                  queryDisplayBuilder, queryResultDisplayBuilder, invoiceDisplayBuilder, settingDisplayBuilder)
         {
 
@@ -35,6 +35,8 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.visible.bulkActionDropdown = false;
             $scope.currentFilters = [];
             $scope.dateFilterOpen = false;
+            $scope.collectionKey = '';
+            $scope.showDateFilter = true;
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;
@@ -175,6 +177,10 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             // PRIVATE
             function init() {
                 $scope.currencySymbol = '$';
+                if($routeParams.id !== 'manage') {
+                    $scope.collectionKey = $routeParams.id;
+                    $scope.showDateFilter = false;
+                }
                 resetFilters();
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
@@ -186,7 +192,12 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.salesLoaded = false;
                 $scope.salesLoaded = false;
 
-                var promise = invoiceResource.searchInvoices(query);
+                var promise;
+                if ($scope.collectionKey !== '') {
+                    promise = entityCollectionResource.getCollectionEntities(query);
+                } else {
+                    promise = invoiceResource.searchInvoices(query);
+                }
                 promise.then(function (response) {
                     var queryResult = queryResultDisplayBuilder.transform(response, invoiceDisplayBuilder);
                     $scope.invoices = queryResult.items;
@@ -212,7 +223,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              */
             function resetFilters() {
                 var query = buildQuery();
-                toggleDateFilterOpen();
+                $scope.dateFilterOpen = false;
                 $scope.currentFilters = [];
                 $scope.filterText = '';
                 setDefaultDates(new Date());
@@ -287,7 +298,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 }
 
                 var dateSearch = false;
-                if (startDate !== undefined && endDate !== undefined) {
+                if (startDate !== undefined && endDate !== undefined && $scope.collectionKey === '') {
                     $scope.filterStartDate = startDate;
                     $scope.filterEndDate = endDate;
                     dateSearch = true;
@@ -305,10 +316,17 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     query.addInvoiceDateParam(endDate, 'end');
                 }
 
+                if($scope.collectionKey !== '') {
+                    query.addCollectionKeyParam($scope.collectionKey);
+                    query.addEntityTypeParam('Invoice');
+                }
+
                 query.addFilterTermParam(filterText);
 
                 if (query.parameters.length > 0) {
-                    $scope.currentFilters = query.parameters;
+                    $scope.currentFilters = _.filter(query.parameters, function(params) {
+                        return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
+                    });
                 }
                 return query;
             };

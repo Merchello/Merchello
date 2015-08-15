@@ -14,6 +14,7 @@
                 filterStartDate: '=',
                 filterEndDate: '=',
                 filterText: '=',
+                showDateFilter: '=',
                 filterButtonText: '@filterButtonText',
                 dateFilterOpen: '=',
                 filterCallback: '&',

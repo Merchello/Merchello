@@ -129,6 +129,24 @@ namespace Merchello.Tests.Base.TestHelpers
 
         #endregion
 
+        #region IEntityCollection
+
+        public void DeleteAllEntityCollections()
+        {
+            var collections = ((EntityCollectionService)_serviceContext.EntityCollectionService).GetAll();
+            ((EntityCollectionService)EntityCollectionService).Delete(collections);
+        }
+
+        public IEntityCollectionService EntityCollectionService
+        {
+            get
+            {
+                return _serviceContext.EntityCollectionService;
+            }
+        }
+
+        #endregion
+
         #region IItemCache
 
         /// <summary>
@@ -163,9 +181,9 @@ namespace Merchello.Tests.Base.TestHelpers
         /// Inserts a customer record in the merchCustomer table and returns an <see cref="ICustomer"/> object representation
         /// </summary>
         /// <returns></returns>
-        public ICustomer MakeExistingCustomer()
+        public ICustomer MakeExistingCustomer(string loginName = "")
         {
-            var customer = MockCustomerDataMaker.CustomerForInserting();
+            var customer = MockCustomerDataMaker.CustomerForInserting(loginName);
             ((CustomerService)CustomerService).Save(customer);
             return customer;
         }
