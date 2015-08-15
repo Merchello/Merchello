@@ -477,7 +477,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetInvoicesMatching(
+        public Page<IInvoice> GetInvoicesMatchingInvoiceStatus(
            string searchTerm,
            Guid invoiceStatusKey,
            long page,
@@ -485,7 +485,7 @@
            string orderExpression,
            SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetInvoiceKeysMatching(
+            var p = this.GetInvoiceKeysMatchingInvoiceStatus(
                 searchTerm,
                 invoiceStatusKey,
                 page,
@@ -528,7 +528,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<Guid> GetInvoiceKeysMatching(
+        public Page<Guid> GetInvoiceKeysMatchingInvoiceStatus(
             string searchTerm,
             Guid invoiceStatusKey,
             long page,
@@ -626,6 +626,330 @@
         {
             var sql = BuildInvoiceSearchSql(searchTerm);
             sql.Append("AND [merchInvoice].[invoiceStatusKey] != @invsk", new { @invsk = invoiceStatusKey });
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets invoices matching the search term and the order status key.
+        /// </summary>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesMatchingOrderStatus(
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = GetInvoiceKeysMatchingOrderStatus(
+                orderStatusKey,
+                page,
+                itemsPerPage,
+                orderExpression,
+                sortDirection);
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the order status key.
+        /// </summary>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingOrderStatus(
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchInvoice]")
+              .Append("WHERE [merchInvoice].[pk] IN (")
+              .Append("SELECT DISTINCT(invoiceKey)")
+              .Append("FROM [merchOrder]")
+              .Append("WHERE [merchOrder].[orderStatusKey] = @osk", new { @osk = orderStatusKey })
+              .Append(")");
+
+            if (orderStatusKey.Equals(Core.Constants.DefaultKeys.OrderStatus.NotFulfilled))
+            {
+                sql.Append("OR [merchInvoice].[pk] NOT IN (");
+                sql.Append("SELECT DISTINCT(invoiceKey)");
+                sql.Append("FROM [merchOrder]");
+                sql.Append(")");
+            }
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets invoices matching the search term and the order status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesMatchingOrderStatus(
+            string searchTerm,
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = GetInvoiceKeysMatchingOrderStatus(
+               orderStatusKey,
+               page,
+               itemsPerPage,
+               orderExpression,
+               sortDirection);
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term and the order status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingOrderStatus(
+            string searchTerm,
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(searchTerm);
+            sql.Append("AND ([merchInvoice].[pk] IN (");
+            sql.Append("SELECT DISTINCT(invoiceKey)");
+            sql.Append("FROM [merchOrder]");
+            sql.Append("WHERE [merchOrder].[orderStatusKey] = @osk", new { @osk = orderStatusKey });
+            sql.Append(")");
+
+            if (orderStatusKey.Equals(Core.Constants.DefaultKeys.OrderStatus.NotFulfilled))
+            {
+                sql.Append("OR [merchInvoice].[pk] NOT IN (");
+                sql.Append("SELECT DISTINCT(invoiceKey)");
+                sql.Append("FROM [merchOrder]");
+                sql.Append(")");
+            }
+            sql.Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets invoices matching the search term but not the order status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetInvoicesMatchingTermNotOrderStatus(
+            string searchTerm,
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = GetInvoiceKeysMatchingOrderStatus(
+              orderStatusKey,
+              page,
+              itemsPerPage,
+              orderExpression,
+              sortDirection);
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term but not the order status key.
+        /// </summary>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchInvoice]")
+              .Append("WHERE [merchInvoice].[pk] NOT IN (")
+              .Append("SELECT DISTINCT(invoiceKey)")
+              .Append("FROM [merchOrder]")
+              .Append("WHERE [merchOrder].[orderStatusKey] != @osk", new { @osk = orderStatusKey })
+              .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets invoice keys matching the search term but not the order status key.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="orderStatusKey">
+        /// The order status key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetInvoiceKeysMatchingTermNotOrderStatus(
+            string searchTerm,
+            Guid orderStatusKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(searchTerm);
+            sql.Append("AND [merchInvoice].[pk] NOT IN (");
+            sql.Append("SELECT DISTINCT(invoiceKey)");
+            sql.Append("FROM [merchOrder]");
+            sql.Append("WHERE [merchOrder].[orderStatusKey] != @osk", new { @osk = orderStatusKey });
+            sql.Append(")");
+
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 

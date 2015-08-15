@@ -128,7 +128,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeys(
             Dictionary<string, object> args,
@@ -140,7 +140,7 @@
             if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
             
             return
-                    this._invoiceService.GetInvoiceKeysMatching(
+                    this._invoiceService.GetInvoiceKeysMatchingInvoiceStatus(
                         args["searchTerm"].ToString(),
                         Constants.DefaultKeys.InvoiceStatus.Unpaid,
                         page,

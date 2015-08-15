@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
@@ -10,12 +11,12 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// The dynamic paid invoice collection provider.
+    /// The dynamic fulfilled order collection provider.
     /// </summary>
-    [EntityCollectionProvider("072E0671-31BE-41E4-8CF9-4AEEC6CC5BC6", "454539B9-D753-4C16-8ED5-5EB659E56665",
-        "Paid Invoice Collection", "A dynamic collection queries for paid invoices", true,
-        "merchelloProviders/paidInvoiceCollection")]
-    internal class DynamicPaidInvoiceCollectionProvider : CachedQueryableEntityCollectionProviderBase<IInvoice>
+    [EntityCollectionProvider("68B57648-7550-4702-8223-C5574B7C0604", "454539B9-D753-4C16-8ED5-5EB659E56665",
+    "Invoices with fulfilled orders collection", "A dynamic collection queries for fufilled orders and returns the associated invoices", true,
+    "merchelloProviders/fulfilledOrderCollection")]
+    internal class DynamicFulfilledOrderCollectionProvider : CachedQueryableEntityCollectionProviderBase<IInvoice>
     {
         /// <summary>
         /// The <see cref="InvoiceService"/>.
@@ -23,7 +24,7 @@
         private readonly InvoiceService _invoiceService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DynamicPaidInvoiceCollectionProvider"/> class.
+        /// Initializes a new instance of the <see cref="DynamicFulfilledOrderCollectionProvider"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -31,14 +32,14 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public DynamicPaidInvoiceCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
+        public DynamicFulfilledOrderCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
             _invoiceService = (InvoiceService)merchelloContext.Services.InvoiceService;
         }
 
         /// <summary>
-        /// Checks if the invoice exists in the collection
+        /// The perform exists.
         /// </summary>
         /// <param name="entity">
         /// The entity.
@@ -48,7 +49,8 @@
         /// </returns>
         protected override bool PerformExists(IInvoice entity)
         {
-            return entity.InvoiceStatusKey.Equals(Constants.DefaultKeys.InvoiceStatus.Paid);
+            return !entity.Orders.Any()
+                   || entity.Orders.All(x => x.OrderStatusKey == Constants.DefaultKeys.OrderStatus.Fulfilled);
         }
 
         /// <summary>
@@ -99,10 +101,12 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var query =
-                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == Constants.DefaultKeys.InvoiceStatus.Paid);
-
-            return _invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection);
+            return _invoiceService.GetInvoiceKeysMatchingOrderStatus(
+                Constants.DefaultKeys.OrderStatus.Fulfilled,
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection);
         }
 
         /// <summary>
@@ -136,9 +140,9 @@
             if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
 
             return
-                    this._invoiceService.GetInvoiceKeysMatchingInvoiceStatus(
+                    this._invoiceService.GetInvoiceKeysMatchingOrderStatus(
                         args["searchTerm"].ToString(),
-                        Constants.DefaultKeys.InvoiceStatus.Paid,
+                        Constants.DefaultKeys.OrderStatus.Fulfilled,
                         page,
                         itemsPerPage,
                         sortBy,
@@ -169,10 +173,12 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var query =
-                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Paid);
-
-            return _invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection);
+            return _invoiceService.GetInvoiceKeysMatchingTermNotOrderStatus(
+                Constants.DefaultKeys.OrderStatus.Fulfilled,
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection);
         }
 
         /// <summary>
@@ -194,7 +200,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
             Dictionary<string, object> args,
@@ -203,17 +209,16 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection);
-
+            if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
 
             return
-                this._invoiceService.GetInvoiceKeysMatchingTermNotInvoiceStatus(
-                    args["searchTerm"].ToString(),
-                    Constants.DefaultKeys.InvoiceStatus.Paid,
-                    page,
-                    itemsPerPage,
-                    sortBy,
-                    sortDirection);
+                    this._invoiceService.GetInvoiceKeysMatchingTermNotOrderStatus(
+                        args["searchTerm"].ToString(),
+                        Constants.DefaultKeys.OrderStatus.Fulfilled,
+                        page,
+                        itemsPerPage,
+                        sortBy,
+                        sortDirection);
         }
     }
 }

@@ -136,7 +136,7 @@
             if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
 
             return
-                    this._invoiceService.GetInvoiceKeysMatching(
+                    this._invoiceService.GetInvoiceKeysMatchingInvoiceStatus(
                         args["searchTerm"].ToString(),
                         Constants.DefaultKeys.InvoiceStatus.Partial,
                         page,
