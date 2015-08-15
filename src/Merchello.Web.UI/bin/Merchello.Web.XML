@@ -15216,7 +15216,7 @@
             The merchello tree controller.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Trees.MerchelloTreeController._dialogsPath">
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController.DialogsPath">
             <summary>
             The dialogs path.
             </summary>
@@ -15224,11 +15224,6 @@
         <member name="F:Merchello.Web.Trees.MerchelloTreeController._textService">
             <summary>
             The text service.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Trees.MerchelloTreeController._user">
-            <summary>
-            The <see cref="T:Umbraco.Core.Models.Membership.IUser"/>.
             </summary>
         </member>
         <member name="F:Merchello.Web.Trees.MerchelloTreeController._culture">
@@ -15310,7 +15305,7 @@
             The <see cref="T:System.String"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesFromCollection(System.String,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesForCollections(System.String,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
             <summary>
             Gets tree nodes for collections.
             </summary>
@@ -15330,12 +15325,67 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodeForConfigurationEntityCollectionProviders(Merchello.Core.Configuration.Outline.TreeElement,Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,System.Net.Http.Formatting.FormDataCollection,System.String)">
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesFromCollection(Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath,System.String,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
+            <summary>
+            Gets tree nodes for static collections.
+            </summary>
+            <param name="info">
+            The info.
+            </param>
+            <param name="splitId">
+            The split id.
+            </param>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="parentRouteId">
+            The parent route id.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <param name="collectionRoots">
+            The collection roots.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesForSelfManagedProviders(Merchello.Core.Configuration.Outline.TreeElement,Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath,System.String,System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Gets tree nodes for self managed collection providers.
+            </summary>
+            <param name="currentTree">
+            The current tree.
+            </param>
+            <param name="info">
+            The info.
+            </param>
+            <param name="splitId">
+            The split id.
+            </param>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="parentRouteId">
+            The parent route id.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodeForConfigurationEntityCollectionProviders(Merchello.Core.Configuration.Outline.TreeElement,System.String,Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,System.Net.Http.Formatting.FormDataCollection,System.String)">
             <summary>
             The get tree node from configuration element.
             </summary>
             <param name="tree">
             The tree.
+            </param>
+            <param name="collectionId">
+            The root collection type (e.g. sales, product, customer)
             </param>
             <param name="info">
             The info.

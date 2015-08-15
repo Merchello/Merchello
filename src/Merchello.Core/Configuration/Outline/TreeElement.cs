@@ -146,6 +146,24 @@
         /// <summary>
         /// Gets or sets the sub tree.
         /// </summary>
+        [ConfigurationProperty("childSettings", IsRequired = false), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
+        public SettingsCollection ChildSettings
+        {
+            get
+            {
+                return (SettingsCollection)this["childSettings"];
+            }
+
+            set
+            {
+                this["childSettings"] = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the sub tree.
+        /// </summary>
         [ConfigurationProperty("subTree", IsRequired = false), ConfigurationCollection(typeof(TreeCollection), AddItemName = "tree")]
         public TreeCollection SubTree
         {

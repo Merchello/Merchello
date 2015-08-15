@@ -145,7 +145,7 @@
         ///// <returns>
         ///// The <see cref="Page{IInvoice}"/>.
         ///// </returns>
-        //Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+        //Page<IInvoice> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);        
 
         #region InvoiceStatus
 

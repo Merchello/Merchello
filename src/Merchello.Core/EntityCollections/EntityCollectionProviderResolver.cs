@@ -108,6 +108,7 @@
         /// </returns>
         public IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes()
         {
+            this.EnsureInitialized();
             return _instanceTypes.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false));
         }
 
@@ -258,8 +259,16 @@
         /// </summary>
         private void EnsureInitialized()
         {
+            if (_instanceTypes.Count != this.GetDistinctProviderKeys().Count()) IsInitialized = false;
             if (!IsInitialized) this.Initialize();
         }
+
+        private IEnumerable<Guid> GetDistinctProviderKeys()
+        {
+            return
+                _entityCollectionProviderCache.Select(
+                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct();
+        } 
 
         /// <summary>
         /// Initializes the resolver.

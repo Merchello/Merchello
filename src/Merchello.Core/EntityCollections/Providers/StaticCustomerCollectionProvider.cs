@@ -120,7 +120,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
             long page,
@@ -155,7 +155,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeys(
             Dictionary<string, object> args,
@@ -164,7 +164,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            if (!args.ContainsKey("searchTerm")) return new Page<Guid>();
+            if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
 
             return ((CustomerService)this.MerchelloContext.Services.CustomerService).GetKeysFromCollection(
             this.CollectionKey,
@@ -194,7 +194,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
             Dictionary<string, object> args,
@@ -203,7 +203,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            if (!args.ContainsKey("searchTerm")) return new Page<Guid>();
+            if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection);
 
             return ((CustomerService)this.MerchelloContext.Services.CustomerService).GetKeysNotInCollection(
             this.CollectionKey,

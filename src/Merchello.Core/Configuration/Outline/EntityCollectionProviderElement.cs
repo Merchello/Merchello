@@ -28,6 +28,23 @@
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the tree is visible.
+        /// </summary>
+        [ConfigurationProperty("visible", IsRequired = false, DefaultValue = true)]
+        public bool Visible
+        {
+            get
+            {
+                return (bool)this["visible"];
+            }
+
+            set
+            {
+                this["visible"] = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [ConfigurationProperty("ref", IsRequired = false, DefaultValue = "")]

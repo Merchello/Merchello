@@ -10,13 +10,20 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// The static product collection provider.
+    /// The dynamic partially paid invoice collection provider.
     /// </summary>
-    [EntityCollectionProvider("4700456D-A872-4721-8455-1DDAC19F8C16", "9F923716-A022-4089-A110-1E9B4E1F2AD1", "Static Product Collection", "A static product collection that could be used for product categories and product groupings", false)]
-    internal sealed class StaticProductCollectionProvider : CachedQueryableEntityCollectionProviderBase<IProduct>
+    [EntityCollectionProvider("82015B97-11E8-4E57-8258-A59E1D378E04", "454539B9-D753-4C16-8ED5-5EB659E56665",
+        "Partially Paid Invoice Collection", "A dynamic collection queries for partially paid invoices", true,
+        "merchelloProviders/partialPaidInvoiceCollection")]
+    internal class DynamicPartiallyPaidInvoiceCollectionProvider : CachedQueryableEntityCollectionProviderBase<IInvoice>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticProductCollectionProvider"/> class.
+        /// The <see cref="InvoiceService"/>.
+        /// </summary>
+        private readonly InvoiceService _invoiceService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DynamicPartiallyPaidInvoiceCollectionProvider"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -24,11 +31,11 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public StaticProductCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
+        public DynamicPartiallyPaidInvoiceCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
+            _invoiceService = (InvoiceService)merchelloContext.Services.InvoiceService;
         }
-
 
         /// <summary>
         /// The perform exists.
@@ -39,13 +46,13 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        protected override bool PerformExists(IProduct entity)
+        protected override bool PerformExists(IInvoice entity)
         {
-            return MerchelloContext.Services.ProductService.ExistsInCollection(entity.Key, CollectionKey);
+            return entity.InvoiceStatusKey.Equals(Constants.DefaultKeys.InvoiceStatus.Partial);
         }
 
         /// <summary>
-        /// The get entities.
+        /// The perform get paged entities.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -60,20 +67,16 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{IProduct}"/>.
+        /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        protected override Page<IProduct> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<IInvoice> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return this.MerchelloContext.Services.ProductService.GetFromCollection(
-                this.CollectionKey,
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            var keyPage = this.PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
+            return _invoiceService.GetPageFromKeyPage(keyPage, () => _invoiceService.GetByKeys(keyPage.Items));
         }
 
         /// <summary>
-        /// The get paged entity keys.
+        /// The perform get paged entity keys.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -90,18 +93,20 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        protected override Page<Guid> PerformGetPagedEntityKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        protected override Page<Guid> PerformGetPagedEntityKeys(
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
         {
-            return ((ProductService)this.MerchelloContext.Services.ProductService).GetKeysFromCollection(
-                this.CollectionKey,
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            var query =
+                Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey == Constants.DefaultKeys.InvoiceStatus.Partial);
+
+            return _invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>
-        /// Gets paged entity keys in the collection
+        /// The perform get paged entity keys.
         /// </summary>
         /// <param name="args">
         /// The args.
@@ -130,17 +135,18 @@
         {
             if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection);
 
-            return ((ProductService)this.MerchelloContext.Services.ProductService).GetKeysFromCollection(
-                this.CollectionKey,
-                args["searchTerm"].ToString(),
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            return
+                    this._invoiceService.GetInvoiceKeysMatchingInvoiceStatus(
+                        args["searchTerm"].ToString(),
+                        Constants.DefaultKeys.InvoiceStatus.Partial,
+                        page,
+                        itemsPerPage,
+                        sortBy,
+                        sortDirection);
         }
 
         /// <summary>
-        /// Get paged entity keys not in collection.
+        /// The perform get paged entity keys not in collection.
         /// </summary>
         /// <param name="page">
         /// The page.
@@ -163,16 +169,14 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            return ((ProductService)this.MerchelloContext.Services.ProductService).GetKeysNotInCollection(
-                this.CollectionKey,
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            var query =
+               Query<IInvoice>.Builder.Where(x => x.InvoiceStatusKey != Constants.DefaultKeys.InvoiceStatus.Partial);
+
+            return _invoiceService.GetPagedKeys(query, page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>
-        /// Get paged entity keys not in collection.
+        /// The perform get paged entity keys not in collection.
         /// </summary>
         /// <param name="args">
         /// The args.
@@ -201,13 +205,15 @@
         {
             if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection);
 
-            return ((ProductService)this.MerchelloContext.Services.ProductService).GetKeysNotInCollection(
-                this.CollectionKey,
-                args["searchTerm"].ToString(),
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+
+            return
+                this._invoiceService.GetInvoiceKeysMatchingTermNotInvoiceStatus(
+                    args["searchTerm"].ToString(),
+                    Constants.DefaultKeys.InvoiceStatus.Partial,
+                    page,
+                    itemsPerPage,
+                    sortBy,
+                    sortDirection);
         }
     }
 }
