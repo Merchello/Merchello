@@ -37,6 +37,29 @@
     <key alias="reports">Reports</key>
     <key alias="gateways">Gateway Providers</key>
   </area>
+  <area alias="merchelloTabs">
+    <key alias="productListing">Product Listing</key>
+    <key alias="product">Product</key>
+    <key alias="productVariants">Product Variants</key>
+    <key alias="productOptions">Product Options</key>
+    <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="salesListing">Sales Listing</key>
+    <key alias="sales">Sale</key>
+    <key alias="payments">Payments</key>
+    <key alias="payment">Payment</key>
+    <key alias="shipments">Shipments</key>
+    <key alias="shipping">Shipping</key>
+    <key alias="customerListing">Customer Listing</key>
+    <key alias="customer">Customer</key>
+    <key alias="customerAddresses">Addresses</key>
+    <key alias="gatewayProviders">Gateway Providers</key>
+    <key alias="notification">Notification</key>
+    <key alias="taxation">Taxation</key>
+    <key alias="offerListing">Offer Listing</key>
+    <key alias="offer">Offer</key>
+    <key alias="coupon">Coupon</key>
+    <key alias="reportListing">Reports</key>
+  </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
     <key alias="partialPaidInvoiceCollection">Partially paid invoices</key>
