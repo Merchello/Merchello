@@ -629,6 +629,23 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
 
     angular.module('merchello.models').constant('AddEditCustomerDialogData', AddEditCustomerDialogData);
 
+/**
+ * @ngdoc model
+ * @name AddEditEntityStaticCollectionDialog
+ * @function
+ *
+ * @description
+ *  A dialog data object for adding or editing Static Collection objects
+ */
+function AddEditEntityStaticCollectionDialog() {
+    var self = this;
+    self.entityType = '';
+    self.collectionKeys = [];
+};
+
+
+angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog', AddEditEntityStaticCollectionDialog);
+
     /**
      * @ngdoc model
      * @name AddEditNotificationMessageDialogData
@@ -3896,6 +3913,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new ConfigureOfferComponentDialogData();
         }
 
+        function createAddEditEntityStaticCollectionDialog() {
+            return new AddEditEntityStaticCollectionDialog();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3936,7 +3957,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData,
             createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
-            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData
+            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData,
+            createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog
         };
 }]);
 

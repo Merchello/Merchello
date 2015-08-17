@@ -63,11 +63,17 @@
                         </div>
                     </merchello-slide-open-panel>
 
+                    <merchello-slide-open-panel is-open="context !== 'createproduct'" classes="'control-group umb-control-group'" hide-close="hideClose">
+
+                                <entity-static-collections entity-type="entityType"></entity-static-collections>
+
+                    </merchello-slide-open-panel>
+
+
                     <!-- Shipping settings for a product. -->
                     <merchello-slide-open-panel is-open="productVariant.shippable || productVariant.trackInventory" classes="'control-group umb-control-group'" hide-close="hideClose">
                         <product-variant-shipping product="product" product-variant="productVariant" settings="settings" context="{{context}}"></product-variant-shipping>
                     </merchello-slide-open-panel>
-
 
                 </div>
                 <!-- /merchello-pane -->

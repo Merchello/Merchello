@@ -23,6 +23,7 @@
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
+            $scope.entityType = 'product';
 
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
@@ -114,7 +115,6 @@
                             $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
                         }
 
-                        console.info($scope.productVariant);
                     } else {
                         // this is a product variant edit
                         // in this case we need the specific variant
