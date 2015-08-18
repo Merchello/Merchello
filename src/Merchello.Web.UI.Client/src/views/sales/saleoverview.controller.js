@@ -39,6 +39,7 @@
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
+            $scope.entityType = 'invoice';
 
             // exposed methods
             //  dialogs

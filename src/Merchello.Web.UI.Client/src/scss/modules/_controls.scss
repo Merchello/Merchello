@@ -1,0 +1,24 @@
+.merchello-controls {
+
+  //.list-icons {
+      .hover-hide {
+        cursor: pointer;
+      }
+      .hover-show {
+        cursor: pointer;
+        visibility: hidden;
+      }
+
+      li {
+        &:hover {
+          .hover-show {
+            visibility: visible;
+          }
+          .hover-hide {
+            visibility: hidden;
+          }
+        }
+      }
+
+  //}
+}

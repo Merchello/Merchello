@@ -4,7 +4,12 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.Interfaces;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The invoice display.

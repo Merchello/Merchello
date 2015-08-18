@@ -8,8 +8,6 @@
     using Core.Configuration;
     using Core.Configuration.Outline;
 
-    using ImageProcessor.Web.Config;
-
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Web.Models.ContentEditing.Collections;
@@ -19,7 +17,6 @@
     using umbraco.BusinessLogic.Actions;
 
     using Umbraco.Core;
-    using Umbraco.Core.Models.Membership;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Models.Trees;
@@ -339,9 +336,8 @@
                                   ? info.ManagedCollections.Where(x => x.ParentKey == null).OrderBy(x => x.SortOrder)
                                   : info.ManagedCollections.Where(x => x.ParentKey == splitId.CollectionKeyAsGuid())
                                         .OrderBy(x => x.SortOrder);
-
-            // UI made collections are added before the resolved collections
-            return collections.Any() ? 
+            
+            var treeNodes = collections.Any() ? 
 
                 collections.Select(
                         collection =>
@@ -352,9 +348,21 @@
                             collection.Name,
                             "icon-list",
                             info.ManagedCollections.Any(x => x.ParentKey == collection.Key),
-                            string.Format("/merchello/merchello/{0}/{1}", info.ViewName, collection.Key))) :
+                            string.Format("/merchello/merchello/{0}/{1}", info.ViewName, collection.Key))).ToArray() :
 
-                Enumerable.Empty<TreeNode>();
+                new TreeNode[] { };
+
+            if (!treeNodes.Any()) return treeNodes;
+            
+
+            //// need to tag these nodes so that they can be filtered by the directive to select which 
+            //// collections entities can be assigned to via the back office
+            foreach (var tn in treeNodes)
+            {
+                tn.CssClasses.Add("static-collection");
+            }
+
+            return treeNodes;
         }
 
         /// <summary>

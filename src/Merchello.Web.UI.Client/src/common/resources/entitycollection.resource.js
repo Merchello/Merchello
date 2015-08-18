@@ -6,7 +6,6 @@
  * @description
  * Handles entity collection API
  */
-
 angular.module('merchello.resources').factory('entityCollectionResource',
     ['$http', 'umbRequestHelper',
         function($http, umbRequestHelper) {
@@ -49,6 +48,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         }),
                         'Failed to get entity collection by the parentKey');
                 },
+                getEntityCollectionsByEntity : function (entity, entityType) {
+                    var url = baseUrl + 'PostGetEntityCollectionsByEntity';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { key: entity.key, entityType: entityType }
+                        ),
+                        'Failed to get entity collections for entity');
+                },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(
                         $http({
@@ -73,6 +80,18 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to save an entity collection');
                 },
+                addEntityToCollections: function(entityKey, collectionKeys) {
+                    var url = baseUrl + 'PostAddEntityToCollections';
+                    var data = [];
+                    angular.forEach(collectionKeys, function(ck) {
+                      data.push({ entityKey: entityKey, collectionKey: ck })
+                    });
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            data
+                        ),
+                        'Failed to add an entity to a collection');
+                },
                 addEntityToCollection : function(entityKey, collectionKey) {
                     var url = baseUrl + 'PostAddEntityToCollection';
                     return umbRequestHelper.resourcePromise(
@@ -80,6 +99,18 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             { entityKey: entityKey, collectionKey: collectionKey }
                         ),
                         'Failed to add an entity to a collection');
+                },
+                removeEntityFromCollections : function(entityKey, collectionKeys) {
+                    var url = baseUrl + 'DeleteEntityFromCollections';
+                    var data = [];
+                    angular.forEach(collectionKeys, function(ck) {
+                        data.push({ entityKey: entityKey, collectionKey: ck })
+                    });
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                           data
+                        ),
+                        'Failed to remove an entity from a collection');
                 },
                 removeEntityFromCollection : function(entityKey, collectionKey) {
                     var url = baseUrl + 'DeleteEntityFromCollection';

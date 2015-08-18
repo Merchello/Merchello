@@ -20,7 +20,8 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
-            $scope.settings = {}
+            $scope.settings = {};
+            $scope.entityType = 'customer';
 
             // exposed methods
             $scope.getCurrency = getCurrency;
@@ -207,7 +208,6 @@
              * Edit an address and update the associated lists.
              */
             function processAddEditAddressDialog(dialogData) {
-                console.info('Got here');
                 var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
                 if(dialogData.customerAddress.key !== '') {
                     $scope.customer.addresses =_.reject($scope.customer.addresses, function(address) {
