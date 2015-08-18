@@ -84,6 +84,7 @@
     <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
     <key alias="collectionPickerTitle">Collections</key>
     <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
+    <key alias="allItems">All items</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>

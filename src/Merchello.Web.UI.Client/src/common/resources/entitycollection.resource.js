@@ -64,6 +64,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         }),
                         'Failed to get default entity collection providers');
                 },
+                getEntityCollectionProviders : function() {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntityCollectionProviders',
+                            method: "GET"
+                        }),
+                        'Failed to get entity collection providers');
+                },
                 addEntityCollection : function(entityCollection) {
                     var url = baseUrl + 'PostAddEntityCollection';
                     return umbRequestHelper.resourcePromise(
