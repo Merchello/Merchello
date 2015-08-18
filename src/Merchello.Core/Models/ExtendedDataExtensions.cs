@@ -6,8 +6,6 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Web.UI;
-    using System.Web.WebPages;
     using System.Xml;
     using System.Xml.Linq;
     using Newtonsoft.Json;
@@ -193,6 +191,21 @@
             };
 
             return dictionary;
+        }
+
+        /// <summary>
+        /// The get allows validation value.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        internal static bool GetAllowsValidationValue(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.ContainsKey(Constants.ExtendedDataKeys.LineItemAllowsValidation) || 
+                extendedData.GetValue(Constants.ExtendedDataKeys.LineItemAllowsValidation).AsBool();
         }
 
         #endregion

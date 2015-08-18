@@ -29,6 +29,7 @@
                     "merchProductPriceTaxAmount",
                     "merchProductSalePriceTaxAmount",
                     "merchTaxIncludedInProductPrice",
+                    "merchLineItemAllowsValidation",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -368,6 +369,17 @@
             }
 
             //// LineItem -----------------------------------------------------------------------
+
+            /// <summary>
+            /// Gets the validate line item.
+            /// </summary>
+            public static string LineItemAllowsValidation
+            {
+                get
+                {
+                    return "merchLineItemAllowsValidation";
+                }
+            }
 
             /// <summary>
             /// Gets the container key reserved extended data key.

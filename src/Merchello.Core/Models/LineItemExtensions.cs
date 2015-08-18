@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Web.WebPages;
+
     using Formatters;
     using Gateways.Shipping;
     using Gateways.Taxation;
@@ -205,6 +207,20 @@
         }
        
         #endregion
+
+        /// <summary>
+        /// The allows validation.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool AllowsValidation(this ILineItem lineItem)
+        {
+            return lineItem.ExtendedData.GetAllowsValidationValue();
+        }
 
         /// <summary>
         /// Converts a line item of one type to a line item of another type
