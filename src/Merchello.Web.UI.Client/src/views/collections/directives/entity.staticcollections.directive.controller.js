@@ -17,8 +17,6 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
         }
 
         function loadCollections() {
-            console.info($scope.entityType);
-            console.info($scope.entity);
             entityCollectionResource.getEntityCollectionsByEntity($scope.entity, $scope.entityType).then(function(collections) {
                 $scope.collections = entityCollectionDisplayBuilder.transform(collections);
             }, function(reason) {

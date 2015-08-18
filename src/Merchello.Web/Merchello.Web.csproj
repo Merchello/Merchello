@@ -391,7 +391,14 @@
     <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
     <Compile Include="Validation\BankingValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
+    <Compile Include="Validation\ItemCacheValidationChain.cs" />
     <Compile Include="Validation\IValidatationHelper.cs" />
+    <Compile Include="Validation\IValidationChain{T}.cs" />
+    <Compile Include="Validation\ProductPricingVisitor.cs" />
+    <Compile Include="Validation\ProductSkuExistsVisitor.cs" />
+    <Compile Include="Validation\Tasks\ValidateItemCacheProductPriceTask.cs" />
+    <Compile Include="Validation\Tasks\ValidateItemCacheProductsExistTask.cs" />
+    <Compile Include="Validation\Tasks\ValidatationTaskBase{T}.cs" />
     <Compile Include="Validation\ValidationHelper.cs" />
     <Compile Include="Visitors\ILineItemDisplayVisitor.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
@@ -477,7 +484,7 @@
     <Compile Include="Trees\MerchelloTreeController.cs" />
     <Compile Include="Trees\ServerVariablesParsingEvents.cs" />
     <Compile Include="UmbracoApplicationEventHandler.cs" />
-    <Compile Include="Validation\BasketItemInventoryValidation.cs" />
+    <Compile Include="Validation\ProductItemInventoryVisitor.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
     <Compile Include="Workflow\Payment\PaymentProcessor.cs" />

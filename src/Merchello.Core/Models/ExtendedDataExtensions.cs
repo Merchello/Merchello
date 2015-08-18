@@ -242,6 +242,7 @@
             extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productVariant.Shippable.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Download, productVariant.Download.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productVariant.DownloadMediaId.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.VersionKey, productVariant.VersionKey.ToString());
         }
 
         /// <summary>
@@ -400,6 +401,36 @@
         public static Guid GetProductKey(this ExtendedDataCollection extendedData)
         {
             return extendedData.GetValue(Constants.ExtendedDataKeys.ProductKey).AsGuid();
+        }
+
+        /// <summary>
+        /// True/false indicating whether or not the collection contains a ProductKey
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        ///  A value indicating whether or not the extended data collection contains a version key.
+        /// </returns>
+        public static bool ContainsVersionKey(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.VersionKey);
+        }
+
+        /// <summary>
+        /// Returns the VersionKey
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
+        /// <returns>
+        /// The version key.
+        /// </returns>
+        public static Guid GetVersionKey(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.ContainsVersionKey() ? 
+                Guid.Empty : 
+                extendedData.GetValue(Constants.ExtendedDataKeys.VersionKey).AsGuid();
         }
 
         /// <summary>

@@ -9,8 +9,7 @@
     using Merchello.Core.Models;
     using Merchello.Web.DataModifiers;
     using Merchello.Web.Models.ContentEditing;
-
-    using umbraco.cms.businesslogic.language;
+    using Merchello.Web.Validation;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -32,19 +31,24 @@
             };
 
         /// <summary>
-        /// The item cache responsible for persisting the customer item cache contents.
-        /// </summary>
-        private readonly IItemCache _itemCache;
-
-        /// <summary>
         /// The customer.
         /// </summary>
         private readonly ICustomerBase _customer;
 
         /// <summary>
+        /// The item cache responsible for persisting the customer item cache contents.
+        /// </summary>
+        private IItemCache _itemCache;
+
+        /// <summary>
         /// The product data modifier.
         /// </summary>
-        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _productDataModifier; 
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _productDataModifier;
+
+        /// <summary>
+        /// The validation chain.
+        /// </summary>
+        private Lazy<ItemCacheValidationChain> _validator; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerItemCacheBase"/> class.
@@ -604,7 +608,29 @@
         /// Saves the customer item cache
         /// </summary>
         public abstract void Save();
-        
+
+        /// <summary>
+        /// The validate.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Validate()
+        {
+            _validator.Value.EnableDataModifiers = this.EnableDataModifiers;
+            var attempt = _validator.Value.Validate(this._itemCache);
+            if (attempt.Success)
+            {
+                _itemCache = attempt.Result;
+            }
+            else
+            {
+                LogHelper.Debug<CustomerItemCacheBase>(attempt.Exception.Message);
+            }
+
+            return attempt.Success;
+        }
+
         /// <summary>
         /// Accepts visitor class to visit customer item cache items
         /// </summary>
@@ -638,6 +664,7 @@
         private void Initialize()
         {
             _productDataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));
+            _validator = new Lazy<ItemCacheValidationChain>(() => new ItemCacheValidationChain(MerchelloContext.Current));
             _itemCache.Items.AddingItem += ItemsOnAddingItem;
         }
 

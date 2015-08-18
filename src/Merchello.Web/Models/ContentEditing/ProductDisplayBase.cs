@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
@@ -12,6 +13,11 @@
     /// </summary>
     public abstract class ProductDisplayBase : ProductVariantDataModifierData
     {
+        /// <summary>
+        /// Gets or sets the version key.
+        /// </summary>
+        public Guid VersionKey { get; set; }
+
         /// <summary>
         /// Gets or sets the SKU.
         /// </summary>

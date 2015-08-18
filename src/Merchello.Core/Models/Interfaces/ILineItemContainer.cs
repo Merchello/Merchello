@@ -1,13 +1,16 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
+    /// <summary>
+    /// The LineItemContainer interface.
+    /// </summary>
     public interface ILineItemContainer : IVersionTaggedEntity
     {
         /// <summary>
-        /// A collection of <see cref="ILineItem"/>
+        /// Gets the collection of <see cref="ILineItem"/>
         /// </summary>
         [DataMember]
         LineItemCollection Items { get; } 

@@ -119,6 +119,17 @@
                 get { return "merchCurrencyCode";  } 
             }
 
+            /// <summary>
+            /// Gets the version key.
+            /// </summary>
+            public static string VersionKey
+            {
+                get
+                {
+                    return "merchVersionKey";
+                }
+            }
+
             //// Common -------------------------------------------------------------------------
 
             /// <summary>
@@ -152,6 +163,7 @@
             {
                 get { return "merchExported"; }
             }
+
 
             /// <summary>
             /// Gets the quantity reserved extended data key.
