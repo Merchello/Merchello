@@ -1408,6 +1408,17 @@
             The <see cref="T:System.Collections.IEnumerable"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetEntityCollectionsByEntity(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery)">
+            <summary>
+            The get entity collections by entity.
+            </summary>
+            <param name="model">
+            The query parameters.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetCollectionEntities(Merchello.Web.Models.Querying.QueryDisplay)">
             <summary>
             Gets the entities in the collection.
@@ -1436,9 +1447,31 @@
             Throws a null reference exception if either the collection key or entity type is not found in query parameters
             </exception>
         </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityToCollections(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel})">
+            <summary>
+            The post add entity to collections.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityToCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
             <summary>
             Adds an entity to a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityFromCollections(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel})">
+            <summary>
+            The delete entity from collections.
             </summary>
             <param name="model">
             The model.
@@ -1798,6 +1831,21 @@
         <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.CollectionKey">
             <summary>
             Gets or sets the collection key.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery">
+            <summary>
+            The entity collection by entity query.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery.Key">
+            <summary>
+            Gets or sets the entity key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery.EntityType">
+            <summary>
+            Gets or sets the entity type.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay">
@@ -2683,6 +2731,16 @@
             <param name="value">
             The value.
             </param>
+        </member>
+        <member name="T:Merchello.Web.Models.Interfaces.IEntityDisplay">
+            <summary>
+            Defines a display entity.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Interfaces.IEntityDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver">
             <summary>

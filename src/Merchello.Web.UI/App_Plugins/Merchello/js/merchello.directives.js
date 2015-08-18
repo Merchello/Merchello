@@ -152,6 +152,8 @@ angular.module('merchello.directives').directive('entityStaticCollections',
             restrict: 'E',
             replace: true,
             scope: {
+                preValuesLoaded: '=',
+                entity: '=',
                 entityType: '='
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.staticcollections.tpl.html',

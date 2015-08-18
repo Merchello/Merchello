@@ -1923,7 +1923,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
     function($scope, eventsService, treeService, localizationService) {
 
         $scope.pickerTitle = '';
-        $scope.pickerRootNode = {};
 
         $scope.getTreeId = getTreeId;
 
@@ -1960,9 +1959,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });
-                if ($scope.pickerRootNode && $scope.pickerRootNode !== undefined) {
-                   // exposeChildTree($scope.pickerRootNode);
-                }
             });
         }
 
@@ -2120,11 +2116,34 @@ angular.module('merchello')
 
 
 angular.module('merchello').controller('Merchello.Directives.EntityStaticCollectionsDirectiveController',
-    ['$scope', 'notificationsService', 'dialogService', 'dialogDataFactory',
-    function($scope, notificationsService, dialogService, dialogDataFactory) {
+    ['$scope', 'notificationsService', 'dialogService', 'entityCollectionHelper', 'entityCollectionResource', 'dialogDataFactory', 'entityCollectionDisplayBuilder',
+    function($scope, notificationsService, dialogService, entityCollectionHelper, entityCollectionResource, dialogDataFactory, entityCollectionDisplayBuilder) {
 
+        $scope.collections = [];
+        $scope.remove = remove;
 
-        $scope.openStaticEntityCollectionPicker = function() {
+        // exposed methods
+        $scope.openStaticEntityCollectionPicker = openStaticEntityCollectionPicker;
+
+        function init() {
+            $scope.$watch('preValuesLoaded', function(pvl) {
+                if (pvl) {
+                    loadCollections();
+                }
+            });
+        }
+
+        function loadCollections() {
+            console.info($scope.entityType);
+            console.info($scope.entity);
+            entityCollectionResource.getEntityCollectionsByEntity($scope.entity, $scope.entityType).then(function(collections) {
+                $scope.collections = entityCollectionDisplayBuilder.transform(collections);
+            }, function(reason) {
+              notificationsService.error('Failed to get entity collections for entity ' + reason);
+            });
+        }
+
+        function openStaticEntityCollectionPicker() {
             var dialogData = dialogDataFactory.createAddEditEntityStaticCollectionDialog();
             dialogData.entityType = $scope.entityType;
             dialogData.collectionKeys = [];
@@ -2138,8 +2157,22 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
         }
 
         function processAddEditStaticCollection(dialogData) {
-            console.info(dialogData);
+            var key = $scope.entity.key;
+            entityCollectionResource.addEntityToCollections(key, dialogData.collectionKeys).then(function() {
+                loadCollections();
+            }, function(reason) {
+                notificationsService.error('Failed to add entity to collections ' + reason);
+            });
         }
+
+        function remove(collection) {
+            entityCollectionResource.removeEntityFromCollection($scope.entity.key, collection.key).then(function() {
+                loadCollections();
+            });
+        }
+
+        // initialize the controller
+        init();
 }]);
 
     /**
@@ -2565,8 +2598,6 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
              * Utility method to get the currency symbol for an invoice
              */
             function getCurrencySymbol(invoice) {
-
-                console.info(invoice);
                 if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
                     return invoice.currency.symbol;
                 }
@@ -2796,7 +2827,6 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
              * Edit an address and update the associated lists.
              */
             function processAddEditAddressDialog(dialogData) {
-                console.info('Got here');
                 var defaultAddressOfType = $scope.customer.getDefaultAddress(dialogData.customerAddress.addressType);
                 if(dialogData.customerAddress.key !== '') {
                     $scope.customer.addresses =_.reject($scope.customer.addresses, function(address) {

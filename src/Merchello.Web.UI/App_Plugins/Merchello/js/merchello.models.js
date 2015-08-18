@@ -4245,7 +4245,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 }
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 return tabs;
             }
 

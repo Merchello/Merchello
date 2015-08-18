@@ -1,13 +1,16 @@
-﻿using umbraco.presentation.umbraco.dialogs;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.Interfaces;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The customer display class.
@@ -67,7 +70,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the invoices.
         /// </summary>
-        public IEnumerable<InvoiceDisplay> Invoices { get; set; } 
+        public IEnumerable<InvoiceDisplay> Invoices { get; set; }
     }
 
     #region Mapping Utility Extensions

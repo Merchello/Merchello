@@ -14,6 +14,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Collections;
+    using Merchello.Web.Models.Interfaces;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Search;
     using Merchello.Web.WebApi;
@@ -203,6 +204,49 @@
         }
 
         /// <summary>
+        /// The get entity collections by entity.
+        /// </summary>
+        /// <param name="model">
+        /// The query parameters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionDisplay}"/>.
+        /// </returns>
+        [HttpPost]
+        public IEnumerable<EntityCollectionDisplay> PostGetEntityCollectionsByEntity(EntityCollectionByEntityQuery model)
+        {
+            var empty = Enumerable.Empty<EntityCollectionDisplay>();
+            
+            var serviceContext = MerchelloContext.Services;
+
+            switch (model.EntityType)
+            {
+                case EntityType.Product:
+
+                    var product = serviceContext.ProductService.GetByKey(model.Key);
+
+                    return product == null ? 
+                        empty : 
+                        product.GetCollectionsContaining().Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.Name);
+
+                case EntityType.Customer:
+                    
+                    var customer = serviceContext.CustomerService.GetByKey(model.Key);
+                    return customer == null ? 
+                        empty :
+                        customer.GetCollectionsContaining().Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.Name);
+                                        
+                case EntityType.Invoice:
+                    var invoice = serviceContext.InvoiceService.GetByKey(model.Key);
+                    return invoice == null
+                               ? empty
+                               : invoice.GetCollectionsContaining().Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.Name);
+            }
+
+            return Enumerable.Empty<EntityCollectionDisplay>();
+        }
+
+            /// <summary>
         /// Gets the entities in the collection.
         /// </summary>
         /// <param name="query">
@@ -293,6 +337,31 @@
         }
 
         /// <summary>
+        /// The post add entity to collections.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage PostAddEntityToCollections(IEnumerable<Entity2CollectionModel> model)
+        {
+            var status = Request.CreateResponse(HttpStatusCode.OK);
+
+            var many2Many = model as Entity2CollectionModel[] ?? model.ToArray();
+            if (!many2Many.Any()) return status;
+
+            foreach (var item in many2Many)
+            {
+                status = this.PostAddEntityToCollection(item);
+            }
+
+            return status;
+        }
+
+        /// <summary>
         /// Adds an entity to a collection.
         /// </summary>
         /// <param name="model">
@@ -331,6 +400,31 @@
             }
 
             return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// The delete entity from collections.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpDelete, HttpPost]
+        public HttpResponseMessage DeleteEntityFromCollections(IEnumerable<Entity2CollectionModel> model)
+        {
+            var status = Request.CreateResponse(HttpStatusCode.OK);
+
+            var many2Many = model as Entity2CollectionModel[] ?? model.ToArray();
+            if (!many2Many.Any()) return status;
+            
+            foreach (var item in many2Many)
+            {
+               status = this.DeleteEntityFromCollection(item);
+            }
+
+            return status;
         }
 
         /// <summary>

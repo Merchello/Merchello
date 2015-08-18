@@ -8,8 +8,6 @@
     using Core.Configuration;
     using Core.Configuration.Outline;
 
-    using ImageProcessor.Web.Config;
-
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Web.Models.ContentEditing.Collections;
@@ -19,7 +17,6 @@
     using umbraco.BusinessLogic.Actions;
 
     using Umbraco.Core;
-    using Umbraco.Core.Models.Membership;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Models.Trees;
@@ -339,8 +336,6 @@
                                   ? info.ManagedCollections.Where(x => x.ParentKey == null).OrderBy(x => x.SortOrder)
                                   : info.ManagedCollections.Where(x => x.ParentKey == splitId.CollectionKeyAsGuid())
                                         .OrderBy(x => x.SortOrder);
-
-            // UI made collections are added before the resolved collections
             
             var treeNodes = collections.Any() ? 
 

@@ -3,7 +3,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
     function($scope, eventsService, treeService, localizationService) {
 
         $scope.pickerTitle = '';
-        $scope.pickerRootNode = {};
 
         $scope.getTreeId = getTreeId;
 
@@ -40,9 +39,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });
-                if ($scope.pickerRootNode && $scope.pickerRootNode !== undefined) {
-                   // exposeChildTree($scope.pickerRootNode);
-                }
             });
         }
 

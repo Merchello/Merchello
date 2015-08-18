@@ -276,8 +276,6 @@
              * Utility method to get the currency symbol for an invoice
              */
             function getCurrencySymbol(invoice) {
-
-                console.info(invoice);
                 if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
                     return invoice.currency.symbol;
                 }

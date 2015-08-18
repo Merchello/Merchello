@@ -253,6 +253,7 @@
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\Collections\Entity2CollectionModel.cs" />
+    <Compile Include="Models\ContentEditing\Collections\EntityCollectionByEntityQuery.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionDisplay.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\ExtendedDataExtensions.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
+    <Compile Include="Models\Interfaces\IEntityDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\EntityCollectionNullableParentKeyResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeFieldResolver.cs" />
