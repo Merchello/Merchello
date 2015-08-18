@@ -1,15 +1,29 @@
 angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticCollectionController',
-    ['$scope', 'treeService', 'localizationService',
-    function($scope, treeService, localizationService) {
+    ['$scope', 'eventsService', 'treeService', 'localizationService',
+    function($scope, eventsService, treeService, localizationService) {
 
         $scope.pickerTitle = '';
         $scope.pickerRootNode = {};
 
-        function init() {
-            console.info($scope.dialogData);
-            setTitle();
+        $scope.getTreeId = getTreeId;
 
+        var eventName = 'merchello.entitycollection.selected';
+
+        function init() {
+            eventsService.on(eventName, onEntityCollectionSelected);
+            setTitle();
         }
+
+        function onEntityCollectionSelected(eventName, args, ev) {
+            //  {key: "addCollection", value: "4d026d91-fe13-49c7-8f06-da3d9f012181"}
+            if (args.key === 'addCollection') {
+                $scope.dialogData.addCollectionKey(args.value);
+            }
+            if (args.key === 'removeCollection') {
+                $scope.dialogData.removeCollectionKey(args.value);
+            }
+        }
+
 
         function setTitle() {
             var key = 'merchelloCollections_' + $scope.dialogData.entityType + 'Collections';
@@ -31,18 +45,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
                 }
             });
         }
-/*
-        function exposeChildTree(node) {
-            if (node.hasChildren) {
-                treeService.loadNodeChildren({node: node}).then(function (children) {
-                    angular.forEach(children, function (child) {
-                        exposeChildTree(child);
-                        console.info(node);
-                    });
-                });
-            }
-        }
-*/
+
         function getTreeId() {
             switch ($scope.dialogData.entityType) {
                 case 'product':

@@ -20,7 +20,8 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
-            $scope.settings = {}
+            $scope.settings = {};
+            $scope.entityType = 'customer';
 
             // exposed methods
             $scope.getCurrency = getCurrency;

@@ -1060,7 +1060,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          * Initializes the controller
          */
         function init() {
-            eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
+            eventsService.on(eventName, onComponentCollectionChanged);
 
             // ensure that the parent scope promises have been resolved
             $scope.$watch('preValuesLoaded', function(pvl) {
@@ -1919,17 +1919,31 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
 }]);
 
 angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticCollectionController',
-    ['$scope', 'treeService', 'localizationService',
-    function($scope, treeService, localizationService) {
+    ['$scope', 'eventsService', 'treeService', 'localizationService',
+    function($scope, eventsService, treeService, localizationService) {
 
         $scope.pickerTitle = '';
         $scope.pickerRootNode = {};
 
-        function init() {
-            console.info($scope.dialogData);
-            setTitle();
+        $scope.getTreeId = getTreeId;
 
+        var eventName = 'merchello.entitycollection.selected';
+
+        function init() {
+            eventsService.on(eventName, onEntityCollectionSelected);
+            setTitle();
         }
+
+        function onEntityCollectionSelected(eventName, args, ev) {
+            //  {key: "addCollection", value: "4d026d91-fe13-49c7-8f06-da3d9f012181"}
+            if (args.key === 'addCollection') {
+                $scope.dialogData.addCollectionKey(args.value);
+            }
+            if (args.key === 'removeCollection') {
+                $scope.dialogData.removeCollectionKey(args.value);
+            }
+        }
+
 
         function setTitle() {
             var key = 'merchelloCollections_' + $scope.dialogData.entityType + 'Collections';
@@ -1951,18 +1965,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
                 }
             });
         }
-/*
-        function exposeChildTree(node) {
-            if (node.hasChildren) {
-                treeService.loadNodeChildren({node: node}).then(function (children) {
-                    angular.forEach(children, function (child) {
-                        exposeChildTree(child);
-                        console.info(node);
-                    });
-                });
-            }
-        }
-*/
+
         function getTreeId() {
             switch ($scope.dialogData.entityType) {
                 case 'product':
@@ -2135,7 +2138,7 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
         }
 
         function processAddEditStaticCollection(dialogData) {
-
+            console.info(dialogData);
         }
 }]);
 
@@ -2605,7 +2608,8 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
-            $scope.settings = {}
+            $scope.settings = {};
+            $scope.entityType = 'customer';
 
             // exposed methods
             $scope.getCurrency = getCurrency;
@@ -7721,6 +7725,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
+            $scope.entityType = 'invoice';
 
             // exposed methods
             //  dialogs

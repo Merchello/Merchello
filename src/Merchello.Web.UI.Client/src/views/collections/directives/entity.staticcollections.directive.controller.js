@@ -17,6 +17,6 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
         }
 
         function processAddEditStaticCollection(dialogData) {
-
+            console.info(dialogData);
         }
 }]);

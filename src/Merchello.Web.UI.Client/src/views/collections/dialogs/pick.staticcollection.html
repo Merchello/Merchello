@@ -3,9 +3,8 @@
         <h4>{{ pickerTitle }}</h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-        <h5>{{ pickerTitle }}</h5>
         <!-- Flyout when Change Prices is clicked -->
-        <merchello-entity-collection-picker section="merchello" enablecheckboxes="true"></merchello-entity-collection-picker>
+        <merch-collection-tree-picker sub-tree-id="getTreeId()" entity-type="dialogData.entityType" get-tree-id="getTreeId()"></merch-collection-tree-picker>
     </div>
 
     <div class="umb-panel-footer">
