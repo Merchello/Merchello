@@ -10068,6 +10068,84 @@
             <see>http://en.wikipedia.org/wiki/ISO_7064</see>
             <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example> 
         </member>
+        <member name="T:Merchello.Web.Validation.ItemCacheValidationChain">
+            <summary>
+            A task chain to validate <see cref="T:Merchello.Core.Models.IItemCache"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.IValidationChain`1">
+            <summary>
+            Defines a validation chain.
+            </summary>
+            <typeparam name="T">
+            The value to validate
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Validation.IValidationChain`1.Validate(`0)">
+            <summary>
+            Performs the validation of T.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
+        </member>
+        <member name="F:Merchello.Web.Validation.ItemCacheValidationChain._merchelloContext">
+            <summary>
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ItemCacheValidationChain._enableDataModifiers">
+            <summary>
+            The enable data modifiers.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ItemCacheValidationChain._constructorParameters">
+            <summary>
+            Constructor parameters for the base class activator
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ItemCacheValidationChain.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ItemCacheValidationChain"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ItemCacheValidationChain.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ItemCacheValidationChain"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.ItemCacheValidationChain.Validate(Merchello.Core.Models.IItemCache)">
+            <summary>
+            The validate.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Validation.ItemCacheValidationChain.EnableDataModifiers">
+            <summary>
+            Gets or sets a value indicating whether enable data modifiers.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.ItemCacheValidationChain.TaskCount">
+            <summary>
+            Gets the count of tasks - Used for testing
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.ItemCacheValidationChain.ConstructorArgumentValues">
+            <summary>
+            Gets the constructor argument values.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Validation.IValidationHelper">
             <summary>
             Defines a ValidationHelper.
@@ -10077,6 +10155,190 @@
             <summary>
             Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ProductPricingVisitor">
+            <summary>
+            A visitor to assert product pricing
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductPricingVisitor._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductPricingVisitor._invalidPrices">
+            <summary>
+            A list of items that should be removed since the product no longer exists in the back office.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductPricingVisitor.#ctor(Merchello.Web.MerchelloHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductPricingVisitor"/> class.
+            </summary>
+            <param name="merchello">
+            The merchello.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductPricingVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Validation.ProductPricingVisitor.InvalidPrices">
+            <summary>
+            Gets the invalid prices.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ProductSkuExistsVisitor">
+            <summary>
+            A visitor to check if products still exist in Merchello.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductSkuExistsVisitor._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductSkuExistsVisitor._noLongerExists">
+            <summary>
+            A list of items that should be removed since the product no longer exists in the back office.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductSkuExistsVisitor.#ctor(Merchello.Web.MerchelloHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductSkuExistsVisitor"/> class.
+            </summary>
+            <param name="merchello">
+            The merchello.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductSkuExistsVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Validation.ProductSkuExistsVisitor.LineItemsToRemove">
+            <summary>
+            Gets the line items to remove.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.ValidateItemCacheProductPriceTask">
+            <summary>
+            Validates that product pricing in Merchello has not been changed.
+            </summary>
+            <remarks>
+            Note: for multi-currency sites, you should place the extended data key (merchLineItemAllowsValidation = false) 
+            into the line item extended data so that this task
+            does not reset the price to that set in the back office
+            </remarks>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1">
+            <summary>
+            A base class for validation tasks.
+            </summary>
+            <typeparam name="T">
+            The type to validate
+            </typeparam>
+        </member>
+        <member name="F:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1._merchelloContext">
+            <summary>
+            The <see cref="P:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1.MerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1._enableDataModfiers">
+            <summary>
+            The enable data modifiers.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+            <remarks>
+            We want to use cached values as much as possible when performing validation operations
+            for performace.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModfiers">
+            A value indicating whether or not to enable data modifiers in the MerchelloHelper
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1.Initialize">
+            <summary>
+            Initializes the task.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1.MerchelloContext">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.Tasks.ValidatationTaskBase`1.Merchello">
+            <summary>
+            Gets the merchello.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateItemCacheProductPriceTask.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.ValidateItemCacheProductPriceTask"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModfiers">
+            The enable data modfiers.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateItemCacheProductPriceTask.PerformTask(Merchello.Core.Models.IItemCache)">
+            <summary>
+            Performs the task of validating the pricing information.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.ValidateItemCacheProductsExistTask">
+            <summary>
+            Validates that products still exist in Merchello.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateItemCacheProductsExistTask.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.ValidateItemCacheProductsExistTask"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModifiers">
+            A value indicating whether or not to enable data modifiers in the MerchelloHelper
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateItemCacheProductsExistTask.PerformTask(Merchello.Core.Models.IItemCache)">
+            <summary>
+            The perform task.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Validation.ValidationHelper">
             <summary>
@@ -10743,6 +11005,11 @@
             Saves the item cache
             </summary>
         </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.Validate">
+            <summary>
+            The validate.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.Accept(Merchello.Core.Models.ILineItemVisitor)">
             <summary>
             Accepts visitor class to visit item cache items
@@ -10794,19 +11061,24 @@
             The product tax extended data keys.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._itemCache">
-            <summary>
-            The item cache responsible for persisting the customer item cache contents.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._customer">
             <summary>
             The customer.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._itemCache">
+            <summary>
+            The item cache responsible for persisting the customer item cache contents.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._productDataModifier">
             <summary>
             The product data modifier.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._validator">
+            <summary>
+            The validation chain.
             </summary>
         </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.#ctor(Merchello.Core.Models.IItemCache,Merchello.Core.Models.ICustomerBase)">
@@ -11132,6 +11404,14 @@
             <summary>
             Saves the customer item cache
             </summary>
+        </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Validate">
+            <summary>
+            The validate.
+            </summary>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Accept(Merchello.Core.Models.ILineItemVisitor)">
             <summary>
@@ -14682,6 +14962,11 @@
             The product display abstract.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.VersionKey">
+            <summary>
+            Gets or sets the version key.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.Sku">
             <summary>
             Gets or sets the SKU.
@@ -14775,11 +15060,6 @@
             Gets or sets the product variant key of the master variant.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.VersionKey">
-            <summary>
-            Gets or sets the version key.
-            </summary>
-        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.ProductOptions">
             <summary>
             Gets or sets the product options.
@@ -14838,11 +15118,6 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.ProductKey">
             <summary>
             Gets or sets the product key.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.VersionKey">
-            <summary>
-            Gets or sets the version key.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.Attributes">
@@ -15746,30 +16021,30 @@
             The merchello migration event args.
             </param>
         </member>
-        <member name="T:Merchello.Web.Validation.BasketItemInventoryValidation">
+        <member name="T:Merchello.Web.Validation.ProductItemInventoryVisitor">
             <summary>
             Visitor to audit basket line item for inventory requirements
             </summary>
         </member>
-        <member name="F:Merchello.Web.Validation.BasketItemInventoryValidation._productVariantService">
+        <member name="F:Merchello.Web.Validation.ProductItemInventoryVisitor._productVariantService">
             <summary>
             The <see cref="T:Merchello.Core.Services.IProductVariantService"/>.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Validation.BasketItemInventoryValidation._failedInventoryValidation">
+        <member name="F:Merchello.Web.Validation.ProductItemInventoryVisitor._failedInventoryValidation">
             <summary>
             A collection of items that failed the inventory validation check.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Validation.BasketItemInventoryValidation.#ctor(Merchello.Core.Services.IProductVariantService)">
+        <member name="M:Merchello.Web.Validation.ProductItemInventoryVisitor.#ctor(Merchello.Core.Services.IProductVariantService)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.BasketItemInventoryValidation"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductItemInventoryVisitor"/> class.
             </summary>
             <param name="productVariantService">
             The <see cref="T:Merchello.Core.Services.ProductVariantService"/>.
             </param>
         </member>
-        <member name="M:Merchello.Web.Validation.BasketItemInventoryValidation.Visit(Merchello.Core.Models.ILineItem)">
+        <member name="M:Merchello.Web.Validation.ProductItemInventoryVisitor.Visit(Merchello.Core.Models.ILineItem)">
             <summary>
             Visits the line item
             </summary>
@@ -15777,24 +16052,24 @@
             The line item.
             </param>
         </member>
-        <member name="P:Merchello.Web.Validation.BasketItemInventoryValidation.FailedInventoryValidations">
+        <member name="P:Merchello.Web.Validation.ProductItemInventoryVisitor.FailedInventoryValidations">
             <summary>
             Gets the failed inventory validations.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Validation.BasketItemInventoryValidation.PassesInventoryRequirements">
+        <member name="P:Merchello.Web.Validation.ProductItemInventoryVisitor.PassesInventoryRequirements">
             <summary>
             Gets a value indicating whether passes inventory requirements.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Validation.BasketItemInventoryValidation.InventoryValidation">
+        <member name="T:Merchello.Web.Validation.ProductItemInventoryVisitor.InventoryValidation">
             <summary>
             The inventory validation.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Validation.BasketItemInventoryValidation.InventoryValidation.#ctor(Merchello.Core.Models.ILineItem,System.Int32)">
+        <member name="M:Merchello.Web.Validation.ProductItemInventoryVisitor.InventoryValidation.#ctor(Merchello.Core.Models.ILineItem,System.Int32)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.BasketItemInventoryValidation.InventoryValidation"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductItemInventoryVisitor.InventoryValidation"/> class.
             </summary>
             <param name="requested">
             The requested.
@@ -15803,12 +16078,12 @@
             The inventory count.
             </param>
         </member>
-        <member name="P:Merchello.Web.Validation.BasketItemInventoryValidation.InventoryValidation.Requested">
+        <member name="P:Merchello.Web.Validation.ProductItemInventoryVisitor.InventoryValidation.Requested">
             <summary>
             Gets the requested amount
             </summary>
         </member>
-        <member name="P:Merchello.Web.Validation.BasketItemInventoryValidation.InventoryValidation.InventoryCount">
+        <member name="P:Merchello.Web.Validation.ProductItemInventoryVisitor.InventoryValidation.InventoryCount">
             <summary>
             Gets the inventory count.
             </summary>

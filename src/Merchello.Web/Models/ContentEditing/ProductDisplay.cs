@@ -48,6 +48,7 @@
             Download = masterVariant.Download;
             DownloadMediaId = masterVariant.DownloadMediaId;
             CatalogInventories = masterVariant.CatalogInventories;
+            VersionKey = masterVariant.VersionKey;
         }
 
         /// <summary>
@@ -59,11 +60,6 @@
         /// Gets or sets the product variant key of the master variant.
         /// </summary>
         public Guid ProductVariantKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the version key.
-        /// </summary>
-        public Guid VersionKey { get; set; }
         
         /// <summary>
         /// Gets or sets the product options.

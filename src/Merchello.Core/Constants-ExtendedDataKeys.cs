@@ -29,6 +29,7 @@
                     "merchProductPriceTaxAmount",
                     "merchProductSalePriceTaxAmount",
                     "merchTaxIncludedInProductPrice",
+                    "merchLineItemAllowsValidation",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -118,6 +119,17 @@
                 get { return "merchCurrencyCode";  } 
             }
 
+            /// <summary>
+            /// Gets the version key.
+            /// </summary>
+            public static string VersionKey
+            {
+                get
+                {
+                    return "merchVersionKey";
+                }
+            }
+
             //// Common -------------------------------------------------------------------------
 
             /// <summary>
@@ -151,6 +163,7 @@
             {
                 get { return "merchExported"; }
             }
+
 
             /// <summary>
             /// Gets the quantity reserved extended data key.
@@ -368,6 +381,17 @@
             }
 
             //// LineItem -----------------------------------------------------------------------
+
+            /// <summary>
+            /// Gets the validate line item.
+            /// </summary>
+            public static string LineItemAllowsValidation
+            {
+                get
+                {
+                    return "merchLineItemAllowsValidation";
+                }
+            }
 
             /// <summary>
             /// Gets the container key reserved extended data key.

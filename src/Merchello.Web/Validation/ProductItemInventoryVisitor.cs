@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
@@ -12,7 +11,7 @@
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements
     /// </summary>
-    public class BasketItemInventoryValidation : ILineItemVisitor
+    public class ProductItemInventoryVisitor : ILineItemVisitor
     {
         #region Fields
 
@@ -29,12 +28,12 @@
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketItemInventoryValidation"/> class.
+        /// Initializes a new instance of the <see cref="ProductItemInventoryVisitor"/> class.
         /// </summary>
         /// <param name="productVariantService">
         /// The <see cref="ProductVariantService"/>.
         /// </param>
-        public BasketItemInventoryValidation(IProductVariantService productVariantService)
+        public ProductItemInventoryVisitor(IProductVariantService productVariantService)
         {
             Mandate.ParameterNotNull(productVariantService, "productVariantService");
 

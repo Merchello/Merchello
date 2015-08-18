@@ -368,6 +368,11 @@
         void Save();
 
         /// <summary>
+        /// The validate.
+        /// </summary>
+        bool Validate();
+
+        /// <summary>
         /// Accepts visitor class to visit item cache items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>

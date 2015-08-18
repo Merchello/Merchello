@@ -49,6 +49,17 @@
             }
 
             /// <summary>
+            /// Gets the item cache validation.
+            /// </summary>
+            public static string ItemCacheValidation
+            {
+                get
+                {
+                    return "ItemCacheValidation";
+                }
+            }
+
+            /// <summary>
             /// Gets the configuration key for the order preparation order create.
             /// </summary>
             public static string OrderPreparationOrderCreate

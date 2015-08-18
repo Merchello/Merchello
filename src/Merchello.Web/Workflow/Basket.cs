@@ -114,7 +114,10 @@
 
             basket = new Basket(customerItemCache, customer);
 
-            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
+            if (basket.Validate())
+            {
+                merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => basket);
+            }
 
             return basket;
         }
