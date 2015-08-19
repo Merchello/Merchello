@@ -30,6 +30,7 @@
         self.taxable = false;
         self.shippable = false;
         self.download = false;
+        self.master = false;
         self.downloadMediaId = -1;
         self.totalInventoryCount = 0;
         self.attributes = [];

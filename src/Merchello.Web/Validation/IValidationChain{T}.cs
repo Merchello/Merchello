@@ -19,6 +19,6 @@
         /// <returns>
         /// The <see cref="Attempt{T}"/>.
         /// </returns>
-        Attempt<T> Validate(T value);
+        Attempt<ValidationResult<T>> Validate(T value);
     }
 }

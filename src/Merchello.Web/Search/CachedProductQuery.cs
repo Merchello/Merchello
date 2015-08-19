@@ -713,22 +713,32 @@
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
-        ///// <summary>
-        ///// Modifies Product Data with configured DataModifier Chain.
-        ///// </summary>
-        ///// <param name="product">
-        ///// The product.
-        ///// </param>
-        ///// <returns>
-        ///// The <see cref="ProductDisplay"/>.
-        ///// </returns>
-        //internal ProductDisplay ModifyProductData(ProductDisplay product)
-        //{
-        //    if (!EnableDataModifiers) return product;
-        //    var modified = this.ModifyData(product);
-        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x));
-        //    return modified;
-        //}
+        /// <summary>
+        /// Gets a display object from the Examine cache or falls back the the database if not found
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        protected override ProductDisplay GetDisplayObject(Guid key)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field(KeyFieldInIndex, key.ToString()).And().Field("master", "True");
+
+            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            if (display != null) return display;
+
+            var entity = Service.GetByKey(key);
+
+            if (entity == null) return null;
+
+            ReindexEntity(entity);
+
+            return AutoMapper.Mapper.Map<ProductDisplay>(entity);
+        }
 
         /// <summary>
         /// The modify data.

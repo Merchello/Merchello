@@ -1,11 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.TypeFields;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.TypeFields;
+
     /// <summary>
     /// Defines a Line Item
     /// </summary>

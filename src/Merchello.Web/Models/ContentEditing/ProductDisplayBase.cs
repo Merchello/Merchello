@@ -79,6 +79,11 @@
         public int DownloadMediaId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether master.
+        /// </summary>
+        public bool Master { get; set; }
+
+        /// <summary>
         /// Gets or sets the total inventory count.
         /// </summary>
         public virtual int TotalInventoryCount { get; set; }
