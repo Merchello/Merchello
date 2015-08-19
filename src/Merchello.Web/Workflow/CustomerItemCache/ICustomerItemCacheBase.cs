@@ -368,8 +368,12 @@
         void Save();
 
         /// <summary>
-        /// The validate.
+        /// Validates values stored in the internal item cache to make certain items being purchase
+        /// reflect most recent values in the back office.
         /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         bool Validate();
 
         /// <summary>
