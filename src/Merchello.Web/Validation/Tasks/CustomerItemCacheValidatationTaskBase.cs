@@ -13,7 +13,7 @@
     /// <typeparam name="T">
     /// The type to validate
     /// </typeparam>
-    public abstract class ValidatationTaskBase<T> : AttemptChainTaskBase<T>
+    public abstract class CustomerItemCacheValidatationTaskBase<T> : AttemptChainTaskBase<T>
     {
         /// <summary>
         /// The <see cref="MerchelloContext"/>.
@@ -23,31 +23,31 @@
         /// <summary>
         /// The enable data modifiers.
         /// </summary>
-        private readonly bool _enableDataModfiers;
+        private readonly bool _enableDataModifiers;
 
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
         /// </summary>
         /// <remarks>
         /// We want to use cached values as much as possible when performing validation operations
-        /// for performace.
+        /// for performance.
         /// </remarks>
         private Lazy<MerchelloHelper> _merchello;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatationTaskBase{T}"/> class.
+        /// Initializes a new instance of the <see cref="CustomerItemCacheValidatationTaskBase{T}"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        /// <param name="enableDataModfiers">
+        /// <param name="enableDataModifiers">
         /// A value indicating whether or not to enable data modifiers in the MerchelloHelper
         /// </param>
-        protected ValidatationTaskBase(IMerchelloContext merchelloContext, bool enableDataModfiers)
+        protected CustomerItemCacheValidatationTaskBase(IMerchelloContext merchelloContext, bool enableDataModifiers)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _merchelloContext = merchelloContext;
-            _enableDataModfiers = enableDataModfiers;
+            this._enableDataModifiers = enableDataModifiers;
             this.Initialize();
         }
 
@@ -78,7 +78,7 @@
         /// </summary>
         private void Initialize()
         {
-            _merchello = new Lazy<MerchelloHelper>(() => new MerchelloHelper(_merchelloContext.Services, _enableDataModfiers));
+            _merchello = new Lazy<MerchelloHelper>(() => new MerchelloHelper(_merchelloContext.Services, this._enableDataModifiers));
         }
     }
 }

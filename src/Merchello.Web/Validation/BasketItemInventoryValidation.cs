@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Validation
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -11,7 +12,8 @@
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements
     /// </summary>
-    public class ProductItemInventoryVisitor : ILineItemVisitor
+    [Obsolete("Use ProductInventoryValidationVistor")]
+    public class BasketItemInventoryValidation : ILineItemVisitor
     {
         #region Fields
 
@@ -28,12 +30,12 @@
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductItemInventoryVisitor"/> class.
+        /// Initializes a new instance of the <see cref="BasketItemInventoryValidation"/> class.
         /// </summary>
         /// <param name="productVariantService">
         /// The <see cref="ProductVariantService"/>.
         /// </param>
-        public ProductItemInventoryVisitor(IProductVariantService productVariantService)
+        public BasketItemInventoryValidation(IProductVariantService productVariantService)
         {
             Mandate.ParameterNotNull(productVariantService, "productVariantService");
 

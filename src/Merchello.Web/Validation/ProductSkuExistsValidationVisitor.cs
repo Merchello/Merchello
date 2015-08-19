@@ -11,7 +11,7 @@
     /// <summary>
     /// A visitor to check if products still exist in Merchello.
     /// </summary>
-    internal class ProductSkuExistsVisitor : ILineItemVisitor
+    internal class ProductSkuExistsValidationVisitor : ILineItemVisitor
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
@@ -24,12 +24,12 @@
         private readonly List<ILineItem> _noLongerExists = new List<ILineItem>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductSkuExistsVisitor"/> class.
+        /// Initializes a new instance of the <see cref="ProductSkuExistsValidationVisitor"/> class.
         /// </summary>
         /// <param name="merchello">
         /// The merchello.
         /// </param>
-        public ProductSkuExistsVisitor(MerchelloHelper merchello)
+        public ProductSkuExistsValidationVisitor(MerchelloHelper merchello)
         {
             Mandate.ParameterNotNull(merchello, "merchello");
 
@@ -57,13 +57,11 @@
         {
             if (lineItem.LineItemType != LineItemType.Product || !lineItem.AllowsValidation()) return;
 
-            var isVariant = lineItem.ExtendedData.DefinesProductVariant();
+            if (!lineItem.ExtendedData.DefinesProductVariant()) return;
 
-            var item = isVariant ? 
-                (ProductDisplayBase)_merchello.Query.Product.GetProductVariantBySku(lineItem.Sku) : 
-                _merchello.Query.Product.GetBySku(lineItem.Sku);
+            var variant = _merchello.Query.Product.GetProductVariantByKey(lineItem.ExtendedData.GetProductVariantKey());
 
-            if (item == null) _noLongerExists.Add(lineItem);
+            if (variant == null) _noLongerExists.Add(lineItem);
         }
     }
 }

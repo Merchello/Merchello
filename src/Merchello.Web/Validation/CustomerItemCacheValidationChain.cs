@@ -2,18 +2,18 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using Merchello.Core;
     using Merchello.Core.Chains;
     using Merchello.Core.Models;
+    using Merchello.Web.Workflow.CustomerItemCache;
 
     using Umbraco.Core;
 
     /// <summary>
     /// A task chain to validate <see cref="IItemCache"/>.
     /// </summary>
-    internal sealed class ItemCacheValidationChain : ConfigurationChainBase<IItemCache>, IValidationChain<IItemCache>
+    internal sealed class CustomerItemCacheValidationChain : ConfigurationChainBase<ValidationResult<CustomerItemCacheBase>>, IValidationChain<CustomerItemCacheBase>
     {
         /// <summary>
         /// The <see cref="IMerchelloContext"/>.
@@ -31,20 +31,20 @@
         private IEnumerable<object> _constructorParameters;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemCacheValidationChain"/> class.
+        /// Initializes a new instance of the <see cref="CustomerItemCacheValidationChain"/> class.
         /// </summary>
-        public ItemCacheValidationChain()
+        public CustomerItemCacheValidationChain()
             : this(MerchelloContext.Current)
         {            
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ItemCacheValidationChain"/> class.
+        /// Initializes a new instance of the <see cref="CustomerItemCacheValidationChain"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public ItemCacheValidationChain(IMerchelloContext merchelloContext)
+        public CustomerItemCacheValidationChain(IMerchelloContext merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _merchelloContext = merchelloContext;
@@ -96,13 +96,15 @@
         /// <returns>
         /// The <see cref="Attempt"/>.
         /// </returns>
-        public Attempt<IItemCache> Validate(IItemCache value)
+        public Attempt<ValidationResult<CustomerItemCacheBase>> Validate(CustomerItemCacheBase value)
         {
-            if (!value.Items.Any()) return Attempt<IItemCache>.Succeed(value);
+            var validated = new ValidationResult<CustomerItemCacheBase>() { Validated = value };
+
+            if (!value.Items.Any()) return Attempt<ValidationResult<CustomerItemCacheBase>>.Succeed(validated);
 
             return TaskHandlers.Any()
-            ? TaskHandlers.First().Execute(value)
-            : Attempt<IItemCache>.Succeed(value);
+            ? TaskHandlers.First().Execute(validated)
+            : Attempt<ValidationResult<CustomerItemCacheBase>>.Succeed(validated);
         }
     }
 }

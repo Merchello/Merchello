@@ -294,6 +294,7 @@
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="EntityCollections\QueryableEntityCollectionProviderBase.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
+    <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />

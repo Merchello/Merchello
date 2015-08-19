@@ -11,7 +11,7 @@
     /// <summary>
     /// A visitor to assert product pricing
     /// </summary>
-    internal class ProductPricingVisitor : ILineItemVisitor
+    internal class ProductPricingValidationVisitor : ILineItemVisitor
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
@@ -24,12 +24,12 @@
         private readonly Dictionary<ILineItem, ProductDisplayBase> _invalidPrices = new Dictionary<ILineItem, ProductDisplayBase>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductPricingVisitor"/> class.
+        /// Initializes a new instance of the <see cref="ProductPricingValidationVisitor"/> class.
         /// </summary>
         /// <param name="merchello">
         /// The merchello.
         /// </param>
-        public ProductPricingVisitor(MerchelloHelper merchello)
+        public ProductPricingValidationVisitor(MerchelloHelper merchello)
         {
             Mandate.ParameterNotNull(merchello, "merchello");
             _merchello = merchello;
@@ -56,11 +56,15 @@
         {
             if (lineItem.LineItemType != LineItemType.Product || !lineItem.AllowsValidation()) return;
 
-            var isVariant = lineItem.ExtendedData.DefinesProductVariant();
+            if (!lineItem.ExtendedData.DefinesProductVariant()) return;
 
-            var item = isVariant ?
-                (ProductDisplayBase)_merchello.Query.Product.GetProductVariantBySku(lineItem.Sku) :
-                _merchello.Query.Product.GetBySku(lineItem.Sku);
+            var item = _merchello.Query.Product.GetProductVariantByKey(lineItem.ExtendedData.GetProductVariantKey());
+
+            if (item.OnSale != lineItem.ExtendedData.GetOnSaleValue())
+            {
+                _invalidPrices.Add(lineItem, item);
+                return;
+            }
 
             if ((item.OnSale && (item.SalePrice != lineItem.Price)) || (!item.OnSale && (item.Price != lineItem.Price)))
             {

@@ -4,16 +4,17 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Workflow.CustomerItemCache;
 
     using Umbraco.Core;
 
     /// <summary>
     /// Validates that products still exist in Merchello.
     /// </summary>
-    public class ValidateItemCacheProductsExistTask : ValidatationTaskBase<IItemCache>
+    internal class ValidateProductsExistTask : CustomerItemCacheValidatationTaskBase<ValidationResult<CustomerItemCacheBase>>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidateItemCacheProductsExistTask"/> class.
+        /// Initializes a new instance of the <see cref="ValidateProductsExistTask"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -21,7 +22,7 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not to enable data modifiers in the MerchelloHelper
         /// </param>
-        public ValidateItemCacheProductsExistTask(IMerchelloContext merchelloContext, bool enableDataModifiers)
+        public ValidateProductsExistTask(IMerchelloContext merchelloContext, bool enableDataModifiers)
             : base(merchelloContext, enableDataModifiers)
         {
         }
@@ -35,20 +36,22 @@
         /// <returns>
         /// The <see cref="Attempt{IItemCache}"/>.
         /// </returns>
-        public override Attempt<IItemCache> PerformTask(IItemCache value)
+        public override Attempt<ValidationResult<CustomerItemCacheBase>> PerformTask(ValidationResult<CustomerItemCacheBase> value)
         {
-            var visitor = new ProductSkuExistsVisitor(Merchello);
-            value.Items.Accept(visitor);
+            var visitor = new ProductSkuExistsValidationVisitor(Merchello);
+            value.Validated.Items.Accept(visitor);
 
             if (visitor.LineItemsToRemove.Any())
             {
                 foreach (var item in visitor.LineItemsToRemove)
                 {
-                    value.Items.Remove(item.Sku);
+                    value.Validated.RemoveItem(item.Sku);
+                    value.Messages.Add("Item no longer exists.  Item removed was " + item.Sku);
+                    value.Validated.Save();
                 }
             }
 
-            return Attempt<IItemCache>.Succeed(value);
+            return Attempt<ValidationResult<CustomerItemCacheBase>>.Succeed(value);
         }
     }
 }
