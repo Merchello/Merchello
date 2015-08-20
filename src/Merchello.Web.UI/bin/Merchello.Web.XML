@@ -1246,9 +1246,9 @@
             Gets or sets the log of adjustments.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Editors.MarketingApiController">
+        <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
             <summary>
-            An API controller for the Merchello marketing section.
+            The entity collection api controller.
             </summary>
         </member>
         <member name="T:Merchello.Web.WebApi.MerchelloApiController">
@@ -1292,6 +1292,272 @@
             <remarks>
             Useful for debugging
             </remarks>
+        </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._entityCollectionService">
+            <summary>
+            The <see cref="T:Merchello.Core.Services.IEntityCollectionService"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._staticProviderAtts">
+            <summary>
+            The static collection providers.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Editors.EntityCollectionApiController._resolver">
+            <summary>
+            The <see cref="T:Merchello.Core.EntityCollections.EntityCollectionProviderResolver"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.EntityCollectionApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="umbracoContext">
+            The umbraco context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetSortableProviderKeys">
+            <summary>
+            The get sortable provider keys.
+            </summary>
+            <returns>
+            The <see cref="!:Guid[]"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetByKey(System.Guid)">
+            <summary>
+            Gets an entity collection by its key.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the collection is not found
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetDefaultEntityCollectionProviders">
+            <summary>
+            The get entity collection providers.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetEntityCollectionProviders">
+            <summary>
+            The get entity collection providers.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetRootEntityCollections(Merchello.Core.EntityType)">
+            <summary>
+            Gets the root level entity collections with the type field specified.
+            </summary>
+            <param name="entityType">
+            The entity Type.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetChildEntityCollections(System.Guid)">
+            <summary>
+            The get child entity collections.
+            </summary>
+            <param name="parentKey">
+            The parent key.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetEntityCollections(System.Guid)">
+            <summary>
+            Gets all entity collections with the type field specified.
+            </summary>
+            <param name="entityTfKey">
+            The entity type field key.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetEntityCollectionsByEntity(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery)">
+            <summary>
+            The get entity collections by entity.
+            </summary>
+            <param name="model">
+            The query parameters.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetCollectionEntities(Merchello.Web.Models.Querying.QueryDisplay)">
+            <summary>
+            Gets the entities in the collection.
+            </summary>
+            <param name="query">
+            The query.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if either the collection key or entity type is not found in query parameters
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostGetEntitiesNotInCollection(Merchello.Web.Models.Querying.QueryDisplay)">
+            <summary>
+            Gets entities not in the collection.
+            </summary>
+            <param name="query">
+            The query.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if either the collection key or entity type is not found in query parameters
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityToCollections(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel})">
+            <summary>
+            The post add entity to collections.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityToCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
+            <summary>
+            Adds an entity to a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityFromCollections(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel})">
+            <summary>
+            The delete entity from collections.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityFromCollection(Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel)">
+            <summary>
+            Deletes an entity from a collection.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PostAddEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
+            <summary>
+            The post add entity collection.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay)">
+            <summary>
+            Saves the entity collection.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the collection is not found
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.PutUpdateSortOrders(System.Collections.Generic.IEnumerable{Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay})">
+            <summary>
+            Updates sort orders.
+            </summary>
+            <param name="collections">
+            The collections.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.IEnumerable"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.DeleteEntityCollection(System.Guid)">
+            <summary>
+            The delete entity collection.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetCachedQueryByEntityType(Merchello.Core.EntityType)">
+            <summary>
+            The get cached query by entity type.
+            </summary>
+            <param name="entityType">
+            The entity type.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Search.ICachedCollectionQuery"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.EntityCollectionApiController.Initialize">
+            <summary>
+            Initializes the controller.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Editors.MarketingApiController">
+            <summary>
+            An API controller for the Merchello marketing section.
+            </summary>
         </member>
         <member name="F:Merchello.Web.Editors.MarketingApiController._offerSettingsService">
             <summary>
@@ -1441,6 +1707,49 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.LocalizationHelper">
+            <summary>
+            The localization helper.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.LocalizationHelper.UmbracoDefaultUiLanguage">
+            <summary>
+            The umbraco default UI language.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.LocalizationHelper.GetCultureFromUser(Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            Gets the culture from user language.
+            </summary>
+            <param name="user">
+            The user.
+            </param>
+            <returns>
+            The <see cref="T:System.Globalization.CultureInfo"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.LocalizationHelper.GetLanguage(Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            The get language.
+            </summary>
+            <param name="u">
+            The <see cref="T:Umbraco.Core.Models.Membership.IUser"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.LocalizationHelper.GetLanguage(System.String)">
+            <summary>
+            The get language.
+            </summary>
+            <param name="userLanguage">
+            The user language.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.MerchelloContextExtensions">
             <summary>
             Extension methods for the <see cref="T:Merchello.Core.IMerchelloContext"/>.
@@ -1508,6 +1817,180 @@
             <summary>
             Gets or sets the sort order.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel">
+            <summary>
+            The add entity to collection model.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.EntityKey">
+            <summary>
+            Gets or sets the entity key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.Entity2CollectionModel.CollectionKey">
+            <summary>
+            Gets or sets the collection key.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery">
+            <summary>
+            The entity collection by entity query.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery.Key">
+            <summary>
+            Gets or sets the entity key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionByEntityQuery.EntityType">
+            <summary>
+            Gets or sets the entity type.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay">
+            <summary>
+            Represents and entity collection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.ParentKey">
+            <summary>
+            Gets or sets the parent key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityTfKey">
+            <summary>
+            Gets or sets the entity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityTypeField">
+            <summary>
+            Gets or sets the entity type field.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.EntityType">
+            <summary>
+            Gets or sets the entity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.ProviderKey">
+            <summary>
+            Gets or sets the provider key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay.SortOrder">
+            <summary>
+            Gets or sets the sort order.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplayExtensions">
+            <summary>
+            Extension methods for <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplayExtensions.ToEntityCollectionDisplay(Merchello.Core.Models.Interfaces.IEntityCollection)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Models.Interfaces.IEntityCollection"/> to <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </summary>
+            <param name="collection">
+            The collection.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplayExtensions.ToEntityCollection(Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay,Merchello.Core.Models.Interfaces.IEntityCollection)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionDisplay"/> to an <see cref="T:Merchello.Core.Models.Interfaces.IEntityCollection"/>.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.Interfaces.IEntityCollection"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay">
+            <summary>
+            Represents an entity collection provider.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityTfKey">
+            <summary>
+            Gets or sets the entity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityTypeField">
+            <summary>
+            Gets or sets the entity type field.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.ManagesUniqueCollection">
+            <summary>
+            Gets or sets a value indicating whether manages unique collection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.LocalizedNameKey">
+            <summary>
+            Gets or sets the localization name key.
+            </summary>
+            <remarks>
+            e.g. "merchelloProviders/providerNameKey"
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.EntityType">
+            <summary>
+            Gets or sets the entity type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay.ManagedCollections">
+            <summary>
+            Gets or sets the managed collections.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplayExtensions">
+            <summary>
+            The entity collection provider display extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplayExtensions.ToEntityCollectionProviderDisplay(Merchello.Core.EntityCollections.EntityCollectionProviderAttribute)">
+            <summary>
+            The to entity collection provider display.
+            </summary>
+            <param name="att">
+            The provider attribute.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
             <summary>
@@ -2249,12 +2732,80 @@
             The value.
             </param>
         </member>
+        <member name="T:Merchello.Web.Models.Interfaces.IEntityDisplay">
+            <summary>
+            Defines a display entity.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Interfaces.IEntityDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver">
             <summary>
             Maps the ListResourcesOffered to an enumeration of <see cref="T:Merchello.Web.Models.ContentEditing.GatewayProviderDisplay"/>.
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver.ResolveCore(Merchello.Core.Gateways.GatewayProviderBase)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.EntityCollectionNullableParentKeyResolver">
+            <summary>
+            The entity collection nullable parent key resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityCollections.EntityCollectionNullableParentKeyResolver.ResolveCore(Merchello.Core.Models.Interfaces.IEntityCollection)">
+            <summary>
+            Asserts the ParentKey returns null when an empty GUID or null.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The nullable Guid.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.EntityTypeFieldResolver">
+            <summary>
+            The entity type field resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityTypeFieldResolver.ResolveCore(Merchello.Core.Models.Interfaces.IHasEntityTypeField)">
+            <summary>
+            Resolves the type field.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.TypeFields.TypeField"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver">
+            <summary>
+            The managed collections resolver.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver._entityCollectionService">
+            <summary>
+            The entity collection service.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.EntityCollections.ManagedCollectionsResolver.ResolveCore(Merchello.Core.EntityCollections.EntityCollectionProviderAttribute)">
             <summary>
             The resolve core.
             </summary>
@@ -4177,6 +4728,58 @@
             The <see cref="T:System.Object"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider">
+            <summary>
+            The unpaid invoice collection provider.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider.#ctor(Merchello.Core.IMerchelloContext,System.Guid)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider.PerformExists(Merchello.Core.Models.IInvoice)">
+            <summary>
+            Checks if the invoice exists in the collection
+            </summary>
+            <param name="entity">
+            The entity.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider.PerformGetPagedEntities(System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets a page of unpaid invoices
+            </summary>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Persistence.Page`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Reporting.IReportApiController">
             <summary>
             Marker interface for reports
@@ -4288,10 +4891,16 @@
             Gets the resolved values.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Search.CachedCustomerQuery">
+        <member name="T:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2">
             <summary>
-            Represents a CachedCustomerQuery.
+            The cached collection query base.
             </summary>
+            <typeparam name="TEntity">
+            The type of <see cref="T:Merchello.Core.Models.EntityBase.IEntity"/>
+            </typeparam>
+            <typeparam name="TDisplay">
+            The type of display object
+            </typeparam>
         </member>
         <member name="T:Merchello.Web.Search.CachedQueryBase`2">
             <summary>
@@ -4447,9 +5056,265 @@
             Gets the search provider.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Search.CachedQueryBase`2.Service">
+            <summary>
+            Gets the service.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Search.CachedQueryBase`2.KeyFieldInIndex">
             <summary>
             Gets the key field in index.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Search.ICachedCollectionQuery">
+            <summary>
+            The CachedCollectionQuery interface.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities from a collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetFromCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities in the collection filtered by a search term.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in the collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.ICachedCollectionQuery.GetNotInCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in the collection filtered by a search term.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.#ctor(Merchello.Core.Services.IPageCachedService{`0},Examine.Providers.BaseIndexProvider,Examine.Providers.BaseSearchProvider,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2"/> class.
+            </summary>
+            <param name="service">
+            The service.
+            </param>
+            <param name="indexProvider">
+            The index provider.
+            </param>
+            <param name="searchProvider">
+            The search provider.
+            </param>
+            <param name="enableDataModifiers">
+            The enable data modifiers.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetFromCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            The get products from collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetFromCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities from the collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetNotInCollection(System.Guid,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetNotInCollection(System.Guid,System.String,System.Int64,System.Int64,System.String,Merchello.Core.Persistence.Querying.SortDirection)">
+            <summary>
+            Gets entities not in collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <param name="page">
+            The page.
+            </param>
+            <param name="itemsPerPage">
+            The items per page.
+            </param>
+            <param name="sortBy">
+            The sort by.
+            </param>
+            <param name="sortDirection">
+            The sort direction.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.GetEntityCollectionProvider(System.Guid)">
+            <summary>
+            The get entity collection provider.
+            </summary>
+            <param name="collectionKey">
+            The collection Key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.EntityCollections.CachedEntityCollectionProviderBase`1"/>.
+            </returns>
+            <exception cref="T:System.Exception">
+            Throws exception if the provider is not found
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+            Throws an invalid cast exception if the provider returned does not match the entity type of the collection
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2.BuildSearchTermArgs(System.String)">
+            <summary>
+            Builds the search term args.
+            </summary>
+            <param name="searchTerm">
+            The search term.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Web.Media.EmbedProviders.Settings.Dictionary"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Search.CachedCustomerQuery">
+            <summary>
+            Represents a CachedCustomerQuery.
             </summary>
         </member>
         <member name="T:Merchello.Web.Search.ICachedCustomerQuery">
@@ -6020,6 +6885,17 @@
             The entity.
             </param>
         </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetDisplayObject(System.Guid)">
+            <summary>
+            Gets a display object from the Examine cache or falls back the the database if not found
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Search.CachedProductQuery.ModifyData``1(``0)">
             <summary>
             The modify data.
@@ -6950,6 +7826,336 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.DeleteCollectionAction">
+            <summary>
+            The delete collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.DeleteCollectionAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.DeleteCollectionAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.DeleteCollectionAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.DeleteCollectionAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.ManageEntitiesAction">
+            <summary>
+            The manage entities action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.ManageEntitiesAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.ManageEntitiesAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.ManageEntitiesAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.ManageEntitiesAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewOfferSettingsAction">
+            <summary>
+            The create collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewOfferSettingsAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewOfferSettingsAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewOfferSettingsAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewOfferSettingsAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewCollectionAction">
+            <summary>
+            The create collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewCollectionAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewCollectionAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewCollectionAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewCollectionAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewEntityAction">
+            <summary>
+            The manage entities action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewEntityAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewEntityAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewEntityAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.SortCollectionAction">
+            <summary>
+            The sort collection action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.SortCollectionAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.SortCollectionAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.SortCollectionAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.SortCollectionAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Trees.BackOfficeTreeAttribute">
             <summary>
@@ -8878,6 +10084,84 @@
             <see>http://en.wikipedia.org/wiki/ISO_7064</see>
             <example>See http://www.tbg5-finance.org/?ibandocs.shtml</example> 
         </member>
+        <member name="T:Merchello.Web.Validation.CustomerItemCacheValidationChain">
+            <summary>
+            A task chain to validate <see cref="T:Merchello.Core.Models.IItemCache"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.IValidationChain`1">
+            <summary>
+            Defines a validation chain.
+            </summary>
+            <typeparam name="T">
+            The value to validate
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Validation.IValidationChain`1.Validate(`0)">
+            <summary>
+            Performs the validation of T.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
+        </member>
+        <member name="F:Merchello.Web.Validation.CustomerItemCacheValidationChain._merchelloContext">
+            <summary>
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.CustomerItemCacheValidationChain._enableDataModifiers">
+            <summary>
+            The enable data modifiers.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.CustomerItemCacheValidationChain._constructorParameters">
+            <summary>
+            Constructor parameters for the base class activator
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.CustomerItemCacheValidationChain.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.CustomerItemCacheValidationChain"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.CustomerItemCacheValidationChain.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.CustomerItemCacheValidationChain"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.CustomerItemCacheValidationChain.Validate(Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase)">
+            <summary>
+            The validate.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Validation.CustomerItemCacheValidationChain.EnableDataModifiers">
+            <summary>
+            Gets or sets a value indicating whether enable data modifiers.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.CustomerItemCacheValidationChain.TaskCount">
+            <summary>
+            Gets the count of tasks - Used for testing
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.CustomerItemCacheValidationChain.ConstructorArgumentValues">
+            <summary>
+            Gets the constructor argument values.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Validation.IValidationHelper">
             <summary>
             Defines a ValidationHelper.
@@ -8887,6 +10171,253 @@
             <summary>
             Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ProductInventoryValidationVisitor">
+            <summary>
+            Used to check for inventory quantities of product items in a line item collection.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductInventoryValidationVisitor._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductInventoryValidationVisitor._outOfStockItems">
+            <summary>
+            The list out of stock items.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductInventoryValidationVisitor.#ctor(Merchello.Web.MerchelloHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductInventoryValidationVisitor"/> class.
+            </summary>
+            <param name="merchello">
+            The merchello.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductInventoryValidationVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Validation.ProductInventoryValidationVisitor.OutOfStockItems">
+            <summary>
+            Gets the list out of stock items.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ProductPricingValidationVisitor">
+            <summary>
+            A visitor to assert product pricing
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductPricingValidationVisitor._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductPricingValidationVisitor._invalidPrices">
+            <summary>
+            A list of items that should be removed since the product no longer exists in the back office.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductPricingValidationVisitor.#ctor(Merchello.Web.MerchelloHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductPricingValidationVisitor"/> class.
+            </summary>
+            <param name="merchello">
+            The merchello.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductPricingValidationVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Validation.ProductPricingValidationVisitor.InvalidPrices">
+            <summary>
+            Gets the invalid prices.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ProductSkuExistsValidationVisitor">
+            <summary>
+            A visitor to check if products still exist in Merchello.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductSkuExistsValidationVisitor._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.ProductSkuExistsValidationVisitor._noLongerExists">
+            <summary>
+            A list of items that should be removed since the product no longer exists in the back office.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductSkuExistsValidationVisitor.#ctor(Merchello.Web.MerchelloHelper)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.ProductSkuExistsValidationVisitor"/> class.
+            </summary>
+            <param name="merchello">
+            The merchello.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.ProductSkuExistsValidationVisitor.Visit(Merchello.Core.Models.ILineItem)">
+            <summary>
+            The visit.
+            </summary>
+            <param name="lineItem">
+            The line item.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Validation.ProductSkuExistsValidationVisitor.LineItemsToRemove">
+            <summary>
+            Gets the line items to remove.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.ValidateProductInventoryTask">
+            <summary>
+            Validates the product is in inventory.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1">
+            <summary>
+            A base class for validation tasks.
+            </summary>
+            <typeparam name="T">
+            The type to validate
+            </typeparam>
+        </member>
+        <member name="F:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1._merchelloContext">
+            <summary>
+            The <see cref="P:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1.MerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1._enableDataModifiers">
+            <summary>
+            The enable data modifiers.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1._merchello">
+            <summary>
+            The <see cref="T:Merchello.Web.MerchelloHelper"/>.
+            </summary>
+            <remarks>
+            We want to use cached values as much as possible when performing validation operations
+            for performance.
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModifiers">
+            A value indicating whether or not to enable data modifiers in the MerchelloHelper
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1.Initialize">
+            <summary>
+            Initializes the task.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1.MerchelloContext">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.Tasks.CustomerItemCacheValidatationTaskBase`1.Merchello">
+            <summary>
+            Gets the merchello.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateProductInventoryTask.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.ValidateProductInventoryTask"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModifiers">
+            The enable data modifiers.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateProductInventoryTask.PerformTask(Merchello.Web.Validation.ValidationResult{Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase})">
+            <summary>
+            Performs the task of checking the inventory.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.ValidateProductPriceTask">
+            <summary>
+            Validates that product pricing in Merchello has not been changed.
+            </summary>
+            <remarks>
+            Note: for multi-currency sites, you should place the extended data key (merchLineItemAllowsValidation = false) 
+            into the line item extended data so that this task
+            does not reset the price to that set in the back office
+            </remarks>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateProductPriceTask.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.ValidateProductPriceTask"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModifiers">
+            The enable data modifiers.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateProductPriceTask.PerformTask(Merchello.Web.Validation.ValidationResult{Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase})">
+            <summary>
+            Performs the task of validating the pricing information.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Validation.Tasks.ValidateProductsExistTask">
+            <summary>
+            Validates that products still exist in Merchello.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateProductsExistTask.#ctor(Merchello.Core.IMerchelloContext,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Validation.Tasks.ValidateProductsExistTask"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The merchello context.
+            </param>
+            <param name="enableDataModifiers">
+            A value indicating whether or not to enable data modifiers in the MerchelloHelper
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Validation.Tasks.ValidateProductsExistTask.PerformTask(Merchello.Web.Validation.ValidationResult{Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase})">
+            <summary>
+            The perform task.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Attempt`1"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Validation.ValidationHelper">
             <summary>
@@ -8901,6 +10432,29 @@
         <member name="P:Merchello.Web.Validation.ValidationHelper.Banking">
             <summary>
             Gets the <see cref="T:Merchello.Web.Validation.IBankingValidationHelper"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Validation.ValidationResult`1">
+            <summary>
+            The validation result.
+            </summary>
+            <typeparam name="T">
+            The type to be validated
+            </typeparam>
+        </member>
+        <member name="F:Merchello.Web.Validation.ValidationResult`1._messages">
+            <summary>
+            Validation messages.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.ValidationResult`1.Validated">
+            <summary>
+            Gets or sets the validated object
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Validation.ValidationResult`1.Messages">
+            <summary>
+            Gets the messages.
             </summary>
         </member>
         <member name="T:Merchello.Web.Visitors.ILineItemDisplayVisitor">
@@ -9553,6 +11107,15 @@
             Saves the item cache
             </summary>
         </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.Validate">
+            <summary>
+            Validates values stored in the internal item cache to make certain items being purchase
+            reflect most recent values in the back office.
+            </summary>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.ICustomerItemCacheBase.Accept(Merchello.Core.Models.ILineItemVisitor)">
             <summary>
             Accepts visitor class to visit item cache items
@@ -9604,19 +11167,29 @@
             The product tax extended data keys.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._itemCache">
-            <summary>
-            The item cache responsible for persisting the customer item cache contents.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._customer">
             <summary>
             The customer.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._validationMessages">
+            <summary>
+            The validation messages.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._itemCache">
+            <summary>
+            The item cache responsible for persisting the customer item cache contents.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._productDataModifier">
             <summary>
             The product data modifier.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase._validator">
+            <summary>
+            The validation chain.
             </summary>
         </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.#ctor(Merchello.Core.Models.IItemCache,Merchello.Core.Models.ICustomerBase)">
@@ -9943,6 +11516,14 @@
             Saves the customer item cache
             </summary>
         </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Validate">
+            <summary>
+            The validate.
+            </summary>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Accept(Merchello.Core.Models.ILineItemVisitor)">
             <summary>
             Accepts visitor class to visit customer item cache items
@@ -9960,9 +11541,50 @@
             The <see cref="T:Merchello.Core.Events.AddItemEventArgs"/>.
             </param>        
         </member>
+        <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.OnValidated(Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase,Merchello.Core.Events.ValidationEventArgs{Merchello.Web.Validation.ValidationResult{Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase}})">
+            <summary>
+            The on validated.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The e.
+            </param>
+        </member>
         <member name="M:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Initialize">
             <summary>
             Initializes the Lazy data modifiers
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddingItem">
+            <summary>
+            Occurs when adding an item.
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.AddedItem">
+            <summary>
+            Occurs after an item is added.
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.RemovingItem">
+            <summary>
+            Occurs before removing an item.
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.RemovedItem">
+            <summary>
+            Occurs after an item is removed.
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Validating">
+            <summary>
+            Occurs when validation is starting.
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.Validated">
+            <summary>
+            Occurs after validation has completed
             </summary>
         </member>
         <member name="P:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.EnableDataModifiers">
@@ -10008,6 +11630,11 @@
         <member name="P:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.ItemCache">
             <summary>
             Gets the <see cref="T:Merchello.Core.Models.IItemCache"/>
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase.ValidationMessages">
+            <summary>
+            Gets the validation messages.
             </summary>
         </member>
         <member name="T:Merchello.Web.Workflow.InvoiceCreation.AddCouponDiscountsToInvoiceTask">
@@ -12765,7 +14392,7 @@
             The <see cref="T:Merchello.Web.Models.Querying.QueryResultDisplay"/>.
             </returns>
             <remarks>
-            Valid sortBy parameters  "sku", "name", "price" 
+            Valid sortBy parameters  "SKU", "name", "price" 
             </remarks>
         </member>
         <member name="M:Merchello.Web.Editors.ProductApiController.AddProduct(Merchello.Web.Models.ContentEditing.ProductDisplay)">
@@ -13135,16 +14762,26 @@
             <summary>
             Applying this attribute to any WebAPI controller will ensure that it only contains one JSON formatter compatible with the angular JSON vulnerability prevention.
             </summary>
+            <remarks>
+            http://issues.merchello.com/youtrack/issue/M-247
+            </remarks>
         </member>
-        <member name="M:Merchello.Web.WebApi.JsonCamelCaseFormatter.Initialize(System.Web.Http.Controllers.HttpControllerSettings,System.Web.Http.Controllers.HttpControllerDescriptor)">
+        <member name="F:Merchello.Web.WebApi.JsonCamelCaseFormatter.CamelCasingFormatter">
             <summary>
-            The initialize.
+            The _camel casing formatter.
             </summary>
-            <param name="controllerSettings">
-            The controller settings.
-            </param>
-            <param name="controllerDescriptor">
-            The controller descriptor.
+        </member>
+        <member name="M:Merchello.Web.WebApi.JsonCamelCaseFormatter.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:Merchello.Web.WebApi.JsonCamelCaseFormatter"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.JsonCamelCaseFormatter.OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            The on action executed.
+            </summary>
+            <param name="httpActionExecutedContext">
+            The http action executed context.
             </param>
         </member>
         <member name="T:Merchello.Web.Workflow.Basket">
@@ -13482,6 +15119,11 @@
             The product display abstract.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.VersionKey">
+            <summary>
+            Gets or sets the version key.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.Sku">
             <summary>
             Gets or sets the SKU.
@@ -13542,6 +15184,11 @@
             Gets or sets the downloadable file's Umbraco media id.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.Master">
+            <summary>
+            Gets or sets a value indicating whether master.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.TotalInventoryCount">
             <summary>
             Gets or sets the total inventory count.
@@ -13573,11 +15220,6 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.ProductVariantKey">
             <summary>
             Gets or sets the product variant key of the master variant.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.VersionKey">
-            <summary>
-            Gets or sets the version key.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplay.ProductOptions">
@@ -13638,11 +15280,6 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.ProductKey">
             <summary>
             Gets or sets the product key.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.VersionKey">
-            <summary>
-            Gets or sets the version key.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.ProductVariantDisplay.Attributes">
@@ -14074,6 +15711,52 @@
             The merchello tree controller.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController.DialogsPath">
+            <summary>
+            The dialogs path.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._textService">
+            <summary>
+            The text service.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._culture">
+            <summary>
+            The <see cref="T:System.Globalization.CultureInfo"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._rootTrees">
+            <summary>
+            The root trees.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._collectiontrees">
+            <summary>
+            The collection trees.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.MerchelloTreeController._entityCollectionProviderResolver">
+            <summary>
+            The <see cref="T:Merchello.Core.EntityCollections.EntityCollectionProviderResolver"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.#ctor(Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController"/> class.
+            </summary>
+            <param name="context">
+            The context.
+            </param>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the Umbraco ApplicationContent is null
+            </exception>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             The get tree nodes.
@@ -14102,6 +15785,114 @@
             The <see cref="T:Umbraco.Web.Models.Trees.MenuItemCollection"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.MakeCollectionRoutePathId(System.String,System.String)">
+            <summary>
+            Makes a route path id
+            </summary>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="collectionKey">
+            Constructs the route path id for collection nodes.
+            The collection key.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesForCollections(System.String,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
+            <summary>
+            Gets tree nodes for collections.
+            </summary>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="parentRouteId">
+            The parent route id.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <param name="collectionRoots">
+            Indicates this is a collection root node
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesFromCollection(Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath,System.String,System.String,System.Net.Http.Formatting.FormDataCollection,System.Boolean)">
+            <summary>
+            Gets tree nodes for static collections.
+            </summary>
+            <param name="info">
+            The info.
+            </param>
+            <param name="splitId">
+            The split id.
+            </param>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="parentRouteId">
+            The parent route id.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <param name="collectionRoots">
+            The collection roots.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodesForSelfManagedProviders(Merchello.Core.Configuration.Outline.TreeElement,Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath,System.String,System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Gets tree nodes for self managed collection providers.
+            </summary>
+            <param name="currentTree">
+            The current tree.
+            </param>
+            <param name="info">
+            The info.
+            </param>
+            <param name="splitId">
+            The split id.
+            </param>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <param name="parentRouteId">
+            The parent route id.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodeForConfigurationEntityCollectionProviders(Merchello.Core.Configuration.Outline.TreeElement,System.String,Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo,System.Net.Http.Formatting.FormDataCollection,System.String)">
+            <summary>
+            The get tree node from configuration element.
+            </summary>
+            <param name="tree">
+            The tree.
+            </param>
+            <param name="collectionId">
+            The root collection type (e.g. sales, product, customer)
+            </param>
+            <param name="info">
+            The info.
+            </param>
+            <param name="queryStrings">
+            The query strings.
+            </param>
+            <param name="parentRouteId">The parent route id</param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetTreeNodeFromConfigurationElement(Merchello.Core.Configuration.Outline.TreeElement,System.Net.Http.Formatting.FormDataCollection,Merchello.Core.Configuration.Outline.TreeElement)">
             <summary>
             The get tree node from configuration element.
@@ -14119,6 +15910,17 @@
             The <see cref="T:Umbraco.Web.Models.Trees.TreeNode"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.LocalizeTitle(Merchello.Core.Configuration.Outline.TreeElement)">
+            <summary>
+            The localize title.
+            </summary>
+            <param name="tree">
+            The tree.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetAttributeDefinedTrees(System.Net.Http.Formatting.FormDataCollection)">
             <summary>
             Adds attribute defined trees.
@@ -14126,6 +15928,71 @@
             <param name="queryStrings">
             The query Strings.
             </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.GetCollectionProviderInfo(System.String)">
+            <summary>
+            Resolves a provider and view for collection node.
+            </summary>
+            <param name="collectionId">
+            The collection id.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath">
+            <summary>
+            The split route path.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath"/> class.
+            </summary>
+            <param name="routePath">
+            The route path.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.CollectionKeyAsGuid">
+            <summary>
+            The collection key as guid.
+            </summary>
+            <returns>
+            The <see cref="T:System.Guid"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.IsChildCollection">
+            <summary>
+            Gets a value indicating whether is child collection.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.CollectionId">
+            <summary>
+            Gets the collection id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.SplitRoutePath.CollectionKey">
+            <summary>
+            Gets the collection key.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo">
+            <summary>
+            The collection provider info.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo.ViewName">
+            <summary>
+            Gets or sets the view name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.MerchelloTreeController.CollectionProviderInfo.ManagedCollections">
+            <summary>
+            Gets or sets the managed collections.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Trees.ServerVariablesParsingEvents">
             <summary>

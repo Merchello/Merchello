@@ -1,9 +1,9 @@
 ﻿namespace Merchello.Web.Validation
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
@@ -12,6 +12,7 @@
     /// <summary>
     /// Visitor to audit basket line item for inventory requirements
     /// </summary>
+    [Obsolete("Use ProductInventoryValidationVistor")]
     public class BasketItemInventoryValidation : ILineItemVisitor
     {
         #region Fields

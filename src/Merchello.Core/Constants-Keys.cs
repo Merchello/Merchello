@@ -13,6 +13,20 @@
         public static class DefaultKeys
         {
             /// <summary>
+            /// The detached published content type.
+            /// </summary>
+            public static class DetachedPublishedContentType
+            {
+                /// <summary>
+                /// Gets the default product variant detached published content type key.
+                /// </summary>
+                public static Guid DefaultProductVariantDetachedPublishedContentTypeKey
+                {
+                    get { return new Guid("1B291A7A-417D-41D1-A044-9051E6F30A15"); }
+                }
+            }
+
+            /// <summary>
             /// The default warehouse keys
             /// </summary>
             public static class Warehouse
@@ -178,6 +192,53 @@
         /// </summary>
         public static class ProviderKeys
         {
+            /// <summary>
+            /// The entity collection.
+            /// </summary>
+            public static class EntityCollection
+            {
+                /// <summary>
+                /// Gets the static product collection provider key.
+                /// </summary>
+                public static Guid StaticProductCollectionProviderKey
+                {
+                    get { return new Guid("4700456D-A872-4721-8455-1DDAC19F8C16"); }
+                }
+
+                /// <summary>
+                /// Gets the static invoice collection provider key.
+                /// </summary>
+                public static Guid StaticInvoiceCollectionProviderKey
+                {
+                    get
+                    {
+                        return new Guid("240023BB-80F0-445C-84D5-29F5892B2FB8");
+                    }
+                }
+
+                /// <summary>
+                /// Gets the static customer collection provider key.
+                /// </summary>
+                public static Guid StaticCustomerCollectionProviderKey
+                {
+                    get
+                    {
+                        return new Guid("A389D41B-C8F1-4289-BD2E-5FFF01DBBDB1");
+                    }
+                }
+
+                /// <summary>
+                /// Gets the static entity collection collection provider.
+                /// </summary>
+                public static Guid StaticEntityCollectionCollectionProvider
+                {
+                    get
+                    {
+                        return new Guid("A8120A01-E9BF-4204-ADDD-D9553F6F24FE");
+                    }
+                }
+            }
+
             /// <summary>
             /// The shipping gateway providers keys.
             /// </summary>
@@ -351,7 +412,7 @@
         /// <summary>
         /// The default type field keys
         /// </summary>
-        /// TODO these are incomplete
+        /// TODO ensure all core type field keys have constant values
         public static class TypeFieldKeys
         {
             /// <summary>
@@ -381,14 +442,6 @@
             /// </summary>
             public static class CampaignActivity
             {
-                ///// <summary>
-                ///// Gets the key representing a sale type.
-                ///// </summary>
-                //public static Guid SaleKey
-                //{
-                //    get { return new Guid("2E8804AF-9852-4216-A3FB-A87D60C2EAF4"); }
-                //}
-
                 /// <summary>
                 /// Gets the key representing a discount type.
                 /// </summary>
@@ -417,6 +470,17 @@
                 public static Guid CustomerKey
                 {
                     get { return new Guid("1607D643-E5E8-4A93-9393-651F83B5F1A9"); }
+                }
+
+                /// <summary>
+                /// Gets the entity collection key.
+                /// </summary>
+                public static Guid EntityCollectionKey
+                {
+                    get
+                    {
+                        return new Guid("A3C60219-2687-4044-A85C-CC7D6FFCA298");
+                    }
                 }
 
                 /// <summary>
@@ -506,7 +570,7 @@
                 }
 
                 /// <summary>
-                /// Gets the backoffice key.
+                /// Gets the back office key.
                 /// </summary>
                 public static Guid BackofficeKey
                 {
@@ -515,7 +579,7 @@
 
 
                 /// <summary>
-                /// Gets the wishlist key.
+                /// Gets the wish list key.
                 /// </summary>
                 public static Guid WishlistKey
                 {
@@ -621,7 +685,7 @@
                 }
 
                 /// <summary>
-                /// Gets the debit record tyep key.
+                /// Gets the debit record type key.
                 /// </summary>
                 public static Guid DebitRecordKey
                 {

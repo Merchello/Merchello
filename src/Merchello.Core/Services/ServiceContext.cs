@@ -50,7 +50,12 @@
         /// <summary>
         /// The digital media service.
         /// </summary>
-        private Lazy<IDigitalMediaService> _digitalMediaService; 
+        private Lazy<IDigitalMediaService> _digitalMediaService;
+
+        /// <summary>
+        /// The entity collection service.
+        /// </summary>
+        private Lazy<IEntityCollectionService> _entityCollectionService; 
 
         /// <summary>
         /// The invoice service.
@@ -189,6 +194,15 @@
                 return _digitalMediaService.Value; 
             }
         }
+
+        /// <summary>
+        /// Gets the <see cref="IEntityCollectionService"/>.
+        /// </summary>
+        public IEntityCollectionService EntityCollectionService
+        {
+            get { return _entityCollectionService.Value; }
+        }
+
 
         /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
@@ -407,6 +421,9 @@
 
             if (_digitalMediaService == null)
                 _digitalMediaService = new Lazy<IDigitalMediaService>(() => new DigitalMediaService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+
+            if (_entityCollectionService == null)
+                _entityCollectionService = new Lazy<IEntityCollectionService>(() => new EntityCollectionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_itemCacheService == null)
                 _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

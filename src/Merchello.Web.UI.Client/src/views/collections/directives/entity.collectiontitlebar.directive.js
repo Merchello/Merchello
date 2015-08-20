@@ -1,0 +1,46 @@
+angular.module('merchello.directives').directive('entityCollectionTitleBar', function($compile, localizationService, entityCollectionResource, entityCollectionDisplayBuilder, entityCollectionProviderDisplayBuilder) {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: {
+      collectionKey: '='
+    },
+    template: '<h2>{{ collection.name }}</h2>',
+    link: function(scope, element, attrs) {
+
+      scope.collection = {};
+
+      function init() {
+        loadCollection();
+      }
+
+      function loadCollection() {
+        if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
+          var key = 'merchelloCollections_allItems';
+          localizationService.localize(key).then(function (value) {
+            scope.collection.name = value;
+          });
+        } else {
+          entityCollectionResource.getByKey(scope.collectionKey).then(function(collection) {
+            var retrieved = entityCollectionDisplayBuilder.transform(collection);
+            entityCollectionResource.getEntityCollectionProviders().then(function(results) {
+              var providers = entityCollectionProviderDisplayBuilder.transform(results);
+              var provider = _.find(providers, function(p) {
+                return p.key === retrieved.providerKey;
+              });
+              if (provider !== undefined && provider.managesUniqueCollection && provider.localizedNameKey !== '') {
+                localizationService.localize(provider.localizedNameKey.replace('/', '_')).then(function(value) {
+                  scope.collection.name = value;
+                });
+              } else {
+                scope.collection = retrieved;
+              }
+            });
+          });
+        }
+      }
+
+      init();
+    }
+  }
+});

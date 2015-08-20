@@ -1,7 +1,7 @@
 
     angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
-        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $timeout, notificationsService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
+        function($scope, $routeParams, $location, $timeout, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;

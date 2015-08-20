@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines the CustomerService, which provides access to operations involving <see cref="ICustomer"/>
     /// </summary>
-    public interface ICustomerService : IPageCachedService<ICustomer>
+    public interface ICustomerService : IPageCachedService<ICustomer>, IStaticCollectionService<ICustomer>
     {
         /// <summary>
         /// Creates a customer without saving to the database

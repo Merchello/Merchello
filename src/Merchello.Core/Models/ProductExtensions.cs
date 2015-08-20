@@ -4,23 +4,29 @@ namespace Merchello.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Xml;
     using System.Xml.Linq;
 
-    using Merchello.Core.Chains;
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Services;
 
     using Models;
-    using Models.Interfaces;
+
     using Newtonsoft.Json;
+
+    using Umbraco.Core.Logging;
+
     using Formatting = Newtonsoft.Json.Formatting;
 
     /// <summary>
     /// The product extensions.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class ProductExtensions
     {
         /// <summary>
@@ -159,7 +165,7 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Removes a product varaint from a catalog inventory.
+        /// Removes a product variant from a catalog inventory.
         /// </summary>
         /// <param name="productVariant">
         /// The product variant.
@@ -175,7 +181,7 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Removes a product varaint from a catalog inventory.
+        /// Removes a product variant from a catalog inventory.
         /// </summary>
         /// <param name="productVariant">
         /// The product variant.
@@ -207,34 +213,102 @@ namespace Merchello.Core
             return optionChoices.CartesianProduct();
         }
 
-        #region DataModifier
+        #region Static Product Collections
 
-        ///// <summary>
-        ///// Merges the modified property data.
-        ///// </summary>
-        ///// <param name="product">
-        ///// The product.
-        ///// </param>
-        ///// <param name="modified">
-        ///// The modified.
-        ///// </param>
-        ///// <remarks>
-        ///// This has the potential to modify a cached value and create some odd results
-        ///// </remarks>
-        //internal static void MergeDataModifierData(this IProductBase product, IProductVariantDataModifierData modified)
-        //{
-        //    if (modified.ModifiedDataLogs != null)
-        //    foreach (var log in modified.ModifiedDataLogs)
-        //    {
-        //        var propInfo = product.GetType().GetProperty(log.PropertyName, BindingFlags.Public | BindingFlags.Instance);
-        //        if (propInfo != null && propInfo.CanWrite)
-        //        {
-        //            propInfo.SetValue(product, log.ModifiedValue, null);
-        //        }
-        //    }
-        //}
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void AddToCollection(this IProduct product, IEntityCollection collection)
+        {
+            product.AddToCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// Adds a product to a static product collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public static void AddToCollection(this IProduct product, Guid collectionKey)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent || !MerchelloContext.HasCurrent) return;
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            if (!attempt.Success) return;
+
+            var provider = attempt.Result;
+
+            if (!provider.EnsureEntityType(EntityType.Product))
+            {
+                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");
+                return;
+            }
+
+            MerchelloContext.Current.Services.ProductService.AddToCollection(product.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// Removes a product from a collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void RemoveFromCollection(this IProduct product, IEntityCollection collection)
+        {
+            product.RemoveFromCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// Removes a product from a collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>        
+        public static void RemoveFromCollection(this IProduct product, Guid collectionKey)
+        {
+            if (!MerchelloContext.HasCurrent) return;
+            MerchelloContext.Current.Services.ProductService.RemoveFromCollection(product.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// Returns static collections containing the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is internal so that people do not query for these entries in a big product list 
+        /// which would be really excessive database calls.
+        /// TODO need to decide how to cache these to provide that functionality
+        /// </remarks>
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IProduct product)
+        {
+            if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
+            return
+                ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
+                    .GetEntityCollectionsByProductKey(product.Key);
+        }
 
         #endregion
+
+
 
         #region ProductAttributeCollection
 
@@ -288,7 +362,7 @@ namespace Merchello.Core
             var doc = XDocument.Parse(xml);
             if (doc.Root == null) return XDocument.Parse("<product />");
                 
-            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions).Root);
+            doc.Root.Add(((Product)product).MasterVariant.SerializeToXml(product.ProductOptions, product.GetCollectionsContaining().Select(x => x.Key)).Root);
 
             // Need to filter out the Master variant so that it does not get overwritten in the cases where
             // a product defines options.
@@ -300,8 +374,22 @@ namespace Merchello.Core
             return doc;
         }
 
-
-        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null)
+        /// <summary>
+        /// Serializes a product variant for Examine indexing.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <param name="productOptionCollection">
+        /// The product option collection.
+        /// </param>
+        /// <param name="collections">
+        /// Static collections keys product belongs 
+        /// </param>
+        /// <returns>
+        /// The <see cref="XDocument"/>.
+        /// </returns>
+        internal static XDocument SerializeToXml(this IProductVariant productVariant, ProductOptionCollection productOptionCollection = null, IEnumerable<Guid> collections = null)
         {
             string xml;
             using (var sw = new StringWriter())
@@ -310,7 +398,6 @@ namespace Merchello.Core
                 {
                     writer.WriteStartDocument();
                     writer.WriteStartElement("productVariant");
-                   // TODO construct the id
                     writer.WriteAttributeString("id", ((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
                     writer.WriteAttributeString("productKey", productVariant.ProductKey.ToString());
                     writer.WriteAttributeString("productVariantKey", productVariant.Key.ToString());
@@ -340,6 +427,17 @@ namespace Merchello.Core
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
+
+                    // 1.11.0 - static collections
+                    if (collections != null)
+                    {
+                        var collectionKeys = collections as Guid[] ?? collections.ToArray();
+                        if (collectionKeys.Any())
+                        {
+                            writer.WriteAttributeString("staticCollectionKeys", string.Join(",", collectionKeys));
+                        }
+                    }
+
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");

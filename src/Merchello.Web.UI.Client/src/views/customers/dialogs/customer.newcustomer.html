@@ -1,0 +1,22 @@
+<div class="umb-panel-body no-header" ng-controller="Merchello.Customer.Dialogs.CustomerNewCustomerController">
+    <form name="editInfoForm" id="editInfoForm">
+        <div class="form-group row-fluid" style="padding: 1em">
+            <label for="firstName">First Name:</label>
+            <input name="firstName" type="text" class="span11" data-ng-model="firstName"  />
+            <label for="lastName">Last Name:</label>
+            <input name="lastName" type="text" class="span11" data-ng-model="lastName" />
+            <label for="email">*Email Address:</label>
+            <div class="error" data-ng-show="editInfoForm.email.$invalid && wasFormSubmitted">Email is a required field.</div>
+            <input name="email" type="email" class="span11" data-ng-model="email" required />
+        </div>
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                <!-- ACTION: Submit DialogData -->
+                <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
+
+            </div>
+        </div>
+    </form>
+</div>

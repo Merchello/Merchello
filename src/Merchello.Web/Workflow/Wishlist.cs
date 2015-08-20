@@ -154,14 +154,17 @@
 
             var wishlist = (IWishList)merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey);
 
-            if (wishlist != null) return wishlist;
+            if (wishlist != null && wishlist.Validate()) return wishlist;
 
             var customerItemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Wishlist);
 
             wishlist = new WishList(customerItemCache, customer);
 
-            merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => wishlist);
-
+            if (wishlist.Validate())
+            {
+                merchelloContext.Cache.RuntimeCache.GetCacheItem(cacheKey, () => wishlist);    
+            }
+            
             return wishlist;
         }
 

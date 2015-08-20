@@ -1,0 +1,10 @@
+.entity-collection-table {
+  .sortable {
+    cursor: move
+  }
+
+  .label { font-size: 1em; line-height: 20px; text-shadow: none; }
+  .label-success { background: lighten($green, 20%); }
+  .label-warning { background: lighten($orange, 20%); }
+  .label-info { background: desaturate(lighten($blue, 30%), 25%); }
+}

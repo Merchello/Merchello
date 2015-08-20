@@ -30,6 +30,7 @@
         self.taxable = false;
         self.shippable = false;
         self.download = false;
+        self.master = true;
         self.downloadMediaId = -1;
         self.productOptions = [];
         self.productVariants = [];

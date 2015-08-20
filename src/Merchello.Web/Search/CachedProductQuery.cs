@@ -12,8 +12,6 @@
     using global::Examine;
     using global::Examine.Providers;
 
-    using log4net.Util;
-
     using Merchello.Core.Chains;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
@@ -21,13 +19,10 @@
     using Models.ContentEditing;
     using Models.Querying;
 
-    using umbraco;
-    using umbraco.cms.presentation;
-
     /// <summary>
     /// Represents a CachedProductQuery
     /// </summary>
-    internal class CachedProductQuery : CachedQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
+    internal class CachedProductQuery : CachedQueryableCollectionQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
     {
         /// <summary>
         /// The product service.
@@ -234,7 +229,7 @@
         {
             return GetQueryResultDisplay(_productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
         }
-
+        
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names
         /// </summary>
@@ -718,22 +713,32 @@
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
-        ///// <summary>
-        ///// Modifies Product Data with configured DataModifier Chain.
-        ///// </summary>
-        ///// <param name="product">
-        ///// The product.
-        ///// </param>
-        ///// <returns>
-        ///// The <see cref="ProductDisplay"/>.
-        ///// </returns>
-        //internal ProductDisplay ModifyProductData(ProductDisplay product)
-        //{
-        //    if (!EnableDataModifiers) return product;
-        //    var modified = this.ModifyData(product);
-        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x));
-        //    return modified;
-        //}
+        /// <summary>
+        /// Gets a display object from the Examine cache or falls back the the database if not found
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        protected override ProductDisplay GetDisplayObject(Guid key)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field(KeyFieldInIndex, key.ToString()).And().Field("master", "True");
+
+            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            if (display != null) return display;
+
+            var entity = Service.GetByKey(key);
+
+            if (entity == null) return null;
+
+            ReindexEntity(entity);
+
+            return AutoMapper.Mapper.Map<ProductDisplay>(entity);
+        }
 
         /// <summary>
         /// The modify data.
@@ -772,7 +777,7 @@
         {
             return result.ToProductDisplay(GetVariantsByProduct);
         }
-
+     
 
         /// <summary>
         /// Initializes the lazy

@@ -292,21 +292,21 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         /// appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
             if(customerKey !== '00000000-0000-0000-0000-000000000000') {
-                addTab.call(this, 'customer', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+                addTab.call(this, 'customer', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
             }
         }
 
         function appendOfferTab(offerKey, backOfficeTree) {
-            var title = '';
+            var title = 'merchelloTabs_';
             if(backOfficeTree.title === undefined || backOfficeTree.title === '') {
-                title = 'Offer';
+                title += 'offer';
             } else {
-                title = backOfficeTree.title;
+                title += backOfficeTree.title.toLowerCase();
             }
             if(offerKey !== '00000000-0000-0000-0000-000000000000' && offerKey !== 'create') {
                 addTab.call(this, 'offer', title, '#' + backOfficeTree.routePath.replace('{0}', offerKey));
             } else {
-                addTab.call(this, 'offer', 'New ' + title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
+                addTab.call(this, 'offer', title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
             }
         }
 
@@ -377,6 +377,49 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
 
     angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
 
+/**
+ * @ngdoc model
+ * @name EntityCollectionDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's EntityCollectionDisplay object
+ */
+var EntityCollectionDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.parentKey = '';
+    self.entityTfKey = '';
+    self.entityType = '';
+    self.entityTypeField = {};
+    self.providerKey = '';
+    self.name = '';
+    self.sortOrder = 0;
+};
+
+angular.module('merchello.models').constant('EntityCollectionDisplay', EntityCollectionDisplay);
+
+/**
+ * @ngdoc model
+ * @name EntityCollectionDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's EntityCollectionProviderDisplay object
+ */
+var EntityCollectionProviderDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.name = '';
+    self.description = '';
+    self.entityTypeField = {};
+    self.managesUniqueCollection = true;
+    self.entityType = '';
+    self.managedCollections = [];
+};
+
+
+angular.module('merchello.models').constant('EntityCollectionProviderDisplay', EntityCollectionProviderDisplay);
     /**
      * @ngdoc model
      * @name CustomerAddressDisplay
@@ -585,6 +628,51 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
     };
 
     angular.module('merchello.models').constant('AddEditCustomerDialogData', AddEditCustomerDialogData);
+
+/**
+ * @ngdoc model
+ * @name AddEditEntityStaticCollectionDialog
+ * @function
+ *
+ * @description
+ *  A dialog data object for adding or editing Static Collection objects
+ */
+function AddEditEntityStaticCollectionDialog() {
+    var self = this;
+    self.entityType = '';
+    self.collectionKeys = [];
+};
+
+AddEditEntityStaticCollectionDialog.prototype = (function() {
+
+    function exists(key) {
+        if (this.collectionKeys.length === 0) return false;
+        var found = _.find(this.collectionKeys, function(k) {
+            return k === key;
+        });
+        return found !== undefined;
+    }
+
+    function addCollectionKey(key) {
+        if (!exists.call(this, key)) {
+            this.collectionKeys.push(key);
+        }
+    }
+
+    function removeCollectionKey(key) {
+        this.collectionKeys = _.reject(this.collectionKeys, function(item) {
+          return item === key;
+        });
+    }
+
+    return {
+        exists : exists,
+        addCollectionKey: addCollectionKey,
+        removeCollectionKey: removeCollectionKey
+    };
+})();
+
+angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog', AddEditEntityStaticCollectionDialog);
 
     /**
      * @ngdoc model
@@ -1956,6 +2044,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.taxable = false;
         self.shippable = false;
         self.download = false;
+        self.master = true;
         self.downloadMediaId = -1;
         self.productOptions = [];
         self.productVariants = [];
@@ -2185,6 +2274,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.taxable = false;
         self.shippable = false;
         self.download = false;
+        self.master = false;
         self.downloadMediaId = -1;
         self.totalInventoryCount = 0;
         self.attributes = [];
@@ -2331,6 +2421,19 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             addParameter.call(this, param);
         }
 
+        function addCollectionKeyParam(collectionKey) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'collectionKey';
+            param.value = collectionKey;
+            addParameter.call(this, param);
+        }
+
+        function addEntityTypeParam(entityType) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'entityType';
+            param.value = entityType;
+            addParameter.call(this, param);
+        }
 
         function addFilterTermParam(term) {
             if(term === undefined || term.length <= 0) {
@@ -2351,6 +2454,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         return {
             addParameter: addParameter,
             addCustomerKeyParam: addCustomerKeyParam,
+            addCollectionKeyParam: addCollectionKeyParam,
+            addEntityTypeParam: addEntityTypeParam,
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,
             addFilterTermParam: addFilterTermParam
@@ -3491,6 +3596,73 @@ angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
         };
     }]);
 
+/**
+ * @ngdoc service
+ * @name entityCollectionDisplayBuilder
+ *
+ * @description
+ * A utility service that builds EntityCollectionDisplay models
+ */
+angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
+    ['genericModelBuilder', 'typeFieldDisplayBuilder', 'EntityCollectionDisplay',
+        function(genericModelBuilder, typeFieldDisplayBuilder, EntityCollectionDisplay) {
+            var Constructor = EntityCollectionDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var collections = [];
+                    if (angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
+                            collections.push(collection);
+                        }
+                    } else {
+                        collections = genericModelBuilder.transform(jsonResult, Constructor);
+                        collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
+                    }
+                    return collections;
+                }
+            };
+}]);
+
+/**
+ * @ngdoc service
+ * @name entityCollectionDisplayBuilder
+ *
+ * @description
+ * A utility service that builds EntityCollectionDisplay models
+ */
+angular.module('merchello.models').factory('entityCollectionProviderDisplayBuilder',
+    ['genericModelBuilder', 'entityCollectionDisplayBuilder',  'typeFieldDisplayBuilder', 'EntityCollectionProviderDisplay',
+        function(genericModelBuilder, entityCollectionDisplayBuilder, typeFieldDisplayBuilder, EntityCollectionProviderDisplay) {
+            var Constructor = EntityCollectionProviderDisplay;
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    var providers = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var provider = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                            provider.managedCollections = entityCollectionDisplayBuilder.transform(jsonResult[ i ].managedCollections);
+                            provider.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[i].entityTypeField);
+                            providers.push(provider);
+                        }
+                    } else {
+                        providers = genericModelBuilder.transform(jsonResult, Constructor);
+                        providers.managedCollections = entityCollectionDisplayBuilder.transform(jsonResult.managedCollections);
+                        providers.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField);
+                    }
+                    return providers;
+                }
+            };
+        }]);
+
+
     /**
      * @ngdoc service
      * @name merchello.models.countryDisplayBuilder
@@ -3771,6 +3943,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new ConfigureOfferComponentDialogData();
         }
 
+        function createAddEditEntityStaticCollectionDialog() {
+            return new AddEditEntityStaticCollectionDialog();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3811,7 +3987,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createProcessRefundPaymentDialogData: createProcessRefundPaymentDialogData,
             createAddPaymentDialogData: createAddPaymentDialogData,
             createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
-            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData
+            createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData,
+            createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog
         };
 }]);
 
@@ -4050,75 +4227,83 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             // creates tabs for the product listing page
             function createProductListTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 return tabs;
             }
 
-            // creates tabs for the product editor page
+           // creates tabs for the product editor page
             function createNewProductEditorTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('createproduct', 'Product', '#/merchello/merchello/productedit/');
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('createproduct', 'merchelloTabs_product', '#/merchello/merchello/productedit/');
                 return tabs;
             }
 
             // creates tabs for the product editor page
-            function createProductEditorTabs(productKey) {
+            function createProductEditorTabs(productKey, hasVariants) {
+                if (hasVariants !== undefined && hasVariants == true)
+                {
+                    return createProductEditorWithOptionsTabs(productKey);
+                }
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 return tabs;
             }
 
             // creates tabs for the product editor with options tabs
             function createProductEditorWithOptionsTabs(productKey) {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/productoptionseditor/' + productKey);
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 
             // creates tabs for the product variant editor
-            function createProductVariantEditorTabs(productKey, productVariantKey) {
+           function createProductVariantEditorTabs(productKey, productVariantKey) {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
+                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
+
 
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
+                tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
                 return tabs;
             }
 
             // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
-                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
-                tabs.addTab('overview', 'Sale', '#/merchello/merchello/saleoverview/' + invoiceKey);
-                tabs.addTab('payments', 'Payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
-                tabs.addTab('shipments', 'Shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
+                tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
+                tabs.addTab('overview', 'merchelloTabs_sales', '#/merchello/merchello/saleoverview/' + invoiceKey);
+                tabs.addTab('payments', 'merchelloTabs_payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
+                tabs.addTab('shipments', 'merchelloTabs_shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
                 return tabs;
             }
 
             // creates the tabs for the customer list page
             function createCustomerListTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
                 return tabs;
             }
 
             // creates the customer overview tabs
             function createCustomerOverviewTabs(customerKey, hasAddresses) {
                 var tabs = new Constructor();
-                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
-                tabs.addTab('overview', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+                tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
+                tabs.addTab('overview', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
                 if(hasAddresses) {
-                    tabs.addTab('addresses', 'Addresses', '#/merchello/merchello/customeraddresses/' + customerKey);
+                    tabs.addTab('addresses', 'merchelloTabs_customerAddresses', '#/merchello/merchello/customeraddresses/' + customerKey);
                 }
                 return tabs;
             }
@@ -4126,26 +4311,27 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             // creates the tabs for the gateway provider section
             function createGatewayProviderTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('providers', 'Gateway Providers', '#/merchello/merchello/gatewayproviderlist/manage');
-                tabs.addTab('notification', 'Notification', '#/merchello/merchello/notificationproviders/manage');
-                tabs.addTab('payment', 'Payment', '#/merchello/merchello/paymentproviders/manage');
-                tabs.addTab('shipping', 'Shipping', '#/merchello/merchello/shippingproviders/manage');
-                tabs.addTab('taxation', 'Taxation', '#/merchello/merchello/taxationproviders/manage');
+                tabs.addTab('providers', 'merchelloTabs_gatewayProviders', '#/merchello/merchello/gatewayproviderlist/manage');
+                tabs.addTab('notification', 'merchelloTabs_notification', '#/merchello/merchello/notificationproviders/manage');
+                tabs.addTab('payment', 'merchelloTabs_payment', '#/merchello/merchello/paymentproviders/manage');
+                tabs.addTab('shipping', 'merchelloTabs_shipping', '#/merchello/merchello/shippingproviders/manage');
+                tabs.addTab('taxation', 'merchelloTabs_taxation', '#/merchello/merchello/taxationproviders/manage');
                 return tabs;
             }
 
             // creates the tabs for the marketing section
             function createMarketingTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('offers', 'Offers Listing', '#/merchello/merchello/offerslist/manage');
+                tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/manage');
                 return tabs;
             }
 
             function createReportsTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
+                tabs.addTab('reportslist', 'merchelloTabs_reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
+
 
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,

@@ -7,13 +7,7 @@
                 </div>
             </div>
             <div class="span5">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <!-- New Order Button -->
-                    <div class="btn-group">
-                        <!-- ACTION: New Customer -->
-                        <a class="btn btn-success" data-ng-click="openNewCustomerDialog()">New Customer</a>
-                    </div>
-                </div>
+
             </div>
             <merchello-tabs tabs="tabs"></merchello-tabs>
         </umb-header>
@@ -43,6 +37,7 @@
                 <reset-list-filters></reset-list-filters>
             </div>
             <div class="merchello-pane">
+                <entity-collection-title-bar collection-key="collectionKey"></entity-collection-title-bar>
                 <!-- Pagination -->
                 <merchello-pager></merchello-pager>
                 <!-- Table of Customers -->
@@ -83,12 +78,18 @@
                         <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.loginName}}</a></td>
                         <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
                         <td><!--customer-location address="customer.getPrimaryLocation()"></customer-location--></td>
-                        <td><localize key="merchelloGeneral_moneySymbol" />{{customer.getLastInvoice().total}}</td>
+                        <td>{{ customer.getLastInvoice().total | currency : getCurrencySymbol(customer.getLastInvoice()) }}</td>
                     </tr>
                     </tbody>
                 </table>
                 <!-- Pagination -->
                 <merchello-pager></merchello-pager>
+            </div>
+            <div class="pager well" data-ng-show="preValuesLoaded && customers.length == 0 && collectionKey===''">
+                <localize key="merchelloCustomers_noCustomers" />
+            </div>
+            <div class="pager well" data-ng-show="preValuesLoaded && customers.length == 0 && collectionKey!==''">
+                <localize key="merchelloCustomers_emptyCustomerCollection" />
             </div>
         </merchello-panel>
     </umb-panel>

@@ -1,0 +1,164 @@
+<div class="umb-panel merchello-context-panel constraint-product-selector" ng-controller="Merchello.EntityCollections.Dialogs.ManageStaticCollectionController" data-ng-show="loaded">
+    <form id="entitycollectionForm" name="entitycollectionForm" class="form-horizontal">
+        <div class="row-fluid">
+            <div class="col-xs-10 span10">
+                <h3 data-ng-hide="editCollection">{{ collection.name }}</h3>
+                <div class="form-group" data-ng-show="editCollection">
+                    <label for="name">Name:</label>
+                    <input name="name" type="text" class="span8" data-ng-model="collection.name" required />
+                    <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+                    <button id="editName" class="btn" data-ng-click="saveCollection()"><localize key="buttons_save" /></button>
+                </div>
+            </div>
+            <a href data-ng-click="editCollection = !editCollection" class="btn btn-link">
+                <span data-ng-show="editCollection"><localize key="general_cancel" /></span>
+                <span data-ng-hide="editCollection"><localize key="general_edit" /></span>
+            </a>
+        </div>
+    </form>
+    <hr />
+    <h4>
+        <span data-ng-show="addToCollection"><localize key="merchelloCollections_addEntities" /></span>
+        <span data-ng-hide="addToCollection"><localize key="merchelloCollections_removeEntities" /></span>
+    </h4>
+    <form class="form-horizontal entity-selection-form">
+        <div class="merchello-pane">
+            <div class="form-group control-group row-fluid">
+                <div class="col-xs-7 span7 controls">
+                    <label for="entityFilter"><localize key="merchelloGeneral_filterBy"/></label>
+                    <input id="entityFilter" class="form-control span8" name="entityFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@placeholders_filter" />
+                    <button id="entityFilterGo" class="btn" data-ng-click="getFilteredEntities(filtertext)"><localize key="merchelloGeneral_filter" /></button>
+                </div>
+                <div class="col-xs-7 span7 control-group padTop">
+                    <label>
+                        <input type="radio" name="mode" data-ng-model="addToCollection" data-ng-value="true" data-ng-click="toggleMode()" />
+                        <localize key="merchelloCollections_addEntities" />
+                    </label>
+                    <label>
+                        <input type="radio" name="mode" data-ng-model="addToCollection"  data-ng-value="false"  data-ng-click="toggleMode()" />
+                        <localize key="merchelloCollections_removeEntities" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+
+        <div class="merchello-pane">
+            <merchello-pager></merchello-pager>
+            <merchello-spinner />
+        </div>
+
+        <table class="table table-hover merchello-selectable-table entity-collection-table sortable" data-ng-show="products.length > 0">
+            <thead>
+                <tr>
+                    <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
+                        <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloVariant_product"/>
+                    </th>
+                    <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
+                        <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
+                    </th>
+                    <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
+                        <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
+                    </th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="product in products"
+                    data-ng-class="{active: product.selected}">
+                    <td>{{product.name}}</td>
+                    <td>{{product.sku}}</td>
+                    <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
+                    <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+                    <td>
+                        <a class="btn btn-default btn-xs btn-mini" href data-ng-click="handleEntity(product)">
+                            <span data-ng-show="addToCollection"><i class="icon-add" /></span>
+                            <span data-ng-hide="addToCollection"><i class="icon-trash" /></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-hover merchello-selectable-table entity-collection-table sortable" data-ng-show="invoices.length > 0">
+            <thead>
+                <tr>
+                    <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
+                        <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i>
+                        <localize key="merchelloOrder_invoiceNumber" />
+                    </th>
+                    <th data-ng-click="changeSortOrder('invoiceDate')" data-ng-class="{'sorted': sortProperty == 'invoiceDate' ||  sortProperty == '-invoiceDate'}">
+                        <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i>
+                        <localize key="general_date" />
+                    </th>
+                    <th data-ng-click="changeSortOrder('billToName')" data-ng-class="{'sorted': sortProperty == 'billToName' ||  sortProperty == '-billToName'}">
+                        <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i>
+                        <localize key="merchelloGeneral_customer" />
+                    </th>
+                    <th>
+                        <localize key="merchelloOrder_paymentStatus" />
+                    </th>
+                    <th>
+                    <th>&nbsp;</th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
+                    <!--<td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>-->
+                    <td>{{invoice.invoiceNumber}}</td>
+                    <td>{{invoice.invoiceDateString() | date : settings.dateFormat }}</td>
+                    <td>{{invoice.billToName}}</td>
+                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
+                    <td>
+                        <a class="btn btn-default btn-xs btn-mini" href data-ng-click="handleEntity(invoice)">
+                            <span data-ng-show="addToCollection"><i class="icon-add" /></span>
+                            <span data-ng-hide="addToCollection"><i class="icon-trash" /></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-hover merchello-selectable-table entity-collection-table sortable" data-ng-show="customers.length > 0">
+            <thead>
+            <tr>
+                <th data-ng-click="changeSortOrder('loginName')" data-ng-class="{'sorted': sortProperty == 'loginName' ||  sortProperty == '-loginName'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'loginName', 'icon-navigation-down': sortProperty == '-loginName'}"></i>
+                    Login
+                </th>
+                <th data-ng-click="changeSortOrder('firstName')" data-ng-class="{'sorted': sortProperty == 'firstName' ||  sortProperty == '-firstName'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'firstName', 'icon-navigation-down': sortProperty == '-firstName'}"></i>
+                    <localize key="general_name" />
+                </th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="customer in customers" data-ng-class="{ active: customer.selected}">
+                    <td>{{customer.loginName}}</td>
+                    <td>{{customer.firstName}} {{customer.lastName}}</td>
+                    <td>
+                        <a class="btn btn-default btn-xs btn-mini" href data-ng-click="handleEntity(customer)">
+                            <span data-ng-show="addToCollection"><i class="icon-add" /></span>
+                            <span data-ng-hide="addToCollection"><i class="icon-trash" /></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    <!-- Prompt to create products if no products in the catalog -->
+    <div class="pager well" data-ng-show="preValuesLoaded && entityCount == 0">
+        <h5 data-ng-show="addToCollection"><localize key="merchelloCollections_noQualifyingEntities" /></h5>
+        <h5 data-ng-hide="addToCollection"><localize key="merchelloCollections_emptyCollection" /></h5>
+    </div>
+
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <!-- ACTION: Cancel -->
+            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+        </div>
+    </div>
+
+</div>

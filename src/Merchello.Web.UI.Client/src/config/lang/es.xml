@@ -6,9 +6,107 @@
     <key alias="delete">Delete</key>
     <key alias="save">Save</key>
     <key alias="select">Select</key>
+    <key alias="remove">Remove</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catálogo</key>
+  </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Name</key>
+    <key alias="startDate">Starting</key>
+    <key alias="endDate">Ending</key>
+    <key alias="alias">Alias</key>
+    <key alias="active">Active</key>
+    <key alias="sortOrder">Sort Order</key>
+  </area>
+  <area alias="merchelloTree">
+    <key alias="products">Products</key>
+    <key alias="sales">Sales</key>
+    <key alias="customers">Customers</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Collections</key>
+    <key alias="reports">Reports</key>
+    <key alias="gateways">Gateway Providers</key>
+  </area>
+  <area alias="merchelloTabs">
+    <key alias="productListing">Product Listing</key>
+    <key alias="product">Product</key>
+    <key alias="productVariants">Product Variants</key>
+    <key alias="productOptions">Product Options</key>
+    <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="salesListing">Sales Listing</key>
+    <key alias="sales">Sale</key>
+    <key alias="payments">Payments</key>
+    <key alias="payment">Payment</key>
+    <key alias="shipments">Shipments</key>
+    <key alias="shipping">Shipping</key>
+    <key alias="customerListing">Customer Listing</key>
+    <key alias="customer">Customer</key>
+    <key alias="customerAddresses">Addresses</key>
+    <key alias="gatewayProviders">Gateway Providers</key>
+    <key alias="notification">Notification</key>
+    <key alias="taxation">Taxation</key>
+    <key alias="offerListing">Offer Listing</key>
+    <key alias="offer">Offer</key>
+    <key alias="coupon">Coupon</key>
+    <key alias="reportListing">Reports</key>
+  </area>
+  <area alias="merchelloProviders">
+    <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
+    <key alias="partialPaidInvoiceCollection">Partially paid invoices</key>
+    <key alias="paidInvoiceCollection">Paid invoices</key>
+    <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
+    <key alias="openOrderCollection">Open orders</key>
+    <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+  </area>
+  <area alias="merchelloCollections">
+    <key alias="providers">Collection Providers</key>
+    <key alias="newCollection">New Collection</key>
+    <key alias="manageCollection">Manage Collection</key>
+    <key alias="addEntities">Add new collection items</key>
+    <key alias="removeEntities">Remove collection items</key>
+    <key alias="sortCollections">Sort Collections</key>
+    <key alias="staticProviders">Static Collections</key>
+    <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
+    <key alias="product">Product Collections</key>
+    <key alias="customer">Customer Collections</key>
+    <key alias="invoice">Invoice Collections</key>
+    <key alias="emptyCollection">The collection is empty.</key>
+    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
+    <key alias="collectionPickerTitle">Collections</key>
+    <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
+    <key alias="allItems">All items</key>
+    <key alias="productCollections">Product Collections</key>
+    <key alias="invoiceCollections">Invoice Collections</key>
+    <key alias="customerCollections">Customer Collections</key>
+  </area>
+  <area alias="merchelloValidation">
+    <key alias="nameFieldRequired">The name field is required</key>
+  </area>
+  <area alias="merchelloProducts">
+    <key alias="emptyProductCollection">There are currently no products in this collection</key>
+  </area>
+  <area alias="merchelloSales">
+    <key alias="noSales"><![CDATA[
+        <h5>You Have No Sales Yet</h5>
+        <p>But you will soon!</p>
+      ]]></key>
+    <key alias="emptySalesCollection">There are currently no sales in this collection</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="paymentStatus">Payment status</key>
+    <key alias="fulfillmentStatus">Fulfillment status</key>
+  </area>
+  <area alias="merchelloCustomers">
+    <key alias="newCustomer">New Customer</key>
+    <key alias="noCustomers"><![CDATA[
+        <h5>You Have No Customers</h5>
+        <p>But you will soon!</p>
+      ]]></key>
+    <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
+    <key alias="customerNotes"><![CDATA[
+      Customer Notes
+      <small>Notes about the customer (not sale specific)</small>
+      ]]></key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -358,12 +456,5 @@
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Delete Confirmation</key>
     <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
-  </area>
-  <area alias="merchelloTableCaptions">
-    <key alias="name">Name</key>
-    <key alias="startDate">Starting</key>
-    <key alias="endDate">Ending</key>
-    <key alias="alias">Alias</key>
-    <key alias="active">Active</key>
   </area>
 </language>

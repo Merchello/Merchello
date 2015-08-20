@@ -368,6 +368,15 @@
         void Save();
 
         /// <summary>
+        /// Validates values stored in the internal item cache to make certain items being purchase
+        /// reflect most recent values in the back office.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool Validate();
+
+        /// <summary>
         /// Accepts visitor class to visit item cache items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>

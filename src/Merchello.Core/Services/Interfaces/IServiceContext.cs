@@ -22,6 +22,11 @@
         IDigitalMediaService DigitalMediaService { get;  }
 
         /// <summary>
+        /// Gets the <see cref="IEntityCollectionService"/>.
+        /// </summary>
+        IEntityCollectionService EntityCollectionService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
         /// </summary>
         IGatewayProviderService GatewayProviderService { get; }

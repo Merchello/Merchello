@@ -14,6 +14,8 @@
     using Gateways.Taxation;
 
     using Merchello.Core.Cache;
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
 
     using Newtonsoft.Json;
@@ -181,6 +183,99 @@
             return patterns.Where(x => x != null);
         }
        
+        #endregion
+
+        #region Static Collections
+
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void AddToCollection(this IInvoice invoice, IEntityCollection collection)
+        {
+            invoice.AddToCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public static void AddToCollection(this IInvoice invoice, Guid collectionKey)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent || !MerchelloContext.HasCurrent) return;
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            if (!attempt.Success) return;
+
+            var provider = attempt.Result;
+
+            if (!provider.EnsureEntityType(EntityType.Invoice))
+            {
+                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a invoice to a non invoice collection");
+                return;
+            }
+
+            MerchelloContext.Current.Services.InvoiceService.AddToCollection(invoice.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>        
+        public static void RemoveFromCollection(this IInvoice invoice, IEntityCollection collection)
+        {
+            invoice.RemoveFromCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>        
+        public static void RemoveFromCollection(this IInvoice invoice, Guid collectionKey)
+        {
+            if (!MerchelloContext.HasCurrent) return;
+            MerchelloContext.Current.Services.InvoiceService.RemoveFromCollection(invoice.Key, collectionKey);
+        }
+
+
+        /// <summary>
+        /// Returns static collections containing the invoice.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IInvoice invoice)
+        {
+            if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
+
+
+            return
+                ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
+                    .GetEntityCollectionsByInvoiceKey(invoice.Key);
+        } 
+
         #endregion
 
         #region Customer

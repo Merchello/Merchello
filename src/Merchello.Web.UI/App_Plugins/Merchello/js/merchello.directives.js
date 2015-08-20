@@ -138,6 +138,387 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
     };
 });
 
+angular.module('merchello.directives').directive('entityCollectionTitleBar', function($compile, localizationService, entityCollectionResource, entityCollectionDisplayBuilder, entityCollectionProviderDisplayBuilder) {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: {
+      collectionKey: '='
+    },
+    template: '<h2>{{ collection.name }}</h2>',
+    link: function(scope, element, attrs) {
+
+      scope.collection = {};
+
+      function init() {
+        loadCollection();
+      }
+
+      function loadCollection() {
+        if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
+          var key = 'merchelloCollections_allItems';
+          localizationService.localize(key).then(function (value) {
+            scope.collection.name = value;
+          });
+        } else {
+          entityCollectionResource.getByKey(scope.collectionKey).then(function(collection) {
+            var retrieved = entityCollectionDisplayBuilder.transform(collection);
+            entityCollectionResource.getEntityCollectionProviders().then(function(results) {
+              var providers = entityCollectionProviderDisplayBuilder.transform(results);
+              var provider = _.find(providers, function(p) {
+                return p.key === retrieved.providerKey;
+              });
+              if (provider !== undefined && provider.managesUniqueCollection && provider.localizedNameKey !== '') {
+                localizationService.localize(provider.localizedNameKey.replace('/', '_')).then(function(value) {
+                  scope.collection.name = value;
+                });
+              } else {
+                scope.collection = retrieved;
+              }
+            });
+          });
+        }
+      }
+
+      init();
+    }
+  }
+});
+
+/**
+ * @ngdoc directive
+ * @name static-collection-tree-picker
+ * @function
+ *
+ * @description
+ * Directive to pick static entity collections.
+ */
+angular.module('merchello.directives').directive('entityStaticCollections',
+    function() {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                preValuesLoaded: '=',
+                entity: '=',
+                entityType: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.staticcollections.tpl.html',
+            controller: 'Merchello.Directives.EntityStaticCollectionsDirectiveController'
+        }
+});
+
+angular.module('merchello.directives').directive('merchCollectionTreeItem', function($compile, treeService, eventsService) {
+    return {
+        restrict: 'E',
+        replace: true,
+
+        scope: {
+            section: '@',
+            currentNode: '=',
+            node: '=',
+            tree: '='
+        },
+
+        template: '<li ng-class="{\'current\': (node == currentNode)}">' +
+        '<div ng-class="getNodeCssClass(node)" id="{{node.id}}">' +
+        '<ins style="width:18px;"></ins>' +
+        '<ins ng-class="{\'icon-navigation-right\': !node.expanded, \'icon-navigation-down\': node.expanded}" ng-click="load(node)"></ins>' +
+        '<i class="icon umb-tree-icon sprTree"></i>' +
+        '<a ng-click="select(node, $event)"></a>' +
+        '<div ng-show="node.loading" class="l"><div></div></div>' +
+        '</div>' +
+        '</li>',
+
+        link: function (scope, element, attrs) {
+
+            var eventName = 'merchello.entitycollection.selected';
+
+
+            // updates the node's DOM/styles
+            function setupNodeDom(node, tree) {
+
+                //get the first div element
+                element.children(":first")
+                    //set the padding
+                    .css("padding-left", (node.level * 20) + "px");
+
+                //remove first 'ins' if there is no children
+                //show/hide last 'ins' depending on children
+                if (!node.hasChildren) {
+                    element.find("ins:first").remove();
+                    element.find("ins").last().hide();
+                }
+                else {
+                    element.find("ins").last().show();
+                }
+
+                var icon = element.find("i:first");
+                icon.addClass(node.cssClass);
+                icon.attr("title", node.routePath);
+
+                element.find("a:first").html(node.name);
+
+                if (!node.menuUrl) {
+                    element.find("a.umb-options").remove();
+                }
+
+                if (node.style) {
+                    element.find("i:first").attr("style", node.style);
+                }
+            }
+
+            /**
+             Method called when an item is clicked in the tree, this passes the
+             DOM element, the tree node object and the original click
+             and emits it as a treeNodeSelect element if there is a callback object
+             defined on the tree
+             */
+            scope.select = function(n, ev) {
+                var args = { key: '', value: '' };
+                var ids = n.id.split('_');
+                args.value = ids[1];
+                var el = $('#' + n.id + ' i.icon');
+                if ($(el).hasClass('icon-list')) {
+                    args.key = 'addCollection';
+                    $(el).removeClass('icon-list').addClass('icon-check');
+                } else {
+                    $(el).removeClass('icon-check').addClass('icon-list');
+                    args.key = 'removeCollection';
+                }
+                eventsService.emit(eventName, args, ev);
+                //emitEvent(eventName, args);
+                //emitEvent("treeNodeSelect", { element: element, tree: scope.tree, node: n, event: ev });
+            };
+
+
+            /** method to set the current animation for the node.
+             *  This changes dynamically based on if we are changing sections or just loading normal tree data.
+             *  When changing sections we don't want all of the tree-ndoes to do their 'leave' animations.
+             */
+            scope.animation = function () {
+                if (scope.node.showHideAnimation) {
+                    return scope.node.showHideAnimation;
+                }
+                else {
+                    return {};
+                }
+            };
+
+            /**
+             Method called when a node in the tree is expanded, when clicking the arrow
+             takes the arrow DOM element and node data as parameters
+             emits treeNodeCollapsing event if already expanded and treeNodeExpanding if collapsed
+             */
+            scope.load = function (node) {
+                if (node.expanded) {
+                    node.expanded = false;
+                }
+                else {
+                    scope.loadChildren(node, false);
+                }
+            };
+
+            /* helper to force reloading children of a tree node */
+            scope.loadChildren = function (node, forceReload) {
+                //emit treeNodeExpanding event, if a callback object is set on the tree
+               // emitEvent("treeNodeExpanding", { tree: scope.tree, node: node });
+
+                if (node.hasChildren && (forceReload || !node.children || (angular.isArray(node.children) && node.children.length === 0))) {
+                    //get the children from the tree service
+                    treeService.loadNodeChildren({ node: node, section: scope.section })
+                        .then(function (data) {
+                            //emit expanded event
+                            //emitEvent("treeNodeExpanded", { tree: scope.tree, node: node, children: data });
+                        });
+                }
+                else {
+                    //emitEvent("treeNodeExpanded", { tree: scope.tree, node: node, children: node.children });
+                    node.expanded = true;
+                }
+            };
+
+            //if the current path contains the node id, we will auto-expand the tree item children
+
+            setupNodeDom(scope.node, scope.tree);
+
+            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
+            var newElement = angular.element(template);
+            $compile(newElement)(scope);
+            element.append(newElement);
+
+        }
+    };
+});
+
+angular.module('merchello.directives').directive('merchCollectionTreePicker', function($q, $timeout, treeService, userService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        terminal: false,
+
+        scope: {
+            subTreeId : '=',
+            entityType: '='
+        },
+
+        compile: function(element, attrs) {
+            //config
+            //var showheader = (attrs.showheader !== 'false');
+            var template = '<ul class="umb-tree"><li class="root">';
+            template += '<div ng-hide="hideheader" on-right-click="altSelect(tree.root, $event)">' +
+                '<h5>' +
+                '<i ng-if="enablecheckboxes == \'true\'" ng-class="selectEnabledNodeClass(tree.root)"></i>' +
+                '<span class="root-link">{{tree.root.name}}</span></h5>' +
+                '</div>';
+            template += '<ul>' +
+               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
+                '</ul>' +
+                '</li>' +
+                '</ul>';
+
+            element.replaceWith(template);
+
+            return function(scope, elem, attr, controller) {
+
+
+                var lastSection = "";
+
+                /** Method to load in the tree data */
+
+                function loadTree() {
+                    scope.section = 'merchello';
+                    if (!scope.loading && scope.section) {
+                        scope.loading = true;
+
+                        //default args
+                        var args = { section: scope.section, tree: scope.treealias, cacheKey: scope.cachekey, isDialog:  true };
+                        treeService.getTree(args)
+                            .then(function(data) {
+                                //set the data once we have it
+                                scope.tree = data;
+
+                                scope.loading = false;
+
+                                //set the root as the current active tree
+
+                                scope.tree.root = _.find(scope.tree.root.children, function(c) {
+                                    return c.id === scope.subTreeId;
+                                });
+                                scope.loadChildren(scope.tree.root, true).then(function(data) {
+                                    scope.activeTree = scope.tree.root;
+                                    // todo - this is really hacky but we need to remove the dynamic collections since
+                                    // they are not valid in this context
+                                    var invalidNodes = _.filter(scope.activeTree.children, function(c) {
+                                        var found = _.find(c.cssClasses, function(css) {
+                                            return css === 'static-collection';
+                                        });
+                                        return found === undefined;
+                                    });
+                                    angular.forEach(invalidNodes, function(n) {
+                                        treeService.removeNode(n);
+                                    });
+                                });
+
+                               // emitEvent("treeLoaded", { tree: scope.tree });
+                                //emitEvent("treeNodeExpanded", { tree: scope.tree, node: scope.tree.root, children: scope.tree.root.children });
+
+                            }, function(reason) {
+                                scope.loading = false;
+                                notificationsService.error("Tree Error", reason);
+                            });
+                    }
+                }
+
+                /** syncs the tree, the treeNode can be ANY tree node in the tree that requires syncing */
+                function syncTree(treeNode, path, forceReload, activate) {
+
+                    deleteAnimations = false;
+
+                    treeService.syncTree({
+                        node: treeNode,
+                        path: path,
+                        forceReload: forceReload
+                    }).then(function (data) {
+
+                        if (activate === undefined || activate === true) {
+                            scope.currentNode = data;
+                        }
+
+                        //emitEvent("treeSynced", { node: data, activate: activate });
+                    });
+
+                }
+
+                /* helper to force reloading children of a tree node */
+                scope.loadChildren = function(node, forceReload) {
+                    var deferred = $q.defer();
+
+                    //standardising
+                    if (!node.children) {
+                        node.children = [];
+                    }
+
+                    if (forceReload || (node.hasChildren && node.children.length === 0)) {
+                        //get the children from the tree service
+                        treeService.loadNodeChildren({ node: node, section: scope.section })
+                            .then(function(data) {
+                                deferred.resolve(data);
+                            });
+                    }
+                    else {
+                        node.expanded = true;
+
+                        deferred.resolve(node.children);
+                    }
+
+                    return deferred.promise;
+                };
+
+
+                /**
+                 Method called when an item is clicked in the tree, this passes the
+                 DOM element, the tree node object and the original click
+                 and emits it as a treeNodeSelect element if there is a callback object
+                 defined on the tree
+                 */
+                scope.select = function (n, ev) {
+                    //on tree select we need to remove the current node -
+                    // whoever handles this will need to make sure the correct node is selected
+                    //reset current node selection
+                    scope.currentNode = null;
+
+                };
+
+
+                //watch for section changes
+                scope.$watch("section", function(newVal, oldVal) {
+
+                    if (!scope.tree) {
+                        loadTree();
+                    }
+
+                    if (!newVal) {
+                        //store the last section loaded
+                        lastSection = oldVal;
+                    }
+                    else if (newVal !== oldVal && newVal !== lastSection) {
+                        //only reload the tree data and Dom if the newval is different from the old one
+                        // and if the last section loaded is different from the requested one.
+                        loadTree();
+
+                        //store the new section to be loaded as the last section
+                        //clear any active trees to reset lookups
+                        lastSection = newVal;
+                    }
+                });
+
+                loadTree();
+            };
+        }
+    };
+});
+
 /**
  * @ngdoc directive
  * @name customer-address-table
@@ -520,6 +901,23 @@ angular.module('merchello.directives').directive('comparisonOperatorRadioButtons
             }
         };
     });
+
+/**
+ * @ngdoc directive
+ * @name merchello-panel
+ * @function
+ *
+ * @description
+ * Directive to wrap all Merchello Mark up and provide common classes.
+ */
+angular.module('merchello.directives').directive('merchelloSpinner', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        transclude: 'true',
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/html/merchellospinner.tpl.html'
+    };
+});
 
 angular.module('merchello.directives').directive('merchelloTabs', [function() {
     return {
@@ -1150,6 +1548,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                 filterStartDate: '=',
                 filterEndDate: '=',
                 filterText: '=',
+                showDateFilter: '=',
                 filterButtonText: '@filterButtonText',
                 dateFilterOpen: '=',
                 filterCallback: '&',

@@ -160,9 +160,11 @@
                 new ProcessorArgumentCollection());
 
             //// Act
-            Notification.Trigger("OrderConfirmation", paymentResult);
+            Notification.Trigger("OrderConfirmation", paymentResult, new [] { "rs@test.com" });
+            Notification.Trigger("OrderConfirmation", paymentResult, new[] { "rs2@test.com" });
 
             //// Assert
+
             // check email
 
         }

@@ -20,11 +20,6 @@
         public Guid ProductKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the version key.
-        /// </summary>
-        public Guid VersionKey { get; set; }
-
-        /// <summary>
         /// Gets or sets the attributes.
         /// </summary>
         public IEnumerable<ProductAttributeDisplay> Attributes { get; set; }

@@ -1,37 +1,26 @@
-﻿using Merchello.Core.Configuration.Outline;
-
-namespace Merchello.Core.Models.TypeFields
+﻿namespace Merchello.Core.Models.TypeFields
 {
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Configuration.Outline;
+
     /// <summary>
     /// Type fields for Merchello entities
     /// </summary>
-    internal sealed class EntityTypeField : TypeFieldMapper<EntityType>, IEntityTypeField
+    public sealed class EntityTypeField : TypeFieldMapper<EntityType>, IEntityTypeField
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityTypeField"/> class.
+        /// </summary>
         internal EntityTypeField()
         {
             if (CachedTypeFields.IsEmpty) BuildCache();
         }
 
-        internal override void BuildCache()
-        {
-            AddUpdateCache(EntityType.CampaignOffer, new TypeField("CampaignActivity", "CampaignActivity", Constants.TypeFieldKeys.Entity.CampaignOfferKey));
-            AddUpdateCache(EntityType.Customer, new TypeField("Customer", "Customer", Constants.TypeFieldKeys.Entity.CustomerKey));
-            AddUpdateCache(EntityType.GatewayProvider, new TypeField("GatewayProvider", "GatewayProvider", Constants.TypeFieldKeys.Entity.GatewayProviderKey));
-            AddUpdateCache(EntityType.Invoice, new TypeField("Invoice", "Invoice", Constants.TypeFieldKeys.Entity.InvoiceKey));
-            AddUpdateCache(EntityType.ItemCache, new TypeField("ItemCache", "ItemCache", Constants.TypeFieldKeys.Entity.ItemCacheKey));
-            AddUpdateCache(EntityType.Order, new TypeField("Order", "Order", Constants.TypeFieldKeys.Entity.OrderKey));
-            AddUpdateCache(EntityType.Payment, new TypeField("Payment", "Payment", Constants.TypeFieldKeys.Entity.PaymentKey));
-            AddUpdateCache(EntityType.Product, new TypeField("Product", "Product", Constants.TypeFieldKeys.Entity.ProductKey));
-            AddUpdateCache(EntityType.Shipment, new TypeField("Shipment", "Shipment", Constants.TypeFieldKeys.Entity.ShipmentKey));
-            AddUpdateCache(EntityType.Warehouse, new TypeField("Warehouse", "Warehouse", Constants.TypeFieldKeys.Entity.WarehouseKey));
-            AddUpdateCache(EntityType.WarehouseCatalog, new TypeField("WarehouseCatalog", "WarehouseCatalog", Constants.TypeFieldKeys.Entity.WarehouseCatalogKey));
-            AddUpdateCache(EntityType.Custom, NotFound);
-        }
-
+        /// <summary>
+        /// Gets the custom type fields.
+        /// </summary>
         public override IEnumerable<ITypeField> CustomTypeFields
         {
             get
@@ -52,21 +41,34 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The customer entity type field
+        /// Gets the customer entity type field
         /// </summary>
-        public ITypeField Customer {
+        public ITypeField Customer 
+        {
             get { return GetTypeField(EntityType.Customer); }
         }
 
         /// <summary>
-        /// The GatewayProvider entity type field
+        /// Gets the entity collection.
         /// </summary>
-        public ITypeField GatewayProvider {
+        public ITypeField EntityCollection
+        {
+            get
+            {
+                return GetTypeField(EntityType.EntityCollection);
+            }
+        }
+
+        /// <summary>
+        /// Gets the GatewayProvider entity type field
+        /// </summary>
+        public ITypeField GatewayProvider 
+        {
             get { return GetTypeField(EntityType.GatewayProvider); }
         }
 
         /// <summary>
-        /// The Invoice entity type field
+        /// Gets the Invoice entity type field
         /// </summary>
         public ITypeField Invoice
         {
@@ -74,7 +76,7 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The ItemCache entity type field
+        /// Gets the ItemCache entity type field
         /// </summary>
         public ITypeField ItemCache
         {
@@ -82,7 +84,7 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The order entity type field
+        /// Gets the order entity type field
         /// </summary>
         public ITypeField Order
         {
@@ -90,7 +92,7 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The payment entity type field
+        /// Gets the payment entity type field
         /// </summary>
         public ITypeField Payment
         {
@@ -98,14 +100,15 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The product entity type field
+        /// Gets the product entity type field
         /// </summary>
-        public ITypeField Product {
+        public ITypeField Product 
+        {
             get { return GetTypeField(EntityType.Product); }
         }
 
         /// <summary>
-        /// The shipment entity type field
+        /// Gets the shipment entity type field
         /// </summary>
         public ITypeField Shipment
         {
@@ -113,7 +116,7 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The Warehouse entity type field
+        /// Gets the Warehouse entity type field
         /// </summary>
         public ITypeField Warehouse
         {
@@ -121,28 +124,50 @@ namespace Merchello.Core.Models.TypeFields
         }
 
         /// <summary>
-        /// The warehouse catalog entity type field
+        /// Gets the warehouse catalog entity type field
         /// </summary>
         public ITypeField WarehouseCatalog
         {
             get { return GetTypeField(EntityType.WarehouseCatalog); }
         }
 
+        /// <summary>
+        /// Gets the entities.
+        /// </summary>
         internal static TypeFieldCollection Entities
         {
             get { return Fields.Entities; }
         }
 
         /// <summary>
-        /// Returns a custom address or NullTypeField TypeKey (Guid)
+        /// The build cache.
         /// </summary>
-        /// <param name="alias">The alias of the custom entitie</param>
+        internal override void BuildCache()
+        {
+            AddUpdateCache(EntityType.CampaignOffer, new TypeField("CampaignActivity", "CampaignActivity", Constants.TypeFieldKeys.Entity.CampaignOfferKey));
+            AddUpdateCache(EntityType.Customer, new TypeField("Customer", "Customer", Constants.TypeFieldKeys.Entity.CustomerKey));
+            AddUpdateCache(EntityType.GatewayProvider, new TypeField("GatewayProvider", "GatewayProvider", Constants.TypeFieldKeys.Entity.GatewayProviderKey));
+            AddUpdateCache(EntityType.Invoice, new TypeField("Invoice", "Invoice", Constants.TypeFieldKeys.Entity.InvoiceKey));
+            AddUpdateCache(EntityType.ItemCache, new TypeField("ItemCache", "ItemCache", Constants.TypeFieldKeys.Entity.ItemCacheKey));
+            AddUpdateCache(EntityType.Order, new TypeField("Order", "Order", Constants.TypeFieldKeys.Entity.OrderKey));
+            AddUpdateCache(EntityType.Payment, new TypeField("Payment", "Payment", Constants.TypeFieldKeys.Entity.PaymentKey));
+            AddUpdateCache(EntityType.Product, new TypeField("Product", "Product", Constants.TypeFieldKeys.Entity.ProductKey));
+            AddUpdateCache(EntityType.Shipment, new TypeField("Shipment", "Shipment", Constants.TypeFieldKeys.Entity.ShipmentKey));
+            AddUpdateCache(EntityType.Warehouse, new TypeField("Warehouse", "Warehouse", Constants.TypeFieldKeys.Entity.WarehouseKey));
+            AddUpdateCache(EntityType.WarehouseCatalog, new TypeField("WarehouseCatalog", "WarehouseCatalog", Constants.TypeFieldKeys.Entity.WarehouseCatalogKey));
+            AddUpdateCache(EntityType.EntityCollection, new TypeField("EntityCollection", "EntityCollection", Constants.TypeFieldKeys.Entity.EntityCollectionKey));
+            AddUpdateCache(EntityType.Custom, NotFound);
+        }
+
+        /// <summary>
+        /// Returns a custom address or NullTypeField TypeKey (GUID)
+        /// </summary>
+        /// <param name="alias">The alias of the custom entities</param>
         /// <returns>An object of <see cref="ITypeField"/></returns>
         protected override ITypeField GetCustom(string alias)
         {
             return GetTypeField(Entities[alias]);
         }
-
 
     }
 }

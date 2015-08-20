@@ -70,21 +70,21 @@
         /// appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
             if(customerKey !== '00000000-0000-0000-0000-000000000000') {
-                addTab.call(this, 'customer', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+                addTab.call(this, 'customer', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
             }
         }
 
         function appendOfferTab(offerKey, backOfficeTree) {
-            var title = '';
+            var title = 'merchelloTabs_';
             if(backOfficeTree.title === undefined || backOfficeTree.title === '') {
-                title = 'Offer';
+                title += 'offer';
             } else {
-                title = backOfficeTree.title;
+                title += backOfficeTree.title.toLowerCase();
             }
             if(offerKey !== '00000000-0000-0000-0000-000000000000' && offerKey !== 'create') {
                 addTab.call(this, 'offer', title, '#' + backOfficeTree.routePath.replace('{0}', offerKey));
             } else {
-                addTab.call(this, 'offer', 'New ' + title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
+                addTab.call(this, 'offer', title, '#' +backOfficeTree.routePath.replace('{0}', 'create'));
             }
         }
 

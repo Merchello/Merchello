@@ -168,7 +168,7 @@
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer, basket.VersionKey);
 
-            if (!itemCache.Items.Any())
+            if (!itemCache.Items.Any() && basket.Validate())
             {
                 // this is either a new preparation or a reset due to version
                 foreach (var item in basket.Items)

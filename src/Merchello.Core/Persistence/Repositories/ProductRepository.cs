@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -11,8 +10,6 @@
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
-
-    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
@@ -140,23 +137,7 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            searchTerm = searchTerm.Replace(",", " ");
-            var invidualTerms = searchTerm.Split(' ');
-
-            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
-
-
-            var sql = new Sql();
-            sql.Select("*").From<ProductVariantDto>();
-
-            if (terms.Any())
-            {
-                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
-
-                sql.Where("sku LIKE @sku OR name LIKE @name", new { @sku = preparedTerms, @name = preparedTerms });
-            }
-
-            sql.Where("master = @master", new { @master = true });
+            var sql = this.BuildProductSearchSql(searchTerm);
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -658,7 +639,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         public Page<Guid> GetProductsKeysOnSale(
             long page,
@@ -672,6 +653,324 @@
               .Append("WHERE [merchProductVariant].[onSale] = 1")
               .Append("AND [merchProductVariant].[master] = 1");
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not the product exists in a collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @pkey = entityKey, @eckey = collectionKey });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
+        /// <summary>
+        /// Adds a product to a static product collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
+        {
+            if (this.ExistsInCollection(entityKey, collectionKey)) return;
+            
+            var dto = new Product2EntityCollectionDto()
+                          {
+                              ProductKey = entityKey,
+                              EntityCollectionKey = collectionKey,
+                              CreateDate = DateTime.Now,
+                              UpdateDate = DateTime.Now
+                          };
+
+            Database.Insert(dto);
+        }
+
+        /// <summary>
+        /// The remove product from collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
+        {
+            Database.Execute(
+                "DELETE [merchProduct2EntityCollection] WHERE [merchProduct2EntityCollection].[productKey] = @pkey AND [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                new { @pkey = entityKey, @eckey = collectionKey });
+        }
+
+        /// <summary>
+        /// The get product keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT DISTINCT([productKey])")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildProductSearchSql(term);
+            sql.Append("AND [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @eckey = collectionKey })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] NOT IN (")
+               .Append("SELECT DISTINCT([productKey])")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildProductSearchSql(term);
+            sql.Append("AND [merchProductVariant].[productKey] NOT IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM [merchProduct2EntityCollection]")
+                .Append(
+                    "WHERE [merchProduct2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @eckey = collectionKey })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get products from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IProduct>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProduct}"/>.
+        /// </returns>
+        public Page<IProduct> GetFromCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = GetKeysFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IProduct>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
         }
 
         /// <summary>
@@ -799,6 +1098,7 @@
                     "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
+                    "DELETE FROM merchProduct2EntityCollection WHERE productKey = @Key",
                     "DELETE FROM merchProduct WHERE pk = @Key",
                     "DELETE FROM merchProductOption WHERE pk NOT IN (SELECT optionKey FROM merchProduct2ProductOption)"
                 };
@@ -1145,5 +1445,37 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Builds the product search SQL.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql BuildProductSearchSql(string searchTerm)
+        {
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+
+            var sql = new Sql();
+            sql.Select("*").From<ProductVariantDto>();
+
+            if (terms.Any())
+            {
+                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
+
+                sql.Where("sku LIKE @sku OR name LIKE @name", new { @sku = preparedTerms, @name = preparedTerms });
+            }
+
+            sql.Where("master = @master", new { @master = true });
+
+            return sql;
+        }
     }
 }
