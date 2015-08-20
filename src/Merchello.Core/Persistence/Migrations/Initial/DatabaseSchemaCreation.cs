@@ -69,9 +69,9 @@
             { 41, typeof(EntityCollectionDto) },
             { 42, typeof(Product2EntityCollectionDto) },
             { 43, typeof(Invoice2EntityCollectionDto) },
-            { 44, typeof(Customer2EntityCollectionDto) },
-            { 45, typeof(DetachedContentTypeDto) },
-            { 46, typeof(ProductVariantDetachedContentDto) }
+            { 44, typeof(Customer2EntityCollectionDto) }  //,
+            //{ 45, typeof(DetachedContentTypeDto) },
+            //{ 46, typeof(ProductVariantDetachedContentDto) }
         };
 
         /// <summary>
