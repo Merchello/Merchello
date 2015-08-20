@@ -13,7 +13,7 @@
     /// <summary>
     /// The create customer 2 entity collection table.
     /// </summary>
-    [Migration("1.10.0", "1.10.1.1", 6, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.11.0", 6, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateCustomer2EntityCollectionTable : MigrationBase
     {
         /// <summary>

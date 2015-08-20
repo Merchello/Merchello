@@ -2,9 +2,6 @@
 {
     using System;
 
-    using Merchello.Core.Cache;
-    using Merchello.Core.Models.Rdbms;
-
     /// <summary>
     /// Merchello constant Guids (keys)
     /// </summary>
@@ -215,7 +212,7 @@
                 {
                     get
                     {
-                        return new Guid("1AEF5650-242D-4566-ADCA-AC0C90538B47");
+                        return new Guid("240023BB-80F0-445C-84D5-29F5892B2FB8");
                     }
                 }
 
@@ -415,7 +412,7 @@
         /// <summary>
         /// The default type field keys
         /// </summary>
-        /// TODO these are incomplete
+        /// TODO ensure all core type field keys have constant values
         public static class TypeFieldKeys
         {
             /// <summary>
@@ -445,14 +442,6 @@
             /// </summary>
             public static class CampaignActivity
             {
-                ///// <summary>
-                ///// Gets the key representing a sale type.
-                ///// </summary>
-                //public static Guid SaleKey
-                //{
-                //    get { return new Guid("2E8804AF-9852-4216-A3FB-A87D60C2EAF4"); }
-                //}
-
                 /// <summary>
                 /// Gets the key representing a discount type.
                 /// </summary>
@@ -581,7 +570,7 @@
                 }
 
                 /// <summary>
-                /// Gets the backoffice key.
+                /// Gets the back office key.
                 /// </summary>
                 public static Guid BackofficeKey
                 {
@@ -590,7 +579,7 @@
 
 
                 /// <summary>
-                /// Gets the wishlist key.
+                /// Gets the wish list key.
                 /// </summary>
                 public static Guid WishlistKey
                 {
@@ -696,7 +685,7 @@
                 }
 
                 /// <summary>
-                /// Gets the debit record tyep key.
+                /// Gets the debit record type key.
                 /// </summary>
                 public static Guid DebitRecordKey
                 {
