@@ -65,11 +65,11 @@
         {
             if (type == null || constructorArgumentValues == null) return Attempt<T>.Fail(new NullReferenceException("Failed to create Type due to null Type or null constructor args"));
 
-            var assembly = type.Assembly;
-            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            const BindingFlags BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            
             var constructorArgumentTypes = constructorArgumentValues.Select(value => value.GetType()).ToList();
 
-            var constructor = type.GetConstructor(bindingFlags, null, CallingConventions.Any, constructorArgumentTypes.ToArray(), null);
+            var constructor = type.GetConstructor(BindingFlags, null, CallingConventions.Any, constructorArgumentTypes.ToArray(), null);
 
             try
             {
