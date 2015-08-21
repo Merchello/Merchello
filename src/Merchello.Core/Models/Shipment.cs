@@ -874,6 +874,15 @@
                 _items = value;
             }
         }
+
+        /// <summary>
+        /// Accepts visitor class to visit order line items included in the shipment
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        public void Accept(ILineItemVisitor visitor)
+        {
+            Items.Accept(visitor);
+        }
     }
 
 }

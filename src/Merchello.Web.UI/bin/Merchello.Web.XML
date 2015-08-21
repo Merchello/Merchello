@@ -1246,9 +1246,9 @@
             Gets or sets the log of adjustments.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
+        <member name="T:Merchello.Web.Editors.DetachedContentApiController">
             <summary>
-            The entity collection api controller.
+            An API controller for handling detached content related operations in the Merchello back office.
             </summary>
         </member>
         <member name="T:Merchello.Web.WebApi.MerchelloApiController">
@@ -1292,6 +1292,40 @@
             <remarks>
             Useful for debugging
             </remarks>
+        </member>
+        <member name="F:Merchello.Web.Editors.DetachedContentApiController._contentTypeService">
+            <summary>
+            Umbraco's <see cref="T:Umbraco.Core.Services.IContentTypeService"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+            <param name="umbracoContext">
+            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
+            <summary>
+            The entity collection api controller.
+            </summary>
         </member>
         <member name="F:Merchello.Web.Editors.EntityCollectionApiController._merchello">
             <summary>
@@ -1990,6 +2024,52 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay">
+            <summary>
+            Stores information from <see cref="T:Umbraco.Core.Models.IContentType"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Id">
+            <summary>
+            Gets or sets the content type id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Key">
+            <summary>
+            Gets or sets Umbraco's unique key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Alias">
+            <summary>
+            Gets or sets the content type alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Icon">
+            <summary>
+            Gets or sets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Tabs">
+            <summary>
+            Gets or sets the tabs.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplayExtensions">
+            <summary>
+            The embedded content type display extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplayExtensions.ToEmbeddedContentTypeDisplay(Umbraco.Core.Models.IContentType)">
+            <summary>
+            The to embedded content type display.
+            </summary>
+            <param name="contentType">
+            The content type.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
@@ -2758,6 +2838,22 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.EmbeddedContentTabsResolver">
+            <summary>
+            The embedded content tabs resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.EmbeddedContentTabsResolver.ResolveCore(Umbraco.Core.Models.IContentType)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.EntityCollectionNullableParentKeyResolver">
             <summary>
             The entity collection nullable parent key resolver.
@@ -3343,7 +3439,13 @@
         </member>
         <member name="T:Merchello.Web.AutoMapperMappings">
             <summary>
-            Binds Merchello AutoMapper mappings during the Umbraco startup.
+            The auto mapper mappings.
+            </summary>
+            <summary>
+            The auto mapper mappings.
+            </summary>
+            <summary>
+            The auto mapper mappings.
             </summary>
             <summary>
             Binds Merchello AutoMapper mappings during the Umbraco startup.
@@ -3359,6 +3461,24 @@
             </summary>
             <summary>
             Binds Merchello AutoMapper mappings during the Umbraco startup.
+            </summary>
+            <summary>
+            Binds Merchello AutoMapper mappings during the Umbraco startup.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.AutoMapperMappings.CreateMarketingMappings">
+            <summary>
+            Creates marketing mappings.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.AutoMapperMappings.CreateDetachedContentMappings">
+            <summary>
+            The create detached content mappings.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.AutoMapperMappings.CreateEntityCollectionMappings">
+            <summary>
+            The create entity collection mappings.
             </summary>
         </member>
         <member name="M:Merchello.Web.AutoMapperMappings.CreatePaymentMappings">
