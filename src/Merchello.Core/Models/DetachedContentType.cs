@@ -29,7 +29,7 @@
         /// <summary>
         /// The content type id selector.
         /// </summary>
-        private static readonly PropertyInfo ContentTypeIdSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, int?>(x => x.ContentTypeId);
+        private static readonly PropertyInfo ContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid?>(x => x.ContentTypeKey);
 
         /// <summary>
         /// The entity type field key.
@@ -44,7 +44,7 @@
         /// <summary>
         /// The content type id.
         /// </summary>
-        private int? _contentTypeId;
+        private Guid? _contentTypeKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedContentType"/> class.
@@ -52,13 +52,13 @@
         /// <param name="entityTfKey">
         /// The entity type field key.
         /// </param>
-        /// <param name="contentTypeId">
-        /// The content Type Id.
+        /// <param name="contentTypeKey">
+        /// The content Type Key.
         /// </param>
-        public DetachedContentType(Guid entityTfKey, int? contentTypeId)
+        public DetachedContentType(Guid entityTfKey, Guid? contentTypeKey)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
-            _contentTypeId = contentTypeId;
+            _contentTypeKey = contentTypeKey;
             _entityTfKey = entityTfKey;
         }
 
@@ -111,14 +111,14 @@
         }
 
         /// <summary>
-        /// Gets or sets the content type id.
+        /// Gets or sets the content type key.
         /// </summary>
         [DataMember]
-        public int? ContentTypeId
+        public Guid? ContentTypeKey
         {
             get
             {
-                return _contentTypeId;
+                return _contentTypeKey;
             }
 
             set
@@ -126,11 +126,11 @@
                 SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _contentTypeId = value;
-                        return _contentTypeId;
+                        _contentTypeKey = value;
+                        return _contentTypeKey;
                     },
-                    _contentTypeId,
-                    ContentTypeIdSelector);
+                    _contentTypeKey,
+                    ContentTypeKeySelector);
             }
         }
     }
