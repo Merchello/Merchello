@@ -45,7 +45,7 @@
                         Key = Constants.DefaultKeys.DetachedPublishedContentType.DefaultProductVariantDetachedPublishedContentTypeKey, 
                         Name = "No Extended Content",
                         EntityTfKey = entity.Product.TypeKey,
-                        ContentTypeId = null,
+                        ContentTypeKey = null,
                         UpdateDate = DateTime.Now, 
                         CreateDate = DateTime.Now
                     });

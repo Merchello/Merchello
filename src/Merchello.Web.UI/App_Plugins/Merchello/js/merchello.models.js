@@ -594,6 +594,26 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
 
     angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
 
+/**
+ * @ngdoc model
+ * @name UmbContentTypeDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's UmbContentTypeDisplay object
+ */
+var UmbContentTypeDisplay = function() {
+    var self = this;
+    self.id = '';
+    self.key = '';
+    self.name = '';
+    self.alias = '';
+    self.icon = '';
+    self.tabs = [];
+};
+
+angular.module('merchello.models').constant('UmbContentTypeDisplay', UmbContentTypeDisplay);
+
     /**
      * @ngdoc model
      * @name AddEditCustomerAddressDialogData
@@ -3779,6 +3799,22 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
 
     }]);
 
+angular.module('merchello.models').factory('umbContentTypeDisplayBuilder',
+    ['genericModelBuilder', 'UmbContentTypeDisplay',
+    function(genericModelBuilder, UmbContentTypeDisplay) {
+
+        var Constructor = UmbContentTypeDisplay;
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+
+}]);
+
 /**
  * @ngdoc service
  * @name merchello.models.dialogDataFactory
@@ -4228,6 +4264,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             function createProductListTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productContentTypeList', 'merchelloTabs_productContentTypes', '#/merchello/merchello/productcontenttypelist/manage')
                 return tabs;
             }
 

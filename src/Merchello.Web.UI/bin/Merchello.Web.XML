@@ -1322,6 +1322,14 @@
             The <see cref="T:Umbraco.Web.UmbracoContext"/>.
             </param>
         </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.GetContentTypes">
+            <summary>
+            The get content types.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
             <summary>
             The entity collection api controller.
@@ -2026,42 +2034,77 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay">
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay">
+            <summary>
+            The detached content type display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.UmbContentType">
+            <summary>
+            Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTfKey">
+            <summary>
+            Gets or sets the entity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField">
+            <summary>
+            Gets or sets the <see cref="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
             <summary>
             Stores information from <see cref="T:Umbraco.Core.Models.IContentType"/>.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Id">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Id">
             <summary>
             Gets or sets the content type id.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Key">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Key">
             <summary>
             Gets or sets Umbraco's unique key.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Alias">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Alias">
             <summary>
             Gets or sets the content type alias.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Icon">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Icon">
             <summary>
             Gets or sets the icon.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay.Tabs">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Tabs">
             <summary>
             Gets or sets the tabs.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplayExtensions">
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions">
             <summary>
             The embedded content type display extensions.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplayExtensions.ToEmbeddedContentTypeDisplay(Umbraco.Core.Models.IContentType)">
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions.ToEmbeddedContentTypeDisplay(Umbraco.Core.Models.IContentType)">
             <summary>
             The to embedded content type display.
             </summary>
@@ -2069,7 +2112,7 @@
             The content type.
             </param>
             <returns>
-            The <see cref="T:Merchello.Web.Models.ContentEditing.EmbeddedContent.EmbeddedContentTypeDisplay"/>.
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
@@ -8218,6 +8261,61 @@
             </summary>
         </member>
         <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewProductContentTypeAction">
+            <summary>
+            The new product content type action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewProductContentTypeAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewProductContentTypeAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewProductContentTypeAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.JsSource">
             <summary>
             Gets the JS source.
             </summary>

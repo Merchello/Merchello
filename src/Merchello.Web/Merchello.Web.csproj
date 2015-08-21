@@ -257,7 +257,8 @@
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionByEntityQuery.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionDisplay.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionProviderDisplay.cs" />
-    <Compile Include="Models\ContentEditing\EmbeddedContent\EmbeddedContentTypeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Content\DetachedContentTypeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Content\UmbContentTypeDisplay.cs" />
     <Compile Include="Models\ContentEditing\ExtendedDataExtensions.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferProviderDisplay.cs" />
@@ -371,6 +372,7 @@
     <Compile Include="Trees\Actions\NewOfferSettingsAction.cs" />
     <Compile Include="Trees\Actions\NewCollectionAction.cs" />
     <Compile Include="Trees\Actions\NewEntityAction.cs" />
+    <Compile Include="Trees\Actions\NewProductContentTypeAction.cs" />
     <Compile Include="Trees\Actions\SortCollectionAction.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Search\CustomerQuery.cs" />

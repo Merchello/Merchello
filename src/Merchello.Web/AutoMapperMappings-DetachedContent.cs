@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Web
 {
-    using Merchello.Web.Models.ContentEditing.EmbeddedContent;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.MapperResolvers.DetachedContent;
 
     using Umbraco.Core.Models;
@@ -15,7 +15,7 @@
         /// </summary>
         private static void CreateDetachedContentMappings()
         {
-            AutoMapper.Mapper.CreateMap<IContentType, EmbeddedContentTypeDisplay>()
+            AutoMapper.Mapper.CreateMap<IContentType, UmbContentTypeDisplay>()
                 .ForMember(
                     dest => dest.Tabs,
                     opt =>

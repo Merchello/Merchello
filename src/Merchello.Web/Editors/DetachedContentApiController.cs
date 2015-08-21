@@ -7,7 +7,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
-    using Merchello.Web.Models.ContentEditing.EmbeddedContent;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.WebApi;
 
     using Umbraco.Core.Models;
@@ -64,14 +64,19 @@
 
         #region ContentTypes
 
+        /// <summary>
+        /// The get content types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{UmbContentTypeDisplay}"/>.
+        /// </returns>
         [HttpGet]
-        public IEnumerable<EmbeddedContentTypeDisplay> GetContentTypes()
+        public IEnumerable<UmbContentTypeDisplay> GetContentTypes()
         {
-            var contentTypes = _contentTypeService.GetAllContentTypes().OrderBy(x => x.SortOrder);
-
-            var ct = (IContentType)contentTypes.First();
-
-            throw new NotImplementedException();
+            return
+                _contentTypeService.GetAllContentTypes()
+                    .OrderBy(x => x.SortOrder)
+                    .Select(x => x.ToEmbeddedContentTypeDisplay());
         }
 
         #endregion

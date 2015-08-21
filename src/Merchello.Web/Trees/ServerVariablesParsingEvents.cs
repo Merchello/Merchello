@@ -74,7 +74,12 @@
                         CurrentPage = 0,
                         ItemsPerPage = 25,
                         Parameters = new QueryDisplayParameter[] { }
-                    })));   
+                    })));  
+ 
+            merchelloUrls.Add(
+                "merchelloDetachedContentApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<DetachedContentApiController>(
+                controller => controller.GetContentTypes()));
 
             merchelloUrls.Add(
                 "merchelloEntityCollectionApiBaseUrl",

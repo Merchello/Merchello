@@ -1,7 +1,7 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.CreateStaticCollectionController" data-ng-show="loaded">
     <form name="collectionForm" id="collectionForm">
         <div class="form-group row-fluid" style="padding: 1em">
-            <label for="name">Name:</label>
+            <label for="name"><localize key="general_name" />:</label>
             <input name="name" type="text" class="span11" data-ng-model="name" required />
             <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
         </div>
