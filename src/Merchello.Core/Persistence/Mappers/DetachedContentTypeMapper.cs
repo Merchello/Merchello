@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Mappers
 {
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Rdbms;
 
     /// <summary>

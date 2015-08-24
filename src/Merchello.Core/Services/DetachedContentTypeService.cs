@@ -8,6 +8,7 @@
     using Lucene.Net.Search;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;

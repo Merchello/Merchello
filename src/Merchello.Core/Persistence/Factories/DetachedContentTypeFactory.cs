@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
 

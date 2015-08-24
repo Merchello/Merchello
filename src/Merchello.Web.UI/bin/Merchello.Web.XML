@@ -2064,6 +2064,46 @@
             Gets or sets the <see cref="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField"/>.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay">
+            <summary>
+            The product variant detached content display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedContentTypeKey">
+            <summary>
+            Gets or sets the detached content type key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.ProductVariantKey">
+            <summary>
+            Gets or sets the product variant key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.CultureName">
+            <summary>
+            Gets or sets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.TemplateId">
+            <summary>
+            Gets or sets the template id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.Slug">
+            <summary>
+            Gets or sets the slug.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedDataValues">
+            <summary>
+            Gets or sets the detached data values.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
             <summary>
             Stores information from <see cref="T:Umbraco.Core.Models.IContentType"/>.
@@ -2855,6 +2895,117 @@
             The value.
             </param>
         </member>
+        <member name="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty">
+            <summary>
+            Represents a <see cref="T:Umbraco.Core.Models.IPublishedProperty"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty">
+            <summary>
+            Defines a detached published property.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty.CultureName">
+            <summary>
+            Gets the culture name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._cultureName">
+            <summary>
+            The _culture name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._propertyType">
+            <summary>
+            The property type.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._rawValue">
+            <summary>
+            The raw value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._sourceValue">
+            <summary>
+            The source value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._objectValue">
+            <summary>
+            The object value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._xpathValue">
+            <summary>
+            The xpath value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._isPreview">
+            <summary>
+            A value indicating whether this is a preview.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <param name="cultureName">
+            The culture name
+            </param>
+            <param name="value">
+            The value.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.String,System.Object,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <param name="cultureName">
+            The culture name
+            </param>
+            <param name="value">
+            The value.
+            </param>
+            <param name="isPreview">
+            The is preview.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.CultureName">
+            <summary>
+            Gets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.PropertyTypeAlias">
+            <summary>
+            Gets the property type alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.HasValue">
+            <summary>
+            Gets a value indicating whether has value.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.DataValue">
+            <summary>
+            Gets the data value.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.XPathValue">
+            <summary>
+            Gets the x path value.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.Interfaces.IEntityDisplay">
             <summary>
             Defines a display entity.
@@ -2873,6 +3024,22 @@
         <member name="M:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver.ResolveCore(Merchello.Core.Gateways.GatewayProviderBase)">
             <summary>
             The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.DetachedDataValuesResolver">
+            <summary>
+            Maps the detached data values to an enumerable of KeyValuePair.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.DetachedDataValuesResolver.ResolveCore(Merchello.Core.Models.DetachedContent.IDetachedContent)">
+            <summary>
+            Performs the work of mapping the value.
             </summary>
             <param name="source">
             The source.
@@ -15415,6 +15582,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.CatalogInventories">
             <summary>
             Gets or sets the catalog inventories.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.DetachedContentValues">
+            <summary>
+            Gets or sets the detached content values.
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplay.#ctor">

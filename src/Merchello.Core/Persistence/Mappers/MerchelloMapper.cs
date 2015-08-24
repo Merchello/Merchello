@@ -6,6 +6,7 @@ namespace Merchello.Core.Persistence.Mappers
     using System.Collections.Concurrent;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;

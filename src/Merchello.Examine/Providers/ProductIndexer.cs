@@ -121,6 +121,7 @@
                 new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
                 new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("detachedContents", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("staticCollectionKeys", FieldIndexTypes.ANALYZED, false, string.Empty),

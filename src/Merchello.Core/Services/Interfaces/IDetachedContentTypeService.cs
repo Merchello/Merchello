@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Interfaces;
 
     using Umbraco.Core.Services;

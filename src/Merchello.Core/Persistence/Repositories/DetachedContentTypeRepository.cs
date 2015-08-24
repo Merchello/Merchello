@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;

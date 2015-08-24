@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web
 {
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.MapperResolvers.DetachedContent;
 
@@ -21,6 +22,12 @@
                     opt =>
                     opt.ResolveUsing<EmbeddedContentTabsResolver>()
                         .ConstructedBy(() => new EmbeddedContentTabsResolver()));
+
+            AutoMapper.Mapper.CreateMap<IProductVariantDetachedContent, ProductVariantDetachedContentDisplay>()
+                .ForMember(
+                    dest => dest.DetachedDataValues,
+                    opt =>
+                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()));
         }
     }
 }

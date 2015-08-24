@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models.DetachedContent
 {
     using System;
     using System.Reflection;
@@ -58,8 +58,8 @@
         public DetachedContentType(Guid entityTfKey, Guid? contentTypeKey)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
-            _contentTypeKey = contentTypeKey;
-            _entityTfKey = entityTfKey;
+            this._contentTypeKey = contentTypeKey;
+            this._entityTfKey = entityTfKey;
         }
 
         /// <summary>
@@ -70,18 +70,18 @@
         {
             get
             {
-                return _entityTfKey;
+                return this._entityTfKey;
             }
 
             set
             {
-                SetPropertyValueAndDetectChanges(
+                this.SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _entityTfKey = value;
-                        return _entityTfKey;
+                        this._entityTfKey = value;
+                        return this._entityTfKey;
                     },
-                    _entityTfKey,
+                    this._entityTfKey,
                     EntityTfKeySelector);
             }
         }
@@ -94,18 +94,18 @@
         {
             get
             {
-                return _name;
+                return this._name;
             }
 
             set
             {
-                SetPropertyValueAndDetectChanges(
+                this.SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _name = value;
-                        return _name;
+                        this._name = value;
+                        return this._name;
                     },
-                    _name,
+                    this._name,
                     NameSelector);
             }
         }
@@ -118,18 +118,18 @@
         {
             get
             {
-                return _contentTypeKey;
+                return this._contentTypeKey;
             }
 
             set
             {
-                SetPropertyValueAndDetectChanges(
+                this.SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _contentTypeKey = value;
-                        return _contentTypeKey;
+                        this._contentTypeKey = value;
+                        return this._contentTypeKey;
                     },
-                    _contentTypeKey,
+                    this._contentTypeKey,
                     ContentTypeKeySelector);
             }
         }
