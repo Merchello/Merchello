@@ -1085,6 +1085,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="productVariants">Product Variants</key>
     <key alias="productOptions">Product Options</key>
     <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="detachedContent">Extended Content</key>
     <key alias="salesListing">Sales Listing</key>
     <key alias="sales">Sale</key>
     <key alias="payments">Payments</key>
@@ -1159,7 +1160,18 @@ To manage your website, simply open the Umbraco back office and start adding con
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
     <key alias="productContentTypes">Product Content Types</key>
+    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
     <key alias="productContentType">Product Content Type</key>
+    <key alias="productContentTypeName">Product Type Name</key>
+    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
+    <key alias="tabs">Tabs</key>
+    <key alias="noProductContentType">
+      <![CDATA[
+        <h5>You have not selected a product content type</h5>
+        <p>If you have not added any product content types, this can be done through the Products context menu.</p>
+      ]]>
+    </key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales">

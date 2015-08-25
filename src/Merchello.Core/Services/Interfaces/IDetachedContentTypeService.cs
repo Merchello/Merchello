@@ -4,7 +4,6 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models.DetachedContent;
-    using Merchello.Core.Models.Interfaces;
 
     using Umbraco.Core.Services;
 
@@ -13,6 +12,26 @@
     /// </summary>
     internal interface IDetachedContentTypeService : IService
     {
+        /// <summary>
+        /// Creates a <see cref="IDetachedContentType"/> without saving it to the database.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="contentTypeKey">
+        /// The content type key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentType"/>.
+        /// </returns>
+        IDetachedContentType CreateDetachedContentType(EntityType entityType, Guid contentTypeKey, string name, bool raiseEvents = true);
+
         /// <summary>
         /// Creates a <see cref="IDetachedContentType"/> without saving it to the database.
         /// </summary>
@@ -32,6 +51,26 @@
         /// The <see cref="IDetachedContentType"/>.
         /// </returns>
         IDetachedContentType CreateDetachedContentType(Guid entityTfKey, Guid contentTypeKey, string name, bool raiseEvents = true);
+
+        /// <summary>
+        /// Creates a <see cref="IDetachedContentType"/> and saves to the database.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="contentTypeKey">
+        /// The content type key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentType"/>.
+        /// </returns>
+        IDetachedContentType CreateDetachedContentTypeWithKey(EntityType entityType, Guid contentTypeKey, string name, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a <see cref="IDetachedContentType"/> and saves to the database.

@@ -6,6 +6,7 @@
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
 
     using Umbraco.Core;
 
@@ -131,6 +132,18 @@
                     },
                     this._contentTypeKey,
                     ContentTypeKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets the entity type.
+        /// </summary>
+        [DataMember]
+        public EntityType EntityType
+        {
+            get
+            {
+                return EnumTypeFieldConverter.EntityType.GetTypeField(EntityTfKey);
             }
         }
     }

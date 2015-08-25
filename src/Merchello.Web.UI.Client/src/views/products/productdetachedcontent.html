@@ -1,0 +1,53 @@
+<form novalidate name="productVariantForm" data-ng-controller="Merchello.Backoffice.ProductDetachedContentController"
+      data-ng-show="loaded" data-ng-submit="save()">
+    <umb-panel val-show-validation>
+        <umb-header>
+            <div class="span7">
+                <umb-content-name ng-model="productVariant.name" localize="placeholder" placeholder="@merchelloPlaceholders_enterProduct">
+                </umb-content-name>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <button data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></button>
+                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown" data-ng-show="context !== 'createproduct'">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu merchello-action-menu" role="menu">
+                            <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+            <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
+                <div class="merchello-pane">
+
+                    <!-- Property classes from Umbraco styles -->
+                    <div class="control-group umb-control-group" data-ng-show="isConfigured">
+                        <label class="merchello-control-label">
+                            <localize key="merchelloVariant_variantInfo"/>
+                            <small><localize key="merchelloVariant_configVariant" /></small>
+                            <select data-ng-model="language"  data-ng-options="l.name for l in languages track by l.isoCode" data-ng-show="loaded" class="span10" />
+                            <button class="btn" data-ng-hide="!isConfigured">Show Configuration</button>
+                        </label>
+                        <div class="merchello-controls">
+                            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
+
+
+                        </div>
+                    </div>
+
+                    <div class="pager well" data-ng-hide="isConfigured">
+                        <localize key="merchelloDetachedContent_noProductContentType" />
+                    </div>
+
+                </div>
+                <!-- /merchello-pane -->
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</form>

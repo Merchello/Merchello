@@ -370,8 +370,8 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
      */
     var TypeFieldDisplay = function() {
         var self = this;
-        self.alias = 'test';
-        self.name = 'test';
+        self.alias = '';
+        self.name = '';
         self.typeKey = '';
     };
 
@@ -594,6 +594,23 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
 
     angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
 
+/**
+ * @ngdoc model
+ * @name DetachedContentTypeDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's DetachedContentTypeDisplay object
+ */
+var DetachedContentTypeDisplay = function () {
+	var self = this;
+	self.key = '';
+	self.name = '';
+	self.entityType = '';
+    self.umbContentType = {};
+};
+
+angular.module('merchello.models').constant('DetachedContentTypeDisplay', DetachedContentTypeDisplay);
 /**
  * @ngdoc model
  * @name UmbContentTypeDisplay
@@ -3799,11 +3816,58 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
 
     }]);
 
+/**
+ * @ngdoc service
+ * @name detachedContentTypeDisplayBuilder
+ *
+ * @description
+ * A utility service that builds DetachedContentTypeDisplay models
+ */
+angular.module('merchello.models').factory('detachedContentTypeDisplayBuilder',
+	['genericModelBuilder', 'typeFieldDisplayBuilder', 'umbContentTypeDisplayBuilder', 'DetachedContentTypeDisplay',
+	function (genericModelBuilder, typeFieldDisplayBuilder, umbContentTypeDisplayBuilder, DetachedContentTypeDisplay) {
+
+		var Constructor = DetachedContentTypeDisplay;
+
+		return {
+			createDefault: function () {
+				var content = new Constructor();
+				content.entityTypeField = typeFieldDisplayBuilder.createDefault();
+				content.umbContentType = umbContentTypeDisplayBuilder.createDefault();
+			    return content;
+			},
+			transform: function (jsonResult) {
+				var contents = [];
+				if (angular.isArray(jsonResult)) {
+					for(var i = 0; i < jsonResult.length; i++) {
+						var content = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+						content.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField);
+						content.umbContentType = umbContentTypeDisplayBuilder.transform(jsonResult[ i ].umbContentType);
+						contents.push(content);
+					}
+				} else {
+				    contents = genericModelBuilder.transform(jsonResult, Constructor);
+					contents.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField);
+					contents.umbContentType = umbContentTypeDisplayBuilder.transform(jsonResult.umbContentType);
+				}
+				return contents;
+			}
+		};
+	}
+]);
+/**
+ * @ngdoc service
+ * @name umbContentTypeDisplayBuilder
+ *
+ * @description
+ * A utility service that builds UmbContentTypeDisplay models
+ */
 angular.module('merchello.models').factory('umbContentTypeDisplayBuilder',
     ['genericModelBuilder', 'UmbContentTypeDisplay',
     function(genericModelBuilder, UmbContentTypeDisplay) {
 
         var Constructor = UmbContentTypeDisplay;
+
         return {
             createDefault: function() {
                 return new Constructor();
@@ -4293,8 +4357,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 
@@ -4304,8 +4368,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
-                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
+                tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productedit/' + productKey + '?variantid=' + productVariantKey);
+               tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey + '?variantid=' + productVariantKey);
                 return tabs;
             }
 

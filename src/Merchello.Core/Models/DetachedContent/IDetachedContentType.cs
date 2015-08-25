@@ -3,17 +3,13 @@
     using System;
 
     using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Interfaces;
 
     /// <summary>
     /// Defines detached content.
     /// </summary>
-    public interface IDetachedContentType : IEntity
+    public interface IDetachedContentType : IHasEntityTypeField, IEntity
     {        
-        /// <summary>
-        /// Gets or sets the entity type field key.
-        /// </summary>
-        Guid EntityTfKey { get; set; }
-
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -23,5 +19,10 @@
         /// Gets or sets the content type key.
         /// </summary>
         Guid? ContentTypeKey { get; set; }
+
+        /// <summary>
+        /// Gets the entity type.
+        /// </summary>
+        EntityType EntityType { get; }
     }
 }

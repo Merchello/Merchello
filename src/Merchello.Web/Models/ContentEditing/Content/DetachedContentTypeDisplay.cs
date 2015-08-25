@@ -1,8 +1,14 @@
 ﻿namespace Merchello.Web.Models.ContentEditing.Content
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.TypeFields;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The detached content type display.
@@ -25,13 +31,35 @@
         public UmbContentTypeDisplay UmbContentType { get; set; }
 
         /// <summary>
-        /// Gets or sets the entity type field key.
+        /// Gets or sets the entity type.
         /// </summary>
-        public Guid EntityTfKey { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EntityType EntityType { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="EntityTypeField"/>.
         /// </summary>
-        public EntityTypeField EntityTypeField { get; set; }
+        public TypeField EntityTypeField { get; set; }
+    }
+
+    /// <summary>
+    /// Utility mapping extensions for <see cref="DetachedContentTypeDisplay"/>.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class DetachedContentTypeDisplayExtensions
+    {
+        /// <summary>
+        /// Maps <see cref="IDetachedContentType"/> to <see cref="DetachedContentTypeDisplay"/>.
+        /// </summary>
+        /// <param name="dtc">
+        /// The <see cref="IDetachedContentType"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DetachedContentTypeDisplay"/>.
+        /// </returns>
+        public static DetachedContentTypeDisplay ToDetachedContentTypeDisplay(this IDetachedContentType dtc)
+        {
+            return AutoMapper.Mapper.Map<DetachedContentTypeDisplay>(dtc);
+        }
     }
 }

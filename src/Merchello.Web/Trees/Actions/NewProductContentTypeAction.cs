@@ -70,7 +70,7 @@
         {
             get
             {
-                return "umb-content";
+                return "add";
             }
         }
 

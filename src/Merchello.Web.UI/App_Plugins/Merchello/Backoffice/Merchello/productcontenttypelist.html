@@ -10,9 +10,15 @@
         </umb-header>
 
         <merchello-panel>
-            <div class="merchello-pane" data-ng-show="preValuesLoaded">
-
-            </div>
+            <div class="merchello-pane row-fluid">
+                <!-- Notification Providers -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloDetachedContent_productContentTypes" />
+                        <small><localize key="merchelloDetachedContent_productContentTypesInfo" /></small>
+                    </label>
+                    <detached-content-type entity-type="Product" />
+                </div>
         </merchello-panel>
 
     </umb-panel>

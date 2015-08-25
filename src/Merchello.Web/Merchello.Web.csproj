@@ -281,6 +281,7 @@
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\DetachedDataValuesResolver.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\EmbeddedContentTabsResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DetachedContent\UmbContentTypeResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\EntityCollectionNullableParentKeyResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeFieldResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\ManagedCollectionsResolver.cs" />
