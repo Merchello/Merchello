@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneElevenZero
+﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneTwelveZero
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +13,7 @@
     /// <summary>
     /// The create product variant 2 detached content type table.
     /// </summary>
-    [Migration("1.10.0", "1.10.1.1", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.11.0", "1.11.0.1", 1, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateProductVariantDetachedContentTable : MigrationBase
     {
         /// <summary>
@@ -32,8 +32,7 @@
             var database = ApplicationContext.Current.DatabaseContext.Database;
             if (!database.TableExist("merchProductVariantDetachedContent"))
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
-
+                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.12.0 upgrade");
             }
         }
 
@@ -42,7 +41,7 @@
         /// </summary>
         public override void Down()
         {
-            throw new DataLossException("Cannot downgrade from a version 1.11.0 database to a prior version, the database schema has already been modified");
+            throw new DataLossException("Cannot downgrade from a version 1.12.0 database to a prior version, the database schema has already been modified");
         }
     }
 }

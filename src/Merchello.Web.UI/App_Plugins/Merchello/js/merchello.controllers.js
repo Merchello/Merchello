@@ -5454,6 +5454,30 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Product.Dialogs.AddProductContentTypeController
+ * @function
+ *
+ * @description
+ * The controller for the adding product content types
+ */
+angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductContentTypeController',
+    ['$scope',
+        function($scope) {
+            $scope.loaded = true;
+            $scope.wasFormSubmitted = false;
+            $scope.contentType = '';
+
+            $scope.save = function() {
+                $scope.wasFormSubmitted = true;
+                if ($scope.productContentTypeForm.name.$valid) {
+                    console.info($scope.contentType);
+                }
+            }
+
+        }]);
+
     /**
      * @ngdoc controller
      * @name Merchello.Product.Dialogs.ProductVariantBulkChangePricesController
@@ -5897,6 +5921,23 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             // Initializes the controller
             init();
 }]);
+
+angular.module('merchello').controller('Merchello.Backoffice.ProductContentTypeListController',
+    ['$scope', 'merchelloTabsFactory',
+    function($scope, merchelloTabsFactory) {
+
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+        $scope.tabs = {};
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createProductListTabs();
+            $scope.tabs.setActive('productContentTypeList');
+        }
+
+        // Initializes the controller
+        init();
+    }]);
 
     /**
      * @ngdoc controller

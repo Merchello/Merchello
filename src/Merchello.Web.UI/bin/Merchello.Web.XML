@@ -1246,9 +1246,9 @@
             Gets or sets the log of adjustments.
             </summary>
         </member>
-        <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
+        <member name="T:Merchello.Web.Editors.DetachedContentApiController">
             <summary>
-            The entity collection api controller.
+            An API controller for handling detached content related operations in the Merchello back office.
             </summary>
         </member>
         <member name="T:Merchello.Web.WebApi.MerchelloApiController">
@@ -1292,6 +1292,48 @@
             <remarks>
             Useful for debugging
             </remarks>
+        </member>
+        <member name="F:Merchello.Web.Editors.DetachedContentApiController._contentTypeService">
+            <summary>
+            Umbraco's <see cref="T:Umbraco.Core.Services.IContentTypeService"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+            <param name="umbracoContext">
+            The <see cref="T:Umbraco.Web.UmbracoContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.GetContentTypes">
+            <summary>
+            The get content types.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
+            <summary>
+            The entity collection api controller.
+            </summary>
         </member>
         <member name="F:Merchello.Web.Editors.EntityCollectionApiController._merchello">
             <summary>
@@ -1990,6 +2032,127 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay">
+            <summary>
+            The detached content type display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.UmbContentType">
+            <summary>
+            Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTfKey">
+            <summary>
+            Gets or sets the entity type field key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField">
+            <summary>
+            Gets or sets the <see cref="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay">
+            <summary>
+            The product variant detached content display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.Key">
+            <summary>
+            Gets or sets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedContentTypeKey">
+            <summary>
+            Gets or sets the detached content type key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.ProductVariantKey">
+            <summary>
+            Gets or sets the product variant key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.CultureName">
+            <summary>
+            Gets or sets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.TemplateId">
+            <summary>
+            Gets or sets the template id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.Slug">
+            <summary>
+            Gets or sets the slug.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedDataValues">
+            <summary>
+            Gets or sets the detached data values.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
+            <summary>
+            Stores information from <see cref="T:Umbraco.Core.Models.IContentType"/>.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Id">
+            <summary>
+            Gets or sets the content type id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Key">
+            <summary>
+            Gets or sets Umbraco's unique key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Alias">
+            <summary>
+            Gets or sets the content type alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Icon">
+            <summary>
+            Gets or sets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Tabs">
+            <summary>
+            Gets or sets the tabs.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions">
+            <summary>
+            The embedded content type display extensions.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions.ToEmbeddedContentTypeDisplay(Umbraco.Core.Models.IContentType)">
+            <summary>
+            The to embedded content type display.
+            </summary>
+            <param name="contentType">
+            The content type.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
@@ -2732,6 +2895,117 @@
             The value.
             </param>
         </member>
+        <member name="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty">
+            <summary>
+            Represents a <see cref="T:Umbraco.Core.Models.IPublishedProperty"/>.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty">
+            <summary>
+            Defines a detached published property.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty.CultureName">
+            <summary>
+            Gets the culture name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._cultureName">
+            <summary>
+            The _culture name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._propertyType">
+            <summary>
+            The property type.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._rawValue">
+            <summary>
+            The raw value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._sourceValue">
+            <summary>
+            The source value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._objectValue">
+            <summary>
+            The object value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._xpathValue">
+            <summary>
+            The xpath value.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._isPreview">
+            <summary>
+            A value indicating whether this is a preview.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.String,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <param name="cultureName">
+            The culture name
+            </param>
+            <param name="value">
+            The value.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.String,System.Object,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <param name="cultureName">
+            The culture name
+            </param>
+            <param name="value">
+            The value.
+            </param>
+            <param name="isPreview">
+            The is preview.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.CultureName">
+            <summary>
+            Gets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.PropertyTypeAlias">
+            <summary>
+            Gets the property type alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.HasValue">
+            <summary>
+            Gets a value indicating whether has value.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.DataValue">
+            <summary>
+            Gets the data value.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.Value">
+            <summary>
+            Gets the value.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.XPathValue">
+            <summary>
+            Gets the x path value.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.Interfaces.IEntityDisplay">
             <summary>
             Defines a display entity.
@@ -2748,6 +3022,38 @@
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.MapperResolvers.AvailableGatewayResourcesResolver.ResolveCore(Merchello.Core.Gateways.GatewayProviderBase)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.DetachedDataValuesResolver">
+            <summary>
+            Maps the detached data values to an enumerable of KeyValuePair.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.DetachedDataValuesResolver.ResolveCore(Merchello.Core.Models.DetachedContent.IDetachedContent)">
+            <summary>
+            Performs the work of mapping the value.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.EmbeddedContentTabsResolver">
+            <summary>
+            The embedded content tabs resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.EmbeddedContentTabsResolver.ResolveCore(Umbraco.Core.Models.IContentType)">
             <summary>
             The resolve core.
             </summary>
@@ -3343,7 +3649,13 @@
         </member>
         <member name="T:Merchello.Web.AutoMapperMappings">
             <summary>
-            Binds Merchello AutoMapper mappings during the Umbraco startup.
+            The auto mapper mappings.
+            </summary>
+            <summary>
+            The auto mapper mappings.
+            </summary>
+            <summary>
+            The auto mapper mappings.
             </summary>
             <summary>
             Binds Merchello AutoMapper mappings during the Umbraco startup.
@@ -3359,6 +3671,24 @@
             </summary>
             <summary>
             Binds Merchello AutoMapper mappings during the Umbraco startup.
+            </summary>
+            <summary>
+            Binds Merchello AutoMapper mappings during the Umbraco startup.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.AutoMapperMappings.CreateMarketingMappings">
+            <summary>
+            Creates marketing mappings.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.AutoMapperMappings.CreateDetachedContentMappings">
+            <summary>
+            The create detached content mappings.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.AutoMapperMappings.CreateEntityCollectionMappings">
+            <summary>
+            The create entity collection mappings.
             </summary>
         </member>
         <member name="M:Merchello.Web.AutoMapperMappings.CreatePaymentMappings">
@@ -8098,6 +8428,61 @@
             </summary>
         </member>
         <member name="P:Merchello.Web.Trees.Actions.NewEntityAction.JsSource">
+            <summary>
+            Gets the JS source.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Trees.Actions.NewProductContentTypeAction">
+            <summary>
+            The new product content type action.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Trees.Actions.NewProductContentTypeAction.LocalInstance">
+            <summary>
+            The local singleton instance.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Trees.Actions.NewProductContentTypeAction.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Merchello.Web.Trees.Actions.NewProductContentTypeAction"/> class from being created.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Instance">
+            <summary>
+            Gets the singleton instance.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Letter">
+            <summary>
+            Gets the letter.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.ShowInNotifier">
+            <summary>
+            Gets a value indicating whether show in notifier.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.CanBePermissionAssigned">
+            <summary>
+            Gets a value indicating whether can be permission assigned.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Icon">
+            <summary>
+            Gets the icon.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.Alias">
+            <summary>
+            Gets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.JsFunctionName">
+            <summary>
+            Gets the JS function name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Trees.Actions.NewProductContentTypeAction.JsSource">
             <summary>
             Gets the JS source.
             </summary>
@@ -15197,6 +15582,11 @@
         <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.CatalogInventories">
             <summary>
             Gets or sets the catalog inventories.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.DetachedContentValues">
+            <summary>
+            Gets or sets the detached content values.
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplay.#ctor">

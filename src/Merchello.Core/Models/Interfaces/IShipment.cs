@@ -176,6 +176,12 @@
         /// </summary>
         [DataMember]
         string TrackingCode { get; set; }
+
+        /// <summary>
+        /// Accepts visitor class to visit order line items included in the shipment
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        void Accept(ILineItemVisitor visitor);  
     }
 }
 

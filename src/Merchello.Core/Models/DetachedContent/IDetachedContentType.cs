@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Models.Interfaces
+﻿namespace Merchello.Core.Models.DetachedContent
 {
     using System;
 
@@ -20,8 +20,8 @@
         string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the content type id.
+        /// Gets or sets the content type key.
         /// </summary>
-        int? ContentTypeId { get; set; }
+        Guid? ContentTypeKey { get; set; }
     }
 }

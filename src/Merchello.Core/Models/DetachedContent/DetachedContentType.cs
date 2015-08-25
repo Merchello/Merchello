@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models.DetachedContent
 {
     using System;
     using System.Reflection;
@@ -29,7 +29,7 @@
         /// <summary>
         /// The content type id selector.
         /// </summary>
-        private static readonly PropertyInfo ContentTypeIdSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, int?>(x => x.ContentTypeId);
+        private static readonly PropertyInfo ContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid?>(x => x.ContentTypeKey);
 
         /// <summary>
         /// The entity type field key.
@@ -44,7 +44,7 @@
         /// <summary>
         /// The content type id.
         /// </summary>
-        private int? _contentTypeId;
+        private Guid? _contentTypeKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedContentType"/> class.
@@ -52,14 +52,14 @@
         /// <param name="entityTfKey">
         /// The entity type field key.
         /// </param>
-        /// <param name="contentTypeId">
-        /// The content Type Id.
+        /// <param name="contentTypeKey">
+        /// The content Type Key.
         /// </param>
-        public DetachedContentType(Guid entityTfKey, int? contentTypeId)
+        public DetachedContentType(Guid entityTfKey, Guid? contentTypeKey)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
-            _contentTypeId = contentTypeId;
-            _entityTfKey = entityTfKey;
+            this._contentTypeKey = contentTypeKey;
+            this._entityTfKey = entityTfKey;
         }
 
         /// <summary>
@@ -70,18 +70,18 @@
         {
             get
             {
-                return _entityTfKey;
+                return this._entityTfKey;
             }
 
             set
             {
-                SetPropertyValueAndDetectChanges(
+                this.SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _entityTfKey = value;
-                        return _entityTfKey;
+                        this._entityTfKey = value;
+                        return this._entityTfKey;
                     },
-                    _entityTfKey,
+                    this._entityTfKey,
                     EntityTfKeySelector);
             }
         }
@@ -94,43 +94,43 @@
         {
             get
             {
-                return _name;
+                return this._name;
             }
 
             set
             {
-                SetPropertyValueAndDetectChanges(
+                this.SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _name = value;
-                        return _name;
+                        this._name = value;
+                        return this._name;
                     },
-                    _name,
+                    this._name,
                     NameSelector);
             }
         }
 
         /// <summary>
-        /// Gets or sets the content type id.
+        /// Gets or sets the content type key.
         /// </summary>
         [DataMember]
-        public int? ContentTypeId
+        public Guid? ContentTypeKey
         {
             get
             {
-                return _contentTypeId;
+                return this._contentTypeKey;
             }
 
             set
             {
-                SetPropertyValueAndDetectChanges(
+                this.SetPropertyValueAndDetectChanges(
                     o =>
                     {
-                        _contentTypeId = value;
-                        return _contentTypeId;
+                        this._contentTypeKey = value;
+                        return this._contentTypeKey;
                     },
-                    _contentTypeId,
-                    ContentTypeIdSelector);
+                    this._contentTypeKey,
+                    ContentTypeKeySelector);
             }
         }
     }

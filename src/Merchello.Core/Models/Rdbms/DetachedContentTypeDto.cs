@@ -36,9 +36,9 @@
         /// <summary>
         /// Gets or sets the content type id.
         /// </summary>
-        [Column("contentTypeId")]
+        [Column("contentTypeKey")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public int? ContentTypeId { get; set; }
+        public Guid? ContentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.

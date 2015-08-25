@@ -1080,6 +1080,7 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloTabs">
     <key alias="productListing">Product Listing</key>
+    <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>
     <key alias="productVariants">Product Variants</key>
     <key alias="productOptions">Product Options</key>
@@ -1142,6 +1143,7 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="contentTypeRequired">Content type is required</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
@@ -1153,6 +1155,11 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
+  </area>
+  <area alias="merchelloDetachedContent">
+    <key alias="selectContentType">Select Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="productContentType">Product Content Type</key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales">

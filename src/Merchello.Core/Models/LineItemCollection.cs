@@ -63,9 +63,8 @@ namespace Merchello.Core.Models
         public event AddItemEventHandler AddingItem;
 
         /// <summary>
-        /// True/false indicating whether or not the current collection is empty
+        /// Gets a value indicating whether or not the current collection is empty
         /// </summary>
-        /// <returns></returns>
         public bool IsEmpty
         {
             get { return this.Count == 0; }

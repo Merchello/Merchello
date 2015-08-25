@@ -807,6 +807,16 @@
         }
 
         /// <summary>
+        /// Accepts visitor class to visit invoice line items
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        public void Accept(ILineItemVisitor visitor)
+        {
+            this.Items.Accept(visitor);
+        }
+
+
+        /// <summary>
         /// The orders changed.
         /// </summary>
         /// <param name="sender">

@@ -247,6 +247,7 @@
     <Compile Include="Discounts\Coupons\Rewards\CouponDiscountLineItemRewardVisitor.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponRewardAdjustmentAudit.cs" />
+    <Compile Include="Editors\DetachedContentApiController.cs" />
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="LocalizationHelper.cs" />
@@ -256,6 +257,9 @@
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionByEntityQuery.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionDisplay.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionProviderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Content\DetachedContentTypeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Content\ProductVariantDetachedContentDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Content\UmbContentTypeDisplay.cs" />
     <Compile Include="Models\ContentEditing\ExtendedDataExtensions.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferProviderDisplay.cs" />
@@ -270,8 +274,13 @@
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
+    <Compile Include="Models\DetachedContent\DetachedPublishedContent.cs" />
+    <Compile Include="Models\DetachedContent\DetachedPublishedProperty.cs" />
+    <Compile Include="Models\DetachedContent\IDetachedPublishedProperty.cs" />
     <Compile Include="Models\Interfaces\IEntityDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DetachedContent\DetachedDataValuesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DetachedContent\EmbeddedContentTabsResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\EntityCollectionNullableParentKeyResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityTypeFieldResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\ManagedCollectionsResolver.cs" />
@@ -297,6 +306,15 @@
     <Compile Include="Models\MapperResolvers\EntityTypeResolver.cs" />
     <Compile Include="Models\Payments\PaymentResultDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryAuditingExtensions.cs" />
+    <Compile Include="AutoMapperMappings-Marketing.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoMapperMappings-DetachedContent.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoMapperMappings-EntityCollection.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings-Payment.cs">
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
     </Compile>
@@ -357,6 +375,7 @@
     <Compile Include="Trees\Actions\NewOfferSettingsAction.cs" />
     <Compile Include="Trees\Actions\NewCollectionAction.cs" />
     <Compile Include="Trees\Actions\NewEntityAction.cs" />
+    <Compile Include="Trees\Actions\NewProductContentTypeAction.cs" />
     <Compile Include="Trees\Actions\SortCollectionAction.cs" />
     <Compile Include="Trees\BackOfficeTreeAttribute.cs" />
     <Compile Include="Search\CustomerQuery.cs" />
@@ -493,9 +512,7 @@
     <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
