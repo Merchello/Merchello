@@ -93,7 +93,6 @@
 
             vs: {
                 files: [
-                    //everything except the index.html root file!
                     //then we need to figure out how to not copy all the test stuff either!?
                     { dest: '<%= vsdir %>', src: '*.manifest', expand: true, cwd: '<%= distdir %>' },
                     { dest: '<%= vsdir %>/assets', src: '**', expand: true, cwd: '<%= distdir %>/assets' },
@@ -107,6 +106,7 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/dashboards' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/marketing' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/collections' },
+                    { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/detachedcontent' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/reports' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/gatewayproviders' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/products' },

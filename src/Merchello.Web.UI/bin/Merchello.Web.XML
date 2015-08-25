@@ -1298,6 +1298,16 @@
             Umbraco's <see cref="T:Umbraco.Core.Services.IContentTypeService"/>.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Editors.DetachedContentApiController._detachedContentTypeService">
+            <summary>
+            The <see cref="T:Merchello.Core.Services.IDetachedContentTypeService"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Editors.DetachedContentApiController._allLanguages">
+            <summary>
+            The collection of all languages.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Editors.DetachedContentApiController.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Editors.DetachedContentApiController"/> class.
@@ -1322,6 +1332,14 @@
             The <see cref="T:Umbraco.Web.UmbracoContext"/>.
             </param>
         </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.GetAllLanguages">
+            <summary>
+            Gets all languages.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.DetachedContentApiController.GetContentTypes">
             <summary>
             The get content types.
@@ -1329,6 +1347,33 @@
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.GetDetachedContentTypesByEntityType(System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/> by entity type.
+            </summary>
+            <param name="enumValue">
+            The entity type.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.PostAddDetachedContentType(Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay)">
+            <summary>
+            The post add content type.
+            </summary>
+            <param name="contentType">
+            The content type.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.Initialize">
+            <summary>
+            Initializes the controller
+            </summary>
         </member>
         <member name="T:Merchello.Web.Editors.EntityCollectionApiController">
             <summary>
@@ -2054,15 +2099,31 @@
             Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTfKey">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityType">
             <summary>
-            Gets or sets the entity type field key.
+            Gets or sets the entity type.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField">
             <summary>
             Gets or sets the <see cref="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.EntityTypeField"/>.
             </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplayExtensions">
+            <summary>
+            Utility mapping extensions for <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplayExtensions.ToDetachedContentTypeDisplay(Merchello.Core.Models.DetachedContent.IDetachedContentType)">
+            <summary>
+            Maps <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/> to <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/>.
+            </summary>
+            <param name="dtc">
+            The <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay">
             <summary>
@@ -2144,7 +2205,7 @@
             The embedded content type display extensions.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions.ToEmbeddedContentTypeDisplay(Umbraco.Core.Models.IContentType)">
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions.ToUmbContentTypeDisplay(Umbraco.Core.Models.IContentType)">
             <summary>
             The to embedded content type display.
             </summary>
@@ -2153,6 +2214,20 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions.ToDetachedContentType(Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay,Merchello.Core.Models.DetachedContent.IDetachedContentType)">
+            <summary>
+            Maps a <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/> to <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
+            </summary>
+            <param name="umbContentType">
+            The umb content type.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
@@ -3062,6 +3137,27 @@
             </param>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.UmbContentTypeResolver">
+            <summary>
+            Resolves <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/> for <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/> mappings.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.MapperResolvers.DetachedContent.UmbContentTypeResolver._contentTypeService">
+            <summary>
+            The <see cref="T:Umbraco.Core.Services.IContentTypeService"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.UmbContentTypeResolver.ResolveCore(Merchello.Core.Models.DetachedContent.IDetachedContentType)">
+            <summary>
+            Resolves <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/> for <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/> mappings.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Models.MapperResolvers.EntityCollections.EntityCollectionNullableParentKeyResolver">

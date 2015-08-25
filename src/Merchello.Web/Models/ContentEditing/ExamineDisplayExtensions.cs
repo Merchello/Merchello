@@ -10,8 +10,10 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Examine;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Search;
 
     using Newtonsoft.Json;
@@ -55,6 +57,7 @@
         /// </returns>
         internal static ProductVariantDisplay ToProductVariantDisplay(this SearchResult result)
         {
+            var detachedContents = RawJsonFieldAsCollection<ProductVariantDetachedContentDisplay>(result, "detachedContents");
             var pvd = new ProductVariantDisplay()
             {
                 Key = FieldAsGuid(result, "productVariantKey"),
@@ -82,7 +85,8 @@
                 DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
                 VersionKey = FieldAsGuid(result, "versionKey"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
-                CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories")
+                CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
+                DetachedContentValues = detachedContents ?? Enumerable.Empty<ProductVariantDetachedContentDisplay>()
             };
   
             return pvd;

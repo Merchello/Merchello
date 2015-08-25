@@ -10,6 +10,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
@@ -110,6 +111,33 @@
         /// <summary>
         /// Creates a <see cref="IDetachedContentType"/> without saving it to the database.
         /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="contentTypeKey">
+        /// The content type key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentType"/>.
+        /// </returns>
+        public IDetachedContentType CreateDetachedContentType(EntityType entityType, Guid contentTypeKey, string name, bool raiseEvents = true)
+        {
+            return CreateDetachedContentType(
+                EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey,
+                contentTypeKey,
+                name,
+                raiseEvents);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IDetachedContentType"/> without saving it to the database.
+        /// </summary>
         /// <param name="entityTfKey">
         /// The entity type field key.
         /// </param>
@@ -143,6 +171,37 @@
             }
 
             return dt;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="IDetachedContentType"/> and saves to the database.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="contentTypeKey">
+        /// The content type key.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentType"/>.
+        /// </returns>
+        public IDetachedContentType CreateDetachedContentTypeWithKey(
+            EntityType entityType,
+            Guid contentTypeKey,
+            string name,
+            bool raiseEvents = true)
+        {
+            return CreateDetachedContentTypeWithKey(
+                EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey,
+                contentTypeKey,
+                name,
+                raiseEvents);
         }
 
         /// <summary>

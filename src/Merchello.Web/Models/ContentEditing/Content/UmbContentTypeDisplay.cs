@@ -4,6 +4,12 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core;
+    using Merchello.Core.Models.DetachedContent;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     using Umbraco.Core.Models;
 
     /// <summary>
@@ -57,9 +63,28 @@
         /// <returns>
         /// The <see cref="UmbContentTypeDisplay"/>.
         /// </returns>
-        public static UmbContentTypeDisplay ToEmbeddedContentTypeDisplay(this IContentType contentType)
+        public static UmbContentTypeDisplay ToUmbContentTypeDisplay(this IContentType contentType)
         {
             return AutoMapper.Mapper.Map<UmbContentTypeDisplay>(contentType);
         }
+
+        /// <summary>
+        /// Maps a <see cref="UmbContentTypeDisplay"/> to <see cref="IDetachedContentType"/>.
+        /// </summary>
+        /// <param name="umbContentType">
+        /// The umb content type.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentType"/>.
+        /// </returns>
+        public static IDetachedContentType ToDetachedContentType(this UmbContentTypeDisplay umbContentType, IDetachedContentType destination)
+        {
+            destination.Name = umbContentType.Name;
+            destination.ContentTypeKey = umbContentType.Key;
+            return destination;
+        } 
     }
 }

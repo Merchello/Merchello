@@ -1,19 +1,26 @@
 ﻿namespace Merchello.Web.Editors
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
+    using System.Net.Http;
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.WebApi;
 
+    using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
+
+    using ServiceContext = Merchello.Core.Services.ServiceContext;
 
     /// <summary>
     /// An API controller for handling detached content related operations in the Merchello back office.
@@ -25,6 +32,16 @@
         /// Umbraco's <see cref="IContentTypeService"/>.
         /// </summary>
         private readonly IContentTypeService _contentTypeService;
+
+        /// <summary>
+        /// The <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        private readonly IDetachedContentTypeService _detachedContentTypeService;
+
+        /// <summary>
+        /// The collection of all languages.
+        /// </summary>
+        private Lazy<ILanguage[]> _allLanguages;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedContentApiController"/> class.
@@ -42,7 +59,8 @@
         /// </param>
         public DetachedContentApiController(IMerchelloContext merchelloContext)
             : this(merchelloContext, UmbracoContext.Current)
-        {            
+        {
+            this.Initialize();
         }
 
         /// <summary>
@@ -60,7 +78,32 @@
             if (ApplicationContext == null) throw new NotFiniteNumberException("Umbraco ApplicationContext is null");
 
             _contentTypeService = ApplicationContext.Services.ContentTypeService;
+
+            _detachedContentTypeService = ((ServiceContext)merchelloContext.Services).DetachedContentTypeService;
         }
+
+        #region Localization
+
+        /// <summary>
+        /// Gets all languages.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{Language}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<object> GetAllLanguages()
+        {
+            return _allLanguages.Value
+                .Select(x => CultureInfo.GetCultureInfo(x.IsoCode))
+                .Select(x => new 
+                            {
+                                IsoCode = x.Name,
+                                Name = x.DisplayName, 
+                                x.NativeName
+                            });
+        }
+
+            #endregion
 
         #region ContentTypes
 
@@ -76,9 +119,67 @@
             return
                 _contentTypeService.GetAllContentTypes()
                     .OrderBy(x => x.SortOrder)
-                    .Select(x => x.ToEmbeddedContentTypeDisplay());
+                    .Select(x => x.ToUmbContentTypeDisplay());
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="DetachedContentTypeDisplay"/> by entity type.
+        /// </summary>
+        /// <param name="enumValue">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{DetachedContentTypeDisplay}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<DetachedContentTypeDisplay> GetDetachedContentTypesByEntityType(string enumValue)
+        {
+            EntityType entityType;
+            if (!Enum.TryParse(enumValue, true, out entityType))
+            {
+                LogHelper.Debug<DetachedContentApiController>("Failed to parse enum value");
+                return Enumerable.Empty<DetachedContentTypeDisplay>();
+            }
+
+            var entityTfKey = EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey;
+
+            var list = _detachedContentTypeService.GetDetachedContentTypesByEntityTfKey(entityTfKey).OrderBy(x => x.Name);
+            
+            return list
+                .Where(x => x.Key != Core.Constants.DefaultKeys.DetachedPublishedContentType.DefaultProductVariantDetachedPublishedContentTypeKey)
+                .Select(x => x.ToDetachedContentTypeDisplay());
+        }
+
+            /// <summary>
+        /// The post add content type.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public DetachedContentTypeDisplay PostAddDetachedContentType(DetachedContentTypeDisplay contentType)
+        {            
+            var detachedContentType = _detachedContentTypeService.CreateDetachedContentTypeWithKey(
+                contentType.EntityType,
+                contentType.UmbContentType.Key,
+                contentType.Name);
+
+            var display = detachedContentType.ToDetachedContentTypeDisplay();
+
+            return display;
         }
 
         #endregion
+
+        /// <summary>
+        /// Initializes the controller
+        /// </summary>
+        private void Initialize()
+        {
+            _allLanguages = new Lazy<ILanguage[]>(() => ApplicationContext.Current.Services.LocalizationService.GetAllLanguages().ToArray());
+        }
     }
 }
