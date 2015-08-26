@@ -37,9 +37,9 @@
 
                     <div class="merchello-controls row-fluid">
 
-                        <div class="row-fluid col-xs-10 span10">
+                        <div class="row-fluid">
 
-                            <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
+                            <table class="table table-striped merchello-striped-table form-horizontal">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
@@ -50,11 +50,8 @@
                                 <tr data-ng-repeat="method in provider.paymentMethods">
                                     <td>{{method.name}}</td>
                                     <td>{{method.description}}</td>
-                                    <td class="edit">
-                                        <div class="btn-group">
-                                            <a class="btn btn-default btn-xs btn-mini" data-ng-click="addEditPaymentMethod(provider, method)"><i class="icon-edit"></i></a>
-                                            <a class="btn btn-warning btn-xs btn-mini" data-ng-click="deletePaymentMethod(method)"><i class="icon-trash"></i></a>
-                                        </div>
+                                    <td class="merchello-icon-container pull-right">
+                                        <merchello-icon-bar show-edit="true" show-delete="true" do-edit="addEditPaymentMethod(provider, method)" do-delete="deletePaymentMethod(method)" />
                                     </td>
                                 </tr>
                                 </tbody>

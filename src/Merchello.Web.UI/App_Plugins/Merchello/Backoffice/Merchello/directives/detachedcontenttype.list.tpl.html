@@ -1,19 +1,29 @@
-<div class="merchello-controls" data-ng-show="loaded">
-    <table class="table table-striped merchello-striped-table detached-content-type-table" data-ng-show="preValuesLoaded">
-        <thead>
-        <tr>
-            <th><localize key="merchelloDetachedContent_umbracoContentTypeName" /></th>
-            <th><localize key="merchelloDetachedContent_umbracoContentTypeAlias" /></th>
-            <th colspan="2"><localize key="merchelloDetachedContent_productContentTypeName" /></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr data-ng-repeat="contentType in detachedContentTypes">
-            <td><i class="icon {{contentType.umbContentType.icon}}" data-ng-hide="contentType.umbContentType.icon===''"></i> {{contentType.umbContentType.name}}</td>
-            <td>{{contentType.umbContentType.alias}}</td>
-            <td><span class="label label-success">{{contentType.name}}</span></td>
-            <td class="edit"><button class="btn btn-mini"><i class="icon-edit"></i></button><button class="btn btn-mini btn-warning"><i class="icon-trash"></i></button></td>
-        </tr>
-        </tbody>
-    </table>
+<div class="merchello-pane row-fluid" data-ng-show="loaded">
+
+    <div  data-ng-repeat="contentType in detachedContentTypes">
+        <label class="merchello-control-label">
+            {{contentType.name}}
+            <small data-ng-show="contentType.description.length > 0">{{contentType.description}}</small>
+        </label>
+        <div class="control-group umb-control-group">
+
+        <table class="table table-striped merchello-striped-table detached-content-type-table" data-ng-show="preValuesLoaded">
+            <thead>
+            <tr>
+                <th><localize key="merchelloDetachedContent_umbracoContentTypeName" /></th>
+                <th><localize key="merchelloDetachedContent_umbracoContentTypeAlias" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="merchello-icon-container">
+                <td><i class="icon {{contentType.umbContentType.icon}}" data-ng-hide="contentType.umbContentType.icon===''"></i> {{contentType.umbContentType.name}}</td>
+                <td>{{contentType.umbContentType.alias}}</td>
+                <td class="edit">
+                    <merchello-icon-bar show-activate="false" show-add="false" show-edit="true" show-delete="true" do-edit="showAlert(args)" do-delete="showAlert()"></merchello-icon-bar>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
 </div>

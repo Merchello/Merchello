@@ -34,6 +34,14 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        [Column("description")]
+        [Length(1000)]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the content type id.
         /// </summary>
         [Column("contentTypeKey")]

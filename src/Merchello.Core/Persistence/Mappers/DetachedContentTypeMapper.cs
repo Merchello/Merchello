@@ -26,6 +26,7 @@
 
             CacheMap<DetachedContentType, DetachedContentTypeDto>(src => src.Key, dto => dto.Key);
             CacheMap<DetachedContentType, DetachedContentTypeDto>(src => src.Name, dto => dto.Name);
+            CacheMap<DetachedContentType, DetachedContentTypeDto>(src => src.Description, dto => dto.Description);
             CacheMap<DetachedContentType, DetachedContentTypeDto>(src => src.EntityTfKey, dto => dto.EntityTfKey);
             CacheMap<DetachedContentType, DetachedContentTypeDto>(src => src.ContentTypeKey, dto => dto.ContentTypeKey);
             CacheMap<DetachedContentType, DetachedContentTypeDto>(src => src.UpdateDate, dto => dto.UpdateDate);

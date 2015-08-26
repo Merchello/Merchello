@@ -10,10 +10,19 @@
               </thead>
               <tr data-ng-repeat="component in availableComponents" data-ng-show="availableComponents.length > 0">
                   <td class="span11"><strong><em>{{component.name}}</em></strong><small data-ng-show="component.description !== ''">{{component.description}}</small></td>
-                  <td class="span1 text-right"><a class="btn btn-warning btn-xs btn-mini" data-ng-click="assignComponent(component)">Add</a></td>
+                  <td class="span1 text-right">
+                      <merchello-add-icon do-add="assignComponent(component)"></merchello-add-icon>
+                  </td>
               </tr>
               <tr data-ng-show="availableComponents.length === 0">
-                  <td colspan="2">No {{componentType}}s avaliable</td>
+                  <td colspan="2">
+                    <span data-ng-show="componentType === 'Constraint'">
+                        <localize data-ng-if="componentType==='Constraint'" key="merchelloMarketing_noConstraints"></localize>
+                    </span>
+                      <span data-ng-hide="componentType === 'Constraint'">
+                        <localize data-ng-if="componentType!=='Constraint'" key="merchelloMarketing_noRewards"></localize>
+                    </span>
+                  </td>
               </tr>
           </table>
         </div>
@@ -26,25 +35,31 @@
                 </thead>
                 <tbody data-ng-show="assignedComponents.length > 0" ui-sortable="sortableOptions" data-ng-model="assignedComponents">
                 <tr class="component-definition" data-ng-class="{ sortable: !sortableOptions.disabled }" class="sortable" data-ng-repeat="component in assignedComponents">
-                    <td class="span10">
+                    <td class="span9">
                         <strong><span data-ng-show="componentType === 'Constraint'">{{$index + 1}})</span> <em>{{component.name}}</em></strong>
                         <small data-ng-show="component.description !== ''">{{component.description}}</small>
-                        <small data-ng-show="component.updated" class="component-not-ready">Component updated - auto saving</small>
-                        <small data-ng-show="component.isConfigured() && !component.updated" class="component-configured">Configured</small>
-                        <small data-ng-show="!component.isConfigured() && !component.updated" class="component-not-ready">Not configured</small>
+                        <small data-ng-show="component.updated" class="component-not-ready"><localize key="merchelloMarketing_componentAutoSaving"></localize></small>
+                        <small data-ng-show="component.isConfigured() && !component.updated" class="component-configured"><localize key="merchelloGeneral_configured"></localize></small>
+                        <small data-ng-show="!component.isConfigured() && !component.updated" class="component-not-ready"><localize key="merchelloGeneral_notConfigured"></localize></small>
                         <small data-ng-show="component.displayConfigurationFormat !== '' && component.isConfigured()"><strong>{{applyDisplayConfigurationFormat(component)}}</strong></small>
                     </td>
-                    <td class="span2 text-right">
-                        <!-- ACTION: Edit constraint -->
-                        <a class="btn btn-default btn-action btn-xs btn-mini" data-ng-show="component.dialogEditorView.editorView !== ''" data-ng-click="configureComponentOpen(component)"><i class="icon-edit"></i></a>
-                        <!-- ACTION: Remove constraint-->
-                        <a data-ng-click="removeComponentOpen(component)" class="btn btn-warning btn-trash btn-xs btn-mini"><i class="icon-trash"></i></a>
+                    <td class="merchello-icon-container span3">
+                        <div class="pull-right">
+                        <merchello-icon-bar show-edit="component.dialogEditorView.editorView !== ''" show-delete="true" do-edit="configureComponentOpen(component)" do-delete="removeComponentOpen(component)"></merchello-icon-bar>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
                 <tbody data-ng-show="assignedComponents.length === 0">
                 <tr class="component-definition">
-                    <td colspan="2">No {{componentType}}s assigned</td>
+                    <td colspan="2">No {{componentType}}s assigned
+                        <span data-ng-show="componentType === 'Constraint'">
+                        <localize data-ng-if="componentType==='Constraint'" key="merchelloMarketing_noConstraintsAssigned"></localize>
+                        </span>
+                      <span data-ng-hide="componentType === 'Constraint'">
+                        <localize data-ng-if="componentType!=='Constraint'" key="merchelloMarketing_noRewardsAssigned"></localize>
+                    </span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

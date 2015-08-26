@@ -13,6 +13,9 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
         $scope.detachedContentTypes = [];
+        $scope.args =  { test: 'action hit' };
+
+        $scope.showAlert = showAlert;
 
         function init() {
             loadDetachedContentTypes();
@@ -25,6 +28,14 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             });
+        }
+
+        function showAlert(value) {
+            if(value !== undefined) {
+                alert('there was a value');
+            } else {
+                alert('there was not a value');
+            }
         }
 
 
