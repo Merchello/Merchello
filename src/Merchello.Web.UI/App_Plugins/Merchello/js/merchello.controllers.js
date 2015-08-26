@@ -3157,6 +3157,9 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
         $scope.detachedContentTypes = [];
+        $scope.args =  { test: 'action hit' };
+
+        $scope.showAlert = showAlert;
 
         function init() {
             loadDetachedContentTypes();
@@ -3169,6 +3172,14 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             });
+        }
+
+        function showAlert(value) {
+            if(value !== undefined) {
+                alert('there was a value');
+            } else {
+                alert('there was not a value');
+            }
         }
 
 
@@ -4149,7 +4160,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
             loadNotificationMessage(key);
             loadAllNotificationMonitors();
             $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
-            $scope.tabs.insertTab('messageEditor', 'Message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
+            $scope.tabs.insertTab('messageEditor', 'merchelloTabs_message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
             $scope.tabs.setActive('messageEditor');
         }
 
@@ -5503,6 +5514,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
             $scope.wasFormSubmitted = false;
             $scope.contentType = {};
             $scope.name = '';
+            $scope.description = '';
 
             $scope.save = function() {
                 $scope.wasFormSubmitted = true;
@@ -5511,6 +5523,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
                     dtc.umbContentType = $scope.contentType;
                     dtc.entityType = 'Product';
                     dtc.name = $scope.name;
+                    dtc.description = $scope.description;
 
                     detachedContentResource.addDetachedContentType(dtc).then(function(result) {
                         notificationsService.success("Content Type Saved", "");
@@ -6177,11 +6190,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
+                        console.info($scope.product);
                         if (!$scope.product.hasVariants()) {
                             $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
                         }
                         else
                         {
+                            console.info('got here');
                             $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
                         }
 
@@ -6301,12 +6316,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                  /*  if ($scope.product.hasVariants()) {
+                  if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    } */
+                    }
+
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);

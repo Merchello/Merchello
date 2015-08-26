@@ -28,6 +28,11 @@
         private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, string>(x => x.Name);
 
         /// <summary>
+        /// The description selector.
+        /// </summary>
+        private static readonly PropertyInfo DescriptionSelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, string>(x => x.Description);
+
+        /// <summary>
         /// The content type id selector.
         /// </summary>
         private static readonly PropertyInfo ContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<DetachedContentType, Guid?>(x => x.ContentTypeKey);
@@ -41,6 +46,11 @@
         /// The name.
         /// </summary>
         private string _name;
+
+        /// <summary>
+        /// The description.
+        /// </summary>
+        private string _description;
 
         /// <summary>
         /// The content type id.
@@ -108,6 +118,30 @@
                     },
                     this._name,
                     NameSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        [IgnoreDataMember]
+        public string Description
+        {
+            get
+            {
+                return this._description;
+            }
+
+            set
+            {
+                this.SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        this._description = value;
+                        return this._description;
+                    },
+                    this._description,
+                    DescriptionSelector);
             }
         }
 

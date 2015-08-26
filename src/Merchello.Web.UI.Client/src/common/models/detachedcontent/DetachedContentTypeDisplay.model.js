@@ -10,6 +10,7 @@ var DetachedContentTypeDisplay = function () {
 	var self = this;
 	self.key = '';
 	self.name = '';
+	self.description = '';
 	self.entityType = '';
     self.umbContentType = {};
 };

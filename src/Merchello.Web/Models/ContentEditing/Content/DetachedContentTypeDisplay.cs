@@ -26,6 +26,11 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="UmbContentTypeDisplay"/>.
         /// </summary>
         public UmbContentTypeDisplay UmbContentType { get; set; }

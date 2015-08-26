@@ -162,10 +162,14 @@
         [HttpPost]
         public DetachedContentTypeDisplay PostAddDetachedContentType(DetachedContentTypeDisplay contentType)
         {            
-            var detachedContentType = _detachedContentTypeService.CreateDetachedContentTypeWithKey(
+            var detachedContentType = _detachedContentTypeService.CreateDetachedContentType(
                 contentType.EntityType,
                 contentType.UmbContentType.Key,
                 contentType.Name);
+
+                detachedContentType.Description = contentType.Description;
+
+            _detachedContentTypeService.Save(detachedContentType);
 
             var display = detachedContentType.ToDetachedContentTypeDisplay();
 

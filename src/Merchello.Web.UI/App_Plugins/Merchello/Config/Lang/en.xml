@@ -27,6 +27,8 @@
     <key alias="all">All</key>
     <key alias="none">None</key>
     <key alias="expired">Expired</key>
+    <key alias="configured">Configured</key>
+    <key alias="notConfigured">Not Configured</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -58,6 +60,7 @@
     <key alias="notification">Notification</key>
     <key alias="taxation">Taxation</key>
     <key alias="offerListing">Offer Listing</key>
+    <key alias="message">Message</key>
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
     <key alias="reportListing">Reports</key>
@@ -69,6 +72,7 @@
     <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
     <key alias="openOrderCollection">Open orders</key>
     <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+    <key alias="addProvider">Add provider</key>
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
@@ -138,7 +142,10 @@
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
-
+    <key alias="billingAddress">Billing Address</key>
+    <key alias="noBillingAddress">No Billing Address</key>
+    <key alias="shippingAddress">Shipping Address</key>
+    <key alias="noShippingAddress">No Shipping Address</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>
@@ -148,6 +155,12 @@
         <p>But you will soon!</p>
       ]]>
     </key>
+    <key alias="customerSaleHistory">
+      <![CDATA[
+      Sales History
+      <small>A list of the customer's sales and their status</small>
+      ]]>
+    </key>
     <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
     <key alias="customerNotes">
       <![CDATA[
@@ -155,6 +168,7 @@
       <small>Notes about the customer (not sale specific)</small>
       ]]>
     </key>
+    <key alias="totalSpent">Total Spent</key>
   </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
@@ -174,6 +188,14 @@
       <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
       <key alias="offerRewardsInfo">Rewards</key>
       <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+      <key alias="noConstraints">No Constraints Available</key>
+      <key alias="noRewards">No Rewards Available</key>
+      <key alias="noContraintsAssigned">No Constraints Assigned</key>
+      <key alias="noRewardsAssigned">No Rewards Assigned</key>
+      <key alias="componentAutoSaving">Component updated - auto saving</key>
+      <key alias="lineItemNameInfo">
+        <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
+      </key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -300,6 +322,8 @@
     <!-- actions -->
     <!-- phrases -->
   </area>
+
+  <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
     <key alias="shipping">Shipping</key>
@@ -314,6 +338,14 @@
       <key alias="shippingMethods" >Shipping Methods</key>
       <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
       <key alias="addCountry" >Add a Country</key>
+      <key alias="addCatalog">Add a Catalog</key>
+      <key alias="selectCatalog">Select Catalog</key>
+      <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
+      <key alias="shipContriesInfo"><![CDATA[
+        Shipping Countries
+        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
+      </key>
+     <key alias="warehouse">Warehouse</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->

@@ -2094,6 +2094,11 @@
             Gets or sets the name.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.Description">
+            <summary>
+            Gets or sets the description.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay.UmbContentType">
             <summary>
             Gets or sets the <see cref="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay"/>.

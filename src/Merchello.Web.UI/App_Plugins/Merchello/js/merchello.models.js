@@ -606,6 +606,7 @@ var DetachedContentTypeDisplay = function () {
 	var self = this;
 	self.key = '';
 	self.name = '';
+	self.description = '';
 	self.entityType = '';
     self.umbContentType = {};
 };
@@ -4359,6 +4360,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 

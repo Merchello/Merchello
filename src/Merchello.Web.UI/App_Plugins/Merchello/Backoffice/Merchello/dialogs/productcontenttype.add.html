@@ -6,7 +6,10 @@
                 <input name="name" type="text" class="span11" data-ng-model="name" required />
                 <div class="error" data-ng-show="productContentTypeForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
             </div>
-
+            <div class="control-group">
+                <label for="description"><localize key="editcontenttype_description" /></label>
+                <textarea name="description" type="text" class="span11" data-ng-model="description" rows="3"></textarea>
+            </div>
             <content-type-drop-down selected-content-type="contentType" />
         </div>
     </form>

@@ -1,9 +1,9 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
-    using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The detached content type factory.
@@ -25,6 +25,7 @@
                 {
                     Key = dto.Key,
                     Name = dto.Name,
+                    Description = !dto.Description.IsNullOrWhiteSpace() ? dto.Description : string.Empty,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -51,6 +52,7 @@
                     ContentTypeKey = entity.ContentTypeKey,
                     EntityTfKey = entity.EntityTfKey,
                     Name = entity.Name,
+                    Description = !entity.Description.IsNullOrWhiteSpace() ? entity.Description : null,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

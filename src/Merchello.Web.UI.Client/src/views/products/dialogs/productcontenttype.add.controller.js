@@ -13,6 +13,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
             $scope.wasFormSubmitted = false;
             $scope.contentType = {};
             $scope.name = '';
+            $scope.description = '';
 
             $scope.save = function() {
                 $scope.wasFormSubmitted = true;
@@ -21,6 +22,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
                     dtc.umbContentType = $scope.contentType;
                     dtc.entityType = 'Product';
                     dtc.name = $scope.name;
+                    dtc.description = $scope.description;
 
                     detachedContentResource.addDetachedContentType(dtc).then(function(result) {
                         notificationsService.success("Content Type Saved", "");

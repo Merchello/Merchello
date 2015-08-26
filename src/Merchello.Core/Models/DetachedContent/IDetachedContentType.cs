@@ -16,6 +16,11 @@
         string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the content type key.
         /// </summary>
         Guid? ContentTypeKey { get; set; }
