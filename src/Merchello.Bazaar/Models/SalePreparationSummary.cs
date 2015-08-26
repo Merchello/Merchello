@@ -1,4 +1,6 @@
-﻿namespace Merchello.Bazaar.Models
+﻿using Merchello.Core.Models;
+
+namespace Merchello.Bazaar.Models
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -46,6 +48,6 @@
         /// <summary>
         /// Gets or sets the currency symbol.
         /// </summary>
-        public string CurrencySymbol { get; set; }
+        public ICurrency Currency { get; set; }
     }
 }

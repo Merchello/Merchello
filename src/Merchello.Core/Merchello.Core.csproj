@@ -253,6 +253,8 @@
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainForAttribute.cs" />
     <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
+    <Compile Include="Configuration\Outline\CurrencyFormatCollection.cs" />
+    <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\EntityCollectionProviderElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />

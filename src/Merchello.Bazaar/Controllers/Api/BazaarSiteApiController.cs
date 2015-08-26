@@ -96,8 +96,8 @@
             var data = new
                            {
                                variant.OnSale,
-                               SalePrice = ModelExtensions.FormatPrice(variant.SalePrice, _currency.Symbol),
-                               Price = ModelExtensions.FormatPrice(variant.Price, _currency.Symbol),
+                               SalePrice = ModelExtensions.FormatPrice(variant.SalePrice, _currency),
+                               Price = ModelExtensions.FormatPrice(variant.Price, _currency),
                                TracksInventory = variant.TrackInventory,
                                variant.TotalInventoryCount
                            };
@@ -264,10 +264,10 @@
             var summary = new UpdatedSaleSummary()
                               {
                                   TotalLabel = "Total",
-                                  InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency.Symbol),
-                                  TaxTotal = ModelExtensions.FormatPrice(invoice.TaxLineItems().Sum(x => x.TotalPrice), _currency.Symbol),
-                                  DiscountsTotal = ModelExtensions.FormatPrice(invoice.DiscountLineItems().Sum(x => x.TotalPrice), _currency.Symbol),
-                                  ShippingTotal = ModelExtensions.FormatPrice(invoice.ShippingLineItems().Sum(x => x.TotalPrice), _currency.Symbol)
+                                  InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency),
+                                  TaxTotal = ModelExtensions.FormatPrice(invoice.TaxLineItems().Sum(x => x.TotalPrice), _currency),
+                                  DiscountsTotal = ModelExtensions.FormatPrice(invoice.DiscountLineItems().Sum(x => x.TotalPrice), _currency),
+                                  ShippingTotal = ModelExtensions.FormatPrice(invoice.ShippingLineItems().Sum(x => x.TotalPrice), _currency)
                               };
             return summary;
         }

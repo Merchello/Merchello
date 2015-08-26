@@ -459,6 +459,24 @@
         }
 
         /// <summary>
+        /// Returns the currency format
+        /// </summary>
+        public static string GetCurrencyFormat(string currencyCode)
+        {
+            // ToDo: This need to be cached ?
+            var query = MerchelloConfiguration.Current.Section.CurrencyFormats
+                        .Cast<CurrencyFormatElement>()
+                        .FirstOrDefault(cf => cf.CurrencyCode.Equals(currencyCode, StringComparison.OrdinalIgnoreCase));
+
+            if (query != null)
+            {
+                return query.Format;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// The cache region.
         /// </summary>
         /// <param name="code">
