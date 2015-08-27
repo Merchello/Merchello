@@ -182,16 +182,24 @@ namespace Merchello.Bazaar
         public static string FormatPrice(decimal price, ICurrency currency)
         {
             // Try to get a currency format else use the pre defined one.
-
+            var format = "{0}{1:0.00}";
+            var symbol = currency.Symbol;
             var currencyFormat = StoreSettingService.GetCurrencyFormat(currency.CurrencyCode);
-
-            if (string.IsNullOrEmpty(currencyFormat))
+            
+            if (currencyFormat != null)
             {
-                // Default currency format
-                return string.Format("{0}{1:0.00}", currency.Symbol, price);
+                if (string.IsNullOrEmpty(currencyFormat.Format))
+                {
+                    format = currencyFormat.Format;
+                }
+
+                if (string.IsNullOrEmpty(currencyFormat.Symbol))
+                {
+                    symbol = currencyFormat.Symbol;
+                }
             }
 
-            return string.Format(currencyFormat, currency.Symbol, price);
+            return string.Format(format, symbol, price);
         }
     }
 }

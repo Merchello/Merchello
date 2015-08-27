@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Models.Interfaces;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Concurrent;
@@ -461,7 +463,7 @@
         /// <summary>
         /// Returns the currency format
         /// </summary>
-        public static string GetCurrencyFormat(string currencyCode)
+        public static ICurrencyFormat GetCurrencyFormat(string currencyCode)
         {
             // ToDo: This need to be cached ?
             var query = MerchelloConfiguration.Current.Section.CurrencyFormats
@@ -470,7 +472,7 @@
 
             if (query != null)
             {
-                return query.Format;
+                return new CurrencyFormat(query.Format, query.Symbol);
             }
 
             return null;

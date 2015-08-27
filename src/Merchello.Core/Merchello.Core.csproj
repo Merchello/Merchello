@@ -334,9 +334,11 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\CurrencyFormat.cs" />
     <Compile Include="Models\DetachedContentType.cs" />
     <Compile Include="Models\EntityCollection.cs" />
     <Compile Include="Models\EntityCollectionExtensions.cs" />
+    <Compile Include="Models\Interfaces\ICurrencyFormat.cs" />
     <Compile Include="Models\Interfaces\IDataModifierData.cs" />
     <Compile Include="Models\Interfaces\IDetachedContentType.cs" />
     <Compile Include="Models\Interfaces\IEntityCollection.cs" />

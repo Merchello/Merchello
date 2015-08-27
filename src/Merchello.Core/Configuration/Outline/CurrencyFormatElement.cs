@@ -18,13 +18,23 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not the region requires a postal code.
+        /// Gets or sets a format of the currency ex: {0}{1:0.00}
         /// </summary>
         [ConfigurationProperty("format", DefaultValue = null, IsRequired = false)]
         public string Format
         {
             get { return (string)this["format"]; }
             set { this["format"] = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a currency symbol.
+        /// </summary>
+        [ConfigurationProperty("symbol", DefaultValue = null, IsRequired = false)]
+        public string Symbol
+        {
+            get { return (string)this["symbol"]; }
+            set { this["symbol"] = value; }
         }
     }
 }
