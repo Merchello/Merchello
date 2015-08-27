@@ -107,13 +107,12 @@
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
-                        console.info($scope.product);
+
                         if (!$scope.product.hasVariants()) {
                             $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
                         }
                         else
                         {
-                            console.info('got here');
                             $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
                         }
 

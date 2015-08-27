@@ -157,7 +157,8 @@
         /// </returns>
         internal DetachedContentCollection<IProductVariantDetachedContent> GetDetachedContentCollection(Guid productVariantKey)
         {
-            return new DetachedContentCollection<IProductVariantDetachedContent>();
+            var contents = this.GetProductVariantDetachedContents(productVariantKey);
+            return new DetachedContentCollection<IProductVariantDetachedContent> { contents };
         }
        
         /// <summary>
@@ -218,6 +219,35 @@
             }
 
             return collection;
+        }
+
+        /// <summary>
+        /// Gets detached content associated with the product variant.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariantDetachedContent}"/>.
+        /// </returns>
+        internal IEnumerable<IProductVariantDetachedContent> GetProductVariantDetachedContents(Guid productVariantKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductVariantDetachedContentDto>()
+                .InnerJoin<DetachedContentTypeDto>()
+                .On<ProductVariantDetachedContentDto, DetachedContentTypeDto>(
+                    left => left.DetachedContentTypeKey,
+                    right => right.Key)
+                .Where(
+                    "[merchProductVariantDetachedContent].[productVariantKey] = @Key",
+                    new { @Key = productVariantKey });
+
+            var dtos = Database.Fetch<ProductVariantDetachedContentDto, DetachedContentTypeDto>(sql);
+
+            var factory = new ProductVariantDetachedContentFactory();
+
+            return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -396,7 +426,6 @@
             entity.ResetDirtyProperties();
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
-
         }
 
         /// <summary>
@@ -533,7 +562,7 @@
         {
             const string Sql = "DELETE FROM merchCatalogInventory WHERE productVariantKey = @pvKey AND catalogKey = @cKey";
 
-            Database.Execute(Sql, new {@pvKey = productVariantKey, @cKey = catalogKey});
+            Database.Execute(Sql, new { @pvKey = productVariantKey, @cKey = catalogKey });
         }
 
         /// <summary>
@@ -551,5 +580,7 @@
 
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
+
+
     }
 }

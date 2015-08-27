@@ -7,15 +7,16 @@
  * The controller for the detached content type list directive
  */
 angular.module('merchello').controller('Merchello.Directives.DetachedContentTypeListController',
-    ['$scope', 'notificationsService', 'detachedContentResource', 'detachedContentTypeDisplayBuilder',
-    function($scope, notificationsService, detachedContentResource, detachedContentTypeDisplayBuilder) {
+    ['$scope', 'notificationsService', 'localizationService', 'dialogService', 'detachedContentResource', 'dialogDataFactory', 'detachedContentTypeDisplayBuilder',
+    function($scope, notificationsService, localizationService, dialogService, detachedContentResource, dialogDataFactory, detachedContentTypeDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
         $scope.detachedContentTypes = [];
         $scope.args =  { test: 'action hit' };
 
-        $scope.showAlert = showAlert;
+        $scope.edit = editContentType;
+        $scope.delete = deleteContentType;
 
         function init() {
             loadDetachedContentTypes();
@@ -24,18 +25,64 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         function loadDetachedContentTypes() {
             detachedContentResource.getDetachedContentTypeByEntityType($scope.entityType).then(function(results) {
                 $scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
-                console.info($scope.detachedContentTypes);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             });
         }
 
-        function showAlert(value) {
-            if(value !== undefined) {
-                alert('there was a value');
-            } else {
-                alert('there was not a value');
-            }
+        function editContentType(contentType) {
+            var dialogData = dialogDataFactory.createEditDetachedContentTypeDialogData();
+
+            // we need to clone this so that the actual model in the scope is not updated in case the user
+            // does not hit save.
+            dialogData.contentType = detachedContentTypeDisplayBuilder.transform(contentType);
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/detachedcontenttype.edit.html',
+                show: true,
+                callback: processEditDialog,
+                dialogData: dialogData
+            });
+        }
+
+        function processEditDialog(dialogData) {
+            detachedContentResource.saveDetachedContentType(dialogData.contentType).then(function(dct) {
+                loadDetachedContentTypes();
+                notificationsService.success('Saved successfully');
+            }, function(reason) {
+                notificationsService.error('Failed to save detached content type' + reason);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteContentType
+         * @function
+         *
+         * @description - Opens the delete content type dialog.
+         */
+        function deleteContentType(contentType) {
+            var dialogData = {};
+            dialogData.name = contentType.name;
+            dialogData.contentType = contentType;
+            localizationService.localize('merchelloDetachedContent_deleteWarning').then(function(warning) {
+                dialogData.warning = warning;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteDialog,
+                    dialogData: dialogData
+                });
+            });
+        }
+
+        function processDeleteDialog(dialogData) {
+            detachedContentResource.deleteDetachedContentType(dialogData.contentType.key).then(function() {
+                loadDetachedContentTypes();
+                notificationsService.success('Deleted successfully');
+            }, function(reason) {
+                console.info(reason);
+              notificationsService.error('Failed to delete detached content type' + reason);
+            });
         }
 
 

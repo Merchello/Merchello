@@ -1175,6 +1175,21 @@ angular.module('merchello.models').constant('ConfigureOfferComponentDialogData')
     };
 
     angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
+/**
+ * @ngdoc model
+ * @name EditDetachedContentTypeDialogData
+ * @function
+ *
+ * @description
+ * A back office dialogData model used for editing detached content types to the dialogService
+ *
+ */
+var EditDetachedContentTypeDialogData = function() {
+    var self = this;
+    self.contentType = {};
+}
+
+angular.module('merchello.models').constant('EditDetachedContentTypeDialogData', EditDetachedContentTypeDialogData);
     /**
      * @ngdoc model
      * @name EditShipmentDialogData
@@ -2082,11 +2097,12 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.taxable = false;
         self.shippable = false;
         self.download = false;
-        self.master = true;
+        //self.master = true;
         self.downloadMediaId = -1;
         self.productOptions = [];
         self.productVariants = [];
         self.catalogInventories = [];
+        self.detachedContents = [];
     };
 
     ProductDisplay.prototype = (function() {
@@ -2280,6 +2296,26 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
     }());
 
     angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);
+/**
+ * @ngdoc model
+ * @name ProductVariantDetachedContentDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's ProductVariantDetachedContentDisplay object
+ */
+var ProductVariantDetachedContentDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.detachedContentType = {};
+    self.productVariantKey = '';
+    self.cultureName = '';
+    self.templateId = 0;
+    self.slug = '';
+    self.detachedDataValues = {};
+};
+
+angular.module('merchello.models').constant('ProductVariantDetachedContentDisplay', ProductVariantDetachedContentDisplay);
     /**
      * @ngdoc model
      * @name ProductAttributeDisplay
@@ -2317,6 +2353,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.totalInventoryCount = 0;
         self.attributes = [];
         self.catalogInventories = [];
+        self.detachedContents = [];
     };
 
     ProductVariantDisplay.prototype = (function() {
@@ -2407,12 +2444,48 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return variant;
         }
 
+        function hasDetachedContent() {
+            return this.detachedContents.length > 0;
+        }
+
+        function assertLanguageContent(isoCodes) {
+            var missing = [];
+            var removers = [];
+            _.each(this.detachedContents, function(dc) {
+              var found = _.find(isoCodes, function(code) {
+                return code === dc.cultureName;
+                });
+                if (found === undefined) {
+                    removers.push(dc.cultureName);
+                }
+            });
+
+            angular.forEach(removers, function(ic) {
+                this.detachedContents = _.reject(this.detachedContents, function(oust) {
+                    return oust.cultureName === ic;
+                });
+            });
+
+            missing = _.filter(this.detachedContents, function(check) {
+                var fnd = _.find(isoCodes, function(ic) {
+                  return ic === check.cultureName;
+                });
+                return found === undefined;
+            });
+
+            console.info(missing);
+
+            return missing;
+        }
+
         return {
             getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
-            setAllInventoryLowCount: setAllInventoryLowCount
+            setAllInventoryLowCount: setAllInventoryLowCount,
+            hasDetachedContent: hasDetachedContent,
+            assertLanguageContent: assertLanguageContent
         };
     }());
 
@@ -4048,6 +4121,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new AddEditEntityStaticCollectionDialog();
         }
 
+        // detached content
+        function createEditDetachedContentTypeDialogData() {
+            return new EditDetachedContentTypeDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -4089,7 +4167,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddPaymentDialogData: createAddPaymentDialogData,
             createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
             createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData,
-            createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog
+            createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog,
+            createEditDetachedContentTypeDialogData: createEditDetachedContentTypeDialogData
         };
 }]);
 
@@ -4350,6 +4429,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 return tabs;
             }
 
@@ -4761,9 +4841,9 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      */
     angular.module('merchello.models').factory('productDisplayBuilder',
         ['genericModelBuilder', 'productVariantDisplayBuilder', 'productOptionDisplayBuilder', 'catalogInventoryDisplayBuilder',
-            'ProductDisplay',
+            'productVariantDetachedContentDisplayBuilder', 'ProductDisplay',
         function(genericModelBuilder, productVariantDisplayBuilder, productOptionDisplayBuilder, catalogInventoryDisplayBuilder,
-        ProductDisplay) {
+                 productVariantDetachedContentDisplayBuilder, ProductDisplay) {
 
             var Constructor = ProductDisplay;
             return {
@@ -4778,6 +4858,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             product.productVariants = productVariantDisplayBuilder.transform(jsonResult[ i ].productVariants);
                             product.productOptions = productOptionDisplayBuilder.transform(jsonResult[ i ].productOptions);
                             product.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            product.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult[i].detachedContents);
                             products.push(product);
                         }
                     } else {
@@ -4785,6 +4866,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         products.productVariants = productVariantDisplayBuilder.transform(jsonResult.productVariants);
                         products.productOptions = productOptionDisplayBuilder.transform(jsonResult.productOptions);
                         products.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                        products.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult.detachedContents);
                     }
                     return products;
 
@@ -4827,6 +4909,47 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
 
     }]);
 
+/**
+ * @ngdoc models
+ * @name productVariantDetachedContentDisplayBuilder
+ *
+ * @description
+ * A utility factory that builds ProductVariantDetachedContentDisplay models
+ */
+angular.module('merchello.models').factory('productVariantDetachedContentDisplayBuilder',
+    ['genericModelBuilder', 'detachedContentTypeDisplayBuilder', 'extendedDataDisplayBuilder', 'ProductVariantDetachedContentDisplay',
+    function(genericModelBuilder, detachedContentTypeBuilder, extendedDataDisplayBuilder, ProductVariantDetachedContentDisplay) {
+
+        var Constructor = ProductVariantDetachedContentDisplay;
+
+        return {
+            createDefault: function() {
+
+                var content = new Constructor();
+                content.detachedContentType = detachedContentTypeBuilder.createDefault();
+                content.detachedDataValues = extendedDataDisplayBuilder.createDefault();
+
+                return content;
+            },
+            transform: function(jsonResult) {
+                var contents = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var content = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        content.detachedContentType = detachedContentTypeBuilder.transform(jsonResult[ i ].detachedContentType);
+                        content.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult[ i ].detachedDataValues);
+                        contents.push(content);
+                    }
+                } else {
+                    contents = genericModelBuilder.transform(jsonResult, Constructor);
+                    contents.detachedContentType = detachedContentTypeBuilder.transform(jsonResult.detachedContentType);
+                    contents.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
+                }
+                return contents;
+            }
+        };
+}]);
+
     /**
      * @ngdoc models
      * @name productVariantDisplayBuilder
@@ -4835,8 +4958,8 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      * A utility service that builds ProductVariantDisplay models
      */
     angular.module('merchello.models').factory('productVariantDisplayBuilder',
-        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'ProductVariantDisplay',
-        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, ProductVariantDisplay) {
+        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'productVariantDetachedContentDisplayBuilder', 'ProductVariantDisplay',
+        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, productVariantDetachedContentDisplayBuilder, ProductVariantDisplay) {
 
             var Constructor = ProductVariantDisplay;
             return {
@@ -4850,12 +4973,14 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             var variant = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             variant.attributes = productAttributeDisplayBuilder.transform(jsonResult[ i ].attributes);
                             variant.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            variant.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult[i].detachedContents);
                             variants.push(variant);
                         }
                     } else {
                         variants = genericModelBuilder.transform(jsonResult, Constructor);
                         variants.attributes = productAttributeDisplayBuilder.transform(jsonResult.attributes);
                         variants.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                        variants.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult.detachedContents);
                     }
                     return variants;
                 }

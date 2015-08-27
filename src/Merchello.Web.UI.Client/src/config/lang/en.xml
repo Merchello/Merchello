@@ -128,10 +128,18 @@
     <key alias="umbracoContentTypeName">Umbraco Content Type</key>
     <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
     <key alias="tabs">Tabs</key>
-      <key alias="noProductContentType"><![CDATA[
-        <h5>You have not selected a product content type</h5>
-        <p>If you have not added any product content types, this can be done through the Products context menu.</p>
-      ]]></key>
+    <key alias="noDetachedContentTypes">
+      <![CDATA[
+      <h5>You have not associated and Umbraco content types with Merchello</h5>
+      <p>This can be done through the Products context menu.</p>
+      ]]>
+    </key>
+    <key alias="noProductContentType"><![CDATA[
+      <h5>You have not selected a product content type</h5>
+    ]]></key>
+    <key alias="deleteWarning"><![CDATA[
+    This will also delete ALL property data associated with products that use this product type.
+    ]]></key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales"><![CDATA[

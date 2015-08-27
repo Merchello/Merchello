@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Web.Http;
 
@@ -176,7 +177,52 @@
             return display;
         }
 
+        /// <summary>
+        /// The put save detached content type.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DetachedContentTypeDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the matching content type could not be found
+        /// </exception>
+        [HttpPut, HttpPost]
+        public DetachedContentTypeDisplay PutSaveDetachedContentType(DetachedContentTypeDisplay contentType)
+        {
+            var destination = _detachedContentTypeService.GetByKey(contentType.Key);
+            if (destination == null) throw new NullReferenceException("Existing DetachedContentType was not found");
+
+            _detachedContentTypeService.Save(contentType.ToDetachedContentType(destination));
+
+            return destination.ToDetachedContentTypeDisplay();
+        }
+
+        /// <summary>
+        /// The delete detached content type.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpGet]
+        public HttpResponseMessage DeleteDetachedContentType(Guid key)
+        {
+            var existing = _detachedContentTypeService.GetByKey(key);
+            if (existing == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            _detachedContentTypeService.Delete(existing);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
         #endregion
+
+
 
         /// <summary>
         /// Initializes the controller

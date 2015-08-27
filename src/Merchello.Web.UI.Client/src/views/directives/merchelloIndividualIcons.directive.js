@@ -1,3 +1,26 @@
+// a save icon
+angular.module('merchello.directives').directive('merchelloSaveIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showSave: '=',
+            doSave: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showSave" ng-click="doSave()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-save"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('buttons_save').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the add icon
 angular.module('merchello.directives').directive('merchelloAddIcon', function(localizationService) {
     return {
         restrict: 'E',
@@ -18,6 +41,7 @@ angular.module('merchello.directives').directive('merchelloAddIcon', function(lo
     }
 });
 
+// the edit icon
 angular.module('merchello.directives').directive('merchelloEditIcon', function(localizationService) {
     return {
         restrict: 'E',
@@ -38,6 +62,7 @@ angular.module('merchello.directives').directive('merchelloEditIcon', function(l
     }
 });
 
+// the delete icon
 angular.module('merchello.directives').directive('merchelloDeleteIcon', function(localizationService) {
     return {
         restrict: 'E',
@@ -58,6 +83,7 @@ angular.module('merchello.directives').directive('merchelloDeleteIcon', function
     }
 });
 
+// the provinces icon
 angular.module('merchello.directives').directive('merchelloProvincesIcon', function(localizationService) {
     return {
         restrict: 'E',
@@ -78,4 +104,5 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
         }
     }
 });
+
 

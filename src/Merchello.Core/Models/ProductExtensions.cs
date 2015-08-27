@@ -544,7 +544,7 @@
                         new 
                         {
                             content.Key,
-                            content.DetachedContentTypeKey,
+                            DetachedContentType = content.DetachedContentType as DetachedContentType,
                             content.CultureName,
                             content.TemplateId,
                             content.ProductVariantKey,

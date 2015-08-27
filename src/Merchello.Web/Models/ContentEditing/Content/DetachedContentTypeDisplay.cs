@@ -66,5 +66,24 @@
         {
             return AutoMapper.Mapper.Map<DetachedContentTypeDisplay>(dtc);
         }
+
+        /// <summary>
+        /// Maps <see cref="DetachedContentTypeDisplay"/> to <see cref="IDetachedContentType"/>.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentType"/>.
+        /// </returns>
+        public static IDetachedContentType ToDetachedContentType(this DetachedContentTypeDisplay contentType, IDetachedContentType destination)
+        {
+            destination.Name = contentType.Name;
+            destination.Description = contentType.Description;
+            return destination;
+        }
     }
 }
