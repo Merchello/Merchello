@@ -13,10 +13,10 @@
     internal interface IDetachedContent : IEntity 
     {
         /// <summary>
-        /// Gets the detached content type key.
+        /// Gets the detached content type.
         /// </summary>
         [DataMember]
-        Guid DetachedContentTypeKey { get; }
+        IDetachedContentType DetachedContentType { get; }
 
         /// <summary>
         /// Gets the culture name.

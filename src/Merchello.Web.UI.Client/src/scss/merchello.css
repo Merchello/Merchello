@@ -600,6 +600,12 @@
 .well .merchello-icon {
   background: #F8F8F8; }
 
+.detached-content-select {
+  display: inline-block;
+  text-align: left; }
+  .detached-content-select label {
+    font-weight: bold; }
+
 .merchello-panel-body .order-items ul {
   margin: 0;
   padding: 0;

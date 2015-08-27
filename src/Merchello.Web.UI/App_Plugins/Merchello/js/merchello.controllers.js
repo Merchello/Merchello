@@ -3142,6 +3142,19 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
             loadSettings();
 }]);
 
+angular.module('merchello').controller('Merchello.DetachedContentType.Dialogs.EditDetachedContentTypeController',
+    ['$scope', function($scope) {
+        $scope.wasFormSubmitted = false;
+        $scope.save = save;
+
+        function save() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.productContentTypeForm.name.$valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+    }]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Directives.DetachedContentTypeListController
@@ -3151,15 +3164,16 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
  * The controller for the detached content type list directive
  */
 angular.module('merchello').controller('Merchello.Directives.DetachedContentTypeListController',
-    ['$scope', 'notificationsService', 'detachedContentResource', 'detachedContentTypeDisplayBuilder',
-    function($scope, notificationsService, detachedContentResource, detachedContentTypeDisplayBuilder) {
+    ['$scope', 'notificationsService', 'localizationService', 'dialogService', 'detachedContentResource', 'dialogDataFactory', 'detachedContentTypeDisplayBuilder',
+    function($scope, notificationsService, localizationService, dialogService, detachedContentResource, dialogDataFactory, detachedContentTypeDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
         $scope.detachedContentTypes = [];
         $scope.args =  { test: 'action hit' };
 
-        $scope.showAlert = showAlert;
+        $scope.edit = editContentType;
+        $scope.delete = deleteContentType;
 
         function init() {
             loadDetachedContentTypes();
@@ -3168,18 +3182,64 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         function loadDetachedContentTypes() {
             detachedContentResource.getDetachedContentTypeByEntityType($scope.entityType).then(function(results) {
                 $scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
-                console.info($scope.detachedContentTypes);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             });
         }
 
-        function showAlert(value) {
-            if(value !== undefined) {
-                alert('there was a value');
-            } else {
-                alert('there was not a value');
-            }
+        function editContentType(contentType) {
+            var dialogData = dialogDataFactory.createEditDetachedContentTypeDialogData();
+
+            // we need to clone this so that the actual model in the scope is not updated in case the user
+            // does not hit save.
+            dialogData.contentType = detachedContentTypeDisplayBuilder.transform(contentType);
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/detachedcontenttype.edit.html',
+                show: true,
+                callback: processEditDialog,
+                dialogData: dialogData
+            });
+        }
+
+        function processEditDialog(dialogData) {
+            detachedContentResource.saveDetachedContentType(dialogData.contentType).then(function(dct) {
+                loadDetachedContentTypes();
+                notificationsService.success('Saved successfully');
+            }, function(reason) {
+                notificationsService.error('Failed to save detached content type' + reason);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteContentType
+         * @function
+         *
+         * @description - Opens the delete content type dialog.
+         */
+        function deleteContentType(contentType) {
+            var dialogData = {};
+            dialogData.name = contentType.name;
+            dialogData.contentType = contentType;
+            localizationService.localize('merchelloDetachedContent_deleteWarning').then(function(warning) {
+                dialogData.warning = warning;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteDialog,
+                    dialogData: dialogData
+                });
+            });
+        }
+
+        function processDeleteDialog(dialogData) {
+            detachedContentResource.deleteDetachedContentType(dialogData.contentType.key).then(function() {
+                loadDetachedContentTypes();
+                notificationsService.success('Deleted successfully');
+            }, function(reason) {
+                console.info(reason);
+              notificationsService.error('Failed to delete detached content type' + reason);
+            });
         }
 
 
@@ -5580,8 +5640,8 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -5600,6 +5660,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.updateInventory = updateInventory;
         $scope.toggleOnSale = toggleOnSale;
         $scope.toggleAvailable = toggleAvailable;
+        $scope.redirectToEditor = redirectToEditor;
 
         function init() {
             angular.forEach($scope.product.productVariants, function(pv) {
@@ -5902,6 +5963,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             $scope.reload();
         }
 
+        function redirectToEditor(variant) {
+           $location.url('/merchello/merchello/productedit/' + variant.productKey + '?variantid=' + variant.key, true);
+        }
+
         // initialize the controller
         init();
 }]);
@@ -5999,9 +6064,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductContentTypeL
 
 angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedContentController',
     ['$scope', '$routeParams', '$location', 'notificationsService', 'merchelloTabsFactory', 'contentResource', 'detachedContentResource', 'productResource',
-        'productDisplayBuilder', 'detachedContentTypeDisplayBuilder',
-    function($scope, $routeParams, $location, notificationsService, merchelloTabsFactory, contentResource, detachedContentResource, productResource,
-             productDisplayBuilder, detachedContentTypeDisplayBuilder) {
+        'productDisplayBuilder', 'productVariantDetachedContentDisplayBuilder',
+        function($scope, $routeParams, $location, notificationsService, merchelloTabsFactory, contentResource, detachedContentResource, productResource,
+             productDisplayBuilder, productVariantDetachedContentDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -6011,6 +6076,16 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
         $scope.isVariant = false;
         $scope.isConfigured = false;
         $scope.defaultLanguage = 'en-US';
+        $scope.contentType = {};
+
+        $scope.save = saveContent;
+
+        var product = {};
+        var loadArgs = {
+            key: '',
+            productVariantKey: ''
+        };
+
         function init() {
             var key = $routeParams.id;
 
@@ -6019,16 +6094,18 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 $location.url('/merchello/merchello/productlist/manage', true);
             }
             var productVariantKey = $routeParams.variantid;
-            loadLanguages(key, productVariantKey);
+            loadArgs.key = key;
+            loadArgs.productVariantKey = productVariantKey;
+            loadLanguages(loadArgs);
         }
 
-        function loadLanguages(key, productVariantKey) {
+        function loadLanguages(args) {
             detachedContentResource.getAllLanguages().then(function(languages) {
                 $scope.languages = languages;
                 if($scope.defaultLanguage !== '' && $scope.defaultLanguage !== undefined) {
                     $scope.language = _.find($scope.languages, function(l) { return l.isoCode === $scope.defaultLanguage; });
                 }
-                loadProduct(key, productVariantKey);
+                loadProduct(args);
             }, function(reason) {
                 notificationsService.error('Failed to load Umbraco languages' + reason);
             });
@@ -6042,30 +6119,35 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
          * @description
          * Load a product by the product key.
          */
-        function loadProduct(key, productVariantKey) {
+        function loadProduct(args) {
 
-            var promiseProduct = productResource.getByKey(key);
-            promiseProduct.then(function (product) {
-                $scope.product = productDisplayBuilder.transform(product);
-                if(productVariantKey === '' || productVariantKey === undefined) {
+            var promiseProduct = productResource.getByKey(args.key);
+            promiseProduct.then(function (p) {
+                product = productDisplayBuilder.transform(p);
+                if(args.productVariantKey === '' || args.productVariantKey === undefined) {
                     // this is a product edit.
                     // we use the master variant context so that we can use directives associated with variants
-                    $scope.productVariant = $scope.product.getMasterVariant();
+                    $scope.productVariant = product.getMasterVariant();
 
-                    if (!$scope.product.hasVariants()) {
-                        $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
+                    if (!product.hasVariants()) {
+                        $scope.tabs = merchelloTabsFactory.createProductEditorTabs(args.key);
                     }
                     else
                     {
-                        $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                        $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(args.key);
                     }
                 } else {
                     // this is a product variant edit
                     // in this case we need the specific variant
-                    $scope.productVariant = $scope.product.getProductVariant(productVariantKey);
-                    $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
+                    $scope.productVariant = product.getProductVariant(args.productVariantKey);
+                    $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(args.key, args.productVariantKey);
                     $scope.isVariant = true;
                 }
+
+                if ($scope.productVariant.hasDetachedContent()) {
+                    $scope.productVariant.assertLanguageContent($scope.languages);
+                }
+
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
 
@@ -6076,6 +6158,47 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
         }
 
 
+        function saveContent(detachedContent) {
+            if(!$scope.productVariant.hasDetachedContent()) {
+                // create detached content values for each language present
+                var isoCodes = _.pluck($scope.languages, 'isoCode');
+
+                contentResource.getScaffold(-20, detachedContent.umbContentType.alias).then(function(scaffold) {
+
+                    var tabs = _.filter(scaffold.tabs, function(t) { return t.id !== 0 });
+
+                    angular.forEach(isoCodes, function(cultureName) {
+                        var productVariantContent = productVariantDetachedContentDisplayBuilder.createDefault();
+                        productVariantContent.cultureName = cultureName;
+                        productVariantContent.productVariantKey = $scope.productVariantKey;
+                        productVariantContent.detachedContentType = detachedContent;
+                        angular.forEach(tabs, function(tab) {
+                          angular.forEach(tab.properties, function(prop) {
+                              productVariantContent.detachedDataValues.setValue(prop.alias, prop.value);
+                          })
+                        });
+                        $scope.productVariant.detachedContents.push(productVariantContent);
+                    });
+
+                    productResource.save(product).then(function(p) {
+                        $scope.loaded = false;
+                        $scope.preValuesLoaded = false;
+                        loadProduct(loadArgs);
+                        notificationsService.success('Saved successfully');
+                    }, function(reason) {
+                        notificationsService.error('Failed to save product ' + reason)
+                    });
+                });
+
+            }
+
+
+
+        }
+
+        function ensureLanguageContent() {
+
+        }
 
         // Initialize the controller
         init();
@@ -6190,13 +6313,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
-                        console.info($scope.product);
+
                         if (!$scope.product.hasVariants()) {
                             $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
                         }
                         else
                         {
-                            console.info('got here');
                             $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
                         }
 

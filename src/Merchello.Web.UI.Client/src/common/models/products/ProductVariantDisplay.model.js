@@ -35,6 +35,7 @@
         self.totalInventoryCount = 0;
         self.attributes = [];
         self.catalogInventories = [];
+        self.detachedContents = [];
     };
 
     ProductVariantDisplay.prototype = (function() {
@@ -125,12 +126,48 @@
             return variant;
         }
 
+        function hasDetachedContent() {
+            return this.detachedContents.length > 0;
+        }
+
+        function assertLanguageContent(isoCodes) {
+            var missing = [];
+            var removers = [];
+            _.each(this.detachedContents, function(dc) {
+              var found = _.find(isoCodes, function(code) {
+                return code === dc.cultureName;
+                });
+                if (found === undefined) {
+                    removers.push(dc.cultureName);
+                }
+            });
+
+            angular.forEach(removers, function(ic) {
+                this.detachedContents = _.reject(this.detachedContents, function(oust) {
+                    return oust.cultureName === ic;
+                });
+            });
+
+            missing = _.filter(this.detachedContents, function(check) {
+                var fnd = _.find(isoCodes, function(ic) {
+                  return ic === check.cultureName;
+                });
+                return found === undefined;
+            });
+
+            console.info(missing);
+
+            return missing;
+        }
+
         return {
             getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
-            setAllInventoryLowCount: setAllInventoryLowCount
+            setAllInventoryLowCount: setAllInventoryLowCount,
+            hasDetachedContent: hasDetachedContent,
+            assertLanguageContent: assertLanguageContent
         };
     }());
 

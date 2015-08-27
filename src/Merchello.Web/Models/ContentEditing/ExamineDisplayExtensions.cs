@@ -86,7 +86,7 @@
                 VersionKey = FieldAsGuid(result, "versionKey"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
-                DetachedContentValues = detachedContents ?? Enumerable.Empty<ProductVariantDetachedContentDisplay>()
+                DetachedContents = detachedContents ?? Enumerable.Empty<ProductVariantDetachedContentDisplay>()
             };
   
             return pvd;

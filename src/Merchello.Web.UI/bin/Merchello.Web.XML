@@ -1370,6 +1370,31 @@
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.PutSaveDetachedContentType(Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay)">
+            <summary>
+            The put save detached content type.
+            </summary>
+            <param name="contentType">
+            The content type.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/>.
+            </returns>
+            <exception cref="T:System.NullReferenceException">
+            Throws a null reference exception if the matching content type could not be found
+            </exception>
+        </member>
+        <member name="M:Merchello.Web.Editors.DetachedContentApiController.DeleteDetachedContentType(System.Guid)">
+            <summary>
+            The delete detached content type.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.DetachedContentApiController.Initialize">
             <summary>
             Initializes the controller
@@ -1429,7 +1454,7 @@
             The get sortable provider keys.
             </summary>
             <returns>
-            The <see cref="!:Guid[]"/>.
+            The <see cref="T:System.Guid"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.EntityCollectionApiController.GetByKey(System.Guid)">
@@ -2130,6 +2155,20 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplayExtensions.ToDetachedContentType(Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay,Merchello.Core.Models.DetachedContent.IDetachedContentType)">
+            <summary>
+            Maps <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay"/> to <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
+            </summary>
+            <param name="contentType">
+            The content type.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay">
             <summary>
             The product variant detached content display.
@@ -2140,9 +2179,9 @@
             Gets or sets the key.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedContentTypeKey">
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedContentType">
             <summary>
-            Gets or sets the detached content type key.
+            Gets or sets the detached content type.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.ProductVariantKey">
@@ -15685,7 +15724,7 @@
             Gets or sets the catalog inventories.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.DetachedContentValues">
+        <member name="P:Merchello.Web.Models.ContentEditing.ProductDisplayBase.DetachedContents">
             <summary>
             Gets or sets the detached content values.
             </summary>

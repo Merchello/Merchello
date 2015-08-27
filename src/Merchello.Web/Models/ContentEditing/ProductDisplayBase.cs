@@ -94,6 +94,6 @@
         /// <summary>
         /// Gets or sets the detached content values.
         /// </summary>
-        public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContentValues { get; set; } 
+        public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContents { get; set; } 
     }
 }

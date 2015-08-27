@@ -328,7 +328,7 @@
         [IgnoreDataMember]
         internal int ExamineId 
         {
-            get { return  _examineId; }
+            get { return _examineId; }
             set { _examineId = value;  }
         }
 

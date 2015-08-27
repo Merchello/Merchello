@@ -1,0 +1,38 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.DetachedContentType.Dialogs.EditDetachedContentTypeController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="general_edit"></localize>: {{dialogData.contentType.name}}</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <form name="productContentTypeForm" id="productContentTypeForm">
+            <div class="form-group row-fluid">
+                <div class="control-group">
+                    <label for="name"><localize key="general_name" /></label>
+                    <input name="name" type="text" class="span11" data-ng-model="dialogData.contentType.name" required />
+                    <div class="error" data-ng-show="productContentTypeForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+                </div>
+                <div class="control-group">
+                    <label for="description"><localize key="editcontenttype_description" /></label>
+                    <textarea name="description" type="text" class="span11" data-ng-model="dialogData.contentType.description" rows="3"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="save(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

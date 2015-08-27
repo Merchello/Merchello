@@ -212,9 +212,26 @@ angular.module('merchello.resources').factory('detachedContentResource',
                     $http.post(url,
                         detachedContentType
                     ),
-                    'Failed to add an detached content type');
+                    'Failed to add a detached content type');
+            },
+            saveDetachedContentType: function(detachedContentType) {
+                var url = baseUrl + 'PutSaveDetachedContentType';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        detachedContentType
+                    ),
+                    'Failed to save detached content type');
+            },
+            deleteDetachedContentType: function(key) {
+                var url = baseUrl + 'DeleteDetachedContentType';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { key : key }
+                    }),
+                    'Failed to delete detached content type');
             }
-
         };
 }]);
 

@@ -37,12 +37,13 @@
                         <div class="merchello-controls">
                             <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
 
-
                         </div>
                     </div>
 
                     <div class="pager well" data-ng-hide="isConfigured">
                         <localize key="merchelloDetachedContent_noProductContentType" />
+                        <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" save="save(contentType)"></detached-content-type-select>
+
                     </div>
 
                 </div>

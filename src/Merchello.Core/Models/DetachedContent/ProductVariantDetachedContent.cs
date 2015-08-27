@@ -41,14 +41,14 @@
         /// <param name="productVariantKey">
         /// The product variant key.
         /// </param>
-        /// <param name="detachedContentTypeKey">
-        /// The detached content type key.
+        /// <param name="detachedContentType">
+        /// The detached content type.
         /// </param>
         /// <param name="cultureName">
         /// The culture name.
         /// </param>
-        internal ProductVariantDetachedContent(Guid productVariantKey, Guid detachedContentTypeKey, string cultureName)
-            : this(productVariantKey, detachedContentTypeKey, cultureName, new DetachedDataValuesCollection())
+        internal ProductVariantDetachedContent(Guid productVariantKey, IDetachedContentType detachedContentType, string cultureName)
+            : this(productVariantKey, detachedContentType, cultureName, new DetachedDataValuesCollection())
         {
         }
 
@@ -58,8 +58,8 @@
         /// <param name="productVariantKey">
         /// The product variant key.
         /// </param>
-        /// <param name="detachedContentTypeKey">
-        /// The detached content type key.
+        /// <param name="detachedContentType">
+        /// The detached content type.
         /// </param>
         /// <param name="cultureName">
         /// The culture name.
@@ -69,25 +69,26 @@
         /// </param>
         internal ProductVariantDetachedContent(
             Guid productVariantKey,
-            Guid detachedContentTypeKey,
+            IDetachedContentType detachedContentType,
             string cultureName,
             DetachedDataValuesCollection detachedDataValuesCollection)
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(productVariantKey), "productVariantKey");
-            Mandate.ParameterCondition(!Guid.Empty.Equals(detachedContentTypeKey), "detachedContentTypeKey");
+            Mandate.ParameterNotNull(detachedContentType, "detachedContentType");
             Mandate.ParameterNotNullOrEmpty(cultureName, "cultureName");
 
             this.ProductVariantKey = productVariantKey;
-            this.DetachedContentTypeKey = detachedContentTypeKey;
+            this.DetachedContentType = detachedContentType;
             this.CultureName = cultureName;
             this.DetachedDataValues = detachedDataValuesCollection;
         }
 
+
         /// <summary>
-        /// Gets the detached content type key.
+        /// Gets the detached content type.
         /// </summary>
         [DataMember]
-        public Guid DetachedContentTypeKey { get; private set; }
+        public IDetachedContentType DetachedContentType { get; private set; }
 
         /// <summary>
         /// Gets the culture name.
