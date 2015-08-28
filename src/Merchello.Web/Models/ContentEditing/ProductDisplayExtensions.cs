@@ -1,13 +1,18 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text.RegularExpressions;
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Workflow.CustomerItemCache;
+
+    using umbraco.developer;
 
     /// <summary>
     /// The product mapping extensions.
@@ -124,6 +129,8 @@
                 destination.ProductOptions.Add(destinationProductOption);
             }
             
+            destination.AddOrUpdateDetachedContent(productDisplay);
+             
             return destination;
         }
 
@@ -238,6 +245,18 @@
 
         #region IProductOption
 
+        /// <summary>
+        /// The to product option.
+        /// </summary>
+        /// <param name="productOptionDisplay">
+        /// The product option display.
+        /// </param>
+        /// <param name="destinationProductOption">
+        /// The destination product option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOption"/>.
+        /// </returns>
         internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destinationProductOption)
         {
             if (productOptionDisplay.Key != Guid.Empty)
@@ -287,9 +306,65 @@
             return destinationProductOption;
         }
 
+        /// <summary>
+        /// The to product option display.
+        /// </summary>
+        /// <param name="productOption">
+        /// The product option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionDisplay"/>.
+        /// </returns>
         internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
         {            
             return AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+        }
+
+        #endregion
+
+        #region IProductVariantDetachedContent
+
+        /// <summary>
+        /// Adds or updates <see cref="IProductVariantDetachedContent"/>.
+        /// </summary>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        internal static void AddOrUpdateDetachedContent(this IProductBase destination, ProductDisplayBase display)
+        {
+            if (destination.DetachedContents.Any())
+            {
+                // detached content
+                var removedLanguages =
+                    destination.DetachedContents.Where(
+                        x => !display.DetachedContents.Select(y => y.CultureName).Contains(x.CultureName));
+
+                foreach (var lang in removedLanguages)
+                {
+                    destination.DetachedContents.RemoveItem(lang.CultureName);
+                }
+            }
+
+
+            foreach (var detachedContent in display.DetachedContents.ToArray())
+            {
+                IProductVariantDetachedContent pvdc;
+                if (destination.DetachedContents.Contains(detachedContent.CultureName))
+                {
+                    var destContent = destination.DetachedContents[detachedContent.CultureName];
+                    detachedContent.ToProductVariantDetachedContent(destContent);
+                }
+                else
+                {
+                    var variant = display.GetType().IsAssignableFrom(typeof(ProductDisplay))
+                                      ? ((ProductDisplay)display).AsMasterVariantDisplay()
+                                      : (ProductVariantDisplay)display;
+                    destination.DetachedContents.Add(detachedContent.ToProductVariantDetachedContent(variant.Key));
+                }
+            }         
         }
 
         #endregion
@@ -385,6 +460,8 @@
                     variantAttributes.Add(destinationProductAttribute);
                 }
             }
+
+            destination.AddOrUpdateDetachedContent(productVariantDisplay);
 
             return destination;
         }

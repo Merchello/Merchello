@@ -1174,7 +1174,7 @@ angular.module('merchello.resources')
                  * @description Gets a product with an API call to the server
                  **/
                 getByKey: function (key) {
-                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProduct';
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProductFromService';
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: url + '?id=' + key,

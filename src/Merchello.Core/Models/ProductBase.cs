@@ -7,6 +7,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Merchello.Core.Models.DetachedContent;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -129,6 +131,11 @@
         private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
 
         /// <summary>
+        /// The detached contents selector.
+        /// </summary>
+        private static readonly PropertyInfo DetachedContentsSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, DetachedContentCollection<IProductVariantDetachedContent>>(x => x.DetachedContents);
+
+        /// <summary>
         /// The SKU.
         /// </summary>
         private string _sku;
@@ -238,6 +245,11 @@
         /// </summary>
         private CatalogInventoryCollection _catalogInventoryCollection;
 
+        /// <summary>
+        /// The detached content collection.
+        /// </summary>
+        private DetachedContentCollection<IProductVariantDetachedContent> _detachedContents; 
+
         #endregion
 
         /// <summary>
@@ -255,15 +267,20 @@
         /// <param name="catalogInventoryCollection">
         /// The catalog inventory collection.
         /// </param>
-        internal ProductBase(string name, string sku, decimal price, CatalogInventoryCollection catalogInventoryCollection)
+        /// <param name="detachedContents">
+        /// The detached Contents.
+        /// </param>
+        internal ProductBase(string name, string sku, decimal price, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
             Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
+            Mandate.ParameterNotNull(detachedContents, "detachedContents");
             _name = name;
             _sku = sku;
             _price = price;
-            _catalogInventoryCollection = catalogInventoryCollection;            
+            _catalogInventoryCollection = catalogInventoryCollection;
+            _detachedContents = detachedContents;
         }
 
         /// <summary>
@@ -279,7 +296,7 @@
         /// The price.
         /// </param>
         protected ProductBase(string name, string sku, decimal price)
-            : this(name, sku, price, new CatalogInventoryCollection())
+            : this(name, sku, price, new CatalogInventoryCollection(), new DetachedContentCollection<IProductVariantDetachedContent>())
         {
         }
         
@@ -287,12 +304,34 @@
         /// <summary>
         /// Gets a Product variant inventory across all warehouses
         /// </summary>
-        [IgnoreDataMember]
+        [DataMember]
         public IEnumerable<ICatalogInventory> CatalogInventories
         {
             get { return _catalogInventoryCollection; }
         }
 
+        /// <summary>
+        /// Gets the detached contents.
+        /// </summary>
+        [DataMember]
+        public virtual DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
+        {
+            get
+            {
+                return _detachedContents;
+            }
+
+            internal set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                _detachedContents = value;
+                _detachedContents.CollectionChanged += DetachedContentsOnCollectionChanged;
+            }
+        }
 
         /// <summary>
         /// Gets or sets SKU associated with the Product
@@ -833,5 +872,18 @@
             OnPropertyChanged(WarehouseInventoryChangedSelector);
         }
 
+        /// <summary>
+        /// The detached contents on collection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="notifyCollectionChangedEventArgs">
+        /// The notify collection changed event args.
+        /// </param>
+        private void DetachedContentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            this.OnPropertyChanged(DetachedContentsSelector);
+        }
     }
 }

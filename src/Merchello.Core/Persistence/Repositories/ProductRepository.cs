@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
@@ -1198,6 +1199,8 @@
             // synchronize the inventory
             ((ProductVariantRepository)_productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
 
+            ((ProductVariantRepository)_productVariantRepository).SaveDetachedContents(((Product)entity).MasterVariant);
+
             entity.ResetDirtyProperties();
         }
 
@@ -1567,7 +1570,6 @@
                 Database.Update(dto);
             }
         }
-
 
         /// <summary>
         /// Builds the product search SQL.

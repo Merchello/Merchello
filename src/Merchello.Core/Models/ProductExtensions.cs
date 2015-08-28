@@ -532,7 +532,7 @@
         /// </returns>
         private static string GetDetachedContentsJson(IEnumerable<IProductVariantDetachedContent> detachedContentCollection)
         {
-            const string Json = "[{0}]";
+            const string Json = "{0}";
             var contents = string.Empty;
 
             if (detachedContentCollection != null)

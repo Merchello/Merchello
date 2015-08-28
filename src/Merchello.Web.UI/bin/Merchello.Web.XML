@@ -2209,6 +2209,50 @@
             Gets or sets the detached data values.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplayExtensions">
+            <summary>
+            Utility mapping extensions for <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplayExtensions.ToProductVariantDetachedContentDisplay(Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent)">
+            <summary>
+            The to product variant detached content display.
+            </summary>
+            <param name="detachedContent">
+            The detached content.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplayExtensions.ToProductVariantDetachedContent(Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay,System.Guid)">
+            <summary>
+            Maps <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/> to <see cref="T:Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent"/>.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="productVariantKey">
+            The product Variant Key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplayExtensions.ToProductVariantDetachedContent(Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay,Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent)">
+            <summary>
+            The to product variant detached content.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="destination">
+            The destination.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
             <summary>
             Stores information from <see cref="T:Umbraco.Core.Models.IContentType"/>.
@@ -12556,7 +12600,8 @@
         </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.#ctor(Merchello.Core.IMerchelloContext,Umbraco.Web.UmbracoContext)">
             <summary>
-            This is a helper contructor for unit testing
+            Initializes a new instance of the <see cref="T:Merchello.Web.Editors.ShipmentApiController"/> class. 
+            This is a helper constructor for unit testing
             </summary>
             <param name="merchelloContext">
             The merchello Context.
@@ -12571,15 +12616,35 @@
             
             GET /umbraco/Merchello/ShipmentApi/GetShipment/{guid}
             </summary>
-            <param name="id">The shipment key</param>
+            <param name="id">
+            The shipment key
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShipmentDisplay"/>.
+            </returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Merchello.Web.Editors.ShipmentApiController.GetShipments(System.Collections.Generic.IEnumerable{System.Guid})" -->
+        <member name="M:Merchello.Web.Editors.ShipmentApiController.GetShipments(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            Returns a list of shipments by their ids
+            GET /umbraco/Merchello/ShipmentApi/GetShipments?ids={guid}={guid}
+            </summary>
+            <param name="ids">
+            The ids.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.GetShipMethod(Merchello.Web.Models.ContentEditing.OrderDisplay)">
             <summary>
-            Gets the Shipmethod that was quoted for an order
+            Gets the Ship method that was quoted for an order
             </summary>
-            <param name="order"></param>
-            <returns></returns>
+            <param name="order">
+            The order.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShipMethodDisplay"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.SearchShipMethodAndAlternatives(Merchello.Web.Models.Shipping.ShipMethodRequestDisplay)">
             <summary>
@@ -12594,20 +12659,25 @@
             </returns>
         </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.NewShipment(Merchello.Web.Models.Shipping.ShipmentRequestDisplay)">
-             <summary>
-             Adds a shipment
+            <summary>
+            Adds a shipment
             
-             POST /umbraco/Merchello/ShipmentApi/CreateShipment
-             </summary>
-             <param name="shipmentRequest">POSTed <see cref="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay"/> object</param>
-             <remarks>
-             
-             Note:  This is a modified order that very likely has not been persisted.  The UI 
-             is responsible for removing line items that either have already shipped or are marked as back ordered.
-             This "order" object should only contain line items intended to be included in the shipment to be created although
-             other order data, such as the invoiceKey are important for this process.
-             
-             </remarks>
+            POST /umbraco/Merchello/ShipmentApi/CreateShipment
+            </summary>
+            <param name="shipmentRequest">
+            POSTed <see cref="T:Merchello.Web.Models.Shipping.ShipmentRequestDisplay"/> object
+            </param>
+            <remarks>
+            
+            Note:  This is a modified order that very likely has not been persisted.  The UI 
+            is responsible for removing line items that either have already shipped or are marked as back ordered.
+            This "order" object should only contain line items intended to be included in the shipment to be created although
+            other order data, such as the invoiceKey are important for this process.
+            
+            </remarks>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ShipmentDisplay"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Editors.ShipmentApiController.PutShipment(Merchello.Web.Models.ContentEditing.ShipmentDisplay)">
             <summary>
@@ -14100,6 +14170,42 @@
             Used for adding items to item caches in <see cref="T:Merchello.Web.Workflow.CustomerItemCache.CustomerItemCacheBase"/>
             </remarks>
         </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.ToProductOption(Merchello.Web.Models.ContentEditing.ProductOptionDisplay,Merchello.Core.Models.IProductOption)">
+            <summary>
+            The to product option.
+            </summary>
+            <param name="productOptionDisplay">
+            The product option display.
+            </param>
+            <param name="destinationProductOption">
+            The destination product option.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IProductOption"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.ToProductOptionDisplay(Merchello.Core.Models.IProductOption)">
+            <summary>
+            The to product option display.
+            </summary>
+            <param name="productOption">
+            The product option.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.AddOrUpdateDetachedContent(Merchello.Core.Models.IProductBase,Merchello.Web.Models.ContentEditing.ProductDisplayBase)">
+            <summary>
+            Adds or updates <see cref="T:Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent"/>.
+            </summary>
+            <param name="destination">
+            The destination.
+            </param>
+            <param name="display">
+            The display.
+            </param>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.CountryDisplay">
             <summary>
             The country display.
@@ -15504,6 +15610,20 @@
             </param>
             <returns>
             The collection of T
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ExamineDisplayExtensions.GetProductVariantDetachedContentDisplayCollection(Examine.SearchResult,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Merchello.Core.Models.DetachedContent.ProductVariantDetachedContent"/> from examine result.
+            </summary>
+            <param name="result">
+            The result.
+            </param>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExamineDisplayExtensions.JsonFieldAs``1(Examine.SearchResult,System.String)">

@@ -24,25 +24,22 @@
 
         <merchello-panel>
             <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
+                <div class="umb-pane" data-ng-show="isConfigured">
+
+                    <umb-property
+                            property="property"
+                            ng-repeat="property in currentTab.properties">
+                        <umb-editor model="property"></umb-editor>
+                    </umb-property>
+
+                </div>
+
                 <div class="merchello-pane">
 
-                    <!-- Property classes from Umbraco styles -->
-                    <div class="control-group umb-control-group" data-ng-show="isConfigured">
-                        <label class="merchello-control-label">
-                            <localize key="merchelloVariant_variantInfo"/>
-                            <small><localize key="merchelloVariant_configVariant" /></small>
-                            <select data-ng-model="language"  data-ng-options="l.name for l in languages track by l.isoCode" data-ng-show="loaded" class="span10" />
-                            <button class="btn" data-ng-hide="!isConfigured">Show Configuration</button>
-                        </label>
-                        <div class="merchello-controls">
-                            <!-- Form for checkboxes that manage below sections, key fields like SKU, Price, etc -->
-
-                        </div>
-                    </div>
 
                     <div class="pager well" data-ng-hide="isConfigured">
                         <localize key="merchelloDetachedContent_noProductContentType" />
-                        <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" save="save(contentType)"></detached-content-type-select>
+                        <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" save="saveContentType(contentType)"></detached-content-type-select>
 
                     </div>
 

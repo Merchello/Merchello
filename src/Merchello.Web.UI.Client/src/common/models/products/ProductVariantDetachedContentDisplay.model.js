@@ -17,4 +17,5 @@ var ProductVariantDetachedContentDisplay = function() {
     self.detachedDataValues = {};
 };
 
+
 angular.module('merchello.models').constant('ProductVariantDetachedContentDisplay', ProductVariantDetachedContentDisplay);

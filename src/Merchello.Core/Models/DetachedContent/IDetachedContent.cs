@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines DetachedContent.
     /// </summary>
-    internal interface IDetachedContent : IEntity 
+    public interface IDetachedContent : IEntity 
     {
         /// <summary>
         /// Gets the detached content type.

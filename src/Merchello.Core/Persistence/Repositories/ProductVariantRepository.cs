@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -160,7 +161,85 @@
             var contents = this.GetProductVariantDetachedContents(productVariantKey);
             return new DetachedContentCollection<IProductVariantDetachedContent> { contents };
         }
-       
+
+        /// <summary>
+        /// Safely saves the detached content selection.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        internal void SaveDetachedContents(IProductVariant productVariant)
+        {
+            if (!productVariant.DetachedContents.Any()) return;
+
+            var existing = this.GetDetachedContentCollection(productVariant.Key);
+
+            foreach (var exist in existing.Where(x => !productVariant.DetachedContents.Contains(x.CultureName)))
+            {
+                this.DeleteDetachedContent(exist);
+            }
+
+            foreach (var dc in productVariant.DetachedContents)
+            {
+                this.SaveDetachedContent(dc);
+            }
+        }
+
+        /// <summary>
+        /// The delete detached content.
+        /// </summary>
+        /// <param name="detachedContent">
+        /// The detached content.
+        /// </param>
+        internal void DeleteDetachedContent(IProductVariantDetachedContent detachedContent)
+        {
+            Database.Execute(
+                "DELETE [merchProductVariantDetachedContent] WHERE @Key = ",
+                new { @Key = detachedContent.Key });
+        }
+
+        /// <summary>
+        /// The save detached content.
+        /// </summary>
+        /// <param name="detachedContent">
+        /// The detached content.
+        /// </param>
+        internal void SaveDetachedContent(IProductVariantDetachedContent detachedContent)
+        {
+            var factory = new ProductVariantDetachedContentFactory();
+
+            if (!detachedContent.HasIdentity)
+            {
+                ((Entity)detachedContent).AddingEntity();
+
+                var dto = factory.BuildDto(detachedContent);
+                Database.Insert(dto);
+                detachedContent.Key = dto.Key;
+            }
+            else
+            {
+                ((Entity)detachedContent).UpdatingEntity();
+                var dto = factory.BuildDto(detachedContent);
+
+                const string Update =
+                    "UPDATE [merchProductVariantDetachedContent] SET [merchProductVariantDetachedContent].[detachedContentTypeKey] = @Dctk, [merchProductVariantDetachedContent].[templateId] = @Tid, [merchProductVariantDetachedContent].[slug] = @Slug, [merchProductVariantDetachedContent].[values] = @Vals, [merchProductVariantDetachedContent].[updateDate] = @Ud WHERE [merchProductVariantDetachedContent].[cultureName] = @Cn AND [merchProductVariantDetachedContent].[productVariantKey] = @Pvk";
+
+
+                Database.Execute(
+                    Update,
+                    new
+                        {
+                            @Dctk = dto.DetachedContentTypeKey,
+                            @Tid = dto.TemplateId,
+                            @Slug = dto.Slug,
+                            @Vals = dto.Values,
+                            @Ud = dto.UpdateDate,
+                            @Cn = dto.CultureName,
+                            @Pvk = dto.ProductVariantKey
+                        });
+            }
+        }
+
         /// <summary>
         /// Saves the catalog inventory.
         /// </summary>
@@ -423,6 +502,8 @@
 
             SaveCatalogInventory(entity);
 
+            SaveDetachedContents(entity);
+
             entity.ResetDirtyProperties();
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
@@ -454,6 +535,8 @@
             Database.Update(dto);
 
             SaveCatalogInventory(entity);
+
+            SaveDetachedContents(entity);
 
             entity.ResetDirtyProperties();
 

@@ -130,6 +130,24 @@
             return this.detachedContents.length > 0;
         }
 
+        function getDetachedContent(isoCode) {
+            if (!this.hasDetachedContent.call(this)) {
+                return null;
+            } else {
+                return _.find(this.detachedContents, function(dc) {
+                  return dc.cultureName === isoCode;
+                });
+            }
+        }
+
+        function detachedContentType() {
+            if (!this.hasDetachedContent.call(this)) {
+                return null;
+            } else {
+                return this.detachedContents[0].detachedContentType;
+            }
+        }
+
         function assertLanguageContent(isoCodes) {
             var missing = [];
             var removers = [];
@@ -150,9 +168,9 @@
 
             missing = _.filter(this.detachedContents, function(check) {
                 var fnd = _.find(isoCodes, function(ic) {
-                  return ic === check.cultureName;
+                  return ic.isoCode === check.cultureName;
                 });
-                return found === undefined;
+                return fnd === undefined;
             });
 
             console.info(missing);
@@ -167,7 +185,9 @@
             setAllInventoryCount: setAllInventoryCount,
             setAllInventoryLowCount: setAllInventoryLowCount,
             hasDetachedContent: hasDetachedContent,
-            assertLanguageContent: assertLanguageContent
+            assertLanguageContent: assertLanguageContent,
+            detachedContentType: detachedContentType,
+            getDetachedContent: getDetachedContent
         };
     }());
 

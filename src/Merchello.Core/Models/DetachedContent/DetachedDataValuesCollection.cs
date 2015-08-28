@@ -7,7 +7,7 @@
     /// <summary>
     /// The detached data values collection.
     /// </summary>
-    internal class DetachedDataValuesCollection : ConcurrentDictionary<string, string>
+    public class DetachedDataValuesCollection : ConcurrentDictionary<string, string>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedDataValuesCollection"/> class.
