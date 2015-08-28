@@ -188,12 +188,12 @@ namespace Merchello.Bazaar
             
             if (currencyFormat != null)
             {
-                if (string.IsNullOrEmpty(currencyFormat.Format))
+                if (!string.IsNullOrEmpty(currencyFormat.Format))
                 {
                     format = currencyFormat.Format;
                 }
 
-                if (string.IsNullOrEmpty(currencyFormat.Symbol))
+                if (!string.IsNullOrEmpty(currencyFormat.Symbol))
                 {
                     symbol = currencyFormat.Symbol;
                 }
