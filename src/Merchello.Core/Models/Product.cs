@@ -8,6 +8,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Merchello.Core.Models.DetachedContent;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -52,7 +54,6 @@
             : this(variant, new ProductOptionCollection(), new ProductVariantCollection())
         {            
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Product"/> class.
@@ -360,6 +361,17 @@
             get { return _variant.CatalogInventories; }
         }
 
+        /// <summary>
+        /// Gets the detached contents.
+        /// </summary>
+        [DataMember]
+        public DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
+        {
+            get
+            {
+                return _variant.DetachedContents;
+            }
+        }
 
         /// <summary>
         /// Gets the master variant.

@@ -2,6 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Security.Cryptography;
+
+    using Merchello.Core.Models.DetachedContent;
 
     /// <summary>
     /// The product variant detached content display.
@@ -42,5 +46,87 @@
         /// Gets or sets the detached data values.
         /// </summary>
         public IEnumerable<KeyValuePair<string, string>> DetachedDataValues { get; set; }
+    }
+
+    /// <summary>
+    /// Utility mapping extensions for <see cref="ProductVariantDetachedContentDisplay"/>.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
+    internal static class ProductVariantDetachedContentDisplayExtensions
+    {
+        /// <summary>
+        /// The to product variant detached content display.
+        /// </summary>
+        /// <param name="detachedContent">
+        /// The detached content.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDetachedContentDisplay"/>.
+        /// </returns>
+        public static ProductVariantDetachedContentDisplay ToProductVariantDetachedContentDisplay(
+            this IProductVariantDetachedContent detachedContent)
+        {
+            return AutoMapper.Mapper.Map<ProductVariantDetachedContentDisplay>(detachedContent);
+        }
+
+        /// <summary>
+        /// Maps <see cref="ProductVariantDetachedContentDisplay"/> to <see cref="IProductVariantDetachedContent"/>.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="productVariantKey">
+        /// The product Variant Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariantDetachedContent"/>.
+        /// </returns>
+        public static IProductVariantDetachedContent ToProductVariantDetachedContent(this ProductVariantDetachedContentDisplay display, Guid productVariantKey)
+        {
+            var contentType = new DetachedContentType(
+                display.DetachedContentType.EntityTypeField.TypeKey,
+                display.DetachedContentType.UmbContentType.Key)
+                                  {
+                                      Key = display.DetachedContentType.Key,
+                                      Name = display.DetachedContentType.Name,
+                                      Description = display.DetachedContentType.Description
+                                  };
+
+            var pvdc = new ProductVariantDetachedContent(productVariantKey, contentType, display.CultureName, new DetachedDataValuesCollection(display.DetachedDataValues))
+                       {
+                           TemplateId = display.TemplateId,
+                           Slug = display.Slug,                          
+                       };
+            if (!display.Key.Equals(Guid.Empty)) pvdc.Key = display.Key;
+            return pvdc;
+        }
+
+        /// <summary>
+        /// The to product variant detached content.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariantDetachedContent"/>.
+        /// </returns>
+        public static IProductVariantDetachedContent ToProductVariantDetachedContent(
+            this ProductVariantDetachedContentDisplay display,
+            IProductVariantDetachedContent destination)
+        {
+
+            destination.Slug = display.Slug;
+            destination.TemplateId = display.TemplateId;
+
+            foreach (var item in display.DetachedDataValues)
+            {
+                destination.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
+            }
+
+            return destination;
+        }
     }
 }

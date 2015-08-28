@@ -234,6 +234,8 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         self.name = '';
         self.url = '';
         self.active = false;
+        self.visible = true;
+        self.callback = undefined;
     };
 
     angular.module('merchello.models').constant('MerchelloTab', MerchelloTab);
@@ -264,6 +266,17 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
             }
         }
 
+        function addActionTab(id, name, callback) {
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
+            if (existing === undefined || existing === null) {
+                var tab = new MerchelloTab();
+                tab.id = id;
+                tab.name = name;
+                tab.callback = callback;
+                this.items.push(tab);
+            }
+        }
+
         function setActive(id) {
            angular.forEach(this.items, function(item) {
                if(item.id === id) {
@@ -272,6 +285,20 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
                    item.active = false;
                }
            });
+        }
+
+        function hideTab(id) {
+            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            if (existing !== undefined && existing !== null) {
+                existing.visible = false;
+            }
+        }
+
+        function showTab(id) {
+            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            if (existing !== undefined && existing !== null) {
+                existing.visible = true;
+            }
         }
 
         function insertTab(id, name, url, index) {
@@ -288,6 +315,22 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
                 }
             }
         }
+
+        function insertActionTab(id, name, callback, index) {
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
+            if (existing === undefined || existing === null) {
+                var tab = new MerchelloTab();
+                tab.id = id;
+                tab.name = name;
+                tab.callback = callback;
+                if (this.items.length <= index) {
+                    addTab.call(this, tab);
+                } else {
+                    this.items.splice(index, 0, tab);
+                }
+            }
+        }
+
 
         /// appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
@@ -315,7 +358,11 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
             setActive: setActive,
             insertTab: insertTab,
             appendCustomerTab: appendCustomerTab,
-            appendOfferTab: appendOfferTab
+            appendOfferTab: appendOfferTab,
+            addActionTab: addActionTab,
+            insertActionTab: insertActionTab,
+            hideTab: hideTab,
+            showTab: showTab
         };
     }());
 
@@ -2315,6 +2362,7 @@ var ProductVariantDetachedContentDisplay = function() {
     self.detachedDataValues = {};
 };
 
+
 angular.module('merchello.models').constant('ProductVariantDetachedContentDisplay', ProductVariantDetachedContentDisplay);
     /**
      * @ngdoc model
@@ -2448,6 +2496,24 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             return this.detachedContents.length > 0;
         }
 
+        function getDetachedContent(isoCode) {
+            if (!this.hasDetachedContent.call(this)) {
+                return null;
+            } else {
+                return _.find(this.detachedContents, function(dc) {
+                  return dc.cultureName === isoCode;
+                });
+            }
+        }
+
+        function detachedContentType() {
+            if (!this.hasDetachedContent.call(this)) {
+                return null;
+            } else {
+                return this.detachedContents[0].detachedContentType;
+            }
+        }
+
         function assertLanguageContent(isoCodes) {
             var missing = [];
             var removers = [];
@@ -2468,9 +2534,9 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
 
             missing = _.filter(this.detachedContents, function(check) {
                 var fnd = _.find(isoCodes, function(ic) {
-                  return ic === check.cultureName;
+                  return ic.isoCode === check.cultureName;
                 });
-                return found === undefined;
+                return fnd === undefined;
             });
 
             console.info(missing);
@@ -2485,7 +2551,9 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             setAllInventoryCount: setAllInventoryCount,
             setAllInventoryLowCount: setAllInventoryLowCount,
             hasDetachedContent: hasDetachedContent,
-            assertLanguageContent: assertLanguageContent
+            assertLanguageContent: assertLanguageContent,
+            detachedContentType: detachedContentType,
+            getDetachedContent: getDetachedContent
         };
     }());
 
@@ -4514,6 +4582,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('reportslist', 'merchelloTabs_reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
+
+
 
 
             return {

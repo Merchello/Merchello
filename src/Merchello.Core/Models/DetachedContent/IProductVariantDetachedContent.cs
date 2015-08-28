@@ -6,7 +6,7 @@
     /// <summary>
     /// Defines a ProductVariantDetachedContent.
     /// </summary>
-    internal interface IProductVariantDetachedContent : IDetachedContent
+    public interface IProductVariantDetachedContent : IDetachedContent
     {
         /// <summary>
         /// Gets the product variant key.

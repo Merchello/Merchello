@@ -15,7 +15,7 @@
         /// <returns>An <c>IEnumerable{object}</c></returns>        
         internal static IEnumerable<KeyValuePair<string, string>> AsEnumerable(this DetachedDataValuesCollection dataValues)
         {
-            return dataValues.Select(item => new KeyValuePair<string, string>(item.Key, item.Value));
+            return dataValues.Select(item => new KeyValuePair<string, string>(item.Key, item.Value ?? string.Empty));
         }
     }
 }

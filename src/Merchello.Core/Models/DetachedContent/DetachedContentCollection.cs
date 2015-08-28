@@ -19,7 +19,7 @@
     /// This collection assumes that all content will be for the same entity and thus uses
     /// the culture name as the key.
     /// </remarks>
-    internal class DetachedContentCollection<T> : NotifiyCollectionBase<string, T>
+    public class DetachedContentCollection<T> : NotifiyCollectionBase<string, T>
         where T : IDetachedContent
     {
         /// <summary>

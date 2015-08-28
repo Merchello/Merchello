@@ -33,11 +33,7 @@
         /// The attributes changed selector.
         /// </summary>
         private static readonly PropertyInfo AttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, ProductAttributeCollection>(x => x.ProductAttributes);
-
-        /// <summary>
-        /// The detached contents selector.
-        /// </summary>
-        private static readonly PropertyInfo DetachedContentsSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, DetachedContentCollection<IProductVariantDetachedContent>>(x => x.DetachedContents);
+        
 
         /// <summary>
         /// The product key.
@@ -49,10 +45,6 @@
         /// </summary>
         private ProductAttributeCollection _attibutes;
 
-        /// <summary>
-        /// The detached content collection.
-        /// </summary>
-        private DetachedContentCollection<IProductVariantDetachedContent> _detachedContents; 
 
         /// <summary>
         /// The value indicating whether or not this is the master variant.
@@ -200,11 +192,11 @@
         /// The price.
         /// </param>
         internal ProductVariant(Guid productKey, ProductAttributeCollection attributes, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents,  bool master, string name, string sku, decimal price)
-            : base(name, sku, price, catalogInventoryCollection)
+            : base(name, sku, price, catalogInventoryCollection, detachedContents)
         {
             Mandate.ParameterNotNull(attributes, "attributes");
             Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
-            Mandate.ParameterNotNull(detachedContents, "detachedContents");
+           
             _productKey = productKey;
             _attibutes = attributes;
             _master = master;
@@ -276,29 +268,6 @@
         }
 
         /// <summary>
-        /// Gets or sets the detached contents.
-        /// </summary>
-        [IgnoreDataMember]
-        internal DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
-        {
-            get
-            {
-                return _detachedContents;
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                _detachedContents = value;
-                _detachedContents.CollectionChanged += DetachedContentsOnCollectionChanged;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether or not this variant is the "master" variant for the product.  All products (even products without options) have a master variant.
         /// </summary>
         [IgnoreDataMember]
@@ -345,20 +314,6 @@
         private void ProductAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(AttributesChangedSelector);
-        }
-
-        /// <summary>
-        /// The detached contents on collection changed.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="notifyCollectionChangedEventArgs">
-        /// The notify collection changed event args.
-        /// </param>
-        private void DetachedContentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
-        {
-           this.OnPropertyChanged(DetachedContentsSelector);
         }
     }
 }

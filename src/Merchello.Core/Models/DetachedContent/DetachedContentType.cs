@@ -172,7 +172,7 @@
         /// <summary>
         /// Gets the entity type.
         /// </summary>
-        [DataMember]
+        [IgnoreDataMember]
         public EntityType EntityType
         {
             get

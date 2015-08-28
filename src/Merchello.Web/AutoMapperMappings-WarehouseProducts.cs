@@ -3,6 +3,10 @@
     using System.Linq.Expressions;
     using Core.Models;
     using Core.Models.Interfaces;
+
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Models.ContentEditing.Content;
+
     using Models.ContentEditing;
     using Models.MapperResolvers;
 
@@ -27,7 +31,7 @@
             AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
             AutoMapper.Mapper.CreateMap<IProductVariant, ProductVariantDisplay>();
 
-            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();
+            AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();            
 
             AutoMapper.Mapper.CreateMap<ProductDisplay, ProductVariantDisplay>()
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(x => x.ProductVariantKey))
