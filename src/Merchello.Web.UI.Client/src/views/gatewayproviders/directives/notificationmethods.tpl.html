@@ -1,8 +1,10 @@
 <div>
-    <div data-ng-repeat="notificationMethods in provider.notificationMethods" class="merchello-notification-method clear">
+    <div data-ng-repeat="notificationMethods in provider.notificationMethods">
         <h4 class="row-fluid col-xs-5 span5 clear" data-ng-bind="notificationMethods.name"></h4>
-        <a data-ng-click="addNotificationMessage(notificationMethods)" class="btn btn-primary"><i class="icon-add"></i> <localize key="merchelloNotificationsMethod_message" /> </a>
-        <a data-ng-click="deleteNotificationMethod(notificationMethods)" class="btn btn-warning"><i class="icon-trash"></i></a>
+        <div class="pull-right">
+        <merchello-icon-bar show-add="true" show-delete="true" do-add="addNotificationMessage(notificationMethods)" do-delete="deleteNotificationMethod(notificationMethods)">
+        </merchello-icon-bar>
+        </div>
         <form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
             <button class="btn close" data-ng-click="editTemplateFlyout.close()"><i class="icon-delete"></i></button>
             <h4><localize key="general_edit" /> <b>{{editTemplateFlyout.model.name}}</b> <localize key="merchelloNotificationsMethod_notification" /></h4>
@@ -22,14 +24,14 @@
             </div>
         </form>
 
-        <table class="table table-striped merchello-striped-table settings-table notifications-table form-horizontal">
+        <table class="table table-striped merchello-striped-table notifications-table form-horizontal">
             <thead>
             <tr>
                 <th><localize key="merchelloNotificationsMethod_notification" /> Subject</th>
                 <th><localize key="merchelloNotificationsEdit_description" /></th>
                 <th><localize key="merchelloNotificationsMethod_event" /></th>
                 <th><localize key="general_email" /></th>
-                <th>Actions</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -37,17 +39,17 @@
             <tr data-ng-repeat="message in notificationMethods.notificationMessages">
                 <td>{{message.name}}</td>
                 <td>{{message.description}}</td>
+
                 <td>{{ getMonitorName(message.monitorKey) }}</td>
                 <td><a href="{{message.fromAddress}}">{{message.fromAddress}}</a></td>
-                <td nowrap>
-                    <a class="btn btn-default btn-xs btn-mini" href="#/merchello/merchello/notification.messageeditor/{{message.key}}/"><i class="icon-edit"></i></a>
-                    <a data-ng-click="deleteNotificationMessage(message)" class="btn btn-default btn-xs btn-mini btn-warning"><i class="icon-trash"></i></a>
+                <td class="merchello-icon-container pull-right">
+                    <merchello-icon-bar show-edit="true" show-delete="true" do-edit="redirectForEdit(message.key)" do-delete="deleteNotificationMessage(message)">
+                    </merchello-icon-bar>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
     <div class="control-group umb-control-group warning" data-ng-show="provider.notificationMethods.length == 0">
         No notification methods have been created for this provider.
     </div>

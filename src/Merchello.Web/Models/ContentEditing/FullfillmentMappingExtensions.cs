@@ -1,18 +1,18 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping.FixedRate;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Web.Models.Payments;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
-	internal static class FullfillmentMappingExtensions
+    using System;
+    using System.Linq;
+
+    using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Notification;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Gateways.Shipping.FixedRate;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.Payments;
+
+    internal static class FullfillmentMappingExtensions
 	{
 
 

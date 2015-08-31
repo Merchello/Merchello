@@ -1,5 +1,5 @@
 
-    angular.module('merchello.directives').directive('notificationMethods', function() {
+    angular.module('merchello.directives').directive('notificationMethods', function($location) {
         return {
             restrict: 'E',
             replace: true,
@@ -8,6 +8,10 @@
 
                 // Exposed monitors
                 $scope.getMonitorName = getMonitorName;
+
+                $scope.redirectForEdit = function(key) {
+                    $location.url('/merchello/merchello/notification.messageeditor/' + key, true);
+                }
 
                 function getMonitorName(key) {
                     var monitor = _.find($scope.notificationMonitors, function(monitor) {

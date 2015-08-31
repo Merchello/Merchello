@@ -684,6 +684,73 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
         };
     }]);
 
+angular.module('merchello.directives').directive('detachedContentType', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        terminal: false,
+
+        scope: {
+            entityType: '@'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/detachedcontenttype.list.tpl.html',
+        controller: 'Merchello.Directives.DetachedContentTypeListController'
+    };
+
+});
+
+angular.module('merchello.directives').directive('detachedContentTypeSelect',
+        function(detachedContentResource, localizationService, detachedContentTypeDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            terminal: false,
+
+            scope: {
+                entityType: '@',
+                selectedContentType: '=',
+                save: '&'
+            },
+            template:         '<div class="detached-content-select">' +
+            '<div data-ng-show="detachedContentTypes.length > 0">' +
+            '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded">' +
+            '<option value="">{{ noSelection }}</option>' +
+            '</select>' +
+            ' <merchello-save-icon show-save="true" do-save="save()"></merchello-save-icon>' +
+            '</div>' +
+                '<div data-ng-hide="detachedContentTypes.length > 0 && loaded" style="text-align: center">' +
+                '<localize key="merchelloDetachedContent_noDetachedContentTypes" />' +
+                '</div>' +
+            '</div>',
+            link: function(scope, elm, attr) {
+
+                scope.loaded = false;
+                scope.detachedContentTypes = [];
+                scope.noSelection = '';
+
+                function init() {
+                    localizationService.localize('merchelloDetachedContent_selectContentType').then(function(value) {
+                        scope.noSelection = value;
+                        loadDetachedContentTypes();
+                    });
+                }
+
+                function loadDetachedContentTypes() {
+                    detachedContentResource.getDetachedContentTypeByEntityType(scope.entityType).then(function(results) {
+                        scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
+                        scope.loaded = true;
+                    });
+                }
+
+                // initialize the directive
+                init();
+            }
+        };
+
+});
+
 angular.module('merchello.directives').directive('comparisonOperatorRadioButtons', function() {
     return {
         restrict: 'E',
@@ -700,6 +767,45 @@ angular.module('merchello.directives').directive('comparisonOperatorRadioButtons
                 }
             }
 
+            init();
+        }
+    };
+});
+
+angular.module('merchello.directives').directive('contentTypeDropDown',
+    function(localizationService, detachedContentResource, umbContentTypeDisplayBuilder) {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            selectedContentType: '=',
+        },
+        template:
+        '<div class="control-group">' +
+        '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+        '<select class="span11" data-ng-model="selectedContentType" data-ng-options="ct.name for ct in contentTypes track by ct.key" data-ng-show="loaded">' +
+            '<option value="">{{ noSelection }}</option>' +
+        '</select>' +
+        '</div>',
+        link: function (scope, element, attrs, ctrl) {
+
+            scope.loaded = false;
+            scope.contentTypes = [];
+            scope.noSelection = '';
+
+            function init() {
+                localizationService.localize('merchelloDetachedContent_selectContentType').then(function(value) {
+                    scope.noSelection = value;
+                    loadContentTypes();
+                });
+            }
+
+            function loadContentTypes() {
+                detachedContentResource.getContentTypes().then(function(results) {
+                    scope.contentTypes = umbContentTypeDisplayBuilder.transform(results);
+                    scope.loaded = true;
+                });
+            }
             init();
         }
     };
@@ -961,6 +1067,155 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
         }
     });
 
+angular.module('merchello.directives').directive('merchelloIconBar', function(localizationService) {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showAdd: '=?',
+            showEdit: '=?',
+            showActivate: '=?',
+            showDelete: '=?',
+            doAdd: '&?',
+            doEdit: '&?',
+            doActivate: '&?',
+            doDelete: '&?',
+            args: '=?'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloiconbar.tpl.html',
+        link: function(scope, elm, attr) {
+            scope.editTitle = '';
+            scope.deleteTitle = '';
+            scope.activateTitle = '';
+            scope.addTitle = '';
+
+            localizationService.localize('general_add').then(function(value) {
+              scope.addTitle = value;
+            });
+            localizationService.localize('general_edit').then(function(value) {
+                scope.editTitle = value;
+            });
+            localizationService.localize('general_delete').then(function(value) {
+                scope.deleteTitle = value;
+            });
+            localizationService.localize('merchelloGatewayProvider_activate').then(function(value) {
+                scope.activateTitle = value;
+            });
+        }
+    };
+
+});
+
+// a save icon
+angular.module('merchello.directives').directive('merchelloSaveIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showSave: '=',
+            doSave: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showSave" ng-click="doSave()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-save"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('buttons_save').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the add icon
+angular.module('merchello.directives').directive('merchelloAddIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doAdd: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-add" ng-click="doAdd()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-add"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_add').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the edit icon
+angular.module('merchello.directives').directive('merchelloEditIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doEdit: '&',
+        },
+        template: '<span class="merchello-icons">' +
+           '<a class="merchello-icon merchello-icon-edit" ng-click="doEdit()" title="{{title}}" prevent-default>' +
+            '<i class="icon icon-edit"></i>' +
+            '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_edit').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the delete icon
+angular.module('merchello.directives').directive('merchelloDeleteIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doDelete: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-delete" ng-click="doDelete()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-trash"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_edit').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the provinces icon
+angular.module('merchello.directives').directive('merchelloProvincesIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showProvinces: '=',
+            doProvinces: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showProvinces" ng-click="doProvinces()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-globe-alt"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('merchelloShippingMethod_adjustIndividualRegions').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+
+
     /**
      * @ngdoc directive
      * @name MerchelloPagerDirective
@@ -1012,8 +1267,8 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             '<div class="tags">' +
             '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
             '</div>' +
-            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName"></input> ' +
-            '<a class="btn btn-primary" ng-click="add()">Add</a>',
+            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName" /> ' +
+            '<merchello-add-icon do-add="add()"></merchello-add-icon>',
             link: function ($scope, $element) {
                 // FIXME: this is lazy and error-prone
                 // this is the option name input
@@ -1046,7 +1301,7 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
     });
 
 
-    angular.module('merchello.directives').directive('notificationMethods', function() {
+    angular.module('merchello.directives').directive('notificationMethods', function($location) {
         return {
             restrict: 'E',
             replace: true,
@@ -1055,6 +1310,10 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
 
                 // Exposed monitors
                 $scope.getMonitorName = getMonitorName;
+
+                $scope.redirectForEdit = function(key) {
+                    $location.url('/merchello/merchello/notification.messageeditor/' + key, true);
+                }
 
                 function getMonitorName(key) {
                     var monitor = _.find($scope.notificationMonitors, function(monitor) {

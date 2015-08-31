@@ -27,6 +27,8 @@
     <key alias="all">All</key>
     <key alias="none">None</key>
     <key alias="expired">Expired</key>
+    <key alias="configured">Configured</key>
+    <key alias="notConfigured">Not Configured</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -39,10 +41,12 @@
   </area>
   <area alias="merchelloTabs">
     <key alias="productListing">Product Listing</key>
+    <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>
     <key alias="productVariants">Product Variants</key>
     <key alias="productOptions">Product Options</key>
     <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="detachedContent">Extended Content</key>
     <key alias="salesListing">Sales Listing</key>
     <key alias="sales">Sale</key>
     <key alias="payments">Payments</key>
@@ -56,6 +60,7 @@
     <key alias="notification">Notification</key>
     <key alias="taxation">Taxation</key>
     <key alias="offerListing">Offer Listing</key>
+    <key alias="message">Message</key>
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
     <key alias="reportListing">Reports</key>
@@ -67,6 +72,7 @@
     <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
     <key alias="openOrderCollection">Open orders</key>
     <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+    <key alias="addProvider">Add provider</key>
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
@@ -101,6 +107,7 @@
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="contentTypeRequired">Content type is required</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
@@ -113,6 +120,27 @@
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
   </area>
+  <area alias="merchelloDetachedContent">
+    <key alias="selectContentType">Select Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
+    <key alias="productContentType">Product Content Type</key>
+    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
+    <key alias="tabs">Tabs</key>
+    <key alias="noDetachedContentTypes">
+      <![CDATA[
+      <h5>You have not associated and Umbraco content types with Merchello</h5>
+      <p>This can be done through the Products context menu.</p>
+      ]]>
+    </key>
+    <key alias="noProductContentType"><![CDATA[
+      <h5>You have not selected a product content type</h5>
+    ]]></key>
+    <key alias="deleteWarning"><![CDATA[
+    This will also delete ALL property data associated with products that use this product type.
+    ]]></key>
+  </area>
   <area alias="merchelloSales">
     <key alias="noSales"><![CDATA[
         <h5>You Have No Sales Yet</h5>
@@ -122,7 +150,10 @@
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
-
+    <key alias="billingAddress">Billing Address</key>
+    <key alias="noBillingAddress">No Billing Address</key>
+    <key alias="shippingAddress">Shipping Address</key>
+    <key alias="noShippingAddress">No Shipping Address</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>
@@ -132,6 +163,12 @@
         <p>But you will soon!</p>
       ]]>
     </key>
+    <key alias="customerSaleHistory">
+      <![CDATA[
+      Sales History
+      <small>A list of the customer's sales and their status</small>
+      ]]>
+    </key>
     <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
     <key alias="customerNotes">
       <![CDATA[
@@ -139,6 +176,7 @@
       <small>Notes about the customer (not sale specific)</small>
       ]]>
     </key>
+    <key alias="totalSpent">Total Spent</key>
   </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
@@ -158,6 +196,14 @@
       <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
       <key alias="offerRewardsInfo">Rewards</key>
       <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+      <key alias="noConstraints">No Constraints Available</key>
+      <key alias="noRewards">No Rewards Available</key>
+      <key alias="noContraintsAssigned">No Constraints Assigned</key>
+      <key alias="noRewardsAssigned">No Rewards Assigned</key>
+      <key alias="componentAutoSaving">Component updated - auto saving</key>
+      <key alias="lineItemNameInfo">
+        <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
+      </key>
     </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -284,6 +330,8 @@
     <!-- actions -->
     <!-- phrases -->
   </area>
+
+  <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
     <key alias="shipping">Shipping</key>
@@ -298,6 +346,14 @@
       <key alias="shippingMethods" >Shipping Methods</key>
       <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
       <key alias="addCountry" >Add a Country</key>
+      <key alias="addCatalog">Add a Catalog</key>
+      <key alias="selectCatalog">Select Catalog</key>
+      <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
+      <key alias="shipContriesInfo"><![CDATA[
+        Shipping Countries
+        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
+      </key>
+     <key alias="warehouse">Warehouse</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->

@@ -3,10 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
     using EntityBase;
+
+    using Merchello.Core.Models.DetachedContent;
 
     using Umbraco.Core;
 
@@ -20,7 +21,7 @@
         #region Fields
 
         /// <summary>
-        /// The sku selector.
+        /// The SKU selector.
         /// </summary>
         private static readonly PropertyInfo SkuSelector = ExpressionHelper.GetPropertyInfo<ProductBase, string>(x => x.Sku);
 
@@ -129,9 +130,13 @@
         /// </summary>
         private static readonly PropertyInfo WarehouseInventoryChangedSelector = ExpressionHelper.GetPropertyInfo<ProductBase, CatalogInventoryCollection>(x => x.CatalogInventoryCollection);
 
+        /// <summary>
+        /// The detached contents selector.
+        /// </summary>
+        private static readonly PropertyInfo DetachedContentsSelector = ExpressionHelper.GetPropertyInfo<ProductVariant, DetachedContentCollection<IProductVariantDetachedContent>>(x => x.DetachedContents);
 
         /// <summary>
-        /// The sku.
+        /// The SKU.
         /// </summary>
         private string _sku;
 
@@ -240,6 +245,11 @@
         /// </summary>
         private CatalogInventoryCollection _catalogInventoryCollection;
 
+        /// <summary>
+        /// The detached content collection.
+        /// </summary>
+        private DetachedContentCollection<IProductVariantDetachedContent> _detachedContents; 
+
         #endregion
 
         /// <summary>
@@ -249,7 +259,7 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
@@ -257,15 +267,20 @@
         /// <param name="catalogInventoryCollection">
         /// The catalog inventory collection.
         /// </param>
-        internal ProductBase(string name, string sku, decimal price, CatalogInventoryCollection catalogInventoryCollection)
+        /// <param name="detachedContents">
+        /// The detached Contents.
+        /// </param>
+        internal ProductBase(string name, string sku, decimal price, CatalogInventoryCollection catalogInventoryCollection, DetachedContentCollection<IProductVariantDetachedContent> detachedContents)
         {
             Mandate.ParameterNotNullOrEmpty(name, "name");
             Mandate.ParameterNotNullOrEmpty(sku, "sku");
             Mandate.ParameterNotNull(catalogInventoryCollection, "warehouseInventory");
+            Mandate.ParameterNotNull(detachedContents, "detachedContents");
             _name = name;
             _sku = sku;
             _price = price;
-            _catalogInventoryCollection = catalogInventoryCollection;            
+            _catalogInventoryCollection = catalogInventoryCollection;
+            _detachedContents = detachedContents;
         }
 
         /// <summary>
@@ -275,29 +290,51 @@
         /// The name.
         /// </param>
         /// <param name="sku">
-        /// The sku.
+        /// The SKU.
         /// </param>
         /// <param name="price">
         /// The price.
         /// </param>
         protected ProductBase(string name, string sku, decimal price)
-            : this(name, sku, price, new CatalogInventoryCollection())
+            : this(name, sku, price, new CatalogInventoryCollection(), new DetachedContentCollection<IProductVariantDetachedContent>())
         {
         }
         
 
         /// <summary>
-        /// Gets a Product variant inventory accross all warehouses
+        /// Gets a Product variant inventory across all warehouses
         /// </summary>
-        [IgnoreDataMember]
+        [DataMember]
         public IEnumerable<ICatalogInventory> CatalogInventories
         {
             get { return _catalogInventoryCollection; }
         }
 
+        /// <summary>
+        /// Gets the detached contents.
+        /// </summary>
+        [DataMember]
+        public virtual DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
+        {
+            get
+            {
+                return _detachedContents;
+            }
+
+            internal set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                _detachedContents = value;
+                _detachedContents.CollectionChanged += DetachedContentsOnCollectionChanged;
+            }
+        }
 
         /// <summary>
-        /// Gets or sets sku associated with the Product
+        /// Gets or sets SKU associated with the Product
         /// </summary>
         [DataMember]
         public string Sku
@@ -309,337 +346,473 @@
 
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _sku = value;
                     return _sku;
-                }, _sku, SkuSelector);
+                }, 
+                _sku, 
+                SkuSelector);
             }
         }
 
         /// <summary>
-        /// The name associated with the Product
+        /// Gets or sets the name associated with the Product
         /// </summary>
         [DataMember]
         public string Name
         {
-            get { return _name; }
+            get
+            {
+                return _name;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _name = value;
                     return _name;
-                }, _name, NameSelector);
+                }, 
+                _name, 
+                NameSelector);
             }
         }
 
         /// <summary>
-        /// The price associated with the Product
+        /// Gets or sets the price associated with the Product
         /// </summary>
         [DataMember]
         public decimal Price
         {
-            get { return _price; }
+            get
+            {
+                return _price;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _price = value;
                     return _price;
-                }, _price, PriceSelector);
+                }, 
+                _price, 
+                PriceSelector);
             }
         }
 
         /// <summary>
-        /// The costOfGoods associated with the Product
+        /// Gets or sets the costOfGoods associated with the Product
         /// </summary>
         [DataMember]
         public decimal? CostOfGoods
         {
-            get { return _costOfGoods; }
+            get
+            {
+                return _costOfGoods;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
                     _costOfGoods = value;
                     return _costOfGoods;
-                }, _costOfGoods, CostOfGoodsSelector);
+                }, 
+                _costOfGoods, 
+                CostOfGoodsSelector);
             }
         }
 
         /// <summary>
-        /// The salePrice associated with the Product
+        /// Gets or sets the sale price associated with the Product
         /// </summary>
         [DataMember]
         public decimal? SalePrice
         {
-            get { return _salePrice; }
+            get
+            {
+                return _salePrice;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
                     _salePrice = value;
                     return _salePrice;
-                }, _salePrice, SalePriceSelector);
+                }, 
+                _salePrice, 
+                SalePriceSelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not this product is onsale
+        /// Gets or sets a value indicating whether or not this product is on sale
         /// </summary>
         [DataMember]
         public bool OnSale
         {
-            get { return _onSale; }
+            get
+            {
+                return _onSale;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _onSale = value;
                     return _onSale;
-                }, _onSale, OnSaleSelector);
+                }, 
+                _onSale, 
+                OnSaleSelector);
             }
         }
 
 
         /// <summary>
-        /// The manufacturer of the product
+        /// Gets or sets the manufacturer of the product
         /// </summary>
         [DataMember]
         public string Manufacturer
         {
-            get { return _manufacturer; }
+            get
+            {
+                return _manufacturer;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _manufacturer = value;
                     return _manufacturer;
-                }, _manufacturer, ManufacturerSelector);
+                }, 
+                _manufacturer, 
+                ManufacturerSelector);
             }
         }
 
         /// <summary>
-        /// The manufacturer model number of the product
+        /// Gets or sets the manufacturer model number of the product
         /// </summary>
         [DataMember]
         public string ManufacturerModelNumber
         {
-            get { return _manufacturerModelNumber; }
+            get
+            {
+                return _manufacturerModelNumber;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _manufacturerModelNumber = value;
                     return _manufacturerModelNumber;
-                }, _manufacturerModelNumber, ManufacturerModelNumberSelector);
+                }, 
+                _manufacturerModelNumber, 
+                ManufacturerModelNumberSelector);
             }
         }
 
 
         /// <summary>
-        /// The weight associated with the Product
+        /// Gets or sets the weight associated with the Product
         /// </summary>
         [DataMember]
         public decimal? Weight
         {
-            get { return _weight; }
+            get
+            {
+                return _weight;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _weight = value;
                     return _weight;
-                }, _weight, WeightSelector);
+                }, 
+                _weight, 
+                WeightSelector);
             }
         }
 
         /// <summary>
-        /// The length associated with the Product
+        /// Gets or sets the length associated with the Product
         /// </summary>
         [DataMember]
         public decimal? Length
         {
-            get { return _length; }
+            get
+            {
+                return _length;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _length = value;
                     return _length;
-                }, _length, LengthSelector);
+                }, 
+                _length, 
+                LengthSelector);
             }
         }
 
         /// <summary>
-        /// The width associated with the Product
+        /// Gets or sets the width associated with the Product
         /// </summary>
         [DataMember]
         public decimal? Width
         {
-            get { return _width; }
+            get
+            {
+                return _width;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
-                {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                        {
                     _width = value;
                     return _width;
-                }, _width, WidthSelector);
+                }, 
+                _width, 
+                WidthSelector);
             }
         }
 
         /// <summary>
-        /// The height associated with the Product
+        /// Gets or sets the height associated with the Product
         /// </summary>
         [DataMember]
         public decimal? Height
         {
-            get { return _height; }
+            get
+            {
+                return _height;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _height = value;
                     return _height;
-                }, _height, HeightSelector);
+                }, 
+                _height, 
+                HeightSelector);
             }
         }
 
         /// <summary>
-        /// The barcode of the product
+        /// Gets or sets the barcode of the product
         /// </summary>
         [DataMember]
         public string Barcode
         {
-            get { return _barcode; }
+            get
+            {
+                return _barcode;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _barcode = value;
                     return _barcode;
-                }, _barcode, BarcodeSelector);
+                }, 
+                _barcode, 
+                BarcodeSelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not this product is available
+        /// Gets or sets a value indicating whether or not this product is available
         /// </summary>
         [DataMember]
         public bool Available
         {
-            get { return _available; }
+            get
+            {
+                return _available;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _available = value;
                     return _available;
-                }, _available, AvailableSelector);
+                }, 
+                _available, 
+                AvailableSelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating whether or not to track inventory on this product
+        /// Gets or sets a value indicating whether or not to track inventory on this product
         /// </summary>
         [DataMember]
         public bool TrackInventory
         {
-            get { return _trackInventory; }
+            get
+            {
+                return _trackInventory;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _trackInventory = value;
                     return _trackInventory;
-                }, _trackInventory, TrackInventorySelector);
+                }, 
+                _trackInventory, 
+                TrackInventorySelector);
             }
         }
 
         /// <summary>
-        /// True/false indicating wether or not this product can be purchased when inventory levels are 
+        /// Gets or sets a value indicating whether or not this product can be purchased when inventory levels are 
         /// 0 or below.
         /// </summary>
         [DataMember]
         public bool OutOfStockPurchase
         {
-            get { return _outOfStockPurchase; }
+            get
+            {
+                return _outOfStockPurchase;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _outOfStockPurchase = value;
                     return _outOfStockPurchase;
-                }, _outOfStockPurchase, OutOfStockPurchaseSelector);
+                }, 
+                _outOfStockPurchase, 
+                OutOfStockPurchaseSelector);
             }
         }
 
         /// <summary>
-        /// The taxable associated with the Product
+        /// Gets or sets a value indicating whether or not the product is taxable
         /// </summary>
         [DataMember]
         public bool Taxable
         {
-            get { return _taxable; }
+            get
+            {
+                return _taxable;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _taxable = value;
                     return _taxable;
-                }, _taxable, TaxableSelector);
+                }, 
+                _taxable, 
+                TaxableSelector);
             }
         }
 
         /// <summary>
-        /// The shippable associated with the Product
+        /// Gets or sets a value indicating whether or not the product is shippable
         /// </summary>
         [DataMember]
         public bool Shippable
         {
-            get { return _shippable; }
+            get
+            {
+                return _shippable;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _shippable = value;
                     return _shippable;
-                }, _shippable, ShippableSelector);
+                }, 
+                _shippable, 
+                ShippableSelector);
             }
         }
 
         /// <summary>
-        /// The download associated with the Product
+        /// Gets or sets a value indicating whether or not this is a downloadable product
         /// </summary>
         [DataMember]
         public bool Download
         {
-            get { return _download; }
+            get
+            {
+                return _download;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _download = value;
                     return _download;
-                }, _download, DownloadSelector);
+                }, 
+                _download, 
+                DownloadSelector);
             }
         }
 
         /// <summary>
-        /// The downloadUrl associated with the Product
+        /// Gets or sets the Umbraco media id of the downloadable media
         /// </summary>
         [DataMember]
         public int? DownloadMediaId
         {
-            get { return _downloadMediaId; }
+            get
+            {
+                return _downloadMediaId;
+            }
+
             set
             {
-                SetPropertyValueAndDetectChanges(o =>
+                SetPropertyValueAndDetectChanges(
+                    o =>
                 {
                     _downloadMediaId = value;
                     return _downloadMediaId;
-                }, _downloadMediaId, DownloadMediaIdSelector);
+                }, 
+                _downloadMediaId, 
+                DownloadMediaIdSelector);
             }
         }
 
@@ -667,10 +840,17 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the catalog inventory collection.
+        /// </summary>
         [IgnoreDataMember]
         internal CatalogInventoryCollection CatalogInventoryCollection
         {
-            get { return _catalogInventoryCollection; }
+            get
+            {
+                return _catalogInventoryCollection;
+            }
+
             set
             {
                 _catalogInventoryCollection = value;
@@ -678,10 +858,32 @@
             }
         }
 
+        /// <summary>
+        /// The catalog inventory collection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CatalogInventoryCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(WarehouseInventoryChangedSelector);
         }
- 
+
+        /// <summary>
+        /// The detached contents on collection changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="notifyCollectionChangedEventArgs">
+        /// The notify collection changed event args.
+        /// </param>
+        private void DetachedContentsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            this.OnPropertyChanged(DetachedContentsSelector);
+        }
     }
 }

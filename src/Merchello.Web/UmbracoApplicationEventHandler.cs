@@ -14,6 +14,7 @@
     using Core.Services;
 
     using Merchello.Core.Gateways.Taxation;
+    using Merchello.Core.Models.DetachedContent;
 
     using Models.SaleHistory;
 
@@ -32,14 +33,14 @@
     public class UmbracoApplicationEventHandler : ApplicationEventHandler
     {
         /// <summary>
-        /// The _merchello is started.
-        /// </summary>
-        private static bool _merchelloIsStarted = false;
-
-        /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
+        /// <summary>
+        /// The _merchello is started.
+        /// </summary>
+        private static bool merchelloIsStarted = false;
 
         /// <summary>
         /// The Umbraco Application Starting event.
@@ -102,7 +103,28 @@
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
-            if (_merchelloIsStarted) this.VerifyMerchelloVersion();
+            DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
+
+            if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// The detached content type service on deleting.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void DetachedContentTypeServiceOnDeleting(IDetachedContentTypeService sender, DeleteEventArgs<IDetachedContentType> e)
+        {
+            foreach (var dc in e.DeletedEntities)
+            {
+                // remove detached content from products
+                var products = MerchelloContext.Current.Services.ProductService.GetByDetachedContentType(dc.Key);
+                MerchelloContext.Current.Services.ProductService.RemoveDetachedContent(products, dc.Key);
+            }
         }
 
         /// <summary>
@@ -130,7 +152,7 @@
         /// </param>
         private void BootManagerBaseOnMerchelloStarted(object sender, EventArgs eventArgs)
         {
-            _merchelloIsStarted = true;
+            merchelloIsStarted = true;
         }
 
         #region Shipment Audits

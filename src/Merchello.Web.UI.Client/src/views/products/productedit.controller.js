@@ -107,6 +107,7 @@
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
+
                         if (!$scope.product.hasVariants()) {
                             $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
                         }
@@ -231,12 +232,13 @@
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                  /*  if ($scope.product.hasVariants()) {
+                  if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    } */
+                    }
+
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);

@@ -34,11 +34,19 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        [Column("description")]
+        [Length(1000)]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the content type id.
         /// </summary>
-        [Column("contentTypeId")]
+        [Column("contentTypeKey")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public int? ContentTypeId { get; set; }
+        public Guid? ContentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.

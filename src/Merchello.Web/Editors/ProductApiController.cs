@@ -100,6 +100,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductDisplay GetProduct(Guid id)
         {            
             var product = _merchello.Query.Product.GetByKey(id);
@@ -117,6 +118,7 @@
         /// <returns>
         /// The <see cref="ProductVariantDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
             var variant = _merchello.Query.Product.GetProductVariantByKey(id);
@@ -134,6 +136,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
             return _productService.GetByKey(id).ToProductDisplay();

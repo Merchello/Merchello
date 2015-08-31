@@ -6,8 +6,8 @@
      * A utility service that builds ProductVariantDisplay models
      */
     angular.module('merchello.models').factory('productVariantDisplayBuilder',
-        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'ProductVariantDisplay',
-        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, ProductVariantDisplay) {
+        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'productVariantDetachedContentDisplayBuilder', 'ProductVariantDisplay',
+        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, productVariantDetachedContentDisplayBuilder, ProductVariantDisplay) {
 
             var Constructor = ProductVariantDisplay;
             return {
@@ -21,12 +21,14 @@
                             var variant = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             variant.attributes = productAttributeDisplayBuilder.transform(jsonResult[ i ].attributes);
                             variant.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            variant.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult[i].detachedContents);
                             variants.push(variant);
                         }
                     } else {
                         variants = genericModelBuilder.transform(jsonResult, Constructor);
                         variants.attributes = productAttributeDisplayBuilder.transform(jsonResult.attributes);
                         variants.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                        variants.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult.detachedContents);
                     }
                     return variants;
                 }

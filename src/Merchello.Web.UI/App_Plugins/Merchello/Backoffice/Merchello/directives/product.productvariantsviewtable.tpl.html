@@ -72,7 +72,9 @@
             <td data-ng-show="variant.onSale">{{variant.salePrice | currency : currencySymbol }}</td>
             <!-- price -->
             <td>{{variant.price | currency : currencySymbol }}</td>
-            <td><a data-ng-href="#/merchello/merchello/productedit/{{variant.productKey}}?variantid={{variant.key}}"><localize key="general_edit" /></a></td>
+            <td>
+                <merchello-edit-icon do-edit="redirectToEditor(variant)"></merchello-edit-icon>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -485,6 +485,60 @@
         }
 
         /// <summary>
+        /// Removes detached content from the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product variants.
+        /// </param>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        public void RemoveDetachedContent(IProduct product, Guid detachedContentTypeKey, bool raiseEvents = true)
+        {                      
+            Save(this.RemoveDetachedContentFromProduct(product, detachedContentTypeKey), raiseEvents);
+        }
+
+        /// <summary>
+        /// Removes detached content from the collection of products
+        /// </summary>
+        /// <param name="products">
+        /// The product variants.
+        /// </param>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        public void RemoveDetachedContent(IEnumerable<IProduct> products, Guid detachedContentTypeKey, bool raiseEvents = true)
+        {
+            var productsArray = products as IProduct[] ?? products.ToArray();
+            if (!productsArray.Any()) return;
+            var modified = productsArray.Select(p => this.RemoveDetachedContentFromProduct(p, detachedContentTypeKey)).ToList();
+            Save(modified, raiseEvents);
+        }
+
+        /// <summary>
+        /// Gets a collect of products by detached content type.
+        /// </summary>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Product}"/>.
+        /// </returns>
+        public IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetByDetachedContentType(detachedContentTypeKey);
+            }
+        }
+
+        /// <summary>
         /// The add product to collection.
         /// </summary>
         /// <param name="product">
@@ -1461,6 +1515,36 @@
                     _productVariantService.Save(variant, false);
                 }
             }
+        }
+
+        /// <summary>
+        /// The remove detached content from product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProduct"/>.
+        /// </returns>
+        private IProduct RemoveDetachedContentFromProduct(IProduct product, Guid detachedContentTypeKey)
+        {
+            // remove from product
+            if (product.DetachedContents.Any(x => x.DetachedContentType.Key == detachedContentTypeKey))
+            {
+                product.DetachedContents.Clear();
+            }
+
+
+            // remove from variants
+            foreach (var variant in product.ProductVariants.ToArray().Where(variant => variant.DetachedContents.Any(x => x.DetachedContentType.Key == detachedContentTypeKey)))
+            {
+                variant.DetachedContents.Clear();
+            }
+
+            return product;
         }
 
         /// <summary>

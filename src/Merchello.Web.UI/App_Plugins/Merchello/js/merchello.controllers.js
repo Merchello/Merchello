@@ -3142,6 +3142,111 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
             loadSettings();
 }]);
 
+angular.module('merchello').controller('Merchello.DetachedContentType.Dialogs.EditDetachedContentTypeController',
+    ['$scope', function($scope) {
+        $scope.wasFormSubmitted = false;
+        $scope.save = save;
+
+        function save() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.productContentTypeForm.name.$valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+    }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.Directives.DetachedContentTypeListController
+ * @function
+ *
+ * @description
+ * The controller for the detached content type list directive
+ */
+angular.module('merchello').controller('Merchello.Directives.DetachedContentTypeListController',
+    ['$scope', 'notificationsService', 'localizationService', 'dialogService', 'detachedContentResource', 'dialogDataFactory', 'detachedContentTypeDisplayBuilder',
+    function($scope, notificationsService, localizationService, dialogService, detachedContentResource, dialogDataFactory, detachedContentTypeDisplayBuilder) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.detachedContentTypes = [];
+        $scope.args =  { test: 'action hit' };
+
+        $scope.edit = editContentType;
+        $scope.delete = deleteContentType;
+
+        function init() {
+            loadDetachedContentTypes();
+        }
+
+        function loadDetachedContentTypes() {
+            detachedContentResource.getDetachedContentTypeByEntityType($scope.entityType).then(function(results) {
+                $scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
+            });
+        }
+
+        function editContentType(contentType) {
+            var dialogData = dialogDataFactory.createEditDetachedContentTypeDialogData();
+
+            // we need to clone this so that the actual model in the scope is not updated in case the user
+            // does not hit save.
+            dialogData.contentType = detachedContentTypeDisplayBuilder.transform(contentType);
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/detachedcontenttype.edit.html',
+                show: true,
+                callback: processEditDialog,
+                dialogData: dialogData
+            });
+        }
+
+        function processEditDialog(dialogData) {
+            detachedContentResource.saveDetachedContentType(dialogData.contentType).then(function(dct) {
+                loadDetachedContentTypes();
+                notificationsService.success('Saved successfully');
+            }, function(reason) {
+                notificationsService.error('Failed to save detached content type' + reason);
+            });
+        }
+
+        /**
+         * @ngdoc method
+         * @name deleteContentType
+         * @function
+         *
+         * @description - Opens the delete content type dialog.
+         */
+        function deleteContentType(contentType) {
+            var dialogData = {};
+            dialogData.name = contentType.name;
+            dialogData.contentType = contentType;
+            localizationService.localize('merchelloDetachedContent_deleteWarning').then(function(warning) {
+                dialogData.warning = warning;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteDialog,
+                    dialogData: dialogData
+                });
+            });
+        }
+
+        function processDeleteDialog(dialogData) {
+            detachedContentResource.deleteDetachedContentType(dialogData.contentType.key).then(function() {
+                loadDetachedContentTypes();
+                notificationsService.success('Deleted successfully');
+            }, function(reason) {
+                console.info(reason);
+              notificationsService.error('Failed to delete detached content type' + reason);
+            });
+        }
+
+
+        // initialize the controller
+        init();
+}]);
+
     /**
      * @ngdoc controller
      * @name Merchello.GatewayProviders.Dialogs.NotificationsMessageAddController
@@ -4115,7 +4220,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
             loadNotificationMessage(key);
             loadAllNotificationMonitors();
             $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
-            $scope.tabs.insertTab('messageEditor', 'Message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
+            $scope.tabs.insertTab('messageEditor', 'merchelloTabs_message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
             $scope.tabs.setActive('messageEditor');
         }
 
@@ -5454,6 +5559,43 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Product.Dialogs.AddProductContentTypeController
+ * @function
+ *
+ * @description
+ * The controller for the adding product content types
+ */
+angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductContentTypeController',
+    ['$scope', '$location', 'notificationsService', 'navigationService',  'detachedContentResource', 'detachedContentTypeDisplayBuilder',
+        function($scope, $location, notificationsService, navigationService, detachedContentResource, detachedContentTypeDisplayBuilder) {
+            $scope.loaded = true;
+            $scope.wasFormSubmitted = false;
+            $scope.contentType = {};
+            $scope.name = '';
+            $scope.description = '';
+
+            $scope.save = function() {
+                $scope.wasFormSubmitted = true;
+                if ($scope.productContentTypeForm.name.$valid && $scope.contentType.key) {
+                    var dtc = detachedContentTypeDisplayBuilder.createDefault();
+                    dtc.umbContentType = $scope.contentType;
+                    dtc.entityType = 'Product';
+                    dtc.name = $scope.name;
+                    dtc.description = $scope.description;
+
+                    detachedContentResource.addDetachedContentType(dtc).then(function(result) {
+                        notificationsService.success("Content Type Saved", "");
+                        navigationService.hideNavigation();
+                        $location.url("/merchello/merchello/productcontenttypelist/" + result.key, true);
+                    }, function(reason) {
+                        notificationsService.error('Failed to add detached content type ' + reason);
+                    });
+                }
+            }
+        }]);
+
     /**
      * @ngdoc controller
      * @name Merchello.Product.Dialogs.ProductVariantBulkChangePricesController
@@ -5498,8 +5640,8 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -5518,6 +5660,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.updateInventory = updateInventory;
         $scope.toggleOnSale = toggleOnSale;
         $scope.toggleAvailable = toggleAvailable;
+        $scope.redirectToEditor = redirectToEditor;
 
         function init() {
             angular.forEach($scope.product.productVariants, function(pv) {
@@ -5820,6 +5963,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             $scope.reload();
         }
 
+        function redirectToEditor(variant) {
+           $location.url('/merchello/merchello/productedit/' + variant.productKey + '?variantid=' + variant.key, true);
+        }
+
         // initialize the controller
         init();
 }]);
@@ -5897,6 +6044,273 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
             // Initializes the controller
             init();
 }]);
+
+angular.module('merchello').controller('Merchello.Backoffice.ProductContentTypeListController',
+    ['$scope', 'merchelloTabsFactory',
+    function($scope, merchelloTabsFactory) {
+
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+        $scope.tabs = {};
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createProductListTabs();
+            $scope.tabs.setActive('productContentTypeList');
+        }
+
+        // Initializes the controller
+        init();
+    }]);
+
+angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedContentController',
+    ['$scope', '$routeParams', '$location', 'notificationsService', 'merchelloTabsFactory', 'contentResource', 'detachedContentResource', 'productResource',
+        'productDisplayBuilder', 'productVariantDetachedContentDisplayBuilder',
+        function($scope, $routeParams, $location, notificationsService, merchelloTabsFactory, contentResource, detachedContentResource, productResource,
+             productDisplayBuilder, productVariantDetachedContentDisplayBuilder) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.productVariant = {};
+            $scope.language = '';
+            $scope.languages = [];
+            $scope.isVariant = false;
+            $scope.isConfigured = false;
+            $scope.defaultLanguage = 'en-US';
+            $scope.contentType = {};
+            $scope.detachedContent = {};
+            $scope.tabs = [];
+
+            // Umbraco properties
+            $scope.contentTabs = [];
+            $scope.currentTab = {};
+
+            // navigation switches
+            var showUmbracoTabs = true;
+            var merchelloTabs = ['productcontent','variantlist', 'optionslist'];
+            var umbracoTabs = [];
+
+            // TODO wire in event handler to watch for content changes so that we can display a notice when swapping languages
+
+            $scope.save = save;
+            $scope.saveContentType = createDetachedContent;
+            $scope.setLanguage = setLanguage;
+
+            var product = {};
+            var loadArgs = {
+                key: '',
+                productVariantKey: ''
+            };
+
+            function init() {
+                var key = $routeParams.id;
+
+                // extended content is not valid unless we have a product to attach it to
+                if (key === '' || key === undefined) {
+                    $location.url('/merchello/merchello/productlist/manage', true);
+                }
+                var productVariantKey = $routeParams.variantid;
+                loadArgs.key = key;
+                loadArgs.productVariantKey = productVariantKey;
+                loadLanguages(loadArgs);
+            }
+
+            function loadLanguages(args) {
+                detachedContentResource.getAllLanguages().then(function(languages) {
+                    $scope.languages = languages;
+                    console.info($scope.languages);
+                    if($scope.defaultLanguage !== '' && $scope.defaultLanguage !== undefined) {
+                        $scope.language = _.find($scope.languages, function(l) { return l.isoCode === $scope.defaultLanguage; });
+                    }
+                    loadProduct(args);
+                }, function(reason) {
+                    notificationsService.error('Failed to load Umbraco languages' + reason);
+                });
+            }
+
+            /**
+             * @ngdoc method
+             * @name loadProduct
+             * @function
+             *
+             * @description
+             * Load a product by the product key.
+             */
+            function loadProduct(args) {
+
+                var promiseProduct = productResource.getByKey(args.key);
+                promiseProduct.then(function (p) {
+                    product = productDisplayBuilder.transform(p);
+                    if(args.productVariantKey === '' || args.productVariantKey === undefined) {
+                        // this is a product edit.
+                        // we use the master variant context so that we can use directives associated with variants
+                        $scope.productVariant = product.getMasterVariant();
+
+                        if (!product.hasVariants()) {
+                            $scope.tabs = merchelloTabsFactory.createProductEditorTabs(args.key);
+                        }
+                        else
+                        {
+                            $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(args.key);
+                        }
+                    } else {
+                        // this is a product variant edit
+                        // in this case we need the specific variant
+                        $scope.productVariant = product.getProductVariant(args.productVariantKey);
+                        $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(args.key, args.productVariantKey);
+                        $scope.isVariant = true;
+                    }
+
+                    $scope.loaded = true;
+
+                    if ($scope.productVariant.hasDetachedContent()) {
+                        $scope.productVariant.assertLanguageContent($scope.languages);
+                        $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
+                        $scope.isConfigured = true;
+                        loadScaffold();
+                    } else {
+                        $scope.preValuesLoaded = true;
+                    }
+                    $scope.tabs.setActive('productcontent');
+                }, function (reason) {
+                    notificationsService.error("Product Load Failed", reason.message);
+                });
+            }
+
+            function loadScaffold() {
+                // every detached content associated with a variant MUST share the same content type,
+                var detachedContentType = $scope.productVariant.detachedContentType();
+
+                contentResource.getScaffold(-20, detachedContentType.umbContentType.alias).then(function(scaffold) {
+                    filterTabs(scaffold);
+                    fillValues();
+                    if ($scope.contentTabs.length > 0) {
+                        $scope.currentTab = $scope.contentTabs[0];
+                        $scope.tabs.setActive($scope.currentTab.id);
+                        setTabVisibility();
+                    }
+                    $scope.preValuesLoaded = true;
+                });
+            }
+
+            function save() {
+                if ($scope.productVariant.hasDetachedContent()) {
+                    // save the current language only
+                    angular.forEach($scope.contentTabs, function(ct) {
+                      angular.forEach(ct.properties, function (p) {
+                          if (typeof p.value !== "function") {
+                              $scope.detachedContent.detachedDataValues.setValue(p.alias, p.value);
+                          }
+                      });
+                    });
+                    doSave();
+                }
+            }
+
+            function createDetachedContent(detachedContent) {
+                if(!$scope.productVariant.hasDetachedContent()) {
+                    // create detached content values for each language present
+                    var isoCodes = _.pluck($scope.languages, 'isoCode');
+
+                    contentResource.getScaffold(-20, detachedContent.umbContentType.alias).then(function(scaffold) {
+
+                        filterTabs(scaffold);
+
+                        angular.forEach(isoCodes, function(cultureName) {
+                           var productVariantContent = buildProductVariantDetachedContent(cultureName, detachedContent, $scope.contentTabs);
+                            $scope.productVariant.detachedContents.push(productVariantContent);
+                        });
+
+                        doSave();
+                    });
+                }
+            }
+
+            function setLanguage(lang) {
+                $scope.language = lang;
+                save();
+            }
+
+            function doSave() {
+                // convert the extended data objects to an array
+                angular.forEach($scope.productVariant.detachedContents, function(dc) {
+                    dc.detachedDataValues = dc.detachedDataValues.toArray();
+                });
+
+                var promise;
+                if ($scope.productVariant.master) {
+                    promise = productResource.save(product);
+                } else {
+                    promise = productResource.saveVariant($scope.productVariant);
+                }
+
+                promise.then(function(p) {
+                    $scope.loaded = false;
+                    $scope.preValuesLoaded = false;
+                    loadProduct(loadArgs);
+                    notificationsService.success('Saved successfully');
+                }, function(reason) {
+                    notificationsService.error('Failed to save product ' + reason)
+                });
+            }
+
+            function buildProductVariantDetachedContent(cultureName, detachedContent, tabs) {
+                var productVariantContent = productVariantDetachedContentDisplayBuilder.createDefault();
+                productVariantContent.cultureName = cultureName;
+                productVariantContent.productVariantKey = $scope.productVariantKey;
+                productVariantContent.detachedContentType = detachedContent;
+                angular.forEach(tabs, function(tab) {
+                    angular.forEach(tab.properties, function(prop) {
+                        productVariantContent.detachedDataValues.setValue(prop.alias, prop.value);
+                    })
+                });
+                return productVariantContent;
+            }
+
+            function filterTabs(scaffold) {
+                $scope.contentTabs = _.filter(scaffold.tabs, function(t) { return t.id !== 0 });
+                if ($scope.contentTabs.length > 0) {
+                    angular.forEach($scope.contentTabs, function(ct) {
+                        $scope.tabs.addActionTab(ct.id, ct.label, switchTab);
+                        umbracoTabs.push(ct.id);
+                    });
+                   // $scope.tabs.insertActionTab('merchello', 'Merchello', switchTab, 0);
+                }
+            }
+
+            function setTabVisibility() {
+                if (showUmbracoTabs) {
+                    angular.forEach(merchelloTabs, function(mt) {
+                      $scope.tabs.hideTab(mt);
+                    });
+                }
+            }
+
+            function switchTab(id) {
+                var exists = _.find(umbracoTabs, function(ut) {
+                    return ut === id;
+                });
+                if (exists !== undefined) {
+                    var fnd = _.find($scope.contentTabs, function (ct) {
+                        return ct.id === id;
+                    });
+                    $scope.currentTab = fnd;
+                    $scope.tabs.setActive(id);
+                }
+            }
+
+            function fillValues() {
+                if ($scope.contentTabs.length > 0) {
+                    angular.forEach($scope.contentTabs, function(ct) {
+                        angular.forEach(ct.properties, function(p) {
+                            p.value = $scope.detachedContent.detachedDataValues.getValue(p.alias);
+                        });
+                    });
+                }
+            }
+
+            // Initialize the controller
+            init();
+    }]);
 
     /**
      * @ngdoc controller
@@ -6007,6 +6421,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
+
                         if (!$scope.product.hasVariants()) {
                             $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
                         }
@@ -6131,12 +6546,13 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantShipp
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                  /*  if ($scope.product.hasVariants()) {
+                  if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    } */
+                    }
+
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);
