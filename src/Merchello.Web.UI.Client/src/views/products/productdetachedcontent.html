@@ -25,6 +25,14 @@
         <merchello-panel>
             <div class="tab-content row-fluid" data-ng-show="preValuesLoaded">
                 <div class="umb-pane" data-ng-show="isConfigured">
+                    <div class="btn-group merch-language-select pull-right">
+                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon icon-flag-alt"></i> {{ language.isoCode }} <i class="icon-navigation-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li data-ng-repeat="lang in languages">
+                                <a href data-ng-click="setLanguage(lang)" prevent-default>{{lang.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
 
                     <umb-property
                             property="property"
@@ -35,14 +43,10 @@
                 </div>
 
                 <div class="merchello-pane">
-
-
                     <div class="pager well" data-ng-hide="isConfigured">
                         <localize key="merchelloDetachedContent_noProductContentType" />
                         <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" save="saveContentType(contentType)"></detached-content-type-select>
-
                     </div>
-
                 </div>
                 <!-- /merchello-pane -->
             </div>

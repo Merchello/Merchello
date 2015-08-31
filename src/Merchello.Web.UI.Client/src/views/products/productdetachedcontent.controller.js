@@ -28,7 +28,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             // TODO wire in event handler to watch for content changes so that we can display a notice when swapping languages
 
             $scope.save = save;
-            $scope.saveContentType = saveContent;
+            $scope.saveContentType = createDetachedContent;
+            $scope.setLanguage = setLanguage;
 
             var product = {};
             var loadArgs = {
@@ -52,6 +53,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function loadLanguages(args) {
                 detachedContentResource.getAllLanguages().then(function(languages) {
                     $scope.languages = languages;
+                    console.info($scope.languages);
                     if($scope.defaultLanguage !== '' && $scope.defaultLanguage !== undefined) {
                         $scope.language = _.find($scope.languages, function(l) { return l.isoCode === $scope.defaultLanguage; });
                     }
@@ -116,7 +118,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                 contentResource.getScaffold(-20, detachedContentType.umbContentType.alias).then(function(scaffold) {
                     filterTabs(scaffold);
-                    FillValues();
+                    fillValues();
                     if ($scope.contentTabs.length > 0) {
                         $scope.currentTab = $scope.contentTabs[0];
                         $scope.tabs.setActive($scope.currentTab.id);
@@ -140,7 +142,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }
             }
 
-            function saveContent(detachedContent) {
+            function createDetachedContent(detachedContent) {
                 if(!$scope.productVariant.hasDetachedContent()) {
                     // create detached content values for each language present
                     var isoCodes = _.pluck($scope.languages, 'isoCode');
@@ -157,6 +159,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         doSave();
                     });
                 }
+            }
+
+            function setLanguage(lang) {
+                $scope.language = lang;
+                save();
             }
 
             function doSave() {
@@ -227,7 +234,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }
             }
 
-            function FillValues() {
+            function fillValues() {
                 if ($scope.contentTabs.length > 0) {
                     angular.forEach($scope.contentTabs, function(ct) {
                         angular.forEach(ct.properties, function(p) {

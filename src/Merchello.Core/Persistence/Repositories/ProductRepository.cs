@@ -144,6 +144,33 @@
         }
 
         /// <summary>
+        /// The get by detached content type.
+        /// </summary>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
+        public IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT DISTINCT([merchProductVariant].[productKey])")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE [merchProductVariant].[pk] IN (")
+                .Append("SELECT DISTINCT([merchProductVariantDetachedContent].[productVariantKey])")
+                .Append("FROM [merchProductVariantDetachedContent]")
+                .Append(
+                    "WHERE [merchProductVariantDetachedContent].[detachedContentTypeKey] = @Key",
+                    new { @Key = detachedContentTypeKey })
+                .Append(")");
+
+            var productKeys = Database.Fetch<Guid>(sql);
+
+            return productKeys.Select(Get);
+        }
+
+        /// <summary>
         /// True/false indicating whether or not a SKU is already exists in the database
         /// </summary>
         /// <param name="sku">

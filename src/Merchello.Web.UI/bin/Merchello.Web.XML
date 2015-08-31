@@ -16679,14 +16679,14 @@
             Handles the Umbraco Application "Starting" and "Started" event and initiates the Merchello startup
             </summary>
         </member>
-        <member name="F:Merchello.Web.UmbracoApplicationEventHandler._merchelloIsStarted">
-            <summary>
-            The _merchello is started.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.UmbracoApplicationEventHandler.Log">
             <summary>
             The log.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.UmbracoApplicationEventHandler.merchelloIsStarted">
+            <summary>
+            The _merchello is started.
             </summary>
         </member>
         <member name="M:Merchello.Web.UmbracoApplicationEventHandler.ApplicationStarting(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
@@ -16709,6 +16709,17 @@
             </param>
             <param name="applicationContext">
             The application context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.UmbracoApplicationEventHandler.DetachedContentTypeServiceOnDeleting(Merchello.Core.Services.IDetachedContentTypeService,Umbraco.Core.Events.DeleteEventArgs{Merchello.Core.Models.DetachedContent.IDetachedContentType})">
+            <summary>
+            The detached content type service on deleting.
+            </summary>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The e.
             </param>
         </member>
         <member name="M:Merchello.Web.UmbracoApplicationEventHandler.TaxMethodServiceOnSaved(Merchello.Core.Services.ITaxMethodService,Umbraco.Core.Events.SaveEventArgs{Merchello.Core.Models.ITaxMethod})">

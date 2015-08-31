@@ -170,9 +170,19 @@
         /// </param>
         internal void SaveDetachedContents(IProductVariant productVariant)
         {
-            if (!productVariant.DetachedContents.Any()) return;
+            var existing = this.GetDetachedContentCollection(productVariant.Key).ToArray();
 
-            var existing = this.GetDetachedContentCollection(productVariant.Key);
+            if (!productVariant.DetachedContents.Any() && !existing.Any()) return;
+
+            if (!productVariant.DetachedContents.Any())
+            {
+                foreach (var dc in existing)
+                {
+                    this.DeleteDetachedContent(dc);
+                }
+
+                return;
+            }
 
             foreach (var exist in existing.Where(x => !productVariant.DetachedContents.Contains(x.CultureName)))
             {
@@ -194,7 +204,7 @@
         internal void DeleteDetachedContent(IProductVariantDetachedContent detachedContent)
         {
             Database.Execute(
-                "DELETE [merchProductVariantDetachedContent] WHERE @Key = ",
+                "DELETE [merchProductVariantDetachedContent] WHERE pk = @Key",
                 new { @Key = detachedContent.Key });
         }
 

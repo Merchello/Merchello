@@ -16,6 +16,17 @@
     public interface IProductRepository : IPagedRepository<IProduct, ProductDto>, IStaticEntityCollectionRepository<IProduct>
     {
         /// <summary>
+        /// Gets a collection of <see cref="IProduct"/> that has detached content of type.
+        /// </summary>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
+        IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey);
+
+        /// <summary>
         /// Gets or sets a value Indicating whether or not a SKU is already exists in the database
         /// </summary>
         /// <param name="sku">The SKU to be tested</param>
