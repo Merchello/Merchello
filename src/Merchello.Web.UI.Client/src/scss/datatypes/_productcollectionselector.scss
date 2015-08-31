@@ -1,0 +1,8 @@
+.merchello-product-collection-picker {
+  .gear {
+    cursor: pointer;
+    &:active, &:focus {
+      text-decoration: none;
+    }
+  }
+}

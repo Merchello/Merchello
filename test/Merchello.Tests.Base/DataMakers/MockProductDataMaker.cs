@@ -9,6 +9,11 @@ using umbraco.presentation.umbraco.dialogs;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    using System.Linq;
+
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Models.ContentEditing.Content;
+
     /// <summary>
     /// Helper class to assist in putting together product data for testing
     /// </summary>
@@ -134,8 +139,8 @@ namespace Merchello.Tests.Base.DataMakers
                         },
                         SortOrder = 1
                     }
-
-                }
+                },
+                DetachedContents = Enumerable.Empty<ProductVariantDetachedContentDisplay>()
             };
         }
     }

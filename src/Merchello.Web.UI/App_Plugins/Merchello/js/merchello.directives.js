@@ -359,10 +359,11 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
 
         scope: {
             subTreeId : '=',
-            entityType: '='
+            entityType: '=',
         },
 
         compile: function(element, attrs) {
+
             //config
             //var showheader = (attrs.showheader !== 'false');
             var template = '<ul class="umb-tree"><li class="root">';
@@ -380,7 +381,6 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
             element.replaceWith(template);
 
             return function(scope, elem, attr, controller) {
-
 
                 var lastSection = "";
 
