@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Models.MapperResolvers.DetachedContent
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using AutoMapper;
 
@@ -22,7 +23,9 @@
         /// </returns>
         protected override IEnumerable<KeyValuePair<string, string>> ResolveCore(IDetachedContent source)
         {
-            return source.DetachedDataValues.AsEnumerable();
+            return source.DetachedDataValues != null
+                       ? source.DetachedDataValues.AsEnumerable()
+                       : Enumerable.Empty<KeyValuePair<string, string>>();
         }
     }
 }

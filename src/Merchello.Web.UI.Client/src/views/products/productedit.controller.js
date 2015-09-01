@@ -168,6 +168,7 @@
                 }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
+                    // convert the extended data objects to an array
                     switch ($scope.context) {
                         case "productedit":
                             // Copy from master variant

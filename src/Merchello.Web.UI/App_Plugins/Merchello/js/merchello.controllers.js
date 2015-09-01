@@ -6232,9 +6232,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             function doSave() {
                 // convert the extended data objects to an array
-                angular.forEach($scope.productVariant.detachedContents, function(dc) {
-                    dc.detachedDataValues = dc.detachedDataValues.toArray();
-                });
+                //angular.forEach($scope.productVariant.detachedContents, function(dc) {
+                //    dc.detachedDataValues = dc.detachedDataValues.toArray();
+                //});
 
                 var promise;
                 if ($scope.productVariant.master) {
@@ -6482,6 +6482,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
+                    // convert the extended data objects to an array
                     switch ($scope.context) {
                         case "productedit":
                             // Copy from master variant

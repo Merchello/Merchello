@@ -168,9 +168,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             function doSave() {
                 // convert the extended data objects to an array
-                angular.forEach($scope.productVariant.detachedContents, function(dc) {
-                    dc.detachedDataValues = dc.detachedDataValues.toArray();
-                });
+                //angular.forEach($scope.productVariant.detachedContents, function(dc) {
+                //    dc.detachedDataValues = dc.detachedDataValues.toArray();
+                //});
 
                 var promise;
                 if ($scope.productVariant.master) {
