@@ -3169,6 +3169,319 @@
             Gets the x path value.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.DetachedContent.IVirtualProductContent">
+            <summary>
+            Defines a virtual product content.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.SafeEncodeUrlSegments(System.String)">
+            <summary>
+            Encodes url segments.
+            </summary>
+            <param name="urlPath">
+            The url path.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+            <seealso cref="!:https://github.com/Shandem/Articulate/blob/master/Articulate/StringExtensions.cs"/>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.ConvertToSlug(System.String)">
+            <summary>
+            The convert to slug.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.GetSearchableUrl(System.String)">
+            <summary>
+            The get searchable url.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.EnsureForwardSlashes(System.String)">
+            <summary>
+            Replaces \ with / in a path.
+            </summary>
+            <param name="value">
+            The value to replace backslashes.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.EnsureStartsAndEndsWith(System.String,System.Char)">
+            <summary>
+            Ensures a string both starts and ends with a character.
+            </summary>
+            <param name="input">
+            The input string.
+            </param>
+            <param name="value">
+            The char value to assert
+            </param>
+            <returns>
+            The asserted string.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.RemoveSpecialCharacters(System.String)">
+            <summary>
+            The remove special characters.
+            </summary>
+            <param name="input">
+            The input.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._name">
+            <summary>
+            The name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._contentType">
+            <summary>
+            The content type.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._properties">
+            <summary>
+            The properties.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._sortOrder">
+            <summary>
+            The sort order.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._isPreviewing">
+            <summary>
+            A value indicating whether or not this is in preview mode.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._cultureName">
+            <summary>
+            The culture name.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._display">
+            <summary>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._templateId">
+            <summary>
+            The _template id.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.VirtualProductContent.#ctor(System.String,Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedProperty},System.String,System.Int32,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.VirtualProductContent"/> class.
+            </summary>
+            <param name="name">
+            The name.
+            </param>
+            <param name="contentType">
+            The content type.
+            </param>
+            <param name="display">
+            The display.
+            </param>
+            <param name="properties">
+            The properties.
+            </param>
+            <param name="cultureName">
+            The culture name
+            </param>
+            <param name="sortOrder">
+            The sort order.
+            </param>
+            <param name="isPreviewing">
+            The is previewing.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.VirtualProductContent.GetProperty(System.String)">
+            <summary>
+            Gets a property by it's alias.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            The <see cref="T:Umbraco.Core.Models.IPublishedProperty"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.VirtualProductContent.Initialize">
+            <summary>
+            Initializes the model.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Key">
+            <summary>
+            Gets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.CultureName">
+            <summary>
+            Gets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Id">
+            <summary>
+            Gets the id.
+            </summary>
+            <remarks>
+            Always 0 for virtual content
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Name">
+            <summary>
+            Gets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.ItemType">
+            <summary>
+            Gets the item type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.IsDraft">
+            <summary>
+            Gets a value indicating whether is a draft.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Parent">
+            <summary>
+            Gets the parent.
+            </summary>
+            <remarks>
+            Always returns null
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Children">
+            <summary>
+            Gets the children.
+            </summary>
+            <remarks>
+            Always returns empty
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Properties">
+            <summary>
+            Gets the properties.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.ContentType">
+            <summary>
+            Gets the content type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.DocumentTypeAlias">
+            <summary>
+            Gets the document type alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.TemplateId">
+            <summary>
+            Gets the template id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.SortOrder">
+            <summary>
+            Gets the sort order.
+            </summary>
+            <remarks>
+            Defaults to 0
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.UrlName">
+            <summary>
+            Gets the url name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.DocumentTypeId">
+            <summary>
+            Gets the document type id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Path">
+            <summary>
+            Gets the path.
+            </summary>
+            <remarks>
+            Always returns null
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Version">
+            <summary>
+            Gets the version.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.Level">
+            <summary>
+            Gets the level.
+            </summary>
+            <remarks>
+            Always returns 0
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.WriterName">
+            <summary>
+            Gets the writer name.
+            </summary>
+            <remarks>
+            Always returns null
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.CreatorName">
+            <summary>
+            Gets the creator name.
+            </summary>
+            <remarks>
+            Always returns null
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.WriterId">
+            <summary>
+            Gets the writer id.
+            </summary>
+            <remarks>
+            Always returns 0 (admin)
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.CreatorId">
+            <summary>
+            Gets the creator id.
+            </summary>
+            <remarks>
+            Always returns 0 (admin)
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.CreateDate">
+            <summary>
+            Gets the create date.
+            </summary>
+            <remarks>
+            Always returns DateTime.MinValue
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualProductContent.UpdateDate">
+            <summary>
+            Gets the update date.
+            </summary>
+            <remarks>
+            Always returns DateTime.MinValue
+            </remarks>
+        </member>
         <member name="T:Merchello.Web.Models.Interfaces.IEntityDisplay">
             <summary>
             Defines a display entity.
@@ -14193,6 +14506,59 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.GetDefaultSlug(Merchello.Web.Models.ContentEditing.ProductDisplayBase)">
+            <summary>
+            Gets the default slug.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.Slug(Merchello.Web.Models.ContentEditing.ProductDisplayBase,System.String)">
+            <summary>
+            The slug.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="cultureName">
+            The culture name.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.TemplateId(Merchello.Web.Models.ContentEditing.ProductDisplayBase,System.String)">
+            <summary>
+            The template id.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="cultureName">
+            The culture name.
+            </param>
+            <returns>
+            The <see cref="T:System.Int32"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.DetachedContentForCulture(Merchello.Web.Models.ContentEditing.ProductDisplayBase,System.String)">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/> for a given culture.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="cultureName">
+            The culture name.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.AddOrUpdateDetachedContent(Merchello.Core.Models.IProductBase,Merchello.Web.Models.ContentEditing.ProductDisplayBase)">
