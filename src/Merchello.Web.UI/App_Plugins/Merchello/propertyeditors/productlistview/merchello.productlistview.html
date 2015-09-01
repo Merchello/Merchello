@@ -1,9 +1,8 @@
-<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductCollectionSelectionController" class="umb-listview merchello-product-collection-picker">
-
+<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductListViewController" class="umb-listview merchello-product-collection-picker">
+    <entity-collection-title-bar collection-key="model.value"></entity-collection-title-bar>
     <table class="table table-striped">
         <thead>
         <tr>
-            <td style="width: 35px"></td>
             <td>
                 <a href="#" data-ng-click="sort('name', true)" prevent-default class="sortable">
                     <localize key="merchelloVariant_product"/>
@@ -23,15 +22,21 @@
                 </a>
             </td>
             <td>
-                <localize key="merchelloVariant_productOnSale" />
+                <a href="#" data-ng-click="sort('onSale', true)" prevent-default class="sortable">
+                    <localize key="merchelloVariant_productOnSale" />
+                    <i data-ng-class="{'icon-navigation-up': isSortDirection('onSale', 'asc'), 'icon-navigation-down': isSortDirection('onSale', 'desc')}"></i>
+                </a>
             </td>
-            <td data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
-                <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
+            <td>
+                <a href="#" data-ng-click="sort('price', true)" prevent-default class="sortable">
+                    <localize key="merchelloGeneral_price"/>
+                    <i data-ng-class="{'icon-navigation-down': isSortDirection('price', 'desc'), 'icon-navigation-up': isSortDirection('price', 'acs')}"></i>
+                </a>
             </td>
             <td>
                 <form class="pull-right ng-pristine ng-valid" novalidate>
                     <i class="icon-search" data-ng-click="enterSearch($event)"></i>
-                    <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
+                    <input type="text" data-ng-model="options.filter" on-keyup="loadProducts()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
                 </form>
             </td>
             <td class="pull-right">
@@ -42,35 +47,46 @@
         </tr>
         </thead>
 
-        <tbody ng-show="listViewResultSet.totalItems === 0">
+        <tbody data-ng-show="!preValuesLoaded">
         <tr>
-            <td colspan="8">
+            <td colspan="7">
+                <div class="umb-loader-wrapper">
+                    <div class="umb-loader"></div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+
+        <tbody ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
+        <tr>
+            <td colspan="7">
                 <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
             </td>
         </tr>
         </tbody>
 
+
         <tbody ng-show="listViewResultSet.totalItems > 0">
         <tr ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
 
-            <td><i class="icon {{result.icon}}" ng-class="getIcon(result)"></i></td>
-            <td><a href="#{{result.editPath}}" data-ng-bind="result.name"></a></td>
+            <td><a href="#" data-ng-click="goToEditor(result)" data-ng-bind="result.name" prevent-default></a></td>
             <td>{{result.sku}}</td>
             <td>{{ result.totalInventory() }}</td>
             <!-- inventory -->
             <td data-ng-show="result.hasVariants() && !result.anyVariantsOnSale()"><localize key="general_no" /></td>
             <td data-ng-show="result.hasVariants() && result.anyVariantsOnSale()">{{product.variantsMinimumPrice(true) | currency : currencySymbol}} - {{result.variantsMaximumPrice(true) | currency : currencySymbol}}</td>
             <td data-ng-show="!result.hasVariants() && !result.onSale"><localize key="general_no" /></td>
-            <td data-ng-show="!result.hasVariants() && result..onSale">{{product.salePrice | currency : currencySymbol}}</td>
+            <td data-ng-show="!result.hasVariants() && result.onSale">{{product.salePrice | currency : currencySymbol}}</td>
             <!-- price -->
             <td data-ng-hide="result.hasVariants()">{{result.price | currency : currencySymbol}}</td>
             <td data-ng-show="result.hasVariants()">{{result.variantsMinimumPrice() | currency : currencySymbol}} - {{result.variantsMaximumPrice() | currency : currencySymbol}}</td>
+            <td colspan="2"></td>
         </tr>
         </tbody>
 
         <tfoot ng-show="pagination.length > 1">
         <tr>
-            <th colspan="8">
+            <th colspan="7">
                 <div class="pull-left">
                 </div>
                 <div class="pagination pagination-right">
@@ -101,6 +117,5 @@
         </tr>
         </tfoot>
     </table>
-
 
 </div>

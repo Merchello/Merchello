@@ -8,10 +8,10 @@
 			}
 		},
 		{
-			alias: 'Merchello.ProductCollectionSelector',
-			name: 'Merchello Product Collection Selector',
+			alias: 'Merchello.ProductListView',
+			name: 'Merchello Product List View',
 			editor: {
-				view: '~/App_Plugins/Merchello/propertyeditors/productcollectionselector/merchello.productcollectionselector.html'
+				view: '~/App_Plugins/Merchello/propertyeditors/productlistview/merchello.productlistview.html'
 			}
 		}
 	],

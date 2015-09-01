@@ -11,7 +11,9 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       scope.collection = {};
 
       function init() {
-        loadCollection();
+        scope.$watch('collectionKey', function(newValue, oldValue) {
+          loadCollection();
+        });
       }
 
       function loadCollection() {

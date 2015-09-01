@@ -151,7 +151,9 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       scope.collection = {};
 
       function init() {
-        loadCollection();
+        scope.$watch('collectionKey', function(newValue, oldValue) {
+          loadCollection();
+        });
       }
 
       function loadCollection() {
@@ -217,7 +219,9 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
             section: '@',
             currentNode: '=',
             node: '=',
-            tree: '='
+            tree: '=',
+            hasSelection: '&?',
+            mode: '@'
         },
 
         template: '<li ng-class="{\'current\': (node == currentNode)}">' +
@@ -233,7 +237,6 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
         link: function (scope, element, attrs) {
 
             var eventName = 'merchello.entitycollection.selected';
-
 
             // updates the node's DOM/styles
             function setupNodeDom(node, tree) {
@@ -275,11 +278,13 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
              defined on the tree
              */
             scope.select = function(n, ev) {
-                var args = { key: '', value: '' };
-                var ids = n.id.split('_');
-                args.value = ids[1];
+               var args = buildArgs(n);
                 var el = $('#' + n.id + ' i.icon');
                 if ($(el).hasClass('icon-list')) {
+                    // single mode
+                    if (scope.mode === 'single' && scope.hasSelection()) {
+                        return;
+                    }
                     args.key = 'addCollection';
                     $(el).removeClass('icon-list').addClass('icon-check');
                 } else {
@@ -291,6 +296,13 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
                 //emitEvent("treeNodeSelect", { element: element, tree: scope.tree, node: n, event: ev });
             };
 
+            function buildArgs(n) {
+                var args = { key: '', value: '' };
+                var id = n.id + '';
+                var ids = id.split('_');
+                args.value = ids[1];
+                return args;
+            }
 
             /** method to set the current animation for the node.
              *  This changes dynamically based on if we are changing sections or just loading normal tree data.
@@ -342,7 +354,7 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
 
             setupNodeDom(scope.node, scope.tree);
 
-            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
+            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" mode="{{mode}}" has-selection="hasSelection()" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
             var newElement = angular.element(template);
             $compile(newElement)(scope);
             element.append(newElement);
@@ -360,12 +372,16 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
         scope: {
             subTreeId : '=',
             entityType: '=',
+            mode: '@?',
+            hasSelection: '&?'
         },
 
         compile: function(element, attrs) {
 
+            // makes multiple selection default
+            if (!attrs.mode) { attrs.mode = 'multiple'; }
+
             //config
-            //var showheader = (attrs.showheader !== 'false');
             var template = '<ul class="umb-tree"><li class="root">';
             template += '<div ng-hide="hideheader" on-right-click="altSelect(tree.root, $event)">' +
                 '<h5>' +
@@ -373,7 +389,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                 '<span class="root-link">{{tree.root.name}}</span></h5>' +
                 '</div>';
             template += '<ul>' +
-               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
+               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" mode="{{mode}}" has-selection="hasSelection()" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
                 '</ul>' +
                 '</li>' +
                 '</ul>';
@@ -513,6 +529,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                     }
                 });
 
+                // Loads the tree
                 loadTree();
             };
         }
