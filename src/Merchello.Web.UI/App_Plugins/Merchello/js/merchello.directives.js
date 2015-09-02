@@ -1235,8 +1235,8 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
 
 
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -1245,9 +1245,11 @@ angular.module('merchello.directives').directive('merchelloListView',
                 entityType: '=',
                 getColumnValue: '&',
                 load: '&',
+                ready: '=?',
                 disableCollections: '@?',
                 includeDateFilter: '@?',
-                noTitle: '@?'
+                noTitle: '@?',
+                noFilter: '@?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
             link: function (scope, elm, attr) {
@@ -1262,9 +1264,11 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.search = search;
                 scope.setPageSize = setPageSize;
 
+                scope.hasFilter = true;
                 scope.hasCollections = true;
                 scope.enableDateFilter = false;
                 scope.showTitle = true;
+                scope.isReady = false;
 
                 scope.config = merchelloListViewHelper.getConfig(scope.entityType);
 
@@ -1286,14 +1290,26 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.pagination = [];
 
                 function init() {
+                    if (!('ready' in attr)) {
+                        scope.isReady = true;
+                    }
                     scope.hasCollections = !('disableCollections' in attr);
                     scope.enableDateFilter = 'includeDateFilter' in attr;
+                    scope.hasFilter = !('noFilter' in attr);
                     scope.showTitle = !('noTitle' in attr);
+                    $log.debug(scope.hasFilter);
                     if(scope.hasCollections) {
                         scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
                     }
-                    console.info(scope.hasCollections);
-                    search();
+                    scope.$watch('ready', function(newVal, oldVal) {
+                        if (newVal === true) {
+                            scope.isReady = newVal;
+                        }
+                          if(scope.isReady) {
+                              search();
+                          }
+                    });
+
                 }
 
                 function search() {

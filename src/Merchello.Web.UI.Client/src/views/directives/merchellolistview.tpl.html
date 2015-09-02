@@ -13,14 +13,14 @@
             </td>
 
             <td>
-                <form class="pull-right ng-pristine ng-valid" novalidate>
+                <form class="pull-right ng-pristine ng-valid" novalidate data-ng-show="hasFilter">
                     <i class="icon-search" data-ng-click="enterSearch($event)"></i>
                     <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
                 </form>
             </td>
             <td>
                 <form class="pull-right ng-pristine ng-valid" novalidate>
-                    <select data-ng-model="options.pageSize" class="span1" data-ng-change="setPageSize()">
+                    <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
                         <option value="2">2</option>
                         <option value="10">10</option>
                         <option value="25">25</option>

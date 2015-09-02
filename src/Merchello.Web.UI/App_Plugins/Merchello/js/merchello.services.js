@@ -398,7 +398,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 ]
             },
 
-            salesHistory: {
+            saleshistory: {
                 columns: [
                     { name: 'invoiceNumber', localizeKey: 'merchelloSales_invoiceNumber' },
                     { name: 'invoiceDate', localizeKey: 'general_date' },
