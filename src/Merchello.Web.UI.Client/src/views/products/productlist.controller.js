@@ -34,7 +34,6 @@
             $scope.collectionKey = '';
 
             // exposed methods
-            $scope.getEditUrl = getEditUrl;
             $scope.getColumnValue = getColumnValue;
 
             var yes = '';

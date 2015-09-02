@@ -37,6 +37,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.dateFilterOpen = false;
             $scope.collectionKey = '';
             $scope.showDateFilter = true;
+            $scope.entityType = 'Invoice';
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;

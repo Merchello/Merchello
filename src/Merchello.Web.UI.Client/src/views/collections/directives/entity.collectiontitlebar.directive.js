@@ -3,7 +3,8 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
     restrict: 'E',
     replace: true,
     scope: {
-      collectionKey: '='
+      collectionKey: '=',
+      entityType: '='
     },
     template: '<h2>{{ collection.name }}</h2>',
     link: function(scope, element, attrs) {
@@ -18,7 +19,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
 
       function loadCollection() {
         if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
-          var key = 'merchelloCollections_allItems';
+          var key = 'merchelloCollections_all' + scope.entityType;
           localizationService.localize(key).then(function (value) {
             scope.collection.name = value;
           });

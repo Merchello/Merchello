@@ -13,22 +13,9 @@
         </umb-header>
 
         <merchello-panel>
-            <!--div class="merchello-pane">
-                <form class="form-horizontal row-fluid">
-                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="products.length > 0">
-                        <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
-                        <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                </form>
-            </div-->
             <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
-                <merchello-list-view config="config" query="query" builder="productDisplayBuilder" load="load" get-column-value="getColumnValue" page-size="limitAmount" entity-type="entityType">
+                <merchello-list-view config="config" query="query" builder="productDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
 
                 </merchello-list-view>
 

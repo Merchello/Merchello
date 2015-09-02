@@ -1,5 +1,5 @@
 <div class="merchello-list-view umb-listview">
-    <entity-collection-title-bar collection-key="collectionKey"></entity-collection-title-bar>
+    <entity-collection-title-bar collection-key="collectionKey" entity-type="entityType"></entity-collection-title-bar>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -19,6 +19,7 @@
             <td>
                 <form class="pull-right ng-pristine ng-valid" novalidate>
                     <select data-ng-model="options.pageSize" class="span1" data-ng-change="setPageSize()">
+                        <option value="2">2</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
