@@ -200,6 +200,9 @@
       ]]>
     </key>
     <key alias="totalSpent">Total Spent</key>
+    <key alias="paid">Paid</key>
+    <key alias="unpaid">Unpaid</key>
+    <key alias="partial">Partial</key>
   </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
@@ -322,6 +325,9 @@
     <!-- phrases -->
     <key alias="noOrders">You have no orders.</key>
     <key alias="attentionRequired">You Have Orders That Require Attention</key>
+    <key alias="fulfilled">Fulfilled</key>
+    <key alias="unfulfilled">Unfulfilled</key>
+    <key alias="open">Open</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->

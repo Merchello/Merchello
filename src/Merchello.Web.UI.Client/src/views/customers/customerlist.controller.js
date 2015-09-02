@@ -7,9 +7,9 @@
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', '$routeParams', '$filter', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'customerResource', 'entityCollectionResource',
+        ['$scope', '$routeParams', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'merchelloTabsFactory', 'customerResource', 'entityCollectionResource',
             'customerDisplayBuilder',
-        function($scope, $routeParams, $filter, notificationsService, settingsResource, merchelloTabsFactory, customerResource, entityCollectionResource,
+        function($scope, $routeParams, $filter, notificationsService, localizationService, settingsResource, merchelloTabsFactory, customerResource, entityCollectionResource,
                  customerDisplayBuilder) {
 
             $scope.loaded = false;
@@ -28,6 +28,7 @@
             var globalCurrency = '';
             var allCurrencies = [];
             const baseUrl = '#/merchello/merchello/customeroverview/';
+
             /**
              * @ngdoc method
              * @name init

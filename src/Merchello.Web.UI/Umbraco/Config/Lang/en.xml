@@ -1221,6 +1221,9 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="noBillingAddress">No Billing Address</key>
     <key alias="shippingAddress">Shipping Address</key>
     <key alias="noShippingAddress">No Shipping Address</key>
+    <key alias="paid">Paid</key>
+    <key alias="unpaid">Unpaid</key>
+    <key alias="partial">Partial</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
@@ -1369,6 +1372,9 @@ To manage your website, simply open the Umbraco back office and start adding con
     <!-- phrases -->
     <key alias="noOrders">You have no orders.</key>
     <key alias="attentionRequired">You Have Orders That Require Attention</key>
+    <key alias="fulfilled">Fulfilled</key>
+    <key alias="unfulfilled">Unfulfilled</key>
+    <key alias="open">Open</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->

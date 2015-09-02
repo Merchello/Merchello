@@ -29,8 +29,18 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'invoiceNumber', localizeKey: 'merchelloSales_invoiceNumber' },
                     { name: 'invoiceDate', localizeKey: 'general_date' },
                     { name: 'billToName', localizeKey: 'merchelloGeneral_customer' },
-                    { name: 'paymentStatus', localizeKey: 'merchelloSales_paymentStatus' },
-                    { name: 'fulfillmentStatus', localizeKey: 'merchelloOrder_fulfillmentStatus' },
+                    { name: 'paymentStatus', localizeKey: 'merchelloSales_paymentStatus', resultColumn: true },
+                    { name: 'fulfillmentStatus', localizeKey: 'merchelloOrder_fulfillmentStatus', resultColumn: true },
+                    { name: 'total', localizeKey: 'merchelloGeneral_total' }
+                ]
+            },
+
+            salesHistory: {
+                columns: [
+                    { name: 'invoiceNumber', localizeKey: 'merchelloSales_invoiceNumber' },
+                    { name: 'invoiceDate', localizeKey: 'general_date' },
+                    { name: 'paymentStatus', localizeKey: 'merchelloSales_paymentStatus', resultColumn: true },
+                    { name: 'fulfillmentStatus', localizeKey: 'merchelloOrder_fulfillmentStatus', resultColumn: true },
                     { name: 'total', localizeKey: 'merchelloGeneral_total' }
                 ]
             },
