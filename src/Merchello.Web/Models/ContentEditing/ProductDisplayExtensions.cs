@@ -10,7 +10,10 @@
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Web.Models.ContentEditing.Content;
+    using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
+
+    using Umbraco.Core;
 
     using umbraco.developer;
 
@@ -323,6 +326,82 @@
         #endregion
 
         #region IProductVariantDetachedContent
+
+        /// <summary>
+        /// Gets the default slug.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string GetDefaultSlug(this ProductDisplayBase display)
+        {
+            return PathHelper.ConvertToSlug(string.Format("{0}-{1}", display.Name, display.Sku));
+        }
+
+        /// <summary>
+        /// The slug.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string Slug(this ProductDisplayBase display, string cultureName)
+        {
+            var defaultSlug = display.GetDefaultSlug();
+            if (!display.DetachedContents.Any()) return defaultSlug;
+
+            var dc = display.DetachedContentForCulture(cultureName);
+
+            return dc.Slug.IsNullOrWhiteSpace() ? defaultSlug : dc.Slug;
+        }
+
+        /// <summary>
+        /// The template id.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal static int TemplateId(this ProductDisplayBase display, string cultureName)
+        {
+            if (!display.DetachedContents.Any()) return 0;
+
+            var dc = display.DetachedContentForCulture(cultureName);
+
+            return dc == null ? 0 : dc.TemplateId;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ProductVariantDetachedContentDisplay"/> for a given culture.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDetachedContentDisplay"/>.
+        /// </returns>
+        internal static ProductVariantDetachedContentDisplay DetachedContentForCulture(this ProductDisplayBase display, string cultureName)
+        {
+            return display.DetachedContents.Any()
+                       ? display.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName)
+                       : null;
+        }
 
         /// <summary>
         /// Adds or updates <see cref="IProductVariantDetachedContent"/>.

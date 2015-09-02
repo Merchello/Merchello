@@ -143,7 +143,8 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
     restrict: 'E',
     replace: true,
     scope: {
-      collectionKey: '='
+      collectionKey: '=',
+      entityType: '='
     },
     template: '<h2>{{ collection.name }}</h2>',
     link: function(scope, element, attrs) {
@@ -151,12 +152,14 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       scope.collection = {};
 
       function init() {
-        loadCollection();
+        scope.$watch('collectionKey', function(newValue, oldValue) {
+          loadCollection();
+        });
       }
 
       function loadCollection() {
         if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
-          var key = 'merchelloCollections_allItems';
+          var key = 'merchelloCollections_all' + scope.entityType;
           localizationService.localize(key).then(function (value) {
             scope.collection.name = value;
           });
@@ -217,7 +220,9 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
             section: '@',
             currentNode: '=',
             node: '=',
-            tree: '='
+            tree: '=',
+            hasSelection: '&?',
+            mode: '@'
         },
 
         template: '<li ng-class="{\'current\': (node == currentNode)}">' +
@@ -233,7 +238,6 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
         link: function (scope, element, attrs) {
 
             var eventName = 'merchello.entitycollection.selected';
-
 
             // updates the node's DOM/styles
             function setupNodeDom(node, tree) {
@@ -275,11 +279,13 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
              defined on the tree
              */
             scope.select = function(n, ev) {
-                var args = { key: '', value: '' };
-                var ids = n.id.split('_');
-                args.value = ids[1];
+               var args = buildArgs(n);
                 var el = $('#' + n.id + ' i.icon');
                 if ($(el).hasClass('icon-list')) {
+                    // single mode
+                    if (scope.mode === 'single' && scope.hasSelection()) {
+                        return;
+                    }
                     args.key = 'addCollection';
                     $(el).removeClass('icon-list').addClass('icon-check');
                 } else {
@@ -291,6 +297,13 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
                 //emitEvent("treeNodeSelect", { element: element, tree: scope.tree, node: n, event: ev });
             };
 
+            function buildArgs(n) {
+                var args = { key: '', value: '' };
+                var id = n.id + '';
+                var ids = id.split('_');
+                args.value = ids[1];
+                return args;
+            }
 
             /** method to set the current animation for the node.
              *  This changes dynamically based on if we are changing sections or just loading normal tree data.
@@ -342,7 +355,7 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
 
             setupNodeDom(scope.node, scope.tree);
 
-            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
+            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" mode="{{mode}}" has-selection="hasSelection()" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
             var newElement = angular.element(template);
             $compile(newElement)(scope);
             element.append(newElement);
@@ -359,12 +372,17 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
 
         scope: {
             subTreeId : '=',
-            entityType: '='
+            entityType: '=',
+            mode: '@?',
+            hasSelection: '&?'
         },
 
         compile: function(element, attrs) {
+
+            // makes multiple selection default
+            if (!attrs.mode) { attrs.mode = 'multiple'; }
+
             //config
-            //var showheader = (attrs.showheader !== 'false');
             var template = '<ul class="umb-tree"><li class="root">';
             template += '<div ng-hide="hideheader" on-right-click="altSelect(tree.root, $event)">' +
                 '<h5>' +
@@ -372,7 +390,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                 '<span class="root-link">{{tree.root.name}}</span></h5>' +
                 '</div>';
             template += '<ul>' +
-               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
+               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" mode="{{mode}}" has-selection="hasSelection()" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
                 '</ul>' +
                 '</li>' +
                 '</ul>';
@@ -380,7 +398,6 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
             element.replaceWith(template);
 
             return function(scope, elem, attr, controller) {
-
 
                 var lastSection = "";
 
@@ -513,6 +530,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                     }
                 });
 
+                // Loads the tree
                 loadTree();
             };
         }
@@ -1215,6 +1233,185 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
 });
 
 
+
+angular.module('merchello.directives').directive('merchelloListView',
+    ['$routeParams', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, queryDisplayBuilder, queryResultDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                config: '=',
+                builder: '=',
+                entityType: '=',
+                pageSize: '=',
+                baseUrl: '@',
+                getColumnValue: '&',
+                load: '&',
+                hasDateFilter: '=?'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
+           // compile: function(element, attrs) {
+                // makes multiple selection default
+            //    if (!attrs.hasDateFilter) { attrs.hasDateFilter = false; }
+            //},
+            link: function (scope, elm, attr) {
+
+                scope.sort = sort;
+                scope.isSortDirection = isSortDirection;
+                scope.next = next;
+                scope.prev = prev;
+                scope.goToPage = goToPage;
+                scope.enterSearch = enterSearch;
+                scope.search = search;
+                scope.setPageSize = setPageSize;
+                scope.collectionKey = '';
+
+                //scope.goToEditor = goToEditor;
+
+                scope.listViewResultSet = {
+                    totalItems: 0,
+                    items: []
+                };
+
+                scope.options = {
+                    pageSize: 25,
+                    pageNumber: 1,
+                    filter: '',
+                    orderBy: (scope.config.orderBy ? scope.config.orderBy : 'name').trim(),
+                    orderDirection: scope.config.orderDirection ? scope.config.orderDirection.trim() : "asc"
+                };
+
+                scope.pagination = [];
+
+                function init() {
+                    if($routeParams.id !== 'manage') {
+                        scope.collectionKey = $routeParams.id;
+                    }
+                    search();
+                }
+
+                function search() {
+                    var page = scope.options.pageNumber - 1;
+                    var perPage = scope.options.pageSize;
+                    var sortBy = scope.options.orderBy;
+                    var sortDirection = scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+
+                    var query = queryDisplayBuilder.createDefault();
+                    query.currentPage = page;
+                    query.itemsPerPage = perPage;
+                    query.sortBy = sortBy;
+                    query.sortDirection = sortDirection;
+                    query.addFilterTermParam(scope.options.filter);
+
+                    console.info(scope.collectionKey);
+                    if (scope.collectionKey !== '') {
+                        query.addCollectionKeyParam(scope.collectionKey);
+                        query.addEntityTypeParam(scope.entityType);
+                    }
+                    scope.load()(query).then(function (response) {
+                        var queryResult = queryResultDisplayBuilder.transform(response, scope.builder);
+                        scope.listViewResultSet.items = queryResult.items;
+                        scope.listViewResultSet.totalItems = queryResult.totalItems;
+                        scope.listViewResultSet.totalPages = queryResult.totalPages;
+
+
+                        scope.pagination = [];
+
+                        //list 10 pages as per normal
+                        if (scope.listViewResultSet.totalPages <= 10) {
+                            for (var i = 0; i < scope.listViewResultSet.totalPages; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.pageNumber == (i + 1)
+                                });
+                            }
+                        }
+                        else {
+                            //if there is more than 10 pages, we need to do some fancy bits
+
+                            //get the max index to start
+                            var maxIndex = scope.listViewResultSet.totalPages - 10;
+                            //set the start, but it can't be below zero
+                            var start = Math.max(scope.options.pageNumber - 5, 0);
+                            //ensure that it's not too far either
+                            start = Math.min(maxIndex, start);
+
+                            for (var i = start; i < (10 + start) ; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.pageNumber == (i + 1)
+                                });
+                            }
+
+                            //now, if the start is greater than 0 then '1' will not be displayed, so do the elipses thing
+                            if (start > 0) {
+                                scope.pagination.unshift({ name: "First", val: 1, isActive: false }, {val: "...",isActive: false});
+                            }
+
+                            //same for the end
+                            if (start < maxIndex) {
+                                scope.pagination.push({ val: "...", isActive: false }, { name: "Last", val: scope.listViewResultSet.totalPages, isActive: false });
+                            }
+                        }
+
+                        scope.preValuesLoaded = true;
+                    }, function(reason) {
+                        notificationsService.success("Entity Load Failed:", reason.message);
+                    });
+                }
+
+                function sort(field, allow) {
+                    if (allow) {
+                        scope.options.orderBy = field;
+
+                        if (scope.options.orderDirection === "desc") {
+                            scope.options.orderDirection = "asc";
+                        }
+                        else {
+                            scope.options.orderDirection = "desc";
+                        }
+                        search();
+                    }
+                };
+
+                function next () {
+                    if (scope.options.pageNumber < scope.listViewResultSet.totalPages) {
+                        scope.options.pageNumber++;
+                        search();
+                    }
+                };
+
+                function goToPage(pageNumber) {
+                    scope.options.pageNumber = pageNumber + 1;
+                    search();
+                }
+
+
+                function prev() {
+                    if (scope.options.pageNumber - 1 > 0) {
+                        scope.options.pageNumber--;
+                        search();
+                    }
+                }
+
+                function enterSearch($event) {
+                    $($event.target).next().focus();
+                }
+
+                function setPageSize() {
+                    scope.options.pageNumber = 1;
+                    search();
+                }
+
+                function isSortDirection(col, direction) {
+                    return scope.options.orderBy.toUpperCase() == col.toUpperCase() && scope.options.orderDirection == direction;
+                }
+
+                init();
+            }
+        }
+}]);
 
     /**
      * @ngdoc directive

@@ -2327,43 +2327,36 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', '$routeParams', 'dialogService', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'entityCollectionResource', 'queryDisplayBuilder',
-            'queryResultDisplayBuilder', 'customerDisplayBuilder',
-        function($scope, $routeParams, dialogService, notificationsService, settingsResource, merchelloTabsFactory, dialogDataFactory, customerResource, entityCollectionResource,
-                 queryDisplayBuilder, queryResultDisplayBuilder, customerDisplayBuilder) {
+        ['$scope', '$routeParams', '$filter', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'customerResource', 'entityCollectionResource',
+            'customerDisplayBuilder',
+        function($scope, $routeParams, $filter, notificationsService, settingsResource, merchelloTabsFactory, customerResource, entityCollectionResource,
+                 customerDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
-            $scope.collectionKey = '';
-            $scope.currentPage = 0;
-            $scope.customers = [];
-            $scope.filterText = '';
-            $scope.limitAmount = 25;
-            $scope.sortProperty = 'loginName';
-            $scope.currentFilters = [];
-            $scope.visible = {
-                bulkActionButton: function() {
-                    var result = false;
-                    return result;
-                },
-                bulkActionDropdown: false
-            };
+
             $scope.currencySymbol = '';
 
-            // exposed methods
-            $scope.loadCustomers = loadCustomers;
-            $scope.resetFilters = resetFilters;
-            $scope.openNewCustomerDialog = openNewCustomerDialog;
-            $scope.numberOfPages = numberOfPages;
-            $scope.limitChanged = limitChanged;
-            $scope.changePage = changePage;
-            $scope.changeSortOrder = changeSortOrder;
-            $scope.getCurrencySymbol = getCurrencySymbol;
+            $scope.customerDisplayBuilder = customerDisplayBuilder;
+            $scope.load = load;
+            $scope.entityType = 'Customer';
 
-            var maxPages = 0;
+            $scope.config = {
+                columns: [
+                    { name: 'loginName', localizeKey: 'merchelloCustomers_loginName'},
+                    { name: 'firstName', localizeKey: 'general_name' },
+                    { name: 'location', localizeKey: 'merchelloCustomers_location' },
+                    { name: 'lastInvoiceTotal', localizeKey: 'merchelloCustomers_lastInvoiceTotal' }
+                ]
+            }
+
+
+            // exposed methods
+            $scope.getColumnValue = getColumnValue;
+
             var globalCurrency = '';
             var allCurrencies = [];
-
+            const baseUrl = '#/merchello/merchello/customeroverview/';
             /**
              * @ngdoc method
              * @name init
@@ -2373,9 +2366,7 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
              * initialized when the scope loads.
              */
             function init() {
-                if($routeParams.id !== 'manage') {
-                    $scope.collectionKey = $routeParams.id;
-                }
+
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createCustomerListTabs();
                 $scope.tabs.setActive('customerlist');
@@ -2391,199 +2382,41 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
                     var currencySymbolPromise = settingsResource.getCurrencySymbol();
                     currencySymbolPromise.then(function (currencySymbol) {
                         globalCurrency = currencySymbol;
-                        loadCustomers($scope.filterText);
+                        $scope.preValuesLoaded = true;
                     }, function (reason) {
-                        notificationService.error('Failed to load the currency symbol', reason.message);
+                        notificationsService.error('Failed to load the currency symbol', reason.message);
                     });
                 }, function(reason) {
-                    notificationService.error('Failed to load all currencies', reason.message);
+                    notificationsService.error('Failed to load all currencies', reason.message);
                 });
             }
 
-            /**
-             * @ngdoc method
-             * @name loadCustomers
-             * @function
-             *
-             * @description
-             * Load the customers from the API using the provided filter (if any).
-             */
-            function loadCustomers(filterText) {
-                $scope.preValuesLoaded = false;
-                var query = queryDisplayBuilder.createDefault();
-                query.currentPage = $scope.currentPage;
-                query.itemsPerPage = $scope.limitAmount;
-                query.sortBy = sortInfo().sortBy;
-                query.sortDirection = sortInfo().sortDirection;
-                if (filterText !== $scope.filterText) {
-                    query.currentPage = 0;
-                    $scope.currentPage = 0;
-                }
-                query.addFilterTermParam(filterText);
-
-                var promise;
-                if ($scope.collectionKey !== '') {
-                    query.addCollectionKeyParam($scope.collectionKey);
-                    query.addEntityTypeParam('Customer');
-                    promise = entityCollectionResource.getCollectionEntities(query);
+            function load(query) {
+                if (query.hasCollectionKeyParam()) {
+                    return entityCollectionResource.getCollectionEntities(query);
                 } else {
-                    promise = customerResource.searchCustomers(query);
+                    return customerResource.searchCustomers(query);
                 }
-
-                promise.then(function (customersResponse) {
-                    $scope.customers = [];
-                    var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
-                    $scope.customers = queryResult.items;
-                    maxPages = queryResult.totalPages;
-                    if(query.parameters.length >= 0) {
-                        $scope.currentFilters = _.filter(query.parameters, function(params) {
-                            return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
-                        });
-                    } else {
-                        $scope.currentFilters = [];
-                    }
-                    $scope.filterText = filterText;
-                    $scope.preValuesLoaded = true;
-
-                });
             }
 
-            /**
-             * @ngdoc method
-             * @name changePage
-             * @function
-             *
-             * @description
-             * Changes the current page.
-             */
-            function changePage(page) {
-                $scope.currentPage = page;
-                $scope.loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name changeSortOrder
-             * @function
-             *
-             * @description
-             * Helper function to set the current sort on the table and switch the
-             * direction if the property is already the current sort column.
-             */
-            function changeSortOrder(propertyToSort) {
-                if ($scope.sortProperty == propertyToSort) {
-                    if ($scope.sortOrder == "asc") {
-                        $scope.sortProperty = "-" + propertyToSort;
-                        $scope.sortOrder = "desc";
-                    } else {
-                        $scope.sortProperty = propertyToSort;
-                        $scope.sortOrder = "asc";
-                    }
-                } else {
-                    $scope.sortProperty = propertyToSort;
-                    $scope.sortOrder = "asc";
-                }
-                $scope.loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name limitChanged
-             * @function
-             *
-             * @description
-             * Helper function to set the amount of items to show per page for the paging filters and calculations
-             */
-            function limitChanged(newVal) {
-                $scope.limitAmount = newVal;
-                $scope.currentPage = 0;
-                $scope.loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            function resetFilters() {
-                $scope.preValuesLoaded = false;
-                $scope.currentFilters = [];
-                $scope.filterText = "";
-                loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name openNewCustomerDialog
-             * @function
-             *
-             * @description
-             * Opens the new customer dialog via the Umbraco dialogService.
-             */
-            function openNewCustomerDialog() {
-                var dialogData = dialogDataFactory.createAddEditCustomerDialogData();
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.addedit.html',
-                    show: true,
-                    callback: processNewCustomerDialog,
-                    dialogData: dialogData
-                });
-            }
-
-            /**
-             * @ngdoc method
-             * @name processEditInfoDialog
-             * @function
-             *
-             * @description
-             * Update the customer info and save.
-             */
-            function processNewCustomerDialog(dialogData) {
-                var customer = customerDisplayBuilder.createDefault();
-                customer.loginName = dialogData.email;
-                customer.email = dialogData.email;
-                customer.firstName = dialogData.firstName;
-                customer.lastName = dialogData.lastName;
-
-                var promiseSaveCustomer = customerResource.AddCustomer(customer);
-                promiseSaveCustomer.then(function (customerResponse) {
-                    notificationsService.success("Customer Saved", "");
-                    loadCustomers($scope.filterText);
-                }, function (reason) {
-                    notificationsService.error("Customer Save Failed", reason.message);
-                });
-            }
-
-            function numberOfPages() {
-                return maxPages;
-            }
-
-            /**
-             * @ngdoc method
-             * @name setVariables
-             * @function
-             *
-             * @description
-             * Returns sort information based off the current $scope.sortProperty.
-             */
-            function sortInfo() {
-                var sortDirection, sortBy;
-                // If the sortProperty starts with '-', it's representing a descending value.
-                if ($scope.sortProperty.indexOf('-') > -1) {
-                    // Get the text after the '-' for sortBy
-                    sortBy = $scope.sortProperty.split('-')[1];
-                    sortDirection = 'Descending';
-                    // Otherwise it is ascending.
-                } else {
-                    sortBy = $scope.sortProperty;
-                    sortDirection = 'Ascending';
-                }
-                return {
-                    sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
-                    sortDirection: sortDirection
+            function getColumnValue(result, col) {
+                switch(col.name) {
+                    case 'loginName':
+                        return '<a href="' + getEditUrl(result) + '">' + result.loginName + '</a>';
+                    case 'firstName':
+                        return  '<a href="' + getEditUrl(result) + '">' + result.firstName + ' ' + result.lastName + '</a>';
+                    case 'location':
+                        var address = result.getPrimaryLocation();
+                        var ret = address.locality;
+                            ret += ' ' + address.region;
+                        if (address.countryCode !== '') {
+                            ret += ' ' + address.countryCode;
+                        }
+                        return ret.trim();
+                    case 'lastInvoiceTotal':
+                        return $filter('currency')(result.getLastInvoice().total, getCurrencySymbol(result.getLastInvoice()));
+                    default:
+                        return result[col.name];
                 }
             }
 
@@ -2609,6 +2442,10 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
                 } else {
                     return currency.symbol;
                 }
+            }
+
+            function getEditUrl(customer) {
+                return baseUrl + customer.key;
             }
 
             // Initializes the controller
@@ -6231,11 +6068,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function doSave() {
-                // convert the extended data objects to an array
-                angular.forEach($scope.productVariant.detachedContents, function(dc) {
-                    dc.detachedDataValues = dc.detachedDataValues.toArray();
-                });
-
                 var promise;
                 if ($scope.productVariant.master) {
                     promise = productResource.save(product);
@@ -6482,6 +6314,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
+                    // convert the extended data objects to an array
                     switch ($scope.context) {
                         case "productedit":
                             // Copy from master variant
@@ -6774,34 +6607,38 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+        ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
             'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
-            'queryDisplayBuilder', 'queryResultDisplayBuilder',
-        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, entityCollectionResource,
-                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
-        queryDisplayBuilder, queryResultDisplayBuilder) {
+        function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
+                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder) {
 
-            $scope.filterText = '';
+            $scope.productDisplayBuilder = productDisplayBuilder;
+            $scope.load = load;
+            $scope.entityType = 'Product';
+
+            $scope.config = {
+                columns: [
+                    { name: 'name', localizeKey: 'merchelloVariant_product'},
+                    { name: 'sku', localizeKey: 'merchelloVariant_sku' },
+                    { name: 'shippable', localizeKey: 'merchelloProducts_shippable' },
+                    { name: 'taxable', localizeKey: 'merchelloProducts_taxable' },
+                    { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity' },
+                    { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale' },
+                    { name: 'price', localizeKey: 'merchelloGeneral_price' }
+                ]
+            }
+
             $scope.tabs = [];
-            $scope.products = [];
-            $scope.currentFilters = [];
-            $scope.sortProperty = 'name';
-            $scope.sortOrder = 'Ascending';
-            $scope.limitAmount = 25;
-            $scope.currentPage = 0;
-            $scope.maxPages = 0;
 
             // collections
             $scope.collectionKey = '';
 
             // exposed methods
-            $scope.getEditUrl = getEditUrl;
-            $scope.limitChanged = limitChanged;
-            $scope.numberOfPages = numberOfPages;
-            $scope.changePage = changePage;
-            $scope.changeSortOrder = changeSortOrder;
-            $scope.getFilteredProducts = getFilteredProducts;
-            $scope.resetFilters = resetFilters;
+            $scope.getColumnValue = getColumnValue;
+
+            var yes = '';
+            var no = '';
+            var some = '';
 
             /**
              * @ngdoc method
@@ -6815,56 +6652,18 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 if($routeParams.id !== 'manage') {
                     $scope.collectionKey = $routeParams.id;
                 }
-
-                loadProducts();
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createProductListTabs();
                 $scope.tabs.setActive('productlist');
             }
 
-            /**
-             * @ngdoc method
-             * @name loadProducts
-             * @function
-             *
-             * @description
-             * Load the products from the product service, then wrap the results
-             * in Merchello models and add to the scope via the products collection.
-             */
-            function loadProducts() {
-                var page = $scope.currentPage;
-                var perPage = $scope.limitAmount;
-                var sortBy = $scope.sortProperty.replace("-", "");
-                var sortDirection = $scope.sortOrder;
 
-                var query = queryDisplayBuilder.createDefault();
-                query.currentPage = page;
-                query.itemsPerPage = perPage;
-                query.sortBy = sortBy;
-                query.sortDirection = sortDirection;
-                query.addFilterTermParam($scope.filterText);
-                $scope.currentFilters = _.filter(query.parameters, function(params) {
-                    return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
-                });
-
-                var promise;
-                if ($scope.collectionKey !== '') {
-                    query.addCollectionKeyParam($scope.collectionKey);
-                    query.addEntityTypeParam('Product');
-                    var promise = entityCollectionResource.getCollectionEntities(query);
+            function load(query) {
+                if (query.hasCollectionKeyParam()) {
+                    return entityCollectionResource.getCollectionEntities(query);
                 } else {
-                    var promise = productResource.searchProducts(query);
+                    return productResource.searchProducts(query);
                 }
-
-                promise.then(function (response) {
-                    var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
-                    $scope.products = queryResult.items;
-                    $scope.maxPages = queryResult.totalPages;
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
-                }, function(reason) {
-                    notificationsService.success("Products Load Failed:", reason.message);
-                });
             }
 
             /**
@@ -6879,112 +6678,82 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function(currencySymbol) {
                     $scope.currencySymbol = currencySymbol;
+                    localizationService.localize('general_yes').then(function(value) {
+                      yes = value;
+                    });
+                    localizationService.localize('general_no').then(function(value) {
+                        no = value;
+                    });
+                    localizationService.localize('merchelloGeneral_some').then(function(value) {
+                        some = value;
+                    });
+
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
                 });
             }
 
-            //--------------------------------------------------------------------------------------
-            // Events methods
-            //--------------------------------------------------------------------------------------
-
-            /**
-             * @ngdoc method
-             * @name limitChanged
-             * @function
-             *
-             * @description
-             * Helper function to set the amount of items to show per page for the paging filters and calculations
-             */
-            function limitChanged(newVal) {
-                $scope.limitAmount = newVal;
-                $scope.currentPage = 0;
-                loadProducts();
+            function getColumnValue(result, col) {
+               switch(col.name) {
+                   case 'name':
+                       return '<a href="' + getEditUrl(result) + '">' + result.name + '</a>';
+                   case 'shippable':
+                       return getShippableValue(result);
+                   case 'taxable':
+                       return getTaxableValue(result);
+                   case 'totalInventory':
+                       return '<span>' + result.totalInventory() + '</span>';
+                   case 'onSale':
+                       return getOnSaleValue(result);
+                   case 'price':
+                       return !result.hasVariants() ?
+                           $filter('currency')(result.price, $scope.currencySymbol) :
+                           $filter('currency')(result.variantsMinimumPrice(), $scope.currencySymbol) + ' - ' + $filter('currency')(result.variantsMaximumPrice(), $scope.currencySymbol);
+                   default:
+                       return result[col.name];
+               }
             }
 
-            /**
-             * @ngdoc method
-             * @name changePage
-             * @function
-             *
-             * @description
-             * Helper function re-search the products after the page has changed
-             */
-            function changePage(newPage) {
-                $scope.currentPage = newPage;
-                loadProducts();
-            }
-
-            /**
-             * @ngdoc method
-             * @name changeSortOrder
-             * @function
-             *
-             * @description
-             * Helper function to set the current sort on the table and switch the
-             * direction if the property is already the current sort column.
-             */
-            function changeSortOrder(propertyToSort) {
-                if ($scope.sortProperty == propertyToSort) {
-                    if ($scope.sortOrder == "Ascending") {
-                        $scope.sortProperty = "-" + propertyToSort;
-                        $scope.sortOrder = "Descending";
-                    } else {
-                        $scope.sortProperty = propertyToSort;
-                        $scope.sortOrder = "Ascending";
-                    }
-                } else {
-                    $scope.sortProperty = propertyToSort;
-                    $scope.sortOrder = "Ascending";
+            function getShippableValue(product) {
+                if ((product.hasVariants() && product.shippableVariants().length === product.productVariants.length) ||
+                    (product.hasVariants() && product.shippableVariants().length === 0) ||
+                    (!product.hasVariants() && product.shippable)) {
+                    return yes;
                 }
-                loadProducts();
+                if (product.hasVariants() && product.shippableVariants().length !== product.productVariants.length && product.shippableVariants().length > 0) {
+                    return some;
+                } else {
+                    return no;
+                }
             }
 
-            /**
-             * @ngdoc method
-             * @name getFilteredProducts
-             * @function
-             *
-             * @description
-             * Calls the product service to search for products via a string search
-             * param.  This searches the Examine index in the core.
-             */
-            function getFilteredProducts(filter) {
-                $scope.preValuesLoaded = false;
-                $scope.filterText = filter;
-                $scope.currentPage = 0;
-                loadProducts();
+            function getTaxableValue(product) {
+                if((product.hasVariants() && product.taxableVariants().length === product.productVariants.length) ||
+                    (product.hasVariants() && product.taxableVariants().length === 0) ||
+                    (!product.hasVariants() && product.taxable)) {
+                    return yes;
+                }
+                if (product.hasVariants() && product.taxableVariants().length !== product.productVariants.length && product.taxableVariants().length > 0) {
+                    return some;
+                } else {
+                    return no;
+                }
             }
 
-            //--------------------------------------------------------------------------------------
-            // Calculations
-            //--------------------------------------------------------------------------------------
-
-            /**
-             * @ngdoc method
-             * @name numberOfPages
-             * @function
-             *
-             * @description
-             * Helper function to get the amount of items to show per page for the paging
-             */
-            function numberOfPages() {
-                return $scope.maxPages;
-            }
-
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            function resetFilters() {
-                $scope.preValuesLoaded = false;
-                $scope.currentFilters = [];
-                $scope.filterText = '';
-                loadProducts();
+            function getOnSaleValue(product) {
+                if((product.hasVariants() && !product.anyVariantsOnSale()) ||
+                    (!product.hasVariants() && !product.onSale)) {
+                    return no;
+                }
+                if(product.hasVariants() && product.anyVariantsOnSale()) {
+                    return $filter('currency')(product.variantsMinimumPrice(true), $scope.currencySymbol) + ' - ' +
+                        $filter('currency')(product.variantsMaximumPrice(true), $scope.currencySymbol);
+                }
+                if (!product.hasVariants() && product.onSale) {
+                    return $filter('currency')(product.salePrice, $scope.currencySymbol)
+                }
             }
 
             function getEditUrl(product) {
@@ -7134,6 +6903,300 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             // Initializes the controller
             init();
     }]);
+
+/**
+ * @ngdoc controller
+ * @name Merchello.PropertyEditors.MerchelloProductListView
+ * @function
+ *
+ * @description
+ * The controller for product collection list view property editor
+ */
+angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProductListViewController',
+    ['$scope', '$location', 'dialogService', 'userService', 'settingsResource', 'notificationsService', 'entityCollectionResource', 'productResource', 'productDisplayBuilder',
+        'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($scope, $location, dialogService, userService, settingsResource, notificationsService, entityCollectionResource, productResource, productDisplayBuilder,
+    queryDisplayBuilder, queryResultDisplayBuilder) {
+
+        $scope.preValuesLoaded = false;
+        $scope.currencySymbol = '';
+        $scope.entityType = 'product';
+        $scope.entityCollection = {};
+        $scope.listViewResultSet = {
+            totalItems: 0,
+            items: []
+        };
+
+        $scope.options = {
+            pageSize: 10,
+            pageNumber: 1,
+            filter: '',
+            orderBy: ($scope.model.config.orderBy ? $scope.model.config.orderBy : 'name').trim(),
+            orderDirection: $scope.model.config.orderDirection ? $scope.model.config.orderDirection.trim() : "asc"
+        };
+
+        $scope.pagination = [];
+
+        $scope.openCollectionSelectionDialog = openCollectionSelectionDialog;
+        $scope.getTreeId = getTreeId;
+        $scope.sort = sort;
+        $scope.isSortDirection = isSortDirection;
+        $scope.next = next;
+        $scope.prev = prev;
+        $scope.goToPage = goToPage;
+        $scope.enterSearch = enterSearch;
+        $scope.loadProducts = loadProducts;
+        $scope.goToEditor = goToEditor;
+
+        var currentUser = null;
+        var allowMerchello = false;
+        const baseUrl = '/merchello/merchello/productedit/';
+        //--------------------------------------------------------------------------------------
+        // Initialization methods
+        //--------------------------------------------------------------------------------------
+        // Load the product from the Guid key stored in the model.value
+        if (_.isString($scope.model.value)) {
+            userService.getCurrentUser().then(function(user) {
+              currentUser = user;
+                var fnd = _.find(currentUser.allowedSections, function(s) {
+                  return s === 'merchello';
+                });
+                if (fnd !== undefined) {
+                    allowMerchello = true;
+                }
+                loadSettings();
+            });
+
+        }
+
+        function loadSettings() {
+            var promise = settingsResource.getCurrencySymbol();
+            promise.then(function(symbol) {
+                $scope.currencySymbol = symbol;
+                loadProducts();
+            }, function (reason) {
+                notificationsService.error('Could not retrieve currency symbol', reason.message);
+            });
+        }
+
+        function loadProducts() {
+            var page = $scope.options.pageNumber - 1;
+            var perPage = $scope.options.pageSize;
+            var sortBy = $scope.options.orderBy;
+            var sortDirection = $scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+
+            var query = queryDisplayBuilder.createDefault();
+            query.currentPage = page;
+            query.itemsPerPage = perPage;
+            query.sortBy = sortBy;
+            query.sortDirection = sortDirection;
+            query.addFilterTermParam($scope.options.filter);
+
+
+
+            var promise;
+            if ($scope.model.value !== '') {
+                query.addCollectionKeyParam($scope.model.value);
+                query.addEntityTypeParam('Product');
+                var promise = entityCollectionResource.getCollectionEntities(query);
+            } else {
+                var promise = productResource.searchProducts(query);
+            }
+
+            promise.then(function (response) {
+                var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
+                $scope.listViewResultSet.items = queryResult.items;
+                $scope.listViewResultSet.totalItems = queryResult.totalItems;
+                $scope.listViewResultSet.totalPages = queryResult.totalPages;
+               // $scope.products = queryResult.items;
+               // $scope.maxPages = queryResult.totalPages;
+
+                $scope.pagination = [];
+
+                //list 10 pages as per normal
+                if ($scope.listViewResultSet.totalPages <= 10) {
+                    for (var i = 0; i < $scope.listViewResultSet.totalPages; i++) {
+                        $scope.pagination.push({
+                            val: (i + 1),
+                            isActive: $scope.options.pageNumber == (i + 1)
+                        });
+                    }
+                }
+                else {
+                    //if there is more than 10 pages, we need to do some fancy bits
+
+                    //get the max index to start
+                    var maxIndex = $scope.listViewResultSet.totalPages - 10;
+                    //set the start, but it can't be below zero
+                    var start = Math.max($scope.options.pageNumber - 5, 0);
+                    //ensure that it's not too far either
+                    start = Math.min(maxIndex, start);
+
+                    for (var i = start; i < (10 + start) ; i++) {
+                        $scope.pagination.push({
+                            val: (i + 1),
+                            isActive: $scope.options.pageNumber == (i + 1)
+                        });
+                    }
+
+                    //now, if the start is greater than 0 then '1' will not be displayed, so do the elipses thing
+                    if (start > 0) {
+                        $scope.pagination.unshift({ name: "First", val: 1, isActive: false }, {val: "...",isActive: false});
+                    }
+
+                    //same for the end
+                    if (start < maxIndex) {
+                        $scope.pagination.push({ val: "...", isActive: false }, { name: "Last", val: $scope.listViewResultSet.totalPages, isActive: false });
+                    }
+                }
+
+
+
+                $scope.preValuesLoaded = true;
+            }, function(reason) {
+                notificationsService.success("Products Load Failed:", reason.message);
+            });
+        }
+
+
+        function sort(field, allow) {
+            if (allow) {
+                $scope.options.orderBy = field;
+
+                if ($scope.options.orderDirection === "desc") {
+                    $scope.options.orderDirection = "asc";
+                }
+                else {
+                    $scope.options.orderDirection = "desc";
+                }
+                console.info($scope.options.orderDirection);
+                loadProducts();
+            }
+        };
+
+        function next () {
+            if ($scope.options.pageNumber < $scope.listViewResultSet.totalPages) {
+                $scope.options.pageNumber++;
+                loadProducts();
+            }
+        };
+
+        function goToPage(pageNumber) {
+            $scope.options.pageNumber = pageNumber + 1;
+            loadProducts();
+        }
+
+
+        function prev() {
+            if ($scope.options.pageNumber > 0) {
+                $scope.options.pageNumber--;
+                loadProducts();
+            }
+        }
+
+        function enterSearch($event) {
+            $($event.target).next().focus();
+        }
+
+
+        function isSortDirection(col, direction) {
+            return $scope.options.orderBy.toUpperCase() == col.toUpperCase() && $scope.options.orderDirection == direction;
+        }
+
+        function goToEditor(product) {
+            if(allowMerchello) {
+                var url = baseUrl + product.key;
+                $location.url(url, true);
+            }
+        }
+
+        function getTreeId() {
+            return "products";
+        }
+
+        function openCollectionSelectionDialog() {
+            var dialogData = {};
+            dialogData.collectionKey = '';
+            dialogData.entityType =  $scope.entityType;
+
+            dialogService.open({
+                template: '/App_Plugins/Merchello/propertyeditors/productlistview/merchello.productlistview.dialog.html',
+                show: true,
+                callback: processCollectionSelection,
+                dialogData: dialogData
+            });
+        }
+
+        function processCollectionSelection(dialogData) {
+            $scope.model.value = dialogData.collectionKey;
+            loadProducts();
+        }
+
+    }]);
+angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProductListViewDialogController',
+    ['$scope', 'treeService', 'localizationService', 'eventsService',
+    function($scope, treeService, localizationService, eventsService) {
+
+        $scope.pickerRootNode = {};
+        $scope.allowMultiple = false;
+        $scope.getTreeId = getTreeId;
+        $scope.hasSelection = hasSelection;
+        $scope.setAllProducts = setAllProducts;
+
+        var eventName = 'merchello.entitycollection.selected';
+
+        function init() {
+            eventsService.on(eventName, onEntityCollectionSelected);
+            $('#all-items i.icon').removeClass('icon-add').addClass('icon-check');
+            setTitle();
+        }
+
+        function setTitle() {
+            var key = 'merchelloCollections_' + $scope.dialogData.entityType + 'Collections';
+            localizationService.localize(key).then(function (value) {
+                $scope.pickerTitle = value;
+                setTree();
+            });
+        }
+
+        function setTree() {
+            treeService.getTree({section: 'merchello'}).then(function(tree) {
+                var root = tree.root;
+                var treeId = getTreeId();
+                $scope.pickerRootNode = _.find(root.children, function (child) {
+                    return child.id === treeId;
+                });
+            });
+        }
+
+        function setAllProducts() {
+            if (!hasSelection()) {
+                $('#all-items i.icon').removeClass('icon-add').addClass('icon-check');
+            }
+        }
+
+        function onEntityCollectionSelected(eventName, args, ev) {
+            //  {key: "addCollection", value: "4d026d91-fe13-49c7-8f06-da3d9f012181"}
+            if (args.key === 'addCollection') {
+               $scope.dialogData.collectionKey = args.value;
+                $('#all-items i.icon').removeClass('icon-check').addClass('icon-add');
+            }
+            if (args.key === 'removeCollection') {
+                $scope.dialogData.collectionKey = '';
+                $('#all-items i.icon').removeClass('icon-add').addClass('icon-check');
+            }
+        }
+
+        function hasSelection() {
+            return $scope.dialogData.collectionKey !== '';
+        }
+
+        function getTreeId() {
+            return "products";
+        }
+
+        init();
+}]);
 
     /**
      * @ngdoc controller
@@ -8749,6 +8812,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             $scope.dateFilterOpen = false;
             $scope.collectionKey = '';
             $scope.showDateFilter = true;
+            $scope.entityType = 'Invoice';
 
             // exposed methods
             $scope.getCurrencySymbol = getCurrencySymbol;

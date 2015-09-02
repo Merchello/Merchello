@@ -1070,6 +1070,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="expired">Expired</key>
     <key alias="configured">Configured</key>
     <key alias="notConfigured">Not Configured</key>
+    <key alias="some">Some</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -1132,6 +1133,9 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="collectionPickerTitle">Collections</key>
     <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
     <key alias="allItems">All items</key>
+    <key alias="allProduct">All Products</key>
+    <key alias="allCustomer">All Customers</key>
+    <key alias="allInvoice">All Sales</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>
@@ -1160,6 +1164,8 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
+    <key alias="shippable">Shippable</key>
+    <key alias="taxable">Taxable</key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
@@ -1202,7 +1208,10 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="noShippingAddress">No Shipping Address</key>    
   </area>
   <area alias="merchelloCustomers">
+    <key alias="loginName">Login</key>
     <key alias="newCustomer">New Customer</key>
+    <key alias="lastInvoiceTotal">Last Invoice Total</key>
+    <key alias="location">Location</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>You Have No Customers</h5>

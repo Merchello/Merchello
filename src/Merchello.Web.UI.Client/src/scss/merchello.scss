@@ -5,6 +5,7 @@
 
 // Modules
 @import "modules/icons";
+@import "modules/listview";
 @import "modules/detachedcontent";
 @import "modules/orders";
 @import "modules/warehouse";
@@ -18,6 +19,7 @@
 // Data Types
 @import "datatypes/productpicker";
 @import "datatypes/producteditor";
+@import "datatypes/productcollectionselector";
 
 h1.logo {
   margin: 0.25em 0;

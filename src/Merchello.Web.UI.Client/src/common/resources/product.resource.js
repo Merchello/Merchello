@@ -72,6 +72,9 @@
                  * @description Saves / updates product with an api call back to the server
                  **/
                 save: function (product) {
+                    angular.forEach(product.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -86,6 +89,9 @@
                  * @description Saves / updates product variant with an api call back to the server
                  **/
                 saveVariant: function (productVariant) {
+                    angular.forEach(productVariant.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,

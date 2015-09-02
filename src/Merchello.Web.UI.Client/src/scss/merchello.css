@@ -600,6 +600,12 @@
 .well .merchello-icon {
   background: #F8F8F8; }
 
+.merchello-list-view a {
+  color: #000; }
+.merchello-list-view select {
+  background: 0;
+  border: 1px solid #d9d9d9; }
+
 .merch-language-select .dropdown-menu {
   width: inherit; }
 
@@ -765,6 +771,11 @@
   margin-bottom: 10px; }
 .merchello-product-editor input[type="radio"], .merchello-product-editor input[type="checkbox"] {
   margin-top: 4px; }
+
+.merchello-product-collection-picker .gear {
+  cursor: pointer; }
+  .merchello-product-collection-picker .gear:active, .merchello-product-collection-picker .gear:focus {
+    text-decoration: none; }
 
 h1.logo {
   margin: 0.25em 0; }

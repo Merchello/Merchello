@@ -1,10 +1,17 @@
 ﻿{     
 	propertyEditors: [      
 		{ 
-			alias: "Merchello.ProductSelector",
-			name: "Merchello Product Selector",
+			alias: 'Merchello.ProductSelector',
+			name: 'Merchello Product Selector',
 			editor: {
-				view: "~/App_Plugins/Merchello/propertyeditors/productpicker/merchello.productselector.html"
+				view: '~/App_Plugins/Merchello/propertyeditors/productpicker/merchello.productselector.html'
+			}
+		},
+		{
+			alias: 'Merchello.ProductListView',
+			name: 'Merchello Product List View',
+			editor: {
+				view: '~/App_Plugins/Merchello/propertyeditors/productlistview/merchello.productlistview.html'
 			}
 		}
 	],
