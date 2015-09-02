@@ -2607,6 +2607,13 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             addParameter.call(this, param);
         }
 
+        function hasCollectionKeyParam() {
+            var fnd = _.find(this.parameters, function(p) {
+                return p.fieldName === 'collectionKey';
+            });
+            return fnd !== undefined;
+        }
+
         function addEntityTypeParam(entityType) {
             var param = new QueryParameterDisplay();
             param.fieldName = 'entityType';
@@ -2637,7 +2644,8 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             addEntityTypeParam: addEntityTypeParam,
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,
-            addFilterTermParam: addFilterTermParam
+            addFilterTermParam: addFilterTermParam,
+            hasCollectionKeyParam: hasCollectionKeyParam
         };
     }());
 

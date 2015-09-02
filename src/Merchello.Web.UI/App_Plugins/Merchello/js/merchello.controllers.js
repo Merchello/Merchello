@@ -6770,34 +6770,39 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', 'assetsService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+        ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
             'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
-            'queryDisplayBuilder', 'queryResultDisplayBuilder',
-        function($scope, $routeParams, $location, assetsService, notificationsService, settingsResource, entityCollectionResource,
-                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder,
-        queryDisplayBuilder, queryResultDisplayBuilder) {
+        function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
+                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder) {
 
-            $scope.filterText = '';
+            $scope.productDisplayBuilder = productDisplayBuilder;
+            $scope.load = load;
+            $scope.entityType = 'Product';
+
+            $scope.config = {
+                columns: [
+                    { name: 'name', localizeKey: 'merchelloVariant_product'},
+                    { name: 'sku', localizeKey: 'merchelloVariant_sku' },
+                    { name: 'shippable', localizeKey: 'merchelloProducts_shippable' },
+                    { name: 'taxable', localizeKey: 'merchelloProducts_taxable' },
+                    { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity' },
+                    { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale' },
+                    { name: 'price', localizeKey: 'merchelloGeneral_price' }
+                ]
+            }
+
             $scope.tabs = [];
-            $scope.products = [];
-            $scope.currentFilters = [];
-            $scope.sortProperty = 'name';
-            $scope.sortOrder = 'Ascending';
-            $scope.limitAmount = 25;
-            $scope.currentPage = 0;
-            $scope.maxPages = 0;
 
             // collections
             $scope.collectionKey = '';
 
             // exposed methods
             $scope.getEditUrl = getEditUrl;
-            $scope.limitChanged = limitChanged;
-            $scope.numberOfPages = numberOfPages;
-            $scope.changePage = changePage;
-            $scope.changeSortOrder = changeSortOrder;
-            $scope.getFilteredProducts = getFilteredProducts;
-            $scope.resetFilters = resetFilters;
+            $scope.getColumnValue = getColumnValue;
+
+            var yes = '';
+            var no = '';
+            var some = '';
 
             /**
              * @ngdoc method
@@ -6811,56 +6816,18 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 if($routeParams.id !== 'manage') {
                     $scope.collectionKey = $routeParams.id;
                 }
-
-                loadProducts();
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createProductListTabs();
                 $scope.tabs.setActive('productlist');
             }
 
-            /**
-             * @ngdoc method
-             * @name loadProducts
-             * @function
-             *
-             * @description
-             * Load the products from the product service, then wrap the results
-             * in Merchello models and add to the scope via the products collection.
-             */
-            function loadProducts() {
-                var page = $scope.currentPage;
-                var perPage = $scope.limitAmount;
-                var sortBy = $scope.sortProperty.replace("-", "");
-                var sortDirection = $scope.sortOrder;
 
-                var query = queryDisplayBuilder.createDefault();
-                query.currentPage = page;
-                query.itemsPerPage = perPage;
-                query.sortBy = sortBy;
-                query.sortDirection = sortDirection;
-                query.addFilterTermParam($scope.filterText);
-                $scope.currentFilters = _.filter(query.parameters, function(params) {
-                    return params.fieldName != 'entityType' && params.fieldName != 'collectionKey'
-                });
-
-                var promise;
-                if ($scope.collectionKey !== '') {
-                    query.addCollectionKeyParam($scope.collectionKey);
-                    query.addEntityTypeParam('Product');
-                    var promise = entityCollectionResource.getCollectionEntities(query);
+            function load(query) {
+                if (query.hasCollectionKeyParam()) {
+                    return entityCollectionResource.getCollectionEntities(query);
                 } else {
-                    var promise = productResource.searchProducts(query);
+                    return productResource.searchProducts(query);
                 }
-
-                promise.then(function (response) {
-                    var queryResult = queryResultDisplayBuilder.transform(response, productDisplayBuilder);
-                    $scope.products = queryResult.items;
-                    $scope.maxPages = queryResult.totalPages;
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
-                }, function(reason) {
-                    notificationsService.success("Products Load Failed:", reason.message);
-                });
             }
 
             /**
@@ -6875,112 +6842,82 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function(currencySymbol) {
                     $scope.currencySymbol = currencySymbol;
+                    localizationService.localize('general_yes').then(function(value) {
+                      yes = value;
+                    });
+                    localizationService.localize('general_no').then(function(value) {
+                        no = value;
+                    });
+                    localizationService.localize('merchelloGeneral_some').then(function(value) {
+                        some = value;
+                    });
+
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
                 });
             }
 
-            //--------------------------------------------------------------------------------------
-            // Events methods
-            //--------------------------------------------------------------------------------------
-
-            /**
-             * @ngdoc method
-             * @name limitChanged
-             * @function
-             *
-             * @description
-             * Helper function to set the amount of items to show per page for the paging filters and calculations
-             */
-            function limitChanged(newVal) {
-                $scope.limitAmount = newVal;
-                $scope.currentPage = 0;
-                loadProducts();
+            function getColumnValue(result, col) {
+               switch(col.name) {
+                   case 'name':
+                       return '<a href="' + getEditUrl(result) + '">' + result.name + '</a>';
+                   case 'shippable':
+                       return getShippableValue(result);
+                   case 'taxable':
+                       return getTaxableValue(result);
+                   case 'totalInventory':
+                       return '<span>' + result.totalInventory() + '</span>';
+                   case 'onSale':
+                       return getOnSaleValue(result);
+                   case 'price':
+                       return !result.hasVariants() ?
+                           $filter('currency')(result.price, $scope.currencySymbol) :
+                           $filter('currency')(result.variantsMinimumPrice(), $scope.currencySymbol) + ' - ' + $filter('currency')(result.variantsMaximumPrice(), $scope.currencySymbol);
+                   default:
+                       return result[col.name];
+               }
             }
 
-            /**
-             * @ngdoc method
-             * @name changePage
-             * @function
-             *
-             * @description
-             * Helper function re-search the products after the page has changed
-             */
-            function changePage(newPage) {
-                $scope.currentPage = newPage;
-                loadProducts();
-            }
-
-            /**
-             * @ngdoc method
-             * @name changeSortOrder
-             * @function
-             *
-             * @description
-             * Helper function to set the current sort on the table and switch the
-             * direction if the property is already the current sort column.
-             */
-            function changeSortOrder(propertyToSort) {
-                if ($scope.sortProperty == propertyToSort) {
-                    if ($scope.sortOrder == "Ascending") {
-                        $scope.sortProperty = "-" + propertyToSort;
-                        $scope.sortOrder = "Descending";
-                    } else {
-                        $scope.sortProperty = propertyToSort;
-                        $scope.sortOrder = "Ascending";
-                    }
-                } else {
-                    $scope.sortProperty = propertyToSort;
-                    $scope.sortOrder = "Ascending";
+            function getShippableValue(product) {
+                if ((product.hasVariants() && product.shippableVariants().length === product.productVariants.length) ||
+                    (product.hasVariants() && product.shippableVariants().length === 0) ||
+                    (!product.hasVariants() && product.shippable)) {
+                    return yes;
                 }
-                loadProducts();
+                if (product.hasVariants() && product.shippableVariants().length !== product.productVariants.length && product.shippableVariants().length > 0) {
+                    return some;
+                } else {
+                    return no;
+                }
             }
 
-            /**
-             * @ngdoc method
-             * @name getFilteredProducts
-             * @function
-             *
-             * @description
-             * Calls the product service to search for products via a string search
-             * param.  This searches the Examine index in the core.
-             */
-            function getFilteredProducts(filter) {
-                $scope.preValuesLoaded = false;
-                $scope.filterText = filter;
-                $scope.currentPage = 0;
-                loadProducts();
+            function getTaxableValue(product) {
+                if((product.hasVariants() && product.taxableVariants().length === product.productVariants.length) ||
+                    (product.hasVariants() && product.taxableVariants().length === 0) ||
+                    (!product.hasVariants() && product.taxable)) {
+                    return yes;
+                }
+                if (product.hasVariants() && product.taxableVariants().length !== product.productVariants.length && product.taxableVariants().length > 0) {
+                    return some;
+                } else {
+                    return no;
+                }
             }
 
-            //--------------------------------------------------------------------------------------
-            // Calculations
-            //--------------------------------------------------------------------------------------
-
-            /**
-             * @ngdoc method
-             * @name numberOfPages
-             * @function
-             *
-             * @description
-             * Helper function to get the amount of items to show per page for the paging
-             */
-            function numberOfPages() {
-                return $scope.maxPages;
-            }
-
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            function resetFilters() {
-                $scope.preValuesLoaded = false;
-                $scope.currentFilters = [];
-                $scope.filterText = '';
-                loadProducts();
+            function getOnSaleValue(product) {
+                if((product.hasVariants() && !product.anyVariantsOnSale()) ||
+                    (!product.hasVariants() && !product.onSale)) {
+                    return no;
+                }
+                if(product.hasVariants() && product.anyVariantsOnSale()) {
+                    return $filter('currency')(product.variantsMinimumPrice(true), $scope.currencySymbol) + ' - ' +
+                        $filter('currency')(product.variantsMaximumPrice(true), $scope.currencySymbol);
+                }
+                if (!product.hasVariants() && product.onSale) {
+                    return $filter('currency')(product.salePrice, $scope.currencySymbol)
+                }
             }
 
             function getEditUrl(product) {
