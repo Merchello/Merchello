@@ -21,15 +21,9 @@
             $scope.load = load;
             $scope.entityType = 'Customer';
 
-            $scope.config = {
-                columns: [
-                    { name: 'loginName', localizeKey: 'merchelloCustomers_loginName'},
-                    { name: 'firstName', localizeKey: 'general_name' },
-                    { name: 'location', localizeKey: 'merchelloCustomers_location' },
-                    { name: 'lastInvoiceTotal', localizeKey: 'merchelloCustomers_lastInvoiceTotal' }
-                ]
-            }
 
+
+           //$scope.config = merchelloListViewHelper.getConfig($scope.entityType);
 
             // exposed methods
             $scope.getColumnValue = getColumnValue;
@@ -112,7 +106,6 @@
                 if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
                     return invoice.currency.symbol;
                 }
-
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;

@@ -1235,28 +1235,24 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
 
 
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
             scope: {
-                config: '=',
                 builder: '=',
                 entityType: '=',
-                pageSize: '=',
-                baseUrl: '@',
                 getColumnValue: '&',
                 load: '&',
-                hasDateFilter: '=?'
+                disableCollections: '@?',
+                includeDateFilter: '@?',
+                noTitle: '@?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
-           // compile: function(element, attrs) {
-                // makes multiple selection default
-            //    if (!attrs.hasDateFilter) { attrs.hasDateFilter = false; }
-            //},
             link: function (scope, elm, attr) {
 
+                scope.collectionKey = '';
                 scope.sort = sort;
                 scope.isSortDirection = isSortDirection;
                 scope.next = next;
@@ -1265,7 +1261,12 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.enterSearch = enterSearch;
                 scope.search = search;
                 scope.setPageSize = setPageSize;
-                scope.collectionKey = '';
+
+                scope.hasCollections = true;
+                scope.enableDateFilter = false;
+                scope.showTitle = true;
+
+                scope.config = merchelloListViewHelper.getConfig(scope.entityType);
 
                 //scope.goToEditor = goToEditor;
 
@@ -1285,9 +1286,13 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.pagination = [];
 
                 function init() {
-                    if($routeParams.id !== 'manage') {
-                        scope.collectionKey = $routeParams.id;
+                    scope.hasCollections = !('disableCollections' in attr);
+                    scope.enableDateFilter = 'includeDateFilter' in attr;
+                    scope.showTitle = !('noTitle' in attr);
+                    if(scope.hasCollections) {
+                        scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
                     }
+                    console.info(scope.hasCollections);
                     search();
                 }
 
@@ -1304,7 +1309,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                     query.sortDirection = sortDirection;
                     query.addFilterTermParam(scope.options.filter);
 
-                    console.info(scope.collectionKey);
                     if (scope.collectionKey !== '') {
                         query.addCollectionKeyParam(scope.collectionKey);
                         query.addEntityTypeParam(scope.entityType);

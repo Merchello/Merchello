@@ -1271,12 +1271,11 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
-    ['$scope', '$location', '$filter', 'assetsService', 'dialogService', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
+    ['$scope', '$location', '$filter', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
         'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($scope, $location, $filter, assetsService, dialogService, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
+    function($scope, $location, $filter, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
              settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
 
-        $scope.testing = false;
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
         $scope.filterText = '';
@@ -2341,15 +2340,9 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
             $scope.load = load;
             $scope.entityType = 'Customer';
 
-            $scope.config = {
-                columns: [
-                    { name: 'loginName', localizeKey: 'merchelloCustomers_loginName'},
-                    { name: 'firstName', localizeKey: 'general_name' },
-                    { name: 'location', localizeKey: 'merchelloCustomers_location' },
-                    { name: 'lastInvoiceTotal', localizeKey: 'merchelloCustomers_lastInvoiceTotal' }
-                ]
-            }
 
+
+           //$scope.config = merchelloListViewHelper.getConfig($scope.entityType);
 
             // exposed methods
             $scope.getColumnValue = getColumnValue;
@@ -2432,7 +2425,6 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
                 if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
                     return invoice.currency.symbol;
                 }
-
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;
@@ -6608,30 +6600,17 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
         ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
-            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
+            'merchelloTabsFactory', 'merchelloListViewHelper', 'productResource', 'productDisplayBuilder',
         function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
-                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder) {
+                 merchelloTabsFactory, merchelloListViewHelper, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
             $scope.load = load;
             $scope.entityType = 'Product';
 
-            $scope.config = {
-                columns: [
-                    { name: 'name', localizeKey: 'merchelloVariant_product'},
-                    { name: 'sku', localizeKey: 'merchelloVariant_sku' },
-                    { name: 'shippable', localizeKey: 'merchelloProducts_shippable' },
-                    { name: 'taxable', localizeKey: 'merchelloProducts_taxable' },
-                    { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity' },
-                    { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale' },
-                    { name: 'price', localizeKey: 'merchelloGeneral_price' }
-                ]
-            }
+            $scope.config = merchelloListViewHelper.getConfig($scope.entityType);
 
             $scope.tabs = [];
-
-            // collections
-            $scope.collectionKey = '';
 
             // exposed methods
             $scope.getColumnValue = getColumnValue;
@@ -6649,9 +6628,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
-                if($routeParams.id !== 'manage') {
-                    $scope.collectionKey = $routeParams.id;
-                }
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createProductListTabs();
                 $scope.tabs.setActive('productlist');
@@ -6758,8 +6734,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             function getEditUrl(product) {
                 return "#/merchello/merchello/productedit/" + product.key;
-                //return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
-                //    "#/merchello/merchello/productedit/" + product.key;
             }
 
             // Initialize the controller

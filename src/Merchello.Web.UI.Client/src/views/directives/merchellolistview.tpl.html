@@ -1,5 +1,7 @@
 <div class="merchello-list-view umb-listview">
-    <entity-collection-title-bar collection-key="collectionKey" entity-type="entityType"></entity-collection-title-bar>
+    <div data-ng-show="showTitle">
+        <entity-collection-title-bar collection-key="collectionKey" entity-type="entityType"></entity-collection-title-bar>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -32,7 +34,7 @@
 
         <tbody data-ng-show="!preValuesLoaded">
         <tr>
-            <td colspan="{{ config.columns + 2 }}">
+            <td colspan="{{ config.columns.length + 2 }}">
                 <div class="umb-loader-wrapper">
                     <div class="umb-loader"></div>
                 </div>
