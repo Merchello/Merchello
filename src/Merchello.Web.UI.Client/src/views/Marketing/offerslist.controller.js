@@ -7,36 +7,31 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
-    ['$scope', '$location', '$filter', 'notificationsService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory', 'dialogDataFactory',
-        'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($scope, $location, $filter, notificationsService, settingsResource, marketingResource, merchelloTabsFactory, dialogDataFactory,
-             settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$scope', '$location', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+        'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder',
+    function($scope, $location, $filter, notificationsService, localizationService, settingsResource, marketingResource, merchelloTabsFactory,
+             settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder) {
+
+        $scope.offerSettingsDisplayBuilder = offerSettingsDisplayBuilder;
 
         $scope.loaded = true;
         $scope.preValuesLoaded = true;
-        $scope.filterText = '';
         $scope.tabs = [];
-        $scope.offers = [];
-        $scope.currentFilters = [];
-        $scope.sortProperty = 'name';
-        $scope.sortOrder = 'Ascending';
-        $scope.limitAmount = 25;
-        $scope.currentPage = 0;
-        $scope.maxPages = 0;
+
         $scope.settings = {};
         $scope.offerProviders = [];
         $scope.includeInactive = false;
         $scope.currencySymbol = '';
 
+        $scope.entityType = 'Offer';
+
         // exposed methods
-        $scope.getEditUrl = getEditUrl;
-        $scope.limitChanged = limitChanged;
-        $scope.numberOfPages = numberOfPages;
-        $scope.changePage = changePage;
-        $scope.getFilteredOffers = getFilteredOffers;
-        $scope.getOfferType = getOfferType;
-        $scope.resetFilters = resetFilters;
-        $scope.getOfferReward = getOfferReward;
+        $scope.load = load;
+        $scope.getColumnValue = getColumnValue;
+
+        var yes = '';
+        var no = '';
+        var expired = '';
 
         function init() {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
@@ -60,6 +55,15 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
                 var promiseCurrency = settingsResource.getCurrencySymbol();
                 promiseCurrency.then(function(symbol) {
                     $scope.currencySymbol = symbol;
+                    localizationService.localize('general_yes').then(function(value) {
+                        yes = value;
+                    });
+                    localizationService.localize('general_no').then(function(value) {
+                        no = value;
+                    });
+                    localizationService.localize('merchelloGeneral_expired').then(function(value) {
+                        expired = value;
+                    });
                     loadOfferProviders();
                 }, function (reason) {
                     notificationsService.error("Settings Load Failed", reason.message);
@@ -74,28 +78,39 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             var providersPromise = marketingResource.getOfferProviders();
             providersPromise.then(function(providers) {
                 $scope.offerProviders = offerProviderDisplayBuilder.transform(providers);
-                resetFilters();
+                $scope.preValuesLoaded = true;
             }, function(reason) {
                 notificationsService.error("Offer providers load failed", reason.message);
             });
         }
 
-        function loadOffers() {
-           var query = buildQuery($scope.filterText);
-            var offersPromise = marketingResource.searchOffers(query);
-            offersPromise.then(function(result) {
-                var queryResult = queryResultDisplayBuilder.transform(result, offerSettingsDisplayBuilder);
-                $scope.offers = queryResult.items;
-                $scope.maxPages = queryResult.totalPages;
-                $scope.itemCount = queryResult.totalItems;
-                $scope.preValuesLoaded = true;
-            });
+        function load(query) {
+            return marketingResource.searchOffers(query);
         }
 
-        function resetFilters() {
-            $scope.filterText = '';
-            $scope.currentPage = 0;
-            loadOffers();
+        function getColumnValue(result, col) {
+            switch(col.name) {
+                case 'name':
+                    return '<a href="' + getEditUrl(result) + '">' + result.name + '</a>';
+                case 'offerType':
+                    return  getOfferType(result);
+                case 'rewards':
+                    return getOfferReward(result).trim();
+                case 'offerStartDate':
+                    return result.offerExpires ? $filter('date')(result.offerStartsDate, $scope.settings.dateFormat) : '-';
+                case 'offerEndDate':
+                    return result.offerExpires ? $filter('date')(result.offerEndsDate, $scope.settings.dateFormat) : '-';
+                case 'active':
+                    if(result.active && !result.expired) {
+                        return yes;
+                    }
+                    if(!result.active) {
+                        return no;
+                    }
+                    return expired;
+                default:
+                    return result[col.name];
+            }
         }
 
         function getOfferReward(offerSettings) {
@@ -109,137 +124,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
             } else {
                 return '-';
             }
-        }
-
-        function buildQuery(filterText) {
-            var page = $scope.currentPage;
-            var perPage = $scope.limitAmount;
-            var sortBy = sortInfo().sortBy;
-            var sortDirection = sortInfo().sortDirection;
-
-
-            if (filterText === undefined) {
-                filterText = '';
-            }
-            $scope.filterText = filterText;
-            var query = queryDisplayBuilder.createDefault();
-            query.currentPage = page;
-            query.itemsPerPage = perPage;
-            query.sortBy = sortBy;
-            query.sortDirection = sortDirection;
-            query.addFilterTermParam(filterText);
-
-            if (query.parameters.length > 0) {
-                $scope.currentFilters = query.parameters;
-            }
-            return query;
-        }
-
-        /**
-         * @ngdoc method
-         * @name setVariables
-         * @function
-         *
-         * @description
-         * Returns sort information based off the current $scope.sortProperty.
-         */
-        function sortInfo() {
-            var sortDirection, sortBy;
-            // If the sortProperty starts with '-', it's representing a descending value.
-            if ($scope.sortProperty.indexOf('-') > -1) {
-                // Get the text after the '-' for sortBy
-                sortBy = $scope.sortProperty.split('-')[1];
-                sortDirection = 'Descending';
-                // Otherwise it is ascending.
-            } else {
-                sortBy = $scope.sortProperty;
-                sortDirection = 'Ascending';
-            }
-            return {
-                sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
-                sortDirection: sortDirection
-            }
-        };
-
-
-        //--------------------------------------------------------------------------------------
-        // Events methods
-        //--------------------------------------------------------------------------------------
-
-        /**
-         * @ngdoc method
-         * @name limitChanged
-         * @function
-         *
-         * @description
-         * Helper function to set the amount of items to show per page for the paging filters and calculations
-         */
-        function limitChanged(newVal) {
-            $scope.limitAmount = newVal;
-            $scope.currentPage = 0;
-            loadOffers();
-        }
-
-        /**
-         * @ngdoc method
-         * @name changePage
-         * @function
-         *
-         * @description
-         * Helper function re-search the products after the page has changed
-         */
-        function changePage(newPage) {
-            $scope.currentPage = newPage;
-            loadOffers();
-        }
-
-        /**
-         * @ngdoc method
-         * @name getFilteredProducts
-         * @function
-         *
-         * @description
-         * Calls the offer settings service to search for offers via a string search
-         * param.
-         */
-        function getFilteredOffers(filter) {
-            $scope.preValuesLoaded = false;
-            $scope.filterText = filter;
-            $scope.currentPage = 0;
-            loadOffers();
-        }
-
-
-        //--------------------------------------------------------------------------------------
-        // Calculations
-        //--------------------------------------------------------------------------------------
-
-        /**
-         * @ngdoc method
-         * @name numberOfPages
-         * @function
-         *
-         * @description
-         * Helper function to get the amount of items to show per page for the paging
-         */
-        function numberOfPages() {
-            return $scope.maxPages;
-            //return Math.ceil($scope.products.length / $scope.limitAmount);
-        }
-
-        /**
-         * @ngdoc method
-         * @name resetFilters
-         * @function
-         *
-         * @description
-         * Fired when the reset filter button is clicked.
-         */
-        function resetFilters() {
-            $scope.preValuesLoaded = false;
-            $scope.currentFilters = [];
-            $scope.filterText = '';
-            loadOffers();
         }
 
         function getEditUrl(offer) {

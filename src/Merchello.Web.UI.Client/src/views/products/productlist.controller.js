@@ -8,15 +8,13 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
         ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
-            'merchelloTabsFactory', 'merchelloListViewHelper', 'productResource', 'productDisplayBuilder',
+            'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
         function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
-                 merchelloTabsFactory, merchelloListViewHelper, productResource, productDisplayBuilder) {
+                 merchelloTabsFactory, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
             $scope.load = load;
             $scope.entityType = 'Product';
-
-            $scope.config = merchelloListViewHelper.getConfig($scope.entityType);
 
             $scope.tabs = [];
 

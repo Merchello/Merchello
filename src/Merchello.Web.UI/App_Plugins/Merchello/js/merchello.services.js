@@ -372,8 +372,8 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'sku', localizeKey: 'merchelloVariant_sku' },
                     { name: 'shippable', localizeKey: 'merchelloProducts_shippable' },
                     { name: 'taxable', localizeKey: 'merchelloProducts_taxable' },
-                    { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity' },
-                    { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale' },
+                    { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity', resultColumn: true },
+                    { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale', resultColumn: true },
                     { name: 'price', localizeKey: 'merchelloGeneral_price' }
                 ]
             },
@@ -382,8 +382,8 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 columns: [
                     { name: 'loginName', localizeKey: 'merchelloCustomers_loginName' },
                     { name: 'firstName', localizeKey: 'general_name' },
-                    { name: 'location', localizeKey: 'merchelloCustomers_location' },
-                    { name: 'lastInvoiceTotal', localizeKey: 'merchelloCustomers_lastInvoiceTotal' }
+                    { name: 'location', localizeKey: 'merchelloCustomers_location', resultColumn: true },
+                    { name: 'lastInvoiceTotal', localizeKey: 'merchelloCustomers_lastInvoiceTotal', resultColumn: true }
                 ]
             },
 
@@ -403,7 +403,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'name', localizeKey: 'merchelloTableCaptions_name' },
                     { name: 'offerCode', localizeKey: 'merchelloMarketing_offerCode' },
                     { name: 'offerType', localizeKey: 'merchelloMarketing_offerType' },
-                    { name: 'rewards', localizeKey: 'merchelloMarketing_offerRewardsInfo' },
+                    { name: 'rewards', localizeKey: 'merchelloMarketing_offerRewardsInfo', resultColumn: true },
                     { name: 'offerStartDate', localizeKey: 'merchelloTableCaptions_startDate' },
                     { name: 'offerEndDate', localizeKey: 'merchelloTableCaptions_endDate' },
                     { name: 'active', localizeKey: 'merchelloTableCaptions_active' }

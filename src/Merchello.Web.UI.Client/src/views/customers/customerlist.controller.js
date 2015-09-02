@@ -22,9 +22,6 @@
             $scope.entityType = 'Customer';
 
 
-
-           //$scope.config = merchelloListViewHelper.getConfig($scope.entityType);
-
             // exposed methods
             $scope.getColumnValue = getColumnValue;
 

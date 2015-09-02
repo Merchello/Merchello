@@ -1137,6 +1137,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="allProduct">All Products</key>
     <key alias="allCustomer">All Customers</key>
     <key alias="allInvoice">All Sales</key>
+    <key alias="allOffer">All Offers</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>
