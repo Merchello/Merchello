@@ -1263,6 +1263,15 @@ angular.module('merchello.resources')
                         'Failed to delete product with key: ' + product.key);
                 },
 
+                deleteDetachedContent: function(variant) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'DeleteDetachedContent';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            variant
+                        ),
+                        'Failed to delete detached content');
+                },
+
                 /**
                  * @ngdoc method
                  * @name searchProducts

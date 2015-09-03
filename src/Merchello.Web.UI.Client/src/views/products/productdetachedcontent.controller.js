@@ -1,7 +1,7 @@
 angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedContentController',
-    ['$scope', '$q', '$routeParams', '$location', 'notificationsService', 'merchelloTabsFactory', 'contentResource', 'detachedContentResource', 'productResource', 'settingsResource',
+    ['$scope', '$q', '$log', '$route', '$routeParams', '$location', 'notificationsService', 'dialogService', 'localizationService', 'merchelloTabsFactory', 'dialogDataFactory', 'contentResource', 'detachedContentResource', 'productResource', 'settingsResource',
         'productDisplayBuilder', 'productVariantDetachedContentDisplayBuilder',
-        function($scope, $q, $routeParams, $location, notificationsService, merchelloTabsFactory, contentResource, detachedContentResource, productResource, settingsResource,
+        function($scope, $q, $log, $route, $routeParams, $location, notificationsService, dialogService, localizationService, merchelloTabsFactory, dialogDataFactory, contentResource, detachedContentResource, productResource, settingsResource,
              productDisplayBuilder, productVariantDetachedContentDisplayBuilder) {
 
             $scope.loaded = false;
@@ -19,6 +19,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             // Umbraco properties
             $scope.contentTabs = [];
             $scope.currentTab = {};
+
+            $scope.openRemoveDetachedContentDialog = openRemoveDetachedContentDialog;
 
             // navigation switches
             var showUmbracoTabs = true;
@@ -52,21 +54,20 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var deferred = $q.defer();
                 $q.all([
                     settingsResource.getAllSettings(),
-                    detachedContentResource.getAllLanguages(),
-                    productResource.getByKey(key)
+                    detachedContentResource.getAllLanguages()
                 ]).then(function(results) {
                     deferred.resolve(results);
                 });
 
                 deferred.promise.then(function(data) {
+                    $log.debug(data);
                     settings = data[0];
                     $scope.languages = data[1];
                     $scope.defaultLanguage = settings.defaultExtendedContentCulture;
                     if($scope.defaultLanguage !== '' && $scope.defaultLanguage !== undefined) {
                         $scope.language = _.find($scope.languages, function(l) { return l.isoCode === $scope.defaultLanguage; });
                     }
-                    var prod = data[2];
-                    loadProduct(prod, loadArgs);
+                    loadProduct(loadArgs);
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
                 });
@@ -81,7 +82,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
              * @description
              * Load a product by the product key.
              */
-            function loadProduct(p, args) {
+            function loadProduct(args) {
+                productResource.getByKey(args.key).then(function(p) {
+
                     product = productDisplayBuilder.transform(p);
                     if(args.productVariantKey === '' || args.productVariantKey === undefined) {
                         // this is a product edit.
@@ -114,6 +117,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.preValuesLoaded = true;
                     }
                     $scope.tabs.setActive('productcontent');
+                });
             }
 
             function loadScaffold() {
@@ -241,6 +245,41 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         });
                     });
                 }
+            }
+
+            function openRemoveDetachedContentDialog() {
+                var deferred = $q.defer();
+                $q.all([
+                    localizationService.localize('merchelloTabs_detachedContent'),
+                    localizationService.localize('merchelloDetachedContent_removeDetachedContentWarning')
+                ]).then(function(data) {
+                    deferred.resolve(data);
+                });
+
+                deferred.promise.then(function(value) {
+
+                    var dialogData = {
+                        name : $scope.productVariant.name + ' ' + value[0],
+                        warning: value[1]
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                        show: true,
+                        callback: processRemoveDetachedContent,
+                        dialogData: dialogData
+                    });
+                });
+            }
+
+            function processRemoveDetachedContent(dialogData) {
+                $scope.loaded = true;
+                $scope.preValuesLoaded = false;
+                productResource.deleteDetachedContent($scope.productVariant).then(function(result) {
+                    $route.reload();
+                }, function(reason) {
+                    notificationsService.error('Failed to delete detached content ' + reason);
+                });
             }
 
             // Initialize the controller

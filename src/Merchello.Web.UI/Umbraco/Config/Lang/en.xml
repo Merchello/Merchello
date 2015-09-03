@@ -1197,6 +1197,13 @@ To manage your website, simply open the Umbraco back office and start adding con
     This will also delete ALL property data associated with products that use this product type.
     ]]>
     </key>
+    <key alias="removeDetachedContent">Remove Extended Content</key>
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
+    Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to 
+    fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
+    ]]>
+    </key>
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Invoice</key>

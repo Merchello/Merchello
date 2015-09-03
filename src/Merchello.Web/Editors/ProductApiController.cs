@@ -281,6 +281,41 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Removes detached content from a product variant
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete]
+        public HttpResponseMessage DeleteDetachedContent(ProductVariantDisplay productVariant)
+        {
+            var product = _productService.GetByKey(productVariant.ProductKey);
+            if (product == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            if (product.ProductVariants.Any() && product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key) != null)
+            {
+                var variant = product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key);
+                if (variant != null) variant.DetachedContents.Clear();
+                //// TODO need to walk this through better, we should not need to save the variant and then the product  
+                //// as the product save should take care of it, but somewhere in the service the runtime cache is resetting
+                //// the variant's detached content in the productvariant collection.  Probably just need to rearrange some of the
+                //// calls in the service - suspect EnsureProductVariants.
+                _productVariantService.Save(variant);
+            }
+            else
+            {
+                product.DetachedContents.Clear();
+            }
+
+            _productService.Save(product);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
         //[HttpPost, HttpDelete]
         //public HttpResponseMessage DeleteProductVariant(Guid id)
         //{

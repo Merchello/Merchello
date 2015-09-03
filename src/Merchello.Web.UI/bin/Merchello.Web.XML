@@ -15455,6 +15455,17 @@
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.ProductApiController.DeleteDetachedContent(Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
+            <summary>
+            Removes detached content from a product variant
+            </summary>
+            <param name="productVariant">
+            The product variant.
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.EncryptionHelper">
             <summary>
             The encryption helper.
