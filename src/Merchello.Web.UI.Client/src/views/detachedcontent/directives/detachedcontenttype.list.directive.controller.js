@@ -18,7 +18,10 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         $scope.edit = editContentType;
         $scope.delete = deleteContentType;
 
+        $scope.debugAllowDelete = false;
+
         function init() {
+            $scope.debugAllowDelete = Umbraco.Sys.ServerVariables.isDebuggingEnabled;
             loadDetachedContentTypes();
         }
 
