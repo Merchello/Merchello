@@ -7,9 +7,9 @@
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
-    ['$scope', '$location', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+    ['$scope', '$q', '$location', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder',
-    function($scope, $location, $filter, notificationsService, localizationService, settingsResource, marketingResource, merchelloTabsFactory,
+    function($scope, $q, $location, $filter, notificationsService, localizationService, settingsResource, marketingResource, merchelloTabsFactory,
              settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder) {
 
         $scope.offerSettingsDisplayBuilder = offerSettingsDisplayBuilder;
@@ -36,51 +36,30 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         function init() {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
             $scope.tabs.setActive('offers');
-            loadSettings();
-        }
 
-        /**
-         * @ngdoc method
-         * @name loadSettings
-         * @function
-         *
-         * @description
-         * Loads in store settings from server into the scope.  Called in init().
-         */
-        function loadSettings() {
-            var promiseSettings = settingsResource.getAllSettings();
-            promiseSettings.then(function(settings) {
-                $scope.settings = settingDisplayBuilder.transform(settings);
+            var deferred = $q.defer();
+            var promises = [
+                settingsResource.getAllCombined(),
+                localizationService.localize('general_yes'),
+                localizationService.localize('general_no'),
+                localizationService.localize('merchelloGeneral_expired'),
+                marketingResource.getOfferProviders()
+            ];
 
-                var promiseCurrency = settingsResource.getCurrencySymbol();
-                promiseCurrency.then(function(symbol) {
-                    $scope.currencySymbol = symbol;
-                    localizationService.localize('general_yes').then(function(value) {
-                        yes = value;
-                    });
-                    localizationService.localize('general_no').then(function(value) {
-                        no = value;
-                    });
-                    localizationService.localize('merchelloGeneral_expired').then(function(value) {
-                        expired = value;
-                    });
-                    loadOfferProviders();
-                }, function (reason) {
-                    notificationsService.error("Settings Load Failed", reason.message);
-                });
-
-            }, function (reason) {
-                notificationsService.error("Settings Load Failed", reason.message);
+            $q.all(promises).then(function(data) {
+                deferred.resolve(data);
             });
-        }
 
-        function loadOfferProviders() {
-            var providersPromise = marketingResource.getOfferProviders();
-            providersPromise.then(function(providers) {
-                $scope.offerProviders = offerProviderDisplayBuilder.transform(providers);
+            deferred.promise.then(function(results) {
+                $scope.settings = results[0].settings;
+                $scope.currencySymbol = results[0].currencySymbol;
+                yes = results[1];
+                no = results[2];
+                expired = results[3];
+                $scope.offerProviders = offerProviderDisplayBuilder.transform(results[4]);
                 $scope.preValuesLoaded = true;
             }, function(reason) {
-                notificationsService.error("Offer providers load failed", reason.message);
+                notificationsService.error("Failed to load promise queue", reason.message);
             });
         }
 

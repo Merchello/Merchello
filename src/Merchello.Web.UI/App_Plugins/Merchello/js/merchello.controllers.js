@@ -1271,9 +1271,9 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
  * The controller for offers list view controller
  */
 angular.module('merchello').controller('Merchello.Backoffice.OffersListController',
-    ['$scope', '$location', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
+    ['$scope', '$q', '$location', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'marketingResource', 'merchelloTabsFactory',
         'settingDisplayBuilder', 'offerProviderDisplayBuilder', 'offerSettingsDisplayBuilder',
-    function($scope, $location, $filter, notificationsService, localizationService, settingsResource, marketingResource, merchelloTabsFactory,
+    function($scope, $q, $location, $filter, notificationsService, localizationService, settingsResource, marketingResource, merchelloTabsFactory,
              settingDisplayBuilder, offerProviderDisplayBuilder, offerSettingsDisplayBuilder) {
 
         $scope.offerSettingsDisplayBuilder = offerSettingsDisplayBuilder;
@@ -1300,54 +1300,33 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
         function init() {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
             $scope.tabs.setActive('offers');
-            loadSettings();
-        }
 
-        /**
-         * @ngdoc method
-         * @name loadSettings
-         * @function
-         *
-         * @description
-         * Loads in store settings from server into the scope.  Called in init().
-         */
-        function loadSettings() {
-            var promiseSettings = settingsResource.getAllSettings();
-            promiseSettings.then(function(settings) {
-                $scope.settings = settingDisplayBuilder.transform(settings);
+            var deferred = $q.defer();
+            var promises = [
+                settingsResource.getAllCombined(),
+                localizationService.localize('general_yes'),
+                localizationService.localize('general_no'),
+                localizationService.localize('merchelloGeneral_expired'),
+                marketingResource.getOfferProviders()
+            ];
 
-                var promiseCurrency = settingsResource.getCurrencySymbol();
-                promiseCurrency.then(function(symbol) {
-                    $scope.currencySymbol = symbol;
-                    localizationService.localize('general_yes').then(function(value) {
-                        yes = value;
-                    });
-                    localizationService.localize('general_no').then(function(value) {
-                        no = value;
-                    });
-                    localizationService.localize('merchelloGeneral_expired').then(function(value) {
-                        expired = value;
-                    });
-                    loadOfferProviders();
-                }, function (reason) {
-                    notificationsService.error("Settings Load Failed", reason.message);
-                });
-
-            }, function (reason) {
-                notificationsService.error("Settings Load Failed", reason.message);
+            $q.all(promises).then(function(data) {
+                deferred.resolve(data);
             });
-        }
 
-        function loadOfferProviders() {
-            var providersPromise = marketingResource.getOfferProviders();
-            providersPromise.then(function(providers) {
-                $scope.offerProviders = offerProviderDisplayBuilder.transform(providers);
+            deferred.promise.then(function(results) {
+                $scope.settings = results[0].settings;
+                $scope.currencySymbol = results[0].currencySymbol;
+                yes = results[1];
+                no = results[2];
+                expired = results[3];
+                $scope.offerProviders = offerProviderDisplayBuilder.transform(results[4]);
                 $scope.preValuesLoaded = true;
             }, function(reason) {
-                notificationsService.error("Offer providers load failed", reason.message);
+                notificationsService.error("Failed to load promise queue", reason.message);
             });
         }
-
+        
         function load(query) {
             return marketingResource.searchOffers(query);
         }
@@ -2394,19 +2373,12 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
 
             function loadSettings() {
                 // currency matching
-                var currenciesPromise = settingsResource.getAllCurrencies();
-                currenciesPromise.then(function(currencies) {
-                    allCurrencies = currencies;
-                    // default currency
-                    var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                    currencySymbolPromise.then(function (currencySymbol) {
-                        globalCurrency = currencySymbol;
-                        $scope.preValuesLoaded = true;
-                    }, function (reason) {
-                        notificationsService.error('Failed to load the currency symbol', reason.message);
-                    });
+                settingsResource.getAllCombined().then(function(combined) {
+                    allCurrencies = combined.currencies;
+                    globalCurrency = combined.currencySymbol;
+                    $scope.preValuesLoaded = true;
                 }, function(reason) {
-                    notificationsService.error('Failed to load all currencies', reason.message);
+                    notificationsService.error('Failed to load combined settings', reason.message);
                 });
             }
 
@@ -6763,9 +6735,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+        ['$scope', '$q', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
             'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
+        function($scope, $q, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
                  merchelloTabsFactory, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
@@ -6813,23 +6785,25 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
              * Load the settings from the settings service to get the currency symbol
              */
             function loadSettings() {
-                var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                currencySymbolPromise.then(function(currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
-                    localizationService.localize('general_yes').then(function(value) {
-                      yes = value;
-                    });
-                    localizationService.localize('general_no').then(function(value) {
-                        no = value;
-                    });
-                    localizationService.localize('merchelloGeneral_some').then(function(value) {
-                        some = value;
-                    });
-
-                    $scope.loaded = true;
+                var deferred = $q.defer();
+                var promises = [
+                        settingsResource.getCurrencySymbol(),
+                        localizationService.localize('general_yes'),
+                        localizationService.localize('general_no'),
+                        localizationService.localize('merchelloGeneral_some')
+                    ];
+                $q.all(promises).then(function(data) {
+                    deferred.resolve(data);
+                });
+                deferred.promise.then(function(result) {
+                    $scope.currencySymbol = result[0];
+                    yes = result[1];
+                    no = result[2];
+                    some = result[3];
                     $scope.preValuesLoaded = true;
-                }, function (reason) {
-                    notificationsService.error("Settings Load Failed", reason.message);
+                    $scope.loaded = true;
+                }, function(reason) {
+                    notificationsService.error("Settings Load Failed", reason.message)
                 });
             }
 
@@ -8497,44 +8471,22 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
-               var settingsPromise = settingsResource.getAllSettings();
-               settingsPromise.then(function(settings) {
-                   $scope.settings = settings;
-               }, function(reason) {
-                   notificationsService.error('Failed to load global settings', reason.message);
-               })
-
-               var countriesPromise = settingsResource.getAllCountries();
-               countriesPromise.then(function(results) {
-                   countries = countryDisplayBuilder.transform(results);
+               settingsResource.getAllCombined().then(function(combined) {
+                   $scope.settings = combined.settings;
+                   countries = combined.countries;
+                   if ($scope.invoice.currency.symbol === '') {
+                       var currency = _.find(combined.currencies, function (symbol) {
+                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                       });
+                       if (currency !== undefined) {
+                           $scope.currencySymbol = currency.symbol;
+                       } else {
+                           $scope.currencySymbol = combined.currencySymbol;
+                       }
+                   }
                });
+           }
 
-               // TODO this can be refactored now that we have currency on the invoice model
-               if ($scope.invoice.currency.symbol === '') {
-                    var currencySymbolPromise = settingsResource.getAllCurrencies();
-                    currencySymbolPromise.then(function (symbols) {
-                        var currency = _.find(symbols, function(symbol) {
-                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                        });
-                        if (currency !== undefined) {
-                        $scope.currencySymbol = currency.symbol;
-                        } else {
-                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                            // default currency
-                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                            defaultCurrencyPromise.then(function (currencySymbol) {
-                                $scope.currencySymbol = currencySymbol;
-                            }, function (reason) {
-                                notificationService.error('Failed to load the default currency symbol', reason.message);
-                            });
-                        }
-                    }, function (reason) {
-                        alert('Failed: ' + reason.message);
-                    });
-               } else {
-                   $scope.currencySymbol = $scope.invoice.currency.symbol;
-               }
-            }
 
             /**
              * @ngdoc method
@@ -8920,9 +8872,9 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$routeParams', '$log', '$filter', 'notificationsService', 'localizationService', 'merchelloTabsFactory', 'settingsResource',
+    ['$scope', '$element', '$routeParams', '$q', '$log', '$filter', 'notificationsService', 'localizationService', 'merchelloTabsFactory', 'settingsResource',
         'invoiceResource', 'entityCollectionResource', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $element, $routeParams, $log, $filter, notificationService, localizationService, merchelloTabsFactory, settingsResource, invoiceResource, entityCollectionResource,
+        function($scope, $element, $routeParams, $q, $log, $filter, notificationService, localizationService, merchelloTabsFactory, settingsResource, invoiceResource, entityCollectionResource,
                  invoiceDisplayBuilder, settingDisplayBuilder)
         {
             $scope.loaded = false;
@@ -8956,24 +8908,29 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             function init() {
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
-                loadSettings();
-                localizationService.localize('merchelloSales_paid').then(function(value) {
-                    paid = value;
+
+                // localize
+                var deferred = $q.defer();
+                var promises = [
+                    localizationService.localize('merchelloSales_paid'),
+                    localizationService.localize('merchelloSales_unpaid'),
+                    localizationService.localize('merchelloSales_partial'),
+                    localizationService.localize('merchelloOrder_fulfilled'),
+                    localizationService.localize('merchelloOrder_unfulfilled'),
+                    localizationService.localize('merchelloOrder_open')
+                ];
+                $q.all(promises).then(function(r) {
+                    deferred.resolve(r);
                 });
-                localizationService.localize('merchelloSales_unpaid').then(function(value) {
-                    unpaid = value;
-                });
-                localizationService.localize('merchelloSales_partial').then(function(value) {
-                    partial = value;
-                });
-                localizationService.localize('merchelloOrder_fulfilled').then(function(value) {
-                    fulfilled = value;
-                });
-                localizationService.localize('merchelloOrder_unfulfilled').then(function(value) {
-                    unfulfilled = value;
-                });
-                localizationService.localize('merchelloOrder_open').then(function(value) {
-                    open = value;
+                deferred.promise.then(function(local) {
+                    paid = local[0];
+                    unpaid = local[1];
+                    partial = local[2];
+                    fulfilled = local[3];
+                    unfulfilled = local[4];
+                    open = local[5];
+
+                    loadSettings();
                 });
             }
 
@@ -8984,31 +8941,13 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              *
              * @description - Load the Merchello settings.
              */
-            // TODO refactor to use $q.defer
             function loadSettings() {
-                // this is needed for the date format
-                var settingsPromise = settingsResource.getAllSettings();
-                settingsPromise.then(function(allSettings) {
-                    $scope.settings = settingDisplayBuilder.transform(allSettings);
-                    // currency matching
-                    var currenciesPromise = settingsResource.getAllCurrencies();
-                    currenciesPromise.then(function(currencies) {
-                        allCurrencies = currencies;
-                        // default currency
-                        var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                        currencySymbolPromise.then(function (currencySymbol) {
-                            globalCurrency = currencySymbol;
-                            $scope.loaded = true;
-                            $scope.preValuesLoaded = true;
-                        }, function (reason) {
-                            notificationService.error('Failed to load the currency symbol', reason.message);
-                        });
-
-                    }, function(reason) {
-                        notificationService.error('Failed to load all currencies', reason.message);
-                    });
-                }, function(reason) {
-                    notificationService.error('Failed to load all settings', reason.message);
+                settingsResource.getAllCombined().then(function(combined) {
+                    $scope.settings = combined.settings;
+                    allCurrencies = combined.currencies;
+                    globalCurrency = combined.currencySymbol;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 });
             };
 
@@ -9110,22 +9049,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             function getEditUrl(invoice) {
                 return baseUrl + invoice.key;
-            }
-
-            /**
-            * @ngdoc method
-            * @name setDefaultDates
-            * @function
-            *
-            * @description
-            * Sets the default dates
-            */
-            function setDefaultDates(actual) {
-                var month = actual.getMonth() == 0 ? 11 : actual.getMonth() - 1;
-                var start = new Date(actual.getFullYear(), month, actual.getDate());
-                var end = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
-                $scope.filterStartDate = start.toLocaleDateString();
-                $scope.filterEndDate = end.toLocaleDateString();
             }
 
             init();

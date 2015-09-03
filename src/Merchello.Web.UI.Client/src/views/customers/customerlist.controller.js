@@ -47,19 +47,12 @@
 
             function loadSettings() {
                 // currency matching
-                var currenciesPromise = settingsResource.getAllCurrencies();
-                currenciesPromise.then(function(currencies) {
-                    allCurrencies = currencies;
-                    // default currency
-                    var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                    currencySymbolPromise.then(function (currencySymbol) {
-                        globalCurrency = currencySymbol;
-                        $scope.preValuesLoaded = true;
-                    }, function (reason) {
-                        notificationsService.error('Failed to load the currency symbol', reason.message);
-                    });
+                settingsResource.getAllCombined().then(function(combined) {
+                    allCurrencies = combined.currencies;
+                    globalCurrency = combined.currencySymbol;
+                    $scope.preValuesLoaded = true;
                 }, function(reason) {
-                    notificationsService.error('Failed to load all currencies', reason.message);
+                    notificationsService.error('Failed to load combined settings', reason.message);
                 });
             }
 
