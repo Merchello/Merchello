@@ -15,6 +15,7 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProdu
         $scope.preValuesLoaded = false;
         $scope.currencySymbol = '';
         $scope.entityType = 'product';
+        $scope.entityTypeName = 'Product';
         $scope.entityCollection = {};
         $scope.listViewResultSet = {
             totalItems: 0,

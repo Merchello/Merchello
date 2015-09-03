@@ -7,9 +7,9 @@
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', '$routeParams', '$filter', 'notificationsService', 'settingsResource', 'merchelloTabsFactory', 'customerResource', 'entityCollectionResource',
+        ['$scope', '$routeParams', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'merchelloTabsFactory', 'customerResource', 'entityCollectionResource',
             'customerDisplayBuilder',
-        function($scope, $routeParams, $filter, notificationsService, settingsResource, merchelloTabsFactory, customerResource, entityCollectionResource,
+        function($scope, $routeParams, $filter, notificationsService, localizationService, settingsResource, merchelloTabsFactory, customerResource, entityCollectionResource,
                  customerDisplayBuilder) {
 
             $scope.loaded = false;
@@ -21,15 +21,6 @@
             $scope.load = load;
             $scope.entityType = 'Customer';
 
-            $scope.config = {
-                columns: [
-                    { name: 'loginName', localizeKey: 'merchelloCustomers_loginName'},
-                    { name: 'firstName', localizeKey: 'general_name' },
-                    { name: 'location', localizeKey: 'merchelloCustomers_location' },
-                    { name: 'lastInvoiceTotal', localizeKey: 'merchelloCustomers_lastInvoiceTotal' }
-                ]
-            }
-
 
             // exposed methods
             $scope.getColumnValue = getColumnValue;
@@ -37,6 +28,7 @@
             var globalCurrency = '';
             var allCurrencies = [];
             const baseUrl = '#/merchello/merchello/customeroverview/';
+
             /**
              * @ngdoc method
              * @name init
@@ -112,7 +104,6 @@
                 if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
                     return invoice.currency.symbol;
                 }
-
                 var currencyCode = invoice.getCurrencyCode();
                 var currency = _.find(allCurrencies, function(currency) {
                     return currency.currencyCode === currencyCode;

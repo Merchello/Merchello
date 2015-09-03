@@ -30,6 +30,11 @@
     <key alias="configured">Configured</key>
     <key alias="notConfigured">Not Configured</key>
     <key alias="some">Some</key>
+    <key alias="lineItems">Line Items</key>
+    <key alias="setDateRange">Set Date Range</key>
+    <key alias="allDates">All Dates</key>
+    <key alias="starting">Starting</key>
+    <key alias="ending">Ending</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -95,6 +100,7 @@
     <key alias="allProduct">All Products</key>
     <key alias="allCustomer">All Customers</key>
     <key alias="allInvoice">All Sales</key>
+    <key alias="allOffer">All Offers</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>
@@ -148,6 +154,18 @@
     ]]></key>
   </area>
   <area alias="merchelloSales">
+    <key alias="invoice">Invoice</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="paymentStatus">Payment Status</key>
+    <key alias="sales">Sales</key>
+    <key alias="capturePayment">Capture Payment</key>
+    <key alias="processPayment">Process Payment</key>
+    <key alias="voidPayment">Void Payment</key>
+    <key alias="refundPayment">Refund Payment</key>
+    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
+    <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+    <key alias="processedBy">Processed by</key>
+    <key alias="refundMethod">Refund method</key>
     <key alias="noSales"><![CDATA[
         <h5>You Have No Sales Yet</h5>
         <p>But you will soon!</p>
@@ -186,6 +204,9 @@
       ]]>
     </key>
     <key alias="totalSpent">Total Spent</key>
+    <key alias="paid">Paid</key>
+    <key alias="unpaid">Unpaid</key>
+    <key alias="partial">Partial</key>
   </area>
     <area alias="merchelloMarketing">
       <key alias="currentOffers">Current Offers</key>
@@ -268,40 +289,49 @@
     <key alias="productOnSale">On sale</key>
   </area>
   <area alias="merchelloOrder">
-    <!-- things -->
+    <!-- moved to sales -->
     <key alias="invoice">Invoice</key>
     <key alias="invoiceNumber">Invoice #</key>
-    <key alias="order">Order</key>
-    <key alias="orders">Orders</key>
-    <key alias="orderNumber">Order #</key>
-    <key alias="paymentStatus">Payment Status</key>
-    <key alias="fulfillmentStatus">Fulfillment Status</key>
-    <key alias="lineItems">Line Items</key>
-    <key alias="orderName">[Order Name]</key>
-    <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
     <key alias="saleInformation">Sale Information</key>
-    <!-- actions -->
-    <key alias="filter">Filter Invoices</key>
-    <key alias="addDateFilters">Add date filters</key>
-    <key alias="removeDateFilters">Remove date filters</key>
+    <key alias="paymentStatus">Payment Status</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
     <key alias="voidPayment">Void Payment</key>
     <key alias="refundPayment">Refund Payment</key>
     <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
-    <!-- phrases -->
-    <key alias="invoicesPerPage">Invoices / Page</key>
-    <key alias="noOrders">You have no orders.</key>
-    <key alias="attentionRequired">You Have Orders That Require Attention</key>
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
     <key alias="refundMethod">Refund method</key>
+
+    <!-- moved to general -->
+    <key alias="lineItems">Line Items</key>
+
+    <key alias="order">Order</key>
+    <key alias="orders">Orders</key>
+    <key alias="orderNumber">Order #</key>
+
+    <key alias="fulfillmentStatus">Fulfillment Status</key>
+    <key alias="orderName">[Order Name]</key>
+    <key alias="createOrder">Create Order</key>
+
+    <!-- to be removed -->
+    <key alias="filter">Filter Invoices</key>
+    <key alias="addDateFilters">Add date filters</key>
+    <key alias="removeDateFilters">Remove date filters</key>
     <key alias="resetFilters">Reset Filters</key>
+    <key alias="invoicesPerPage">Invoices / Page</key>
     <key alias="archiveSales">Archive Sales</key>
     <key alias="unarchiveSales">Unarchive Sales</key>
     <key alias="noSalesYet">You have no sales yet</key>
     <key alias="butSoonYouWill">but soon you will!</key>
+
+    <!-- phrases -->
+    <key alias="noOrders">You have no orders.</key>
+    <key alias="attentionRequired">You Have Orders That Require Attention</key>
+    <key alias="fulfilled">Fulfilled</key>
+    <key alias="unfulfilled">Unfulfilled</key>
+    <key alias="open">Open</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->

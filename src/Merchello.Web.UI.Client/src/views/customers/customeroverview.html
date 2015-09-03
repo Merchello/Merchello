@@ -88,40 +88,8 @@
                 </div>
             </div>
             <div class="merchello-pane primary span12">
-                <div class="control-group umb-control-group">
-                    <div class="merchello-section-label">
-                        <localize key="merchelloCustomers_customerSaleHistory"></localize>
-                    </div>
-                    <div class="merchello-controls">
-                        <table class="table table-hover merchello-selectable-table customer-orders">
-                            <thead>
-                                <tr>
-                                    <th data-ng-show="false"><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
-                                    <th><localize key="merchelloSales_invoiceNumber" /></th>
-                                    <th><localize key="general_date" /></th>
-                                    <th><localize key="merchelloSales_paymentStatus" /></th>
-                                    <th><localize key="merchelloSales_fulfillmentStatus" /></th>
-                                    <th><localize key="merchelloGeneral_total" /></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="invoice in customer.invoices">
-                                    <td data-ng-show="false"><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/saleoverview/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
-                                    <td>{{invoice.invoiceDateString() | date: settings.dateFormat }}</td>
-                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
-                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                                    <td>{{invoice.total | currency : getCurrency(invoice.getCurrencyCode()).symbol }}</td>
-                                </tr>
-                                <tr data-ng-repeat="total in invoiceTotals" class="invoice-total">
-                                    <td data-ng-show="false"></td>
-                                    <td colspan="3"></td>
-                                    <td><localize key="merchelloCustomers_totalSpent"></localize>: {{total.currencyCode}}</td>
-                                    <td>{{total.total | currency : getCurrency(total.currencyCode).symbol }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <h4><localize key="merchelloCustomers_customerSaleHistory"></localize></h4>
+                <merchello-list-view builder="invoiceDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="listViewEntityType" ready="preValuesLoaded" disable-collections no-title no-filter>
                 </div>
 
                 <div class="control-group umb-control-group">

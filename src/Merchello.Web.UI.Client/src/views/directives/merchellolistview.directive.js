@@ -1,26 +1,24 @@
 angular.module('merchello.directives').directive('merchelloListView',
-    ['$routeParams', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
-    function($routeParams, queryDisplayBuilder, queryResultDisplayBuilder) {
+    ['$routeParams', '$log', '$filter', 'dialogService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, dialogService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
             scope: {
-                config: '=',
                 builder: '=',
                 entityType: '=',
-                pageSize: '=',
-                baseUrl: '@',
                 getColumnValue: '&',
                 load: '&',
-                hasDateFilter: '=?'
+                ready: '=?',
+                disableCollections: '@?',
+                includeDateFilter: '@?',
+                noTitle: '@?',
+                noFilter: '@?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
-           // compile: function(element, attrs) {
-                // makes multiple selection default
-            //    if (!attrs.hasDateFilter) { attrs.hasDateFilter = false; }
-            //},
             link: function (scope, elm, attr) {
 
+                scope.collectionKey = '';
                 scope.sort = sort;
                 scope.isSortDirection = isSortDirection;
                 scope.next = next;
@@ -29,7 +27,22 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.enterSearch = enterSearch;
                 scope.search = search;
                 scope.setPageSize = setPageSize;
-                scope.collectionKey = '';
+                scope.openDateRangeDialog = openDateRangeDialog;
+
+                scope.hasFilter = true;
+                scope.hasCollections = true;
+                scope.enableDateFilter = false;
+                scope.showTitle = true;
+                scope.isReady = false;
+
+                // date filtering
+                scope.clearDates = clearDates;
+                scope.startDate = '';
+                scope.endDate = '';
+                scope.dateBtnText = ''
+                var allDates = '';
+
+                scope.config = merchelloListViewHelper.getConfig(scope.entityType);
 
                 //scope.goToEditor = goToEditor;
 
@@ -39,7 +52,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                 };
 
                 scope.options = {
-                    pageSize: 25,
+                    pageSize: scope.config.pageSize ? scope.config.pageSize : 10,
                     pageNumber: 1,
                     filter: '',
                     orderBy: (scope.config.orderBy ? scope.config.orderBy : 'name').trim(),
@@ -49,10 +62,35 @@ angular.module('merchello.directives').directive('merchelloListView',
                 scope.pagination = [];
 
                 function init() {
-                    if($routeParams.id !== 'manage') {
-                        scope.collectionKey = $routeParams.id;
+                    if (!('ready' in attr)) {
+                        scope.isReady = true;
                     }
-                    search();
+                    scope.hasCollections = !('disableCollections' in attr);
+                    scope.enableDateFilter = 'includeDateFilter' in attr;
+                    scope.hasFilter = !('noFilter' in attr);
+                    scope.showTitle = !('noTitle' in attr);
+                    $log.debug(scope.hasFilter);
+                    if(scope.hasCollections) {
+                        scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
+                        // none of the collections have the capability to filter by dates
+                        if (scope.collectionKey !== '' && scope.enableDateFilter) {
+                            scope.enableDateFilter = false;
+                        }
+                    }
+                    localizationService.localize('merchelloGeneral_allDates').then(function(value) {
+                        allDates = value;
+                        scope.dateBtnText = allDates;
+                    });
+
+                    scope.$watch('ready', function(newVal, oldVal) {
+                        if (newVal === true) {
+                            scope.isReady = newVal;
+                        }
+                          if(scope.isReady) {
+                              search();
+                          }
+                    });
+
                 }
 
                 function search() {
@@ -68,11 +106,21 @@ angular.module('merchello.directives').directive('merchelloListView',
                     query.sortDirection = sortDirection;
                     query.addFilterTermParam(scope.options.filter);
 
-                    console.info(scope.collectionKey);
                     if (scope.collectionKey !== '') {
                         query.addCollectionKeyParam(scope.collectionKey);
                         query.addEntityTypeParam(scope.entityType);
                     }
+
+                    if (scope.enableDateFilter && scope.startDate !== '' && scope.endDate !== '') {
+                        // just to be safe
+                        var start = $filter('date')(scope.startDate, 'yyyy-MM-dd');
+                        var end = $filter('date')(scope.endDate, 'yyyy-MM-dd');
+                        query.addInvoiceDateParam(start, 'start');
+                        query.addInvoiceDateParam(end, 'end');
+                        console.info('hello');
+                        scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
+                    }
+
                     scope.load()(query).then(function (response) {
                         var queryResult = queryResultDisplayBuilder.transform(response, scope.builder);
                         scope.listViewResultSet.items = queryResult.items;
@@ -151,7 +199,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                     search();
                 }
 
-
                 function prev() {
                     if (scope.options.pageNumber - 1 > 0) {
                         scope.options.pageNumber--;
@@ -170,6 +217,34 @@ angular.module('merchello.directives').directive('merchelloListView',
 
                 function isSortDirection(col, direction) {
                     return scope.options.orderBy.toUpperCase() == col.toUpperCase() && scope.options.orderDirection == direction;
+                }
+
+                function clearDates() {
+                    scope.startDate = '';
+                    scope.endDate = '';
+                    scope.dateBtnText = allDates;
+                    search();
+                }
+
+                function openDateRangeDialog() {
+                    var dialogData = {
+                        startDate: scope.startDate,
+                        endDate: scope.endDate
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                        show: true,
+                        callback: processDateRange,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processDateRange(dialogData) {
+                    scope.startDate = dialogData.startDate;
+                    scope.endDate = dialogData.endDate;
+                    console.info('got here');
+                    search();
                 }
 
                 init();

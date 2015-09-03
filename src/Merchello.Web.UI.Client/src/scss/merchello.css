@@ -603,8 +603,31 @@
 .merchello-list-view a {
   color: #000; }
 .merchello-list-view select {
+  width: 75px;
   background: 0;
   border: 1px solid #d9d9d9; }
+.merchello-list-view .label {
+  font-size: 1em;
+  line-height: 20px;
+  text-shadow: none;
+  padding: .25em 1em .25em .5em; }
+  .merchello-list-view .label i {
+    color: #000; }
+.merchello-list-view .label-success {
+  background: #cfebc9;
+  border-color: #53a93f; }
+.merchello-list-view .label-warning {
+  background: #feede3;
+  border-color: #f57020; }
+.merchello-list-view .label-info {
+  background: #e4f4fa;
+  border-color: #049cdb; }
+.merchello-list-view .label-default {
+  color: #000; }
+.merchello-list-view .icon-loading:before {
+  font-size: 1.15em;
+  vertical-align: top;
+  padding-top: 1px; }
 
 .merch-language-select .dropdown-menu {
   width: inherit; }

@@ -8,30 +8,15 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
         ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
-            'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'productDisplayBuilder',
+            'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
         function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
-                 merchelloTabsFactory, dialogDataFactory, productResource, productDisplayBuilder) {
+                 merchelloTabsFactory, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
             $scope.load = load;
             $scope.entityType = 'Product';
 
-            $scope.config = {
-                columns: [
-                    { name: 'name', localizeKey: 'merchelloVariant_product'},
-                    { name: 'sku', localizeKey: 'merchelloVariant_sku' },
-                    { name: 'shippable', localizeKey: 'merchelloProducts_shippable' },
-                    { name: 'taxable', localizeKey: 'merchelloProducts_taxable' },
-                    { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity' },
-                    { name: 'onSale', localizeKey: 'merchelloVariant_productOnSale' },
-                    { name: 'price', localizeKey: 'merchelloGeneral_price' }
-                ]
-            }
-
             $scope.tabs = [];
-
-            // collections
-            $scope.collectionKey = '';
 
             // exposed methods
             $scope.getColumnValue = getColumnValue;
@@ -49,9 +34,6 @@
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
-                if($routeParams.id !== 'manage') {
-                    $scope.collectionKey = $routeParams.id;
-                }
                 loadSettings();
                 $scope.tabs = merchelloTabsFactory.createProductListTabs();
                 $scope.tabs.setActive('productlist');
@@ -158,8 +140,6 @@
 
             function getEditUrl(product) {
                 return "#/merchello/merchello/productedit/" + product.key;
-                //return product.hasVariants() ? "#/merchello/merchello/producteditwithoptions/" + product.key :
-                //    "#/merchello/merchello/productedit/" + product.key;
             }
 
             // Initialize the controller
