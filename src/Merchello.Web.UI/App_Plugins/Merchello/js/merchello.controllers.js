@@ -1326,7 +1326,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OffersListControlle
                 notificationsService.error("Failed to load promise queue", reason.message);
             });
         }
-        
+
         function load(query) {
             return marketingResource.searchOffers(query);
         }

@@ -80,7 +80,11 @@
             },
 
             config: {
-              files: [{ dest: '<%= distdir %>/config', src: '**/*.*', expand: true, cwd: 'src/config/'}]  
+              files: [{ dest: '<%= distdir %>/config', src: '**/*.config', expand: true, cwd: 'src/config/'}]
+            },
+
+            lang: {
+                files: [{ dest: '<%= distdir %>/Lang', src: '**/*.*', expand: true, cwd: 'src/config/lang'}]
             },
 
             assets: {
@@ -99,6 +103,7 @@
                     { dest: '<%= vsdir %>/js', src: '**', expand: true, cwd: '<%= distdir %>/js' },
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/config', src: '**', expand: true, cwd: '<%= distdir %>/config' },
+                    { dest: '<%= vsdir %>/lang', src: '**', expand: true, cwd: '<%= distdir %>/lang' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/sales' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/catalog' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/customers' },
