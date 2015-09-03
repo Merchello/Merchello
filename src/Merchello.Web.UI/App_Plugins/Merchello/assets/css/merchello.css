@@ -668,6 +668,21 @@
     font-size: 17.5px;
     font-width: bold; }
 
+.sales-history h4 {
+  margin-bottom: .5em; }
+  .sales-history h4 small {
+    margin-top: .25em;
+    display: block; }
+
+.merchello-settings .form-group {
+  margin-bottom: 1em; }
+.merchello-settings label {
+  vertical-align: middle; }
+  .merchello-settings label input[type="checkbox"] {
+    margin-top: 3px; }
+  .merchello-settings label span {
+    display: inline-block; }
+
 .merchello-panel-body .shipping-dimensions {
   margin-bottom: 1.5em; }
 

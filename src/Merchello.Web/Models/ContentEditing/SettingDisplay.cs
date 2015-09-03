@@ -66,6 +66,11 @@
         public bool GlobalShippingIsTaxable { get; set; }
 
         /// <summary>
+        /// Gets or sets the default extended content culture.
+        /// </summary>
+        public string DefaultExtendedContentCulture { get; set; }
+
+        /// <summary>
         /// Gets or sets the how taxes should be applied globally.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]

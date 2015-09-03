@@ -87,8 +87,6 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProdu
             query.sortDirection = sortDirection;
             query.addFilterTermParam($scope.options.filter);
 
-
-
             var promise;
             if ($scope.model.value !== '') {
                 query.addCollectionKeyParam($scope.model.value);

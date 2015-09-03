@@ -407,6 +407,14 @@
             {
                 get { return new Guid("B9653D97-A87B-4F78-BE2D-395665FBE361"); }
             }
+
+            /// <summary>
+            /// Gets the default extended content culture key.
+            /// </summary>
+            public static Guid DefaultExtendedContentCulture
+            {
+                get { return new Guid("292E477B-E39A-4B8B-9865-334EEE850FD7"); }
+            }
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedContentController',
-    ['$scope', '$routeParams', '$location', 'notificationsService', 'merchelloTabsFactory', 'contentResource', 'detachedContentResource', 'productResource',
+    ['$scope', '$q', '$routeParams', '$location', 'notificationsService', 'merchelloTabsFactory', 'contentResource', 'detachedContentResource', 'productResource', 'settingsResource',
         'productDisplayBuilder', 'productVariantDetachedContentDisplayBuilder',
-        function($scope, $routeParams, $location, notificationsService, merchelloTabsFactory, contentResource, detachedContentResource, productResource,
+        function($scope, $q, $routeParams, $location, notificationsService, merchelloTabsFactory, contentResource, detachedContentResource, productResource, settingsResource,
              productDisplayBuilder, productVariantDetachedContentDisplayBuilder) {
 
             $scope.loaded = false;
@@ -31,6 +31,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             $scope.saveContentType = createDetachedContent;
             $scope.setLanguage = setLanguage;
 
+            var settings = {};
             var product = {};
             var loadArgs = {
                 key: '',
@@ -47,21 +48,30 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var productVariantKey = $routeParams.variantid;
                 loadArgs.key = key;
                 loadArgs.productVariantKey = productVariantKey;
-                loadLanguages(loadArgs);
-            }
 
-            function loadLanguages(args) {
-                detachedContentResource.getAllLanguages().then(function(languages) {
-                    $scope.languages = languages;
-                    console.info($scope.languages);
+                var deferred = $q.defer();
+                $q.all([
+                    settingsResource.getAllSettings(),
+                    detachedContentResource.getAllLanguages(),
+                    productResource.getByKey(key)
+                ]).then(function(results) {
+                    deferred.resolve(results);
+                });
+
+                deferred.promise.then(function(data) {
+                    settings = data[0];
+                    $scope.languages = data[1];
+                    $scope.defaultLanguage = settings.defaultExtendedContentCulture;
                     if($scope.defaultLanguage !== '' && $scope.defaultLanguage !== undefined) {
                         $scope.language = _.find($scope.languages, function(l) { return l.isoCode === $scope.defaultLanguage; });
                     }
-                    loadProduct(args);
+                    var prod = data[2];
+                    loadProduct(prod, loadArgs);
                 }, function(reason) {
-                    notificationsService.error('Failed to load Umbraco languages' + reason);
+                    notificationsService.error('Failed to load ' + reason);
                 });
             }
+
 
             /**
              * @ngdoc method
@@ -71,10 +81,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
              * @description
              * Load a product by the product key.
              */
-            function loadProduct(args) {
-
-                var promiseProduct = productResource.getByKey(args.key);
-                promiseProduct.then(function (p) {
+            function loadProduct(p, args) {
                     product = productDisplayBuilder.transform(p);
                     if(args.productVariantKey === '' || args.productVariantKey === undefined) {
                         // this is a product edit.
@@ -107,9 +114,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.preValuesLoaded = true;
                     }
                     $scope.tabs.setActive('productcontent');
-                }, function (reason) {
-                    notificationsService.error("Product Load Failed", reason.message);
-                });
             }
 
             function loadScaffold() {

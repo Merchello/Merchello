@@ -1,0 +1,17 @@
+.merchello-settings {
+  .form-group {
+    margin-bottom: 1em;
+  }
+
+  // hacky fix for global style override
+  label {
+
+    input[type="checkbox"] {
+      margin-top: 3px;
+    }
+    vertical-align: middle;
+    span {
+      display: inline-block;
+    }
+  }
+}

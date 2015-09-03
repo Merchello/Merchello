@@ -404,6 +404,7 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         self.globalTrackInventory = false;
         self.globalShippingIsTaxable = false;
         self.globalTaxationApplication = 'invoice';
+        self.defaultExtendedContentCulture = 'en-US'
     };
 
     angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);
