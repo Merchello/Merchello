@@ -32,7 +32,10 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'paymentStatus', localizeKey: 'merchelloSales_paymentStatus', resultColumn: true },
                     { name: 'fulfillmentStatus', localizeKey: 'merchelloOrder_fulfillmentStatus', resultColumn: true },
                     { name: 'total', localizeKey: 'merchelloGeneral_total' }
-                ]
+                ],
+                pageSize: 10,
+                orderBy: 'invoiceNumber',
+                orderDirection: 'desc'
             },
 
             saleshistory: {
@@ -42,7 +45,9 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'paymentStatus', localizeKey: 'merchelloSales_paymentStatus', resultColumn: true },
                     { name: 'fulfillmentStatus', localizeKey: 'merchelloOrder_fulfillmentStatus', resultColumn: true },
                     { name: 'total', localizeKey: 'merchelloGeneral_total' }
-                ]
+                ],
+                orderBy: 'invoiceNumber',
+                orderDirection: 'desc'
             },
 
             offer: {

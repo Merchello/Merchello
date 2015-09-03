@@ -21,13 +21,20 @@
             <td>
                 <form class="pull-right ng-pristine ng-valid" novalidate>
                     <select data-ng-model="options.pageSize" data-ng-change="setPageSize()">
-                        <option value="2">2</option>
                         <option value="10">10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
                 </form>
+            </td>
+        </tr>
+        <tr data-ng-show="enableDateFilter">
+            <td colspan="{{ config.columns.length + 2}}">
+                <div class="btn-group pull-right">
+                    <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
+                    <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
+                </div>
             </td>
         </tr>
         </thead>
