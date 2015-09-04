@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Tests.UnitTests.Slug
 {
+    using Merchello.Core;
     using Merchello.Web.Models.VirtualContent;
 
     using NUnit.Framework;

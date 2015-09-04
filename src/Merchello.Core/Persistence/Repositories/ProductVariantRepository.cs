@@ -191,7 +191,8 @@
 
             foreach (var dc in productVariant.DetachedContents)
             {
-                this.SaveDetachedContent(dc);
+                var slug = PathHelper.ConvertToSlug(productVariant.Name);
+                this.SaveDetachedContent(dc, slug);
             }
         }
 
@@ -214,7 +215,10 @@
         /// <param name="detachedContent">
         /// The detached content.
         /// </param>
-        internal void SaveDetachedContent(IProductVariantDetachedContent detachedContent)
+        /// <param name="slug">
+        /// The generated slug
+        /// </param>
+        internal void SaveDetachedContent(IProductVariantDetachedContent detachedContent, string slug)
         {
             var factory = new ProductVariantDetachedContentFactory();
 
@@ -222,6 +226,9 @@
             {
                 ((Entity)detachedContent).AddingEntity();
 
+                var count = Database.ExecuteScalar<int>("SELECT COUNT(slug) FROM [merchProductVariantDetachedContent] WHERE [merchProductVariantDetachedContent].[slug] = @Slug AND [merchProductVariantDetachedContent].[productVariantKey] != @Pvk", new { @Slug = slug, @Pvk = detachedContent.ProductVariantKey });
+                if (count > 0) slug = string.Format("{0}-{1}", slug, count + 1);
+                detachedContent.Slug = slug;
                 var dto = factory.BuildDto(detachedContent);
                 Database.Insert(dto);
                 detachedContent.Key = dto.Key;

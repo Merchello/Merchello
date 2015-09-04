@@ -65,11 +65,15 @@ angular.module('merchello.services').factory('detachedContentHelper',
 
                     // save the current language only
                     angular.forEach(args.scope.contentTabs, function(ct) {
-                        angular.forEach(ct.properties, function (p) {
-                            if (typeof p.value !== "function") {
-                                args.scope.detachedContent.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
-                            }
-                        });
+                        if (ct.id === 'render') {
+                            args.scope.detachedContent.slug = _.find(ct.properties, function(s) { return s.alias === 'slug'}).value;
+                        } else {
+                            angular.forEach(ct.properties, function (p) {
+                                if (typeof p.value !== "function") {
+                                    args.scope.detachedContent.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
+                                }
+                            });
+                        }
                     });
 
                     args.saveMethod(args.content).then(function(data) {
@@ -92,6 +96,29 @@ angular.module('merchello.services').factory('detachedContentHelper',
                 }
 
                 return deferred.promise;
+            },
+
+            buildRenderTab: function(args) {
+                var tab = {
+                    alias: args.tabAlias,
+                    label: args.tabLabel,
+                    id: args.tabId,
+                    properties: [
+                        {
+                            alias: 'slug',
+                            description: 'Description',
+                            editor: 'Umbraco.Textbox',
+                            hideLabel: false,
+                            label: 'Slug',
+                            validation: {
+                                mandatory: true
+                            },
+                            value: args.slug,
+                            view: 'textbox'
+                        }
+                    ]
+                }
+                return tab;
             }
 
         }

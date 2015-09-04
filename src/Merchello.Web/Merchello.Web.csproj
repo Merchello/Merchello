@@ -278,7 +278,6 @@
     <Compile Include="Models\VirtualContent\DetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IDetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IVirtualProductContent.cs" />
-    <Compile Include="Models\VirtualContent\PathHelper.cs" />
     <Compile Include="Models\VirtualContent\VirtualProductContent.cs" />
     <Compile Include="Models\Interfaces\IEntityDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
