@@ -70,6 +70,7 @@
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
     <key alias="reportListing">Reports</key>
+    <key alias="render">Render</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
@@ -151,6 +152,11 @@
     ]]></key>
     <key alias="deleteWarning"><![CDATA[
     This will also delete ALL property data associated with products that use this product type.
+    ]]></key>
+    <key alias="removeDetachedContent">Remove Extended Content</key>
+    <key alias="removeDetachedContentWarning"><![CDATA[
+    Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to
+    fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
     ]]></key>
   </area>
   <area alias="merchelloSales">
@@ -287,6 +293,7 @@
     <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
     <key alias="productOnSale">On sale</key>
+    <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
   </area>
   <area alias="merchelloOrder">
     <!-- moved to sales -->
@@ -426,6 +433,7 @@
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
+    <key alias="defaultCultureName">Set the default extended content culture</key>
   </area>
 
   <area alias="merchelloShippingCountry">

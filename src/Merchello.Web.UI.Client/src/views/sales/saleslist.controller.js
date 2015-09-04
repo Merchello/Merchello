@@ -8,9 +8,9 @@
  * The controller for the orders list page
  */
 angular.module('merchello').controller('Merchello.Backoffice.SalesListController',
-    ['$scope', '$element', '$routeParams', '$log', '$filter', 'notificationsService', 'localizationService', 'merchelloTabsFactory', 'settingsResource',
+    ['$scope', '$element', '$routeParams', '$q', '$log', '$filter', 'notificationsService', 'localizationService', 'merchelloTabsFactory', 'settingsResource',
         'invoiceResource', 'entityCollectionResource', 'invoiceDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $element, $routeParams, $log, $filter, notificationService, localizationService, merchelloTabsFactory, settingsResource, invoiceResource, entityCollectionResource,
+        function($scope, $element, $routeParams, $q, $log, $filter, notificationService, localizationService, merchelloTabsFactory, settingsResource, invoiceResource, entityCollectionResource,
                  invoiceDisplayBuilder, settingDisplayBuilder)
         {
             $scope.loaded = false;
@@ -44,24 +44,29 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             function init() {
                 $scope.tabs = merchelloTabsFactory.createSalesListTabs();
                 $scope.tabs.setActive('saleslist');
-                loadSettings();
-                localizationService.localize('merchelloSales_paid').then(function(value) {
-                    paid = value;
+
+                // localize
+                var deferred = $q.defer();
+                var promises = [
+                    localizationService.localize('merchelloSales_paid'),
+                    localizationService.localize('merchelloSales_unpaid'),
+                    localizationService.localize('merchelloSales_partial'),
+                    localizationService.localize('merchelloOrder_fulfilled'),
+                    localizationService.localize('merchelloOrder_unfulfilled'),
+                    localizationService.localize('merchelloOrder_open')
+                ];
+                $q.all(promises).then(function(r) {
+                    deferred.resolve(r);
                 });
-                localizationService.localize('merchelloSales_unpaid').then(function(value) {
-                    unpaid = value;
-                });
-                localizationService.localize('merchelloSales_partial').then(function(value) {
-                    partial = value;
-                });
-                localizationService.localize('merchelloOrder_fulfilled').then(function(value) {
-                    fulfilled = value;
-                });
-                localizationService.localize('merchelloOrder_unfulfilled').then(function(value) {
-                    unfulfilled = value;
-                });
-                localizationService.localize('merchelloOrder_open').then(function(value) {
-                    open = value;
+                deferred.promise.then(function(local) {
+                    paid = local[0];
+                    unpaid = local[1];
+                    partial = local[2];
+                    fulfilled = local[3];
+                    unfulfilled = local[4];
+                    open = local[5];
+
+                    loadSettings();
                 });
             }
 
@@ -72,31 +77,13 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
              *
              * @description - Load the Merchello settings.
              */
-            // TODO refactor to use $q.defer
             function loadSettings() {
-                // this is needed for the date format
-                var settingsPromise = settingsResource.getAllSettings();
-                settingsPromise.then(function(allSettings) {
-                    $scope.settings = settingDisplayBuilder.transform(allSettings);
-                    // currency matching
-                    var currenciesPromise = settingsResource.getAllCurrencies();
-                    currenciesPromise.then(function(currencies) {
-                        allCurrencies = currencies;
-                        // default currency
-                        var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                        currencySymbolPromise.then(function (currencySymbol) {
-                            globalCurrency = currencySymbol;
-                            $scope.loaded = true;
-                            $scope.preValuesLoaded = true;
-                        }, function (reason) {
-                            notificationService.error('Failed to load the currency symbol', reason.message);
-                        });
-
-                    }, function(reason) {
-                        notificationService.error('Failed to load all currencies', reason.message);
-                    });
-                }, function(reason) {
-                    notificationService.error('Failed to load all settings', reason.message);
+                settingsResource.getAllCombined().then(function(combined) {
+                    $scope.settings = combined.settings;
+                    allCurrencies = combined.currencies;
+                    globalCurrency = combined.currencySymbol;
+                    $scope.loaded = true;
+                    $scope.preValuesLoaded = true;
                 });
             };
 
@@ -198,22 +185,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
 
             function getEditUrl(invoice) {
                 return baseUrl + invoice.key;
-            }
-
-            /**
-            * @ngdoc method
-            * @name setDefaultDates
-            * @function
-            *
-            * @description
-            * Sets the default dates
-            */
-            function setDefaultDates(actual) {
-                var month = actual.getMonth() == 0 ? 11 : actual.getMonth() - 1;
-                var start = new Date(actual.getFullYear(), month, actual.getDate());
-                var end = new Date(actual.getFullYear(), actual.getMonth(), actual.getDate());
-                $scope.filterStartDate = start.toLocaleDateString();
-                $scope.filterEndDate = end.toLocaleDateString();
             }
 
             init();

@@ -1263,6 +1263,15 @@ angular.module('merchello.resources')
                         'Failed to delete product with key: ' + product.key);
                 },
 
+                deleteDetachedContent: function(variant) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'DeleteDetachedContent';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            variant
+                        ),
+                        'Failed to delete detached content');
+                },
+
                 /**
                  * @ngdoc method
                  * @name searchProducts
@@ -1286,8 +1295,8 @@ angular.module('merchello.resources')
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources').factory('settingsResource',
-        ['$q', '$http', '$cacheFactory', 'umbRequestHelper',
-            function($q, $http, $cacheFactory, umbRequestHelper) {
+        ['$q', '$http', '$cacheFactory', 'umbRequestHelper', 'countryDisplayBuilder', 'settingDisplayBuilder',
+            function($q, $http, $cacheFactory, umbRequestHelper, countryDisplayBuilder, settingDisplayBuilder) {
 
         /* cacheFactory instance for cached items in the merchelloSettingsService */
         var _settingsCache = $cacheFactory('merchelloSettings');
@@ -1395,6 +1404,28 @@ angular.module('merchello.resources')
              */
             getAllSettings: function () {
                 return getCachedOrApi("AllSettings", "GetAllSettings", "settings");
+            },
+
+            getAllCombined: function() {
+                var deferred = $q.defer();
+                var promises = [
+                    this.getAllSettings(),
+                    this.getAllCurrencies(),
+                    this.getAllCountries()
+                ];
+                $q.all(promises).then(function(data) {
+                    var result = {
+                        settings: settingDisplayBuilder.transform(data[0]),
+                        currencies: data[1],
+                        currencySymbol: _.find(data[1], function(c) {
+                            return c.currencyCode === data[0].currencyCode
+                        }).symbol,
+                        countries: countryDisplayBuilder.transform(data[2])
+                    };
+                    deferred.resolve(result);
+                });
+
+                return deferred.promise;
             },
 
             getCurrentSettings: function() {

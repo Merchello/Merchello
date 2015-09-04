@@ -12,6 +12,9 @@
     using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Web.Models;
 
+    /// <summary>
+    /// The virtual product content.
+    /// </summary>
     public class VirtualProductContent : PublishedContentBase, IVirtualProductContent
     {
         /// <summary>
@@ -54,6 +57,9 @@
         /// </summary>
         private Lazy<int> _templateId;
 
+        /// <summary>
+        /// The url name.
+        /// </summary>
         private Lazy<string> _urlName; 
 
         /// <summary>

@@ -1212,6 +1212,9 @@
         /// </param>
         protected override void PersistUpdatedItem(IProduct entity)
         {
+            var cachedKeys = entity.ProductVariants.Select(x => x.Key).ToList();
+            cachedKeys.Add(((ProductVariant)((Product)entity).MasterVariant).Key);
+
             ((Product)entity).UpdatingEntity();
             ((ProductVariant)((Product)entity).MasterVariant).VersionKey = Guid.NewGuid();
 
@@ -1229,6 +1232,11 @@
             ((ProductVariantRepository)_productVariantRepository).SaveDetachedContents(((Product)entity).MasterVariant);
 
             entity.ResetDirtyProperties();
+
+            foreach (var key in cachedKeys)
+            {
+                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(key));
+            }
         }
 
         /// <summary>

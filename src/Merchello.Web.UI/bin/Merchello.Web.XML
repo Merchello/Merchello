@@ -3244,6 +3244,11 @@
             The <see cref="T:System.String"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.VirtualContent.VirtualProductContent">
+            <summary>
+            The virtual product content.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._name">
             <summary>
             The name.
@@ -3282,6 +3287,11 @@
         <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._templateId">
             <summary>
             The _template id.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.VirtualProductContent._urlName">
+            <summary>
+            The url name.
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.VirtualContent.VirtualProductContent.#ctor(System.String,Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedProperty},System.String,System.Int32,System.Boolean)">
@@ -14244,6 +14254,11 @@
             Gets or sets a value indicating whether global shipping is taxable.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.SettingDisplay.DefaultExtendedContentCulture">
+            <summary>
+            Gets or sets the default extended content culture.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.SettingDisplay.GlobalTaxationApplication">
             <summary>
             Gets or sets the how taxes should be applied globally.
@@ -15435,6 +15450,17 @@
             </summary>
             <param name="id">
             The key of the product to delete
+            </param>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ProductApiController.DeleteDetachedContent(Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
+            <summary>
+            Removes detached content from a product variant
+            </summary>
+            <param name="productVariant">
+            The product variant.
             </param>
             <returns>
             The <see cref="T:System.Net.Http.HttpResponseMessage"/>.

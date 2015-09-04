@@ -8,13 +8,13 @@
             </div>
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group">
+                    <div class="btn-group" data-ng-show="productVariant.detachedContents.length > 0">
                         <button data-ng-disabled="productVariantForm.$invalid" data-ng-click="save(productVariantForm)" class="btn btn-success"><localize key="buttons_save" /></button>
-                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown" data-ng-show="context !== 'createproduct'">
+                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu merchello-action-menu" role="menu">
-                            <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
+                            <li><a data-ng-click="openRemoveDetachedContentDialog()"><localize key="merchelloDetachedContent_removeDetachedContent">Remove Extended Content</localize></a></li>
                         </ul>
                     </div>
                 </div>

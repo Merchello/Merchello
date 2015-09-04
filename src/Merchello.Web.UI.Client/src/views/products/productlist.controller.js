@@ -7,9 +7,9 @@
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+        ['$scope', '$q', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
             'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
+        function($scope, $q, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
                  merchelloTabsFactory, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
@@ -57,23 +57,25 @@
              * Load the settings from the settings service to get the currency symbol
              */
             function loadSettings() {
-                var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                currencySymbolPromise.then(function(currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
-                    localizationService.localize('general_yes').then(function(value) {
-                      yes = value;
-                    });
-                    localizationService.localize('general_no').then(function(value) {
-                        no = value;
-                    });
-                    localizationService.localize('merchelloGeneral_some').then(function(value) {
-                        some = value;
-                    });
-
-                    $scope.loaded = true;
+                var deferred = $q.defer();
+                var promises = [
+                        settingsResource.getCurrencySymbol(),
+                        localizationService.localize('general_yes'),
+                        localizationService.localize('general_no'),
+                        localizationService.localize('merchelloGeneral_some')
+                    ];
+                $q.all(promises).then(function(data) {
+                    deferred.resolve(data);
+                });
+                deferred.promise.then(function(result) {
+                    $scope.currencySymbol = result[0];
+                    yes = result[1];
+                    no = result[2];
+                    some = result[3];
                     $scope.preValuesLoaded = true;
-                }, function (reason) {
-                    notificationsService.error("Settings Load Failed", reason.message);
+                    $scope.loaded = true;
+                }, function(reason) {
+                    notificationsService.error("Settings Load Failed", reason.message)
                 });
             }
 
