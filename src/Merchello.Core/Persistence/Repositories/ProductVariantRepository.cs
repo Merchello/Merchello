@@ -226,9 +226,7 @@
             {
                 ((Entity)detachedContent).AddingEntity();
 
-                var count = Database.ExecuteScalar<int>("SELECT COUNT(slug) FROM [merchProductVariantDetachedContent] WHERE [merchProductVariantDetachedContent].[slug] = @Slug AND [merchProductVariantDetachedContent].[productVariantKey] != @Pvk", new { @Slug = slug, @Pvk = detachedContent.ProductVariantKey });
-                if (count > 0) slug = string.Format("{0}-{1}", slug, count + 1);
-                detachedContent.Slug = slug;
+                detachedContent.Slug = this.EnsureSlug(detachedContent, slug);
                 var dto = factory.BuildDto(detachedContent);
                 Database.Insert(dto);
                 detachedContent.Key = dto.Key;
@@ -236,6 +234,7 @@
             else
             {
                 ((Entity)detachedContent).UpdatingEntity();
+                detachedContent.Slug = this.EnsureSlug(detachedContent, detachedContent.Slug);
                 var dto = factory.BuildDto(detachedContent);
 
                 const string Update =
@@ -681,6 +680,24 @@
             return Database.Fetch<ProductAttributeDto>(sql).Any();
         }
 
+        /// <summary>
+        /// Ensures the slug is valid.
+        /// </summary>
+        /// <param name="detachedContent">
+        /// The detached content.
+        /// </param>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The slug.
+        /// </returns>
+        private string EnsureSlug(IProductVariantDetachedContent detachedContent, string slug)
+        {
+            var count = Database.ExecuteScalar<int>("SELECT COUNT(slug) FROM [merchProductVariantDetachedContent] WHERE [merchProductVariantDetachedContent].[slug] = @Slug AND [merchProductVariantDetachedContent].[productVariantKey] != @Pvk", new { @Slug = slug, @Pvk = detachedContent.ProductVariantKey });
+            if (count > 0) slug = string.Format("{0}-{1}", slug, count + 1);
+            return slug;
+        }
 
     }
 }

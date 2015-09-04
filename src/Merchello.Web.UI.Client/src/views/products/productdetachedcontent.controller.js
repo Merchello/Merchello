@@ -21,7 +21,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // Umbraco properties
             $scope.contentTabs = [];
-            $scope.currentTab = '';
+            $scope.currentTab = null;
 
             $scope.openRemoveDetachedContentDialog = openRemoveDetachedContentDialog;
 
@@ -127,9 +127,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     filterTabs(scaffold);
                     fillValues();
                     if ($scope.contentTabs.length > 0) {
-                        if ($scope.currentTab === '') {
+                        if ($scope.currentTab === null) {
                             $scope.currentTab = $scope.contentTabs[0];
-                            $scope.tabs.setActive($scope.currentTab.id);
                         }
                         setTabVisibility();
                     }
@@ -141,6 +140,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         umbracoTabs.push(rt.id);
                         $scope.tabs.addActionTab(rt.id, rt.label, switchTab)
                     }
+                    
+                    $scope.tabs.setActive($scope.currentTab.id);
                     $scope.preValuesLoaded = true;
                 });
             }
@@ -173,7 +174,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             // save when the language is changed
             function setLanguage(lang) {
                 $scope.language = lang;
-                save();
+                $scope.contentTabs = [];
+                umbracoTabs = [];
+                $scope.currentTab = null;
+                saveDetachedContent();
+
             }
 
             function saveWithoutEvents() {
@@ -246,6 +251,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         return ct.id === id;
                     });
                     $scope.currentTab = fnd;
+                    $log.debug(fnd);
                     $scope.tabs.setActive(id);
                 }
             }
