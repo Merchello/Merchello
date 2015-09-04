@@ -57,6 +57,7 @@
             // clean up
             variant.key = this.productVariantKey;
             variant.productKey = this.key;
+            variant.master = true;
             delete variant['productOptions'];
             delete variant['productVariants'];
             return variant;

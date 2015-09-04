@@ -6253,7 +6253,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.tabs.addActionTab(ct.id, ct.label, switchTab);
                         umbracoTabs.push(ct.id);
                     });
-                   // $scope.tabs.insertActionTab('merchello', 'Merchello', switchTab, 0);
+                    // add the rendering tab
+                    if ($scope.productVariant.master) {
+                        $scope.tabs.addActionTab('render', 'merchelloTabs_render', switchTab('render'))
+                    }
                 }
             }
 

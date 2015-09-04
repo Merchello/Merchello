@@ -70,6 +70,7 @@
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
     <key alias="reportListing">Reports</key>
+    <key alias="render">Render</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>

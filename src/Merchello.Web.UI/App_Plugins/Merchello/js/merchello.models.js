@@ -2172,6 +2172,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             // clean up
             variant.key = this.productVariantKey;
             variant.productKey = this.key;
+            variant.master = true;
             delete variant['productOptions'];
             delete variant['productVariants'];
             return variant;
@@ -2539,8 +2540,6 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
                 });
                 return fnd === undefined;
             });
-
-            console.info(missing);
 
             return missing;
         }
