@@ -132,6 +132,7 @@
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
     <key alias="shippable">Shippable</key>
     <key alias="taxable">Taxable</key>
+    <key alias="available">Available</key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>

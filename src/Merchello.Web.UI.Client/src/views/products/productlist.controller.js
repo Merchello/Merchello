@@ -7,9 +7,9 @@
      * The controller for product list view controller
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductListController',
-        ['$scope', '$q', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
+        ['$scope', '$log', '$q', '$routeParams', '$location', '$filter', 'localizationService', 'notificationsService', 'settingsResource', 'entityCollectionResource',
             'merchelloTabsFactory', 'productResource', 'productDisplayBuilder',
-        function($scope, $q, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
+        function($scope, $log, $q, $routeParams, $location, $filter, localizationService, notificationsService, settingsResource, entityCollectionResource,
                  merchelloTabsFactory, productResource, productDisplayBuilder) {
 
             $scope.productDisplayBuilder = productDisplayBuilder;
@@ -83,6 +83,8 @@
                switch(col.name) {
                    case 'name':
                        return '<a href="' + getEditUrl(result) + '">' + result.name + '</a>';
+                   case 'available':
+                       return result.available ? yes : no;
                    case 'shippable':
                        return getShippableValue(result);
                    case 'taxable':
@@ -141,7 +143,11 @@
             }
 
             function getEditUrl(product) {
-                return "#/merchello/merchello/productedit/" + product.key;
+                if (product.hasVariants()) {
+                    return '#/merchello/merchello/producteditwithoptions/' + product.key;
+                } else {
+                    return "#/merchello/merchello/productedit/" + product.key;
+                }
             }
 
             // Initialize the controller

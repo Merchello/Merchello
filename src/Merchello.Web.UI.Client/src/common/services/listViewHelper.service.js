@@ -12,6 +12,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 columns: [
                     { name: 'name', localizeKey: 'merchelloVariant_product' },
                     { name: 'sku', localizeKey: 'merchelloVariant_sku' },
+                    { name: 'available', localizeKey: 'merchelloProducts_available' },
                     { name: 'shippable', localizeKey: 'merchelloProducts_shippable' },
                     { name: 'taxable', localizeKey: 'merchelloProducts_taxable' },
                     { name: 'totalInventory', localizeKey: 'merchelloGeneral_quantity', resultColumn: true },
