@@ -35,13 +35,19 @@
                     dest => dest.Tabs,
                     opt =>
                     opt.ResolveUsing<EmbeddedContentTabsResolver>()
-                        .ConstructedBy(() => new EmbeddedContentTabsResolver()));
+                        .ConstructedBy(() => new EmbeddedContentTabsResolver()))
+                 .ForMember(
+                    dest => dest.AllowedTemplates,
+                    opt =>
+                    opt.ResolveUsing<AllowedTemplatesResolver>()
+                    .ConstructedBy(() => new AllowedTemplatesResolver()));
 
             AutoMapper.Mapper.CreateMap<IProductVariantDetachedContent, ProductVariantDetachedContentDisplay>()
                 .ForMember(
                     dest => dest.DetachedDataValues,
                     opt =>
                     opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()));
+
         }
     }
 }

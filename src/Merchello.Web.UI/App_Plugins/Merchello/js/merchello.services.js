@@ -99,6 +99,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
             },
 
             buildRenderTab: function(args) {
+                console.info(args);
                 var tab = {
                     alias: args.tabAlias,
                     label: args.tabLabel,
@@ -106,16 +107,21 @@ angular.module('merchello.services').factory('detachedContentHelper',
                     properties: [
                         {
                             alias: 'slug',
-                            description: 'Description',
+                            description: args.slugDescription,
                             editor: 'Umbraco.Textbox',
                             hideLabel: false,
-                            label: 'Slug',
+                            label: args.slugLabel,
                             validation: {
                                 mandatory: true
                             },
                             value: args.slug,
                             view: 'textbox'
-                        }
+                        } //,
+                        /*{
+                            alias: 'templateId',
+                            editor: 'Umbraco.DropDown',
+                            hideLabel: false
+                        }*/
                     ]
                 }
                 return tab;

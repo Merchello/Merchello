@@ -27,6 +27,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // navigation switches
             var render = '';
+            var slugLabel = '';
+            var slugLabelDescription = '';
+            var selectTemplateLabel = '';
             var showUmbracoTabs = true;
             var merchelloTabs = ['productcontent','variantlist', 'optionslist'];
             var umbracoTabs = [];
@@ -58,7 +61,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 $q.all([
                     settingsResource.getAllSettings(),
                     detachedContentResource.getAllLanguages(),
-                    localizationService.localize('merchelloTabs_render')
+                    localizationService.localize('merchelloTabs_render'),
+                    localizationService.localize('merchelloDetachedContent_slug'),
+                    localizationService.localize('merchelloDetachedContent_slugDescription'),
+                    localizationService.localize('merchelloDetachedContent_selectTemplate'),
                 ]).then(function(results) {
                     deferred.resolve(results);
                 });
@@ -71,6 +77,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.language = _.find($scope.languages, function(l) { return l.isoCode === $scope.defaultLanguage; });
                     }
                     render = data[2];
+                    slugLabel = data[3];
+                    slugLabelDescription = data[4];
+                    selectTemplateLabel = data[5];
                     loadProduct(loadArgs);
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
@@ -102,7 +111,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.isVariant = true;
                     }
 
-                    editorState.set($scope.productVariant);
+                    //editorState.set($scope.productVariant);
 
                     $scope.loaded = true;
 
@@ -134,13 +143,26 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     }
                     // add the rendering tab
                     if ($scope.productVariant.master) {
-                        var rt = detachedContentHelper.buildRenderTab({ tabId: 'render', tabAlias: render, tabLabel: render, slug: $scope.detachedContent.slug });
-                        $log.debug($scope.contentTabs);
+                        var umbContentType = $scope.detachedContent.detachedContentType.umbContentType;
+                        var args = {
+                            tabId: 'render',
+                            tabAlias: render,
+                            tabLabel: render,
+                            slugLabel: slugLabel,
+                            slugDescription: slugLabelDescription,
+                            templateLabel: selectTemplateLabel,
+                            slug: $scope.detachedContent.slug,
+                            templateId: $scope.detachedContent.templateId,
+                            allowedTemplates: umbContentType.allowedTemplates,
+                            defaultTemplateId: umbContentType.defaultTemplateId
+                        };
+
+                        var rt = detachedContentHelper.buildRenderTab(args);
                         $scope.contentTabs.push(rt);
                         umbracoTabs.push(rt.id);
                         $scope.tabs.addActionTab(rt.id, rt.label, switchTab)
                     }
-                    
+
                     $scope.tabs.setActive($scope.currentTab.id);
                     $scope.preValuesLoaded = true;
                 });
@@ -245,13 +267,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var exists = _.find(umbracoTabs, function(ut) {
                     return ut === id;
                 });
-                $log.debug(exists);
                 if (exists !== undefined) {
                     var fnd = _.find($scope.contentTabs, function (ct) {
                         return ct.id === id;
                     });
                     $scope.currentTab = fnd;
-                    $log.debug(fnd);
                     $scope.tabs.setActive(id);
                 }
             }
@@ -260,6 +280,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 if ($scope.contentTabs.length > 0) {
                     angular.forEach($scope.contentTabs, function(ct) {
                         angular.forEach(ct.properties, function(p) {
+                            $log.debug(p);
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
                                 p.value = angular.fromJson(stored);

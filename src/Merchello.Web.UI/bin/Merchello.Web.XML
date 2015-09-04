@@ -2283,9 +2283,19 @@
             Gets or sets the icon.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.DefaultTemplateId">
+            <summary>
+            Gets or sets the default template id.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Tabs">
             <summary>
             Gets or sets the tabs.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.AllowedTemplates">
+            <summary>
+            Gets or sets the allowed templates.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions">
@@ -2317,6 +2327,26 @@
             <returns>
             The <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay">
+            <summary>
+            The Umbraco template display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay.Id">
+            <summary>
+            Gets or sets the id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
             <summary>
@@ -3057,6 +3087,22 @@
             <param name="value">
             The value.
             </param>
+        </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.AllowedTemplatesResolver">
+            <summary>
+            The allowed templates resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.AllowedTemplatesResolver.ResolveCore(Umbraco.Core.Models.IContentType)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty">
             <summary>

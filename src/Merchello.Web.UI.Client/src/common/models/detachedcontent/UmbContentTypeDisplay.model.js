@@ -14,6 +14,8 @@ var UmbContentTypeDisplay = function() {
     self.alias = '';
     self.icon = '';
     self.tabs = [];
+    self.defaultTemplateId = 0;
+    self.allowedTemplates = [];
 };
 
 angular.module('merchello.models').constant('UmbContentTypeDisplay', UmbContentTypeDisplay);
