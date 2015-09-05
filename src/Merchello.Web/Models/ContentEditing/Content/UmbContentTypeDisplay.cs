@@ -43,9 +43,19 @@
         public string Icon { get; set; }
 
         /// <summary>
+        /// Gets or sets the default template id.
+        /// </summary>
+        public int DefaultTemplateId { get; set; }
+
+        /// <summary>
         /// Gets or sets the tabs.
         /// </summary>
-        public IEnumerable<string> Tabs { get; set; } 
+        public IEnumerable<string> Tabs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the allowed templates.
+        /// </summary>
+        public IEnumerable<UmbTemplateDisplay> AllowedTemplates { get; set; } 
     }
 
     /// <summary>

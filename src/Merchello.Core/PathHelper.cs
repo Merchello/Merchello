@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models.VirtualContent
+﻿namespace Merchello.Core
 {
     using System;
     using System.Linq;
@@ -7,6 +7,9 @@
 
     using Umbraco.Core;
 
+    /// <summary>
+    /// The path helper.
+    /// </summary>
     internal static class PathHelper
     {
         /// <summary>
@@ -47,7 +50,7 @@
         /// </returns>
         internal static string ConvertToSlug(string value)
         {
-            return RemoveSpecialCharacters(value).SafeEncodeUrlSegments();
+            return RemoveSpecialCharacters(value).SafeEncodeUrlSegments().ToLowerInvariant();
         }
 
         /// <summary>

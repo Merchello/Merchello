@@ -2283,9 +2283,19 @@
             Gets or sets the icon.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.DefaultTemplateId">
+            <summary>
+            Gets or sets the default template id.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.Tabs">
             <summary>
             Gets or sets the tabs.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay.AllowedTemplates">
+            <summary>
+            Gets or sets the allowed templates.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplayExtensions">
@@ -2317,6 +2327,26 @@
             <returns>
             The <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay">
+            <summary>
+            The Umbraco template display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay.Id">
+            <summary>
+            Gets or sets the id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay.Alias">
+            <summary>
+            Gets or sets the alias.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.UmbTemplateDisplay.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ExtendedDataExtensions.AddProductVariantValues(Merchello.Core.Models.ExtendedDataCollection,Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
             <summary>
@@ -3058,6 +3088,22 @@
             The value.
             </param>
         </member>
+        <member name="T:Merchello.Web.Models.MapperResolvers.DetachedContent.AllowedTemplatesResolver">
+            <summary>
+            The allowed templates resolver.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.MapperResolvers.DetachedContent.AllowedTemplatesResolver.ResolveCore(Umbraco.Core.Models.IContentType)">
+            <summary>
+            The resolve core.
+            </summary>
+            <param name="source">
+            The source.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty">
             <summary>
             Represents a <see cref="T:Umbraco.Core.Models.IPublishedProperty"/>.
@@ -3173,76 +3219,6 @@
             <summary>
             Defines a virtual product content.
             </summary>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.SafeEncodeUrlSegments(System.String)">
-            <summary>
-            Encodes url segments.
-            </summary>
-            <param name="urlPath">
-            The url path.
-            </param>
-            <returns>
-            The <see cref="T:System.String"/>.
-            </returns>
-            <seealso cref="!:https://github.com/Shandem/Articulate/blob/master/Articulate/StringExtensions.cs"/>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.ConvertToSlug(System.String)">
-            <summary>
-            The convert to slug.
-            </summary>
-            <param name="value">
-            The value.
-            </param>
-            <returns>
-            The <see cref="T:System.String"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.GetSearchableUrl(System.String)">
-            <summary>
-            The get searchable url.
-            </summary>
-            <param name="value">
-            The value.
-            </param>
-            <returns>
-            The <see cref="T:System.String"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.EnsureForwardSlashes(System.String)">
-            <summary>
-            Replaces \ with / in a path.
-            </summary>
-            <param name="value">
-            The value to replace backslashes.
-            </param>
-            <returns>
-            The <see cref="T:System.String"/>.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.EnsureStartsAndEndsWith(System.String,System.Char)">
-            <summary>
-            Ensures a string both starts and ends with a character.
-            </summary>
-            <param name="input">
-            The input string.
-            </param>
-            <param name="value">
-            The char value to assert
-            </param>
-            <returns>
-            The asserted string.
-            </returns>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.PathHelper.RemoveSpecialCharacters(System.String)">
-            <summary>
-            The remove special characters.
-            </summary>
-            <param name="input">
-            The input.
-            </param>
-            <returns>
-            The <see cref="T:System.String"/>.
-            </returns>
         </member>
         <member name="T:Merchello.Web.Models.VirtualContent.VirtualProductContent">
             <summary>

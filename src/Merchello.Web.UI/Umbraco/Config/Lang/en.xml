@@ -1173,10 +1173,14 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
     <key alias="shippable">Shippable</key>
     <key alias="taxable">Taxable</key>
+    <key alias="available">Available</key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
     <key alias="productContentTypes">Product Content Types</key>
+    <key alias="slug">URL Slug</key>
+    <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
+    <key alias="selectTemplate">Select an Umbraco template</key>
     <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
     <key alias="productContentType">Product Content Type</key>
     <key alias="umbracoContentTypeName">Umbraco Content Type</key>

@@ -473,6 +473,7 @@
     <Compile Include="ObjectResolution\MerchelloManyObjectsResolverBase.cs" />
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
+    <Compile Include="PathHelper.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DetachedContentTypeFactory.cs" />
     <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
