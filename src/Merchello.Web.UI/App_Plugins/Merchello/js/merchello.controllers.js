@@ -6321,7 +6321,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 if ($scope.contentTabs.length > 0) {
                     angular.forEach($scope.contentTabs, function(ct) {
                         angular.forEach(ct.properties, function(p) {
-                            $log.debug(p);
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
                                 p.value = angular.fromJson(stored);

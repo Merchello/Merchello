@@ -30,6 +30,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
                     angular.forEach(args.scope.contentTabs, function(ct) {
                         if (ct.id === 'render') {
                             args.scope.detachedContent.slug = _.find(ct.properties, function(s) { return s.alias === 'slug'}).value;
+                            args.scope.detachedContent.templateId = _.find(ct.properties, function(t) { return t.alias === 'templateId' }).value;
                         } else {
                             angular.forEach(ct.properties, function (p) {
                                 if (typeof p.value !== "function") {
@@ -62,7 +63,14 @@ angular.module('merchello.services').factory('detachedContentHelper',
             },
 
             buildRenderTab: function(args) {
-                console.info(args);
+                var items = [];
+                var i = 1;
+                _.each(args.allowedTemplates, function(t) {
+                    console.info(t);
+                  items.push({ id: t.id, sortOrder: i, value: t.name });
+                    i++;
+                });
+
                 var tab = {
                     alias: args.tabAlias,
                     label: args.tabLabel,
@@ -79,14 +87,25 @@ angular.module('merchello.services').factory('detachedContentHelper',
                             },
                             value: args.slug,
                             view: 'textbox'
-                        } //,
-                        /*{
+                        },
+                        {
                             alias: 'templateId',
                             editor: 'Umbraco.DropDown',
-                            hideLabel: false
-                        }*/
+                            hideLabel: false,
+                            label: args.templateLabel,
+                            config: {
+                                items: items
+                            },
+                            description: '',
+                            value: args.templateId === 0 ? args.defaultTemplateId : args.templateId,
+                            validation: {
+                                mandatory: false
+                            },
+                            view: 'dropdown'
+                        }
                     ]
-                }
+                };
+
                 return tab;
             }
 
