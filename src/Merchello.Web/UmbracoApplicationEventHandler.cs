@@ -15,6 +15,7 @@
 
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Routing;
 
     using Models.SaleHistory;
 
@@ -23,6 +24,7 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
+    using Umbraco.Web.Routing;
 
     using ServiceContext = Merchello.Core.Services.ServiceContext;
     using Task = System.Threading.Tasks.Task;
@@ -68,6 +70,9 @@
             {
                 Log.Error("Initialization of Merchello failed", ex);
             }
+
+            // Insert my finder before ContentFinderByNiceUrl
+            ContentFinderResolver.Current.InsertType<ContentFinderProductBySlug>();
         }
 
         /// <summary>

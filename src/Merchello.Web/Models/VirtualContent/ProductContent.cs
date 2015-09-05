@@ -15,7 +15,7 @@
     /// <summary>
     /// The virtual product content.
     /// </summary>
-    public class VirtualProductContent : PublishedContentBase, IVirtualProductContent
+    public class ProductContent : PublishedContentBase, IProductContent
     {
         /// <summary>
         /// The name.
@@ -63,7 +63,7 @@
         private Lazy<string> _urlName; 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VirtualProductContent"/> class.
+        /// Initializes a new instance of the <see cref="ProductContent"/> class.
         /// </summary>
         /// <param name="name">
         /// The name.
@@ -86,7 +86,7 @@
         /// <param name="isPreviewing">
         /// The is previewing.
         /// </param>
-        public VirtualProductContent(
+        public ProductContent(
             string name,
             PublishedContentType contentType,
             ProductDisplay display,
@@ -114,6 +114,17 @@
             get
             {
                 return _display.Key;
+            }
+        }
+
+        /// <summary>
+        /// Gets the product variant key.
+        /// </summary>
+        public Guid ProductVariantKey
+        {
+            get
+            {
+                return _display.ProductVariantKey;
             }
         }
 
@@ -150,6 +161,44 @@
             get
             {
                 return this._display.Name;
+            }
+        }
+
+        /// <summary>
+        /// Gets the product options.
+        /// </summary>
+        public IEnumerable<ProductOptionDisplay> ProductOptions
+        {
+            get
+            {
+                return _display.ProductOptions;
+            }
+        }
+
+        /// <summary>
+        /// Gets the product variants.
+        /// </summary>
+        public IEnumerable<IProductVariantContent> ProductVariants
+        {
+            get
+            {
+                return Enumerable.Empty<IProductVariantContent>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the total inventory count.
+        /// </summary>
+        public int TotalInventoryCount
+        {
+            get
+            {
+                return 0;
+                //return this.ProductVariants != null
+                //           ? this.ProductVariants.Any()
+                //                 ? this.ProductVariants.Sum(x => x.TotalInventoryCount)
+                //                 : this.CatalogInventories.Sum(x => x.Count)
+                //           : 0;
             }
         }
 
@@ -416,7 +465,7 @@
         {
             return this._properties.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
         }
-
+        
         /// <summary>
         /// Initializes the model.
         /// </summary>

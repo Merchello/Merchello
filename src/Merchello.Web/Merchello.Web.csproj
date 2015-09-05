@@ -279,8 +279,9 @@
     <Compile Include="Models\VirtualContent\DetachedPublishedContent.cs" />
     <Compile Include="Models\VirtualContent\DetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IDetachedPublishedProperty.cs" />
-    <Compile Include="Models\VirtualContent\IVirtualProductContent.cs" />
-    <Compile Include="Models\VirtualContent\VirtualProductContent.cs" />
+    <Compile Include="Models\VirtualContent\IProductContent.cs" />
+    <Compile Include="Models\VirtualContent\IProductVariantContent.cs" />
+    <Compile Include="Models\VirtualContent\ProductContent.cs" />
     <Compile Include="Models\Interfaces\IEntityDisplay.cs" />
     <Compile Include="Models\MapperResolvers\AvailableGatewayResourcesResolver.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\DetachedDataValuesResolver.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplay.cs" />
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="Models\Ui\UrlActionParams.cs" />
+    <Compile Include="Models\VirtualContent\ProductContentBase.cs" />
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
@@ -361,6 +363,7 @@
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
     <Compile Include="Reporting\ReportController.cs" />
     <Compile Include="Reporting\ReportApiControllerResolver.cs" />
+    <Compile Include="Routing\ContentFinderProductBySlug.cs" />
     <Compile Include="Search\CachedQueryableCollectionQueryBase.cs" />
     <Compile Include="Search\CachedCustomerQuery.cs" />
     <Compile Include="Search\CachedOrderQuery.cs" />
