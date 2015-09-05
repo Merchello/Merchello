@@ -276,7 +276,6 @@
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
-    <Compile Include="Models\VirtualContent\DetachedPublishedContent.cs" />
     <Compile Include="Models\VirtualContent\DetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IDetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IProductContent.cs" />

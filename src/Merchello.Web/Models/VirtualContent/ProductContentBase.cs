@@ -2,15 +2,20 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
+    using Merchello.Web.Models.DetachedContent;
 
     using Umbraco.Core;
+    using Umbraco.Core.Models;
+    using Umbraco.Web.Models;
 
     /// <summary>
     /// Base class for Product content classes
     /// </summary>
-    public abstract class ProductContentBase 
+    internal abstract class ProductContentBase : PublishedContentBase
     {
         /// <summary>
         /// The product base.
@@ -18,15 +23,40 @@
         private readonly ProductDisplayBase _productBase;
 
         /// <summary>
+        /// The culture name.
+        /// </summary>
+        private readonly string _cultureName;
+
+        /// <summary>
+        /// The properties.
+        /// </summary>
+        private Lazy<IEnumerable<IPublishedProperty>> _properties;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentBase"/> class.
         /// </summary>
         /// <param name="productBase">
         /// The product base.
         /// </param>
-        protected ProductContentBase(ProductDisplayBase productBase)
+        /// <param name="cultureName">
+        /// The culture name
+        /// </param>
+        protected ProductContentBase(ProductDisplayBase productBase, string cultureName = "en-US")
         {
             Mandate.ParameterNotNull(productBase, "productBase");
             _productBase = productBase;
+            _cultureName = cultureName;
+        }
+
+        /// <summary>
+        /// Gets the culture name.
+        /// </summary>
+        public string CultureName
+        {
+            get
+            {
+                return _cultureName;
+            }
         }
 
         /// <summary>
@@ -259,6 +289,69 @@
             {
                 return _productBase.CatalogInventories;
             }
+        }
+
+        /// <summary>
+        /// Gets the properties.
+        /// </summary>
+        public override ICollection<IPublishedProperty> Properties
+        {
+            get
+            {
+                return this._properties.Value.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// The get property.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPublishedProperty"/>.
+        /// </returns>
+        public override IPublishedProperty GetProperty(string alias)
+        {
+            return _properties.Value.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
+        }
+
+        /// <summary>
+        /// The get property.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <param name="recurse">
+        /// The recurse.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPublishedProperty"/>.
+        /// </returns>
+        /// <exception cref="NotSupportedException">
+        /// </exception>
+        public override IPublishedProperty GetProperty(string alias, bool recurse)
+        {
+            if (recurse)
+                throw new NotSupportedException();
+
+            return GetProperty(alias);
+        }
+
+        /// <summary>
+        /// Gets the detached properties.
+        /// </summary>
+        protected IEnumerable<IPublishedProperty> DetachedProperties
+        {
+            get
+            {
+                return _properties.Value;
+            }
+        }
+
+        private void Initialize()
+        {
+            
         }
     }
 }

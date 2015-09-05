@@ -1455,6 +1455,24 @@
             }
         }
 
+
+        /// <summary>
+        /// Gets the product key associated with a slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The product key.
+        /// </returns>
+        internal Guid GetKeyForSlug(string slug)
+        {
+            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeyForSlug(slug);
+            }
+        }
+
         /// <summary>
         /// The validate sort by field.
         /// </summary>
@@ -1516,6 +1534,7 @@
                 }
             }
         }
+
 
         /// <summary>
         /// The remove detached content from product.

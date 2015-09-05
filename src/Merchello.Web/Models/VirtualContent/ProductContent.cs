@@ -5,32 +5,26 @@
     using System.Linq;
 
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.DetachedContent;
 
-    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
-    using Umbraco.Web.Models;
 
     /// <summary>
     /// The virtual product content.
     /// </summary>
-    public class ProductContent : PublishedContentBase, IProductContent
+    internal class ProductContent : ProductContentBase, IProductContent
     {
-        /// <summary>
-        /// The name.
-        /// </summary>
-        private readonly string _name;
-
         /// <summary>
         /// The content type.
         /// </summary>
         private readonly PublishedContentType _contentType;
 
         /// <summary>
-        /// The properties.
+        /// The detached content display.
         /// </summary>
-        private readonly IEnumerable<IPublishedProperty> _properties;
+        private readonly ProductVariantDetachedContentDisplay _detachedContentDisplay;
 
         /// <summary>
         /// The sort order.
@@ -43,39 +37,19 @@
         private readonly bool _isPreviewing;
 
         /// <summary>
-        /// The culture name.
-        /// </summary>
-        private readonly string _cultureName;
-
-        /// <summary>
         /// The <see cref="ProductDisplay"/>.
         /// </summary>
         private readonly ProductDisplay _display;
 
-        /// <summary>
-        /// The _template id.
-        /// </summary>
-        private Lazy<int> _templateId;
-
-        /// <summary>
-        /// The url name.
-        /// </summary>
-        private Lazy<string> _urlName; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContent"/> class.
         /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
         /// <param name="contentType">
         /// The content type.
         /// </param>
         /// <param name="display">
         /// The display.
-        /// </param>
-        /// <param name="properties">
-        /// The properties.
         /// </param>
         /// <param name="cultureName">
         /// The culture name
@@ -87,23 +61,19 @@
         /// The is previewing.
         /// </param>
         public ProductContent(
-            string name,
             PublishedContentType contentType,
-            ProductDisplay display,
-            IEnumerable<IPublishedProperty> properties,
+            ProductDisplay display,           
             string cultureName = "en-US",
             int sortOrder = 0,
             bool isPreviewing = false)
+            : base(display, cultureName)
         {
-            this._name = name;
             this._display = display;
             this._contentType = contentType;
-            this._properties = properties;
-            this._cultureName = cultureName;
             this._sortOrder = sortOrder;
             this._isPreviewing = isPreviewing;
 
-            this.Initialize();
+            this._detachedContentDisplay = _display.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName);
         }
 
         /// <summary>
@@ -126,17 +96,6 @@
             {
                 return _display.ProductVariantKey;
             }
-        }
-
-        /// <summary>
-        /// Gets the culture name.
-        /// </summary>
-        public string CultureName 
-        { 
-            get
-            {
-                return _cultureName;
-            } 
         }
 
         /// <summary>
@@ -250,17 +209,6 @@
         }
 
         /// <summary>
-        /// Gets the properties.
-        /// </summary>
-        public override ICollection<IPublishedProperty> Properties
-        {
-            get
-            {
-                return this._properties.ToArray(); 
-            }
-        }
-
-        /// <summary>
         /// Gets the content type.
         /// </summary>
         public override PublishedContentType ContentType
@@ -289,7 +237,7 @@
         {
             get
             {
-                return _templateId.Value;
+                return _detachedContentDisplay != null ? _detachedContentDisplay.TemplateId : 0;
             }
         }
 
@@ -314,7 +262,7 @@
         {
             get
             {
-                return _urlName.Value;
+                return _detachedContentDisplay != null ? _detachedContentDisplay.Slug : null;
             }
         }
 
@@ -450,28 +398,6 @@
             {
                 return DateTime.MinValue;
             }
-        }
-
-        /// <summary>
-        /// Gets a property by it's alias.
-        /// </summary>
-        /// <param name="alias">
-        /// The alias.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPublishedProperty"/>.
-        /// </returns>
-        public override IPublishedProperty GetProperty(string alias)
-        {
-            return this._properties.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
-        }
-        
-        /// <summary>
-        /// Initializes the model.
-        /// </summary>
-        private void Initialize()
-        {
-            _templateId = new Lazy<int>(() => _display.TemplateId(_cultureName));
         }
     }
 }

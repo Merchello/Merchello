@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Routing
 {
-    using Merchello.Web.Models.DetachedContent;
+    using Merchello.Core;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Web.Routing;
@@ -22,7 +23,9 @@
         public bool TryFindContent(PublishedContentRequest contentRequest)
         {
             if (contentRequest.Uri.AbsolutePath == "/") return false;
-            
+
+            var key = ((ProductService)MerchelloContext.Current.Services.ProductService).GetKeyForSlug("product2");
+
             return false;                            
         }
     }
