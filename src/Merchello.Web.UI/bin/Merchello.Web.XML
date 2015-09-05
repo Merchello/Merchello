@@ -2204,6 +2204,11 @@
             Gets or sets the slug.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.CanBeRendered">
+            <summary>
+            Gets or sets a value indicating whether the virtual content can be rendered.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay.DetachedDataValues">
             <summary>
             Gets or sets the detached data values.

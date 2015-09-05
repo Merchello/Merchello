@@ -49,6 +49,7 @@
                                           Key = dto.Key,
                                           Slug = dto.Slug ?? string.Empty,
                                           TemplateId = dto.TemplateId ?? 0,
+                                          CanBeRendered = dto.CanBeRendered,
                                           CreateDate = dto.CreateDate,
                                           UpdateDate = dto.UpdateDate
                                       };
@@ -77,6 +78,7 @@
                            ProductVariantKey = entity.ProductVariantKey,
                            Slug = !entity.Slug.IsNullOrWhiteSpace() ? entity.Slug : null,
                            TemplateId = entity.TemplateId > 0 ? entity.TemplateId : null,
+                           CanBeRendered = entity.CanBeRendered,
                            Values = JsonConvert.SerializeObject(entity.DetachedDataValues.AsEnumerable()),
                            CreateDate = entity.CreateDate,
                            UpdateDate = entity.UpdateDate

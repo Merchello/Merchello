@@ -225,7 +225,6 @@
             if (!detachedContent.HasIdentity)
             {
                 ((Entity)detachedContent).AddingEntity();
-
                 detachedContent.Slug = this.EnsureSlug(detachedContent, slug);
                 var dto = factory.BuildDto(detachedContent);
                 Database.Insert(dto);
@@ -238,7 +237,7 @@
                 var dto = factory.BuildDto(detachedContent);
 
                 const string Update =
-                    "UPDATE [merchProductVariantDetachedContent] SET [merchProductVariantDetachedContent].[detachedContentTypeKey] = @Dctk, [merchProductVariantDetachedContent].[templateId] = @Tid, [merchProductVariantDetachedContent].[slug] = @Slug, [merchProductVariantDetachedContent].[values] = @Vals, [merchProductVariantDetachedContent].[updateDate] = @Ud WHERE [merchProductVariantDetachedContent].[cultureName] = @Cn AND [merchProductVariantDetachedContent].[productVariantKey] = @Pvk";
+                    "UPDATE [merchProductVariantDetachedContent] SET [merchProductVariantDetachedContent].[detachedContentTypeKey] = @Dctk, [merchProductVariantDetachedContent].[templateId] = @Tid, [merchProductVariantDetachedContent].[slug] = @Slug, [merchProductVariantDetachedContent].[values] = @Vals, [merchProductVariantDetachedContent].[canBeRendered] = @Cbr, [merchProductVariantDetachedContent].[updateDate] = @Ud WHERE [merchProductVariantDetachedContent].[cultureName] = @Cn AND [merchProductVariantDetachedContent].[productVariantKey] = @Pvk";
 
 
                 Database.Execute(
@@ -249,6 +248,7 @@
                             @Tid = dto.TemplateId,
                             @Slug = dto.Slug,
                             @Vals = dto.Values,
+                            @Cbr = dto.CanBeRendered,
                             @Ud = dto.UpdateDate,
                             @Cn = dto.CultureName,
                             @Pvk = dto.ProductVariantKey
@@ -690,7 +690,7 @@
         /// The slug.
         /// </param>
         /// <returns>
-        /// The slug.
+        /// A slug incremented with a count if necessary.
         /// </returns>
         private string EnsureSlug(IProductVariantDetachedContent detachedContent, string slug)
         {

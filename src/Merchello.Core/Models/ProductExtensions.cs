@@ -431,7 +431,8 @@
                     writer.WriteAttributeString("attributes", GetAttributesJson(productVariant));
                     writer.WriteAttributeString("catalogInventories", GetCatalogInventoriesJson(productVariant));
                     writer.WriteAttributeString("productOptions", GetProductOptionsJson(productOptionCollection));
-                    writer.WriteAttributeString("detachedContents", GetDetachedContentsJson(((ProductVariant)productVariant).DetachedContents));
+                    writer.WriteAttributeString("slugs", string.Join(" ", productVariant.DetachedContents.Select(x => x.Slug)));
+                    writer.WriteAttributeString("detachedContents", GetDetachedContentsJson(((ProductVariant)productVariant).DetachedContents));        
                     writer.WriteAttributeString("versionKey", productVariant.VersionKey.ToString());
 
                     // 1.11.0 - static collections
@@ -440,10 +441,10 @@
                         var collectionKeys = collections as Guid[] ?? collections.ToArray();
                         if (collectionKeys.Any())
                         {
-                            writer.WriteAttributeString("staticCollectionKeys", string.Join(",", collectionKeys));
+                            writer.WriteAttributeString("staticCollectionKeys", string.Join(" ", collectionKeys));
                         }
                     }
-
+                  
                     writer.WriteAttributeString("createDate", productVariant.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", productVariant.UpdateDate.ToString("s"));                    
                     writer.WriteAttributeString("allDocs", "1");
@@ -549,6 +550,7 @@
                             content.TemplateId,
                             content.ProductVariantKey,
                             content.Slug,
+                            content.CanBeRendered,
                             DetachedDataValues = content.DetachedDataValues.AsEnumerable()
                         });
                 }

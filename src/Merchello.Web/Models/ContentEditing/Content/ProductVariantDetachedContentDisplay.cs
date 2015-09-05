@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security.Cryptography;
 
     using Merchello.Core.Models.DetachedContent;
 
@@ -41,6 +40,11 @@
         /// Gets or sets the slug.
         /// </summary>
         public string Slug { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the virtual content can be rendered.
+        /// </summary>
+        public bool CanBeRendered { get; set; }
 
         /// <summary>
         /// Gets or sets the detached data values.
@@ -92,10 +96,18 @@
                                       Description = display.DetachedContentType.Description
                                   };
 
+            // Assign the default template
+            var templateId = 0;
+            if (display.TemplateId == 0 && display.DetachedContentType.UmbContentType.DefaultTemplateId != 0)
+            {
+                templateId = display.DetachedContentType.UmbContentType.DefaultTemplateId;
+            }
+
             var pvdc = new ProductVariantDetachedContent(productVariantKey, contentType, display.CultureName, new DetachedDataValuesCollection(display.DetachedDataValues))
-                       {
-                           TemplateId = display.TemplateId,
-                           Slug = display.Slug,                          
+                       {                           
+                           TemplateId = templateId,
+                           Slug = display.Slug,
+                           CanBeRendered = display.CanBeRendered
                        };
             if (!display.Key.Equals(Guid.Empty)) pvdc.Key = display.Key;
             return pvdc;
@@ -117,9 +129,9 @@
             this ProductVariantDetachedContentDisplay display,
             IProductVariantDetachedContent destination)
         {
-
             destination.Slug = display.Slug;
             destination.TemplateId = display.TemplateId;
+            destination.CanBeRendered = display.CanBeRendered;
 
             foreach (var item in display.DetachedDataValues)
             {

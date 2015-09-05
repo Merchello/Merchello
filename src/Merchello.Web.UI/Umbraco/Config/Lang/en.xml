@@ -1181,6 +1181,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="slug">URL Slug</key>
     <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
     <key alias="selectTemplate">Select an Umbraco template</key>
+    <key alias="canBeRendered">Allow this content to be rendered.</key>
     <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
     <key alias="productContentType">Product Content Type</key>
     <key alias="umbracoContentTypeName">Umbraco Content Type</key>

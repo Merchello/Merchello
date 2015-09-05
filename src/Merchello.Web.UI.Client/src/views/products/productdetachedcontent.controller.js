@@ -30,6 +30,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             var slugLabel = '';
             var slugLabelDescription = '';
             var selectTemplateLabel = '';
+            var canBeRenderedLabel = '';
             var showUmbracoTabs = true;
             var merchelloTabs = ['productcontent','variantlist', 'optionslist'];
             var umbracoTabs = [];
@@ -65,6 +66,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     localizationService.localize('merchelloDetachedContent_slug'),
                     localizationService.localize('merchelloDetachedContent_slugDescription'),
                     localizationService.localize('merchelloDetachedContent_selectTemplate'),
+                    localizationService.localize('merchelloDetachedContent_canBeRendered')
                 ]).then(function(results) {
                     deferred.resolve(results);
                 });
@@ -80,6 +82,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     slugLabel = data[3];
                     slugLabelDescription = data[4];
                     selectTemplateLabel = data[5];
+                    canBeRenderedLabel = data[6];
                     loadProduct(loadArgs);
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
@@ -154,7 +157,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             slug: $scope.detachedContent.slug,
                             templateId: $scope.detachedContent.templateId,
                             allowedTemplates: umbContentType.allowedTemplates,
-                            defaultTemplateId: umbContentType.defaultTemplateId
+                            defaultTemplateId: umbContentType.defaultTemplateId,
+                            canBeRenderedLabel: canBeRenderedLabel,
+                            canBeRendered: $scope.detachedContent.canBeRendered
                         };
 
                         var rt = detachedContentHelper.buildRenderTab(args);
@@ -200,7 +205,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 umbracoTabs = [];
                 $scope.currentTab = null;
                 saveDetachedContent();
-
             }
 
             function saveWithoutEvents() {
@@ -237,6 +241,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 productVariantContent.cultureName = cultureName;
                 productVariantContent.productVariantKey = $scope.productVariantKey;
                 productVariantContent.detachedContentType = detachedContent;
+                productVariantContent.canBeRendered = true;
                 angular.forEach(tabs, function(tab) {
                     angular.forEach(tab.properties, function(prop) {
                         productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));

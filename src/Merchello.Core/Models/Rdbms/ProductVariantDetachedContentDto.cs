@@ -75,6 +75,13 @@
         public string Slug { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether virtual content can be rendered.
+        /// </summary>
+        [Column("canBeRendered")]
+        [Constraint(Default = "1")]
+        public bool CanBeRendered { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

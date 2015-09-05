@@ -247,14 +247,16 @@
             {
                 var jtoken = JObject.Parse(j.ToString());
                 var contentType = jtoken.GetValue("DetachedContentType").ToObject<DetachedContentType>();
-                
+
                 var dataValues = jtoken.GetValue("DetachedDataValues").ToObject<IEnumerable<KeyValuePair<string, string>>>();
                 var pvdc = new ProductVariantDetachedContent(jtoken.GetValue("ProductVariantKey").ToObject<Guid>(), contentType, j.Value<string>("CultureName"), new DetachedDataValuesCollection(dataValues))
-                               {
-                                   Key = jtoken.GetValue("Key").ToObject<Guid>(),
-                                   Slug = jtoken.SelectToken("Slug").ToString(),
-                                   TemplateId = (int)j.SelectToken("TemplateId")
-                               };
+                        {
+                            Key = jtoken.GetValue("Key").ToObject<Guid>(),
+                            Slug = jtoken.SelectToken("Slug").ToString(),
+                            TemplateId = (int)j.SelectToken("TemplateId"),
+                            CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString())
+                        };
+
                 contents.Add(pvdc.ToProductVariantDetachedContentDisplay());
             }
 
