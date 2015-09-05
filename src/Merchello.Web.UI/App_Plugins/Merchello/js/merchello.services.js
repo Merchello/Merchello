@@ -68,6 +68,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
                         if (ct.id === 'render') {
                             args.scope.detachedContent.slug = _.find(ct.properties, function(s) { return s.alias === 'slug'}).value;
                             args.scope.detachedContent.templateId = _.find(ct.properties, function(t) { return t.alias === 'templateId' }).value;
+                            args.scope.detachedContent.canBeRendered = _.find(ct.properties, function(r) { return r.alias === 'canBeRendered'}).value === '1' ? true : false;
                         } else {
                             angular.forEach(ct.properties, function (p) {
                                 if (typeof p.value !== "function") {
@@ -103,7 +104,6 @@ angular.module('merchello.services').factory('detachedContentHelper',
                 var items = [];
                 var i = 1;
                 _.each(args.allowedTemplates, function(t) {
-                    console.info(t);
                   items.push({ id: t.id, sortOrder: i, value: t.name });
                     i++;
                 });
@@ -139,6 +139,18 @@ angular.module('merchello.services').factory('detachedContentHelper',
                                 mandatory: false
                             },
                             view: 'dropdown'
+                        },
+                        {
+                            alias: 'canBeRendered',
+                            editor: 'Umbraco.TrueFalse',
+                            description: '',
+                            label: args.canBeRenderedLabel,
+                            hideLabel: false,
+                            value: args.canBeRendered ? '1' : '0',
+                            view: 'boolean',
+                            validation: {
+                                mandatory: false
+                            }
                         }
                     ]
                 };

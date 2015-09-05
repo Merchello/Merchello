@@ -2363,6 +2363,7 @@ var ProductVariantDetachedContentDisplay = function() {
     self.cultureName = '';
     self.templateId = 0;
     self.slug = '';
+    self.canBeRendered = true;
     self.detachedDataValues = {};
 };
 

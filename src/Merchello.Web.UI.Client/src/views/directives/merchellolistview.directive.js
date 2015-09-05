@@ -69,7 +69,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                     scope.enableDateFilter = 'includeDateFilter' in attr;
                     scope.hasFilter = !('noFilter' in attr);
                     scope.showTitle = !('noTitle' in attr);
-                    $log.debug(scope.hasFilter);
                     if(scope.hasCollections) {
                         scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
                         // none of the collections have the capability to filter by dates

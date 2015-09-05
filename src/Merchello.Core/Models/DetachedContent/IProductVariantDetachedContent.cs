@@ -25,5 +25,11 @@
         /// </summary>
         [DataMember]
         string Slug { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether virtual content can be rendered.
+        /// </summary>
+        [DataMember]
+        bool CanBeRendered { get; set; }
     }
 }

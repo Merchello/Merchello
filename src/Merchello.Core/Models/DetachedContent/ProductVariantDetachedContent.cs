@@ -26,6 +26,11 @@
         private static readonly PropertyInfo SlugSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, string>(x => x.Slug);
 
         /// <summary>
+        /// The can be rendered selector.
+        /// </summary>
+        private static readonly PropertyInfo CanBeRenderedSelector = ExpressionHelper.GetPropertyInfo<ProductVariantDetachedContent, bool>(x => x.CanBeRendered);
+
+        /// <summary>
         /// The template id.
         /// </summary>
         private int? _templateId;
@@ -34,6 +39,11 @@
         /// The slug.
         /// </summary>
         private string _slug;
+
+        /// <summary>
+        /// A value indicating whether or not we should all the virtual content to render.
+        /// </summary>
+        private bool _canBeRendered;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantDetachedContent"/> class.
@@ -153,6 +163,30 @@
                     },
                     this._slug,
                     SlugSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether virtual content can be rendered.
+        /// </summary>
+        [DataMember]
+        public bool CanBeRendered
+        {
+            get
+            {
+                return this._canBeRendered;
+            }
+
+            set
+            {
+                this.SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        this._canBeRendered = value;
+                        return this._canBeRendered;
+                    },
+                    this._canBeRendered,
+                    CanBeRenderedSelector);
             }
         }
     }
