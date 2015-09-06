@@ -5996,6 +5996,17 @@
             A value indicating whether or not the product was found by slug.
             </returns>        
         </member>
+        <member name="M:Merchello.Web.Routing.ContentFinderProductBySlug.PrepareSlug(Umbraco.Web.Routing.PublishedContentRequest)">
+            <summary>
+            The prepare slug.
+            </summary>
+            <param name="contentRequest">
+            The content request.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2">
             <summary>
             The cached collection query base.

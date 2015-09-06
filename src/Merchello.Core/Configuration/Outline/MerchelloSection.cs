@@ -110,6 +110,18 @@
         }
 
         /// <summary>
+        /// Gets the content finder culture.
+        /// </summary>
+        [ConfigurationProperty("contentFinderCulture", IsRequired = true), ConfigurationCollection(typeof(ContentFinderCultureCollection), AddItemName = "route")]
+        public ContentFinderCultureCollection ContentFinderCulture
+        {
+            get
+            {
+                return (ContentFinderCultureCollection)this["contentFinderCulture"];
+            }
+        }
+
+        /// <summary>
         /// Gets the strategies collection
         /// </summary>
         [ConfigurationProperty("strategies", IsRequired = true), ConfigurationCollection(typeof(StrategiesCollection), AddItemName = "strategy")]

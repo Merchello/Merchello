@@ -3,8 +3,10 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Web.Models.VirtualContent;
 
+    using Umbraco.Core;
     using Umbraco.Web.Routing;
 
     /// <summary>
@@ -35,7 +37,9 @@
         {
             if (contentRequest.Uri.AbsolutePath == "/") return false;
 
-            var slug = contentRequest.Uri.AbsolutePath.EnsureNotStartsOrEndsWith('/');
+            var slug = PrepareSlug(contentRequest);
+
+            if (slug.IsNullOrWhiteSpace()) return false;
 
             // This may have a db fallback so we want this content finder to happen after Umbraco's content finders.
             var display = Merchello.Query.Product.GetBySlug(slug);
@@ -51,6 +55,30 @@
            
             contentRequest.PublishedContent = Factory.BuildContent(display, contentRequest.Culture.Name);
             return true;
+        }
+
+        /// <summary>
+        /// The prepare slug.
+        /// </summary>
+        /// <param name="contentRequest">
+        /// The content request.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string PrepareSlug(PublishedContentRequest contentRequest)
+        {
+            var slug = contentRequest.Uri.AbsolutePath.EnsureNotStartsOrEndsWith('/');
+
+            // Check if there were any overrides to the slug in the merchello.config
+            var prefix = MerchelloConfiguration.Current.GetProductSlugCulturePrefix(contentRequest.Culture.Name);
+
+            if (prefix.IsNullOrWhiteSpace()) return slug;
+
+            // enforce the prefix is present in the slug
+            return !slug.StartsWith(prefix) ? 
+                string.Empty : 
+                slug.Replace(prefix, string.Empty).EnsureNotStartsOrEndsWith('/');
         }
     }
 }
