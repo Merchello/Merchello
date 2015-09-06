@@ -25,12 +25,14 @@
         /// </returns>
         public override ActionResult Index(RenderModel model)
         {
-           
+            // add in webconfig appsetting    <add key="umbracoHomeStoreUrl" value="/store" />
+            string homeUrl = Convert.ToString(ConfigurationManager.AppSettings["umbracoHomeStoreUrl"]);
             if (CurrentCustomer.IsAnonymous)
             {
                 var error = new Exception("Current customer cannot be Anonymous");
                 LogHelper.Error<BazaarAccountController>("Anonymous customers should not be allowed to access the Account section.", error);
-                throw error;
+                  //throw error;
+                return this.Redirect(homeUrl);
             }
 
             var viewModel = ViewModelFactory.CreateAccount(model, AllCountries, AllowedShipCountries);
