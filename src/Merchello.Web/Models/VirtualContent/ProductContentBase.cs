@@ -10,6 +10,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
+    using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Web.Models;
 
     /// <summary>
@@ -17,6 +18,16 @@
     /// </summary>
     internal abstract class ProductContentBase : PublishedContentBase
     {
+        /// <summary>
+        /// The detached content display.
+        /// </summary>
+        private readonly ProductVariantDetachedContentDisplay _detachedContentDisplay;
+
+        /// <summary>
+        /// The content type.
+        /// </summary>
+        private readonly PublishedContentType _contentType;
+
         /// <summary>
         /// The product base.
         /// </summary>
@@ -38,14 +49,21 @@
         /// <param name="productBase">
         /// The product base.
         /// </param>
+        /// <param name="contentType">
+        /// The content Type.
+        /// </param>
         /// <param name="cultureName">
         /// The culture name
         /// </param>
-        protected ProductContentBase(ProductDisplayBase productBase, string cultureName = "en-US")
+        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, string cultureName = "en-US")
         {
             Mandate.ParameterNotNull(productBase, "productBase");
             _productBase = productBase;
             _cultureName = cultureName;
+            _contentType = contentType;
+            _detachedContentDisplay = productBase.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName);
+            
+            this.Initialize();
         }
 
         /// <summary>
@@ -291,6 +309,40 @@
             }
         }
 
+
+        /// <summary>
+        /// Gets the content type.
+        /// </summary>
+        public override PublishedContentType ContentType
+        {
+            get
+            {
+                return this._contentType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the document type id.
+        /// </summary>
+        public override int DocumentTypeId
+        {
+            get
+            {
+                return _contentType != null ? _contentType.Id : 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the document type alias.
+        /// </summary>
+        public override string DocumentTypeAlias
+        {
+            get
+            {
+                return _contentType != null ? _contentType.Alias : null;
+            }
+        }
+
         /// <summary>
         /// Gets the properties.
         /// </summary>
@@ -299,6 +351,192 @@
             get
             {
                 return this._properties.Value.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Gets the sort order.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to 0
+        /// </remarks>
+        public override int SortOrder
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the url name.
+        /// </summary>
+        public override string UrlName
+        {
+            get
+            {
+                return DetachedContentDisplay != null ? DetachedContentDisplay.Slug : null;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <remarks>
+        /// Always returns null
+        /// </remarks>
+        public override string Path
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        public override Guid Version
+        {
+            get
+            {
+                return _productBase.VersionKey;
+            }
+        }
+
+        /// <summary>
+        /// Gets the children.
+        /// </summary>
+        /// <remarks>
+        /// Always returns empty
+        /// </remarks>
+        public override IEnumerable<IPublishedContent> Children
+        {
+            get
+            {
+                return Enumerable.Empty<IPublishedContent>();
+            }
+        }
+
+        /// <summary>
+        /// Gets the level.
+        /// </summary>
+        /// <remarks>
+        /// Always returns 0
+        /// </remarks>
+        public override int Level
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the writer name.
+        /// </summary>
+        /// <remarks>
+        /// Always returns null
+        /// </remarks>
+        public override string WriterName
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the creator name.
+        /// </summary>
+        /// <remarks>
+        /// Always returns null
+        /// </remarks>
+        public override string CreatorName
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the writer id.
+        /// </summary>
+        /// <remarks>
+        /// Always returns 0 (admin)
+        /// </remarks>
+        public override int WriterId
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the creator id.
+        /// </summary>
+        /// <remarks>
+        /// Always returns 0 (admin)
+        /// </remarks>
+        public override int CreatorId
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the create date.
+        /// </summary>
+        /// <remarks>
+        /// Always returns DateTime.MinValue
+        /// </remarks>
+        public override DateTime CreateDate
+        {
+            get
+            {
+                return DateTime.MinValue;
+            }
+        }
+
+        /// <summary>
+        /// Gets the update date.
+        /// </summary>
+        /// <remarks>
+        /// Always returns DateTime.MinValue
+        /// </remarks>
+        public override DateTime UpdateDate
+        {
+            get
+            {
+                return DateTime.MinValue;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the detached content display.
+        /// </summary>
+        protected ProductVariantDetachedContentDisplay DetachedContentDisplay
+        {
+            get
+            {
+                return _detachedContentDisplay;
+            }
+        }
+
+        /// <summary>
+        /// Gets the detached properties.
+        /// </summary>
+        protected IEnumerable<IPublishedProperty> DetachedProperties
+        {
+            get
+            {
+                return _properties.Value;
             }
         }
 
@@ -323,12 +561,13 @@
         /// The alias.
         /// </param>
         /// <param name="recurse">
-        /// The recurse.
+        /// Indicates if this is a recursive property call.
         /// </param>
         /// <returns>
         /// The <see cref="IPublishedProperty"/>.
         /// </returns>
         /// <exception cref="NotSupportedException">
+        /// Throws an exception on a recursive property get
         /// </exception>
         public override IPublishedProperty GetProperty(string alias, bool recurse)
         {
@@ -339,19 +578,35 @@
         }
 
         /// <summary>
-        /// Gets the detached properties.
+        /// The build properties.
         /// </summary>
-        protected IEnumerable<IPublishedProperty> DetachedProperties
+        /// <returns>
+        /// The <see cref="IEnumerable{IPublishedProperty}"/>.
+        /// </returns>
+        private IEnumerable<IPublishedProperty> BuildProperties()
         {
-            get
+            var properties = new List<IPublishedProperty>();
+
+            if (_detachedContentDisplay == null) return properties;
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var value in _detachedContentDisplay.DetachedDataValues)
             {
-                return _properties.Value;
+                var propType = _contentType.GetPropertyType(value.Key);
+                if (propType != null)
+                {
+                    properties.Add(new DetachedPublishedProperty(propType, _cultureName, value.Value));
+                }
             }
+            return properties;
         }
 
+        /// <summary>
+        /// Initializes the model
+        /// </summary>
         private void Initialize()
         {
-            
+            _properties = new Lazy<IEnumerable<IPublishedProperty>>(this.BuildProperties);
         }
     }
 }

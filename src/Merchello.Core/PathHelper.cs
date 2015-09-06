@@ -50,7 +50,7 @@
         /// </returns>
         internal static string ConvertToSlug(string value)
         {
-            return RemoveSpecialCharacters(value).SafeEncodeUrlSegments().ToLowerInvariant();
+            return RemoveSpecialCharacters(value).SafeEncodeUrlSegments().ToLowerInvariant().EnsureNotStartsOrEndsWith('/');
         }
 
         /// <summary>
@@ -69,36 +69,6 @@
                 value.EnsureForwardSlashes().EnsureEndsWith('/').SafeEncodeUrlSegments();
         }
 
-        /// <summary>
-        /// Replaces \ with / in a path.
-        /// </summary>
-        /// <param name="value">
-        /// The value to replace backslashes.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        internal static string EnsureForwardSlashes(this string value)
-        {
-            return value.Replace("\\", "/");
-        }
-
-        /// <summary>
-        /// Ensures a string both starts and ends with a character.
-        /// </summary>
-        /// <param name="input">
-        /// The input string.
-        /// </param>
-        /// <param name="value">
-        /// The char value to assert
-        /// </param>
-        /// <returns>
-        /// The asserted string.
-        /// </returns>
-        internal static string EnsureStartsAndEndsWith(this string input, char value)
-        {
-            return input.EnsureStartsWith(value).EnsureEndsWith(value);
-        }
 
         /// <summary>
         /// The remove special characters.

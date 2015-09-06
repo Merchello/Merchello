@@ -279,6 +279,7 @@
     <Compile Include="Models\VirtualContent\DetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IDetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IProductContent.cs" />
+    <Compile Include="Models\VirtualContent\IProductContentFactory.cs" />
     <Compile Include="Models\VirtualContent\IProductVariantContent.cs" />
     <Compile Include="Models\VirtualContent\ProductContent.cs" />
     <Compile Include="Models\Interfaces\IEntityDisplay.cs" />
@@ -347,6 +348,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="Models\Ui\UrlActionParams.cs" />
     <Compile Include="Models\VirtualContent\ProductContentBase.cs" />
+    <Compile Include="Models\VirtualContent\ProductContentFactory.cs" />
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />

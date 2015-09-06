@@ -71,8 +71,7 @@
                 Log.Error("Initialization of Merchello failed", ex);
             }
 
-            // Insert my finder before ContentFinderByNiceUrl
-            ContentFinderResolver.Current.InsertType<ContentFinderProductBySlug>();
+            this.RegisterContentFinders();
         }
 
         /// <summary>
@@ -112,6 +111,21 @@
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
         }
+
+        /// <summary>
+        /// Registers Merchello content finders.
+        /// </summary>
+        private void RegisterContentFinders()
+        {
+            //// We want the product content finder to execute after Umbraco's content finders since
+            //// we may ultimately rely on a database query as a fallback to when something is not found in the
+            //// examine index.  If we simply did an InsertType, we would be executing a worthless query for each time
+            //// a legitament Umbraco content was rendered.
+            var contentFinderByIdPathIndex = ContentFinderResolver.Current.GetTypes().IndexOf(typeof(ContentFinderByIdPath));
+
+            ContentFinderResolver.Current.InsertType<ContentFinderProductBySlug>(contentFinderByIdPathIndex + 1);
+        }
+
 
         /// <summary>
         /// The detached content type service on deleting.

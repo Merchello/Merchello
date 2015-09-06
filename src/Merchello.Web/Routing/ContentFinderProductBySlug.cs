@@ -12,6 +12,16 @@
     public class ContentFinderProductBySlug : IContentFinder
     {
         /// <summary>
+        /// The <see cref="MerchelloHelper"/>
+        /// </summary>
+        private static readonly MerchelloHelper Merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+
+        /// <summary>
+        /// The factory.
+        /// </summary>
+        private static readonly ProductContentFactory Factory = new ProductContentFactory();
+
+        /// <summary>
         /// Tries to find a <see cref="IProductContent"/> by it's unique slug.
         /// </summary>
         /// <param name="contentRequest">
@@ -24,9 +34,15 @@
         {
             if (contentRequest.Uri.AbsolutePath == "/") return false;
 
-            var key = ((ProductService)MerchelloContext.Current.Services.ProductService).GetKeyForSlug("product2");
+            var slug = contentRequest.Uri.AbsolutePath.EnsureNotStartsOrEndsWith('/');
 
-            return false;                            
+            var display = Merchello.Query.Product.GetBySlug(slug);
+
+            if (display == null) return false;
+
+            contentRequest.PublishedContent = Factory.BuildContent(display, contentRequest.Culture.Name);
+
+            return true;
         }
     }
 }
