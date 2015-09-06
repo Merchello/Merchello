@@ -6202,7 +6202,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             canBeRenderedLabel: canBeRenderedLabel,
                             canBeRendered: $scope.detachedContent.canBeRendered
                         };
-                        
+
                         var rt = detachedContentHelper.buildRenderTab(args);
                         $scope.contentTabs.push(rt);
                         umbracoTabs.push(rt.id);

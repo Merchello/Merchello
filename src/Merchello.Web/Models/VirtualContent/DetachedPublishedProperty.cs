@@ -1,14 +1,20 @@
-﻿namespace Merchello.Web.Models.DetachedContent
+﻿namespace Merchello.Web.Models.VirtualContent
 {
     using System;
 
-    using Umbraco.Core;
+    using Merchello.Web.Models.DetachedContent;
+
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
     /// <summary>
     /// Represents a <see cref="IPublishedProperty"/>.
     /// </summary>
+    /// <remarks>
+    /// This class is a direct port of the work done by Lee Kelleher and Matt Brailsford in their Nested Content project
+    /// (with some OCD formatting =) )
+    /// </remarks>
+    /// <seealso cref="https://github.com/leekelleher/umbraco-nested-content/blob/master/src/Our.Umbraco.NestedContent/Models/DetachedPublishedProperty.cs"/>
     internal class DetachedPublishedProperty : IDetachedPublishedProperty
     {
         /// <summary>

@@ -3123,49 +3123,54 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
-        <member name="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty">
+        <member name="T:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty">
             <summary>
             Represents a <see cref="T:Umbraco.Core.Models.IPublishedProperty"/>.
             </summary>
+            <remarks>
+            This class is a direct port of the work done by Lee Kelleher and Matt Brailsford in their Nested Content project
+            (with some OCD formatting =) )
+            </remarks>
+            <seealso cref="!:https://github.com/leekelleher/umbraco-nested-content/blob/master/src/Our.Umbraco.NestedContent/Models/DetachedPublishedProperty.cs"/>
         </member>
         <member name="T:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty">
             <summary>
             Marker interface for DetachedPublishedProperties.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._propertyType">
+        <member name="F:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty._propertyType">
             <summary>
             The property type.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._rawValue">
+        <member name="F:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty._rawValue">
             <summary>
             The raw value.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._sourceValue">
+        <member name="F:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty._sourceValue">
             <summary>
             The source value.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._objectValue">
+        <member name="F:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty._objectValue">
             <summary>
             The object value.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._xpathValue">
+        <member name="F:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty._xpathValue">
             <summary>
             The xpath value.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._isPreview">
+        <member name="F:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty._isPreview">
             <summary>
             A value indicating whether this is a preview.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object)">
+        <member name="M:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty"/> class.
             </summary>
             <param name="propertyType">
             The property type.
@@ -3174,9 +3179,9 @@
             The value.
             </param>
         </member>
-        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
+        <member name="M:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty"/> class.
             </summary>
             <param name="propertyType">
             The property type.
@@ -3188,27 +3193,27 @@
             The is preview.
             </param>
         </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.PropertyTypeAlias">
+        <member name="P:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.PropertyTypeAlias">
             <summary>
             Gets the property type alias.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.HasValue">
+        <member name="P:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.HasValue">
             <summary>
             Gets a value indicating whether has value.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.DataValue">
+        <member name="P:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.DataValue">
             <summary>
             Gets the data value.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.Value">
+        <member name="P:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.Value">
             <summary>
             Gets the value.
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.XPathValue">
+        <member name="P:Merchello.Web.Models.VirtualContent.DetachedPublishedProperty.XPathValue">
             <summary>
             Gets the x path value.
             </summary>
@@ -3275,6 +3280,42 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductVariantContent"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.VirtualContent.IProductVariantContent">
+            <summary>
+            Defines ProductVariantContent
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.IProductVariantContent.HasProperty(System.String)">
+            <summary>
+            The has property.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            A value indicating whether or not the property exists.
+            </returns>
+            <remarks>
+            This is a hack to override Umbraco's static extension method that requires
+            that a content type be present.  For ProductVariantContent this may not always be true.  For example 
+            content is defined for the containing ProductContent but some or all variants have not been extended.
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductVariantContent.Key">
+            <summary>
+            Gets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductVariantContent.ProductKey">
+            <summary>
+            Gets the product key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductVariantContent.Attributes">
+            <summary>
+            Gets the attributes.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.VirtualContent.ProductContent">
             <summary>
@@ -3476,6 +3517,19 @@
             Gets the catalog inventories.
             </summary>
         </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductContentBase.Id">
+            <summary>
+            Gets the id.
+            </summary>
+            <remarks>
+            Always 0 for virtual content
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductContentBase.ItemType">
+            <summary>
+            Gets the item type.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContentBase.ContentType">
             <summary>
             Gets the content type.
@@ -3606,6 +3660,11 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._variantContent">
+            <summary>
+            The variant content.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContent"/> class.
@@ -3623,6 +3682,11 @@
             The is previewing.
             </param>
         </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.Initialize">
+            <summary>
+            Initializes the model.
+            </summary>
+        </member>
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.Key">
             <summary>
             Gets the key.
@@ -3632,14 +3696,6 @@
             <summary>
             Gets the product variant key.
             </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.Id">
-            <summary>
-            Gets the id.
-            </summary>
-            <remarks>
-            Always 0 for virtual content
-            </remarks>
         </member>
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.Path">
             <summary>
@@ -3667,11 +3723,6 @@
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.TotalInventoryCount">
             <summary>
             Gets the total inventory count.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.ItemType">
-            <summary>
-            Gets the item type.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.IsDraft">
@@ -4852,6 +4903,89 @@
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.VirtualContent.ProductVariantContent">
+            <summary>
+            Represents Product Variant Content.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.ProductVariantContent._variant">
+            <summary>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductVariantContent.#ctor(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,Umbraco.Core.Models.PublishedContent.PublishedContentType,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductVariantContent"/> class.
+            </summary>
+            <param name="variant">
+            The variant.
+            </param>
+            <param name="contentType">
+            The content type.
+            </param>
+            <param name="cultureName">
+            The culture name.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductVariantContent.HasProperty(System.String)">
+            <summary>
+            The has property.
+            </summary>
+            <param name="alias">
+            The alias.
+            </param>
+            <returns>
+            A value indicating whether or not the property exists.
+            </returns>
+            <remarks>
+            This is a hack to override Umbraco's static extension method that requires
+            that a content type be present.  For ProductVariantContent this may not always be true.  For example 
+            content is defined for the containing ProductContent but some or all variants have not been extended.
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.Key">
+            <summary>
+            Gets the key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.ProductKey">
+            <summary>
+            Gets the product key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.Name">
+            <summary>
+            Gets the name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.Attributes">
+            <summary>
+            Gets the attributes.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.Path">
+            <summary>
+            Gets the path.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.TemplateId">
+            <summary>
+            Gets the template id.
+            </summary>
+            <remarks>
+            ProductVariantContent cannot be rendered
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.IsDraft">
+            <summary>
+            Gets a value indicating whether is draft.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.Parent">
+            <summary>
+            Gets the parent.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Mvc.IPaymentMethodUiController">
             <summary>
             Marker interface for a PaymentMethodUiController.
@@ -5979,6 +6113,10 @@
             <summary>
             The <see cref="T:Merchello.Web.MerchelloHelper"/>
             </summary>
+            <remarks>
+            Using the MerchelloHelper instead of the service will first look to construct the display object
+            from the Examine index alleviating the need for a service call.
+            </remarks>
         </member>
         <member name="F:Merchello.Web.Routing.ContentFinderProductBySlug.Factory">
             <summary>
@@ -5995,6 +6133,17 @@
             <returns>
             A value indicating whether or not the product was found by slug.
             </returns>        
+        </member>
+        <member name="M:Merchello.Web.Routing.ContentFinderProductBySlug.PrepareSlug(Umbraco.Web.Routing.PublishedContentRequest)">
+            <summary>
+            The prepare slug.
+            </summary>
+            <param name="contentRequest">
+            The content request.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Search.CachedQueryableCollectionQueryBase`2">
             <summary>
@@ -14811,6 +14960,18 @@
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductOptionDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.ProductVariantsAsProductVariantContent(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String)">
+            <summary>
+            The product variants as product variant content.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <param name="cultureName">The cultureName</param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.GetDefaultSlug(Merchello.Web.Models.ContentEditing.ProductDisplayBase)">

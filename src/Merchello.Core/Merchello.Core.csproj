@@ -253,10 +253,12 @@
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainForAttribute.cs" />
     <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
+    <Compile Include="Configuration\Outline\ContentFinderCultureCollection.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\EntityCollectionProviderElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
     <Compile Include="Configuration\Outline\PluggableObjectElement.cs" />
+    <Compile Include="Configuration\Outline\RouteElement.cs" />
     <Compile Include="Configuration\Outline\SelfManagedEntityCollectionProviderCollection.cs" />
     <Compile Include="Configuration\Outline\StrategyElement.cs" />
     <Compile Include="Configuration\Outline\TreeCollection.cs" />

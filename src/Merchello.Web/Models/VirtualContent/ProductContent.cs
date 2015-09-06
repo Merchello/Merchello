@@ -7,7 +7,6 @@
     using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
 
-    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
@@ -26,6 +25,10 @@
         /// </summary>
         private readonly ProductDisplay _display;
 
+        /// <summary>
+        /// The variant content.
+        /// </summary>
+        private Lazy<IEnumerable<IProductVariantContent>> _variantContent; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContent"/> class.
@@ -51,6 +54,8 @@
         {
             this._display = display;
             this._isPreviewing = isPreviewing;
+
+            this.Initialize();
         }
 
         /// <summary>
@@ -73,22 +78,7 @@
             {
                 return _display.ProductVariantKey;
             }
-        }
-
-        /// <summary>
-        /// Gets the id.
-        /// </summary>
-        /// <remarks>
-        /// Always 0 for virtual content
-        /// </remarks>
-        public override int Id
-        {
-            get
-            {
-                // this may need to be set to the root id so that it can pass the security check
-                return 0;
-            }
-        }
+        }      
 
         /// <summary>
         /// Gets the path.
@@ -134,36 +124,25 @@
         {
             get
             {
-                return Enumerable.Empty<IProductVariantContent>();
+                return _variantContent.Value;
             }
         }
 
         /// <summary>
         /// Gets the total inventory count.
         /// </summary>
-        public int TotalInventoryCount
+        public new int TotalInventoryCount
         {
             get
             {
-                return 0;
-                //return this.ProductVariants != null
-                //           ? this.ProductVariants.Any()
-                //                 ? this.ProductVariants.Sum(x => x.TotalInventoryCount)
-                //                 : this.CatalogInventories.Sum(x => x.Count)
-                //           : 0;
+                // use the display object here so the Lazy does not execute if not needed
+                return _display.ProductVariants != null
+                           ? _display.ProductVariants.Any()
+                                 ? _display.ProductVariants.Sum(x => x.TotalInventoryCount)
+                                 : this.CatalogInventories.Sum(x => x.Count)
+                           : 0;
             }
-        }
-
-        /// <summary>
-        /// Gets the item type.
-        /// </summary>
-        public override PublishedItemType ItemType
-        {
-            get
-            {
-                return PublishedItemType.Content;
-            }
-        }
+        }      
 
         /// <summary>
         /// Gets a value indicating whether is a draft.
@@ -207,6 +186,14 @@
             {
                 return DetachedContentDisplay != null ? DetachedContentDisplay.TemplateId : 0;
             }
+        }
+
+        /// <summary>
+        /// Initializes the model.
+        /// </summary>
+        private void Initialize()
+        {
+            _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(CultureName));
         }
     }
 }

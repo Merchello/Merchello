@@ -6,6 +6,7 @@
 
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Web.Models.DetachedContent;
+    using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;
 
