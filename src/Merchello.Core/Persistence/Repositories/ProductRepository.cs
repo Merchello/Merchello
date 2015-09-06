@@ -171,6 +171,27 @@
         }
 
         /// <summary>
+        /// The get key for slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        public Guid GetKeyForSlug(string slug)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT [merchProductVariant].[productKey]")
+                .Append("FROM [merchProductVariant]")
+                .Append(
+                    "JOIN [merchProductVariantDetachedContent] ON [merchProductVariant].[pk] = [merchProductVariantDetachedContent].[productVariantKey]")
+                .Append("WHERE [merchProductVariantDetachedContent].[slug] = @Sl", new { @Sl = slug });
+
+            return Database.Fetch<Guid>(sql).FirstOrDefault();
+        }
+
+        /// <summary>
         /// True/false indicating whether or not a SKU is already exists in the database
         /// </summary>
         /// <param name="sku">

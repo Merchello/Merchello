@@ -35,6 +35,17 @@
         ProductDisplay GetBySku(string sku);
 
         /// <summary>
+        /// The get by slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        ProductDisplay GetBySlug(string slug);
+
+        /// <summary>
         /// Gets a <see cref="ProductVariantDisplay"/> by it's key
         /// </summary>
         /// <param name="key">

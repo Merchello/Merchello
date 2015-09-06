@@ -12,11 +12,6 @@
     internal class DetachedPublishedProperty : IDetachedPublishedProperty
     {
         /// <summary>
-        /// The _culture name.
-        /// </summary>
-        private readonly string _cultureName;
-
-        /// <summary>
         /// The property type.
         /// </summary>
         private readonly PublishedPropertyType _propertyType;
@@ -52,14 +47,11 @@
         /// <param name="propertyType">
         /// The property type.
         /// </param>
-        /// <param name="cultureName">
-        /// The culture name
-        /// </param>
         /// <param name="value">
         /// The value.
         /// </param>
-        public DetachedPublishedProperty(PublishedPropertyType propertyType, string cultureName, object value)
-            : this(propertyType, cultureName, value, false)
+        public DetachedPublishedProperty(PublishedPropertyType propertyType, object value)
+            : this(propertyType, value, false)
         {
         }
 
@@ -69,37 +61,20 @@
         /// <param name="propertyType">
         /// The property type.
         /// </param>
-        /// <param name="cultureName">
-        /// The culture name
-        /// </param>
         /// <param name="value">
         /// The value.
         /// </param>
         /// <param name="isPreview">
         /// The is preview.
         /// </param>
-        public DetachedPublishedProperty(PublishedPropertyType propertyType, string cultureName, object value, bool isPreview)
+        public DetachedPublishedProperty(PublishedPropertyType propertyType, object value, bool isPreview)
         {
-            Mandate.ParameterNotNullOrEmpty(cultureName, "cultureName");
-
             this._propertyType = propertyType;
             this._isPreview = isPreview;
             this._rawValue = value;
-            this._cultureName = cultureName;
             this._sourceValue = new Lazy<object>(() => this._propertyType.ConvertDataToSource(this._rawValue, this._isPreview));
             this._objectValue = new Lazy<object>(() => this._propertyType.ConvertSourceToObject(this._sourceValue.Value, this._isPreview));
             this._xpathValue = new Lazy<object>(() => this._propertyType.ConvertSourceToXPath(this._sourceValue.Value, this._isPreview));
-        }
-
-        /// <summary>
-        /// Gets the culture name.
-        /// </summary>
-        public string CultureName
-        {
-            get
-            {
-                return this._cultureName;
-            }
         }
 
         /// <summary>

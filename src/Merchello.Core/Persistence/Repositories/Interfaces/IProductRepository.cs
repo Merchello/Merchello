@@ -27,6 +27,17 @@
         IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey);
 
         /// <summary>
+        /// The get key for slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        Guid GetKeyForSlug(string slug);
+
+        /// <summary>
         /// Gets or sets a value Indicating whether or not a SKU is already exists in the database
         /// </summary>
         /// <param name="sku">The SKU to be tested</param>

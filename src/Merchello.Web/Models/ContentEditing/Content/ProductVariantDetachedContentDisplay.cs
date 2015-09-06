@@ -5,6 +5,12 @@
     using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Models.DetachedContent;
+
+    using Newtonsoft.Json;
+
+    using Umbraco.Core.Models;
+    using Umbraco.Core.Models.PublishedContent;
 
     /// <summary>
     /// The product variant detached content display.
@@ -140,5 +146,33 @@
 
             return destination;
         }
+
+        /// <summary>
+        /// The data values as published properties.
+        /// </summary>
+        /// <param name="pvd">
+        /// The <see cref="ProductVariantDetachedContentDisplay"/>.
+        /// </param>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IPublishedProperty}"/>.
+        /// </returns>
+        public static IEnumerable<IPublishedProperty> DataValuesAsPublishedProperties(this ProductVariantDetachedContentDisplay pvd, PublishedContentType contentType)
+        {
+            var properties = new List<IPublishedProperty>();
+            foreach (var value in pvd.DetachedDataValues)
+            {
+                var propType = contentType.GetPropertyType(value.Key);
+                var valObj = JsonConvert.DeserializeObject<object>(value.Value);
+                if (propType != null)
+                {
+                    properties.Add(new DetachedPublishedProperty(propType, valObj));
+                }
+            }
+
+            return properties;
+        } 
     }
 }

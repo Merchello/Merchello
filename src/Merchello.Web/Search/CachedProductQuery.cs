@@ -132,6 +132,29 @@
         }
 
         /// <summary>
+        /// Gets a product by it's slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public ProductDisplay GetBySlug(string slug)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field("slugs", slug).And().Field("master", "True");
+
+            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            if (display != null) return this.ModifyData(display);
+
+            var key = _productService.GetKeyForSlug(slug);
+
+            return Guid.Empty.Equals(key) ? null : this.GetByKey(key);
+        }
+
+        /// <summary>
         /// Gets a <see cref="ProductVariantDisplay"/> by it's key
         /// </summary>
         /// <param name="key">
