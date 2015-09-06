@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
@@ -14,11 +16,6 @@
     /// </summary>
     internal class ProductContent : ProductContentBase, IProductContent
     {
-        /// <summary>
-        /// The sort order.
-        /// </summary>
-        private readonly int _sortOrder;
-
         /// <summary>
         /// A value indicating whether or not this is in preview mode.
         /// </summary>
@@ -42,9 +39,6 @@
         /// <param name="cultureName">
         /// The culture name
         /// </param>
-        /// <param name="sortOrder">
-        /// The sort order.
-        /// </param>
         /// <param name="isPreviewing">
         /// The is previewing.
         /// </param>
@@ -52,12 +46,10 @@
             PublishedContentType contentType,
             ProductDisplay display,           
             string cultureName = "en-US",
-            int sortOrder = 0,
             bool isPreviewing = false)
             : base(display, contentType, cultureName)
         {
             this._display = display;
-            this._sortOrder = sortOrder;
             this._isPreviewing = isPreviewing;
         }
 
@@ -109,7 +101,7 @@
             get
             {
                 // this may need to be set to the root id so that it can pass the security check
-                return null;
+                return "-1,0";
             }
         }
 
@@ -195,6 +187,16 @@
             }
         }
 
+        /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        public override string Url
+        {
+            get
+            {
+                return UrlName.EnsureStartsAndEndsWith('/');
+            }
+        }
 
         /// <summary>
         /// Gets the template id.

@@ -2,3 +2,10 @@
 @{
     Layout = null;
 }
+
+<html>
+    <body>
+        @Model.Content.GetGridHtml("grid")
+        <a href="@CurrentPage.Url">Test</a>
+    </body>
+</html>

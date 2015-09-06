@@ -2258,6 +2258,20 @@
             The <see cref="T:Merchello.Core.Models.DetachedContent.IProductVariantDetachedContent"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplayExtensions.DataValuesAsPublishedProperties(Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay,Umbraco.Core.Models.PublishedContent.PublishedContentType)">
+            <summary>
+            The data values as published properties.
+            </summary>
+            <param name="pvd">
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/>.
+            </param>
+            <param name="contentType">
+            The content type.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
             <summary>
             Stores information from <see cref="T:Umbraco.Core.Models.IContentType"/>.
@@ -3116,17 +3130,7 @@
         </member>
         <member name="T:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty">
             <summary>
-            Defines a detached published property.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.IDetachedPublishedProperty.CultureName">
-            <summary>
-            Gets the culture name.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._cultureName">
-            <summary>
-            The _culture name.
+            Marker interface for DetachedPublishedProperties.
             </summary>
         </member>
         <member name="F:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty._propertyType">
@@ -3159,29 +3163,23 @@
             A value indicating whether this is a preview.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.String,System.Object)">
+        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
             </summary>
             <param name="propertyType">
             The property type.
-            </param>
-            <param name="cultureName">
-            The culture name
             </param>
             <param name="value">
             The value.
             </param>
         </member>
-        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.String,System.Object,System.Boolean)">
+        <member name="M:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.#ctor(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty"/> class.
             </summary>
             <param name="propertyType">
             The property type.
-            </param>
-            <param name="cultureName">
-            The culture name
             </param>
             <param name="value">
             The value.
@@ -3189,11 +3187,6 @@
             <param name="isPreview">
             The is preview.
             </param>
-        </member>
-        <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.CultureName">
-            <summary>
-            Gets the culture name.
-            </summary>
         </member>
         <member name="P:Merchello.Web.Models.DetachedContent.DetachedPublishedProperty.PropertyTypeAlias">
             <summary>
@@ -3603,11 +3596,6 @@
             Gets the detached properties.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._sortOrder">
-            <summary>
-            The sort order.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._isPreviewing">
             <summary>
             A value indicating whether or not this is in preview mode.
@@ -3618,7 +3606,7 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Int32,System.Boolean)">
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContent"/> class.
             </summary>
@@ -3630,9 +3618,6 @@
             </param>
             <param name="cultureName">
             The culture name
-            </param>
-            <param name="sortOrder">
-            The sort order.
             </param>
             <param name="isPreviewing">
             The is previewing.
@@ -3701,6 +3686,11 @@
             <remarks>
             Always returns null
             </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.Url">
+            <summary>
+            Gets the URL.
+            </summary>
         </member>
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.TemplateId">
             <summary>

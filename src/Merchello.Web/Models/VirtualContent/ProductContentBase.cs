@@ -585,20 +585,9 @@
         /// </returns>
         private IEnumerable<IPublishedProperty> BuildProperties()
         {
-            var properties = new List<IPublishedProperty>();
-
-            if (_detachedContentDisplay == null) return properties;
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var value in _detachedContentDisplay.DetachedDataValues)
-            {
-                var propType = _contentType.GetPropertyType(value.Key);
-                if (propType != null)
-                {
-                    properties.Add(new DetachedPublishedProperty(propType, _cultureName, value.Value));
-                }
-            }
-            return properties;
+            return this._detachedContentDisplay == null ? 
+                Enumerable.Empty<IPublishedProperty>() : 
+                this._detachedContentDisplay.DataValuesAsPublishedProperties(this._contentType);
         }
 
         /// <summary>
