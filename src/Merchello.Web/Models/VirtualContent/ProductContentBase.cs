@@ -6,7 +6,6 @@
 
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
-    using Merchello.Web.Models.DetachedContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
@@ -16,7 +15,7 @@
     /// <summary>
     /// Base class for Product content classes
     /// </summary>
-    internal abstract class ProductContentBase : PublishedContentBase
+    public abstract class ProductContentBase : PublishedContentBase
     {
         /// <summary>
         /// The detached content display.
@@ -41,7 +40,7 @@
         /// <summary>
         /// The properties.
         /// </summary>
-        private Lazy<IEnumerable<IPublishedProperty>> _properties;
+        private IEnumerable<IPublishedProperty> _properties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentBase"/> class.
@@ -309,6 +308,30 @@
             }
         }
 
+        /// <summary>
+        /// Gets the id.
+        /// </summary>
+        /// <remarks>
+        /// Always 0 for virtual content
+        /// </remarks>
+        public override int Id
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Gets the item type.
+        /// </summary>
+        public override PublishedItemType ItemType
+        {
+            get
+            {
+                return PublishedItemType.Content;
+            }
+        }
 
         /// <summary>
         /// Gets the content type.
@@ -350,7 +373,7 @@
         {
             get
             {
-                return this._properties.Value.ToArray();
+                return this._properties.ToArray();
             }
         }
 
@@ -536,7 +559,7 @@
         {
             get
             {
-                return _properties.Value;
+                return _properties;
             }
         }
 
@@ -551,7 +574,7 @@
         /// </returns>
         public override IPublishedProperty GetProperty(string alias)
         {
-            return _properties.Value.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
+            return _properties.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
         }
 
         /// <summary>
@@ -585,7 +608,7 @@
         /// </returns>
         private IEnumerable<IPublishedProperty> BuildProperties()
         {
-            return this._detachedContentDisplay == null ? 
+            return this._detachedContentDisplay == null || _contentType == null ? 
                 Enumerable.Empty<IPublishedProperty>() : 
                 this._detachedContentDisplay.DataValuesAsPublishedProperties(this._contentType);
         }
@@ -595,7 +618,7 @@
         /// </summary>
         private void Initialize()
         {
-            _properties = new Lazy<IEnumerable<IPublishedProperty>>(this.BuildProperties);
+            _properties = this.BuildProperties();
         }
     }
 }

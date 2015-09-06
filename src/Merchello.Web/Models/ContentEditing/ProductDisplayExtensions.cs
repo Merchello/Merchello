@@ -14,6 +14,8 @@
     using Merchello.Web.Workflow.CustomerItemCache;
 
     using Umbraco.Core;
+    using Umbraco.Core.Models;
+    using Umbraco.Core.Models.PublishedContent;
 
     using umbraco.developer;
 
@@ -326,6 +328,35 @@
         #endregion
 
         #region IProductVariantDetachedContent
+
+        /// <summary>
+        /// The product variants as product variant content.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">The cultureName</param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariantContent}"/>.
+        /// </returns>
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, string cultureName)
+        {
+            var variantContent = new List<IProductVariantContent>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var variant in display.ProductVariants)
+            {
+                var contentType = variant.DetachedContents.Any()
+                                      ? PublishedContentType.Get(
+                                          PublishedItemType.Content,
+                                          variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
+                                      : null;
+
+                variantContent.Add(new ProductVariantContent(variant, contentType, cultureName));
+            }
+
+            return variantContent;
+        } 
 
         /// <summary>
         /// Gets the default slug.

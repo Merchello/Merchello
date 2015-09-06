@@ -349,6 +349,7 @@
     <Compile Include="Models\Ui\UrlActionParams.cs" />
     <Compile Include="Models\VirtualContent\ProductContentBase.cs" />
     <Compile Include="Models\VirtualContent\ProductContentFactory.cs" />
+    <Compile Include="Models\VirtualContent\ProductVariantContent.cs" />
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
