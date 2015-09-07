@@ -7,7 +7,7 @@
 @using Umbraco.Web
 @{
     
-    using (Html.BeginUmbracoForm<WishListOperationsController>("UpdateWishList", new { area = "Bazaar" }))
+    using (Html.BeginUmbracoForm<BazaarWishListController>("UpdateWishList", new { area = "Bazaar" }))
     {
         <table class="table wishList">
             <thead>
@@ -44,8 +44,8 @@
                             <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @class = "col-xs-2", @type="number" })</td>
                             <td>@Model.Items[i].FormatTotalPrice(Model.Currency.Symbol)</td>
                             <td>
-                                @Html.ActionLink("To Basket", "MoveItemToBasket", "WishListOperations", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-info" })
-                                @Html.ActionLink("Remove", "RemoveItemFromWishList", "WishListOperations", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-danger" })
+                                @Html.ActionLink("To Basket", "MoveItemToBasket", "BazaarWishList", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-info" })
+                                @Html.ActionLink("Remove", "RemoveItemFromWishList", "BazaarWishList", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
                     }

@@ -1,4 +1,5 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
+@using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @using Umbraco.Web
 @{
@@ -10,17 +11,17 @@
 </div>
 
 <div class="row" id="categories">
-    @foreach (var group in Model.ProductGroups.Where(x => x.IsVisible()))
+    @foreach (var group in BazaarContentHelper.GetProductGroupsContent().Where(x => x.IsVisible()))
     {
         <div>
             <a href="@group.Url">
                 <h2>@group.Name</h2>
-                @if (!string.IsNullOrEmpty(group.Image))
+                @if (group.HasValue("image"))
                 {
                     <img src="@group.GetCropUrl(propertyAlias: "image", width: 300)" alt="@group.Name" />
                 }
             </a>
-            <p>@group.Brief</p>
+            <p>@group.GetPropertyValue("brief")</p>
         </div>
     }
     

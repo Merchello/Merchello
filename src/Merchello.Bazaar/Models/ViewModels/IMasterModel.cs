@@ -30,31 +30,6 @@
         ICurrency Currency { get; }
 
         /// <summary>
-        /// Gets the store page.
-        /// </summary>
-        StoreModel StorePage { get; }
-
-        /// <summary>
-        /// Gets the basket page.
-        /// </summary>
-        BasketModel BasketPage { get; }
-
-        /// <summary>
-        /// Gets the wish list page.
-        /// </summary>
-        WishListModel WishListPage { get; }
-
-        /// <summary>
-        /// Gets the registration page.
-        /// </summary>
-        RegistrationModel RegistrationPage { get; }
-
-        /// <summary>
-        /// Gets the product groups.
-        /// </summary>
-        IEnumerable<ProductGroupModel> ProductGroups { get; }
-
-        /// <summary>
         /// Gets a value indicating whether show account.
         /// </summary>
         bool ShowAccount { get; }

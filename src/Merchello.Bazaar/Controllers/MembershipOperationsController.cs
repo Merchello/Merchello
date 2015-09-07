@@ -4,6 +4,7 @@
     using System.Web.Security;
 
     using Merchello.Bazaar.Models;
+    using Merchello.Web.Mvc;
 
     using Umbraco.Core;
     using Umbraco.Web.Mvc;
@@ -12,7 +13,7 @@
     /// The membership controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class MembershipOperationsController : SurfaceControllerBase
+    public class MembershipOperationsController : MerchelloSurfaceController
     {
         /// <summary>
         /// Responsible for rendering the member registration form.

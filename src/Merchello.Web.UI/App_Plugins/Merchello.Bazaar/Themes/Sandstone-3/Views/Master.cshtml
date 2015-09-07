@@ -1,9 +1,15 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<MasterModel>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<IPublishedContent>
 @using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
+@using Umbraco.Core.Models
 @using ClientDependency.Core.Mvc
+@using Umbraco.Web
 @{
     Layout = null;
+
+    var themedModel = Model is IMasterModel ?
+        (IMasterModel)Model :
+        (IMasterModel)Model.AncestorOrSelf("BazaarStore");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -20,15 +26,15 @@
            .RequiresJs("/App_Plugins/Merchello.Bazaar/Assets/js/jquery.unobtrusive-ajax.min.js")
            .RequiresJs("/App_Plugins/Merchello.Bazaar/Assets/js/jquery.validate.unobtrusive.min.js")
            .RequiresJs("/App_Plugins/Merchello.Bazaar/Assets/js/merchello.bazaar.js")
-           .RequiresPackageCss(Model, "bootstrap.min.css")
-           .RequiresPackageCss(Model, "bootstrap.css")
-           .RequiresPackageCss(Model, "styles.min.css")
-           .RequiresPackageJs(Model, "bootstrap.min.js");
+           .RequiresPackageCss(themedModel, "bootstrap.min.css")
+           .RequiresPackageCss(themedModel, "bootstrap.css")
+           .RequiresPackageCss(themedModel, "styles.min.css")
+           .RequiresPackageJs(themedModel, "bootstrap.min.js");
     }
     @Html.RenderCssHere()
 </head>
 <body class="@Model.DocumentTypeAlias" id="top">
-    @Html.ThemedPartial(Model, "NavBar")
+    @Html.ThemedPartial(themedModel, "NavBar")
     <div class="container">
         @RenderBody()
     </div>

@@ -1,6 +1,8 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Bazaar.Models.ViewModels.MasterModel>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Bazaar.Models.ViewModels.IMasterModel>
 @using System.Web.Mvc.Html
+@using Merchello.Bazaar
 @using Merchello.Bazaar.Models
+@using Merchello.Bazaar.Models.ViewModels
 @using Merchello.Core.Models
 @using Merchello.Web
 @using Umbraco.Web
@@ -8,7 +10,7 @@
 
 <div class="navbar navbar-default">
     <div class="container">
-		<a class="navbar-brand" href="@Model.StorePage.Url">@Model.StoreTitle</a>
+		<a class="navbar-brand" href="@BazaarContentHelper.GetStoreRoot().Url">@Model.StoreTitle</a>
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 				<span class="sr-only">Toggle navigation</span>
@@ -20,7 +22,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                @foreach (var group in Model.ProductGroups)
+                @foreach (var group in BazaarContentHelper.GetProductGroupsContent())
                 {
                     <li><a href="@group.Url">@group.Name</a></li>
                 }
@@ -33,12 +35,12 @@
                         <ul class="dropdown-menu" id="swatch-menu">
                             @if (Model.CurrentCustomer.IsAnonymous)
                             {
-                                <li><a href="@Model.RegistrationPage.Url">Sign Up / Login</a></li>
+                                <li><a href="@BazaarContentHelper.GetRegistrationContent().Url">Sign Up / Login</a></li>
                             }
                             else
                             {
-                                <li><a href="@Model.AccountPage.Url">Account</a></li>
-                                var purchaseHistory = Model.AccountPage.Descendant("BazaarAccountHistory");
+                                <li><a href="@BazaarContentHelper.GetAccountContent().Url">Account</a></li>
+                                var purchaseHistory = BazaarContentHelper.GetAccountContent().Descendant("BazaarAccountHistory");
                                 if (purchaseHistory != null)
                                     {
                                     <li><a href="@purchaseHistory.Url">Purchase History</a></li>     
@@ -50,9 +52,9 @@
                 }
                 @if (!Model.CurrentCustomer.IsAnonymous && Model.ShowWishList)
                 {
-                    <li><a href="@Model.WishListPage.Url">Wish List (@(((ICustomer)Model.CurrentCustomer).WishList().TotalItemCount))</a></li>
+                    <li><a href="@BazaarContentHelper.GetWishListContent().Url">Wish List (@(((ICustomer)Model.CurrentCustomer).WishList().TotalItemCount))</a></li>
                 }
-                <li><a href="@Model.BasketPage.Url">Basket (@Model.CurrentCustomer.Basket().TotalItemCount)</a></li>
+                <li><a href="@BazaarContentHelper.GetWishListContent().Url">Basket (@Model.CurrentCustomer.Basket().TotalItemCount)</a></li>
             </ul>
 
         </div><!-- /.nav-collapse -->

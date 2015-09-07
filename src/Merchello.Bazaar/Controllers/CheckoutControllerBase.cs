@@ -14,7 +14,7 @@
     /// <summary>
     /// The base checkout controller.
     /// </summary>
-    public abstract class CheckoutRenderControllerBase : RenderControllerBase
+    public abstract class CheckoutControllerBase : BazaarControllerBase
     {
         /// <summary>
         /// The <see cref="IStoreSettingService"/>.
@@ -39,20 +39,20 @@
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckoutRenderControllerBase"/> class.
+        /// Initializes a new instance of the <see cref="CheckoutControllerBase"/> class.
         /// </summary>
-        protected CheckoutRenderControllerBase()
+        protected CheckoutControllerBase()
             : this(Core.MerchelloContext.Current)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckoutRenderControllerBase"/> class.
+        /// Initializes a new instance of the <see cref="CheckoutControllerBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        protected CheckoutRenderControllerBase(IMerchelloContext merchelloContext)
+        protected CheckoutControllerBase(IMerchelloContext merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _storeSettingService = merchelloContext.Services.StoreSettingService;
@@ -92,17 +92,6 @@
             get
             {
                 return _shippingCountries.Value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the gateway context.
-        /// </summary>
-        protected IGatewayContext GatewayContext
-        {
-            get
-            {
-                return _gatewayContext;
             }
         }
 

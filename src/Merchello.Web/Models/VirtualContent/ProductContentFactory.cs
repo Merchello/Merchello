@@ -2,42 +2,35 @@
 {
     using System.Linq;
 
+    using Merchello.Core.Configuration;
     using Merchello.Web.Models.ContentEditing;
 
-    using Umbraco.Core;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
-    using Umbraco.Core.Services;
 
     /// <summary>
     /// Represents a ProductContentFactory.
     /// </summary>
-    internal class ProductContentFactory : IProductContentFactory
+    public class ProductContentFactory : IProductContentFactory
     {
         /// <summary>
-        /// The <see cref="IContentTypeService"/>.
+        /// The parent.
         /// </summary>
-        private readonly IContentTypeService _contentTypeService;
+        private IPublishedContent _parent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
         /// </summary>
         public ProductContentFactory()
-            : this(ApplicationContext.Current.Services.ContentTypeService)
         {
+            this.Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
+        /// The initializing.
         /// </summary>
-        /// <param name="contentTypeService">
-        /// The content type service.
-        /// </param>
-        public ProductContentFactory(IContentTypeService contentTypeService)
-        {
-            Mandate.ParameterNotNull(contentTypeService, "contentTypeService");
-            _contentTypeService = contentTypeService;
-        }
+        public static event TypedEventHandler<ProductContentFactory, VirtualContentEventArgs> Initializing; 
 
         /// <summary>
         /// The build content.
@@ -62,14 +55,21 @@
 
             if (detachedContent == null) return null;
 
+            var slugPrefix = MerchelloConfiguration.Current.GetProductSlugCulturePrefix(cultureName);
+
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
 
-            return new ProductContent(publishedContentType, display, cultureName);
+            return new ProductContent(publishedContentType, display, cultureName, _parent, slugPrefix);
         }
 
-        public IProductVariantContent BuildContent(ProductVariantDisplay display, string cultureName)
+        /// <summary>
+        /// The initialize.
+        /// </summary>
+        private void Initialize()
         {
-            throw new System.NotImplementedException();
+            var args = new VirtualContentEventArgs(_parent);
+            Initializing.RaiseEvent(args, this);
+            _parent = args.Parent;
         }
     }
 }
