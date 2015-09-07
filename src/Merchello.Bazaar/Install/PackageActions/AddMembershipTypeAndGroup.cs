@@ -1,15 +1,13 @@
 ﻿namespace Merchello.Bazaar.Install.PackageActions
 {
-    using System.ComponentModel.Design;
     using System.Xml;
 
     using umbraco.cms.businesslogic.packager.standardPackageActions;
+    using umbraco.interfaces;
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
-
-    using umbraco.interfaces;
 
     /// <summary>
     /// A package installation package action to install a MemberType and MemberGroup.

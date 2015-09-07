@@ -229,6 +229,7 @@
     <Compile Include="Controllers\BazaarPaymentMethodFormControllerBase.cs" />
     <Compile Include="Controllers\CashPaymentMethodController.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
+    <Compile Include="Install\PackageActions\AddXpathToStoreConfigKey.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
     <Compile Include="Models\Account\CustomerAddressModel.cs" />
     <Compile Include="Controllers\SalePreparationOperationsController.cs" />
