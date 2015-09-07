@@ -28,7 +28,7 @@
         @foreach (var inv in Model.Invoices.ToArray())
         {
             <tr>
-                <td>@Html.ActionLink(inv.InvoiceNumber.ToString(CultureInfo.InvariantCulture), "LinkToReceipt", "AccountOperations", new { area = "Bazaar", receiptContentId = Model.ReceiptPage.Id, invoiceKey = inv.Key }, new { @class = "invoice" })</td>
+                <td>@Html.ActionLink(inv.InvoiceNumber.ToString(CultureInfo.InvariantCulture), "LinkToReceipt", "BazaarAccount", new { area = "Bazaar", receiptContentId = Model.ReceiptPage.Id, invoiceKey = inv.Key }, new { @class = "invoice" })</td>
                 <td>@inv.InvoiceDate.ToShortDateString()</td>
                 <td>@inv.InvoiceStatus.Name</td>
                 <td>

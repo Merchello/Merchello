@@ -10,9 +10,6 @@
     using Merchello.Core.Sales;
     using Merchello.Web;
     using Merchello.Web.Mvc;
-    using Merchello.Web.Workflow;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The bazaar payment method form controller base.

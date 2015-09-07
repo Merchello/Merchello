@@ -1,11 +1,10 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CustomerAddressModel>
-@using Merchello.Bazaar.Controllers.Surface
 @using Merchello.Bazaar.Models.Account
 @using System.Web.Mvc.Html
 @using Merchello.Bazaar.Controllers
 @using Umbraco.Web
 
-@using (Html.BeginUmbracoForm<AccountOperationsController>("SaveCustomerAddress", null, new { @id = "addresses-form", @class = "form-horizontal" }))
+@using (Html.BeginUmbracoForm<BazaarAccountController>("SaveCustomerAddress", null, new { @id = "addresses-form", @class = "form-horizontal" }))
 {
     <h2 id="address-caption"></h2>
     <fieldset>

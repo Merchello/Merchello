@@ -12,6 +12,7 @@
     /// </summary>
     public static class ModelExtensions
     {
+
         /// <summary>
         /// The theme partial view path.
         /// </summary>
@@ -44,7 +45,7 @@
         public static string ThemeViewPath(this IMasterModel model, string viewName)
         {
             const string Path = "{0}Views/{1}.cshtml";
-            return string.Format(Path, PathHelper.GetThemePath(model), viewName);
+            return string.Format(Path, PathHelper.GetThemePath(model.Theme), viewName);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@
         public static string ThemeAccountPath(this IMasterModel model, string viewName)
         {
             const string Path = "{0}Views/Account/{1}.cshtml";
-            return string.Format(Path, PathHelper.GetThemePath(model), viewName);
+            return string.Format(Path, PathHelper.GetThemePath(model.Theme), viewName);
         }
 
         /// <summary>

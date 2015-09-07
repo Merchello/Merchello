@@ -7,6 +7,7 @@
     using Merchello.Core;
     using Merchello.Web.Models.ContentEditing;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
@@ -26,9 +27,19 @@
         private readonly ProductDisplay _display;
 
         /// <summary>
+        /// The parent node.
+        /// </summary>
+        private readonly IPublishedContent _parent;
+
+        /// <summary>
+        /// The slug prefix.
+        /// </summary>
+        private readonly string _slugPrefix;
+
+        /// <summary>
         /// The variant content.
         /// </summary>
-        private Lazy<IEnumerable<IProductVariantContent>> _variantContent; 
+        private Lazy<IEnumerable<IProductVariantContent>> _variantContent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContent"/> class.
@@ -42,6 +53,12 @@
         /// <param name="cultureName">
         /// The culture name
         /// </param>
+        /// <param name="parent">
+        /// The parent <see cref="IPublishedContent"/>
+        /// </param>
+        /// <param name="slugPrefix">
+        /// The slug prefix
+        /// </param>
         /// <param name="isPreviewing">
         /// The is previewing.
         /// </param>
@@ -49,10 +66,14 @@
             PublishedContentType contentType,
             ProductDisplay display,           
             string cultureName = "en-US",
+            IPublishedContent parent = null,
+            string slugPrefix = "",
             bool isPreviewing = false)
             : base(display, contentType, cultureName)
         {
             this._display = display;
+            this._parent = parent;
+            this._slugPrefix = slugPrefix;
             this._isPreviewing = isPreviewing;
 
             this.Initialize();
@@ -91,7 +112,7 @@
             get
             {
                 // this may need to be set to the root id so that it can pass the security check
-                return "-1,0";
+                return _parent == null ? "-1,0" : _parent.Path + ",0";
             }
         }
 
@@ -162,7 +183,7 @@
         {
             get
             {
-                return null;
+                return _parent;
             }
         }
 
@@ -173,7 +194,10 @@
         {
             get
             {
-                return UrlName.EnsureStartsAndEndsWith('/');
+                return _slugPrefix.IsNullOrWhiteSpace()
+                           ? UrlName.EnsureStartsAndEndsWith('/')
+                           : string.Format("{0}{1}", _slugPrefix.EnsureEndsWith('/'), UrlName)
+                                 .EnsureStartsAndEndsWith('/');
             }
         }
 

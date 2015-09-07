@@ -4,12 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
+    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using Merchello.Bazaar.Controllers.Api;
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -35,10 +37,46 @@
         /// </param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ServerVariablesParser.Parsing += this.ServerVariablesParserOnParsing;
+            ServerVariablesParser.Parsing += ServerVariablesParserOnParsing;
 
             LogHelper.Info<UmbracoEventHandler>("Binding Merchello Customer synchronization");
             MemberService.Saved += MemberServiceOnSaved;
+
+            ContentService.Saved += ContentServiceOnSaved;
+
+            // We handle the Initializing event so that we can set the parent node of the virtual content to the store
+            // so that published content queries in views will work correctly
+            ProductContentFactory.Initializing += ProductContentFactoryOnInitializing;
+        }
+
+        /// <summary>
+        /// Clears the store root from the content helper when it's been saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private static void ContentServiceOnSaved(IContentService sender, SaveEventArgs<IContent> e)
+        {
+            if (e.SavedEntities.All(x => x.ContentType.Alias != "BazaarStore")) return;
+            BazaarContentHelper.StoreRoot = null;
+        }
+
+        /// <summary>
+        /// The product content factory on initializing.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private static void ProductContentFactoryOnInitializing(ProductContentFactory sender, VirtualContentEventArgs e)
+        {            
+            var store = BazaarContentHelper.GetStoreRoot();
+            e.Parent = store;
         }
 
         /// <summary>
@@ -50,7 +88,7 @@
         /// <param name="saveEventArgs">
         /// The save event args.
         /// </param>
-        private void MemberServiceOnSaved(IMemberService sender, SaveEventArgs<IMember> saveEventArgs)
+        private static void MemberServiceOnSaved(IMemberService sender, SaveEventArgs<IMember> saveEventArgs)
         {
             var members = saveEventArgs.SavedEntities.ToArray();
 
@@ -85,7 +123,7 @@
         /// <param name="e">
         /// The dictionary.
         /// </param>
-        private void ServerVariablesParserOnParsing(object sender, Dictionary<string, object> e)
+        private static void ServerVariablesParserOnParsing(object sender, Dictionary<string, object> e)
         {
             if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
 

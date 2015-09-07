@@ -25,7 +25,7 @@
                     <li class="row">
                         <a href="@p.Url"><img src="@p.Image" class="span3"></a>
                         <div class="pull-right span3">
-                            @Html.Action("RenderAddToBasket", "BasketOperations", new { area = "Bazaar", model = p })
+                            @Html.Action("RenderAddToBasket", "BazaarBasket", new { area = "Bazaar", model = p })
                         </div>
                         <div class="info span5">
                             <h2><a href="@p.Url">@p.Name</a></h2>

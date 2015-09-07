@@ -6,7 +6,7 @@
 @using Merchello.Bazaar.Controllers
 @using Umbraco.Web
 @{
-    using (Html.BeginUmbracoForm<AccountOperationsController>("UpdateAccountProfile", new { area = "Bazaar" }, new { @id="update-account-form" }))
+    using (Html.BeginUmbracoForm<BazaarAccountController>("UpdateAccountProfile", new { area = "Bazaar" }, new { @id="update-account-form" }))
     {
         <fieldset>
             <legend>Update Profile</legend>

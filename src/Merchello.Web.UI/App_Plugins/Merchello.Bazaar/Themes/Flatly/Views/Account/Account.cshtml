@@ -38,10 +38,10 @@
             @BuildAddressTable(AddressType.Shipping, customer.Addresses.Where(x => x.AddressType == AddressType.Shipping))
         </div>
         <div id="address-form">
-            @Html.Action("RenderCustomerAddressForm", "AccountOperations", new { area = "Bazaar", model = Model.CustomerAddressModel })
+            @Html.Action("RenderCustomerAddressForm", "BazaarAccount", new { area = "Bazaar", model = Model.CustomerAddressModel })
         </div>
         <div id="profile-form">
-            @Html.Action("RenderAccountProfileForm", "AccountOperations", new { area = "Bazaar", model = Model.AccountProfileModel })
+            @Html.Action("RenderAccountProfileForm", "BazaarAccount", new { area = "Bazaar", model = Model.AccountProfileModel })
         </div>
     </div>
 </div>
@@ -89,10 +89,10 @@
                             <li><a href="#" class="address-edit-link" data-adddresstype="@adr.AddressType.ToString().ToLowerInvariant()" data-addresskey="@adr.Key">Edit</a></li>
                             @if (!adr.IsDefault)
                             {
-                                <li>@Html.ActionLink("Make Default", "SetDefaultAddress", "AccountOperations", new { area = "Bazaar", customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, new { @class = "address-setdefault" })</li>
+                                <li>@Html.ActionLink("Make Default", "SetDefaultAddress", "BazaarAccount", new { area = "Bazaar", customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, new { @class = "address-setdefault" })</li>
                             }
                             <li>
-                                @Html.ActionLink("Delete", "DeleteCustomerAddress", "AccountOperations", new { area = "Bazaar", customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, new { @class = "address-delete" })
+                                @Html.ActionLink("Delete", "DeleteCustomerAddress", "BazaarAccount", new { area = "Bazaar", customerKey = adr.CustomerKey, customerAddressKey = adr.Key, accountPageId = Model.Id }, new { @class = "address-delete" })
                             </li>
                         </ul>
                     </td>

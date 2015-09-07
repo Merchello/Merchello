@@ -24,11 +24,6 @@
         private static readonly MerchelloHelper Merchello = new MerchelloHelper(MerchelloContext.Current.Services);
 
         /// <summary>
-        /// The factory.
-        /// </summary>
-        private static readonly ProductContentFactory Factory = new ProductContentFactory();
-
-        /// <summary>
         /// Tries to find a <see cref="IProductContent"/> by it's unique slug.
         /// </summary>
         /// <param name="contentRequest">
@@ -57,9 +52,10 @@
             // ensure their is a "renderable" detached content 
             var cultureName = contentRequest.Culture.Name;
             if (display.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName && x.CanBeRendered) == null) return false;
-           
-            // return the IProductContent (virtual content)
-            contentRequest.PublishedContent = Factory.BuildContent(display, contentRequest.Culture.Name);
+
+            var factory = new ProductContentFactory();
+  
+            contentRequest.PublishedContent = factory.BuildContent(display, contentRequest.Culture.Name);
             return true;
         }
 

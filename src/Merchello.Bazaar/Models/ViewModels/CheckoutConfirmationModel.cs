@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Bazaar.Models.ViewModels
 {
+    using System;
+    using System.ComponentModel;
+
     using Umbraco.Core.Models;
     using Umbraco.Web;
 
@@ -11,7 +14,7 @@
         /// <summary>
         /// The receipt page.
         /// </summary>
-        private IPublishedContent _receiptPage;
+        private Lazy<IPublishedContent> _receiptPage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutConfirmationModel"/> class.
@@ -22,6 +25,7 @@
         public CheckoutConfirmationModel(IPublishedContent content)
             : base(content)
         {
+            Initialize();
         }
 
         /// <summary>
@@ -41,7 +45,7 @@
         {
             get
             {
-                return _receiptPage ?? StorePage.Descendant("BazaarReceipt");
+                return _receiptPage.Value;
             }
         }
 
@@ -49,5 +53,13 @@
         /// Gets or sets a value indicating whether the Bazaar is configured to resolve the payment collection forms.
         /// </summary>
         public bool ResolvePaymentForms { get; set; }
+
+        /// <summary>
+        /// Initializes the model.
+        /// </summary>
+        private void Initialize()
+        {
+            _receiptPage = new Lazy<IPublishedContent>(() => BazaarContentHelper.GetStoreRoot().Descendant("BazaarReceipt"));
+        }
     }
 }

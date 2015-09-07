@@ -3267,20 +3267,6 @@
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.IProductContentFactory.BuildContent(Merchello.Web.Models.ContentEditing.ProductVariantDisplay,System.String)">
-            <summary>
-            The build content.
-            </summary>
-            <param name="display">
-            The display.
-            </param>
-            <param name="cultureName">
-            The culture name.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.VirtualContent.IProductVariantContent"/>.
-            </returns>
-        </member>
         <member name="T:Merchello.Web.Models.VirtualContent.IProductVariantContent">
             <summary>
             Defines ProductVariantContent
@@ -3660,12 +3646,22 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </summary>
         </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._parent">
+            <summary>
+            The parent node.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._slugPrefix">
+            <summary>
+            The slug prefix.
+            </summary>
+        </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._variantContent">
             <summary>
             The variant content.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,System.Boolean)">
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContent"/> class.
             </summary>
@@ -3677,6 +3673,12 @@
             </param>
             <param name="cultureName">
             The culture name
+            </param>
+            <param name="parent">
+            The parent <see cref="T:Umbraco.Core.Models.IPublishedContent"/>
+            </param>
+            <param name="slugPrefix">
+            The slug prefix
             </param>
             <param name="isPreviewing">
             The is previewing.
@@ -4871,23 +4873,15 @@
             Represents a ProductContentFactory.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.VirtualContent.ProductContentFactory._contentTypeService">
+        <member name="F:Merchello.Web.Models.VirtualContent.ProductContentFactory._parent">
             <summary>
-            The <see cref="T:Umbraco.Core.Services.IContentTypeService"/>.
+            The parent.
             </summary>
         </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContentFactory.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContentFactory"/> class.
             </summary>
-        </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentFactory.#ctor(Umbraco.Core.Services.IContentTypeService)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContentFactory"/> class.
-            </summary>
-            <param name="contentTypeService">
-            The content type service.
-            </param>
         </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContentFactory.BuildContent(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String)">
             <summary>
@@ -4902,6 +4896,16 @@
             <returns>
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
             </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentFactory.Initialize">
+            <summary>
+            The initialize.
+            </summary>
+        </member>
+        <member name="E:Merchello.Web.Models.VirtualContent.ProductContentFactory.Initializing">
+            <summary>
+            The initializing.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.VirtualContent.ProductVariantContent">
             <summary>
@@ -4984,6 +4988,24 @@
         <member name="P:Merchello.Web.Models.VirtualContent.ProductVariantContent.Parent">
             <summary>
             Gets the parent.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.VirtualContent.VirtualContentEventArgs">
+            <summary>
+            The virtual content event args.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.VirtualContentEventArgs.#ctor(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.VirtualContentEventArgs"/> class.
+            </summary>
+            <param name="parent">
+            The parent.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.VirtualContentEventArgs.Parent">
+            <summary>
+            Gets or sets the parent.
             </summary>
         </member>
         <member name="T:Merchello.Web.Mvc.IPaymentMethodUiController">
@@ -6117,11 +6139,6 @@
             Using the MerchelloHelper instead of the service will first look to construct the display object
             from the Examine index alleviating the need for a service call.
             </remarks>
-        </member>
-        <member name="F:Merchello.Web.Routing.ContentFinderProductBySlug.Factory">
-            <summary>
-            The factory.
-            </summary>
         </member>
         <member name="M:Merchello.Web.Routing.ContentFinderProductBySlug.TryFindContent(Umbraco.Web.Routing.PublishedContentRequest)">
             <summary>

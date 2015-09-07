@@ -9,7 +9,7 @@
     /// The Merchello product group controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarProductGroupController : RenderControllerBase
+    public class BazaarProductGroupController : BazaarControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

@@ -2,6 +2,9 @@
 {
     using Merchello.Bazaar.Models.ViewModels;
 
+    using Umbraco.Core.Models;
+    using Umbraco.Web;
+
     /// <summary>
     /// Helper class to assist in starter kit specific path resolution.
     /// </summary>
@@ -20,10 +23,12 @@
         /// <returns>
         /// The <see cref="string"/> representing the path to the starter kit theme folder.
         /// </returns>
-        public static string GetThemePath(IMasterModel model)
+        public static string GetThemePath(IPublishedContent model)
         {
             const string Path = "~/App_Plugins/Merchello.Bazaar/Themes/{0}/";
-            return string.Format(Path, model.Theme);
+            return model.HasProperty("theme") && model.HasValue("theme") ? 
+                string.Format(Path, model.GetPropertyValue<string>("theme")) :
+                string.Empty;
         }
 
         /// <summary>
@@ -57,7 +62,7 @@
         public static string GetThemePartialViewPath(IMasterModel model, string viewName)
         {
             return GetThemePartialViewPath(model.Theme, viewName);
-        }
+        }       
 
         /// <summary>
         /// The get theme partial view path.
@@ -73,8 +78,23 @@
         /// </returns>
         public static string GetThemePartialViewPath(string theme, string viewName)
         {
-            const string Path = "~/App_Plugins/Merchello.Bazaar/Themes/{0}/Views/Partials/{1}.cshtml";
-            return string.Format(Path, theme, viewName);
+            var path = string.Format("{0}{1}", GetThemePath(theme), "Views/Partials/{0}.cshtml");
+            return string.Format(path, viewName);
+        }
+
+        /// <summary>
+        /// Gets the theme path.
+        /// </summary>
+        /// <param name="theme">
+        /// The theme.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetThemePath(string theme)
+        {
+            const string Path = "~/App_Plugins/Merchello.Bazaar/Themes/{0}/";
+            return string.Format(Path, theme);
         }
     }
 }

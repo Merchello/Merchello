@@ -5,7 +5,7 @@
 @using Merchello.Bazaar.Controllers
 @using Umbraco.Web
 
-@using (Html.BeginUmbracoForm<AccountOperationsController>("SaveCustomerAddress", null, new { @id = "addresses-form", @class = "form-horizontal" }))
+@using (Html.BeginUmbracoForm<BazaarAccountController>("SaveCustomerAddress", null, new { @id = "addresses-form", @class = "form-horizontal" }))
 {
     @Html.AntiForgeryToken()
     <h2 id="address-caption"></h2>
