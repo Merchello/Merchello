@@ -156,5 +156,14 @@
         {
             get { return (TreeCollection)this["backoffice"]; }
         }
+
+        /// <summary>
+        /// Gets the CurrencyFormat collection
+        /// </summary>
+        [ConfigurationProperty("currencyFormats", IsRequired = true), ConfigurationCollection(typeof(CurrencyFormatCollection), AddItemName = "format")]
+        public CurrencyFormatCollection CurrencyFormats
+        {
+            get { return (CurrencyFormatCollection)this["currencyFormats"]; }
+        }
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace Merchello.Bazaar
+﻿using Merchello.Core.Models;
+using Merchello.Core.Services;
+
+namespace Merchello.Bazaar
 {
     using System;
     using System.Linq;
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
-    using Merchello.Core.Models;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -13,7 +15,6 @@
     /// </summary>
     public static class ModelExtensions
     {
-
         /// <summary>
         /// The theme partial view path.
         /// </summary>
@@ -46,7 +47,7 @@
         public static string ThemeViewPath(this IMasterModel model, string viewName)
         {
             const string Path = "{0}Views/{1}.cshtml";
-            return string.Format(Path, PathHelper.GetThemePath(model.Theme), viewName);
+            return string.Format(Path, PathHelper.GetThemePath(model), viewName);
         }
 
         /// <summary>
@@ -64,7 +65,7 @@
         public static string ThemeAccountPath(this IMasterModel model, string viewName)
         {
             const string Path = "{0}Views/Account/{1}.cshtml";
-            return string.Format(Path, PathHelper.GetThemePath(model.Theme), viewName);
+            return string.Format(Path, PathHelper.GetThemePath(model), viewName);
         }
 
         /// <summary>
@@ -80,30 +81,10 @@
         {
             if (!model.ProductData.ProductVariants.Any())
             {
-                return FormatPrice(model.ProductData.Price, model.Currency.Symbol);
+                return FormatPrice(model.ProductData.Price, model.Currency);
             }
 
-            return FormattedPrice(model.ProductData, model.Currency);
-
-        }
-
-        /// <summary>
-        /// The formatted price.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="currency">
-        /// The currency.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string FormattedPrice(this ProductDisplay display, ICurrency currency)
-        {
-            if (!display.ProductVariants.Any()) return FormatPrice(display.Price, currency.Symbol);
-
-            var variants = display.ProductVariants.ToArray();
+            var variants = model.ProductData.ProductVariants.ToArray();
             var onsaleLow = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Min(x => x.SalePrice) : 0;
             var low = variants.Any(x => !x.OnSale) ? variants.Where(x => !x.OnSale).Min(x => x.Price) : 0;
             var onSaleHigh = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Max(x => x.SalePrice) : 0;
@@ -116,14 +97,13 @@
             }
 
             if (low != max)
-                return string.Format(
+                return String.Format(
                     "{0} - {1}",
-                    FormatPrice(low, currency.Symbol),
-                    FormatPrice(max, currency.Symbol));
+                    FormatPrice(low, model.Currency),
+                    FormatPrice(max, model.Currency));
 
-            return FormatPrice(display.Price, currency.Symbol);
+            return FormatPrice(model.ProductData.Price, model.Currency);
         }
-
 
         /// <summary>
         /// Formats the sale price with the Merchello's setting currency symbol.
@@ -136,7 +116,7 @@
         /// </returns>
         public static string FormattedSalePrice(this ProductModel model)
         {
-            return FormatPrice(model.ProductData.SalePrice, model.Currency.Symbol);
+            return FormatPrice(model.ProductData.SalePrice, model.Currency);
         }
 
         /// <summary>
@@ -145,15 +125,15 @@
         /// <param name="lineItem">
         /// The line item.
         /// </param>
-        /// <param name="currencySymbol">
-        /// The currency symbol.
+        /// <param name="currency">
+        /// The currency.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string FormatUnitPrice(this BasketLineItem lineItem, string currencySymbol)
+        public static string FormatUnitPrice(this BasketLineItem lineItem, ICurrency currency)
         {
-            return FormatPrice(lineItem.UnitPrice, currencySymbol);
+            return FormatPrice(lineItem.UnitPrice, currency);
         }
 
         /// <summary>
@@ -162,15 +142,15 @@
         /// <param name="lineItem">
         /// The line item.
         /// </param>
-        /// <param name="currencySymbol">
-        /// The currency symbol.
+        /// <param name="currency">
+        /// The currency.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string FormatTotalPrice(this BasketLineItem lineItem, string currencySymbol)
+        public static string FormatTotalPrice(this BasketLineItem lineItem, ICurrency currency)
         {
-            return FormatPrice(lineItem.TotalPrice, currencySymbol);
+            return FormatPrice(lineItem.TotalPrice, currency);
         }
 
         /// <summary>
@@ -184,7 +164,7 @@
         /// </returns>
         public static string FormatTotalPrice(this BasketTableModel model)
         {
-            return FormatPrice(model.TotalPrice, model.Currency.Symbol);
+            return FormatPrice(model.TotalPrice, model.Currency);
         }
 
         /// <summary>
@@ -193,15 +173,33 @@
         /// <param name="price">
         /// The price.
         /// </param>
-        /// <param name="currencySymbol">
-        /// The currency symbol.
+        /// <param name="currency">
+        /// The currency.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string FormatPrice(decimal price, string currencySymbol)
+        public static string FormatPrice(decimal price, ICurrency currency)
         {
-            return string.Format("{0}{1:0.00}", currencySymbol, price);
+            // Try to get a currency format else use the pre defined one.
+            var format = "{0}{1:0.00}";
+            var symbol = currency.Symbol;
+            var currencyFormat = StoreSettingService.GetCurrencyFormat(currency.CurrencyCode);
+            
+            if (currencyFormat != null)
+            {
+                if (!string.IsNullOrEmpty(currencyFormat.Format))
+                {
+                    format = currencyFormat.Format;
+                }
+
+                if (!string.IsNullOrEmpty(currencyFormat.Symbol))
+                {
+                    symbol = currencyFormat.Symbol;
+                }
+            }
+
+            return string.Format(format, symbol, price);
         }
     }
 }

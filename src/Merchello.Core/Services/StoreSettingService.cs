@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Models.Interfaces;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Concurrent;
@@ -456,6 +458,24 @@
         public IEnumerable<ICountry> GetAllCountries(string[] excludeCountryCodes)
         {
             return GetAllCountries().Where(x => !excludeCountryCodes.Contains(x.CountryCode));
+        }
+
+        /// <summary>
+        /// Returns the currency format
+        /// </summary>
+        public static ICurrencyFormat GetCurrencyFormat(string currencyCode)
+        {
+            // ToDo: This need to be cached ?
+            var query = MerchelloConfiguration.Current.Section.CurrencyFormats
+                        .Cast<CurrencyFormatElement>()
+                        .FirstOrDefault(cf => cf.CurrencyCode.Equals(currencyCode, StringComparison.OrdinalIgnoreCase));
+
+            if (query != null)
+            {
+                return new CurrencyFormat(query.Format, query.Symbol);
+            }
+
+            return null;
         }
 
         /// <summary>
