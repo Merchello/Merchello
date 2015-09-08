@@ -6,12 +6,12 @@
     public interface ICurrencyFormat
     {
         /// <summary>
-        /// The currency format
+        /// Gets or sets the format.
         /// </summary>
         string Format { get; set; }
 
         /// <summary>
-        /// The currency format
+        /// Gets or sets the symbol.
         /// </summary>
         string Symbol { get; set; }
     }
