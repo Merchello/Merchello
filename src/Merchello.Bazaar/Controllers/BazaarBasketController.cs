@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Web;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow;
 
     using Umbraco.Web.Models;
@@ -60,7 +61,23 @@
                 Currency = model.Currency
             };
 
-            return this.PartialView(model.ThemePartialViewPath("AddToCart"), addItemModel);
+            return RenderAddItem(addItemModel);
+        }
+
+        /// <summary>
+        /// The render add to basket.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public ActionResult RenderAddItem(AddItemModel model)
+        {
+            var theme = BazaarContentHelper.GetStoreTheme();
+            return this.PartialView(PathHelper.GetThemePartialViewPath(theme, "AddToCart"), model);
         }
 
         /// <summary>

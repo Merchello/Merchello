@@ -5,6 +5,7 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core.Models;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -82,7 +83,27 @@
                 return FormatPrice(model.ProductData.Price, model.Currency.Symbol);
             }
 
-            var variants = model.ProductData.ProductVariants.ToArray();
+            return FormattedPrice(model.ProductData, model.Currency);
+
+        }
+
+        /// <summary>
+        /// The formatted price.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="currency">
+        /// The currency.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string FormattedPrice(this ProductDisplay display, ICurrency currency)
+        {
+            if (!display.ProductVariants.Any()) return FormatPrice(display.Price, currency.Symbol);
+
+            var variants = display.ProductVariants.ToArray();
             var onsaleLow = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Min(x => x.SalePrice) : 0;
             var low = variants.Any(x => !x.OnSale) ? variants.Where(x => !x.OnSale).Min(x => x.Price) : 0;
             var onSaleHigh = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Max(x => x.SalePrice) : 0;
@@ -95,13 +116,14 @@
             }
 
             if (low != max)
-                return String.Format(
+                return string.Format(
                     "{0} - {1}",
-                    FormatPrice(low, model.Currency.Symbol),
-                    FormatPrice(max, model.Currency.Symbol));
+                    FormatPrice(low, currency.Symbol),
+                    FormatPrice(max, currency.Symbol));
 
-            return FormatPrice(model.ProductData.Price, model.Currency.Symbol);
+            return FormatPrice(display.Price, currency.Symbol);
         }
+
 
         /// <summary>
         /// Formats the sale price with the Merchello's setting currency symbol.

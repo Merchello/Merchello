@@ -37,5 +37,12 @@
         /// </summary>
         IEnumerable<IProductVariantContent> ProductVariants { get; }
 
+        /// <summary>
+        /// The specify culture.
+        /// </summary>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        void SpecifyCulture(string cultureName);
     }
 }

@@ -1,10 +1,13 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Merchello.Web.Models.VirtualContent
 @{
     Layout = null;
+    ((IProductContent)Model.Content).SpecifyCulture(System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
 }
 
 <html>
     <body>
+        
         @Model.Content.GetGridHtml("grid")
         <a href="@CurrentPage.Url">Test</a>
     </body>

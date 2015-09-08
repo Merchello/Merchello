@@ -3223,6 +3223,14 @@
             Defines a virtual product content.
             </summary>
         </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.IProductContent.SpecifyCulture(System.String)">
+            <summary>
+            The specify culture.
+            </summary>
+            <param name="cultureName">
+            The culture name.
+            </param>
+        </member>
         <member name="P:Merchello.Web.Models.VirtualContent.IProductContent.Key">
             <summary>
             Gets the key.
@@ -3253,15 +3261,12 @@
             Defines a ProductContentFactory.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.IProductContentFactory.BuildContent(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String)">
+        <member name="M:Merchello.Web.Models.VirtualContent.IProductContentFactory.BuildContent(Merchello.Web.Models.ContentEditing.ProductDisplay)">
             <summary>
             The build content.
             </summary>
             <param name="display">
             The display.
-            </param>
-            <param name="cultureName">
-            The culture name
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
@@ -3313,11 +3318,6 @@
             Base class for Product content classes
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.VirtualContent.ProductContentBase._detachedContentDisplay">
-            <summary>
-            The detached content display.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContentBase._contentType">
             <summary>
             The content type.
@@ -3328,9 +3328,9 @@
             The product base.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.VirtualContent.ProductContentBase._cultureName">
+        <member name="F:Merchello.Web.Models.VirtualContent.ProductContentBase._detachedContentDisplay">
             <summary>
-            The culture name.
+            The detached content display.
             </summary>
         </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContentBase._properties">
@@ -3348,8 +3348,8 @@
             <param name="contentType">
             The content Type.
             </param>
-            <param name="cultureName">
-            The culture name
+            <param name="specificCulture">
+            Specifically sets the culture
             </param>
         </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContentBase.GetProperty(System.String)">
@@ -3380,12 +3380,28 @@
             Throws an exception on a recursive property get
             </exception>
         </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentBase.ChangeCulture(System.String)">
+            <summary>
+            Changes the current culture.
+            </summary>
+            <param name="cultureName">
+            The culture name.
+            </param>
+        </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContentBase.BuildProperties">
             <summary>
             The build properties.
             </summary>
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentBase.GetDetachedContentDisplayForCulture">
+            <summary>
+            The get detached content display for culture.
+            </summary>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContentBase.Initialize">
@@ -3643,7 +3659,7 @@
         </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._display">
             <summary>
-            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            The <see cref="P:Merchello.Web.Models.VirtualContent.ProductContent.ProductDisplay"/>.
             </summary>
         </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._parent">
@@ -3651,17 +3667,12 @@
             The parent node.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._slugPrefix">
-            <summary>
-            The slug prefix.
-            </summary>
-        </member>
         <member name="F:Merchello.Web.Models.VirtualContent.ProductContent._variantContent">
             <summary>
             The variant content.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,System.String,Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.#ctor(Umbraco.Core.Models.PublishedContent.PublishedContentType,Merchello.Web.Models.ContentEditing.ProductDisplay,Umbraco.Core.Models.IPublishedContent,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContent"/> class.
             </summary>
@@ -3671,17 +3682,19 @@
             <param name="display">
             The display.
             </param>
-            <param name="cultureName">
-            The culture name
-            </param>
             <param name="parent">
             The parent <see cref="T:Umbraco.Core.Models.IPublishedContent"/>
             </param>
-            <param name="slugPrefix">
-            The slug prefix
-            </param>
             <param name="isPreviewing">
             The is previewing.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.SpecifyCulture(System.String)">
+            <summary>
+            The specify culture.
+            </summary>
+            <param name="cultureName">
+            The culture name.
             </param>
         </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContent.Initialize">
@@ -3748,6 +3761,16 @@
         <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.TemplateId">
             <summary>
             Gets the template id.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.ProductDisplay">
+            <summary>
+            Gets the product display.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.ProductContent.SlugPrefix">
+            <summary>
+            Gets the slug prefix.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.Interfaces.IEntityDisplay">
@@ -4868,6 +4891,22 @@
             Gets a collection of route parameters where the first is the parameter name and the second is the value.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.VirtualContent.ProductContentExtensions">
+            <summary>
+            Extension methods for <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentExtensions.AsProductDisplay(Merchello.Web.Models.VirtualContent.IProductContent)">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> from <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </summary>
+            <param name="content">
+            The content.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.VirtualContent.ProductContentFactory">
             <summary>
             Represents a ProductContentFactory.
@@ -4883,15 +4922,12 @@
             Initializes a new instance of the <see cref="T:Merchello.Web.Models.VirtualContent.ProductContentFactory"/> class.
             </summary>
         </member>
-        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentFactory.BuildContent(Merchello.Web.Models.ContentEditing.ProductDisplay,System.String)">
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentFactory.BuildContent(Merchello.Web.Models.ContentEditing.ProductDisplay)">
             <summary>
             The build content.
             </summary>
             <param name="display">
             The display.
-            </param>
-            <param name="cultureName">
-            The culture name.
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
@@ -5949,6 +5985,44 @@
         <member name="M:Merchello.Web.PropertyConverters.ProductDisplayValueConverter.ConvertDataToSource(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
             <summary>
             Converts property data to <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <param name="source">
+            The source.
+            </param>
+            <param name="preview">
+            The preview.
+            </param>
+            <returns>
+            The <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.PropertyConverters.ProductListViewValueConverter">
+            <summary>
+            The product static collection value converter.
+            </summary>
+        </member>
+        <member name="F:Merchello.Web.PropertyConverters.ProductListViewValueConverter.EditorAliases">
+            <summary>
+            The property editor aliases that to be associated with this converter
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.PropertyConverters.ProductListViewValueConverter.IsConverter(Umbraco.Core.Models.PublishedContent.PublishedPropertyType)">
+            <summary>
+            The is converter.
+            </summary>
+            <param name="propertyType">
+            The property type.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.PropertyConverters.ProductListViewValueConverter.ConvertDataToSource(Umbraco.Core.Models.PublishedContent.PublishedPropertyType,System.Object,System.Boolean)">
+            <summary>
+            The convert data to source.
             </summary>
             <param name="propertyType">
             The property type.

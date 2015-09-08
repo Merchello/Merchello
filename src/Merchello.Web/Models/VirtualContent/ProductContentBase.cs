@@ -18,11 +18,6 @@
     public abstract class ProductContentBase : PublishedContentBase
     {
         /// <summary>
-        /// The detached content display.
-        /// </summary>
-        private readonly ProductVariantDetachedContentDisplay _detachedContentDisplay;
-
-        /// <summary>
         /// The content type.
         /// </summary>
         private readonly PublishedContentType _contentType;
@@ -33,14 +28,14 @@
         private readonly ProductDisplayBase _productBase;
 
         /// <summary>
-        /// The culture name.
+        /// The detached content display.
         /// </summary>
-        private readonly string _cultureName;
+        private ProductVariantDetachedContentDisplay _detachedContentDisplay;
 
         /// <summary>
         /// The properties.
         /// </summary>
-        private IEnumerable<IPublishedProperty> _properties;
+        private Lazy<Dictionary<string, IEnumerable<IPublishedProperty>>> _properties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentBase"/> class.
@@ -51,30 +46,22 @@
         /// <param name="contentType">
         /// The content Type.
         /// </param>
-        /// <param name="cultureName">
-        /// The culture name
+        /// <param name="specificCulture">
+        /// Specifically sets the culture
         /// </param>
-        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, string cultureName = "en-US")
+        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, string specificCulture = "en-US")
         {
             Mandate.ParameterNotNull(productBase, "productBase");
             _productBase = productBase;
-            _cultureName = cultureName;
-            _contentType = contentType;
-            _detachedContentDisplay = productBase.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName);
-            
+            this.CultureName = specificCulture;
+            _contentType = contentType;            
             this.Initialize();
         }
 
         /// <summary>
         /// Gets the culture name.
         /// </summary>
-        public string CultureName
-        {
-            get
-            {
-                return _cultureName;
-            }
-        }
+        public string CultureName { get; private set; }
 
         /// <summary>
         /// Gets the price.
@@ -373,7 +360,7 @@
         {
             get
             {
-                return this._properties.ToArray();
+                return this._properties.Value[this.CultureName].ToArray();
             }
         }
 
@@ -559,7 +546,7 @@
         {
             get
             {
-                return _properties;
+                return _properties.Value[this.CultureName];
             }
         }
 
@@ -574,7 +561,7 @@
         /// </returns>
         public override IPublishedProperty GetProperty(string alias)
         {
-            return _properties.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
+            return _properties.Value[this.CultureName].FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
         }
 
         /// <summary>
@@ -601,16 +588,47 @@
         }
 
         /// <summary>
+        /// Changes the current culture.
+        /// </summary>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        internal void ChangeCulture(string cultureName)
+        {            
+            CultureName = cultureName;
+            _detachedContentDisplay = this.GetDetachedContentDisplayForCulture();
+        }
+
+        /// <summary>
         /// The build properties.
         /// </summary>
         /// <returns>
         /// The <see cref="IEnumerable{IPublishedProperty}"/>.
         /// </returns>
-        private IEnumerable<IPublishedProperty> BuildProperties()
+        private Dictionary<string, IEnumerable<IPublishedProperty>> BuildProperties()
         {
-            return this._detachedContentDisplay == null || _contentType == null ? 
-                Enumerable.Empty<IPublishedProperty>() : 
-                this._detachedContentDisplay.DataValuesAsPublishedProperties(this._contentType);
+            var propDictionary = new Dictionary<string, IEnumerable<IPublishedProperty>>();
+            if (!_productBase.DetachedContents.Any() || _contentType == null) return propDictionary;
+
+            foreach (var dc in _productBase.DetachedContents)
+            {
+                propDictionary.Add(dc.CultureName, dc.DataValuesAsPublishedProperties(this._contentType));
+            }
+
+            return propDictionary;
+        }
+
+        /// <summary>
+        /// The get detached content display for culture.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ProductVariantDetachedContentDisplay"/>.
+        /// </returns>
+        private ProductVariantDetachedContentDisplay GetDetachedContentDisplayForCulture()
+        {
+            return this._productBase.DetachedContents.Any(x => x.CultureName == this.CultureName) ?
+                this._productBase.DetachedContents.FirstOrDefault(x => x.CultureName == this.CultureName) : 
+                this._productBase.DetachedContents.FirstOrDefault(x => x.CultureName == Core.Constants.DefaultCultureName);
         }
 
         /// <summary>
@@ -618,7 +636,8 @@
         /// </summary>
         private void Initialize()
         {
-            _properties = this.BuildProperties();
+            _detachedContentDisplay = this.GetDetachedContentDisplayForCulture();
+            _properties = new Lazy<Dictionary<string, IEnumerable<IPublishedProperty>>>(this.BuildProperties);
         }
     }
 }

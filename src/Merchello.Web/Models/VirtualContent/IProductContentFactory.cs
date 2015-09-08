@@ -13,12 +13,9 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="cultureName">
-        /// The culture name
-        /// </param>
         /// <returns>
         /// The <see cref="IProductContent"/>.
         /// </returns>
-        IProductContent BuildContent(ProductDisplay display, string cultureName);
+        IProductContent BuildContent(ProductDisplay display);
     }
 }

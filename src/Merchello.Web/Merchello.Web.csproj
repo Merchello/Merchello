@@ -348,6 +348,7 @@
     <Compile Include="Models\SaleHistory\SalesHistoryDisplayExtensions.cs" />
     <Compile Include="Models\Ui\UrlActionParams.cs" />
     <Compile Include="Models\VirtualContent\ProductContentBase.cs" />
+    <Compile Include="Models\VirtualContent\ProductContentExtensions.cs" />
     <Compile Include="Models\VirtualContent\ProductContentFactory.cs" />
     <Compile Include="Models\VirtualContent\ProductVariantContent.cs" />
     <Compile Include="Models\VirtualContent\VirtualContentEventArgs.cs" />
@@ -361,6 +362,7 @@
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
+    <Compile Include="PropertyConverters\ProductListViewValueConverter.cs" />
     <Compile Include="Providers\DynamicCollection\UnpaidInvoiceCollectionProvider.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />

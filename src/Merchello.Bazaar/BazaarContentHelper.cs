@@ -7,6 +7,7 @@
 
     using Merchello.Bazaar.Models.ViewModels;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Web;
 
@@ -21,6 +22,11 @@
         internal static IPublishedContent StoreRoot { get; set; }
 
         /// <summary>
+        /// Gets or sets the theme.
+        /// </summary>
+        internal static string Theme { get; set; }
+
+        /// <summary>
         /// The get store root.
         /// </summary>
         /// <returns>
@@ -32,6 +38,19 @@
             var umbraco = new UmbracoHelper(UmbracoContext.Current);
             StoreRoot = umbraco.TypedContentSingleAtXPath(WebConfigurationManager.AppSettings["Bazaar:XpathToStore"]);
             return StoreRoot;
+        }
+
+        /// <summary>
+        /// The get store theme.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetStoreTheme()
+        {
+            if (!Theme.IsNullOrWhiteSpace()) return Theme;
+            Theme = GetStoreRoot().GetPropertyValue<string>("themePicker");
+            return Theme;
         }
      
         /// <summary>

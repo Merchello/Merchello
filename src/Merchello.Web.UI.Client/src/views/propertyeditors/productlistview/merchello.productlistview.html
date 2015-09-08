@@ -34,6 +34,9 @@
                 </a>
             </td>
             <td>
+                <localize key="merchelloTabs_render"></localize>
+            </td>
+            <td>
                 <form class="pull-right ng-pristine ng-valid" novalidate>
                     <i class="icon-search" data-ng-click="enterSearch($event)"></i>
                     <input type="text" data-ng-model="options.filter" on-keyup="loadProducts()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
@@ -49,7 +52,7 @@
 
         <tbody data-ng-show="!preValuesLoaded">
         <tr>
-            <td colspan="7">
+            <td colspan="8">
                 <div class="umb-loader-wrapper">
                     <div class="umb-loader"></div>
                 </div>
@@ -59,7 +62,7 @@
 
         <tbody ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
         <tr>
-            <td colspan="7">
+            <td colspan="8">
                 <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
             </td>
         </tr>
@@ -80,6 +83,7 @@
             <!-- price -->
             <td data-ng-hide="result.hasVariants()">{{result.price | currency : currencySymbol}}</td>
             <td data-ng-show="result.hasVariants()">{{result.variantsMinimumPrice() | currency : currencySymbol}} - {{result.variantsMaximumPrice() | currency : currencySymbol}}</td>
+            <td><i class="icon-check" data-ng-show="result.canBeRendered()" /></td>
             <td colspan="2"></td>
         </tr>
         </tbody>

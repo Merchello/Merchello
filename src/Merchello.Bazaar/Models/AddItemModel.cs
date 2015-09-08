@@ -14,8 +14,12 @@
         /// <summary>
         /// Gets or sets the Content Id of the ProductDetail page
         /// </summary>
-        [Required]
         public int ContentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the content url.
+        /// </summary>
+        public string ContentUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the basket page id.
