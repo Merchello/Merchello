@@ -1,4 +1,6 @@
-﻿namespace Merchello.Core.Services
+﻿using Merchello.Core.Models.Interfaces;
+
+namespace Merchello.Core.Services
 {
     using System;
     using System.Collections.Concurrent;
@@ -141,7 +143,12 @@
         /// <summary>
         /// Returns the province label from the configuration file
         /// </summary>
-        /// <param name="countryCode">The two letter ISO Region code</param>
+        /// <param name="countryCode">
+        /// The two letter ISO Region code
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string GetProvinceLabelForCountry(string countryCode)
         {
             return CountryHasProvinces(countryCode)
@@ -159,6 +166,26 @@
             return CountryHasProvinces(countryCode) ?
                 RegionProvinceCache[countryCode] :
                 new List<IProvince>();
+        }
+
+        /// <summary>
+        /// Returns the currency format
+        /// </summary>
+        /// <param name="currency">
+        /// The <see cref="ICurrency"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrencyFormat"/>.
+        /// </returns>
+        public ICurrencyFormat GetCurrencyFormat(ICurrency currency)
+        {
+            var query = MerchelloConfiguration.Current.Section.CurrencyFormats
+                        .Cast<CurrencyFormatElement>()
+                        .FirstOrDefault(cf => cf.CurrencyCode.Equals(currency.CurrencyCode, StringComparison.OrdinalIgnoreCase));
+
+            return query != null ? 
+                new CurrencyFormat(query.Format, query.Symbol) : 
+                CurrencyFormat.CreateDefault(currency.Symbol);
         }
 
         /// <summary>
@@ -266,7 +293,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key' (Guid)
+        /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key' (GUID)
         /// </summary>
         /// <param name="key">
         /// The key.
@@ -384,7 +411,7 @@
         }
 
         /// <summary>
-        /// Gets the complete collection of registered typefields
+        /// Gets the complete collection of registered type fields
         /// </summary>
         /// <returns>
         /// Gets the collection of all type fields.
@@ -441,7 +468,7 @@
         /// <summary>
         /// Gets a <see cref="ICurrency"/> for the currency code passed
         /// </summary>
-        /// <param name="currencyCode">The ISO Currency Code (eg. USD)</param>
+        /// <param name="currencyCode">The ISO Currency Code (e.g. USD)</param>
         /// <returns>The <see cref="ICurrency"/></returns>
         public ICurrency GetCurrencyByCode(string currencyCode)
         {
@@ -456,7 +483,7 @@
         public IEnumerable<ICountry> GetAllCountries(string[] excludeCountryCodes)
         {
             return GetAllCountries().Where(x => !excludeCountryCodes.Contains(x.CountryCode));
-        }
+        }        
 
         /// <summary>
         /// The cache region.

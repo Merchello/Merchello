@@ -8,6 +8,7 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
+    using Umbraco.Web;
 
     /// <summary>
     /// Represents a ProductContentFactory.
@@ -38,28 +39,21 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="cultureName">
-        /// The culture name.
-        /// </param>
         /// <returns>
         /// The <see cref="IProductContent"/>.
         /// </returns>
-        public IProductContent BuildContent(ProductDisplay display, string cultureName)
+        public IProductContent BuildContent(ProductDisplay display)
         {
-            var detachedContent = display.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName);
-            if (detachedContent == null && cultureName == Core.Constants.DefaultCultureName)
-            {
-                detachedContent =
-                    display.DetachedContents.FirstOrDefault(x => x.CultureName == Core.Constants.DefaultCultureName);
-            }
+            if (!display.DetachedContents.Any(x => x.CanBeRendered)) return null;
 
+            // assert there is at least one the can be rendered
+            var detachedContent = display.DetachedContents.FirstOrDefault(x => x.CanBeRendered);
+            
             if (detachedContent == null) return null;
-
-            var slugPrefix = MerchelloConfiguration.Current.GetProductSlugCulturePrefix(cultureName);
 
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
 
-            return new ProductContent(publishedContentType, display, cultureName, _parent, slugPrefix);
+            return new ProductContent(publishedContentType, display, _parent);
         }
 
         /// <summary>

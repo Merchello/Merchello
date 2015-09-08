@@ -254,6 +254,8 @@
     <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
     <Compile Include="Configuration\Outline\ContentFinderCultureCollection.cs" />
+    <Compile Include="Configuration\Outline\CurrencyFormatCollection.cs" />
+    <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\EntityCollectionProviderElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
@@ -334,12 +336,14 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\CurrencyFormat.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentType.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityCollection.cs" />
     <Compile Include="Models\EntityCollectionExtensions.cs" />
+    <Compile Include="Models\Interfaces\ICurrencyFormat.cs" />
     <Compile Include="Models\Interfaces\IDataModifierData.cs" />
     <Compile Include="Models\DetachedContent\IDetachedContent.cs" />
     <Compile Include="Models\DetachedContent\IDetachedContentType.cs" />

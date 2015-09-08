@@ -5,6 +5,9 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -12,7 +15,6 @@
     /// </summary>
     public static class ModelExtensions
     {
-
         /// <summary>
         /// The theme partial view path.
         /// </summary>
@@ -79,10 +81,30 @@
         {
             if (!model.ProductData.ProductVariants.Any())
             {
-                return FormatPrice(model.ProductData.Price, model.Currency.Symbol);
+                return FormatPrice(model.ProductData.Price, model.Currency);
             }
 
-            var variants = model.ProductData.ProductVariants.ToArray();
+            return FormattedPrice(model.ProductData, model.Currency);
+        }
+
+
+        /// <summary>
+        /// The formatted price.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="currency">
+        /// The currency.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string FormattedPrice(this ProductDisplay display, ICurrency currency)
+        {
+            if (!display.ProductVariants.Any()) return FormatPrice(display.Price, currency);
+
+            var variants = display.ProductVariants.ToArray();
             var onsaleLow = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Min(x => x.SalePrice) : 0;
             var low = variants.Any(x => !x.OnSale) ? variants.Where(x => !x.OnSale).Min(x => x.Price) : 0;
             var onSaleHigh = variants.Any(x => x.OnSale) ? variants.Where(x => x.OnSale).Max(x => x.SalePrice) : 0;
@@ -95,12 +117,13 @@
             }
 
             if (low != max)
-                return String.Format(
+                return string.Format(
                     "{0} - {1}",
-                    FormatPrice(low, model.Currency.Symbol),
-                    FormatPrice(max, model.Currency.Symbol));
+                    FormatPrice(low, currency),
+                    FormatPrice(max, currency));
 
-            return FormatPrice(model.ProductData.Price, model.Currency.Symbol);
+            return FormatPrice(display.Price, currency);
+
         }
 
         /// <summary>
@@ -114,7 +137,7 @@
         /// </returns>
         public static string FormattedSalePrice(this ProductModel model)
         {
-            return FormatPrice(model.ProductData.SalePrice, model.Currency.Symbol);
+            return FormatPrice(model.ProductData.SalePrice, model.Currency);
         }
 
         /// <summary>
@@ -123,15 +146,15 @@
         /// <param name="lineItem">
         /// The line item.
         /// </param>
-        /// <param name="currencySymbol">
-        /// The currency symbol.
+        /// <param name="currency">
+        /// The currency.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string FormatUnitPrice(this BasketLineItem lineItem, string currencySymbol)
+        public static string FormatUnitPrice(this BasketLineItem lineItem, ICurrency currency)
         {
-            return FormatPrice(lineItem.UnitPrice, currencySymbol);
+            return FormatPrice(lineItem.UnitPrice, currency);
         }
 
         /// <summary>
@@ -140,15 +163,15 @@
         /// <param name="lineItem">
         /// The line item.
         /// </param>
-        /// <param name="currencySymbol">
-        /// The currency symbol.
+        /// <param name="currency">
+        /// The currency.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string FormatTotalPrice(this BasketLineItem lineItem, string currencySymbol)
+        public static string FormatTotalPrice(this BasketLineItem lineItem, ICurrency currency)
         {
-            return FormatPrice(lineItem.TotalPrice, currencySymbol);
+            return FormatPrice(lineItem.TotalPrice, currency);
         }
 
         /// <summary>
@@ -162,7 +185,7 @@
         /// </returns>
         public static string FormatTotalPrice(this BasketTableModel model)
         {
-            return FormatPrice(model.TotalPrice, model.Currency.Symbol);
+            return FormatPrice(model.TotalPrice, model.Currency);
         }
 
         /// <summary>
@@ -171,15 +194,22 @@
         /// <param name="price">
         /// The price.
         /// </param>
-        /// <param name="currencySymbol">
-        /// The currency symbol.
+        /// <param name="currency">
+        /// The currency.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string FormatPrice(decimal price, string currencySymbol)
+        public static string FormatPrice(decimal price, ICurrency currency)
         {
-            return string.Format("{0}{1:0.00}", currencySymbol, price);
+            var storeSettingService = MerchelloContext.Current.Services.StoreSettingService;
+
+            // Try to get a currency format else use the pre defined one.
+            var symbol = currency.Symbol;
+            var format = storeSettingService.GetCurrencyFormat(currency);
+           
+
+            return string.Format(format.Format, symbol, price);
         }
     }
 }

@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core;
@@ -32,11 +33,6 @@
         private readonly IPublishedContent _parent;
 
         /// <summary>
-        /// The slug prefix.
-        /// </summary>
-        private readonly string _slugPrefix;
-
-        /// <summary>
         /// The variant content.
         /// </summary>
         private Lazy<IEnumerable<IProductVariantContent>> _variantContent;
@@ -50,14 +46,8 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="cultureName">
-        /// The culture name
-        /// </param>
         /// <param name="parent">
         /// The parent <see cref="IPublishedContent"/>
-        /// </param>
-        /// <param name="slugPrefix">
-        /// The slug prefix
         /// </param>
         /// <param name="isPreviewing">
         /// The is previewing.
@@ -65,15 +55,12 @@
         public ProductContent(
             PublishedContentType contentType,
             ProductDisplay display,           
-            string cultureName = "en-US",
             IPublishedContent parent = null,
-            string slugPrefix = "",
             bool isPreviewing = false)
-            : base(display, contentType, cultureName)
+            : base(display, contentType)
         {
             this._display = display;
             this._parent = parent;
-            this._slugPrefix = slugPrefix;
             this._isPreviewing = isPreviewing;
 
             this.Initialize();
@@ -194,9 +181,9 @@
         {
             get
             {
-                return _slugPrefix.IsNullOrWhiteSpace()
+                return SlugPrefix.IsNullOrWhiteSpace()
                            ? UrlName.EnsureStartsAndEndsWith('/')
-                           : string.Format("{0}{1}", _slugPrefix.EnsureEndsWith('/'), UrlName)
+                           : string.Format("{0}{1}", SlugPrefix.EnsureEndsWith('/'), UrlName)
                                  .EnsureStartsAndEndsWith('/');
             }
         }
@@ -210,6 +197,45 @@
             {
                 return DetachedContentDisplay != null ? DetachedContentDisplay.TemplateId : 0;
             }
+        }
+
+        /// <summary>
+        /// Gets the product display.
+        /// </summary>
+        internal ProductDisplay ProductDisplay
+        {
+            get
+            {
+                return _display;
+            }
+        }
+
+        /// <summary>
+        /// Gets the slug prefix.
+        /// </summary>
+        private string SlugPrefix
+        {
+            get
+            {
+                return MerchelloConfiguration.Current.GetProductSlugCulturePrefix(CultureName);
+            }
+        }
+
+        /// <summary>
+        /// The specify culture.
+        /// </summary>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        public void SpecifyCulture(string cultureName)
+        {
+            if (!_display.DetachedContents.Any(x => x.CultureName == cultureName && x.CanBeRendered)) return;
+            
+            this.ChangeCulture(cultureName);
+            foreach (var variant in ProductVariants)
+            {
+                ((ProductContentBase)variant).ChangeCulture(cultureName);
+            }                            
         }
 
         /// <summary>

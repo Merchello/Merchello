@@ -164,6 +164,20 @@
             return _.filter(this.productVariants, function(v) { return v.taxable; });
         }
 
+        // returns a value indicating whether or not the product has a detached content that can be rendered.
+        function canBeRendered() {
+            if (!this.available) {
+                return false;
+            }
+            if (this.detachedContents.length === 0) {
+                return false;
+            }
+            if (_.filter(this.detachedContents, function(dc) { return dc.canBeRendered; }).length === 0) {
+                return false;
+            }
+            return true;
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -175,7 +189,8 @@
             anyVariantsOnSale: anyVariantsOnSale,
             shippableVariants: shippableVariants,
             getProductVariant: getProductVariant,
-            taxableVariants: taxableVariants
+            taxableVariants: taxableVariants,
+            canBeRendered: canBeRendered
         };
     }());
 

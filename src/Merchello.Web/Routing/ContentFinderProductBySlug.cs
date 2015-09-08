@@ -1,12 +1,15 @@
 ﻿namespace Merchello.Web.Routing
 {
+    using System.Globalization;
     using System.Linq;
+    using System.Net.Mime;
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
+    using Umbraco.Web;
     using Umbraco.Web.Routing;
 
     /// <summary>
@@ -49,13 +52,12 @@
             // products marked as not available cannot be rendered
             if (!display.Available) return false;
 
-            // ensure their is a "renderable" detached content 
-            var cultureName = contentRequest.Culture.Name;
-            if (display.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName && x.CanBeRendered) == null) return false;
-
+            // ensure their is a "renderable" detached content             
+            if (display.DetachedContents.FirstOrDefault(x => x.CanBeRendered) == null) return false;
+            var threadCulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
             var factory = new ProductContentFactory();
   
-            contentRequest.PublishedContent = factory.BuildContent(display, contentRequest.Culture.Name);
+            contentRequest.PublishedContent = factory.BuildContent(display);
             return true;
         }
 

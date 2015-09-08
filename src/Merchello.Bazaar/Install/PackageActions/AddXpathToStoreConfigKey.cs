@@ -8,23 +8,17 @@
     using umbraco.interfaces;
 
     /// <summary>
-    /// Adds a key to the web.config app settings
+    /// The add xpath to store config key.
     /// </summary>
-    /// <remarks>
-    /// 
-    /// Modified verion of https://packageactioncontrib.codeplex.com/SourceControl/latest#PackageActionsContrib/AddAppConfigKey.cs
-    /// 
-    /// Original contribution from Paul Sterling
-    /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-    public class AddSslAppConfigKey : IPackageAction
+    public class AddXpathToStoreConfigKey : IPackageAction
     {
         #region IPackageAction Members
 
         /// <summary>
         /// The key.
         /// </summary>
-        private const string Key = "Bazaar:RequireSsl";
+        private const string Key = "Bazaar:XpathToStore";
 
         /// <summary>
         /// The alias.
@@ -34,7 +28,7 @@
         /// </returns>
         public string Alias()
         {
-            return "MerchelloBazaar_AddSslAppConfigKey";
+            return "MerchelloBazaar_AddXpathToStoreConfigKey";
         }
 
         /// <summary>
@@ -53,7 +47,7 @@
         {
             try
             {
-                CreateAppSettingsKey(Key, false.ToString());
+                CreateAppSettingsKey(Key, "//root/BazaarStore");
 
                 return true;
             }
@@ -71,7 +65,7 @@
         /// </returns>
         public XmlNode SampleXml()
         {
-            const string Sample = "<Action runat=\"install\" undo=\"true/false\" alias=\"MerchelloBazaar_AddSslAppConfigKey\"></Action>";
+            const string Sample = "<Action runat=\"install\" undo=\"true/false\" alias=\"MerchelloBazaar_AddXpathToStoreConfigKey\"></Action>";
 
             return helper.parseStringToXmlNode(Sample);
         }

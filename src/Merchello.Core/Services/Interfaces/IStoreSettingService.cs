@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
 
     using Umbraco.Core.Services;
@@ -79,6 +80,17 @@
         /// <param name="currencyCode">The ISO Currency Code (ex. USD)</param>
         /// <returns>The <see cref="ICurrency"/></returns>
         ICurrency GetCurrencyByCode(string currencyCode);
+
+        /// <summary>
+        /// Returns the currency format
+        /// </summary>
+        /// <param name="currency">
+        /// The <see cref="ICurrency"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrencyFormat"/>.
+        /// </returns>
+        ICurrencyFormat GetCurrencyFormat(ICurrency currency);
 
         /// <summary>
         /// Returns a <see cref="ICountry"/> collection for all countries excluding codes passed

@@ -340,7 +340,7 @@
                 ShippingQuotes = shippingRateQuotes.Select(x => new SelectListItem()
                                                                     {
                                                                         Value = x.ShipMethod.Key.ToString(),
-                                                                        Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency.Symbol))
+                                                                        Text = string.Format("{0} ({1})", x.ShipMethod.Name, ModelExtensions.FormatPrice(x.Rate, _currency))
                                                                     }),
                 PaymentMethods = (viewModel.ResolvePaymentForms
                      ? allowedMethods.Where(x => paymentInfoArray.Any(y => y.PaymentMethodKey == x.PaymentMethod.Key && y.UrlActionParams != null))

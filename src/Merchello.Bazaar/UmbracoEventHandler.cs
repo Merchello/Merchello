@@ -62,6 +62,7 @@
         {
             if (e.SavedEntities.All(x => x.ContentType.Alias != "BazaarStore")) return;
             BazaarContentHelper.StoreRoot = null;
+            BazaarContentHelper.Theme = null;
         }
 
         /// <summary>
