@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Bazaar.Factories
 {
     using System.Collections.Generic;
+    using System.Globalization;
 
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
@@ -116,6 +117,17 @@
         /// The <see cref="ProductGroupModel"/>.
         /// </returns>
         ProductGroupModel CreateProductGroup(RenderModel model);
+
+        /// <summary>
+        /// Creates a <see cref="ProductCollectionModel"/>.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductCollectionModel"/>.
+        /// </returns>
+        ProductCollectionModel CreateProductCollection(RenderModel model);
 
         /// <summary>
         /// Creates a <see cref="ProductModel"/>.

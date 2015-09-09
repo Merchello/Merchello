@@ -2,10 +2,12 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using Merchello.Web.Models.VirtualContent;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Web;
 
@@ -15,6 +17,11 @@
     public class ProductCollectionModel : MasterModel
     {
         /// <summary>
+        /// The _products.
+        /// </summary>
+        private IProductContent[] _products;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductCollectionModel"/> class.
         /// </summary>
         /// <param name="content">
@@ -23,6 +30,7 @@
         public ProductCollectionModel(IPublishedContent content)
             : base(content)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -32,10 +40,29 @@
         {
             get
             {
-                return Content.HasValue("products")
-                           ? Content.GetPropertyValue<IEnumerable<IProductContent>>("products")
-                           : Enumerable.Empty<IProductContent>();
+                return _products;
             }
+        }
+
+        /// <summary>
+        /// The specify culture.
+        /// </summary>
+        /// <param name="culture">
+        /// The culture.
+        /// </param>
+        public void SpecifyCulture(CultureInfo culture)
+        {
+            _products.ForEach(x => x.SpecifyCulture(culture.Name));
+        }
+
+        /// <summary>
+        /// Initializes the model.
+        /// </summary>
+        private void Initialize()
+        {
+            _products = Content.HasValue("products")
+                           ? Content.GetPropertyValue<IEnumerable<IProductContent>>("products").ToArray()
+                           : Enumerable.Empty<IProductContent>().ToArray();
         }
     }
 }

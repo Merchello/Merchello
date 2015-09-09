@@ -2,6 +2,8 @@
 @using System.Web.Mvc.Html
 @using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
+@using Merchello.Web.Models.VirtualContent
+@using Umbraco.Core.Models
 @using Umbraco.Web
 
 @{
@@ -20,9 +22,14 @@
             <ul id="featured" class="product-list">
 
                 @foreach (var p in Model.Products)
-                {
+                {                  
                     <li class="row">
-                        <a href="@p.Url"><img src="@p.Image" class="span3"></a>
+                        @if (p.HasValue("image"))
+                        {
+                            var image = Umbraco.TypedMedia(p.GetPropertyValue("image"));
+                            <a href="@p.Url"><img src="@image.Url" class="span3"></a>
+                        }
+                        
                         <div class="pull-right span3">
                             @Html.Action("RenderAddItem", "BazaarBasket", new { area = "Bazaar", model = p.BuildAddItemModel(Model.Currency, Model.ShowWishList) })
                         </div>
@@ -30,10 +37,10 @@
                             <h2><a href="@p.Url">@p.Name</a></h2>
                             @if (p.ProductVariants.Any())
                             {
-                                <span class="price">@p.FormattedPrice()</span>
+                                <span class="price">@ModelExtensions.FormatPrice(p.Price, BazaarContentHelper.GetStoreCurrency())</span>
                             }
 
-                            <p>@p.Brief</p>
+                            <p>@p.GetPropertyValue("brief")</p>
                         </div>
                     </li>
                 }

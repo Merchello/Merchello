@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines ProductVariantContent
     /// </summary>
-    public interface IProductVariantContent : IPublishedContent
+    public interface IProductVariantContent : IProductContentBase, IPublishedContent
     {
         /// <summary>
         /// Gets the key.
