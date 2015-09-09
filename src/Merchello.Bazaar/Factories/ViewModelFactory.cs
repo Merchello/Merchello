@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Configuration;
     using System.Web.Mvc;
@@ -378,6 +379,20 @@
         public ProductGroupModel CreateProductGroup(RenderModel model)
         {
             return this.Build<ProductGroupModel>(model);
+        }
+
+        /// <summary>
+        /// The create product collection.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductCollectionModel"/>.
+        /// </returns>
+        public ProductCollectionModel CreateProductCollection(RenderModel model)
+        {
+            return this.Build<ProductCollectionModel>(model);
         }
 
         /// <summary>

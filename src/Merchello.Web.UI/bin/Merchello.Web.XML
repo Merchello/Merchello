@@ -3223,6 +3223,111 @@
             Defines a virtual product content.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.VirtualContent.IProductContentBase">
+            <summary>
+            The ProductContentBase interface.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.CultureName">
+            <summary>
+            Gets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Price">
+            <summary>
+            Gets the price.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.SalePrice">
+            <summary>
+            Gets the sale price.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.OnSale">
+            <summary>
+            Gets a value indicating whether on sale.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Available">
+            <summary>
+            Gets a value indicating whether available.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.TrackInventory">
+            <summary>
+            Gets a value indicating whether track inventory.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Shippable">
+            <summary>
+            Gets a value indicating whether shippable.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Taxable">
+            <summary>
+            Gets a value indicating whether taxable.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Sku">
+            <summary>
+            Gets the SKU.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.CostOfGoods">
+            <summary>
+            Gets the cost of goods.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Manufacturer">
+            <summary>
+            Gets the manufacturer.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.ManufacturerModelNumber">
+            <summary>
+            Gets the manufacturer model number.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Weight">
+            <summary>
+            Gets the weight.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Length">
+            <summary>
+            Gets the length.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Width">
+            <summary>
+            Gets the width.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Height">
+            <summary>
+            Gets the height.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Barcode">
+            <summary>
+            Gets the barcode.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.OutOfStockPurchase">
+            <summary>
+            Gets a value indicating whether out of stock purchase.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.Download">
+            <summary>
+            Gets a value indicating whether the product is a downloadable product.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.VirtualContent.IProductContentBase.DownloadMediaId">
+            <summary>
+            Gets the downloadable file's Umbraco media id.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Models.VirtualContent.IProductContent.SpecifyCulture(System.String)">
             <summary>
             The specify culture.
@@ -3239,11 +3344,6 @@
         <member name="P:Merchello.Web.Models.VirtualContent.IProductContent.ProductVariantKey">
             <summary>
             Gets the product variant key of the master variant.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.VirtualContent.IProductContent.CultureName">
-            <summary>
-            Gets the culture name.
             </summary>
         </member>
         <member name="P:Merchello.Web.Models.VirtualContent.IProductContent.ProductOptions">

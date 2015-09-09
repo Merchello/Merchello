@@ -32,6 +32,24 @@
         }
 
         /// <summary>
+        /// Gets the theme view path.
+        /// </summary>
+        /// <param name="theme">
+        /// The theme.
+        /// </param>
+        /// <param name="viewName">
+        /// The view name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetThemeViewPath(string theme, string viewName)
+        {
+            const string Path = "{0}Views/{1}.cshtml";
+            return string.Format(Path, GetThemePath(theme), viewName);
+        }
+
+        /// <summary>
         /// The get theme account path.
         /// </summary>
         /// <param name="model">

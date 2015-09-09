@@ -61,9 +61,7 @@
         /// </summary>
         private void Initialize()
         {
-            var storeSettingsService = MerchelloServices.StoreSettingService;
-            var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);           
-            _currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
+            _currency = BazaarContentHelper.GetStoreCurrency();
             _viewModelFactory = new Lazy<IViewModelFactory>(() => new ViewModelFactory(Umbraco, CurrentCustomer, _currency));
         }
     }

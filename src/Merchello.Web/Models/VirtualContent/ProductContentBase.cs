@@ -15,7 +15,7 @@
     /// <summary>
     /// Base class for Product content classes
     /// </summary>
-    public abstract class ProductContentBase : PublishedContentBase
+    public abstract class ProductContentBase : PublishedContentBase, IProductContentBase
     {
         /// <summary>
         /// The content type.

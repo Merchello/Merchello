@@ -1,17 +1,15 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
-    using System.Linq;
     using System.Web.Mvc;
 
-    using Umbraco.Core.Persistence.DatabaseModelDefinitions;
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
     /// <summary>
-    /// The bazaar product collection controller.
+    /// The bazaar product content controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarProductCollectionController : BazaarControllerBase
+    public class BazaarProductContentController : BazaarControllerBase
     {
         /// <summary>
         /// The index.
@@ -23,12 +21,9 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         public override ActionResult Index(RenderModel model)
-        {            
-            var viewModel = ViewModelFactory.CreateProductCollection(model);
-
-            viewModel.SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);            
-
-            return this.View(viewModel.ThemeViewPath("ProductCollection"), viewModel);
+        {
+            var theme = BazaarContentHelper.GetStoreTheme();
+            return this.View(PathHelper.GetThemeViewPath(theme, "ProductContent"), model.Content);
         }
     }
 }

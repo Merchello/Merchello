@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
-    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using Merchello.Bazaar.Controllers.Api;
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
@@ -44,9 +45,25 @@
 
             ContentService.Saved += ContentServiceOnSaved;
 
+            StoreSettingService.Saved += StoreSettingServiceOnSaved;
+
             // We handle the Initializing event so that we can set the parent node of the virtual content to the store
             // so that published content queries in views will work correctly
             ProductContentFactory.Initializing += ProductContentFactoryOnInitializing;
+        }
+
+        /// <summary>
+        /// Clears the Bazaar currency if Merchello store settings are saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        private static void StoreSettingServiceOnSaved(IStoreSettingService sender, SaveEventArgs<IStoreSetting> saveEventArgs)
+        {
+            BazaarContentHelper.Currency = null;
         }
 
         /// <summary>
@@ -63,6 +80,7 @@
             if (e.SavedEntities.All(x => x.ContentType.Alias != "BazaarStore")) return;
             BazaarContentHelper.StoreRoot = null;
             BazaarContentHelper.Theme = null;
+            BazaarContentHelper.Currency = null;
         }
 
         /// <summary>

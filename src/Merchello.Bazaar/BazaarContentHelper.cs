@@ -6,6 +6,8 @@
     using System.Web.Configuration;
 
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core;
+    using Merchello.Core.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
@@ -25,6 +27,8 @@
         /// Gets or sets the theme.
         /// </summary>
         internal static string Theme { get; set; }
+
+        internal static ICurrency Currency { get; set; }
 
         /// <summary>
         /// The get store root.
@@ -51,6 +55,54 @@
             if (!Theme.IsNullOrWhiteSpace()) return Theme;
             Theme = GetStoreRoot().GetPropertyValue<string>("themePicker");
             return Theme;
+        }
+
+        /// <summary>
+        /// Gets the store currency.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ICurrency"/>.
+        /// </returns>
+        public static ICurrency GetStoreCurrency()
+        {
+            if (Currency != null) return Currency;
+            var storeSettingsService = MerchelloContext.Current.Services.StoreSettingService;
+            var storeSetting = storeSettingsService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey);
+            Currency = storeSettingsService.GetCurrencyByCode(storeSetting.Value);
+            return Currency;
+        }
+
+        /// <summary>
+        /// Gets the store title.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string StoreTitle()
+        {
+            return GetStoreRoot().GetPropertyValue<string>("storeTitle");
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the wish list should be shown.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool ShowWishList()
+        {
+            return GetStoreRoot().GetPropertyValue<bool>("enableWishList");
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not to show the customer account.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool ShowAccount()
+        {
+            return GetStoreRoot().GetPropertyValue<bool>("customerAccounts");
         }
      
         /// <summary>
@@ -121,7 +173,7 @@
         }
 
         /// <summary>
-        /// The product groups content.
+        /// Gets the product groups content.
         /// </summary>
         /// <returns>
         /// The <see cref="IEnumerable{IPublishedContent}"/>.
@@ -131,5 +183,16 @@
         {
             return GetStoreRoot().Children.Where(x => x.DocumentTypeAlias == "BazaarProductGroup" && x.IsVisible());
         }
+
+        /// <summary>
+        /// Gets the product collection content.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IPublishedContent}"/>.
+        /// </returns>
+        public static IEnumerable<IPublishedContent> GetProductCollectionContent()
+        {
+            return GetStoreRoot().Children.Where(x => x.DocumentTypeAlias == "BazaarProductCollection" && x.IsVisible());
+        } 
     }
 }

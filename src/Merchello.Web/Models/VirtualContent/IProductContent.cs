@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines a virtual product content.
     /// </summary>
-    public interface IProductContent : IPublishedContent
+    public interface IProductContent : IProductContentBase, IPublishedContent
     {
         /// <summary>
         /// Gets the key.
@@ -21,11 +21,6 @@
         /// Gets the product variant key of the master variant.
         /// </summary>
         Guid ProductVariantKey { get; }
-
-        /// <summary>
-        /// Gets the culture name.
-        /// </summary>
-        string CultureName { get; }
 
         /// <summary>
         /// Gets the product options.

@@ -26,6 +26,23 @@
                 {
                     <li><a href="@group.Url">@group.Name</a></li>
                 }
+                @{
+                    var collections = BazaarContentHelper.GetProductCollectionContent().ToArray();
+                }
+                @if (collections.Any())
+                {
+                    <li role="presentation" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            Categories <span class="caret"></span>
+                        </a>
+                        @foreach (var collection in collections)
+                        {
+                            <ul class="dropdown-menu">
+                                <li><a href="@collection.Url">@collection.Name</a></li>
+                            </ul>
+                        }
+                    </li>
+                }
             </ul>
             <ul class="nav pull-right navbar-nav">
                 @if (Model.ShowAccount)
