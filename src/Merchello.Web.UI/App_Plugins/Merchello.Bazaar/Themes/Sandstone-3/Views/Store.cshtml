@@ -1,9 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
-@using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @using Merchello.Web.Models.VirtualContent
 @using Umbraco.Web
-@using Umbraco.Web.Models
 @{
     Layout = "Master.cshtml";
 }
@@ -26,8 +24,7 @@
                 <h2>@product.Name</h2>
                 @if (product.HasValue("image"))
                 {
-                   // var image = Umbraco.TypedMedia(product.GetPropertyValue("image"));
-                    <img src="" alt="@product.Name" />
+                    <img src="@product.GetCropUrl(propertyAlias: "image", height: 300)" alt="@product.Name" />
                 }
             </a>
             <p>@product.GetPropertyValue("brief")</p>

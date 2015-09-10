@@ -14,14 +14,8 @@
         <div class="col-md-8">
             @if (Model.HasValue("image"))
             {
-               // var image = Umbraco.TypedMedia(Model.GetPropertyValue("image"));
-                <img class="img-responsive" src="" alt="@Model.Name">
-            }
-            
-            @if (Model.ProductVariants.Any())
-            {
-                <h4 class="pull-right">@ModelExtensions.FormatPrice(Model.Price, BazaarContentHelper.GetStoreCurrency())</h4>
-            }
+                <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height: 300)" alt="@Model.Name">
+            }            
             <h4>
                 <a href="#">@Model.Name</a>
             </h4>

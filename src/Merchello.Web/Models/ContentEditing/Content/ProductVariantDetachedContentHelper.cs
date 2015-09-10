@@ -125,7 +125,7 @@
         /// </returns>
         private static bool IsJsonObject(object propVal)
         {
-            var stringify = propVal.ToString();
+            var stringify = propVal.ToString().Trim();
 
             return (stringify.StartsWith("{") && stringify.EndsWith("}")) || 
                    (stringify.StartsWith("[") && stringify.EndsWith("]"));
