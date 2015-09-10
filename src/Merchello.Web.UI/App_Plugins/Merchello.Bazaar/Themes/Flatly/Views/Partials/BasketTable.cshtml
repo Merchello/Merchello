@@ -7,7 +7,7 @@
 @using Umbraco.Web
 @{
     
-    using (Html.BeginUmbracoForm<BasketOperationsController>("UpdateBasket", new { area = "Bazaar" }))
+    using (Html.BeginUmbracoForm<BazaarBasketController>("UpdateBasket", new { area = "Bazaar" }))
     {
         @Html.AntiForgeryToken()
         <table class="table basket">
@@ -48,10 +48,10 @@
                                 <div class="text-right">
                                     @if (Model.ShowWishList)
                                     {
-                                        @Html.ActionLink("Wish List +", "MoveItemToWishList", "BasketOperations", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-info" })
+                                        @Html.ActionLink("Wish List +", "MoveItemToWishList", "BazaarBasket", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-info" })
                                     }
 
-                                    @Html.ActionLink("Remove", "RemoveItemFromBasket", "BasketOperations", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId }, new { @class = "btn btn-danger" })
+                                    @Html.ActionLink("Remove", "RemoveItemFromBasket", "BazaarBasket", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId }, new { @class = "btn btn-danger" })
                                 </div>
                             </td>
                         </tr>

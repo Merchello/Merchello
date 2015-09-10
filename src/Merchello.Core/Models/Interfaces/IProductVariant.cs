@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models.EntityBase;
+
     /// <summary>
     /// Defines a product variant
     /// </summary>
     public interface IProductVariant : IProductBase, IEntity
     {
         /// <summary>
-        /// The key for the defining product
+        /// Gets or sets the product key.
         /// </summary>
         Guid ProductKey { get; set; }
             
         /// <summary>
-        /// The product's attributes
+        /// Gets the product's attributes
         /// </summary>
         /// <remarks>
         /// Designated options that make up this product
@@ -24,7 +25,7 @@ namespace Merchello.Core.Models
         IEnumerable<IProductAttribute> Attributes { get; }
 
         /// <summary>
-        /// Returns the total (sum) of inventory "counts" across all associated warehouses
+        /// Gets the total (sum) of inventory "counts" across all associated warehouses
         /// </summary>
         /// <returns></returns>
         int TotalInventoryCount { get; }

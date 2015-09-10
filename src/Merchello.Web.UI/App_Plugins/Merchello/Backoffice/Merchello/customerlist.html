@@ -13,77 +13,9 @@
         </umb-header>
         <merchello-panel>
             <div class="merchello-pane">
-                <form class="form-horizontal row-fluid">
-                    <!-- Number of Customer Per Page -->
-                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="customers.length > 0">
-                        <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
-                        <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>
-                    <!-- Customer Filters -->
-                    <div class="form-group control-group span10">
-                        <label class="control-label" for="customerFilter">Filter Customers:</label>
-                        <div class="controls">
-                            <input type="text" id="customerFilter" class="form-control span8" name="customerFilter" data-ng-model="filterText" placeholder="Type a customer's name or email." />
-                            <!-- ACTION: Customer Filter -->
-                            <button type="submit" id="customersFilterGo" class="btn" data-ng-click="loadCustomers(filterText)">Filter</button>
-                        </div>
-                    </div>
-                </form>
-                <reset-list-filters></reset-list-filters>
-            </div>
-            <div class="merchello-pane">
-                <entity-collection-title-bar collection-key="collectionKey"></entity-collection-title-bar>
-                <!-- Pagination -->
-                <merchello-pager></merchello-pager>
-                <!-- Table of Customers -->
-                <table class="table table-hover merchello-selectable-table" data-ng-show="preValuesLoaded">
-                    <thead>
-                    <tr>
-                        <th data-ng-show="visible.bulkActionButton"><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
-                        <th data-ng-click="changeSortOrder('loginName')" data-ng-class="{'sorted': sortProperty == 'loginName' ||  sortProperty == '-loginName'}">
-                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'loginName', 'icon-navigation-down': sortProperty == '-loginName'}"></i>
-                            Login
-                        </th>
-                        <th data-ng-click="changeSortOrder('firstName')" data-ng-class="{'sorted': sortProperty == 'firstName' ||  sortProperty == '-firstName'}">
-                            <i data-ng-class="{'icon-navigation-up': sortProperty == 'firstName', 'icon-navigation-down': sortProperty == '-firstName'}"></i>
-                            Name
-                        </th>
-                        <th>Location</th>
-                        <th>Last Invoice Total</th>
-                    </tr>
-                    <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
-                    <tr data-ng-show="visible.bulkActionButton">
-                        <th></th>
-                        <th colspan="4">
-                            <div class="btn-group">
-                                <!-- ACTION: Show Dropdown Menu -->
-                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" data-ng-click="visible.bulkActionDropdown = !visible.bulkActionDropdown">Bulk Action (3 Variants) <i class="icon-navigation-down"></i></a>
-                                <ul class="dropdown-menu" data-ng-class="{'show': visible.bulkActionDropdown }">
-                                    <!-- ACTION: Export Customers -->
-                                    <li><a href="#">Export Customers</a></li>
-                                </ul>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr data-ng-repeat="customer in customers">
-                        <td data-ng-show="visible.bulkActionButton"><input type="checkbox" /></td>
-                        <!-- ACTION: Go To Customer View Page -->
-                        <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.loginName}}</a></td>
-                        <td><a href="#/merchello/merchello/customeroverview/{{customer.key}}">{{customer.firstName}} {{customer.lastName}}</a></td>
-                        <td><!--customer-location address="customer.getPrimaryLocation()"></customer-location--></td>
-                        <td>{{ customer.getLastInvoice().total | currency : getCurrencySymbol(customer.getLastInvoice()) }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <!-- Pagination -->
-                <merchello-pager></merchello-pager>
+
+                <merchello-list-view builder="customerDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
+
             </div>
             <div class="pager well" data-ng-show="preValuesLoaded && customers.length == 0 && collectionKey===''">
                 <localize key="merchelloCustomers_noCustomers" />

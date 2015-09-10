@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Configuration;
     using System.Web.Mvc;
@@ -166,13 +167,11 @@
                 Items = basket.Items.Select(_basketLineItemFactory.Value.Build).ToArray(),
                 TotalPrice = basket.Items.Sum(x => x.TotalPrice),
                 Currency = viewModel.Currency,
-                CheckoutPage = viewModel.StorePage.Descendant("BazaarCheckout"),
-                ContinueShoppingPage = viewModel.ProductGroups.Any() ?
-                    (IPublishedContent)viewModel.ProductGroups.First() :
-                    viewModel.StorePage,
+                CheckoutPage = BazaarContentHelper.GetCheckoutPageContent(),
+                ContinueShoppingPage = BazaarContentHelper.GetContinueShoppingContent(),
                 ShowWishList = viewModel.ShowWishList && !_currentCustomer.IsAnonymous,
-                WishListPageId = viewModel.WishListPage.Id,
-                BasketPageId = viewModel.BasketPage.Id
+                WishListPageId = BazaarContentHelper.GetWishListContent().Id,
+                BasketPageId = BazaarContentHelper.GetBasketContent().Id
             };
 
             return viewModel;
@@ -383,6 +382,20 @@
         }
 
         /// <summary>
+        /// The create product collection.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductCollectionModel"/>.
+        /// </returns>
+        public ProductCollectionModel CreateProductCollection(RenderModel model)
+        {
+            return this.Build<ProductCollectionModel>(model);
+        }
+
+        /// <summary>
         /// Creates a <see cref="ProductModel"/>.
         /// </summary>
         /// <param name="model">
@@ -445,7 +458,7 @@
                 {
                     MemberTypeName = viewModel.CustomerMemberTypeName.EncryptWithMachineKey(),
                 },
-                AccountPageId = viewModel.AccountPage.Id
+                AccountPageId = BazaarContentHelper.GetAccountContent().Id
             };
 
             return viewModel;
@@ -493,11 +506,9 @@
             {
                 Items = wishList.Items.Select(_basketLineItemFactory.Value.Build).ToArray(),
                 Currency = viewModel.Currency,
-                WishListPageId = viewModel.WishListPage.Id,
-                BasketPageId = viewModel.BasketPage.Id,
-                ContinueShoppingPage = viewModel.ProductGroups.Any() ?
-                  (IPublishedContent)viewModel.ProductGroups.First() :
-                  viewModel.StorePage
+                WishListPageId = BazaarContentHelper.GetWishListContent().Id,
+                BasketPageId = BazaarContentHelper.GetBasketContent().Id,
+                ContinueShoppingPage = BazaarContentHelper.GetContinueShoppingContent()
             };
 
             return viewModel;

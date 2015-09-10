@@ -8,13 +8,12 @@
 
     using global::Examine;
 
-    using Merchello.Core;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
-    using Merchello.Examine;
-    using Merchello.Web.Search;
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Extension methods to map examine (Lucene) documents to respective "Display" object classes
@@ -82,7 +81,8 @@
                 DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
                 VersionKey = FieldAsGuid(result, "versionKey"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
-                CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories")
+                CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
+                DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")
             };
   
             return pvd;
@@ -220,6 +220,47 @@
             return !result.Fields.ContainsKey(alias)
                 ? new List<T>()
                 : JsonConvert.DeserializeObject<IEnumerable<T>>(result.Fields[alias]);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="ProductVariantDetachedContent"/> from examine result.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductVariantDetachedContentDispaly}"/>.
+        /// </returns>
+        private static IEnumerable<ProductVariantDetachedContentDisplay> GetProductVariantDetachedContentDisplayCollection(SearchResult result, string alias)
+        {
+            if (!result.Fields.ContainsKey(alias)) return Enumerable.Empty<ProductVariantDetachedContentDisplay>();
+
+            var jarray = JArray.Parse(result.Fields[alias]);
+            
+            var contents = new List<ProductVariantDetachedContentDisplay>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var j in jarray)
+            {
+                var jtoken = JObject.Parse(j.ToString());
+                var contentType = jtoken.GetValue("DetachedContentType").ToObject<DetachedContentType>();
+
+                var dataValues = jtoken.GetValue("DetachedDataValues").ToObject<IEnumerable<KeyValuePair<string, string>>>();
+                var pvdc = new ProductVariantDetachedContent(jtoken.GetValue("ProductVariantKey").ToObject<Guid>(), contentType, j.Value<string>("CultureName"), new DetachedDataValuesCollection(dataValues))
+                        {
+                            Key = jtoken.GetValue("Key").ToObject<Guid>(),
+                            Slug = jtoken.SelectToken("Slug").ToString(),
+                            TemplateId = (int)j.SelectToken("TemplateId"),
+                            CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString())
+                        };
+
+                contents.Add(pvdc.ToProductVariantDetachedContentDisplay());
+            }
+
+            return contents;
         }
 
         /// <summary>

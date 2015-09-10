@@ -8,8 +8,8 @@
      */
     var TypeFieldDisplay = function() {
         var self = this;
-        self.alias = 'test';
-        self.name = 'test';
+        self.alias = '';
+        self.name = '';
         self.typeKey = '';
     };
 

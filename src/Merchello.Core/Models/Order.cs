@@ -307,5 +307,15 @@
             get { return _examineId; }
             set { _examineId = value; }
         }
+
+        /// <summary>
+        /// Accepts visitor class to visit order line items
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        public void Accept(ILineItemVisitor visitor)
+        {
+            Items.Accept(visitor);
+        }
+
     }
 }

@@ -14,6 +14,8 @@
     using Core.Services;
 
     using Merchello.Core.Gateways.Taxation;
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Web.Routing;
 
     using Models.SaleHistory;
 
@@ -22,6 +24,7 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
+    using Umbraco.Web.Routing;
 
     using ServiceContext = Merchello.Core.Services.ServiceContext;
     using Task = System.Threading.Tasks.Task;
@@ -32,14 +35,14 @@
     public class UmbracoApplicationEventHandler : ApplicationEventHandler
     {
         /// <summary>
-        /// The _merchello is started.
-        /// </summary>
-        private static bool _merchelloIsStarted = false;
-
-        /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
+        /// <summary>
+        /// The _merchello is started.
+        /// </summary>
+        private static bool merchelloIsStarted = false;
 
         /// <summary>
         /// The Umbraco Application Starting event.
@@ -67,6 +70,8 @@
             {
                 Log.Error("Initialization of Merchello failed", ex);
             }
+
+            this.RegisterContentFinders();
         }
 
         /// <summary>
@@ -102,7 +107,43 @@
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
-            if (_merchelloIsStarted) this.VerifyMerchelloVersion();
+            DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
+
+            if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// Registers Merchello content finders.
+        /// </summary>
+        private void RegisterContentFinders()
+        {
+            //// We want the product content finder to execute after Umbraco's content finders since
+            //// we may ultimately rely on a database query as a fallback to when something is not found in the
+            //// examine index.  If we simply did an InsertType, we would be executing a worthless query for each time
+            //// a legitament Umbraco content was rendered.
+            var contentFinderByIdPathIndex = ContentFinderResolver.Current.GetTypes().IndexOf(typeof(ContentFinderByIdPath));
+
+            ContentFinderResolver.Current.InsertType<ContentFinderProductBySlug>(contentFinderByIdPathIndex + 1);
+        }
+
+
+        /// <summary>
+        /// The detached content type service on deleting.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void DetachedContentTypeServiceOnDeleting(IDetachedContentTypeService sender, DeleteEventArgs<IDetachedContentType> e)
+        {
+            foreach (var dc in e.DeletedEntities)
+            {
+                // remove detached content from products
+                var products = MerchelloContext.Current.Services.ProductService.GetByDetachedContentType(dc.Key);
+                MerchelloContext.Current.Services.ProductService.RemoveDetachedContent(products, dc.Key);
+            }
         }
 
         /// <summary>
@@ -130,7 +171,7 @@
         /// </param>
         private void BootManagerBaseOnMerchelloStarted(object sender, EventArgs eventArgs)
         {
-            _merchelloIsStarted = true;
+            merchelloIsStarted = true;
         }
 
         #region Shipment Audits

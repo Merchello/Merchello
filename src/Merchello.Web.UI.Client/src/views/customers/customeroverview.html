@@ -26,20 +26,25 @@
                         <div class="well customer-info flex-col">
                             <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
                             <!-- ACTION: Edit Info -->
-                            <a class="btn btn-default btn-action pull-right" data-ng-click="openEditInfoDialog()"><i class="icon icon-edit"></i></a>
-                            <h4>{{customer.firstName}} {{customer.lastName}}</h4>
-                            <div><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
+
+                            <div class="pull-right">
+                                <merchello-edit-icon do-edit="openEditInfoDialog()"></merchello-edit-icon>
+                            </div>
+
+                            <h4 class="span10">{{customer.firstName}} {{customer.lastName}}</h4>
+                            <div class="span12"><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
                         </div>
                     </div>
                     <!-- Billing Address -->
                     <div class="span4">
                         <div class="well billing-address-info flex-col">
-                            <h4>
-                                Billing Address
-                                <!-- ACTION: Add or Edit Address -->
-                                <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressAddEditDialog(defaultBillingAddress)"><i class="icon icon-edit"></i></a>
+                            <h4 class="span10">
+                                <localize key="merchelloSales_billingAddress"></localize>
                             </h4>
-                            <div class="vcard" data-ng-show="!defaultBillingAddress.isEmpty()">
+                            <div class="pull-right">
+                                <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultBillingAddress)"></merchello-edit-icon>
+                            </div>
+                            <div class="vcard span12" data-ng-show="!defaultBillingAddress.isEmpty()">
                                 <h5>{{defaultBillingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
                                 <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
@@ -51,20 +56,19 @@
                                     <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
                                 </span>
                             </div>
-                            <div data-ng-show="defaultBillingAddress.isEmpty()">
-                                <h5>No Billing Address</h5>
+                            <div class="span12" data-ng-show="defaultBillingAddress.isEmpty()">
+                                <h5><localize key="merchelloSales_noBillingAddress"></localize></h5>
                             </div>
                         </div>
                     </div>
                     <!-- Shipping Address -->
                     <div class="span4">
                         <div class="well shipping-address-info flex-col">
-                            <h4>
-                                Shipping Address
-                                <!-- ACTION: Add or Edit Address -->
-                                <a class="btn btn-default btn-action pull-right" data-ng-click="openAddressAddEditDialog(defaultShippingAddress)"><i class="icon icon-edit"></i></a>
-                            </h4>
-                            <div class="vcard" data-ng-show="!defaultShippingAddress.isEmpty()">
+                            <h4 class="span10"><localize key="merchelloSales_shippingAddress"></localize></h4>
+                            <div class="pull-right">
+                                <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultShippingAddress)"></merchello-edit-icon>
+                            </div>
+                            <div class="vcard span12" data-ng-show="!defaultShippingAddress.isEmpty()">
                                 <h5>{{defaultShippingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
                                 <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
@@ -76,50 +80,17 @@
                                     <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
                                 </span>
                             </div>
-                            <div data-ng-show="defaultShippingAddress.isEmpty()">
-                                <h5>No Shipping Address</h5>
+                            <div class="span12" data-ng-show="defaultShippingAddress.isEmpty()">
+                                <h5><localize key="merchelloSales_noShippingAddress"></localize></h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="merchello-pane primary span12">
-                <div class="control-group umb-control-group">
-                    <div class="merchello-section-label">
-                        Sales History
-                        <small>A list of the customer's sales and their status</small>
-                    </div>
-                    <div class="merchello-controls">
-                        <table class="table table-hover merchello-selectable-table customer-orders">
-                            <thead>
-                                <tr>
-                                    <th data-ng-show="false"><input type="checkbox" /></th> <!-- This needs to allow a user to select all orders and change the status, delete, etc -->
-                                    <th><localize key="merchelloSales_invoiceNumber" /></th>
-                                    <th><localize key="general_date" /></th>
-                                    <th><localize key="merchelloSales_paymentStatus" /></th>
-                                    <th><localize key="merchelloSales_fulfillmentStatus" /></th>
-                                    <th><localize key="merchelloGeneral_total" /></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="invoice in customer.invoices">
-                                    <td data-ng-show="false"><input type="checkbox" /></td>
-                                    <td>#<a href="#/merchello/merchello/saleoverview/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
-                                    <td>{{invoice.invoiceDateString() | date: settings.dateFormat }}</td>
-                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
-                                    <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                                    <td>{{invoice.total | currency : getCurrency(invoice.getCurrencyCode()).symbol }}</td>
-                                </tr>
-                                <tr data-ng-repeat="total in invoiceTotals" class="invoice-total">
-                                    <td data-ng-show="false"></td>
-                                    <td colspan="3"></td>
-                                    <td>Total Spent: {{total.currencyCode}}</td>
-                                    <td>{{total.total | currency : getCurrency(total.currencyCode).symbol }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="merchello-pane sales-history primary span12">
+                <h4><localize key="merchelloCustomers_customerSaleHistory"></localize></h4>
+                <merchello-list-view builder="invoiceDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="listViewEntityType" ready="preValuesLoaded" disable-collections no-title no-filter>
+            </div>
 
                 <div class="control-group umb-control-group">
                     <label class="merchello-section-label" for="customer-note">

@@ -4,8 +4,13 @@
 @import "globals/well";
 
 // Modules
+@import "modules/icons";
+@import "modules/listview";
+@import "modules/detachedcontent";
 @import "modules/orders";
 @import "modules/warehouse";
+@import "modules/customer";
+@import "modules/settings";
 @import "modules/product";
 @import "modules/taxation";
 @import "modules/coupon";
@@ -16,6 +21,7 @@
 // Data Types
 @import "datatypes/productpicker";
 @import "datatypes/producteditor";
+@import "datatypes/productcollectionselector";
 
 h1.logo {
   margin: 0.25em 0;

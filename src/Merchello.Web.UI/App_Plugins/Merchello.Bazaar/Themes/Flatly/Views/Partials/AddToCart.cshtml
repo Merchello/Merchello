@@ -25,7 +25,7 @@
     }
     <div class="control-group add-button">
         @{
-            using (Html.BeginUmbracoForm<BasketOperationsController>("AddToBasket", new { @class = "bs-docs-example", role = "form" }))
+            using (Html.BeginUmbracoForm<BazaarBasketController>("AddToBasket", new { @class = "bs-docs-example", role = "form" }))
             {
 
                 if (hasVariants)
@@ -105,6 +105,6 @@
 
     private static string FormatPrice(decimal price, ICurrency currency)
     {
-        return ModelExtensions.FormatPrice(price, currency.Symbol);
+        return ModelExtensions.FormatPrice(price, currency);
     }
 }

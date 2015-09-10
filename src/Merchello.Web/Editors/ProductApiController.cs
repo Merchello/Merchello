@@ -5,16 +5,18 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Web;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
+
     using Merchello.Core;
-    using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
+    using Merchello.Web.WebApi.Binders;
+    using Merchello.Web.WebApi.Filters;
 
-    using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
@@ -100,6 +102,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductDisplay GetProduct(Guid id)
         {            
             var product = _merchello.Query.Product.GetByKey(id);
@@ -117,6 +120,7 @@
         /// <returns>
         /// The <see cref="ProductVariantDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
             var variant = _merchello.Query.Product.GetProductVariantByKey(id);
@@ -134,6 +138,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
             return _productService.GetByKey(id).ToProductDisplay();
@@ -234,6 +239,32 @@
         }
 
         /// <summary>
+        /// The put product with detached content.
+        /// </summary>
+        /// <param name="detachedContentItem">
+        /// The product save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductDisplay PutProductWithDetachedContent(
+            [ModelBinder(typeof(ProductContentSaveBinder))]
+            ProductContentSave detachedContentItem)
+        {
+            ProductVariantDetachedContentHelper<ProductContentSave, ProductDisplay>.MapDetachedProperties(detachedContentItem);
+
+            var merchProduct = _productService.GetByKey(detachedContentItem.Display.Key);
+
+            merchProduct = detachedContentItem.Display.ToProduct(merchProduct);
+
+            _productService.Save(merchProduct);
+
+            return merchProduct.ToProductDisplay();
+        }
+
+        /// <summary>
         /// The put product variant.
         /// </summary>
         /// <param name="productVariant">
@@ -247,6 +278,29 @@
         {
             var variant = _productVariantService.GetByKey(productVariant.Key);
             variant = productVariant.ToProductVariant(variant);
+
+            _productVariantService.Save(variant);
+
+            return variant.ToProductVariantDisplay();
+        }
+
+        /// <summary>
+        /// The put product variant content.
+        /// </summary>
+        /// <param name="detachedContentItem">
+        /// The product variant save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductVariantDisplay PutProductVariantWithDetachedContent(
+            [ModelBinder(typeof(ProductVariantContentSaveBinder))]
+            ProductVariantContentSave detachedContentItem)
+        {
+            var variant = _productVariantService.GetByKey(detachedContentItem.Display.Key);
+            variant = detachedContentItem.Display.ToProductVariant(variant);
 
             _productVariantService.Save(variant);
 
@@ -278,10 +332,40 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        //[HttpPost, HttpDelete]
-        //public HttpResponseMessage DeleteProductVariant(Guid id)
-        //{
+        /// <summary>
+        /// Removes detached content from a product variant
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete]
+        public HttpResponseMessage DeleteDetachedContent(ProductVariantDisplay productVariant)
+        {
+            var product = _productService.GetByKey(productVariant.ProductKey);
+            if (product == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
-        //}
+            if (product.ProductVariants.Any() && product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key) != null)
+            {
+                var variant = product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key);
+                if (variant != null) variant.DetachedContents.Clear();
+                //// TODO need to walk this through better, we should not need to save the variant and then the product  
+                //// as the product save should take care of it, but somewhere in the service the runtime cache is resetting
+                //// the variant's detached content in the productvariant collection.  Probably just need to rearrange some of the
+                //// calls in the service - suspect EnsureProductVariants.
+                _productVariantService.Save(variant);
+            }
+            else
+            {
+                product.DetachedContents.Clear();
+            }
+
+            _productService.Save(product);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
     }
 }

@@ -1,0 +1,52 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ProductCollectionModel>
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar
+@using Merchello.Bazaar.Models.ViewModels
+@using Merchello.Web.Models.VirtualContent
+@using Umbraco.Core.Models
+@using Umbraco.Web
+
+@{
+    Layout = "Master.cshtml";
+}
+<div class="row-fluid">
+    <h1>@Model.Name</h1>
+</div>
+
+<div class="row-fluid" id="products">
+
+    @{
+
+        if (Model.Products.Any())
+        {
+            <ul id="featured" class="product-list">
+
+                @foreach (var p in Model.Products)
+                {                  
+                    <li class="row">
+                        @if (p.HasValue("image"))
+                        {
+                            var image = Umbraco.TypedMedia(p.GetPropertyValue("image"));
+                            <a href="@p.Url"><img src="@image.Url" class="span3"></a>
+                        }
+                        
+                        <div class="pull-right span3">
+                            @Html.Action("RenderAddItem", "BazaarBasket", new { area = "Bazaar", model = p.BuildAddItemModel(Model.Currency, Model.ShowWishList) })
+                        </div>
+                        <div class="info span5">
+                            <h2><a href="@p.Url">@p.Name</a></h2>
+                            @if (p.ProductVariants.Any())
+                            {
+                                <span class="price">@ModelExtensions.FormatPrice(p.Price, BazaarContentHelper.GetStoreCurrency())</span>
+                            }
+
+                            <p>@p.GetPropertyValue("brief")</p>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+
+    }
+
+</div>

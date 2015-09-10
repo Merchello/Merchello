@@ -25,6 +25,7 @@
             $scope.tabs = [];
             $scope.entityType = 'product';
 
+
             // settings - contains defaults for the checkboxes
             $scope.settings = {};
 
@@ -107,6 +108,7 @@
                         // we use the master variant context so that we can use directives associated with variants
                         $scope.productVariant = $scope.product.getMasterVariant();
                         $scope.context = 'productedit';
+
                         if (!$scope.product.hasVariants()) {
                             $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key);
                         }
@@ -167,6 +169,7 @@
                 }
                 if (thisForm.$valid) {
                     $scope.preValuesLoaded = false;
+                    // convert the extended data objects to an array
                     switch ($scope.context) {
                         case "productedit":
                             // Copy from master variant
@@ -204,11 +207,11 @@
                     $scope.product = productDisplayBuilder.transform(product);
                     // short pause to make sure examine index has a chance to update
                     $timeout(function() {
-                       // if ($scope.product.hasVariants()) {
-                       //     $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
-                        //} else {
+                       if ($scope.product.hasVariants()) {
+                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
+                        } else {
                             $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
-                        //}
+                        }
                     }, 400);
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -231,12 +234,13 @@
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                  /*  if ($scope.product.hasVariants()) {
+                  if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    } */
+                    }
+
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
                     notificationsService.error("Product Save Failed", reason.message);

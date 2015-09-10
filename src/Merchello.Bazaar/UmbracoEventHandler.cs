@@ -10,6 +10,9 @@
     using Merchello.Bazaar.Controllers.Api;
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -35,10 +38,76 @@
         /// </param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ServerVariablesParser.Parsing += this.ServerVariablesParserOnParsing;
+            ServerVariablesParser.Parsing += ServerVariablesParserOnParsing;
 
             LogHelper.Info<UmbracoEventHandler>("Binding Merchello Customer synchronization");
             MemberService.Saved += MemberServiceOnSaved;
+
+            ContentService.Saved += ContentServiceOnSaved;
+            ContentService.Deleted += ContentServiceOnDeleted;
+
+            StoreSettingService.Saved += StoreSettingServiceOnSaved;
+
+            // We handle the Initializing event so that we can set the parent node of the virtual content to the store
+            // so that published content queries in views will work correctly
+            ProductContentFactory.Initializing += ProductContentFactoryOnInitializing;
+        }
+
+        /// <summary>
+        /// Clears the Bazaar currency if Merchello store settings are saved.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="saveEventArgs">
+        /// The save event args.
+        /// </param>
+        private static void StoreSettingServiceOnSaved(IStoreSettingService sender, SaveEventArgs<IStoreSetting> saveEventArgs)
+        {
+            BazaarContentHelper.Currency = null;
+        }
+
+        /// <summary>
+        /// Clears the store root from the content helper when a qualifying save occurs
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private static void ContentServiceOnSaved(IContentService sender, SaveEventArgs<IContent> e)
+        {
+            BazaarContentHelper.Reset(e.SavedEntities.Select(x => x.ContentType));
+        }
+
+        /// <summary>
+        /// Clears the store root from the content helper when a qualifying delete occurs.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ContentServiceOnDeleted(IContentService sender, DeleteEventArgs<IContent> e)
+        {
+            BazaarContentHelper.Reset(e.DeletedEntities.Select(x => x.ContentType));
+        }
+
+        /// <summary>
+        /// The product content factory on initializing.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private static void ProductContentFactoryOnInitializing(ProductContentFactory sender, VirtualContentEventArgs e)
+        {            
+            var store = BazaarContentHelper.GetStoreRoot();
+            e.Parent = store;
         }
 
         /// <summary>
@@ -50,7 +119,7 @@
         /// <param name="saveEventArgs">
         /// The save event args.
         /// </param>
-        private void MemberServiceOnSaved(IMemberService sender, SaveEventArgs<IMember> saveEventArgs)
+        private static void MemberServiceOnSaved(IMemberService sender, SaveEventArgs<IMember> saveEventArgs)
         {
             var members = saveEventArgs.SavedEntities.ToArray();
 
@@ -85,7 +154,7 @@
         /// <param name="e">
         /// The dictionary.
         /// </param>
-        private void ServerVariablesParserOnParsing(object sender, Dictionary<string, object> e)
+        private static void ServerVariablesParserOnParsing(object sender, Dictionary<string, object> e)
         {
             if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
 

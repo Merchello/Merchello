@@ -6,6 +6,7 @@
       <Value>Lucene</Value>
       <Value>Merchello</Value>
       <Value>Umbraco</Value>
+      <Value>Umbraco's</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

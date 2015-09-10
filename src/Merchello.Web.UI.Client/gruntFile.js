@@ -80,7 +80,11 @@
             },
 
             config: {
-              files: [{ dest: '<%= distdir %>/config', src: '**/*.*', expand: true, cwd: 'src/config/'}]  
+              files: [{ dest: '<%= distdir %>/config', src: '**/*.config', expand: true, cwd: 'src/config/'}]
+            },
+
+            lang: {
+                files: [{ dest: '<%= distdir %>/Lang', src: '**/*.*', expand: true, cwd: 'src/config/lang'}]
             },
 
             assets: {
@@ -93,13 +97,13 @@
 
             vs: {
                 files: [
-                    //everything except the index.html root file!
                     //then we need to figure out how to not copy all the test stuff either!?
                     { dest: '<%= vsdir %>', src: '*.manifest', expand: true, cwd: '<%= distdir %>' },
                     { dest: '<%= vsdir %>/assets', src: '**', expand: true, cwd: '<%= distdir %>/assets' },
                     { dest: '<%= vsdir %>/js', src: '**', expand: true, cwd: '<%= distdir %>/js' },
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/config', src: '**', expand: true, cwd: '<%= distdir %>/config' },
+                    { dest: '<%= vsdir %>/lang', src: '**', expand: true, cwd: '<%= distdir %>/lang' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/sales' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/catalog' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/customers' },
@@ -107,6 +111,7 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/dashboards' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/marketing' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/collections' },
+                    { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/detachedcontent' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/reports' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/gatewayproviders' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/products' },

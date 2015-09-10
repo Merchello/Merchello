@@ -1,7 +1,8 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Bazaar.Models.ViewModels.MasterModel>
+﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<IPublishedContent>
 @using System.Web.Mvc.Html
-@using Merchello.Bazaar.Models
+@using Merchello.Bazaar
 @using Merchello.Core.Models
+@using Umbraco.Core.Models
 @using Merchello.Web
 @using Umbraco.Web
 
@@ -13,28 +14,46 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="@Model.StorePage.Url">@Model.StoreTitle</a>
+            <a class="brand" href="@BazaarContentHelper.GetStoreRoot().Url">@BazaarContentHelper.StoreTitle()</a>
             <div class="nav-collapse">
                 <ul class="nav">
-                    @foreach (var group in Model.ProductGroups)
+                    @foreach (var group in BazaarContentHelper.GetProductGroupsContent())
                     {
-                        <li><a href="@group.Url">@group.Name</a></li>
+                        <li><a href="@group.Url">@group.Name</a></li>                        
+                    }
+                    @{
+                        var collections = BazaarContentHelper.GetProductCollectionContent().ToArray();
+                    }
+                    @if (collections.Any())
+                    {
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                Categories <span class="caret"></span>
+                            </a>
+                            @foreach (var collection in collections)
+                            {
+                                <ul class="dropdown-menu">
+                                    <li><a href="@collection.Url">@collection.Name</a></li>
+                                </ul>
+                            }
+                        </li>
                     }
                 </ul>
+                
                 <ul class="nav pull-right">
-                    @if (Model.ShowAccount)
+                    @if (BazaarContentHelper.ShowAccount())
                     {
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">@GetAccountDropDownName(Model.CurrentCustomer) <b class="caret"></b></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">@GetAccountDropDownName(CurrentCustomer) <b class="caret"></b></a>
                             <ul class="dropdown-menu" id="swatch-menu">
-                                @if (Model.CurrentCustomer.IsAnonymous)
+                                @if (CurrentCustomer.IsAnonymous)
                                 {
-                                    <li><a href="@Model.RegistrationPage.Url">Sign Up / Login</a></li>
+                                    <li><a href="@BazaarContentHelper.GetRegistrationContent().Url">Sign Up / Login</a></li>
                                 }
                                 else
                                 {
-                                    <li><a href="@Model.AccountPage.Url">Account</a></li>
-                                    var purchaseHistory = Model.AccountPage.Descendant("BazaarAccountHistory");
+                                    <li><a href="@BazaarContentHelper.GetAccountContent().Url">Account</a></li>
+                                    var purchaseHistory = BazaarContentHelper.GetAccountContent().Descendant("BazaarAccountHistory");
                                     if (purchaseHistory != null)
                                      {
                                         <li><a href="@purchaseHistory.Url">Purchase History</a></li>     
@@ -44,11 +63,11 @@
                             </ul>
                         </li>
                     }
-                    @if (!Model.CurrentCustomer.IsAnonymous && Model.ShowWishList)
+                    @if (!CurrentCustomer.IsAnonymous && BazaarContentHelper.ShowWishList())
                     {
-                        <li><a href="@Model.WishListPage.Url">Wish List (@(((ICustomer)Model.CurrentCustomer).WishList().TotalItemCount))</a></li>
+                        <li><a href="@BazaarContentHelper.GetWishListContent().Url">Wish List (@(((ICustomer)CurrentCustomer).WishList().TotalItemCount))</a></li>
                     }
-                    <li><a href="@Model.BasketPage.Url">Basket (@Model.CurrentCustomer.Basket().TotalItemCount)</a></li>
+                    <li><a href="@BazaarContentHelper.GetBasketContent().Url">Basket (@CurrentCustomer.Basket().TotalItemCount)</a></li>
                 </ul>
 
             </div><!-- /.nav-collapse -->

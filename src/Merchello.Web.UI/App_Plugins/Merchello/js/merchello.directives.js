@@ -143,7 +143,8 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
     restrict: 'E',
     replace: true,
     scope: {
-      collectionKey: '='
+      collectionKey: '=',
+      entityType: '='
     },
     template: '<h2>{{ collection.name }}</h2>',
     link: function(scope, element, attrs) {
@@ -151,12 +152,14 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       scope.collection = {};
 
       function init() {
-        loadCollection();
+        scope.$watch('collectionKey', function(newValue, oldValue) {
+          loadCollection();
+        });
       }
 
       function loadCollection() {
         if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
-          var key = 'merchelloCollections_allItems';
+          var key = 'merchelloCollections_all' + scope.entityType;
           localizationService.localize(key).then(function (value) {
             scope.collection.name = value;
           });
@@ -217,7 +220,9 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
             section: '@',
             currentNode: '=',
             node: '=',
-            tree: '='
+            tree: '=',
+            hasSelection: '&?',
+            mode: '@'
         },
 
         template: '<li ng-class="{\'current\': (node == currentNode)}">' +
@@ -233,7 +238,6 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
         link: function (scope, element, attrs) {
 
             var eventName = 'merchello.entitycollection.selected';
-
 
             // updates the node's DOM/styles
             function setupNodeDom(node, tree) {
@@ -275,11 +279,13 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
              defined on the tree
              */
             scope.select = function(n, ev) {
-                var args = { key: '', value: '' };
-                var ids = n.id.split('_');
-                args.value = ids[1];
+               var args = buildArgs(n);
                 var el = $('#' + n.id + ' i.icon');
                 if ($(el).hasClass('icon-list')) {
+                    // single mode
+                    if (scope.mode === 'single' && scope.hasSelection()) {
+                        return;
+                    }
                     args.key = 'addCollection';
                     $(el).removeClass('icon-list').addClass('icon-check');
                 } else {
@@ -291,6 +297,13 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
                 //emitEvent("treeNodeSelect", { element: element, tree: scope.tree, node: n, event: ev });
             };
 
+            function buildArgs(n) {
+                var args = { key: '', value: '' };
+                var id = n.id + '';
+                var ids = id.split('_');
+                args.value = ids[1];
+                return args;
+            }
 
             /** method to set the current animation for the node.
              *  This changes dynamically based on if we are changing sections or just loading normal tree data.
@@ -342,7 +355,7 @@ angular.module('merchello.directives').directive('merchCollectionTreeItem', func
 
             setupNodeDom(scope.node, scope.tree);
 
-            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
+            var template = '<ul ng-class="{collapsed: !node.expanded}"><merch-collection-tree-item  ng-repeat="child in node.children" eventhandler="eventhandler" tree="tree" current-node="currentNode" mode="{{mode}}" has-selection="hasSelection()" node="child" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item></ul>';
             var newElement = angular.element(template);
             $compile(newElement)(scope);
             element.append(newElement);
@@ -359,12 +372,17 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
 
         scope: {
             subTreeId : '=',
-            entityType: '='
+            entityType: '=',
+            mode: '@?',
+            hasSelection: '&?'
         },
 
         compile: function(element, attrs) {
+
+            // makes multiple selection default
+            if (!attrs.mode) { attrs.mode = 'multiple'; }
+
             //config
-            //var showheader = (attrs.showheader !== 'false');
             var template = '<ul class="umb-tree"><li class="root">';
             template += '<div ng-hide="hideheader" on-right-click="altSelect(tree.root, $event)">' +
                 '<h5>' +
@@ -372,7 +390,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                 '<span class="root-link">{{tree.root.name}}</span></h5>' +
                 '</div>';
             template += '<ul>' +
-               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
+               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" mode="{{mode}}" has-selection="hasSelection()" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
                 '</ul>' +
                 '</li>' +
                 '</ul>';
@@ -380,7 +398,6 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
             element.replaceWith(template);
 
             return function(scope, elem, attr, controller) {
-
 
                 var lastSection = "";
 
@@ -513,6 +530,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                     }
                 });
 
+                // Loads the tree
                 loadTree();
             };
         }
@@ -684,6 +702,73 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
         };
     }]);
 
+angular.module('merchello.directives').directive('detachedContentType', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        terminal: false,
+
+        scope: {
+            entityType: '@'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/detachedcontenttype.list.tpl.html',
+        controller: 'Merchello.Directives.DetachedContentTypeListController'
+    };
+
+});
+
+angular.module('merchello.directives').directive('detachedContentTypeSelect',
+        function(detachedContentResource, localizationService, detachedContentTypeDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            terminal: false,
+
+            scope: {
+                entityType: '@',
+                selectedContentType: '=',
+                save: '&'
+            },
+            template:         '<div class="detached-content-select">' +
+            '<div data-ng-show="detachedContentTypes.length > 0">' +
+            '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+            '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded">' +
+            '<option value="">{{ noSelection }}</option>' +
+            '</select>' +
+            ' <merchello-save-icon show-save="true" do-save="save()"></merchello-save-icon>' +
+            '</div>' +
+                '<div data-ng-hide="detachedContentTypes.length > 0 && loaded" style="text-align: center">' +
+                '<localize key="merchelloDetachedContent_noDetachedContentTypes" />' +
+                '</div>' +
+            '</div>',
+            link: function(scope, elm, attr) {
+
+                scope.loaded = false;
+                scope.detachedContentTypes = [];
+                scope.noSelection = '';
+
+                function init() {
+                    localizationService.localize('merchelloDetachedContent_selectContentType').then(function(value) {
+                        scope.noSelection = value;
+                        loadDetachedContentTypes();
+                    });
+                }
+
+                function loadDetachedContentTypes() {
+                    detachedContentResource.getDetachedContentTypeByEntityType(scope.entityType).then(function(results) {
+                        scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
+                        scope.loaded = true;
+                    });
+                }
+
+                // initialize the directive
+                init();
+            }
+        };
+
+});
+
 angular.module('merchello.directives').directive('comparisonOperatorRadioButtons', function() {
     return {
         restrict: 'E',
@@ -700,6 +785,45 @@ angular.module('merchello.directives').directive('comparisonOperatorRadioButtons
                 }
             }
 
+            init();
+        }
+    };
+});
+
+angular.module('merchello.directives').directive('contentTypeDropDown',
+    function(localizationService, detachedContentResource, umbContentTypeDisplayBuilder) {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            selectedContentType: '=',
+        },
+        template:
+        '<div class="control-group">' +
+        '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+        '<select class="span11" data-ng-model="selectedContentType" data-ng-options="ct.name for ct in contentTypes track by ct.key" data-ng-show="loaded">' +
+            '<option value="">{{ noSelection }}</option>' +
+        '</select>' +
+        '</div>',
+        link: function (scope, element, attrs, ctrl) {
+
+            scope.loaded = false;
+            scope.contentTypes = [];
+            scope.noSelection = '';
+
+            function init() {
+                localizationService.localize('merchelloDetachedContent_selectContentType').then(function(value) {
+                    scope.noSelection = value;
+                    loadContentTypes();
+                });
+            }
+
+            function loadContentTypes() {
+                detachedContentResource.getContentTypes().then(function(results) {
+                    scope.contentTypes = umbContentTypeDisplayBuilder.transform(results);
+                    scope.loaded = true;
+                });
+            }
             init();
         }
     };
@@ -961,6 +1085,408 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
         }
     });
 
+angular.module('merchello.directives').directive('merchelloIconBar', function(localizationService) {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showAdd: '=?',
+            showEdit: '=?',
+            showActivate: '=?',
+            showDelete: '=?',
+            doAdd: '&?',
+            doEdit: '&?',
+            doActivate: '&?',
+            doDelete: '&?',
+            args: '=?'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchelloiconbar.tpl.html',
+        link: function(scope, elm, attr) {
+            scope.editTitle = '';
+            scope.deleteTitle = '';
+            scope.activateTitle = '';
+            scope.addTitle = '';
+
+            localizationService.localize('general_add').then(function(value) {
+              scope.addTitle = value;
+            });
+            localizationService.localize('general_edit').then(function(value) {
+                scope.editTitle = value;
+            });
+            localizationService.localize('general_delete').then(function(value) {
+                scope.deleteTitle = value;
+            });
+            localizationService.localize('merchelloGatewayProvider_activate').then(function(value) {
+                scope.activateTitle = value;
+            });
+        }
+    };
+
+});
+
+// a save icon
+angular.module('merchello.directives').directive('merchelloSaveIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showSave: '=',
+            doSave: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showSave" ng-click="doSave()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-save"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('buttons_save').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the add icon
+angular.module('merchello.directives').directive('merchelloAddIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doAdd: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-add" ng-click="doAdd()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-add"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_add').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the edit icon
+angular.module('merchello.directives').directive('merchelloEditIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doEdit: '&',
+        },
+        template: '<span class="merchello-icons">' +
+           '<a class="merchello-icon merchello-icon-edit" ng-click="doEdit()" title="{{title}}" prevent-default>' +
+            '<i class="icon icon-edit"></i>' +
+            '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_edit').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the delete icon
+angular.module('merchello.directives').directive('merchelloDeleteIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doDelete: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-delete" ng-click="doDelete()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-trash"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_edit').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+// the provinces icon
+angular.module('merchello.directives').directive('merchelloProvincesIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            showProvinces: '=',
+            doProvinces: '&',
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-provinces" data-ng-show="showProvinces" ng-click="doProvinces()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-globe-alt"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('merchelloShippingMethod_adjustIndividualRegions').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
+
+
+angular.module('merchello.directives').directive('merchelloListView',
+    ['$routeParams', '$log', '$filter', 'dialogService', 'localizationService', 'merchelloListViewHelper', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    function($routeParams, $log, $filter, dialogService, localizationService, merchelloListViewHelper, queryDisplayBuilder, queryResultDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                builder: '=',
+                entityType: '=',
+                getColumnValue: '&',
+                load: '&',
+                ready: '=?',
+                disableCollections: '@?',
+                includeDateFilter: '@?',
+                noTitle: '@?',
+                noFilter: '@?'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellolistview.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.collectionKey = '';
+                scope.sort = sort;
+                scope.isSortDirection = isSortDirection;
+                scope.next = next;
+                scope.prev = prev;
+                scope.goToPage = goToPage;
+                scope.enterSearch = enterSearch;
+                scope.search = search;
+                scope.setPageSize = setPageSize;
+                scope.openDateRangeDialog = openDateRangeDialog;
+
+                scope.hasFilter = true;
+                scope.hasCollections = true;
+                scope.enableDateFilter = false;
+                scope.showTitle = true;
+                scope.isReady = false;
+
+                // date filtering
+                scope.clearDates = clearDates;
+                scope.startDate = '';
+                scope.endDate = '';
+                scope.dateBtnText = ''
+                var allDates = '';
+
+                scope.config = merchelloListViewHelper.getConfig(scope.entityType);
+
+                //scope.goToEditor = goToEditor;
+
+                scope.listViewResultSet = {
+                    totalItems: 0,
+                    items: []
+                };
+
+                scope.options = {
+                    pageSize: scope.config.pageSize ? scope.config.pageSize : 10,
+                    pageNumber: 1,
+                    filter: '',
+                    orderBy: (scope.config.orderBy ? scope.config.orderBy : 'name').trim(),
+                    orderDirection: scope.config.orderDirection ? scope.config.orderDirection.trim() : "asc"
+                };
+
+                scope.pagination = [];
+
+                function init() {
+                    if (!('ready' in attr)) {
+                        scope.isReady = true;
+                    }
+                    scope.hasCollections = !('disableCollections' in attr);
+                    scope.enableDateFilter = 'includeDateFilter' in attr;
+                    scope.hasFilter = !('noFilter' in attr);
+                    scope.showTitle = !('noTitle' in attr);
+                    if(scope.hasCollections) {
+                        scope.collectionKey = $routeParams.id !== 'manage' ? $routeParams.id : '';
+                        // none of the collections have the capability to filter by dates
+                        if (scope.collectionKey !== '' && scope.enableDateFilter) {
+                            scope.enableDateFilter = false;
+                        }
+                    }
+                    localizationService.localize('merchelloGeneral_allDates').then(function(value) {
+                        allDates = value;
+                        scope.dateBtnText = allDates;
+                    });
+
+                    scope.$watch('ready', function(newVal, oldVal) {
+                        if (newVal === true) {
+                            scope.isReady = newVal;
+                        }
+                          if(scope.isReady) {
+                              search();
+                          }
+                    });
+
+                }
+
+                function search() {
+                    var page = scope.options.pageNumber - 1;
+                    var perPage = scope.options.pageSize;
+                    var sortBy = scope.options.orderBy;
+                    var sortDirection = scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+
+                    var query = queryDisplayBuilder.createDefault();
+                    query.currentPage = page;
+                    query.itemsPerPage = perPage;
+                    query.sortBy = sortBy;
+                    query.sortDirection = sortDirection;
+                    query.addFilterTermParam(scope.options.filter);
+
+                    if (scope.collectionKey !== '') {
+                        query.addCollectionKeyParam(scope.collectionKey);
+                        query.addEntityTypeParam(scope.entityType);
+                    }
+
+                    if (scope.enableDateFilter && scope.startDate !== '' && scope.endDate !== '') {
+                        // just to be safe
+                        var start = $filter('date')(scope.startDate, 'yyyy-MM-dd');
+                        var end = $filter('date')(scope.endDate, 'yyyy-MM-dd');
+                        query.addInvoiceDateParam(start, 'start');
+                        query.addInvoiceDateParam(end, 'end');
+                        console.info('hello');
+                        scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
+                    }
+
+                    scope.load()(query).then(function (response) {
+                        var queryResult = queryResultDisplayBuilder.transform(response, scope.builder);
+                        scope.listViewResultSet.items = queryResult.items;
+                        scope.listViewResultSet.totalItems = queryResult.totalItems;
+                        scope.listViewResultSet.totalPages = queryResult.totalPages;
+
+
+                        scope.pagination = [];
+
+                        //list 10 pages as per normal
+                        if (scope.listViewResultSet.totalPages <= 10) {
+                            for (var i = 0; i < scope.listViewResultSet.totalPages; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.pageNumber == (i + 1)
+                                });
+                            }
+                        }
+                        else {
+                            //if there is more than 10 pages, we need to do some fancy bits
+
+                            //get the max index to start
+                            var maxIndex = scope.listViewResultSet.totalPages - 10;
+                            //set the start, but it can't be below zero
+                            var start = Math.max(scope.options.pageNumber - 5, 0);
+                            //ensure that it's not too far either
+                            start = Math.min(maxIndex, start);
+
+                            for (var i = start; i < (10 + start) ; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.pageNumber == (i + 1)
+                                });
+                            }
+
+                            //now, if the start is greater than 0 then '1' will not be displayed, so do the elipses thing
+                            if (start > 0) {
+                                scope.pagination.unshift({ name: "First", val: 1, isActive: false }, {val: "...",isActive: false});
+                            }
+
+                            //same for the end
+                            if (start < maxIndex) {
+                                scope.pagination.push({ val: "...", isActive: false }, { name: "Last", val: scope.listViewResultSet.totalPages, isActive: false });
+                            }
+                        }
+
+                        scope.preValuesLoaded = true;
+                    }, function(reason) {
+                        notificationsService.success("Entity Load Failed:", reason.message);
+                    });
+                }
+
+                function sort(field, allow) {
+                    if (allow) {
+                        scope.options.orderBy = field;
+
+                        if (scope.options.orderDirection === "desc") {
+                            scope.options.orderDirection = "asc";
+                        }
+                        else {
+                            scope.options.orderDirection = "desc";
+                        }
+                        search();
+                    }
+                };
+
+                function next () {
+                    if (scope.options.pageNumber < scope.listViewResultSet.totalPages) {
+                        scope.options.pageNumber++;
+                        search();
+                    }
+                };
+
+                function goToPage(pageNumber) {
+                    scope.options.pageNumber = pageNumber + 1;
+                    search();
+                }
+
+                function prev() {
+                    if (scope.options.pageNumber - 1 > 0) {
+                        scope.options.pageNumber--;
+                        search();
+                    }
+                }
+
+                function enterSearch($event) {
+                    $($event.target).next().focus();
+                }
+
+                function setPageSize() {
+                    scope.options.pageNumber = 1;
+                    search();
+                }
+
+                function isSortDirection(col, direction) {
+                    return scope.options.orderBy.toUpperCase() == col.toUpperCase() && scope.options.orderDirection == direction;
+                }
+
+                function clearDates() {
+                    scope.startDate = '';
+                    scope.endDate = '';
+                    scope.dateBtnText = allDates;
+                    search();
+                }
+
+                function openDateRangeDialog() {
+                    var dialogData = {
+                        startDate: scope.startDate,
+                        endDate: scope.endDate
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                        show: true,
+                        callback: processDateRange,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processDateRange(dialogData) {
+                    scope.startDate = dialogData.startDate;
+                    scope.endDate = dialogData.endDate;
+                    console.info('got here');
+                    search();
+                }
+
+                init();
+            }
+        }
+}]);
+
     /**
      * @ngdoc directive
      * @name MerchelloPagerDirective
@@ -1012,8 +1538,8 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
             '<div class="tags">' +
             '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
             '</div>' +
-            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName"></input> ' +
-            '<a class="btn btn-primary" ng-click="add()">Add</a>',
+            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName" /> ' +
+            '<merchello-add-icon do-add="add()"></merchello-add-icon>',
             link: function ($scope, $element) {
                 // FIXME: this is lazy and error-prone
                 // this is the option name input
@@ -1046,7 +1572,7 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
     });
 
 
-    angular.module('merchello.directives').directive('notificationMethods', function() {
+    angular.module('merchello.directives').directive('notificationMethods', function($location) {
         return {
             restrict: 'E',
             replace: true,
@@ -1055,6 +1581,10 @@ angular.module('merchello.directives').directive('merchelloAddress', function() 
 
                 // Exposed monitors
                 $scope.getMonitorName = getMonitorName;
+
+                $scope.redirectForEdit = function(key) {
+                    $location.url('/merchello/merchello/notification.messageeditor/' + key, true);
+                }
 
                 function getMonitorName(key) {
                     var monitor = _.find($scope.notificationMonitors, function(monitor) {

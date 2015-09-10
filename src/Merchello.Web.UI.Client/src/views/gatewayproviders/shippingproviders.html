@@ -3,13 +3,13 @@
         <umb-header>
             <div class="span7">
                 <div class="umb-headline-editor-wrapper">
-                    <h1>{{selectedCatalog.name}}: Shipping Providers & Methods</h1>
+                    <h1>{{selectedCatalog.name}}: <localize key="merchelloShipping_shippingProvidersMethodsTitle" /></h1>
                 </div>
             </div>
             <div class="span5">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <div class="btn-group">
-                        <a class="btn-primary btn" data-ng-click="changeSelectedCatalogOpen()" data-ng-show="primaryWarehouse.warehouseCatalogs.length > 1">Select Catalog</a>
+                        <a class="btn-primary btn" data-ng-click="changeSelectedCatalogOpen()" data-ng-show="primaryWarehouse.warehouseCatalogs.length > 1"><localize key="merchelloShipping_selectCatalog"></localize></a>
                     </div>
                 </div>
             </div>
@@ -20,10 +20,9 @@
                 <!-- Shipping Providers & Methods -->
                 <div class="control-group umb-control-group">
                     <div class="merchello-section-label">
-                        Shipping Countries
-                        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>
+                       <localize key="merchelloShipping_shipContriesInfo"></localize>
                         <!-- ACTION: Add Country -->
-                        <a class="" data-ng-click="addCountry()"><i class="icon icon-add"></i> Add Country</a>
+                        <a class="" data-ng-click="addCountry()"><i class="icon icon-add"></i> <localize key="merchelloShipping_addCountry"></localize></a>
                     </div>
                     <div class="merchello-controls" data-ng-show="preValuesLoaded">
                         <div>
@@ -41,26 +40,20 @@
             <div class="merchello-pane secondary span3">
                 <!-- Warehouse(s) -->
                 <div class="well warehouse-info" data-ng-show="visible.warehouseListPanel">
-                    <h3>
-                        Warehouse
-                        <!-- ACTION: Edit Warehouse -->
-                        <a class="btn btn-default btn-action pull-right" data-ng-click="addEditWarehouseDialogOpen(primaryWarehouse)"><i class="icon-edit"></i></a>
-                    </h3>
+                    <h3 class="span10"><localize key="merchelloShipping_warehouse"></localize></h3>
+                    <div class="pull-right"><merchello-edit-icon do-edit="addEditWarehouseDialogOpen(primaryWarehouse)"></merchello-edit-icon></div>
                     <merchello-address address="primaryWarehouseAddress" data-ng-show="!primaryWarehouseAddress.isEmpty()"></merchello-address>
                 </div>
                 <!-- Catalogs -->
                 <div class="well catalog-info" data-ng-show="visible.catalogPanel">
-                    <h3>
-                        Current Catalog
-                        <!-- ACTION: Delete Catalog -->
-                        <a class="btn btn-default btn-trash pull-right" data-ng-show="!selectedCatalog.isDefault" data-ng-click="deleteWarehouseCatalogOpen()"><i class="icon-trash"></i></a>
-                        <!-- ACTION: Edit Catalog -->
-                        <a class="btn btn-default btn-action pull-right" data-ng-click="addEditWarehouseCatalogDialogOpen(selectedCatalog)"><i class="icon icon-edit"></i></a>
-                    </h3>
+                    <h3 class="span10">Current Catalog</h3>
+                    <div class="pull-right">
+                        <merchello-icon-bar show-edit="true" show-delete="!selectedCatalog.isDefault" do-edit="addEditWarehouseCatalogDialogOpen(selectedCatalog)" do-delete="deleteWarehouseCatalogOpen()"></merchello-icon-bar>
+                    </div>
                     <h4>{{selectedCatalog.name}}</h4>
                     <div>{{selectedCatalog.description}}</div><br />
                     <!-- ACTION: Add Catalog -->
-                    <a class="" data-ng-click="addEditWarehouseCatalogDialogOpen()"><i class="icon icon-add"></i> Add Catalog</a>
+                    <a class="" data-ng-click="addEditWarehouseCatalogDialogOpen()"><i class="icon icon-add"></i> <localize key="merchelloShipping_addCatalog"></localize></a>
                 </div>
             </div>
         </merchello-panel>

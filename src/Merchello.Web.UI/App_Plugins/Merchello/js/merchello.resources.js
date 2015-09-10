@@ -167,6 +167,76 @@
 
 /**
  * @ngdoc controller
+ * @name detachedContentResource
+ * @function
+ *
+ * @description
+ * Handles the detached content API
+ */
+angular.module('merchello.resources').factory('detachedContentResource',
+    ['$http', 'umbRequestHelper',
+    function($http, umbRequestHelper) {
+
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloDetachedContentApiBaseUrl'];
+
+        return {
+            getAllLanguages: function() {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: baseUrl + 'GetAllLanguages',
+                        method: "GET"
+                    }),
+                    'Failed to get Umbraco languages');
+            },
+            getContentTypes: function() {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: baseUrl + 'GetContentTypes',
+                        method: "GET"
+                    }),
+                    'Failed to get Umbraco content types');
+            },
+            getDetachedContentTypeByEntityType: function(enumValue) {
+                var url = baseUrl + 'GetDetachedContentTypesByEntityType';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { enumValue: enumValue}
+                    }),
+                    'Failed to get detached content types');
+            },
+            addDetachedContentType : function(detachedContentType) {
+                var url = baseUrl + 'PostAddDetachedContentType';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        detachedContentType
+                    ),
+                    'Failed to add a detached content type');
+            },
+            saveDetachedContentType: function(detachedContentType) {
+                var url = baseUrl + 'PutSaveDetachedContentType';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        detachedContentType
+                    ),
+                    'Failed to save detached content type');
+            },
+            deleteDetachedContentType: function(key) {
+                var url = baseUrl + 'DeleteDetachedContentType';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { key : key }
+                    }),
+                    'Failed to delete detached content type');
+            }
+        };
+}]);
+
+/**
+ * @ngdoc controller
  * @name entityCollectionResource
  * @function
  *
@@ -471,6 +541,13 @@ angular.module('merchello.resources')
 
                         return umbRequestHelper.resourcePromise(
                             $http.post(umbRequestHelper.getApiUrl('merchelloInvoiceApiBaseUrl', 'SearchByCustomer'), query),
+                            'Failed to retreive invoices');
+                    },
+
+                    searchByCustomer : function(query) {
+                        var url = baseUrl + 'SearchByCustomer';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url, query),
                             'Failed to retreive invoices');
                     },
 
@@ -1104,7 +1181,7 @@ angular.module('merchello.resources')
                  * @description Gets a product with an API call to the server
                  **/
                 getByKey: function (key) {
-                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProduct';
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetProductFromService';
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: url + '?id=' + key,
@@ -1143,6 +1220,9 @@ angular.module('merchello.resources')
                  * @description Saves / updates product with an api call back to the server
                  **/
                 save: function (product) {
+                    angular.forEach(product.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -1151,16 +1231,63 @@ angular.module('merchello.resources')
                         'Failed to save data for product key ' + product.key);
                 },
 
+                saveProductContent: function(product, cultureName, files) {
+                    console.info('culture check ' + cultureName);
+                    angular.forEach(product.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
+                    var deferred = $q.defer();
+                    umbRequestHelper.postMultiPartRequest(
+                        url,
+                        { key: "detachedContentItem", value: { display: product, cultureName: cultureName} },
+                        function (data, formData) {
+                            //now add all of the assigned files
+                            for (var f in files) {
+                                //each item has a property alias and the file object, we'll ensure that the alias is suffixed to the key
+                                // so we know which property it belongs to on the server side
+                                formData.append("file_" + files[f].alias, files[f].file);
+                            }
+                        },
+                        function (data, status, headers, config) {
+                            deferred.resolve(data);
+                        });
+
+                    return deferred.promise;
+
+                   // return umbRequestHelper.resourcePromise(
+                    //    $http.post(url,
+                    //        { display: product, cultureName: cultureName, uploadedFiles: files }
+                    //    ),
+                    //    'Failed to save data for product key ' + product.key);
+                },
+
                 /**
                  * @ngdoc method
                  * @name saveVariant
                  * @description Saves / updates product variant with an api call back to the server
                  **/
                 saveVariant: function (productVariant) {
+                    angular.forEach(productVariant.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             productVariant
+                        ),
+                        'Failed to save data for product variant key ' + productVariant.key);
+                },
+
+                saveVariantContent: function(productVariant, cultureName, files) {
+                    angular.forEach(productVariant.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { display: productVariant, cultureName: cultureName, uploadedFiles: files }
                         ),
                         'Failed to save data for product variant key ' + productVariant.key);
                 },
@@ -1178,6 +1305,15 @@ angular.module('merchello.resources')
                             { params: { id: product.key }}
                         ),
                         'Failed to delete product with key: ' + product.key);
+                },
+
+                deleteDetachedContent: function(variant) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'DeleteDetachedContent';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            variant
+                        ),
+                        'Failed to delete detached content');
                 },
 
                 /**
@@ -1203,8 +1339,8 @@ angular.module('merchello.resources')
      * @description Loads in data and allows modification for invoices
      **/
     angular.module('merchello.resources').factory('settingsResource',
-        ['$q', '$http', '$cacheFactory', 'umbRequestHelper',
-            function($q, $http, $cacheFactory, umbRequestHelper) {
+        ['$q', '$http', '$cacheFactory', 'umbRequestHelper', 'countryDisplayBuilder', 'settingDisplayBuilder',
+            function($q, $http, $cacheFactory, umbRequestHelper, countryDisplayBuilder, settingDisplayBuilder) {
 
         /* cacheFactory instance for cached items in the merchelloSettingsService */
         var _settingsCache = $cacheFactory('merchelloSettings');
@@ -1312,6 +1448,28 @@ angular.module('merchello.resources')
              */
             getAllSettings: function () {
                 return getCachedOrApi("AllSettings", "GetAllSettings", "settings");
+            },
+
+            getAllCombined: function() {
+                var deferred = $q.defer();
+                var promises = [
+                    this.getAllSettings(),
+                    this.getAllCurrencies(),
+                    this.getAllCountries()
+                ];
+                $q.all(promises).then(function(data) {
+                    var result = {
+                        settings: settingDisplayBuilder.transform(data[0]),
+                        currencies: data[1],
+                        currencySymbol: _.find(data[1], function(c) {
+                            return c.currencyCode === data[0].currencyCode
+                        }).symbol,
+                        countries: countryDisplayBuilder.transform(data[2])
+                    };
+                    deferred.resolve(result);
+                });
+
+                return deferred.promise;
             },
 
             getCurrentSettings: function() {

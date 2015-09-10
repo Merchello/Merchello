@@ -1,6 +1,9 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
+@using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
+@using Merchello.Web.Models.VirtualContent
 @using Umbraco.Web
+@using Umbraco.Web.Models
 @{
     Layout = "Master.cshtml";
 }
@@ -13,21 +16,22 @@
 
 <section id="categories">
     <div class="page-header">
-        <h1>Categories</h1>
+        <h1>Featured Products</h1>
     </div>
 	<div class="row">
-    @foreach (var group in Model.ProductGroups.Where(x => x.IsVisible()))
+    @foreach (var product in Model.GetPropertyValue<IEnumerable<IProductContent>>("featuredProducts"))
     {
-        <span class="col-md-6">
-            <a href="@group.Url">
-                <h2>@group.Name</h2>
-                @if (!string.IsNullOrEmpty(group.Image))
+        <div class="col-md-6">
+            <a href="@product.Url">
+                <h2>@product.Name</h2>
+                @if (product.HasValue("image"))
                 {
-                    <img src="@group.Image" alt="@group.Name" />
+                   // var image = Umbraco.TypedMedia(product.GetPropertyValue("image"));
+                    <img src="" alt="@product.Name" />
                 }
             </a>
-            <p>@group.Brief</p>
-        </span>
+            <p>@product.GetPropertyValue("brief")</p>
+        </div>
     }
     </div>
 </section>

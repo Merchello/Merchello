@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System;
+
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -7,6 +9,10 @@
     /// </summary>
     public interface IProduct : IProductBase, IEntity
     {
+        /// <summary>
+        /// Gets the product variant key.
+        /// </summary>
+        Guid ProductVariantKey { get; }
 
         /// <summary>
         /// Gets a value indicating whether or not this product group defines product options.

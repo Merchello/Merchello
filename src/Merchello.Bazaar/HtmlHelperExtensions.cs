@@ -9,6 +9,8 @@
 
     using Merchello.Bazaar.Models.ViewModels;
 
+    using Umbraco.Core.Models;
+
     /// <summary>
     /// Html Helper extension methods.
     /// </summary>
@@ -19,14 +21,15 @@
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
     public static class HtmlHelperExtensions
     {
+
         /// <summary>
         /// Adds Starter Kit Asset CSS file.
         /// </summary>
         /// <param name="html">
         /// The html.
         /// </param>
-        /// <param name="model">
-        /// The model.
+        /// <param name="theme">
+        /// The current theme.
         /// </param>
         /// <param name="fileName">
         /// The file name.
@@ -34,9 +37,9 @@
         /// <returns>
         /// The <see cref="HtmlHelper"/>.
         /// </returns>
-        public static HtmlHelper RequiresPackageCss(this HtmlHelper html, IMasterModel model, string fileName)
+        public static HtmlHelper RequiresPackageCss(this HtmlHelper html, string theme, string fileName)
         {
-            return html.RequiresCss(string.Format("{0}Assets/css/{1}", PathHelper.GetThemePath(model), fileName));
+            return html.RequiresCss(string.Format("{0}Assets/css/{1}", PathHelper.GetThemePath(theme), fileName));
         }
 
         /// <summary>
@@ -45,8 +48,8 @@
         /// <param name="html">
         /// The html.
         /// </param>
-        /// <param name="model">
-        /// The model.
+        /// <param name="theme">
+        /// The current theme.
         /// </param>
         /// <param name="fileName">
         /// The file name.
@@ -54,9 +57,9 @@
         /// <returns>
         /// The <see cref="HtmlHelper"/>.
         /// </returns>
-        public static HtmlHelper RequiresPackageJs(this HtmlHelper html, IMasterModel model, string fileName)
+        public static HtmlHelper RequiresPackageJs(this HtmlHelper html, string theme, string fileName)
         {
-            return html.RequiresJs(string.Format("{0}Assets/js/{1}", PathHelper.GetThemePath(model), fileName));
+            return html.RequiresJs(string.Format("{0}Assets/js/{1}", PathHelper.GetThemePath(theme), fileName));
         }
 
         #region Partial Views

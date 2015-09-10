@@ -96,7 +96,7 @@
         /// The get sortable provider keys.
         /// </summary>
         /// <returns>
-        /// The <see cref="Guid[]"/>.
+        /// The <see cref="Guid"/>.
         /// </returns>
         [HttpGet]
         public Guid[] GetSortableProviderKeys()
