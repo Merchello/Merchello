@@ -2104,6 +2104,34 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.Collections.EntityCollectionProviderDisplay"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentSaveItem`1">
+            <summary>
+            The detached content save item.
+            </summary>
+            <typeparam name="TDisplay">
+            The type of display object
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.DetachedContentSaveItem`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentSaveItem`1"/> class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentSaveItem`1.Display">
+            <summary>
+            Gets or sets the detached content item.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentSaveItem`1.CultureName">
+            <summary>
+            Gets or sets the culture name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.ContentEditing.Content.DetachedContentSaveItem`1.UploadedFiles">
+            <summary>
+            Gets the uploaded files.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.DetachedContentTypeDisplay">
             <summary>
             The detached content type display.
@@ -2168,6 +2196,16 @@
             <returns>
             The <see cref="T:Merchello.Core.Models.DetachedContent.IDetachedContentType"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductContentSave">
+            <summary>
+            The product content save.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantContentSave">
+            <summary>
+            The product variant content save.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentDisplay">
             <summary>
@@ -2271,6 +2309,25 @@
             <returns>
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
+        </member>
+        <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentHelper`2">
+            <summary>
+            The product variant detached content helper.
+            </summary>
+            <typeparam name="TSaveModel">
+            The Type of save model
+            </typeparam>
+            <typeparam name="TDisplay">
+            The type of display object
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentHelper`2.MapDetachedProperties(`0)">
+            <summary>
+            Maps the detached property values
+            </summary>
+            <param name="detachedContentItem">
+            The detached content item.
+            </param>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
             <summary>
@@ -11995,6 +12052,110 @@
             This is the Visitor design pattern.  PluralSight has some great intros
             </remarks>
         </member>
+        <member name="T:Merchello.Web.WebApi.Binders.DetachedContentSaveBinder`1">
+            <summary>
+            The detached content save binder.
+            </summary>
+            <typeparam name="TModelSave">
+            The type of display model
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.DetachedContentSaveBinder`1.#ctor(Umbraco.Core.ApplicationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.Binders.DetachedContentSaveBinder`1"/> class.
+            </summary>
+            <param name="applicationContext">
+            The application context.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.DetachedContentSaveBinder`1.BindModel(System.Web.Http.Controllers.HttpActionContext,System.Web.Http.ModelBinding.ModelBindingContext)">
+            <summary>
+            The bind model.
+            </summary>
+            <param name="actionContext">
+            The action context.
+            </param>
+            <param name="bindingContext">
+            The binding context.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.DetachedContentSaveBinder`1.GetModelAsync(System.Web.Http.Controllers.HttpActionContext,System.Web.Http.ModelBinding.ModelBindingContext,System.Net.Http.MultipartFormDataStreamProvider)">
+            <summary>
+            Builds the model from the request contents
+            </summary>
+            <param name="actionContext">
+            The action Context.
+            </param>
+            <param name="bindingContext">
+            The binding Context.
+            </param>
+            <param name="provider">
+            The provider.
+            </param>
+            <returns>
+            The <see cref="T:System.Threading.Tasks.Task"/>.
+            </returns>
+        </member>
+        <member name="P:Merchello.Web.WebApi.Binders.DetachedContentSaveBinder`1.ApplicationContext">
+            <summary>
+            Gets the application context.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.WebApi.Binders.ProductContentSaveBinder">
+            <summary>
+            The product content save binder.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.ProductContentSaveBinder.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.Binders.ProductContentSaveBinder"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.ProductContentSaveBinder.#ctor(Umbraco.Core.ApplicationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.Binders.ProductContentSaveBinder"/> class.
+            </summary>
+            <param name="applicationContext">
+            The application context.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.WebApi.Binders.ProductVariantContentSaveBinder">
+            <summary>
+            The product variant content save binder.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.ProductVariantContentSaveBinder.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.Binders.ProductVariantContentSaveBinder"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Binders.ProductVariantContentSaveBinder.#ctor(Umbraco.Core.ApplicationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.WebApi.Binders.ProductVariantContentSaveBinder"/> class.
+            </summary>
+            <param name="applicationContext">
+            The application context.
+            </param>
+        </member>
+        <member name="T:Merchello.Web.WebApi.Filters.FileUploadCleanupFilterAttribute">
+            <summary>
+            Checks if the parameter is ContentItemSave and then deletes any temporary saved files from file uploads associated with the request
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.WebApi.Filters.FileUploadCleanupFilterAttribute.#ctor(System.Boolean)">
+            <summary>
+            Constructor specifies if the filter should analyze the incoming or outgoing model
+            </summary>
+            <param name="incomingModel"></param>
+        </member>
+        <member name="P:Merchello.Web.WebApi.Filters.FileUploadCleanupFilterAttribute.AllowMultiple">
+            <summary>
+            Returns true so that other filters can execute along with this one
+            </summary>
+        </member>
         <member name="T:Merchello.Web.WebApi.ScheduledTasksApiController">
             <summary>
             Schedule Tasks
@@ -16073,12 +16234,34 @@
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Editors.ProductApiController.PutProductWithDetachedContent(Merchello.Web.Models.ContentEditing.Content.ProductContentSave)">
+            <summary>
+            The put product with detached content.
+            </summary>
+            <param name="detachedContentItem">
+            The product save.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Editors.ProductApiController.PutProductVariant(Merchello.Web.Models.ContentEditing.ProductVariantDisplay)">
             <summary>
             The put product variant.
             </summary>
             <param name="productVariant">
             The product variant.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Editors.ProductApiController.PutProductVariantWithDetachedContent(Merchello.Web.Models.ContentEditing.Content.ProductVariantContentSave)">
+            <summary>
+            The put product variant content.
+            </summary>
+            <param name="detachedContentItem">
+            The product variant save.
             </param>
             <returns>
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductVariantDisplay"/>.

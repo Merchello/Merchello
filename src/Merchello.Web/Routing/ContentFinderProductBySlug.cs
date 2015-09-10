@@ -54,7 +54,7 @@
 
             // ensure their is a "renderable" detached content             
             if (display.DetachedContents.FirstOrDefault(x => x.CanBeRendered) == null) return false;
-            var threadCulture = System.Threading.Thread.CurrentThread.CurrentUICulture;
+
             var factory = new ProductContentFactory();
   
             contentRequest.PublishedContent = factory.BuildContent(display);

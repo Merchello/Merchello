@@ -52,7 +52,7 @@
             if (detachedContent == null) return null;
 
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
-
+            
             return new ProductContent(publishedContentType, display, _parent);
         }
 

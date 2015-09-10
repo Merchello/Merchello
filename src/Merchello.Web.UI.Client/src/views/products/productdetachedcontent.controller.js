@@ -224,9 +224,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             function saveDetachedContent() {
                 var promise;
                 if ($scope.productVariant.master) {
-                    promise = detachedContentHelper.detachedContentPerformSave({ saveMethod: productResource.save, content: product, scope: $scope, statusMessage: 'Saving...' });
+                    promise = detachedContentHelper.detachedContentPerformSave({ saveMethod: productResource.saveProductContent, content: product, scope: $scope, statusMessage: 'Saving...' });
                 } else {
-                    promise = detachedContentHelper.detachedContentPerformSave({ saveMethod: productResource.saveVariant, content: $scope.productVariant, scope: $scope, statusMessage: 'Saving...' });
+                    promise = detachedContentHelper.detachedContentPerformSave({ saveMethod: productResource.saveVariantContent, content: $scope.productVariant, scope: $scope, statusMessage: 'Saving...' });
                 }
                 promise.then(function(data) {
                     $scope.loaded = false;

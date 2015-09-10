@@ -1,6 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
 @using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
+@using Merchello.Web.Models.VirtualContent
 @using Umbraco.Web
 @{
     Layout = "Master.cshtml";
@@ -10,18 +11,22 @@
     <p class="lead">@Model.TagLine</p>
 </div>
 
+<div class="page-header">
+    <h1>Featured Products</h1>
+</div>
 <div class="row" id="categories">
-    @foreach (var group in BazaarContentHelper.GetProductGroupsContent().Where(x => x.IsVisible()))
+    @foreach (var product in Model.GetPropertyValue<IEnumerable<IProductContent>>("featuredProducts"))
     {
-        <div>
-            <a href="@group.Url">
-                <h2>@group.Name</h2>
-                @if (group.HasValue("image"))
+        <div class="span6">
+            <a href="@product.Url">
+                <h2>@product.Name</h2>
+                @if (product.HasValue("image"))
                 {
-                    <img src="@group.GetCropUrl(propertyAlias: "image", width: 300)" alt="@group.Name" />
+                    var image = Umbraco.TypedMedia(product.GetPropertyValue("image"));
+                    <img src="@image.GetCropUrl(null, 300)" alt="@product.Name" />
                 }
             </a>
-            <p>@group.GetPropertyValue("brief")</p>
+            <p>@product.GetPropertyValue("brief")</p>
         </div>
     }
     

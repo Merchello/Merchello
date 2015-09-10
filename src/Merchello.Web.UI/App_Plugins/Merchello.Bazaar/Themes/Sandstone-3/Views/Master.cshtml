@@ -7,9 +7,7 @@
 @{
     Layout = null;
 
-    var themedModel = Model is IMasterModel ?
-        (IMasterModel)Model :
-        (IMasterModel)Model.AncestorOrSelf("BazaarStore");
+    var theme = BazaarContentHelper.GetStoreTheme();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -26,15 +24,15 @@
            .RequiresJs("/App_Plugins/Merchello.Bazaar/Assets/js/jquery.unobtrusive-ajax.min.js")
            .RequiresJs("/App_Plugins/Merchello.Bazaar/Assets/js/jquery.validate.unobtrusive.min.js")
            .RequiresJs("/App_Plugins/Merchello.Bazaar/Assets/js/merchello.bazaar.js")
-           .RequiresPackageCss(themedModel, "bootstrap.min.css")
-           .RequiresPackageCss(themedModel, "bootstrap.css")
-           .RequiresPackageCss(themedModel, "styles.min.css")
-           .RequiresPackageJs(themedModel, "bootstrap.min.js");
+           .RequiresPackageCss(theme, "bootstrap.min.css")
+           .RequiresPackageCss(theme, "bootstrap.css")
+           .RequiresPackageCss(theme, "styles.min.css")
+           .RequiresPackageJs(theme, "bootstrap.min.js");
     }
     @Html.RenderCssHere()
 </head>
 <body class="@Model.DocumentTypeAlias" id="top">
-    @Html.ThemedPartial(themedModel, "NavBar")
+    @Html.ThemedPartial(theme, "NavBar", Model)
     <div class="container">
         @RenderBody()
     </div>

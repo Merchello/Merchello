@@ -19,6 +19,27 @@
     public static class BazaarContentHelper
     {
         /// <summary>
+        /// The content helper cached content type alias.
+        /// </summary>
+        private static readonly string[] ContentHelperCachedContentTypeAlias =
+            {
+                "BazaarAccount",
+                "BazaarAccountHistory",
+                "BazaarBasket",
+                "BazaarCheckout",
+                "BazaarCheckoutConfirm",
+                "BazaarCheckoutShipping",                
+                "BazaarProduct",
+                "BazaarProductCollection",
+                "BazaarProductContent",
+                "BazaarProductGroup",
+                "BazaarReciept",
+                "BazaarRegistration",
+                "BazaarStore",
+                "BazaarWishList"
+            };
+
+        /// <summary>
         /// Gets or sets the store root.
         /// </summary>
         internal static IPublishedContent StoreRoot { get; set; }
@@ -28,6 +49,9 @@
         /// </summary>
         internal static string Theme { get; set; }
 
+        /// <summary>
+        /// Gets or sets the currency.
+        /// </summary>
         internal static ICurrency Currency { get; set; }
 
         /// <summary>
@@ -193,6 +217,33 @@
         public static IEnumerable<IPublishedContent> GetProductCollectionContent()
         {
             return GetStoreRoot().Children.Where(x => x.DocumentTypeAlias == "BazaarProductCollection" && x.IsVisible());
-        } 
+        }
+
+        /// <summary>
+        /// The reset.
+        /// </summary>
+        /// <param name="contentTypes">
+        /// The content types.
+        /// </param>
+        internal static void Reset(IEnumerable<IContentType> contentTypes)
+        {
+            contentTypes.ForEach(Reset);
+        }
+
+        /// <summary>
+        /// The reset.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        internal static void Reset(IContentType contentType)
+        {
+            if (ContentHelperCachedContentTypeAlias.Contains(contentType.Alias))
+            {
+                StoreRoot = null;
+                Theme = null;
+                Currency = null;
+            }
+        }
     }
 }

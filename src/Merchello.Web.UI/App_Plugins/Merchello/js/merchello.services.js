@@ -36,8 +36,8 @@ angular.module('merchello.services').service('dateHelper', [function() {
 }]);
 
 angular.module('merchello.services').factory('detachedContentHelper',
-    ['$q', 'formHelper', 'notificationsService',
-    function($q, formHelper, notificationsService) {
+    ['$q', 'fileManager', 'formHelper', 'notificationsService',
+    function($q, fileManager, formHelper, notificationsService) {
 
         return {
 
@@ -63,6 +63,10 @@ angular.module('merchello.services').factory('detachedContentHelper',
                 if (args.scope.preValuesLoaded && formHelper.submitForm({ scope: args.scope, statusMessage: args.statusMessage })) {
                     args.scope.preValuesLoaded = false;
 
+                    // get any files from the fileManager
+                    var files = fileManager.getFiles();
+
+
                     // save the current language only
                     angular.forEach(args.scope.contentTabs, function(ct) {
                         if (ct.id === 'render') {
@@ -78,7 +82,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
                         }
                     });
 
-                    args.saveMethod(args.content).then(function(data) {
+                    args.saveMethod(args.content, args.scope.language.isoCode, files).then(function(data) {
                         formHelper.resetForm({ scope: args.scope, notifications: data.notifications });
                         args.scope.preValuesLoaded = true;
                         deferred.resolve(data);

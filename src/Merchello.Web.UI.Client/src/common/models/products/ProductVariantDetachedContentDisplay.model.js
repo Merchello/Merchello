@@ -16,6 +16,7 @@ var ProductVariantDetachedContentDisplay = function() {
     self.slug = '';
     self.canBeRendered = true;
     self.detachedDataValues = {};
+    self.uploadedFiles = [];
 };
 
 
