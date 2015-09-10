@@ -14,8 +14,8 @@
         <div class="span8">
             @if (Model.HasValue("image"))
             {
-                var image = Umbraco.TypedMedia(Model.GetPropertyValue("image"));
-                <img class="img-responsive" src="@image.GetCropUrl(300)" alt="@Model.Name">
+                //var image = Umbraco.TypedMedia(Model.GetPropertyValue("image"));
+                <img class="img-responsive" src="" alt="@Model.Name">
             }
             
             @if (Model.ProductVariants.Any())

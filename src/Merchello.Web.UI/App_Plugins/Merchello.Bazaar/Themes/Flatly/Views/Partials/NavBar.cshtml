@@ -19,7 +19,7 @@
                 <ul class="nav">
                     @foreach (var group in BazaarContentHelper.GetProductGroupsContent())
                     {
-                        <li><a href="@group.Url">@group.Name</a></li>
+                        <li><a href="@group.Url">@group.Name</a></li>                        
                     }
                     @{
                         var collections = BazaarContentHelper.GetProductCollectionContent().ToArray();

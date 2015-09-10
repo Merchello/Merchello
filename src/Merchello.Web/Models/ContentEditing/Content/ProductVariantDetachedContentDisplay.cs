@@ -5,7 +5,6 @@
     using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Models.DetachedContent;
-    using Merchello.Web.Models.DetachedContent;
     using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;
@@ -18,6 +17,7 @@
     /// </summary>
     public class ProductVariantDetachedContentDisplay
     {
+
         /// <summary>
         /// Gets or sets the key.
         /// </summary>

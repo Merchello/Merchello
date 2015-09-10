@@ -1231,6 +1231,38 @@ angular.module('merchello.resources')
                         'Failed to save data for product key ' + product.key);
                 },
 
+                saveProductContent: function(product, cultureName, files) {
+                    console.info('culture check ' + cultureName);
+                    angular.forEach(product.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
+                    var deferred = $q.defer();
+                    umbRequestHelper.postMultiPartRequest(
+                        url,
+                        { key: "detachedContentItem", value: { display: product, cultureName: cultureName} },
+                        function (data, formData) {
+                            //now add all of the assigned files
+                            for (var f in files) {
+                                //each item has a property alias and the file object, we'll ensure that the alias is suffixed to the key
+                                // so we know which property it belongs to on the server side
+                                formData.append("file_" + files[f].alias, files[f].file);
+                            }
+                        },
+                        function (data, status, headers, config) {
+                            deferred.resolve(data);
+                        });
+
+                    return deferred.promise;
+
+                   // return umbRequestHelper.resourcePromise(
+                    //    $http.post(url,
+                    //        { display: product, cultureName: cultureName, uploadedFiles: files }
+                    //    ),
+                    //    'Failed to save data for product key ' + product.key);
+                },
+
                 /**
                  * @ngdoc method
                  * @name saveVariant
@@ -1244,6 +1276,18 @@ angular.module('merchello.resources')
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             productVariant
+                        ),
+                        'Failed to save data for product variant key ' + productVariant.key);
+                },
+
+                saveVariantContent: function(productVariant, cultureName, files) {
+                    angular.forEach(productVariant.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { display: productVariant, cultureName: cultureName, uploadedFiles: files }
                         ),
                         'Failed to save data for product variant key ' + productVariant.key);
                 },

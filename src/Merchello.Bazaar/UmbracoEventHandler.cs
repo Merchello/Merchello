@@ -44,6 +44,7 @@
             MemberService.Saved += MemberServiceOnSaved;
 
             ContentService.Saved += ContentServiceOnSaved;
+            ContentService.Deleted += ContentServiceOnDeleted;
 
             StoreSettingService.Saved += StoreSettingServiceOnSaved;
 
@@ -67,7 +68,7 @@
         }
 
         /// <summary>
-        /// Clears the store root from the content helper when it's been saved.
+        /// Clears the store root from the content helper when a qualifying save occurs
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -77,10 +78,21 @@
         /// </param>
         private static void ContentServiceOnSaved(IContentService sender, SaveEventArgs<IContent> e)
         {
-            if (e.SavedEntities.All(x => x.ContentType.Alias != "BazaarStore")) return;
-            BazaarContentHelper.StoreRoot = null;
-            BazaarContentHelper.Theme = null;
-            BazaarContentHelper.Currency = null;
+            BazaarContentHelper.Reset(e.SavedEntities.Select(x => x.ContentType));
+        }
+
+        /// <summary>
+        /// Clears the store root from the content helper when a qualifying delete occurs.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ContentServiceOnDeleted(IContentService sender, DeleteEventArgs<IContent> e)
+        {
+            BazaarContentHelper.Reset(e.DeletedEntities.Select(x => x.ContentType));
         }
 
         /// <summary>

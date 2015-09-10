@@ -6,11 +6,16 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
+
     using Merchello.Core;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
+    using Merchello.Web.WebApi.Binders;
+    using Merchello.Web.WebApi.Filters;
 
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -234,6 +239,32 @@
         }
 
         /// <summary>
+        /// The put product with detached content.
+        /// </summary>
+        /// <param name="detachedContentItem">
+        /// The product save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductDisplay PutProductWithDetachedContent(
+            [ModelBinder(typeof(ProductContentSaveBinder))]
+            ProductContentSave detachedContentItem)
+        {
+            ProductVariantDetachedContentHelper<ProductContentSave, ProductDisplay>.MapDetachedProperties(detachedContentItem);
+
+            var merchProduct = _productService.GetByKey(detachedContentItem.Display.Key);
+
+            merchProduct = detachedContentItem.Display.ToProduct(merchProduct);
+
+            _productService.Save(merchProduct);
+
+            return merchProduct.ToProductDisplay();
+        }
+
+        /// <summary>
         /// The put product variant.
         /// </summary>
         /// <param name="productVariant">
@@ -247,6 +278,29 @@
         {
             var variant = _productVariantService.GetByKey(productVariant.Key);
             variant = productVariant.ToProductVariant(variant);
+
+            _productVariantService.Save(variant);
+
+            return variant.ToProductVariantDisplay();
+        }
+
+        /// <summary>
+        /// The put product variant content.
+        /// </summary>
+        /// <param name="detachedContentItem">
+        /// The product variant save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductVariantDisplay PutProductVariantWithDetachedContent(
+            [ModelBinder(typeof(ProductVariantContentSaveBinder))]
+            ProductVariantContentSave detachedContentItem)
+        {
+            var variant = _productVariantService.GetByKey(detachedContentItem.Display.Key);
+            variant = detachedContentItem.Display.ToProductVariant(variant);
 
             _productVariantService.Save(variant);
 
@@ -313,10 +367,5 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        //[HttpPost, HttpDelete]
-        //public HttpResponseMessage DeleteProductVariant(Guid id)
-        //{
-
-        //}
     }
 }

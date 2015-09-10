@@ -1,10 +1,13 @@
 ﻿namespace Merchello.Bazaar.Install
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Gateways.Shipping.FixedRate;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
 
     using umbraco.cms.businesslogic.web;
 
@@ -24,6 +27,14 @@
         private readonly ServiceContext _services;
 
         /// <summary>
+        /// The collections.
+        /// </summary>
+        /// <remarks>
+        /// Introduced in 1.12.0
+        /// </remarks>
+        private readonly IDictionary<string, Guid> _collections = new Dictionary<string, Guid>(); 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BazaarDataInstaller"/> class.
         /// </summary>
         public BazaarDataInstaller()
@@ -39,7 +50,7 @@
         /// </returns>
         public IContent Execute()
         {
-            var product = this.AddMerchelloData();
+            this.AddMerchelloData();
 
             LogHelper.Info<BazaarDataInstaller>("Adding Example Merchello Data");
 
@@ -47,26 +58,18 @@
             var root = _services.ContentService.CreateContent("Store", -1, "BazaarStore");
 
             // Default theme
-            root.SetValue("themePicker", "Flatly");
+            root.SetValue("themePicker", "Sandstone-3");
             root.SetValue("customerMemberType", "MerchelloCustomer");
             root.SetValue("storeTitle", "Merchello Bazaar");
             root.SetValue("tagLine", "Get Shopping");
-
+            root.SetValue("featuredProducts", _collections["featuredProducts"].ToString());
 
             _services.ContentService.SaveAndPublishWithStatus(root);
 
-            LogHelper.Info<BazaarDataInstaller>("Adding Example ProductGroup and Products");
-            var pg = _services.ContentService.CreateContent("Soap", root.Id, "BazaarProductGroup");
-            pg.SetValue("image", "{ 'focalPoint' : { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1005/soapcategory.jpg', 'crops': [] }");
-            pg.SetValue("brief", "Avocado Moisturizing Bar is great for dry skin.");
+            LogHelper.Info<BazaarDataInstaller>("Adding example category page");
+            var pg = _services.ContentService.CreateContent("Specialized Soap", root.Id, "BazaarProductCollection");
+            pg.SetValue("products", _collections["specializedSoap"].ToString());
             _services.ContentService.SaveAndPublishWithStatus(pg);
-
-            var prod = _services.ContentService.CreateContent("Bar of Soap", pg.Id, "BazaarProduct");
-            prod.SetValue("merchelloProduct", product.Key.ToString());
-            prod.SetValue("description", "<p><span>Made with real avocados, this Avocado Moisturizing Bar is great for dry skin. Layers of color are achieved by using oxide colorants. Scented with Wasabi Fragrance Oil, this soap smells slightly spicy, making it a great choice for both men and women. To ensure this soap does not overheat, place in the freezer to keep cool and prevent gel phase.</span></p>");
-            prod.SetValue("brief", "Avocado Moisturizing Bar is great for dry skin.");
-            prod.SetValue("image", "{ 'focalPoint': { 'left': 0.5, 'top': 0.5 }, 'src': '/media/1009/avocadobars.jpg', 'crops': [] }");
-            _services.ContentService.SaveAndPublishWithStatus(prod);
 
             LogHelper.Info<BazaarDataInstaller>("Adding example eCommerce workflow pages");
             var basket = _services.ContentService.CreateContent("Basket", root.Id, "BazaarBasket");
@@ -104,10 +107,7 @@
         /// <summary>
         /// The add merchello data.
         /// </summary>
-        /// <returns>
-        /// The <see cref="IProduct"/>.
-        /// </returns>
-        private IProduct AddMerchelloData()
+        private void AddMerchelloData()
         {
             var merchelloServices = MerchelloContext.Current.Services;
 
@@ -123,11 +123,16 @@
             merchelloServices.WarehouseService.Save(warehouse);
 
             LogHelper.Info<BazaarDataInstaller>("Adding example shipping data");
-            var catalog = warehouse.WarehouseCatalogs.FirstOrDefault(x => x.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey);
+            var catalog =
+                warehouse.WarehouseCatalogs.FirstOrDefault(
+                    x => x.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey);
             var country = merchelloServices.StoreSettingService.GetCountryByCode("US");
 
             // The follow is internal to Merchello and not exposed in the public API
-            var shipCountry = ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.GetShipCountryByCountryCode(catalog.Key, "US");
+            var shipCountry =
+                ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.GetShipCountryByCountryCode(
+                    catalog.Key,
+                    "US");
             // Add the ship country
             if (shipCountry == null || shipCountry.CountryCode == "ELSE")
             {
@@ -137,8 +142,14 @@
 
             // Associate the fixed rate Shipping Provider to the ShipCountry
             var key = Core.Constants.ProviderKeys.Shipping.FixedRateShippingProviderKey;
-            var rateTableProvider = (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.GetProviderByKey(key);
-            var gatewayShipMethod = (FixedRateShippingGatewayMethod)rateTableProvider.CreateShipMethod(FixedRateShippingGatewayMethod.QuoteType.VaryByWeight, shipCountry, "Ground");
+            var rateTableProvider =
+                (FixedRateShippingGatewayProvider)MerchelloContext.Current.Gateways.Shipping.GetProviderByKey(key);
+            var gatewayShipMethod =
+                (FixedRateShippingGatewayMethod)
+                rateTableProvider.CreateShipMethod(
+                    FixedRateShippingGatewayMethod.QuoteType.VaryByWeight,
+                    shipCountry,
+                    "Ground");
 
             // Add rate adjustments for Hawaii and Alaska
             gatewayShipMethod.ShipMethod.Provinces["HI"].RateAdjustmentType = RateAdjustmentType.Numeric;
@@ -153,17 +164,66 @@
             gatewayShipMethod.RateTable.AddRow(25, 10000, 100);
             rateTableProvider.SaveShippingGatewayMethod(gatewayShipMethod);
 
-            LogHelper.Info<BazaarDataInstaller>("Adding an example product");
-            var product = merchelloServices.ProductService.CreateProduct("Bar of Soap", "soapbar", 5M);
-            product.Shippable = true;
-            product.Taxable = true;
-            product.TrackInventory = false;
-            product.Available = true;
-            product.Weight = 1M;
-            product.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(product, false);
-            return product;
-        }
+            // Add the product collections
+            var featuredProducts =
+                merchelloServices.EntityCollectionService.CreateEntityCollectionWithKey(
+                    EntityType.Product,
+                    Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
+                    "Featured Products");
+            var specializedSoap =
+                merchelloServices.EntityCollectionService.CreateEntityCollectionWithKey(
+                    EntityType.Product,
+                    Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
+                    "Specialized Soap");
+            _collections.Add("featuredProducts", featuredProducts.Key);
+            _collections.Add("specializedSoap", specializedSoap.Key);
 
+            // Add the detached content type
+            var contentType = _services.ContentTypeService.GetContentType("BazaarProductContent");
+            var detachedContentTypeService =
+                ((Core.Services.ServiceContext)merchelloServices).DetachedContentTypeService;
+            var detachedContentType = detachedContentTypeService.CreateDetachedContentType(
+                EntityType.Product,
+                contentType.Key,
+                "Bazaar Product");
+            detachedContentType.Description = "Default Bazaar Product Content";
+            detachedContentTypeService.Save(detachedContentType);
+
+            LogHelper.Info<BazaarDataInstaller>("Adding an example product");
+            var barOfSoap = merchelloServices.ProductService.CreateProduct("Bar of Soap", "soapbar", 5M);
+            barOfSoap.Shippable = true;
+            barOfSoap.Taxable = true;
+            barOfSoap.TrackInventory = false;
+            barOfSoap.Available = true;
+            barOfSoap.Weight = 1M;
+            barOfSoap.AddToCatalogInventory(catalog);
+            merchelloServices.ProductService.Save(barOfSoap, false);
+
+            // add to collections
+            barOfSoap.AddToCollection(featuredProducts);
+            barOfSoap.AddToCollection(specializedSoap);
+
+            var rootMedia = _services.MediaService.GetRootMedia().ToArray();
+
+            barOfSoap.DetachedContents.Add(
+                new ProductVariantDetachedContent(
+                    barOfSoap.ProductVariantKey,
+                    detachedContentType,
+                    "en-US",
+                    new DetachedDataValuesCollection(
+                        new[]
+                            {
+                                new KeyValuePair<string, string>(
+                                    "description",
+                                    "\"<p><span>Made with real avocados, this Avocado Moisturizing Bar is great for dry skin. Layers of color are achieved by using oxide colorants. Scented with Wasabi Fragrance Oil, this soap smells slightly spicy, making it a great choice for both men and women. To ensure this soap does not overheat, place in the freezer to keep cool and prevent gel phase.</span></p>\""),
+                                new KeyValuePair<string, string>(
+                                    "brief",
+                                    "\"Avocado Moisturizing Bar is great for dry skin.\""),
+                                new KeyValuePair<string, string>(
+                                    "image",
+                                    rootMedia.FirstOrDefault(x => x.Name == "avocadobars.jpg") != null ? "\"" + rootMedia.FirstOrDefault(x => x.Name == "avocadobars.jpg").Id.ToString() + "\"" : "\"\""), 
+                            })));            
+            merchelloServices.ProductService.Save(barOfSoap);
+        }
     }
 }
