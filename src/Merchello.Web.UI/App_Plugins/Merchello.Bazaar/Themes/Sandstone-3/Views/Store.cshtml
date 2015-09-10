@@ -1,9 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
-@using Merchello.Bazaar
 @using Merchello.Bazaar.Models.ViewModels
 @using Merchello.Web.Models.VirtualContent
 @using Umbraco.Web
-@using Umbraco.Web.Models
 @{
     Layout = "Master.cshtml";
 }
@@ -18,20 +16,22 @@
     <div class="page-header">
         <h1>Featured Products</h1>
     </div>
-	<div class="row">
-    @foreach (var product in Model.GetPropertyValue<IEnumerable<IProductContent>>("featuredProducts"))
-    {
-        <div class="col-md-6">
-            <a href="@product.Url">
-                <h2>@product.Name</h2>
-                @if (product.HasValue("image"))
-                {
-                   // var image = Umbraco.TypedMedia(product.GetPropertyValue("image"));
-                    <img src="" alt="@product.Name" />
-                }
-            </a>
-            <p>@product.GetPropertyValue("brief")</p>
-        </div>
-    }
+    <div class="row">
+        @foreach (var product in Model.GetPropertyValue<IEnumerable<IProductContent>>("featuredProducts"))
+        {
+            // if you want to specify the culture you can do it like
+            product.SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
+            
+            <div class="col-md-6">
+                <a href="@product.Url">
+                    <h2>@product.Name</h2>
+                    @if (product.HasValue("image"))
+                    {
+                        <img src="@product.GetCropUrl(propertyAlias: "image", height: 300)" alt="@product.Name" />
+                    }
+                </a>
+                <p>@product.GetPropertyValue("brief")</p>
+            </div>
+        }
     </div>
 </section>

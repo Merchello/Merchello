@@ -1,9 +1,6 @@
 ﻿namespace Merchello.Core.Models.DetachedContent
 {
-    using System;
-    using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Web.Http.Validation.Providers;
 
     using Merchello.Core.Models.EntityBase;
 

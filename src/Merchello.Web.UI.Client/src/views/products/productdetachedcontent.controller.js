@@ -121,6 +121,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     if ($scope.productVariant.hasDetachedContent()) {
                         $scope.productVariant.assertLanguageContent($scope.languages);
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
+                        $log.debug($scope.detachedContent);
                         $scope.isConfigured = true;
                         loadScaffold();
                     } else {
@@ -287,7 +288,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         angular.forEach(ct.properties, function(p) {
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
-                                p.value = angular.fromJson(stored);
+                                try {
+                                    p.value = angular.fromJson(stored);
+                                }
+                                catch (e) {
+                                    // Hack fix for some property editors
+                                    p.value = stored.substring(1, stored.length-1);
+                                }
                             }
                         });
                     });

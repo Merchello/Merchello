@@ -90,7 +90,7 @@
         /// <param name="e">
         /// The e.
         /// </param>
-        private void ContentServiceOnDeleted(IContentService sender, DeleteEventArgs<IContent> e)
+        private static void ContentServiceOnDeleted(IContentService sender, DeleteEventArgs<IContent> e)
         {
             BazaarContentHelper.Reset(e.DeletedEntities.Select(x => x.ContentType));
         }

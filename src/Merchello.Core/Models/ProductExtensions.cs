@@ -551,7 +551,9 @@
                             content.ProductVariantKey,
                             content.Slug,
                             content.CanBeRendered,
-                            DetachedDataValues = content.DetachedDataValues.AsEnumerable()
+                            DetachedDataValues = content.DetachedDataValues.AsEnumerable(),
+                            content.CreateDate,
+                            content.UpdateDate
                         });
                 }
 

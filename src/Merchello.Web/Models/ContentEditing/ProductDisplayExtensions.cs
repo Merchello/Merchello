@@ -17,8 +17,6 @@
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
-    using umbraco.developer;
-
     /// <summary>
     /// The product mapping extensions.
     /// </summary>
@@ -356,7 +354,37 @@
             }
 
             return variantContent;
-        } 
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not this object can be rendered as virtual content.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool HasVirtualContent(this ProductDisplay display)
+        {
+            return display.Available && display.DetachedContents.Any(x => x.CanBeRendered);
+        }
+
+        /// <summary>
+        /// Creates <see cref="IProductContent"/> from the display object.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public static IProductContent AsProductContent(this ProductDisplay display)
+        {
+            if (!display.HasVirtualContent()) return null;
+            var factory = new ProductContentFactory();
+            return factory.BuildContent(display);
+        }
 
         /// <summary>
         /// Gets the default slug.
