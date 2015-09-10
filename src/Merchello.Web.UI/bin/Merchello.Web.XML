@@ -8430,17 +8430,6 @@
             The entity.
             </param>
         </member>
-        <member name="M:Merchello.Web.Search.CachedProductQuery.GetDisplayObject(System.Guid)">
-            <summary>
-            Gets a display object from the Examine cache or falls back the the database if not found
-            </summary>
-            <param name="key">
-            The key.
-            </param>
-            <returns>
-            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
-            </returns>
-        </member>
         <member name="M:Merchello.Web.Search.CachedProductQuery.ModifyData``1(``0)">
             <summary>
             The modify data.
@@ -8453,6 +8442,17 @@
             </typeparam>
             <returns>
             The <see cref="!:T"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Search.CachedProductQuery.GetDisplayObject(System.Guid)">
+            <summary>
+            Gets a display object from the Examine cache or falls back the the database if not found
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Search.CachedProductQuery.PerformMapSearchResultToDisplayObject(Examine.SearchResult)">
