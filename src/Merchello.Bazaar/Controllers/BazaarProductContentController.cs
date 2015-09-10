@@ -2,6 +2,8 @@
 {
     using System.Web.Mvc;
 
+    using Merchello.Web.Models.VirtualContent;
+
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
@@ -23,6 +25,9 @@
         public override ActionResult Index(RenderModel model)
         {
             var theme = BazaarContentHelper.GetStoreTheme();
+
+            ((IProductContent)model.Content).SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
+
             return this.View(PathHelper.GetThemeViewPath(theme, "ProductContent"), model.Content);
         }
     }

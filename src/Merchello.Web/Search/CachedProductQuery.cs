@@ -147,7 +147,8 @@
 
             var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
 
-            if (display != null) return this.ModifyData(display);
+            // Don't modifiy the data here as it would have been modified in the PerformMapSearchResultToDisplayObject
+            if (display != null) return display;
 
             var key = _productService.GetKeyForSlug(slug);
 

@@ -22,6 +22,9 @@ ol, ul {
     text-decoration: line-through; }
   .price .sale-price {
     color: red; }
+  .price .original-price {
+    margin-left: 0.5em;
+    text-decoration: line-through; }
 
 div.price {
   padding: 1em; }

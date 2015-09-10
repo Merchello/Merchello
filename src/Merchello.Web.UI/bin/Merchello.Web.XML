@@ -5074,6 +5074,17 @@
             Extension methods for <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
             </summary>
         </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentExtensions.SpecifyCulture(Merchello.Web.Models.VirtualContent.IProductContent,System.Globalization.CultureInfo)">
+            <summary>
+            Specifies the model culture setting.
+            </summary>
+            <param name="content">
+            The content.
+            </param>
+            <param name="culture">
+            The culture.
+            </param>
+        </member>
         <member name="M:Merchello.Web.Models.VirtualContent.ProductContentExtensions.AsProductDisplay(Merchello.Web.Models.VirtualContent.IProductContent)">
             <summary>
             Gets the <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/> from <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
@@ -15347,6 +15358,28 @@
             The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.HasVirtualContent(Merchello.Web.Models.ContentEditing.ProductDisplay)">
+            <summary>
+            Returns a value indicating whether or not this object can be rendered as virtual content.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <returns>
+            The <see cref="T:System.Boolean"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.AsProductContent(Merchello.Web.Models.ContentEditing.ProductDisplay)">
+            <summary>
+            Creates <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/> from the display object.
+            </summary>
+            <param name="display">
+            The display.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Models.ContentEditing.ProductDisplayExtensions.GetDefaultSlug(Merchello.Web.Models.ContentEditing.ProductDisplayBase)">
             <summary>
             Gets the default slug.
@@ -16390,6 +16423,50 @@
             <param name="enableDataModifiers">
             A value indicating whether or not to enable data modifiers
             </param>
+        </member>
+        <member name="M:Merchello.Web.MerchelloHelper.TypeProductContent(System.String)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/> by it's key.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.MerchelloHelper.TypedProductContent(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/> by it's key.
+            </summary>
+            <param name="key">
+            The key.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.MerchelloHelper.TypedProductContentBySlug(System.String)">
+            <summary>
+            Gets a <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/> by it's slug.
+            </summary>
+            <param name="slug">
+            The slug.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.MerchelloHelper.TypedProductContentFromCollection(System.Guid)">
+            <summary>
+            The typed product content from collection.
+            </summary>
+            <param name="collectionKey">
+            The collection key.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.MerchelloHelper.Product(System.String)">
             <summary>

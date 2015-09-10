@@ -45,20 +45,12 @@
             if (slug.IsNullOrWhiteSpace()) return false;
 
             // This may have a db fallback so we want this content finder to happen after Umbraco's content finders.
-            var display = Merchello.Query.Product.GetBySlug(slug);
-
-            if (display == null) return false;
-
-            // products marked as not available cannot be rendered
-            if (!display.Available) return false;
-
-            // ensure their is a "renderable" detached content             
-            if (display.DetachedContents.FirstOrDefault(x => x.CanBeRendered) == null) return false;
-
-            var factory = new ProductContentFactory();
-  
-            contentRequest.PublishedContent = factory.BuildContent(display);
+            var content = Merchello.TypedProductContentBySlug(slug);
+            if (content == null) return false;
+            
+            contentRequest.PublishedContent = content;
             return true;
+
         }
 
         /// <summary>

@@ -30,7 +30,6 @@
                 {
                     Product = product.AsProductDisplay(),
                     ContentId = 0,
-                    ContentUrl = product.Url,
                     BasketPageId = BazaarContentHelper.GetBasketContent().Id,
                     ShowWishList = showWishList,
                     WishListPageId = BazaarContentHelper.GetWishListContent().Id,

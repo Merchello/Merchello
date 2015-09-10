@@ -8,7 +8,8 @@
     using Core.Services;
     
     using global::Examine.SearchCriteria;
-    
+
+    using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Validation;
 
     using Models.ContentEditing;
@@ -109,8 +110,73 @@
                 return _validationHelper.Value;
             }
         }
+
+        /// <summary>
+        /// Gets a <see cref="IProductContent"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypedProductContent(string key)
+        {
+            return this.TypedProductContent(new Guid(key));
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IProductContent"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypedProductContent(Guid key)
+        {
+            var display = Query.Product.GetByKey(key);
+            return display == null ? null : 
+                display.AsProductContent();
+        }
+
+        /// <summary>
+        /// Gets a <see cref="IProductContent"/> by it's slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypedProductContentBySlug(string slug)
+        {
+            var display = Query.Product.GetBySlug(slug);
+            return display == null ? null : 
+                display.AsProductContent();
+        }
+
+        /// <summary>
+        /// The typed product content from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey)
+        {
+            var products = Query.Product.GetFromCollection(collectionKey, 1, long.MaxValue).Items
+                    .Select(x => (ProductDisplay)x)
+                    .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
+
+            var factory = new ProductContentFactory();
+            return products.Select(factory.BuildContent);
+        }
         
-        #region Product
+            #region Product
 
         /// <summary>
         /// Retrieves a <see cref="ProductDisplay"/> from the Merchello Product index.
