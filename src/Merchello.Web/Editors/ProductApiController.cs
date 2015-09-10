@@ -299,6 +299,8 @@
             [ModelBinder(typeof(ProductVariantContentSaveBinder))]
             ProductVariantContentSave detachedContentItem)
         {
+            ProductVariantDetachedContentHelper<ProductVariantContentSave, ProductVariantDisplay>.MapDetachedProperties(detachedContentItem);
+
             var variant = _productVariantService.GetByKey(detachedContentItem.Display.Key);
             variant = detachedContentItem.Display.ToProductVariant(variant);
 

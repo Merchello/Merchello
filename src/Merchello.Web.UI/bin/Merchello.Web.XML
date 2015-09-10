@@ -2312,7 +2312,7 @@
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentHelper`2">
             <summary>
-            The product variant detached content helper.
+            Utility helper for correctly emulating content properties.
             </summary>
             <typeparam name="TSaveModel">
             The Type of save model
@@ -2328,6 +2328,17 @@
             <param name="detachedContentItem">
             The detached content item.
             </param>
+        </member>
+        <member name="M:Merchello.Web.Models.ContentEditing.Content.ProductVariantDetachedContentHelper`2.IsJsonObject(System.Object)">
+            <summary>
+            Simple check to guess if a property value is a JSON string
+            </summary>
+            <param name="propVal">
+            The prop val.
+            </param>
+            <returns>
+            The guess.
+            </returns>
         </member>
         <member name="T:Merchello.Web.Models.ContentEditing.Content.UmbContentTypeDisplay">
             <summary>
