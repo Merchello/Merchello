@@ -11,8 +11,7 @@
     /// <typeparam name="T">
     /// The type of <see cref="IEntity"/>
     /// </typeparam>
-    public abstract class CopyEntityTaskBase<T> : IAttemptChainTask<T>
-        where T : class, IEntity
+    public abstract class CopyEntityTaskBase<T> : AttemptChainTaskBase<T>
     {
         /// <summary>
         /// The _merchello context.
@@ -36,7 +35,7 @@
         protected CopyEntityTaskBase(IMerchelloContext merchelloContext, T original)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            Mandate.ParameterNotNull(original, "orginal");
+            Mandate.ParameterCondition(original is IEntity, "orginal");
             _merchelloContext = merchelloContext;
             _original = original;
         }
@@ -62,17 +61,5 @@
                 return _merchelloContext.Services;
             }
         }
-
-        /// <summary>
-        /// Performs the task.
-        /// </summary>
-        /// <param name="entity">
-        /// The <see cref="IEntity"/> argument.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attempt{T}"/>.
-        /// </returns>
-        public abstract Attempt<T> PerformTask(T entity);
-
     }
 }

@@ -7,7 +7,7 @@
     /// <summary>
     /// The copy product task base.
     /// </summary>
-    internal abstract class CopyProductTaskBase : CopyEntityTaskBase<IProduct>
+    public abstract class CopyProductTaskBase : CopyEntityTaskBase<IProduct>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CopyProductTaskBase"/> class.
@@ -37,6 +37,24 @@
             var skus = entitiesVariant.Attributes.Select(x => x.Sku).ToArray();
 
             return Original.ProductVariants.FirstOrDefault(x => x.Attributes.All(y => skus.Contains(y.Sku)));
+        }
+
+        /// <summary>
+        /// The get cloned mathing variant.
+        /// </summary>
+        /// <param name="clone">
+        /// The clone.
+        /// </param>
+        /// <param name="originalVariant">
+        /// The original variant.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        protected IProductVariant GetClonedMathingVariant(IProduct clone, IProductVariant originalVariant)
+        {
+            var skus = originalVariant.Attributes.Select(x => x.Sku).ToArray();
+            return clone.ProductVariants.FirstOrDefault(x => x.Attributes.All(y => skus.Contains(y.Sku)));
         }
     }
 }

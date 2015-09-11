@@ -11,7 +11,6 @@
     /// The type of <see cref="Entity"/>
     /// </typeparam>
     public interface ICopyEntityChain<T>
-        where T : class, IEntity
     {
         /// <summary>
         /// The copy.

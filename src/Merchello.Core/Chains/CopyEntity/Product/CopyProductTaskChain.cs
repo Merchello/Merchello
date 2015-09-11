@@ -130,13 +130,23 @@
             clone.Download = _original.Download;
             clone.DownloadMediaId = _original.DownloadMediaId;
             clone.Height = _original.Height;
+            clone.Length = _original.Length;
             clone.Weight = _original.Weight;
             clone.Width = _original.Width;
-            
+            clone.Manufacturer = _original.Manufacturer;
+            clone.ManufacturerModelNumber = _original.ManufacturerModelNumber;
+            clone.TrackInventory = _original.TrackInventory;
+            clone.OutOfStockPurchase = _original.OutOfStockPurchase;
+            clone.Shippable = _original.Shippable;
+            clone.Taxable = _original.Taxable;
 
-            return this.TaskHandlers.Any()
+            var attempt = this.TaskHandlers.Any()
                       ? this.TaskHandlers.First().Execute(clone)
                       : Attempt<IProduct>.Fail(clone, new NotSupportedException("No tasks were found to continue copying the product"));
+
+            if (attempt.Success) _merchelloContext.Services.ProductService.Save(attempt.Result);
+
+            return attempt;
         }
 
         /// <summary>

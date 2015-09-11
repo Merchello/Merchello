@@ -13,7 +13,6 @@
     /// The type of Merchello Entity
     /// </typeparam>
     internal abstract class CopyEntityAttemptChainBase<T> : ConfigurationChainBase<T>, ICopyEntityChain<T>
-        where T : class, IEntity
     {
         /// <summary>
         /// The copy.

@@ -72,8 +72,11 @@
 
             foreach (var key in catalogKeys)
             {
-                var catalog = _warehouseCatalogs.Value.FirstOrDefault(x => x.Key == key);
-                if (catalog != null) variant.AddToCatalogInventory(catalog);
+                if (variant.CatalogInventories.All(x => x.CatalogKey != key))
+                {
+                    var catalog = _warehouseCatalogs.Value.FirstOrDefault(x => x.Key == key);
+                    if (catalog != null) variant.AddToCatalogInventory(catalog);   
+                }
             }
         }
 

@@ -246,6 +246,8 @@
     <Compile Include="Chains\CopyEntity\CopyEntityTaskBase{T}.cs" />
     <Compile Include="Chains\CopyEntity\ICopyEntityChain{T}.cs" />
     <Compile Include="Chains\CopyEntity\Product\AddProductToWarehouseCatalogsTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyDetachedContentTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyProductCollectionsTask.cs" />
     <Compile Include="Chains\CopyEntity\Product\CopyProductOptionsTask.cs" />
     <Compile Include="Chains\CopyEntity\Product\CopyProductTaskBase.cs" />
     <Compile Include="Chains\CopyEntity\Product\CopyProductTaskChain.cs" />

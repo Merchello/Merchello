@@ -51,7 +51,7 @@
             Mandate.ParameterNotNullOrEmpty(typeName, "typName");
             Mandate.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
 
-            return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);            
+            return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);
         }
 
         /// <summary>
@@ -73,7 +73,11 @@
 
             try
             {
-                return Attempt<T>.Succeed(constructor.Invoke(constructorArgumentValues) as T);
+                var obj = constructor.Invoke(constructorArgumentValues);
+                return (obj is T)
+                           ? Attempt<T>.Succeed(obj as T)
+                           : Attempt<T>.Fail(
+                               new InvalidCastException("Object invoked was not of expected type: " + typeof(T).Name));
             }
             catch (Exception ex)
             {
