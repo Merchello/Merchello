@@ -34,7 +34,7 @@
         /// </returns>
         public override Attempt<IProduct> PerformTask(IProduct entity)
         {
-            Services.ProductService.Save(entity);
+            Services.ProductService.Save(entity, false); // don't add it to the Examine index yet.
             return Attempt<IProduct>.Succeed(entity);
         }
     }

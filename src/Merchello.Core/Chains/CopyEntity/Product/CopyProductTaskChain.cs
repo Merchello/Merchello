@@ -5,10 +5,13 @@
     using System.Data;
     using System.Linq;
 
+    using Examine;
+
     using Merchello.Core.Exceptions;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
+    using Umbraco.Web.UI.Umbraco.Dashboard;
 
     /// <summary>
     /// The copy product task chain.
@@ -123,7 +126,7 @@
         {
             if (!this.ValidateSku()) return Attempt<IProduct>.Fail(new InvalidSkuException("A product or product variant already exists with the sku: " + _sku + ". SKUs must be unique."));
 
-            var clone = _merchelloContext.Services.ProductService.CreateProduct(_name, _sku, _original.Price);
+            var clone = _merchelloContext.Services.ProductService.CreateProduct(_name, _sku, _original.Price, false);
             clone.Barcode = _original.Barcode;
             clone.Available = false;
             clone.CostOfGoods = _original.CostOfGoods;
@@ -133,6 +136,8 @@
             clone.Length = _original.Length;
             clone.Weight = _original.Weight;
             clone.Width = _original.Width;
+            clone.OnSale = _original.OnSale;
+            clone.SalePrice = _original.SalePrice;
             clone.Manufacturer = _original.Manufacturer;
             clone.ManufacturerModelNumber = _original.ManufacturerModelNumber;
             clone.TrackInventory = _original.TrackInventory;
@@ -144,7 +149,10 @@
                       ? this.TaskHandlers.First().Execute(clone)
                       : Attempt<IProduct>.Fail(clone, new NotSupportedException("No tasks were found to continue copying the product"));
 
-            if (attempt.Success) _merchelloContext.Services.ProductService.Save(attempt.Result);
+            if (attempt.Success)
+            {
+                _merchelloContext.Services.ProductService.Save(attempt.Result);
+            }
 
             return attempt;
         }

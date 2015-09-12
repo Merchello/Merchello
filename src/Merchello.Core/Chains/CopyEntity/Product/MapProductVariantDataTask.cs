@@ -38,10 +38,13 @@
         {
             foreach (var origVariant in Original.ProductVariants.ToArray())
             {
-                var cloneVariant = this.GetOrignalMatchingVariant(origVariant);
+                var cloneVariant = this.GetClonedMathingVariant(entity, origVariant);
 
                 cloneVariant.Barcode = origVariant.Barcode;
                 cloneVariant.Available = false;
+                cloneVariant.Price = origVariant.Price;
+                cloneVariant.OnSale = origVariant.OnSale;
+                cloneVariant.SalePrice = origVariant.SalePrice;
                 cloneVariant.CostOfGoods = origVariant.CostOfGoods;
                 cloneVariant.Download = origVariant.Download;
                 cloneVariant.DownloadMediaId = origVariant.DownloadMediaId;

@@ -5536,6 +5536,22 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyController',
+    ['$scope',
+    function($scope) {
+
+        $scope.wasFormSubmitted = false;
+        $scope.save = save;
+
+
+        function save() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.copyProductForm.name.$valid && $scope.copyProductForm.sku.$valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+}]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Product.Dialogs.AddProductContentTypeController
@@ -6424,6 +6440,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // Exposed methods
             $scope.save = save;
+            $scope.openCopyProductDialog = openCopyProductDialog;
             $scope.loadAllWarehouses = loadAllWarehouses;
             $scope.deleteProductDialog = deleteProductDialog;
 
@@ -6651,6 +6668,29 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 });
             }
 
+            function openCopyProductDialog() {
+                var dialogData = {
+                    product: $scope.product,
+                    name: '',
+                    sku: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.copy.html',
+                    show: true,
+                    callback: processCopyProduct,
+                    dialogData: dialogData
+                });
+            }
+
+
+            function processCopyProduct(dialogData) {
+                productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
+                    notificationsService.success("Product copied");
+                    $timeout(function() {
+                        $location.url("/merchello/merchello/productedit/" + result.key);
+                    }, 1000);
+                });
+            }
 
             /**
              * @ngdoc method
@@ -6705,9 +6745,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      * The controller for product edit with options view
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
-        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
+        ['$scope', '$routeParams', '$timeout', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
             'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
+        function($scope, $routeParams, $timeout, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
             merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
@@ -6719,6 +6759,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // exposed methods
             $scope.save = save;
+            $scope.openCopyProductDialog = openCopyProductDialog;
             $scope.deleteProductDialog = deleteProductDialog;
             $scope.init = init;
 
@@ -6832,6 +6873,32 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     notificationsService.error("Product Deletion Failed", reason.message);
                 });
             }
+
+            function openCopyProductDialog() {
+                var dialogData = {
+                    product: $scope.product,
+                    name: '',
+                    sku: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.copy.html',
+                    show: true,
+                    callback: processCopyProduct,
+                    dialogData: dialogData
+                });
+            }
+
+
+            function processCopyProduct(dialogData) {
+                productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
+                    notificationsService.success("Product copied");
+                    $timeout(function() {
+                        $location.url("/merchello/merchello/productedit/" + result.key);
+                    }, 1000);
+                });
+            }
+
+
 
             // Initialize the controller
             init();

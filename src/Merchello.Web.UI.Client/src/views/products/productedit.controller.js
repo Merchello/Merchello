@@ -41,6 +41,7 @@
 
             // Exposed methods
             $scope.save = save;
+            $scope.openCopyProductDialog = openCopyProductDialog;
             $scope.loadAllWarehouses = loadAllWarehouses;
             $scope.deleteProductDialog = deleteProductDialog;
 
@@ -268,6 +269,29 @@
                 });
             }
 
+            function openCopyProductDialog() {
+                var dialogData = {
+                    product: $scope.product,
+                    name: '',
+                    sku: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.copy.html',
+                    show: true,
+                    callback: processCopyProduct,
+                    dialogData: dialogData
+                });
+            }
+
+
+            function processCopyProduct(dialogData) {
+                productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
+                    notificationsService.success("Product copied");
+                    $timeout(function() {
+                        $location.url("/merchello/merchello/productedit/" + result.key);
+                    }, 1000);
+                });
+            }
 
             /**
              * @ngdoc method

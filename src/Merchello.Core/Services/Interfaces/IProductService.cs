@@ -22,10 +22,13 @@
         /// <param name="price">
         /// The price.
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        IProduct CreateProduct(string name, string sku, decimal price);
+        IProduct CreateProduct(string name, string sku, decimal price, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a Product and saves it to the database
@@ -39,10 +42,13 @@
         /// <param name="price">
         /// The price.
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        IProduct CreateProductWithKey(string name, string sku, decimal price);
+        IProduct CreateProductWithKey(string name, string sku, decimal price, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IProductVariant"/> object

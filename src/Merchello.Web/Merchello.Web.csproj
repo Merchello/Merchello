@@ -274,6 +274,7 @@
     <Compile Include="Models\ContentEditing\InvoiceShippingUpdateData.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
+    <Compile Include="Models\ContentEditing\ProductCopySave.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Discounts\Coupons\CouponManager.cs" />

@@ -7,9 +7,9 @@
      * The controller for product edit with options view
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
-        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
+        ['$scope', '$routeParams', '$timeout', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
             'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
+        function($scope, $routeParams, $timeout, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
             merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
@@ -21,6 +21,7 @@
 
             // exposed methods
             $scope.save = save;
+            $scope.openCopyProductDialog = openCopyProductDialog;
             $scope.deleteProductDialog = deleteProductDialog;
             $scope.init = init;
 
@@ -134,6 +135,32 @@
                     notificationsService.error("Product Deletion Failed", reason.message);
                 });
             }
+
+            function openCopyProductDialog() {
+                var dialogData = {
+                    product: $scope.product,
+                    name: '',
+                    sku: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.copy.html',
+                    show: true,
+                    callback: processCopyProduct,
+                    dialogData: dialogData
+                });
+            }
+
+
+            function processCopyProduct(dialogData) {
+                productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
+                    notificationsService.success("Product copied");
+                    $timeout(function() {
+                        $location.url("/merchello/merchello/productedit/" + result.key);
+                    }, 1000);
+                });
+            }
+
+
 
             // Initialize the controller
             init();

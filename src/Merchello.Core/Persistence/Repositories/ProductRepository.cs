@@ -1077,8 +1077,8 @@
             if (dto == null)
                 return null;
 
-            var inventoryCollection = ((ProductVariantRepository)_productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
-            var productAttributeCollection = ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
+            //var inventoryCollection = ((ProductVariantRepository)_productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
+            //var productAttributeCollection = ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
 
             var factory = new ProductFactory(
                 ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection,
@@ -1253,11 +1253,6 @@
             ((ProductVariantRepository)_productVariantRepository).SaveDetachedContents(((Product)entity).MasterVariant);
 
             entity.ResetDirtyProperties();
-
-            foreach (var key in cachedKeys)
-            {
-                RuntimeCache.ClearCacheItem(Core.Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(key));
-            }
         }
 
         /// <summary>
@@ -1378,7 +1373,7 @@
             var variants = _productVariantRepository.GetByQuery(query);
             foreach (var variant in variants)
             {
-                if (variant != null) // todo why is this need?
+                if (variant != null) 
                     collection.Add(variant);
             }
             return collection;
