@@ -37,18 +37,18 @@
         {
             <tr>
                 <td>@item.Name</td>
-                <td>@ModelExtensions.FormatPrice(item.Price, Model.Currency.Symbol)</td>
+                <td>@ModelExtensions.FormatPrice(item.Price, Model.Currency)</td>
                 <td class="text-center">@item.Quantity</td>
-                <td class="text-right">@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency.Symbol)</td>
+                <td class="text-right">@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency)</td>
             </tr>
         }
         <tr>
             <td colspan="3" class="text-right"><b>Shipping Total:</b></td>
-            <td class="text-right"><span id="shipping-total">@ModelExtensions.FormatPrice(Model.Invoice.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.Price), Model.Currency.Symbol)</span></td>
+            <td class="text-right"><span id="shipping-total">@ModelExtensions.FormatPrice(Model.Invoice.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.Price), Model.Currency)</span></td>
         </tr>
         <tr>
             <td colspan="3" class="text-right"><b>Tax Total:</b></td>
-            <td class="text-right"><span id="tax-total">@ModelExtensions.FormatPrice(Model.Invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.Price), Model.Currency.Symbol)</span></td>
+            <td class="text-right"><span id="tax-total">@ModelExtensions.FormatPrice(Model.Invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.Price), Model.Currency)</span></td>
         </tr>
         @if (discounts.Any())
         {
@@ -61,13 +61,13 @@
                 <tr>
                     <td>@item.Name</td>
                     <td colspan="2"><b>Offer Code:</b> @item.Sku @RenderRemoveCouponLink(item.Sku, isReceipt)</td>
-                    <td class="text-right">(@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency.Symbol))</td>
+                    <td class="text-right">(@ModelExtensions.FormatPrice(item.TotalPrice, Model.Currency))</td>
                 </tr>
             }
         }
         <tr>
             <td colspan="3" class="text-right"><b>Total:</b></td>
-            <td class="text-right"><span id="invoice-total">@ModelExtensions.FormatPrice(Model.Invoice.Total, Model.Currency.Symbol)</span></td>
+            <td class="text-right"><span id="invoice-total">@ModelExtensions.FormatPrice(Model.Invoice.Total, Model.Currency)</span></td>
         </tr>
     </tbody>
 </table>
