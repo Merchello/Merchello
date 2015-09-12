@@ -36,6 +36,7 @@
         /// <remarks>
         /// This is a fix for certain caching issues where we've introduced a repository
         /// that returns items cached in other objects.  
+        /// 
         /// TODO we need to look at this again when we refactor the repositories
         /// </remarks>
         protected virtual bool IsCachedRepository

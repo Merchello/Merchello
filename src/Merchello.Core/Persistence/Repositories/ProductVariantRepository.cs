@@ -37,6 +37,13 @@
         {            
         }
 
+        /// <summary>
+        /// Gets a value indicating whether is cached repository.
+        /// </summary>
+        /// <remarks>
+        /// TODO the ProductVariantService should eventually be made internal (or removed)
+        /// All access to IProductVariant should be done through IProduct for better Cache management
+        /// </remarks>
         protected override bool IsCachedRepository
         {
             get
