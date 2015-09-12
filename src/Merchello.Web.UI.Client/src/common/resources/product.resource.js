@@ -89,6 +89,14 @@
                         dc.detachedDataValues = dc.detachedDataValues.toArray();
                     });
 
+                    angular.forEach(product.productVariants, function(pv) {
+                      if (pv.detachedContents.length > 0) {
+                          angular.forEach(pv.detachedContents, function(pvdc) {
+                            pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                          });
+                      }
+                    });
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
                     var deferred = $q.defer();
                     umbRequestHelper.postMultiPartRequest(
@@ -156,6 +164,15 @@
                         });
 
                     return deferred.promise;
+                },
+
+                copyProduct: function(product, name, sku) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PostCopyProduct';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { product: product, name: name, sku: sku }
+                        ),
+                        'Failed to delete detached content');
                 },
 
                 /**

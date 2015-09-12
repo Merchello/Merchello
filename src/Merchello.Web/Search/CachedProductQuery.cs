@@ -15,6 +15,7 @@
     using Merchello.Core.Chains;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
+    using Merchello.Web.DataModifiers.Product;
 
     using Models.ContentEditing;
     using Models.Querying;

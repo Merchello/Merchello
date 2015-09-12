@@ -133,6 +133,9 @@
     <key alias="shippable">Shippable</key>
     <key alias="taxable">Taxable</key>
     <key alias="available">Available</key>
+    <key alias="copyProduct">Copy Product</key>
+    <key alias="newProductName">New Product Name</key>
+    <key alias="newProductSku">New Product SKU</key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>

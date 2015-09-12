@@ -242,6 +242,17 @@
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="Chains\ConfigurationChainBase.cs" />
+    <Compile Include="Chains\CopyEntity\CopyEntityAttemptChainBase{T}.cs" />
+    <Compile Include="Chains\CopyEntity\CopyEntityTaskBase{T}.cs" />
+    <Compile Include="Chains\CopyEntity\ICopyEntityChain{T}.cs" />
+    <Compile Include="Chains\CopyEntity\Product\AddProductToWarehouseCatalogsTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyDetachedContentTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyProductCollectionsTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyProductOptionsTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyProductTaskBase.cs" />
+    <Compile Include="Chains\CopyEntity\Product\CopyProductTaskChain.cs" />
+    <Compile Include="Chains\CopyEntity\Product\MapProductVariantDataTask.cs" />
+    <Compile Include="Chains\CopyEntity\Product\SaveProductCopyTask.cs" />
     <Compile Include="Chains\IDataModifierChain{T}.cs" />
     <Compile Include="Chains\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
@@ -300,6 +311,7 @@
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
+    <Compile Include="Exceptions\SkuExistsException.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />

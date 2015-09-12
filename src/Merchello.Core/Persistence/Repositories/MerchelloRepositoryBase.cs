@@ -31,6 +31,22 @@
         private readonly IRuntimeCacheProvider _cache;
 
         /// <summary>
+        /// Gets a value indicating whether is cached repository.
+        /// </summary>
+        /// <remarks>
+        /// This is a fix for certain caching issues where we've introduced a repository
+        /// that returns items cached in other objects.  
+        /// TODO we need to look at this again when we refactor the repositories
+        /// </remarks>
+        protected virtual bool IsCachedRepository
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloRepositoryBase{TEntity}"/> class.
         /// </summary>
         /// <param name="work">
@@ -172,11 +188,14 @@
 		/// </returns>
 		public TEntity Get(Guid key)
 		{
-			var fromCache = TryGetFromCache(key);
-			if (fromCache.Success)
-			{
-				return fromCache.Result;
-			}
+		    if (IsCachedRepository)
+		    {
+                var fromCache = TryGetFromCache(key);
+                if (fromCache.Success)
+                {
+                    return fromCache.Result;
+                }  
+		    }
 
 			var entity = PerformGet(key);
 			if (entity != null)

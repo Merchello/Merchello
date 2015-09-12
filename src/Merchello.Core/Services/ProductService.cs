@@ -130,7 +130,6 @@
 
         #endregion
 
-
         /// <summary>
         /// Creates a Product without saving it to the database
         /// </summary>
@@ -143,10 +142,13 @@
         /// <param name="price">
         /// The price.
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        public IProduct CreateProduct(string name, string sku, decimal price)
+        public IProduct CreateProduct(string name, string sku, decimal price, bool raiseEvents = true)
         {
             var templateVariant = new ProductVariant(name, sku, price);
             var product = new Product(templateVariant);
@@ -156,6 +158,7 @@
                 return product;
             }
 
+            if (raiseEvents)
             Created.RaiseEvent(new Events.NewEventArgs<IProduct>(product), this);
 
             return product;
@@ -173,13 +176,18 @@
         /// <param name="price">
         /// The price.
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        public IProduct CreateProductWithKey(string name, string sku, decimal price)
+        public IProduct CreateProductWithKey(string name, string sku, decimal price, bool raiseEvents = true)
         {
             var templateVariant = new ProductVariant(name, sku, price);
             var product = new Product(templateVariant);
+
+            if (raiseEvents)
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IProduct>(product), this))
             {
                 product.WasCancelled = true;
@@ -196,6 +204,7 @@
                 }
             }
 
+            if (raiseEvents)
             Created.RaiseEvent(new Events.NewEventArgs<IProduct>(product), this);
 
             return product;
