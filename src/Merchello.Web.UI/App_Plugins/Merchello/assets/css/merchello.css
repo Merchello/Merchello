@@ -1,4 +1,4 @@
-.merchello-panel-body {
+﻿.merchello-panel-body {
   position: absolute;
   top: 101px;
   bottom: 0;
@@ -13,7 +13,7 @@
   .merchello-panel-body a {
     cursor: pointer;
     color: #049cdb; }
-  .merchello-panel-body .active, .merchello-panel-body .active td, .merchello-side-panel .active .merchello-panel-body td, .merchello-context-panel .active .merchello-panel-body td, .merchello-panel-body .active:hover, .merchello-panel-body .active td:hover, .merchello-side-panel .active .merchello-panel-body td:hover, .merchello-context-panel .active .merchello-panel-body td:hover {
+  .merchello-panel-body .active, .merchello-panel-body .merchello-panel-body .active td, .merchello-panel-body .active .merchello-panel-body td, .merchello-panel-body .merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body td, .merchello-panel-body .merchello-context-panel .active td, .merchello-context-panel .active .merchello-panel-body td, .merchello-panel-body .active:hover, .merchello-panel-body .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-panel-body td:hover, .merchello-panel-body .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-panel-body td:hover, .merchello-panel-body .merchello-context-panel .active td:hover, .merchello-context-panel .active .merchello-panel-body td:hover {
     background-color: #f0f9ee; }
   .merchello-panel-body .btn {
     line-height: 21px;
@@ -33,11 +33,11 @@
     line-height: 20px;
     text-shadow: none; }
   .merchello-panel-body .label-success {
-    background: #8ecf7f; }
+    background: #8fcf7f; }
   .merchello-panel-body .label-warning {
-    background: #f9af82; }
+    background: #f9ae82; }
   .merchello-panel-body .label-info {
-    background: #8cd0ec; }
+    background: #8cd1ec; }
   .merchello-panel-body .icon-loading:before {
     font-size: 1.15em;
     vertical-align: top;
@@ -179,7 +179,7 @@
     float: left;
     display: inline-block;
     margin-right: 10px;
-    line-height: .8em; }
+    line-height: 0.8em; }
     .merchello-panel-body *[class*="icon"].large + p {
       display: inline-block;
       width: 90%; }
@@ -202,9 +202,9 @@
     font-size: 1em; }
   .merchello-panel-body .merchello-striped-table td > i {
     font-size: 1.7em; }
-  .merchello-panel-body .active td, .merchello-side-panel .active .merchello-panel-body td td, .merchello-context-panel .active .merchello-panel-body td td {
-    border-top: solid 1px #cfebc9; }
-  .merchello-panel-body .table-hover tbody .active:hover > td, .merchello-panel-body .table-hover tbody .active td:hover > td, .merchello-panel-body .active .table-hover tbody td:hover > td, .merchello-side-panel .active .merchello-panel-body .table-hover tbody td:hover > td, .merchello-context-panel .active .merchello-panel-body .table-hover tbody td:hover > td {
+  .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body .active td, .merchello-panel-body .active .merchello-context-panel .active td, .merchello-context-panel .active .merchello-panel-body .active td {
+    border-top: solid 1px #d0ebc9; }
+  .merchello-panel-body .table-hover tbody .active:hover > td, .merchello-panel-body .table-hover tbody .active:hover > .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-panel-body .table-hover tbody .active:hover > td:hover, .merchello-panel-body .table-hover tbody .active:hover > .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-panel-body .table-hover tbody .active:hover > td:hover, .merchello-panel-body .table-hover tbody .active:hover > .merchello-context-panel .active td:hover, .merchello-context-panel .active .merchello-panel-body .table-hover tbody .active:hover > td:hover {
     background-color: #e0f2dc; }
   .merchello-panel-body .table .text-right {
     text-align: right; }
@@ -347,7 +347,7 @@
         color: #f57020;
         text-decoration: none;
         border-color: #f57020;
-        background: #fcceb2; }
+        background: #fccdb2; }
       .merchello-panel-body .tags .tag:after {
         content: "\e1a4";
         padding-left: 5px;
@@ -385,11 +385,11 @@
         padding-top: 0;
         border-top: none; }
     .merchello-panel-body .notes #new {
-      color: #f78f51; }
+      color: #f78e51; }
       .merchello-panel-body .notes #new blockquote {
         border-left-color: #f57020; }
       .merchello-panel-body .notes #new .date-time {
-        color: #f9af82; }
+        color: #f9ae82; }
   .merchello-panel-body .customer-details ul {
     margin: 0;
     padding: 0;
@@ -455,7 +455,7 @@
     overflow: hidden; }
   .bar-graph .merchello-panel-body li {
     display: inline-block;
-    margin-right: .8%;
+    margin-right: 0.8%;
     text-align: center;
     color: #d9d9d9;
     margin-left: -4px; }
@@ -479,8 +479,8 @@
   .month .merchello-panel-body li {
     width: 2.5%; }
   .ninety .merchello-panel-body li {
-    width: .81%;
-    margin-right: .3%;
+    width: 0.81%;
+    margin-right: 0.3%;
     overflow: hidden;
     text-indent: -9999em; }
   .ninety .key .merchello-panel-body li:nth-child(5n), .ninety .key .merchello-panel-body li:first-child {
@@ -493,18 +493,18 @@
   .merchello-panel-body .bar-graph .graph {
     border-bottom: solid 1px #d9d9d9; }
   .merchello-panel-body .bar-graph .mid {
-    background: #8cd0ec; }
+    background: #8cd1ec; }
   .merchello-panel-body .bar-graph .high {
-    background: #8ecf7f; }
+    background: #8fcf7f; }
   .merchello-panel-body .bar-graph .low {
-    background: #f9af82; }
+    background: #f9ae82; }
   @media screen and (max-width: 88em) {
     .day .merchello-panel-body li {
-      margin-right: .8%; }
+      margin-right: 0.8%; }
     .month .merchello-panel-body li {
-      margin-right: .8%; }
+      margin-right: 0.8%; }
     .ninety .merchello-panel-body li {
-      margin-right: .3%; } }
+      margin-right: 0.3%; } }
 
 .umb-dashboard-control .merchello-panel-body {
   top: 0 !important; }
@@ -517,10 +517,10 @@
   display: block; }
 .merchello-side-panel input[type="radio"] {
   margin-top: 0; }
-.merchello-side-panel .active, .merchello-panel-body .active .merchello-side-panel td, .merchello-side-panel .active td, .merchello-context-panel .active .merchello-side-panel td, .merchello-side-panel .active:hover, .merchello-panel-body .active .merchello-side-panel td:hover, .merchello-side-panel .active td:hover, .merchello-context-panel .active .merchello-side-panel td:hover {
+.merchello-side-panel .active, .merchello-side-panel .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel td, .merchello-side-panel .merchello-side-panel .active td, .merchello-side-panel .active .merchello-side-panel td, .merchello-side-panel .merchello-context-panel .active td, .merchello-context-panel .active .merchello-side-panel td, .merchello-side-panel .active:hover, .merchello-side-panel .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-side-panel td:hover, .merchello-side-panel .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-side-panel td:hover, .merchello-side-panel .merchello-context-panel .active td:hover, .merchello-context-panel .active .merchello-side-panel td:hover {
   background-color: #f0f9ee; }
-.merchello-side-panel .active td, .merchello-panel-body .active .merchello-side-panel td td, .merchello-context-panel .active .merchello-side-panel td td {
-  border-top: solid 1px #cfebc9; }
+.merchello-side-panel .active td, .merchello-side-panel .active .merchello-panel-body .active td, .merchello-panel-body .active .merchello-side-panel .active td, .merchello-side-panel .active .merchello-context-panel .active td, .merchello-context-panel .active .merchello-side-panel .active td {
+  border-top: solid 1px #d0ebc9; }
 .merchello-side-panel .error {
   color: #fff;
   background: #9d261d;
@@ -536,10 +536,10 @@
     white-space: normal; }
   .merchello-context-panel strong {
     display: block; }
-  .merchello-context-panel .active, .merchello-panel-body .active .merchello-context-panel td, .merchello-side-panel .active .merchello-context-panel td, .merchello-context-panel .active td, .merchello-context-panel .active:hover, .merchello-panel-body .active .merchello-context-panel td:hover, .merchello-side-panel .active .merchello-context-panel td:hover, .merchello-context-panel .active td:hover {
+  .merchello-context-panel .active, .merchello-context-panel .merchello-panel-body .active td, .merchello-panel-body .active .merchello-context-panel td, .merchello-context-panel .merchello-side-panel .active td, .merchello-side-panel .active .merchello-context-panel td, .merchello-context-panel .merchello-context-panel .active td, .merchello-context-panel .active .merchello-context-panel td, .merchello-context-panel .active:hover, .merchello-context-panel .merchello-panel-body .active td:hover, .merchello-panel-body .active .merchello-context-panel td:hover, .merchello-context-panel .merchello-side-panel .active td:hover, .merchello-side-panel .active .merchello-context-panel td:hover, .merchello-context-panel .merchello-context-panel .active td:hover, .merchello-context-panel .active .merchello-context-panel td:hover {
     background-color: #f0f9ee; }
-  .merchello-context-panel .active td, .merchello-panel-body .active .merchello-context-panel td td, .merchello-side-panel .active .merchello-context-panel td td {
-    border-top: solid 1px #cfebc9; }
+  .merchello-context-panel .active td, .merchello-context-panel .active .merchello-panel-body .active td, .merchello-panel-body .active .merchello-context-panel .active td, .merchello-context-panel .active .merchello-side-panel .active td, .merchello-side-panel .active .merchello-context-panel .active td {
+    border-top: solid 1px #d0ebc9; }
   .merchello-context-panel .error {
     color: #fff;
     background: #9d261d;
@@ -566,9 +566,9 @@
   display: inline-block; }
   .merchello-icons.merchello-icons-interactive {
     opacity: 0;
-    transition: opacity .15s ease-in-out;
-    -moz-transition: opacity .15s ease-in-out;
-    -webkit-transition: opacity .15s ease-in-out; }
+    transition: opacity 0.15s ease-in-out;
+    -moz-transition: opacity 0.15s ease-in-out;
+    -webkit-transition: opacity 0.15s ease-in-out; }
   .merchello-icons .merchello-icon {
     display: inline-block;
     padding: 4px 6px;
@@ -610,11 +610,11 @@
   font-size: 1em;
   line-height: 20px;
   text-shadow: none;
-  padding: .25em 1em .25em .5em; }
+  padding: 0.25em 1em 0.25em 0.5em; }
   .merchello-list-view .label i {
     color: #000; }
 .merchello-list-view .label-success {
-  background: #cfebc9;
+  background: #d0ebc9;
   border-color: #53a93f; }
 .merchello-list-view .label-warning {
   background: #feede3;
@@ -637,6 +637,10 @@
   text-align: left; }
   .detached-content-select label {
     font-weight: bold; }
+
+.control-label {
+  width: 160px;
+  position: absolute; }
 
 .merchello-panel-body .order-items ul {
   margin: 0;
@@ -669,9 +673,9 @@
     font-width: bold; }
 
 .sales-history h4 {
-  margin-bottom: .5em; }
+  margin-bottom: 0.5em; }
   .sales-history h4 small {
-    margin-top: .25em;
+    margin-top: 0.25em;
     display: block; }
 
 .merchello-settings .form-group {
@@ -693,7 +697,7 @@
   .merchello-panel-body .product-tax-method input[type="checkbox"] {
     display: inline-block;
     margin: 0;
-    padding: .5em 0;
+    padding: 0.5em 0;
     line-height: 20px;
     vertical-align: middle; }
 
@@ -737,9 +741,9 @@
   margin-right: 1em; }
 
 .each-matching {
-  padding-left: .5em; }
+  padding-left: 0.5em; }
   .each-matching input[type=checkbox] {
-    margin-right: .5em; }
+    margin-right: 0.5em; }
 
 .constraint-product-selector strong {
   display: inline; }
@@ -768,11 +772,11 @@
   line-height: 20px;
   text-shadow: none; }
 .entity-collection-table .label-success {
-  background: #8ecf7f; }
+  background: #8fcf7f; }
 .entity-collection-table .label-warning {
-  background: #f9af82; }
+  background: #f9ae82; }
 .entity-collection-table .label-info {
-  background: #8cd0ec; }
+  background: #8cd1ec; }
 
 .merchello-controls .hover-hide {
   cursor: pointer; }
@@ -821,7 +825,7 @@ h1.logo {
     display: block;
     width: 169px;
     height: 48px;
-    background: url("/App_Plugins/Merchello/assets/images/h1-a.png") no-repeat;
+    background: url('/App_Plugins/Merchello/assets/images/h1-a.png') no-repeat;
     text-indent: -9999px; }
 
 .merchello-documentation {

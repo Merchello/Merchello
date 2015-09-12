@@ -1232,7 +1232,6 @@ angular.module('merchello.resources')
                 },
 
                 saveProductContent: function(product, cultureName, files) {
-                    console.info('culture check ' + cultureName);
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.toArray();
                     });
