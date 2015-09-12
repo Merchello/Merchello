@@ -121,7 +121,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     if ($scope.productVariant.hasDetachedContent()) {
                         $scope.productVariant.assertLanguageContent($scope.languages);
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
-                        $log.debug($scope.detachedContent);
                         $scope.isConfigured = true;
                         loadScaffold();
                     } else {
