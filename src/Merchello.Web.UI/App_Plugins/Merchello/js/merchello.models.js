@@ -2536,9 +2536,10 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
         }
 
         function assertLanguageContent(isoCodes) {
+            var self = this;
             var missing = [];
             var removers = [];
-            _.each(this.detachedContents, function(dc) {
+            _.each(self.detachedContents, function(dc) {
               var found = _.find(isoCodes, function(code) {
                 return code === dc.cultureName;
                 });
@@ -2548,18 +2549,17 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             });
 
             angular.forEach(removers, function(ic) {
-                this.detachedContents = _.reject(this.detachedContents, function(oust) {
+                this.detachedContents = _.reject(self.detachedContents, function(oust) {
                     return oust.cultureName === ic;
                 });
             });
 
-            missing = _.filter(this.detachedContents, function(check) {
-                var fnd = _.find(isoCodes, function(ic) {
-                  return ic.isoCode === check.cultureName;
+            missing = _.filter(isoCodes, function(check) {
+                var fnd = _.find(self.detachedContents, function(dc) {
+                  return dc.cultureName === check;
                 });
                 return fnd === undefined;
             });
-
             return missing;
         }
 

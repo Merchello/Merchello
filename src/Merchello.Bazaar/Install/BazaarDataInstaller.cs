@@ -307,7 +307,6 @@
             genericSoap.Weight = 1M;
             genericSoap.AddToCatalogInventory(catalog);
             genericSoap.ProductOptions.Add(new ProductOption("Color"));
-            genericSoap.ProductOptions.Add(new ProductOption("Color"));
             genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("White", "White"));
             genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
             genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));

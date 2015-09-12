@@ -7,13 +7,13 @@
       <PropertyGroup>
         
         <VersionMajor>1</VersionMajor>
-        <VersionMinor>11</VersionMinor>
+        <VersionMinor>12</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>15</VersionSuffix>        
+        <VersionSuffix>0</VersionSuffix>        
         <BuildConfiguration>Release</BuildConfiguration>
         <ReleaseAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch)</ReleaseAssemblyInformationVersion>
         <DevAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</DevAssemblyInformationVersion>
-        <AssemblyInformationVersion>$(DevAssemblyInformationVersion)</AssemblyInformationVersion>
+        <AssemblyInformationVersion>$(ReleaseAssemblyInformationVersion)</AssemblyInformationVersion>
 
 
         <UmbracoVersionMajor>7</UmbracoVersionMajor>
