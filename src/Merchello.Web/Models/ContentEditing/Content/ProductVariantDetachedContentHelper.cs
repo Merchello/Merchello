@@ -90,7 +90,7 @@
                         // TODO there has to be a better way of getting the preValues
                         var preValues = dataTypeService.GetPreValuesCollectionByDataTypeId(p.DataTypeDefinitionId);
 
-                        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue), preValues, d);
+                        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue.Trim()), preValues, d);
 
                         var valueEditor = editor.ValueEditor;
                         if (valueEditor.IsReadOnly == false)

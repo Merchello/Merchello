@@ -107,9 +107,22 @@
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
+            // Detached Content
+            LocalizationService.SavedLanguage += LocalizationServiceOnSavedLanguage;
+            LocalizationService.DeletedLanguage += LocalizationServiceOnDeletedLanguage;
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        private void LocalizationServiceOnDeletedLanguage(ILocalizationService sender, DeleteEventArgs<ILanguage> deleteEventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void LocalizationServiceOnSavedLanguage(ILocalizationService sender, SaveEventArgs<ILanguage> saveEventArgs)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -132,6 +132,19 @@
             return Database.Fetch<ProductVariantDto>(sql).Any();
         }
 
+        ///// <summary>
+        ///// Deletes all detached content for culture.
+        ///// </summary>
+        ///// <param name="cultureName">
+        ///// The culture name.
+        ///// </param>
+        //public void DeleteAllDetachedContentForCulture(string cultureName)
+        //{
+        //    Database.Execute(
+        //        "DELETE FROM merchProductVariantDetachedContent WHERE cultureName = @Cn",
+        //        new { @Cn = cultureName });
+        //}
+
         /// <summary>
         /// The get product attribute collection.
         /// </summary>
