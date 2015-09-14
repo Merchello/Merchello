@@ -7,6 +7,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Web.Routing;
     using System.Xml.Linq;
     using Outline;
     using Umbraco.Core.IO;
@@ -193,6 +194,29 @@
         public string FullpathToRoot
         {
             get { return GetRootDirectorySafe(); }
+        }
+
+        /// <summary>
+        /// The get product slug culture prefix.
+        /// </summary>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The product slug prefix.
+        /// </returns>
+        public string GetProductSlugCulturePrefix(string cultureName)
+        {
+            try
+            {
+                if (!Section.ContentFinderCulture.Routes().Any()) return string.Empty;
+                var el = Section.ContentFinderCulture[cultureName];
+                return el == null ? string.Empty : el.ProductSlugPrefix.EnsureNotEndsWith('/');
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>

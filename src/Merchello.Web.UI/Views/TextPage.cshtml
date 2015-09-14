@@ -1,6 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @{
-    Layout = "Base.cshtml";
+    Layout = null;
 }
 
-@CurrentPage.bodyText
+@Model.Content.GetProperty("cropper").GetType().Name
+@Model.Content.GetCropUrl("cropper")

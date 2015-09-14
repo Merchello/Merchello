@@ -79,7 +79,8 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
-        /// This is a helper contructor for unit testing
+        /// Initializes a new instance of the <see cref="ShipmentApiController"/> class. 
+        /// This is a helper constructor for unit testing
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello Context.
@@ -102,7 +103,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ShipmentApi/GetShipment/{guid}
         /// </summary>
-        /// <param name="id">The shipment key</param>
+        /// <param name="id">
+        /// The shipment key
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipmentDisplay"/>.
+        /// </returns>
         [HttpGet]
         public ShipmentDisplay GetShipment(Guid id)
         {
@@ -115,12 +121,17 @@ namespace Merchello.Web.Editors
             return shipment.ToShipmentDisplay();
         }
 
+
 		/// <summary>
 		/// Returns a list of shipments by their ids
-		/// GET /umbraco/Merchello/ShipmentApi/GetShipments?ids={guid}&ids={guid}
+		/// GET /umbraco/Merchello/ShipmentApi/GetShipments?ids={guid}={guid}
 		/// </summary>
-		/// <param name="ids"></param>
-		/// <returns></returns>
+		/// <param name="ids">
+		/// The ids.
+		/// </param>
+		/// <returns>
+        /// The <see cref="IEnumerable{ShipmentDisplay}"/>.
+		/// </returns>
 		[HttpGet]
         public IEnumerable<ShipmentDisplay> GetShipments([FromUri]IEnumerable<Guid> ids)
 		{
@@ -138,10 +149,14 @@ namespace Merchello.Web.Editors
 		}
 
         /// <summary>
-        /// Gets the Shipmethod that was quoted for an order
+        /// Gets the Ship method that was quoted for an order
         /// </summary>
-        /// <param name="order"></param>
-        /// <returns></returns>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipMethodDisplay"/>.
+        /// </returns>
         [HttpPost]
         public ShipMethodDisplay GetShipMethod(OrderDisplay order)
         {
@@ -215,10 +230,12 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Adds a shipment
-        ///
+        /// 
         /// POST /umbraco/Merchello/ShipmentApi/CreateShipment
         /// </summary>
-        /// <param name="shipmentRequest">POSTed <see cref="ShipmentRequestDisplay"/> object</param>
+        /// <param name="shipmentRequest">
+        /// POSTed <see cref="ShipmentRequestDisplay"/> object
+        /// </param>
         /// <remarks>
         /// 
         /// Note:  This is a modified order that very likely has not been persisted.  The UI 
@@ -227,6 +244,9 @@ namespace Merchello.Web.Editors
         /// other order data, such as the invoiceKey are important for this process.
         /// 
         /// </remarks>
+        /// <returns>
+        /// The <see cref="ShipmentDisplay"/>.
+        /// </returns>
         [HttpPost]
         public ShipmentDisplay NewShipment(ShipmentRequestDisplay shipmentRequest)
         {
@@ -241,15 +261,14 @@ namespace Merchello.Web.Editors
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
-                
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));                
                                   
                 return attempt.Result.ToShipmentDisplay();
 
             }
             catch (Exception ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message)));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message)));
             }
         }
 

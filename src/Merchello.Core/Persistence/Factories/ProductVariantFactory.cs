@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System;
+
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Rdbms;
 
     /// <summary>
@@ -11,12 +14,17 @@
         /// <summary>
         /// The <see cref="ProductAttributeCollection"/>.
         /// </summary>
-        private readonly ProductAttributeCollection _productAttributeCollection;
+        private readonly Func<Guid, ProductAttributeCollection> _productAttributeCollection;
 
         /// <summary>
         /// The <see cref="CatalogInventoryCollection"/>.
         /// </summary>
-        private readonly CatalogInventoryCollection _catalogInventories;
+        private readonly Func<Guid, CatalogInventoryCollection> _catalogInventories;
+
+        /// <summary>
+        /// The <see cref="DetachedContentCollection{IProductVariantDetachedContent}"/>.
+        /// </summary>
+        private readonly Func<Guid, DetachedContentCollection<IProductVariantDetachedContent>> _detachedContentCollection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantFactory"/> class.
@@ -27,11 +35,17 @@
         /// <param name="catalogInventories">
         /// The catalog inventories.
         /// </param>
-        public ProductVariantFactory(ProductAttributeCollection productAttributes,
-            CatalogInventoryCollection catalogInventories)
+        /// <param name="detachedContentCollection">
+        /// The <see cref="DetachedContentCollection{IProductVariantDetachedContent}"/>
+        /// </param>
+        public ProductVariantFactory(
+            Func<Guid, ProductAttributeCollection> productAttributes,
+            Func<Guid, CatalogInventoryCollection> catalogInventories,
+            Func<Guid, DetachedContentCollection<IProductVariantDetachedContent>> detachedContentCollection)
         {
             _productAttributeCollection = productAttributes;
             _catalogInventories = catalogInventories;
+            _detachedContentCollection = detachedContentCollection;
         }
 
         /// <summary>
@@ -68,8 +82,9 @@
                 DownloadMediaId = dto.DownloadMediaId,
                 Master = dto.Master,
                 ExamineId = dto.ProductVariantIndexDto.Id, 
-                CatalogInventoryCollection = _catalogInventories,
-                ProductAttributes = _productAttributeCollection,
+                CatalogInventoryCollection = _catalogInventories.Invoke(dto.Key),
+                ProductAttributes = _productAttributeCollection.Invoke(dto.Key),
+                DetachedContents = _detachedContentCollection.Invoke(dto.Key),
                 VersionKey = dto.VersionKey,
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate

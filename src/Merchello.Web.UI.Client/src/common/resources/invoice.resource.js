@@ -43,6 +43,13 @@
                             'Failed to retreive invoices');
                     },
 
+                    searchByCustomer : function(query) {
+                        var url = baseUrl + 'SearchByCustomer';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url, query),
+                            'Failed to retreive invoices');
+                    },
+
                     /**
                      * @ngdoc method
                      * @name searchInvoices

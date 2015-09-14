@@ -48,6 +48,7 @@
             Download = masterVariant.Download;
             DownloadMediaId = masterVariant.DownloadMediaId;
             CatalogInventories = masterVariant.CatalogInventories;
+            DetachedContents = masterVariant.DetachedContents;
             VersionKey = masterVariant.VersionKey;
         }
 

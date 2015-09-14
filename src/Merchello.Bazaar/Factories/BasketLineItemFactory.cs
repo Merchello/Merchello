@@ -1,8 +1,12 @@
 ﻿namespace Merchello.Bazaar.Factories
 {
+    using System;
+
     using Merchello.Bazaar.Models;
     using Merchello.Bazaar.Models.ViewModels;
     using Merchello.Core.Models;
+    using Merchello.Web;
+    using Merchello.Web.Trees.Actions;
 
     using Umbraco.Core;
     using Umbraco.Web;
@@ -12,6 +16,8 @@
     /// </summary>
     internal class BasketLineItemFactory
     {
+        private readonly MerchelloHelper _merchello = new MerchelloHelper();
+
         /// <summary>
         /// The _umbraco.
         /// </summary>
@@ -65,6 +71,19 @@
                                 ? int.Parse(lineItem.ExtendedData["umbracoContentId"])
                                 : 0;
 
+            var productKey = lineItem.ExtendedData.GetProductKey();
+            ProductModel product = null;
+            if (!productKey.Equals(Guid.Empty))
+            {
+                var productContent = _merchello.TypedProductContent(productKey);  
+                if (productContent != null) product = new ProductModel(productContent)
+                                                          {
+                                                              CurrentCustomer = _currentCustomer,
+                                                              Currency = _currency
+                                                          };
+            }
+            
+
             var basketLineItem = new BasketLineItem
                 {
                     Key = lineItem.Key,
@@ -74,15 +93,32 @@
                     UnitPrice = lineItem.Price,
                     TotalPrice = lineItem.TotalPrice,
                     Quantity = lineItem.Quantity,
-                    Product = contentId > 0 ? new ProductModel(this._umbraco.TypedContent(contentId))
-                                                  {
-                                                      CurrentCustomer = this._currentCustomer,
-                                                      Currency = this._currency
-                                                  } 
-                                                  : null
+                    ExtendedData = lineItem.ExtendedData,
+                    Product = product ?? this.HandleLegacyBazaarProductContent(contentId)
                 };
 
             return basketLineItem;
-        }  
+        }
+
+        /// <summary>
+        /// The handle legacy bazaar product content.
+        /// </summary>
+        /// <param name="contentId">
+        /// The content id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductModel"/>.
+        /// </returns>
+        private ProductModel HandleLegacyBazaarProductContent(int contentId)
+        {
+            return contentId > 0
+                       ? new ProductModel(this._umbraco.TypedContent(contentId))
+                             {
+                                 CurrentCustomer =
+                                     this._currentCustomer,
+                                 Currency = this._currency
+                             }
+                       : null;
+        }
     }
 }

@@ -5,7 +5,7 @@
 
     <merchello-panel>
         <div class="merchello-pane row-fluid">
-            <div class="control-group umb-control-group">
+            <div class="control-group umb-control-group merchello-settings">
                 <label class="merchello-control-label">
                     <localize key="merchelloSettings_storeDefaults" />
                     <small><localize key="merchelloSettings_setDefaultSettingsHelper" /></small>
@@ -25,6 +25,13 @@
                             <option value="yyyy-MM-dd">yyyy-MM-dd (ex: 2014-01-01)</option>
                         </select>
                     </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="cultureName"><localize key="merchelloSettings_defaultCultureName" /></label>
+                        <select class="form-control col-xs-8 span8" name="cultureName" data-ng-model="selectedLanguage" data-ng-change="languageChanged(selectedLanguage)" data-ng-options="l.name for l in languages track by l.isoCode" no-dirty-check>
+                        </select>
+                    </div>
+
 
                     <div class="form-group col-xs-6 span6">
                         <label for="startingorder"><localize key="merchelloSettings_startingOrderNumber" /></label>
@@ -68,7 +75,7 @@
                 </div>
             </div>
 
-            <div class="control-group umb-control-group">
+            <div class="control-group umb-control-group merchello-settings">
                 <label class="merchello-control-label">
                     <localize key="merchelloSettings_catalogDefaults" />
                     <small><localize key="merchelloSettings_catalogDefaultsHelper" /></small>
@@ -76,18 +83,19 @@
 
                 <div class="merchello-controls">
                     <div class="row-fluid">
-                        <div class="form-group col-xs-6 span6">
+                        <div class="col-xs-6 span6">
                             <!-- All Digital Goods will be goods will be included in version 2 -->
                             <!--<label class="label-checkbox"><input name="digital" type="checkbox"> <span>All items have/are digital goods</span></label>-->
-                            <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalTaxable" /></span></label>
-                            <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" no-dirty-check> <span><localize key="merchelloSettings_globalShippable" /></span></label>
+                            <label><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalTaxable" /></span></label>
+                            <label><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" no-dirty-check> <span><localize key="merchelloSettings_globalShippable" /></span></label>
                         </div>
-                        <div class="form-group col-xs-6 span6">
-                            <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory" no-dirty-check> <span><localize key="merchelloSettings_globalTrackInventory" /></span></label>
-                            <label class="label-checkbox"><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalShippingIsTaxable" /></span></label>
+                        <div class="col-xs-6 span6">
+                            <label><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory" no-dirty-check> <span><localize key="merchelloSettings_globalTrackInventory" /></span></label>
+                            <label><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalShippingIsTaxable" /></span></label>
                         </div>
 
-                        <div class="btn-group col-xs-6 span12">
+                        <!-- TODO This needs to be in the header for consistency -->
+                        <div class="col-xs-6 span12" style="padding-top: 3em">
                             <button class="btn btn-success" data-ng-disabled="storeSettingsForm.$invalid" type="submit"><localize key="buttons_save" /></button>
                         </div>
                     </div>

@@ -3,11 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Core.Persistence.Querying;
-
     using Models;
-
-    using Umbraco.Core.Persistence;
 
     /// <summary>
     /// Defines the ProductService, which provides access to operations involving <see cref="IProduct"/>
@@ -26,10 +22,13 @@
         /// <param name="price">
         /// The price.
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        IProduct CreateProduct(string name, string sku, decimal price);
+        IProduct CreateProduct(string name, string sku, decimal price, bool raiseEvents = true);
 
         /// <summary>
         /// Creates a Product and saves it to the database
@@ -43,10 +42,13 @@
         /// <param name="price">
         /// The price.
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
         /// <returns>
         /// The <see cref="IProduct"/>.
         /// </returns>
-        IProduct CreateProductWithKey(string name, string sku, decimal price);
+        IProduct CreateProductWithKey(string name, string sku, decimal price, bool raiseEvents = true);
 
         /// <summary>
         /// Saves a single <see cref="IProductVariant"/> object
@@ -93,7 +95,7 @@
         /// <param name="keys">List of GUID keys for Product objects to retrieve</param>
         /// <returns>List of <see cref="IProduct"/></returns>
         IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys);
-
+            
         /// <summary>
         /// Gets a collection of all <see cref="IProduct"/>.
         /// </summary>
@@ -150,6 +152,48 @@
         /// <returns>A value indication whether or not the SKU exists</returns>
         bool SkuExists(string sku);
 
+        #region Detached Content
+
+        /// <summary>
+        /// Removes detached content from the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product variants.
+        /// </param>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        void RemoveDetachedContent(IProduct product, Guid detachedContentTypeKey, bool raiseEvents = true);
+
+        /// <summary>
+        /// Removes detached content from the collection of products
+        /// </summary>
+        /// <param name="products">
+        /// The product variants.
+        /// </param>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        void RemoveDetachedContent(IEnumerable<IProduct> products, Guid detachedContentTypeKey, bool raiseEvents = true);
+
+        /// <summary>
+        /// Gets a collect of products by detached content type.
+        /// </summary>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Product}"/>.
+        /// </returns>
+        IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey); 
+
+        #endregion
 
         //#region Filter Queries
 

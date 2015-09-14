@@ -36,9 +36,6 @@
         /// </param>
         public ProductDataService(IMerchelloContext merchelloContext)
         {
-            ////TODO Figure out how to get MerchelloContext instantiated before ExamineManager 
-            //// attempts to interact with the index
-            ////Mandate.ParameterNotNull(merchelloContext, "MerchelloContext");
             _merchelloContext = merchelloContext;
         }
 
@@ -50,7 +47,8 @@
         /// </returns>
         public IEnumerable<IProduct> GetAll()
         {
-            return new ProductService().GetPage(1, 100).Items;
+            return new ProductService().GetAll();
+            //.GetPage(1, 100).Items;
         }
 
         /// <summary>

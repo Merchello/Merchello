@@ -14,7 +14,7 @@
     {
         // Set the path of the language files directory
         private const string UmbracoLangPath = "~/umbraco/config/lang/";
-        private const string MerchelloLangPath = "~/App_Plugins/Merchello/Config/Lang/";
+        private const string MerchelloLangPath = "~/App_Plugins/Merchello/Lang/";
 
         public string Alias()
         {

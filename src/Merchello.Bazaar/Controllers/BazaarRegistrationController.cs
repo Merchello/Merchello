@@ -9,7 +9,7 @@
     /// The bazaar customer sign up controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarRegistrationController : RenderControllerBase
+    public class BazaarRegistrationController : BazaarControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.DataModifiers
+﻿namespace Merchello.Web.DataModifiers.Product
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -41,8 +41,8 @@
         public ProductVariantDataModifierChain(IMerchelloContext merchelloContext)
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
-            _merchelloContext = merchelloContext;
-            ResolveChain(Core.Constants.TaskChainAlias.MerchelloHelperProductDataModifiers);
+            this._merchelloContext = merchelloContext;
+            this.ResolveChain(Core.Constants.TaskChainAlias.MerchelloHelperProductDataModifiers);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@
         /// </summary>
         internal int TaskCount
         {
-            get { return TaskHandlers.Count(); }
+            get { return this.TaskHandlers.Count(); }
         }
 
         /// <summary>
@@ -60,8 +60,8 @@
         {
             get
             {
-                return _constructorParameters ??
-                    (_constructorParameters = new List<object>(new object[] { _merchelloContext }));
+                return this._constructorParameters ??
+                    (this._constructorParameters = new List<object>(new object[] { this._merchelloContext }));
             }
         }
 
@@ -76,8 +76,8 @@
         /// </returns>
         public Attempt<IProductVariantDataModifierData> Modify(IProductVariantDataModifierData value)
         {
-            return TaskHandlers.Any()
-                       ? TaskHandlers.First().Execute(value)
+            return this.TaskHandlers.Any()
+                       ? this.TaskHandlers.First().Execute(value)
                        : Attempt<IProductVariantDataModifierData>.Succeed(value);
         }
     }

@@ -11,10 +11,8 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
 
-    // TODO Generate SQL SCRIPT and follow the order of table creation
-
     /// <summary>
-    /// Represents the initial database schema creation by running CreateTable for all DTOs against the db.
+    /// Represents the initial database schema creation by running CreateTable for all DTOs against the database.
     /// </summary>
     internal class DatabaseSchemaCreation
     {
@@ -69,9 +67,9 @@
             { 41, typeof(EntityCollectionDto) },
             { 42, typeof(Product2EntityCollectionDto) },
             { 43, typeof(Invoice2EntityCollectionDto) },
-            { 44, typeof(Customer2EntityCollectionDto) }  //,
-            //{ 45, typeof(DetachedContentTypeDto) },
-            //{ 46, typeof(ProductVariantDetachedContentDto) }
+            { 44, typeof(Customer2EntityCollectionDto) },
+            { 45, typeof(DetachedContentTypeDto) },
+            { 46, typeof(ProductVariantDetachedContentDto) }
         };
 
         /// <summary>
@@ -82,20 +80,26 @@
         #endregion
 
         /// <summary>
-        /// Drops all Merchello tables in the db
+        /// Drops all Merchello tables in the database
         /// </summary>
         internal void UninstallDatabaseSchema()
         {
             DatabaseSchemaHelper.UninstallDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseSchemaCreation"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
         public DatabaseSchemaCreation(Database database)
         {
             _database = database;
         }
 
         /// <summary>
-        /// Initialize the database by creating the umbraco db schema
+        /// Initialize the database by creating the umbraco database schema
         /// </summary>
         public void InitializeDatabaseSchema()
         {
@@ -113,6 +117,9 @@
         /// <summary>
         /// Validates the schema of the current database
         /// </summary>
+        /// <returns>
+        /// The <see cref="MerchelloDatabaseSchemaResult"/>.
+        /// </returns>
         public MerchelloDatabaseSchemaResult ValidateSchema()
         {
             var result = new MerchelloDatabaseSchemaResult

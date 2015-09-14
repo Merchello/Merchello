@@ -234,6 +234,8 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         self.name = '';
         self.url = '';
         self.active = false;
+        self.visible = true;
+        self.callback = undefined;
     };
 
     angular.module('merchello.models').constant('MerchelloTab', MerchelloTab);
@@ -264,6 +266,17 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
             }
         }
 
+        function addActionTab(id, name, callback) {
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
+            if (existing === undefined || existing === null) {
+                var tab = new MerchelloTab();
+                tab.id = id;
+                tab.name = name;
+                tab.callback = callback;
+                this.items.push(tab);
+            }
+        }
+
         function setActive(id) {
            angular.forEach(this.items, function(item) {
                if(item.id === id) {
@@ -272,6 +285,20 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
                    item.active = false;
                }
            });
+        }
+
+        function hideTab(id) {
+            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            if (existing !== undefined && existing !== null) {
+                existing.visible = false;
+            }
+        }
+
+        function showTab(id) {
+            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            if (existing !== undefined && existing !== null) {
+                existing.visible = true;
+            }
         }
 
         function insertTab(id, name, url, index) {
@@ -288,6 +315,22 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
                 }
             }
         }
+
+        function insertActionTab(id, name, callback, index) {
+            var existing = _.find(this.items, function(tab) { return tab.id === id; });
+            if (existing === undefined || existing === null) {
+                var tab = new MerchelloTab();
+                tab.id = id;
+                tab.name = name;
+                tab.callback = callback;
+                if (this.items.length <= index) {
+                    addTab.call(this, tab);
+                } else {
+                    this.items.splice(index, 0, tab);
+                }
+            }
+        }
+
 
         /// appends a customer tab to the current collection
         function appendCustomerTab(customerKey) {
@@ -315,7 +358,11 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
             setActive: setActive,
             insertTab: insertTab,
             appendCustomerTab: appendCustomerTab,
-            appendOfferTab: appendOfferTab
+            appendOfferTab: appendOfferTab,
+            addActionTab: addActionTab,
+            insertActionTab: insertActionTab,
+            hideTab: hideTab,
+            showTab: showTab
         };
     }());
 
@@ -357,6 +404,7 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         self.globalTrackInventory = false;
         self.globalShippingIsTaxable = false;
         self.globalTaxationApplication = 'invoice';
+        self.defaultExtendedContentCulture = 'en-US'
     };
 
     angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);
@@ -370,8 +418,8 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
      */
     var TypeFieldDisplay = function() {
         var self = this;
-        self.alias = 'test';
-        self.name = 'test';
+        self.alias = '';
+        self.name = '';
         self.typeKey = '';
     };
 
@@ -593,6 +641,46 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
     }());
 
     angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
+
+/**
+ * @ngdoc model
+ * @name DetachedContentTypeDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's DetachedContentTypeDisplay object
+ */
+var DetachedContentTypeDisplay = function () {
+	var self = this;
+	self.key = '';
+	self.name = '';
+	self.description = '';
+	self.entityType = '';
+    self.umbContentType = {};
+};
+
+angular.module('merchello.models').constant('DetachedContentTypeDisplay', DetachedContentTypeDisplay);
+/**
+ * @ngdoc model
+ * @name UmbContentTypeDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's UmbContentTypeDisplay object
+ */
+var UmbContentTypeDisplay = function() {
+    var self = this;
+    self.id = '';
+    self.key = '';
+    self.name = '';
+    self.alias = '';
+    self.icon = '';
+    self.tabs = [];
+    self.defaultTemplateId = 0;
+    self.allowedTemplates = [];
+};
+
+angular.module('merchello.models').constant('UmbContentTypeDisplay', UmbContentTypeDisplay);
 
     /**
      * @ngdoc model
@@ -1137,6 +1225,21 @@ angular.module('merchello.models').constant('ConfigureOfferComponentDialogData')
     };
 
     angular.module('merchello.models').constant('EditAddressDialogData', EditAddressDialogData);
+/**
+ * @ngdoc model
+ * @name EditDetachedContentTypeDialogData
+ * @function
+ *
+ * @description
+ * A back office dialogData model used for editing detached content types to the dialogService
+ *
+ */
+var EditDetachedContentTypeDialogData = function() {
+    var self = this;
+    self.contentType = {};
+}
+
+angular.module('merchello.models').constant('EditDetachedContentTypeDialogData', EditDetachedContentTypeDialogData);
     /**
      * @ngdoc model
      * @name EditShipmentDialogData
@@ -2044,11 +2147,12 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.taxable = false;
         self.shippable = false;
         self.download = false;
-        self.master = true;
+        //self.master = true;
         self.downloadMediaId = -1;
         self.productOptions = [];
         self.productVariants = [];
         self.catalogInventories = [];
+        self.detachedContents = [];
     };
 
     ProductDisplay.prototype = (function() {
@@ -2070,6 +2174,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             // clean up
             variant.key = this.productVariantKey;
             variant.productKey = this.key;
+            variant.master = true;
             delete variant['productOptions'];
             delete variant['productVariants'];
             return variant;
@@ -2176,6 +2281,20 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return _.filter(this.productVariants, function(v) { return v.taxable; });
         }
 
+        // returns a value indicating whether or not the product has a detached content that can be rendered.
+        function canBeRendered() {
+            if (!this.available) {
+                return false;
+            }
+            if (this.detachedContents.length === 0) {
+                return false;
+            }
+            if (_.filter(this.detachedContents, function(dc) { return dc.canBeRendered; }).length === 0) {
+                return false;
+            }
+            return true;
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -2187,7 +2306,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             anyVariantsOnSale: anyVariantsOnSale,
             shippableVariants: shippableVariants,
             getProductVariant: getProductVariant,
-            taxableVariants: taxableVariants
+            taxableVariants: taxableVariants,
+            canBeRendered: canBeRendered
         };
     }());
 
@@ -2242,6 +2362,29 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
     }());
 
     angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);
+/**
+ * @ngdoc model
+ * @name ProductVariantDetachedContentDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's ProductVariantDetachedContentDisplay object
+ */
+var ProductVariantDetachedContentDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.detachedContentType = {};
+    self.productVariantKey = '';
+    self.cultureName = '';
+    self.templateId = 0;
+    self.slug = '';
+    self.canBeRendered = true;
+    self.detachedDataValues = {};
+    self.uploadedFiles = [];
+};
+
+
+angular.module('merchello.models').constant('ProductVariantDetachedContentDisplay', ProductVariantDetachedContentDisplay);
     /**
      * @ngdoc model
      * @name ProductAttributeDisplay
@@ -2279,6 +2422,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.totalInventoryCount = 0;
         self.attributes = [];
         self.catalogInventories = [];
+        self.detachedContents = [];
     };
 
     ProductVariantDisplay.prototype = (function() {
@@ -2369,12 +2513,66 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return variant;
         }
 
+        function hasDetachedContent() {
+            return this.detachedContents.length > 0;
+        }
+
+        function getDetachedContent(isoCode) {
+            if (!this.hasDetachedContent.call(this)) {
+                return null;
+            } else {
+                return _.find(this.detachedContents, function(dc) {
+                  return dc.cultureName === isoCode;
+                });
+            }
+        }
+
+        function detachedContentType() {
+            if (!this.hasDetachedContent.call(this)) {
+                return null;
+            } else {
+                return this.detachedContents[0].detachedContentType;
+            }
+        }
+
+        function assertLanguageContent(isoCodes) {
+            var self = this;
+            var missing = [];
+            var removers = [];
+            _.each(self.detachedContents, function(dc) {
+              var found = _.find(isoCodes, function(code) {
+                return code === dc.cultureName;
+                });
+                if (found === undefined) {
+                    removers.push(dc.cultureName);
+                }
+            });
+
+            angular.forEach(removers, function(ic) {
+                this.detachedContents = _.reject(self.detachedContents, function(oust) {
+                    return oust.cultureName === ic;
+                });
+            });
+
+            missing = _.filter(isoCodes, function(check) {
+                var fnd = _.find(self.detachedContents, function(dc) {
+                  return dc.cultureName === check;
+                });
+                return fnd === undefined;
+            });
+            return missing;
+        }
+
         return {
             getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
             removeInActiveInventories: removeInActiveInventories,
             setAllInventoryCount: setAllInventoryCount,
-            setAllInventoryLowCount: setAllInventoryLowCount
+            setAllInventoryLowCount: setAllInventoryLowCount,
+            hasDetachedContent: hasDetachedContent,
+            assertLanguageContent: assertLanguageContent,
+            detachedContentType: detachedContentType,
+            getDetachedContent: getDetachedContent
         };
     }());
 
@@ -2428,6 +2626,13 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             addParameter.call(this, param);
         }
 
+        function hasCollectionKeyParam() {
+            var fnd = _.find(this.parameters, function(p) {
+                return p.fieldName === 'collectionKey';
+            });
+            return fnd !== undefined;
+        }
+
         function addEntityTypeParam(entityType) {
             var param = new QueryParameterDisplay();
             param.fieldName = 'entityType';
@@ -2458,7 +2663,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             addEntityTypeParam: addEntityTypeParam,
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,
-            addFilterTermParam: addFilterTermParam
+            addFilterTermParam: addFilterTermParam,
+            hasCollectionKeyParam: hasCollectionKeyParam
         };
     }());
 
@@ -3781,6 +3987,69 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
 
 /**
  * @ngdoc service
+ * @name detachedContentTypeDisplayBuilder
+ *
+ * @description
+ * A utility service that builds DetachedContentTypeDisplay models
+ */
+angular.module('merchello.models').factory('detachedContentTypeDisplayBuilder',
+	['genericModelBuilder', 'typeFieldDisplayBuilder', 'umbContentTypeDisplayBuilder', 'DetachedContentTypeDisplay',
+	function (genericModelBuilder, typeFieldDisplayBuilder, umbContentTypeDisplayBuilder, DetachedContentTypeDisplay) {
+
+		var Constructor = DetachedContentTypeDisplay;
+
+		return {
+			createDefault: function () {
+				var content = new Constructor();
+				content.entityTypeField = typeFieldDisplayBuilder.createDefault();
+				content.umbContentType = umbContentTypeDisplayBuilder.createDefault();
+			    return content;
+			},
+			transform: function (jsonResult) {
+				var contents = [];
+				if (angular.isArray(jsonResult)) {
+					for(var i = 0; i < jsonResult.length; i++) {
+						var content = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+						content.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField);
+						content.umbContentType = umbContentTypeDisplayBuilder.transform(jsonResult[ i ].umbContentType);
+						contents.push(content);
+					}
+				} else {
+				    contents = genericModelBuilder.transform(jsonResult, Constructor);
+					contents.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField);
+					contents.umbContentType = umbContentTypeDisplayBuilder.transform(jsonResult.umbContentType);
+				}
+				return contents;
+			}
+		};
+	}
+]);
+/**
+ * @ngdoc service
+ * @name umbContentTypeDisplayBuilder
+ *
+ * @description
+ * A utility service that builds UmbContentTypeDisplay models
+ */
+angular.module('merchello.models').factory('umbContentTypeDisplayBuilder',
+    ['genericModelBuilder', 'UmbContentTypeDisplay',
+    function(genericModelBuilder, UmbContentTypeDisplay) {
+
+        var Constructor = UmbContentTypeDisplay;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+
+}]);
+
+/**
+ * @ngdoc service
  * @name merchello.models.dialogDataFactory
  *
  * @description
@@ -3947,6 +4216,11 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new AddEditEntityStaticCollectionDialog();
         }
 
+        // detached content
+        function createEditDetachedContentTypeDialogData() {
+            return new EditDetachedContentTypeDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -3988,7 +4262,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createAddPaymentDialogData: createAddPaymentDialogData,
             createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
             createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData,
-            createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog
+            createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog,
+            createEditDetachedContentTypeDialogData: createEditDetachedContentTypeDialogData
         };
 }]);
 
@@ -4228,6 +4503,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             function createProductListTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productContentTypeList', 'merchelloTabs_productContentTypes', '#/merchello/merchello/productcontenttypelist/manage')
                 return tabs;
             }
 
@@ -4248,6 +4524,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 return tabs;
             }
 
@@ -4256,6 +4533,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
                 tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
@@ -4267,8 +4545,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
-                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
+                tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productedit/' + productKey + '?variantid=' + productVariantKey);
+               tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey + '?variantid=' + productVariantKey);
                 return tabs;
             }
 
@@ -4331,6 +4609,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('reportslist', 'merchelloTabs_reports', '#/merchello/merchello/reportslist/manage');
                 return tabs;
             }
+
+
 
 
             return {
@@ -4658,9 +4938,9 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      */
     angular.module('merchello.models').factory('productDisplayBuilder',
         ['genericModelBuilder', 'productVariantDisplayBuilder', 'productOptionDisplayBuilder', 'catalogInventoryDisplayBuilder',
-            'ProductDisplay',
+            'productVariantDetachedContentDisplayBuilder', 'ProductDisplay',
         function(genericModelBuilder, productVariantDisplayBuilder, productOptionDisplayBuilder, catalogInventoryDisplayBuilder,
-        ProductDisplay) {
+                 productVariantDetachedContentDisplayBuilder, ProductDisplay) {
 
             var Constructor = ProductDisplay;
             return {
@@ -4675,6 +4955,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             product.productVariants = productVariantDisplayBuilder.transform(jsonResult[ i ].productVariants);
                             product.productOptions = productOptionDisplayBuilder.transform(jsonResult[ i ].productOptions);
                             product.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            product.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult[i].detachedContents);
                             products.push(product);
                         }
                     } else {
@@ -4682,6 +4963,7 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         products.productVariants = productVariantDisplayBuilder.transform(jsonResult.productVariants);
                         products.productOptions = productOptionDisplayBuilder.transform(jsonResult.productOptions);
                         products.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                        products.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult.detachedContents);
                     }
                     return products;
 
@@ -4724,6 +5006,47 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
 
     }]);
 
+/**
+ * @ngdoc models
+ * @name productVariantDetachedContentDisplayBuilder
+ *
+ * @description
+ * A utility factory that builds ProductVariantDetachedContentDisplay models
+ */
+angular.module('merchello.models').factory('productVariantDetachedContentDisplayBuilder',
+    ['genericModelBuilder', 'detachedContentTypeDisplayBuilder', 'extendedDataDisplayBuilder', 'ProductVariantDetachedContentDisplay',
+    function(genericModelBuilder, detachedContentTypeBuilder, extendedDataDisplayBuilder, ProductVariantDetachedContentDisplay) {
+
+        var Constructor = ProductVariantDetachedContentDisplay;
+
+        return {
+            createDefault: function() {
+
+                var content = new Constructor();
+                content.detachedContentType = detachedContentTypeBuilder.createDefault();
+                content.detachedDataValues = extendedDataDisplayBuilder.createDefault();
+
+                return content;
+            },
+            transform: function(jsonResult) {
+                var contents = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var content = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        content.detachedContentType = detachedContentTypeBuilder.transform(jsonResult[ i ].detachedContentType);
+                        content.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult[ i ].detachedDataValues);
+                        contents.push(content);
+                    }
+                } else {
+                    contents = genericModelBuilder.transform(jsonResult, Constructor);
+                    contents.detachedContentType = detachedContentTypeBuilder.transform(jsonResult.detachedContentType);
+                    contents.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
+                }
+                return contents;
+            }
+        };
+}]);
+
     /**
      * @ngdoc models
      * @name productVariantDisplayBuilder
@@ -4732,8 +5055,8 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      * A utility service that builds ProductVariantDisplay models
      */
     angular.module('merchello.models').factory('productVariantDisplayBuilder',
-        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'ProductVariantDisplay',
-        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, ProductVariantDisplay) {
+        ['genericModelBuilder', 'productAttributeDisplayBuilder', 'catalogInventoryDisplayBuilder', 'productVariantDetachedContentDisplayBuilder', 'ProductVariantDisplay',
+        function(genericModelBuilder, productAttributeDisplayBuilder, catalogInventoryDisplayBuilder, productVariantDetachedContentDisplayBuilder, ProductVariantDisplay) {
 
             var Constructor = ProductVariantDisplay;
             return {
@@ -4747,12 +5070,14 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                             var variant = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             variant.attributes = productAttributeDisplayBuilder.transform(jsonResult[ i ].attributes);
                             variant.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult[ i ].catalogInventories);
+                            variant.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult[i].detachedContents);
                             variants.push(variant);
                         }
                     } else {
                         variants = genericModelBuilder.transform(jsonResult, Constructor);
                         variants.attributes = productAttributeDisplayBuilder.transform(jsonResult.attributes);
                         variants.catalogInventories = catalogInventoryDisplayBuilder.transform(jsonResult.catalogInventories);
+                        variants.detachedContents = productVariantDetachedContentDisplayBuilder.transform(jsonResult.detachedContents);
                     }
                     return variants;
                 }

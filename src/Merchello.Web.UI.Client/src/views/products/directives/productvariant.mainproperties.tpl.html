@@ -49,10 +49,11 @@
             <label class="label-checkbox"><input name="taxable" type="checkbox" data-ng-model="productVariant.taxable"> <span><localize key="merchelloVariant_isTaxable" /></span></label>
             <label class="label-checkbox"><input name="shippable" type="checkbox" data-ng-model="productVariant.shippable"> <span><localize key="merchelloVariant_isShippable" /></span></label>
             <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.trackInventory" data-ng-disabled="productVariant.download"> <span><localize key="merchelloVariant_trackInventory" /></span></label>
+            <label class="label-checkbox"><input name="trackinventory" type="checkbox" data-ng-model="productVariant.outOfStockPurchase" data-ng-disabled="productVariant.download"> <span><localize key="merchelloVariant_allowOutOfStockPurchase" /></span></label>
         </div>
         <div class="form-group col-xs-6 span6">
             <label class="label-checkbox"><input name="digital" type="checkbox" data-ng-model="productVariant.download"> <span><localize key="merchelloVariant_hasDigitalDownload" /></span></label>
-            <label class="label-checkbox" data-ng-show="context === 'productedit'"><input name="hasoptions" type="checkbox" data-ng-model="product.hasOptions" data-ng-click="ensureInitialOption()"> <span><localize key="merchelloVariant_hasOptions" /></span></label>
+            <label class="label-checkbox" data-ng-show="context === 'productedit' && !product.hasVariants() "><input name="hasoptions" type="checkbox" data-ng-model="product.hasOptions" data-ng-click="ensureInitialOption()"> <span><localize key="merchelloVariant_hasOptions" /></span></label>
             <label class="label-checkbox"><input name="available" type="checkbox" data-ng-model="productVariant.available"> <span><localize key="merchelloVariant_isAvailable" /></span></label>
             <label class="label-checkbox"><input name="onsale" type="checkbox" data-ng-model="productVariant.onSale"> <span><localize key="merchelloVariant_isOnSale" /></span></label>
         </div>

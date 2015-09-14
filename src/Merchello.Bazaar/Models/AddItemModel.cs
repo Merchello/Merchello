@@ -14,7 +14,6 @@
         /// <summary>
         /// Gets or sets the Content Id of the ProductDetail page
         /// </summary>
-        [Required]
         public int ContentId { get; set; }
 
         /// <summary>

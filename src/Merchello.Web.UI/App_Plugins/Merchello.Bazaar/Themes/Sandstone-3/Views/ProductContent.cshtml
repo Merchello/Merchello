@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<IProductContent>
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar
+@using Merchello.Web.Models.VirtualContent
+@using Umbraco.Web
+@{
+    Layout = "Master.cshtml";
+}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <h1>@Model.Name</h1>
+    </div>
+    <div class="row-fluid">
+        <div class="col-md-9">
+            @if (Model.HasValue("image"))
+            {
+                <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height: 300)" alt="@Model.Name">
+            }            
+            <h4>
+                <a href="#">@Model.Name</a>
+            </h4>
+            @Model.GetPropertyValue("description")
+        </div>
+        <div class="pull-right col-md-3">
+            @Html.Action("RenderAddItem", "BazaarBasket", new { area = "Bazaar", model = Model.BuildAddItemModel(BazaarContentHelper.GetStoreCurrency(), BazaarContentHelper.ShowWishList()) })
+        </div>
+    </div>
+</div>

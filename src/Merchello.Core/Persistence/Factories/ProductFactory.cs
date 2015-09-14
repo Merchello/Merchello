@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System;
+
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Rdbms;
 
     /// <summary>
@@ -16,12 +19,12 @@
         /// <summary>
         /// The product option collection.
         /// </summary>
-        private readonly ProductOptionCollection _productOptionCollection;
+        private readonly Func<Guid, ProductOptionCollection> _getProductOptionCollection;
 
         /// <summary>
         /// The product variant collection.
         /// </summary>
-        private readonly ProductVariantCollection _productVariantCollection;
+        private readonly Func<Guid, ProductVariantCollection> _getProductVariantCollection;
 
 
         /// <summary>
@@ -29,37 +32,42 @@
         /// </summary>
         public ProductFactory()
             : this(
-                new ProductAttributeCollection(),
-                new CatalogInventoryCollection(),
-                new ProductOptionCollection(),
-                new ProductVariantCollection())
+                pac => new ProductAttributeCollection(),
+                cic => new CatalogInventoryCollection(),
+                poc => new ProductOptionCollection(),
+                pvc => new ProductVariantCollection(),
+                dcc => new DetachedContentCollection<IProductVariantDetachedContent>())
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFactory"/> class.
         /// </summary>
-        /// <param name="productAttributes">
+        /// <param name="getProductAttributes">
         /// The product attributes.
         /// </param>
-        /// <param name="catalogInventories">
+        /// <param name="getCatalogInventories">
         /// The catalog inventories.
         /// </param>
-        /// <param name="productOptions">
+        /// <param name="getProductOptions">
         /// The product options.
         /// </param>
-        /// <param name="productVariantCollection">
+        /// <param name="getProductVariantCollection">
         /// The product variant collection.
         /// </param>
+        /// <param name="getDetachedContentCollection">
+        /// Gets the detached content collection
+        /// </param>
         public ProductFactory(
-            ProductAttributeCollection productAttributes,
-            CatalogInventoryCollection catalogInventories,
-            ProductOptionCollection productOptions,
-            ProductVariantCollection productVariantCollection)
+            Func<Guid, ProductAttributeCollection> getProductAttributes,
+            Func<Guid, CatalogInventoryCollection> getCatalogInventories,
+            Func<Guid, ProductOptionCollection> getProductOptions,
+            Func<Guid, ProductVariantCollection> getProductVariantCollection,
+            Func<Guid, DetachedContentCollection<IProductVariantDetachedContent>> getDetachedContentCollection)
         {
-            _productVariantFactory = new ProductVariantFactory(productAttributes, catalogInventories);
-            _productOptionCollection = productOptions;
-            _productVariantCollection = productVariantCollection;
+            _productVariantFactory = new ProductVariantFactory(getProductAttributes, getCatalogInventories, getDetachedContentCollection);
+            this._getProductOptionCollection = getProductOptions;
+            this._getProductVariantCollection = getProductVariantCollection;
         }
 
         /// <summary>
@@ -77,8 +85,8 @@
             var product = new Product(variant)
             {
                 Key = dto.Key,
-                ProductOptions = _productOptionCollection,
-                ProductVariants = _productVariantCollection,
+                ProductOptions = this._getProductOptionCollection.Invoke(dto.Key),
+                ProductVariants = this._getProductVariantCollection.Invoke(dto.Key),
                 UpdateDate = dto.UpdateDate,
                 CreateDate = dto.CreateDate
             };

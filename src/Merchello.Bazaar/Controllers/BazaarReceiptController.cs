@@ -15,7 +15,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [RequireSsl("Bazaar:RequireSsl")]
-    public class BazaarReceiptController : RenderControllerBase
+    public class BazaarReceiptController : BazaarControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.
@@ -39,7 +39,7 @@
 
             var invoiceKey = new Guid(key);
 
-            var invoice = MerchelloContext.Services.InvoiceService.GetByKey(invoiceKey);
+            var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
            
             var viewModel = ViewModelFactory.CreateReceipt(model, invoice);
 

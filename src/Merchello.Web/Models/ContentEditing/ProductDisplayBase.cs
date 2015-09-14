@@ -4,9 +4,7 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
-
-    using Newtonsoft.Json;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     /// <summary>
     /// The product display abstract.
@@ -92,5 +90,10 @@
         /// Gets or sets the catalog inventories.
         /// </summary>
         public IEnumerable<CatalogInventoryDisplay> CatalogInventories { get; set; }
+
+        /// <summary>
+        /// Gets or sets the detached content values.
+        /// </summary>
+        public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContents { get; set; } 
     }
 }

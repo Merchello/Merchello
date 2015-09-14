@@ -7,8 +7,8 @@
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', '$timeout', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, $timeout, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
@@ -27,6 +27,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.updateInventory = updateInventory;
         $scope.toggleOnSale = toggleOnSale;
         $scope.toggleAvailable = toggleAvailable;
+        $scope.redirectToEditor = redirectToEditor;
 
         function init() {
             angular.forEach($scope.product.productVariants, function(pv) {
@@ -327,6 +328,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
 
         function reload() {
             $scope.reload();
+        }
+
+        function redirectToEditor(variant) {
+           $location.url('/merchello/merchello/productedit/' + variant.productKey + '?variantid=' + variant.key, true);
         }
 
         // initialize the controller

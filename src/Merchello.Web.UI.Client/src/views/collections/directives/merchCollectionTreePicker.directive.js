@@ -6,12 +6,17 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
 
         scope: {
             subTreeId : '=',
-            entityType: '='
+            entityType: '=',
+            mode: '@?',
+            hasSelection: '&?'
         },
 
         compile: function(element, attrs) {
+
+            // makes multiple selection default
+            if (!attrs.mode) { attrs.mode = 'multiple'; }
+
             //config
-            //var showheader = (attrs.showheader !== 'false');
             var template = '<ul class="umb-tree"><li class="root">';
             template += '<div ng-hide="hideheader" on-right-click="altSelect(tree.root, $event)">' +
                 '<h5>' +
@@ -19,7 +24,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                 '<span class="root-link">{{tree.root.name}}</span></h5>' +
                 '</div>';
             template += '<ul>' +
-               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
+               '<merch-collection-tree-item ng-repeat="child in tree.root.children" eventhandler="eventhandler" node="child" current-node="currentNode" tree="this" mode="{{mode}}" has-selection="hasSelection()" section="{{section}}" ng-animate="animation()"></merch-collection-tree-item>' +
                 '</ul>' +
                 '</li>' +
                 '</ul>';
@@ -27,7 +32,6 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
             element.replaceWith(template);
 
             return function(scope, elem, attr, controller) {
-
 
                 var lastSection = "";
 
@@ -160,6 +164,7 @@ angular.module('merchello.directives').directive('merchCollectionTreePicker', fu
                     }
                 });
 
+                // Loads the tree
                 loadTree();
             };
         }
