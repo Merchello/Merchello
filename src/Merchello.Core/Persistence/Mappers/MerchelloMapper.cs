@@ -6,6 +6,7 @@ namespace Merchello.Core.Persistence.Mappers
     using System.Collections.Concurrent;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -79,6 +80,7 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IWarehouseCatalog), typeof(WarehouseCatalogMapper));
             CacheMapper(typeof(IDigitalMedia), typeof(DigitalMediaMapper));
             CacheMapper(typeof(IEntityCollection), typeof(EntityCollectionMapper));
+            CacheMapper(typeof(IDetachedContentType), typeof(DetachedContentTypeMapper));
         }
 
 

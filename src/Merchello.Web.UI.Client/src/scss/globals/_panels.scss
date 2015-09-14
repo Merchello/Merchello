@@ -150,6 +150,18 @@
         }
     }
 
+    .detached-content-type-table {
+        th, td {
+            width: 20%;
+            &:last-child {
+                width: 60%;
+            }
+            &.edit {
+                text-align: right;
+            }
+        }
+    }
+
     // DFB: restyle tax table
 	.tax-table{
 		td.last-of-type{width:10%;}

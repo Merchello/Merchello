@@ -61,6 +61,15 @@
         /// </returns>
         bool SkuExists(string sku);
 
+        ///// <summary>
+        ///// The delete all detached content for culture.
+        ///// </summary>
+        ///// <param name="cultureName">
+        ///// The culture name.
+        ///// </param>
+        //void DeleteAllDetachedContentForCulture(string cultureName);
+
+
 
         #region Filter Queries
 

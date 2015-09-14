@@ -255,6 +255,7 @@
     <Compile Include="Chains\DemoAttemptChainTask.cs" />
     <Compile Include="PackageAction\GrantAppPermissionChecks.cs" />
     <Compile Include="PackageAction\LocalizationIntallerTests.cs" />
+    <Compile Include="Slug\PathHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Querying\AddressSqlClausesTests.cs" />
     <Compile Include="Querying\GatewayProviderSqlClausesTests.cs" />

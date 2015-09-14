@@ -82,6 +82,17 @@
             {
                 get { return "MerchelloHelperProductDataModifiers"; }
             }
+
+            /// <summary>
+            /// Gets the copy product.
+            /// </summary>
+            public static string CopyProduct
+            {
+                get
+                {
+                    return "CopyProduct";
+                }
+            }
         }
     }
 }

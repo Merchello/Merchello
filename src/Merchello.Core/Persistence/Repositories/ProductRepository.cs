@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
@@ -140,6 +141,54 @@
             var sql = this.BuildProductSearchSql(searchTerm);
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get by detached content type.
+        /// </summary>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
+        public IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT DISTINCT([merchProductVariant].[productKey])")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE [merchProductVariant].[pk] IN (")
+                .Append("SELECT DISTINCT([merchProductVariantDetachedContent].[productVariantKey])")
+                .Append("FROM [merchProductVariantDetachedContent]")
+                .Append(
+                    "WHERE [merchProductVariantDetachedContent].[detachedContentTypeKey] = @Key",
+                    new { @Key = detachedContentTypeKey })
+                .Append(")");
+
+            var productKeys = Database.Fetch<Guid>(sql);
+
+            return productKeys.Select(Get);
+        }
+
+        /// <summary>
+        /// The get key for slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        public Guid GetKeyForSlug(string slug)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT [merchProductVariant].[productKey]")
+                .Append("FROM [merchProductVariant]")
+                .Append(
+                    "JOIN [merchProductVariantDetachedContent] ON [merchProductVariant].[pk] = [merchProductVariantDetachedContent].[productVariantKey]")
+                .Append("WHERE [merchProductVariantDetachedContent].[slug] = @Sl", new { @Sl = slug });
+
+            return Database.Fetch<Guid>(sql).FirstOrDefault();
         }
 
         /// <summary>
@@ -1008,7 +1057,6 @@
             };
         }
 
-        #region Overrides of RepositoryBase<IProduct>
 
         /// <summary>
         /// The perform get.
@@ -1029,10 +1077,16 @@
             if (dto == null)
                 return null;
 
-            var inventoryCollection = ((ProductVariantRepository)_productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
-            var productAttributeCollection = ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
+            //var inventoryCollection = ((ProductVariantRepository)_productVariantRepository).GetCategoryInventoryCollection(dto.ProductVariantDto.Key);
+            //var productAttributeCollection = ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection(dto.ProductVariantDto.Key);
 
-            var factory = new ProductFactory(productAttributeCollection, inventoryCollection, GetProductOptionCollection(dto.Key), GetProductVariantCollection(dto.Key));
+            var factory = new ProductFactory(
+                ((ProductVariantRepository)_productVariantRepository).GetProductAttributeCollection,
+                ((ProductVariantRepository)_productVariantRepository).GetCategoryInventoryCollection, 
+                GetProductOptionCollection, 
+                GetProductVariantCollection,
+                ((ProductVariantRepository)_productVariantRepository).GetDetachedContentCollection);
+
             var product = factory.BuildEntity(dto);
 
 
@@ -1041,6 +1095,15 @@
             return product;
         }
 
+        /// <summary>
+        /// Gets all products.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
         protected override IEnumerable<IProduct> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -1052,7 +1115,6 @@
             }
             else
             {
-                //var factory = new ProductFactory();
                 var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
@@ -1061,10 +1123,16 @@
             }
         }
 
-        #endregion
 
-        #region Overrides of MerchelloPetaPocoRepositoryBase<IProduct>
-
+        /// <summary>
+        /// The get base query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
@@ -1079,11 +1147,23 @@
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base SQL where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchProduct.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets the delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -1096,7 +1176,8 @@
                         (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",
                     "DELETE FROM merchProduct2ProductOption WHERE productKey = @Key",
                     "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
-                    "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
+                    "DELETE FROM merchProductVariantDetachedContent WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
+                    "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",                    
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
                     "DELETE FROM merchProduct2EntityCollection WHERE productKey = @Key",
                     "DELETE FROM merchProduct WHERE pk = @Key",
@@ -1106,6 +1187,12 @@
             return list;
         }
 
+        /// <summary>
+        /// Saves a new product.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IProduct entity)
         {
             Mandate.ParameterCondition(SkuExists(entity.Sku) == false, "Skus must be unique.");
@@ -1138,8 +1225,17 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Updates an existing product.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IProduct entity)
         {
+            var cachedKeys = entity.ProductVariants.Select(x => x.Key).ToList();
+            cachedKeys.Add(((ProductVariant)((Product)entity).MasterVariant).Key);
+
             ((Product)entity).UpdatingEntity();
             ((ProductVariant)((Product)entity).MasterVariant).VersionKey = Guid.NewGuid();
 
@@ -1154,9 +1250,17 @@
             // synchronize the inventory
             ((ProductVariantRepository)_productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
 
+            ((ProductVariantRepository)_productVariantRepository).SaveDetachedContents(((Product)entity).MasterVariant);
+
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Deletes a product.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistDeletedItem(IProduct entity)
         {
             var deletes = GetDeleteClauses();
@@ -1166,6 +1270,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IProduct"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
         protected override IEnumerable<IProduct> PerformGetByQuery(IQuery<IProduct> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -1175,7 +1288,6 @@
             var dtos = Database.Fetch<ProductDto, ProductVariantDto, ProductVariantIndexDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
-
         }
 
         /// <summary>
@@ -1199,7 +1311,7 @@
         /// <returns>
         /// The <see cref="Page{ProductVariantDto}"/>.
         /// </returns>
-        private Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
+        private new Page<ProductVariantDto> GetDtoPage(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             if (!string.IsNullOrEmpty(orderExpression))
             {
@@ -1212,10 +1324,15 @@
             return Database.Page<ProductVariantDto>(page, itemsPerPage, sql);
         }
 
-        #endregion
-
-        #region Product Options and Attributes
-
+        /// <summary>
+        /// The get product option collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionCollection"/>.
+        /// </returns>
         private ProductOptionCollection GetProductOptionCollection(Guid productKey)
         {
             var sql = new Sql();
@@ -1240,6 +1357,15 @@
             return productOptions;
         }
 
+        /// <summary>
+        /// Gets the product variant collection.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantCollection"/>.
+        /// </returns>
         private ProductVariantCollection GetProductVariantCollection(Guid productKey)
         {
             var collection = new ProductVariantCollection();
@@ -1247,12 +1373,18 @@
             var variants = _productVariantRepository.GetByQuery(query);
             foreach (var variant in variants)
             {
-                if (variant != null) // todo why is this need?
+                if (variant != null) 
                     collection.Add(variant);
             }
             return collection;
         }
 
+        /// <summary>
+        /// Deletes a product option.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
         private void DeleteProductOption(IProductOption option)
         {
             var executeClauses = new[]
@@ -1269,12 +1401,18 @@
             }
         }
 
+        /// <summary>
+        /// Saves a collection of product options.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
         private void SaveProductOptions(IProduct product)
         {
             var existing = GetProductOptionCollection(product.Key);
             if (!product.DefinesOptions && !existing.Any()) return;
 
-            //ensure all ids are in the new list
+            //// ensure all ids are in the new list
             var resetSorts = false;
             foreach (var ex in existing)
             {
@@ -1302,6 +1440,15 @@
             }
         }
 
+        /// <summary>
+        /// Saves a product option.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="productOption">
+        /// The product option.
+        /// </param>
         private void SaveProductOption(IProduct product, IProductOption productOption)
         {
             var factory = new ProductOptionFactory();
@@ -1325,7 +1472,6 @@
                 };
 
                 Database.Insert(association);
-
             }
             else
             {
@@ -1333,24 +1479,32 @@
                 var dto = factory.BuildDto(productOption);
                 Database.Update(dto);
 
-                const string update = "UPDATE merchProduct2ProductOption SET SortOrder = @So, updateDate = @Ud WHERE productKey = @pk AND optionKey = @OKey";
+                const string Update = "UPDATE merchProduct2ProductOption SET SortOrder = @So, updateDate = @Ud WHERE productKey = @pk AND optionKey = @OKey";
 
-                Database.Execute(update,
-                                 new
-                                 {
-                                     So = productOption.SortOrder,
-                                     Ud = productOption.UpdateDate,
-                                     pk = product.Key,
-                                     OKey = productOption.Key
-                                 });
-
-
+                Database.Execute(
+                    Update,
+                    new
+                        {
+                        So = productOption.SortOrder,
+                        Ud = productOption.UpdateDate,
+                        pk = product.Key,
+                        OKey = productOption.Key
+                    });
             }
 
             // now save the product attributes
             SaveProductAttributes(product, productOption);
         }
 
+        /// <summary>
+        /// Gets the product attribute collection.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
         private ProductAttributeCollection GetProductAttributeCollection(Guid optionKey)
         {
             var sql = new Sql();
@@ -1371,27 +1525,43 @@
             return attributes;
         }
 
+        /// <summary>
+        /// Deletes a product attribute.
+        /// </summary>
+        /// <param name="productAttribute">
+        /// The product attribute.
+        /// </param>
         private void DeleteProductAttribute(IProductAttribute productAttribute)
         {
-            // TODO : this is sort of hacky but we want ProductVariant events to trigger on a ProductVariant Delete
-            // and we need to delete all variants that had the attribute that is to be deleted so the current solution
-            // is to delete all associations from the merchProductVariant2ProductAttribute table so that the follow up
-            // EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
-            // the events
+            //// We want ProductVariant events to trigger on a ProductVariant Delete
+            //// and we need to delete all variants that had the attribute that is to be deleted so the current solution
+            //// is to delete all associations from the merchProductVariant2ProductAttribute table so that the follow up
+            //// EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
+            //// the events
 
-            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeKey = @Key)",
+            Database.Execute(
+                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeKey = @Key)",
                 new { Key = productAttribute.Key });
-            Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
 
+            Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
         }
 
+        /// <summary>
+        /// Saves the product attribute collection.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="productOption">
+        /// The product option.
+        /// </param>
         private void SaveProductAttributes(IProduct product, IProductOption productOption)
         {
             if (!productOption.Choices.Any()) return;
 
             var existing = GetProductAttributeCollection(productOption.Key);
 
-            //ensure all ids are in the new list
+            ////ensure all ids are in the new list
             var resetSorts = false;
             foreach (var ex in existing)
             {
@@ -1399,6 +1569,7 @@
                 DeleteProductAttribute(ex);
                 resetSorts = true;
             }
+
             if (resetSorts)
             {
                 var count = 1;
@@ -1409,26 +1580,33 @@
                     productOption.Choices.Add(o);
                 }
             }
+
             foreach (var att in productOption.Choices.OrderBy(x => x.SortOrder))
             {
                 // ensure the id is set
                 att.OptionKey = productOption.Key;
                 SaveProductAttribute(att);
             }
-            // this is required due to the special case relation between a product and product variants
+
+            //// this is required due to the special case relation between a product and product variants
             foreach (var variant in product.ProductVariants)
             {
                 RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductVariant>(variant.Key));
             }
         }
 
+        /// <summary>
+        /// Saves a product attribute.
+        /// </summary>
+        /// <param name="productAttribute">
+        /// The product attribute.
+        /// </param>
         private void SaveProductAttribute(IProductAttribute productAttribute)
         {
             var factory = new ProductAttributeFactory();
 
             if (!productAttribute.HasIdentity)
-            {
-                //((Entity)productAttribute).AddingEntity();
+            {                
                 productAttribute.CreateDate = DateTime.Now;
                 productAttribute.UpdateDate = DateTime.Now;
 
@@ -1443,8 +1621,6 @@
                 Database.Update(dto);
             }
         }
-
-        #endregion
 
         /// <summary>
         /// Builds the product search SQL.

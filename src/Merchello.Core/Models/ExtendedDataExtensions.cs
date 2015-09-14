@@ -504,8 +504,7 @@
         /// </returns>
         public static decimal GetPriceValue(this ExtendedDataCollection extendedData)
         {
-            decimal converted = decimal.TryParse(extendedData.GetValue(Constants.ExtendedDataKeys.Price), System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
-            return converted;
+            return extendedData.GetValue(Constants.ExtendedDataKeys.Price).AsDecimal();
         }
 
         /// <summary>
@@ -986,7 +985,7 @@
         private static decimal AsDecimal(this string value)
         {
             decimal converted;
-            return decimal.TryParse(value, out converted) ? converted : 0;
+            return decimal.TryParse(value, System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
         }
 
         /// <summary>

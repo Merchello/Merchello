@@ -29,7 +29,7 @@
             loadNotificationMessage(key);
             loadAllNotificationMonitors();
             $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
-            $scope.tabs.insertTab('messageEditor', 'Message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
+            $scope.tabs.insertTab('messageEditor', 'merchelloTabs_message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
             $scope.tabs.setActive('messageEditor');
         }
 

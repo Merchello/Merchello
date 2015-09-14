@@ -114,7 +114,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_StoreSettings()
         {
             //// Arrange
-            const int expected = 13;
+            const int expected = 14;
 
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");

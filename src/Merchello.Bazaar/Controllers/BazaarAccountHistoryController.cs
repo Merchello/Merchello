@@ -14,7 +14,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [Authorize]
-    public class BazaarAccountHistoryController : RenderControllerBase
+    public class BazaarAccountHistoryController : BazaarControllerBase
     {
         /// <summary>
         /// The _merchello.
@@ -26,7 +26,7 @@
         /// </summary>
         public BazaarAccountHistoryController()
         {
-            _merchello = new MerchelloHelper(MerchelloContext.Services);
+            _merchello = new MerchelloHelper(MerchelloServices);
         }
 
         /// <summary>

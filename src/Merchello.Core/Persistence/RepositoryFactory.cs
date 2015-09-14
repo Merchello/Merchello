@@ -138,6 +138,20 @@
         }
 
         /// <summary>
+        /// Creates a new instance of the <see cref="DetachedContentTypeRepository"/>.
+        /// </summary>
+        /// <param name="uow">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDetachedContentTypeRepository"/>.
+        /// </returns>
+        internal virtual IDetachedContentTypeRepository CreateDetachedContentTypeRepository(IDatabaseUnitOfWork uow)
+        {
+            return new DetachedContentTypeRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// The create entity collection repository.
         /// </summary>
         /// <param name="uow">

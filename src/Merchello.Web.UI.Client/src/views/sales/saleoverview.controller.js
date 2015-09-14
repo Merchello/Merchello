@@ -167,44 +167,22 @@
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
-               var settingsPromise = settingsResource.getAllSettings();
-               settingsPromise.then(function(settings) {
-                   $scope.settings = settings;
-               }, function(reason) {
-                   notificationsService.error('Failed to load global settings', reason.message);
-               })
-
-               var countriesPromise = settingsResource.getAllCountries();
-               countriesPromise.then(function(results) {
-                   countries = countryDisplayBuilder.transform(results);
+               settingsResource.getAllCombined().then(function(combined) {
+                   $scope.settings = combined.settings;
+                   countries = combined.countries;
+                   if ($scope.invoice.currency.symbol === '') {
+                       var currency = _.find(combined.currencies, function (symbol) {
+                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                       });
+                       if (currency !== undefined) {
+                           $scope.currencySymbol = currency.symbol;
+                       } else {
+                           $scope.currencySymbol = combined.currencySymbol;
+                       }
+                   }
                });
+           }
 
-               // TODO this can be refactored now that we have currency on the invoice model
-               if ($scope.invoice.currency.symbol === '') {
-                    var currencySymbolPromise = settingsResource.getAllCurrencies();
-                    currencySymbolPromise.then(function (symbols) {
-                        var currency = _.find(symbols, function(symbol) {
-                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                        });
-                        if (currency !== undefined) {
-                        $scope.currencySymbol = currency.symbol;
-                        } else {
-                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                            // default currency
-                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                            defaultCurrencyPromise.then(function (currencySymbol) {
-                                $scope.currencySymbol = currencySymbol;
-                            }, function (reason) {
-                                notificationService.error('Failed to load the default currency symbol', reason.message);
-                            });
-                        }
-                    }, function (reason) {
-                        alert('Failed: ' + reason.message);
-                    });
-               } else {
-                   $scope.currencySymbol = $scope.invoice.currency.symbol;
-               }
-            }
 
             /**
              * @ngdoc method

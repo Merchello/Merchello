@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Bazaar.Models.ViewModels
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
 
@@ -14,9 +15,9 @@
     public class AccountHistoryModel : MasterModel
     {
         /// <summary>
-        /// The _receipt page.
+        /// The receipt page.
         /// </summary>
-        private IPublishedContent _receiptPage;
+        private Lazy<IPublishedContent> _receiptPage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountHistoryModel"/> class.
@@ -27,6 +28,7 @@
         public AccountHistoryModel(IPublishedContent content)
             : base(content)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -41,8 +43,17 @@
         {
             get
             {
-                return _receiptPage ?? StorePage.Descendant("BazaarReceipt");
+                return _receiptPage.Value;
             }
+        }
+
+
+        /// <summary>
+        /// Initializes the model.
+        /// </summary>
+        private void Initialize()
+        {
+            _receiptPage = new Lazy<IPublishedContent>(() => BazaarContentHelper.GetStoreRoot().Descendant("BazaarReceipt"));
         }
     }
 }

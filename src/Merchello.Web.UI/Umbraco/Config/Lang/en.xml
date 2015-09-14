@@ -1068,6 +1068,14 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="all">All</key>
     <key alias="none">None</key>
     <key alias="expired">Expired</key>
+    <key alias="configured">Configured</key>
+    <key alias="notConfigured">Not Configured</key>
+    <key alias="some">Some</key>
+    <key alias="lineItems">Line Items</key>
+    <key alias="setDateRange">Set Date Range</key>
+    <key alias="allDates">All Dates</key>
+    <key alias="starting">Starting</key>
+    <key alias="ending">Ending</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -1080,10 +1088,12 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloTabs">
     <key alias="productListing">Product Listing</key>
+    <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>
     <key alias="productVariants">Product Variants</key>
     <key alias="productOptions">Product Options</key>
     <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="detachedContent">Extended Content</key>
     <key alias="salesListing">Sales Listing</key>
     <key alias="sales">Sale</key>
     <key alias="payments">Payments</key>
@@ -1097,9 +1107,11 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="notification">Notification</key>
     <key alias="taxation">Taxation</key>
     <key alias="offerListing">Offer Listing</key>
+    <key alias="message">Message</key>
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
     <key alias="reportListing">Reports</key>
+    <key alias="render">Render</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
@@ -1108,6 +1120,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
     <key alias="openOrderCollection">Open orders</key>
     <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+    <key alias="addProvider">Add provider</key>
   </area>
   <area alias="merchelloCollections">
     <key alias="providers">Collection Providers</key>
@@ -1126,6 +1139,10 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="collectionPickerTitle">Collections</key>
     <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
     <key alias="allItems">All items</key>
+    <key alias="allProduct">All Products</key>
+    <key alias="allCustomer">All Customers</key>
+    <key alias="allInvoice">All Sales</key>
+    <key alias="allOffer">All Offers</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>
@@ -1142,6 +1159,7 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="contentTypeRequired">Content type is required</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
@@ -1153,8 +1171,62 @@ To manage your website, simply open the Umbraco back office and start adding con
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
+    <key alias="shippable">Shippable</key>
+    <key alias="taxable">Taxable</key>
+    <key alias="available">Available</key>
+    <key alias="copyProduct">Copy Product</key>
+    <key alias="newProductName">New Product Name</key>
+    <key alias="newProductSku">New Product SKU</key>
+  </area>
+  <area alias="merchelloDetachedContent">
+    <key alias="selectContentType">Select Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="slug">URL Slug</key>
+    <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
+    <key alias="selectTemplate">Select an Umbraco template</key>
+    <key alias="canBeRendered">Allow this content to be rendered.</key>
+    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
+    <key alias="productContentType">Product Content Type</key>
+    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
+    <key alias="tabs">Tabs</key>
+    <key alias="noDetachedContentTypes">
+      <![CDATA[
+      <h5>You have not associated and Umbraco content types with Merchello</h5>
+      <p>This can be done through the Products context menu.</p>
+      ]]>
+    </key>
+    <key alias="noProductContentType">
+      <![CDATA[
+      <h5>You have not selected a product content type</h5>
+    ]]>
+    </key>
+    <key alias="deleteWarning">
+      <![CDATA[
+    This will also delete ALL property data associated with products that use this product type.
+    ]]>
+    </key>
+    <key alias="removeDetachedContent">Remove Extended Content</key>
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
+    Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to 
+    fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
+    ]]>
+    </key>
   </area>
   <area alias="merchelloSales">
+    <key alias="invoice">Invoice</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="paymentStatus">Payment Status</key>
+    <key alias="sales">Sales</key>
+    <key alias="capturePayment">Capture Payment</key>
+    <key alias="processPayment">Process Payment</key>
+    <key alias="voidPayment">Void Payment</key>
+    <key alias="refundPayment">Refund Payment</key>
+    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
+    <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+    <key alias="processedBy">Processed by</key>
+    <key alias="refundMethod">Refund method</key>
     <key alias="noSales">
       <![CDATA[
         <h5>You Have No Sales Yet</h5>
@@ -1165,14 +1237,29 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
-
+    <key alias="billingAddress">Billing Address</key>
+    <key alias="noBillingAddress">No Billing Address</key>
+    <key alias="shippingAddress">Shipping Address</key>
+    <key alias="noShippingAddress">No Shipping Address</key>
+    <key alias="paid">Paid</key>
+    <key alias="unpaid">Unpaid</key>
+    <key alias="partial">Partial</key>
   </area>
   <area alias="merchelloCustomers">
+    <key alias="loginName">Login</key>
     <key alias="newCustomer">New Customer</key>
+    <key alias="lastInvoiceTotal">Last Invoice Total</key>
+    <key alias="location">Location</key>
     <key alias="noCustomers">
       <![CDATA[
         <h5>You Have No Customers</h5>
         <p>But you will soon!</p>
+      ]]>
+    </key>
+    <key alias="customerSaleHistory">
+      <![CDATA[
+      Sales History
+      <small>A list of the customer's sales and their status</small>
       ]]>
     </key>
     <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
@@ -1182,6 +1269,7 @@ To manage your website, simply open the Umbraco back office and start adding con
       <small>Notes about the customer (not sale specific)</small>
       ]]>
     </key>
+    <key alias="totalSpent">Total Spent</key>
   </area>
   <area alias="merchelloMarketing">
     <key alias="currentOffers">Current Offers</key>
@@ -1201,6 +1289,14 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
     <key alias="offerRewardsInfo">Rewards</key>
     <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+    <key alias="noConstraints">No Constraints Available</key>
+    <key alias="noRewards">No Rewards Available</key>
+    <key alias="noContraintsAssigned">No Constraints Assigned</key>
+    <key alias="noRewardsAssigned">No Rewards Assigned</key>
+    <key alias="componentAutoSaving">Component updated - auto saving</key>
+    <key alias="lineItemNameInfo">
+      <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
+    </key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -1254,42 +1350,52 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
     <key alias="productOnSale">On sale</key>
+    <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
   </area>
   <area alias="merchelloOrder">
-    <!-- things -->
+    <!-- moved to sales -->
     <key alias="invoice">Invoice</key>
     <key alias="invoiceNumber">Invoice #</key>
-    <key alias="order">Order</key>
-    <key alias="orders">Orders</key>
-    <key alias="orderNumber">Order #</key>
-    <key alias="paymentStatus">Payment Status</key>
-    <key alias="fulfillmentStatus">Fulfillment Status</key>
-    <key alias="lineItems">Line Items</key>
-    <key alias="orderName">[Order Name]</key>
-    <key alias="createOrder">Create Order</key>
     <key alias="sales">Sales</key>
     <key alias="saleInformation">Sale Information</key>
-    <!-- actions -->
-    <key alias="filter">Filter Invoices</key>
-    <key alias="addDateFilters">Add date filters</key>
-    <key alias="removeDateFilters">Remove date filters</key>
+    <key alias="paymentStatus">Payment Status</key>
     <key alias="capturePayment">Capture Payment</key>
     <key alias="processPayment">Process Payment</key>
     <key alias="voidPayment">Void Payment</key>
     <key alias="refundPayment">Refund Payment</key>
     <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
-    <!-- phrases -->
-    <key alias="invoicesPerPage">Invoices / Page</key>
-    <key alias="noOrders">You have no orders.</key>
-    <key alias="attentionRequired">You Have Orders That Require Attention</key>
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
     <key alias="refundMethod">Refund method</key>
+
+    <!-- moved to general -->
+    <key alias="lineItems">Line Items</key>
+
+    <key alias="order">Order</key>
+    <key alias="orders">Orders</key>
+    <key alias="orderNumber">Order #</key>
+
+    <key alias="fulfillmentStatus">Fulfillment Status</key>
+    <key alias="orderName">[Order Name]</key>
+    <key alias="createOrder">Create Order</key>
+
+    <!-- to be removed -->
+    <key alias="filter">Filter Invoices</key>
+    <key alias="addDateFilters">Add date filters</key>
+    <key alias="removeDateFilters">Remove date filters</key>
     <key alias="resetFilters">Reset Filters</key>
+    <key alias="invoicesPerPage">Invoices / Page</key>
     <key alias="archiveSales">Archive Sales</key>
     <key alias="unarchiveSales">Unarchive Sales</key>
     <key alias="noSalesYet">You have no sales yet</key>
     <key alias="butSoonYouWill">but soon you will!</key>
+
+    <!-- phrases -->
+    <key alias="noOrders">You have no orders.</key>
+    <key alias="attentionRequired">You Have Orders That Require Attention</key>
+    <key alias="fulfilled">Fulfilled</key>
+    <key alias="unfulfilled">Unfulfilled</key>
+    <key alias="open">Open</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
@@ -1327,6 +1433,8 @@ To manage your website, simply open the Umbraco back office and start adding con
     <!-- actions -->
     <!-- phrases -->
   </area>
+
+  <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
   <area alias="merchelloShipping">
     <!-- things -->
     <key alias="shipping">Shipping</key>
@@ -1341,6 +1449,15 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="shippingMethods" >Shipping Methods</key>
     <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
     <key alias="addCountry" >Add a Country</key>
+    <key alias="addCatalog">Add a Catalog</key>
+    <key alias="selectCatalog">Select Catalog</key>
+    <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
+    <key alias="shipContriesInfo">
+      <![CDATA[
+        Shipping Countries
+        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
+    </key>
+    <key alias="warehouse">Warehouse</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -1374,6 +1491,7 @@ To manage your website, simply open the Umbraco back office and start adding con
     <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
     <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
     <key alias="globalTaxationApplication">Set how taxes are applied</key>
+    <key alias="defaultCultureName">Set the default extended content culture</key>
   </area>
 
   <area alias="merchelloShippingCountry">

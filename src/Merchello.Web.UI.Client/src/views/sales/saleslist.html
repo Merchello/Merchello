@@ -6,113 +6,13 @@
                     <h1><localize key="merchelloOrder_sales" /></h1>
                 </div>
             </div>
-            <div class="span5">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <!-- New Order Button
-                        <div class="btn-group">
-                            <a href="#/merchello/merchello/edit/orders?create" class="btn btn-success"><localize key="merchelloOrder_createOrder" /></a>
-                        </div>
-                         -->
-                </div>
-            </div>
+            <div class="span5"></div>
             <merchello-tabs tabs="tabs"></merchello-tabs>
         </umb-header>
         <merchello-panel>
-            <div class="merchello-pane">
-                <form class="form-horizontal limit-form row-fluid right">
-                    <!-- Number of Orders/Invoices Per Page -->
-                    <div class="controls pull-right" style="margin-left: 0;" data-ng-show="invoices.length > 0">
-                        <span style="line-height: 30px; margin-left: -2em;">Show:&nbsp;</span>
-                        <select name="limitSelect" class="form-control span9 col-xs-9" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                    </div>    
-                </form>
-
-                <!-- Order Filters -->
-                <div class="well row-fluid left invoice-filter">
-                    <filter-invoices show-date-filter="showDateFilter" filter-start-date="filterStartDate" date-filter-open="dateFilterOpen" filter-end-date="filterEndDate" filter-text="filterText" filter-term-callback="termFilterInvoices(filterText)" filter-callback="filterInvoices(filterStartDate, filterEndDate, filterText)" toggle-date-filter-open="toggleDateFilterOpen()"></filter-invoices>
-                </div>
-                <div class="clear"></div>
-
-                <reset-list-filters></reset-list-filters>
-
-            </div>
             <!-- Tabular Order List -->
             <div class="merchello-pane">
-
-                <entity-collection-title-bar collection-key="collectionKey"></entity-collection-title-bar>
-
-                <merchello-pager></merchello-pager>
-                <!-- List of Sales -->
-                <table class="table table-hover merchello-selectable-table" data-ng-show="salesLoaded && invoices.length > 0">
-                    <thead>
-                        <tr data-ng-show="!visible.bulkActionDropdown">
-                            <!--<th>
-                                <input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" />
-                            </th>-->
-                            <th data-ng-click="changeSortOrder('invoiceNumber')" data-ng-class="{'sorted': sortProperty == 'invoiceNumber' ||  sortProperty == '-invoiceNumber'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceNumber', 'icon-navigation-down': sortProperty == '-invoiceNumber'}"></i>
-                                <localize key="merchelloOrder_invoiceNumber" />
-                            </th>
-                            <th data-ng-click="changeSortOrder('invoiceDate')" data-ng-class="{'sorted': sortProperty == 'invoiceDate' ||  sortProperty == '-invoiceDate'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'invoiceDate', 'icon-navigation-down': sortProperty == '-invoiceDate'}"></i>
-                                <localize key="general_date" />
-                            </th>
-                            <th data-ng-click="changeSortOrder('billToName')" data-ng-class="{'sorted': sortProperty == 'billToName' ||  sortProperty == '-billToName'}">
-                                <i data-ng-class="{'icon-navigation-up': sortProperty == 'billToName', 'icon-navigation-down': sortProperty == '-billToName'}"></i>
-                                <localize key="merchelloGeneral_customer" />
-                            </th>
-                            <th>
-                                <localize key="merchelloOrder_paymentStatus" />
-                            </th>
-                            <th>
-                                <localize key="merchelloOrder_fulfillmentStatus" />
-                            </th>
-                            <th>
-                                <localize key="merchelloGeneral_total" />
-                            </th>
-                        </tr>
-                        <!-- Displays the bulk action button & dropdown menu when the checkbox is selected, which replaces normal heading TR -->
-                        <tr data-ng-show="visible.bulkActionDropdown">
-                            <!--<th><input type="checkbox" data-ng-model="selectAllOrders" data-ng-click="updateBulkActionDropdownStatus(true)" /></th>-->
-                            <th colspan="6">
-                                <div class="btn-group">
-                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedSalesCount}} sales selected) <i class="icon-navigation-down"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Archive Sales</a></li>
-                                        <li><a href="#">Unarchive Sales</a></li>
-                                    </ul>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Invoices -->
-                        <tr data-ng-repeat="invoice in invoices | orderBy:sortProperty" data-ng-class="{active: invoice.selected}" data-ng-click="updateBulkActionDropdownStatus(false, invoice.key)">
-                            <!--<td><input type="checkbox" data-ng-model="invoice.selected" data-ng-click="invoice.selected = !invoice.selected" /></td>-->
-                            <td>#<a data-ng-href="#/merchello/merchello/saleoverview/{{invoice.key}}">{{invoice.invoiceNumber}}</a></td>
-                            <td>{{invoice.invoiceDateString() | date : settings.dateFormat }}</td>
-                            <td>{{invoice.billToName}}</td>
-                            <td><span class="label" data-ng-class="{ 'label-success': invoice.getPaymentStatus()=='Paid', 'label-info': invoice.getPaymentStatus()=='Unpaid' }"><i data-ng-class="{ 'icon-check': invoice.getPaymentStatus()=='Paid', 'icon-loading': invoice.getPaymentStatus()=='Unpaid' }"></i> {{invoice.getPaymentStatus()}}</span></td>
-                            <td><span class="label" data-ng-class="{ 'label-success': invoice.getFulfillmentStatus()=='Fulfilled', 'label-warning': invoice.getFulfillmentStatus()=='Not Fulfilled', 'label-info': invoice.getFulfillmentStatus()=='Partial' }"><i data-ng-class="{ 'icon-check': invoice.getFulfillmentStatus()=='Fulfilled', 'icon-alert': invoice.getFulfillmentStatus()=='Not Fulfilled', 'icon-loading': invoice.getFulfillmentStatus()=='Partial' }"></i> {{invoice.getFulfillmentStatus()}}</span></td>
-                            <td>{{invoice.total | currency : getCurrencySymbol(invoice)}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Pagination -->
-
-                <merchello-pager></merchello-pager>
-
-                <div class="pager well" data-ng-show="salesLoaded && invoices.length == 0 && collectionKey===''">
-                    <localize key="merchelloSales_noSales" />
-                </div>
-                <div class="pager well" data-ng-show="salesLoaded && invoices.length == 0 && collectionKey!==''">
-                    <localize key="merchelloSales_emptySalesCollection" />
-                </div>
+                <merchello-list-view builder="invoiceDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType" include-date-filter />
             </div>
         </merchello-panel>
     </umb-panel>

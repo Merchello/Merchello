@@ -266,7 +266,7 @@
                 }
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IEntityCollection>(entityCollection), this);
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IEntityCollection>(entityCollection), this);
         }        
 
         /// <summary>

@@ -14,8 +14,8 @@
             '<div class="tags">' +
             '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
             '</div>' +
-            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName"></input> ' +
-            '<a class="btn btn-primary" ng-click="add()">Add</a>',
+            '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName" /> ' +
+            '<merchello-add-icon do-add="add()"></merchello-add-icon>',
             link: function ($scope, $element) {
                 // FIXME: this is lazy and error-prone
                 // this is the option name input

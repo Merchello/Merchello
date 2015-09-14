@@ -39,7 +39,7 @@
         public override Attempt<ValidationResult<CustomerItemCacheBase>> PerformTask(ValidationResult<CustomerItemCacheBase> value)
         {
             var visitor = new ProductSkuExistsValidationVisitor(Merchello);
-            value.Validated.Items.Accept(visitor);
+            value.Validated.Accept(visitor);
 
             if (visitor.LineItemsToRemove.Any())
             {

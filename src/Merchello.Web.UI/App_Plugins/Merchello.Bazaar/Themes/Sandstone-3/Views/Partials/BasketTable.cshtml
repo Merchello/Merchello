@@ -7,7 +7,7 @@
 @using Umbraco.Web
 @{
     
-    using (Html.BeginUmbracoForm<BasketOperationsController>("UpdateBasket", new { area = "Bazaar" }))
+    using (Html.BeginUmbracoForm<BazaarBasketController>("UpdateBasket", new { area = "Bazaar" }))
     {
         <table class="table basket">
             <thead>
@@ -40,16 +40,16 @@
                                     <a href="@Model.Items[i].Product.Url"><span>@Model.Items[i].Name</span></a>
                                 }
                             </td>
-                            <td>@Model.Items[i].FormatUnitPrice(Model.Currency.Symbol)</td>
+                            <td>@Model.Items[i].FormatUnitPrice(Model.Currency)</td>
                             <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @class = "col-xs-2", @type="number" })</td>
-                            <td>@Model.Items[i].FormatTotalPrice(Model.Currency.Symbol)</td>
+                            <td>@Model.Items[i].FormatTotalPrice(Model.Currency)</td>
                             <td>
                                 @if (Model.ShowWishList)
                                 {
-                                    @Html.ActionLink("Wish List +", "MoveItemToWishList", "BasketOperations", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-info" })
+                                    @Html.ActionLink("Wish List +", "MoveItemToWishList", "BazaarBasket", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId, wishListPageId = Model.WishListPageId }, new { @class = "btn btn-info" })
                                 }
 
-                                @Html.ActionLink("Remove", "RemoveItemFromBasket", "BasketOperations", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId }, new { @class = "btn btn-danger" })
+                                @Html.ActionLink("Remove", "RemoveItemFromBasket", "BazaarBasket", new { area = "Bazaar", lineItemKey = Model.Items[i].Key, basketPageId = Model.BasketPageId }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
                     }

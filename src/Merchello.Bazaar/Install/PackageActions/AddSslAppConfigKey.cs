@@ -4,8 +4,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Xml;
 
-    using Merchello.Core.Configuration;
-
     using umbraco.cms.businesslogic.packager.standardPackageActions;
     using umbraco.interfaces;
 

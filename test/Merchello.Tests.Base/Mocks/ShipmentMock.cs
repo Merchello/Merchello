@@ -94,5 +94,10 @@
         public string Carrier { get; set; }
 
         public string TrackingCode { get; set; }
+
+        public void Accept(ILineItemVisitor visitor)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

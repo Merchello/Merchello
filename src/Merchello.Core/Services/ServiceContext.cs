@@ -48,6 +48,11 @@
         private Lazy<ICustomerService> _customerService;
 
         /// <summary>
+        /// The detached content type service.
+        /// </summary>
+        private Lazy<IDetachedContentTypeService> _detachedContentTypeService; 
+
+        /// <summary>
         /// The digital media service.
         /// </summary>
         private Lazy<IDigitalMediaService> _digitalMediaService;
@@ -321,6 +326,17 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        internal IDetachedContentTypeService DetachedContentTypeService
+        {
+            get
+            {
+                return _detachedContentTypeService.Value;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="ITaxMethodService"/>
         /// </summary>
         internal ITaxMethodService TaxMethodService
@@ -418,6 +434,9 @@
 
             if (_customerService == null)
                 _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _anonymousCustomerService.Value, _customerAddressService.Value, _invoiceService.Value, _paymentService.Value));
+
+            if (_detachedContentTypeService == null)
+                _detachedContentTypeService = new Lazy<IDetachedContentTypeService>(() => new DetachedContentTypeService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
 
             if (_digitalMediaService == null)
                 _digitalMediaService = new Lazy<IDigitalMediaService>(() => new DigitalMediaService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));

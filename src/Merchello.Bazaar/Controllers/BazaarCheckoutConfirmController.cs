@@ -21,7 +21,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [RequireSsl("Bazaar:RequireSsl")]
-    public class BazaarCheckoutConfirmController : CheckoutRenderControllerBase
+    public class BazaarCheckoutConfirmController : CheckoutControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

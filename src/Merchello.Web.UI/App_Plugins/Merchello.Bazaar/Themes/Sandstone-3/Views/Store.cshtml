@@ -1,5 +1,6 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
 @using Merchello.Bazaar.Models.ViewModels
+@using Merchello.Web.Models.VirtualContent
 @using Umbraco.Web
 @{
     Layout = "Master.cshtml";
@@ -13,21 +14,24 @@
 
 <section id="categories">
     <div class="page-header">
-        <h1>Categories</h1>
+        <h1>Featured Products</h1>
     </div>
-	<div class="row">
-    @foreach (var group in Model.ProductGroups.Where(x => x.IsVisible()))
-    {
-        <span class="col-md-6">
-            <a href="@group.Url">
-                <h2>@group.Name</h2>
-                @if (!string.IsNullOrEmpty(group.Image))
-                {
-                    <img src="@group.Image" alt="@group.Name" />
-                }
-            </a>
-            <p>@group.Brief</p>
-        </span>
-    }
+    <div class="row">
+        @foreach (var product in Model.GetPropertyValue<IEnumerable<IProductContent>>("featuredProducts"))
+        {
+            // if you want to specify the culture you can do it like
+            product.SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
+            
+            <div class="col-md-6">
+                <a href="@product.Url">
+                    <h2>@product.Name</h2>
+                    @if (product.HasValue("image"))
+                    {
+                        <img src="@product.GetCropUrl(propertyAlias: "image", height: 300)" alt="@product.Name" />
+                    }
+                </a>
+                <p>@product.GetPropertyValue("brief")</p>
+            </div>
+        }
     </div>
 </section>

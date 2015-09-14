@@ -155,6 +155,11 @@
                 menu.Items.Add<NewCollectionAction>(
                     _textService.Localize(string.Format("merchelloVariant/newProduct"), _culture),
                     false).NavigateToRoute("merchello/merchello/productedit/create");
+
+                menu.Items.Add<NewProductContentTypeAction>(
+                    _textService.Localize(string.Format("merchelloDetachedContent/productContentType"), _culture),
+                    false)
+                    .LaunchDialogView(DialogsPath + "productcontenttype.add.html", _textService.Localize(string.Format("merchelloDetachedContent/productContentType"), _culture));
             }
 
             if (id == "customers")

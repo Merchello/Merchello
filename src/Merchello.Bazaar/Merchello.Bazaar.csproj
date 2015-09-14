@@ -86,17 +86,17 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Core, Version=1.12.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.11.0\lib\net40\Merchello.Core.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.12.0\lib\net40\Merchello.Core.dll</HintPath>
     </Reference>
     <Reference Include="Merchello.Examine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.11.0\lib\net40\Merchello.Examine.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.12.0\lib\net40\Merchello.Examine.dll</HintPath>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Merchello.Web, Version=1.12.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.1.11.0\lib\net40\Merchello.Web.dll</HintPath>
+      <HintPath>..\packages\Merchello.Core.1.12.0\lib\net40\Merchello.Web.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
@@ -220,18 +220,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\RequiresSslAttribute.cs" />
+    <Compile Include="BazaarContentHelper.cs" />
     <Compile Include="Controllers\Api\BazaarSiteApiController.cs" />
     <Compile Include="Controllers\BazaarCheckoutConfirmController.cs" />
+    <Compile Include="Controllers\BazaarControllerBase.cs" />
+    <Compile Include="Controllers\BazaarProductCollectionController.cs" />
+    <Compile Include="Controllers\BazaarProductContentController.cs" />
     <Compile Include="Controllers\BazaarReceiptController.cs" />
-    <Compile Include="Controllers\Surface\AccountOperationsController.cs" />
-    <Compile Include="Controllers\Surface\BazaarPaymentMethodFormControllerBase.cs" />
-    <Compile Include="Controllers\Surface\CashPaymentMethodController.cs" />
+    <Compile Include="Controllers\BazaarStoreController.cs" />
+    <Compile Include="Controllers\BazaarPaymentMethodFormControllerBase.cs" />
+    <Compile Include="Controllers\CashPaymentMethodController.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
+    <Compile Include="Install\PackageActions\AddXpathToStoreConfigKey.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
     <Compile Include="Models\Account\CustomerAddressModel.cs" />
-    <Compile Include="Controllers\Surface\SalePreparationOperationsController.cs" />
-    <Compile Include="Controllers\CheckoutRenderControllerBase.cs" />
-    <Compile Include="Controllers\Surface\WishListOperationsController.cs" />
+    <Compile Include="Controllers\SalePreparationOperationsController.cs" />
+    <Compile Include="Controllers\CheckoutControllerBase.cs" />
     <Compile Include="Controllers\BazaarAccountController.cs" />
     <Compile Include="Controllers\BazaarAccountHistoryController.cs" />
     <Compile Include="Controllers\BazaarBasketController.cs" />
@@ -239,13 +243,9 @@
     <Compile Include="Controllers\BazaarRegistrationController.cs" />
     <Compile Include="Controllers\BazaarProductController.cs" />
     <Compile Include="Controllers\BazaarProductGroupController.cs" />
-    <Compile Include="Controllers\BazaarStoreController.cs" />
     <Compile Include="Controllers\BazaarWishListController.cs" />
-    <Compile Include="Controllers\Surface\MembershipOperationsController.cs" />
+    <Compile Include="Controllers\MembershipOperationsController.cs" />
     <Compile Include="Controllers\Api\PropertyEditorsController.cs" />
-    <Compile Include="Controllers\RenderControllerBase.cs" />
-    <Compile Include="Controllers\Surface\SurfaceControllerBase.cs" />
-    <Compile Include="Controllers\Surface\BasketOperationsController.cs" />
     <Compile Include="Factories\BasketLineItemFactory.cs" />
     <Compile Include="Factories\IViewModelFactory.cs" />
     <Compile Include="Factories\SalePreparationSummaryFactory.cs" />
@@ -257,6 +257,7 @@
     </Compile>
     <Compile Include="Install\PackageActions\AddSslAppConfigKey.cs" />
     <Compile Include="ModelExtensions.cs" />
+    <Compile Include="Models\PublishedContentExtensions.cs" />
     <Compile Include="Models\RedeemCouponOfferForm.cs" />
     <Compile Include="Models\CheckoutAddressForm.cs" />
     <Compile Include="Models\CheckoutConfirmationForm.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="Models\ViewModels\IMasterModel.cs" />
     <Compile Include="Models\ViewModels\MasterModel.cs" />
     <Compile Include="Models\CustomerRegistrationModel.cs" />
+    <Compile Include="Models\ViewModels\ProductCollectionModel.cs" />
     <Compile Include="Models\ViewModels\ProductGroupModel.cs" />
     <Compile Include="Models\ViewModels\ProductModel.cs" />
     <Compile Include="Models\ViewModels\ReceiptModel.cs" />
@@ -289,6 +291,7 @@
     <Compile Include="Models\ViewModels\WishListModel.cs" />
     <Compile Include="Models\WishListTableModel.cs" />
     <Compile Include="PathHelper.cs" />
+    <Compile Include="ProductContentExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UmbracoEventHandler.cs" />
   </ItemGroup>
