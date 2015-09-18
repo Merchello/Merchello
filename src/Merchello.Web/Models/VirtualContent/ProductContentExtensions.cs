@@ -36,5 +36,19 @@
         {
             return ((ProductContent)content).ProductDisplay;
         }
+
+        /// <summary>
+        /// Gets the <see cref="ProductVariantDisplay"/> from <see cref="IProductVariantContent"/>.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        public static ProductVariantDisplay AsProductVariantDisplay(this IProductVariantContent content)
+        {
+            return ((ProductVariantContent)content).ProductVariantDisplay;
+        }
     }
 }
