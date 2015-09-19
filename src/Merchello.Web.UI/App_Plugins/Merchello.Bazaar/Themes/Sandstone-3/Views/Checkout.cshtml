@@ -7,11 +7,13 @@
     System.Web.Mvc.HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
 }
 
-
 <div class="row">
-	<div class="col-md-12">
-		<h1>@Model.Name</h1>
-	</div>
+    
+    <div class="col-md-12">
+        <h1>@Model.Name</h1>
+    </div>
+
 </div>
+
 @Html.ThemedPartial(Model, "CheckoutAddressesForm", Model.CheckoutAddressForm)
 
