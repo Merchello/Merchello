@@ -926,7 +926,7 @@
         /// <param name="modifier">
         /// The modifier.
         /// </param>
-        internal static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
+        public static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
         {
             if (modifier.ModifiedDataLogs == null) return;
             foreach (var log in modifier.ModifiedDataLogs)

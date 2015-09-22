@@ -59,7 +59,7 @@
                     var lineItem = result.Key;                                        
                     var quantity = lineItem.Quantity;
                     var name = lineItem.Name;
-
+                    var removedEd = lineItem.ExtendedData.AsEnumerable();
                     value.Validated.RemoveItem(lineItem.Sku);
                     
                     var extendedData = new ExtendedDataCollection();
@@ -83,6 +83,14 @@
 
                     extendedData.AddProductVariantValues(variant);
                     extendedData.MergeDataModifierLogs(variant);
+                    extendedData.MergeDataModifierLogs(variant);
+
+                    // preserve any custom extended data values
+                    foreach (var val in removedEd.Where(val => !extendedData.ContainsKey(val.Key)))
+                    {
+                        extendedData.SetValue(val.Key, val.Value);
+                    }
+
                     var price = variant.OnSale ? extendedData.GetSalePriceValue() : extendedData.GetPriceValue();
 
                     var keys = lineItem.ExtendedData.Keys.Where(x => extendedData.Keys.Any(y => y != x));
