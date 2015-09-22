@@ -5,7 +5,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
 
-    internal static class ExtendedDataExtensions
+    public static class ExtendedDataExtensions
     {
         /// <summary>
         /// The add product variant values.

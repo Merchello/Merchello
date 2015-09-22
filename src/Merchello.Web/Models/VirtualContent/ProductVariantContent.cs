@@ -147,5 +147,16 @@
 
             return ContentType.GetPropertyType(alias) != null;
         }
+
+        /// <summary>
+        /// Gets the product variant display.
+        /// </summary>
+        internal ProductVariantDisplay ProductVariantDisplay
+        {
+            get
+            {
+                return _variant;
+            }
+        }
     }
 }

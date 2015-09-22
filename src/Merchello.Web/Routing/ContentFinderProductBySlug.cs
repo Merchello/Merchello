@@ -50,7 +50,6 @@
             
             contentRequest.PublishedContent = content;
             return true;
-
         }
 
         /// <summary>

@@ -104,5 +104,10 @@ namespace Merchello.Web.Models.VirtualContent
         /// Gets the downloadable file's Umbraco media id.
         /// </summary>
         int DownloadMediaId { get; }
+
+        /// <summary>
+        /// Gets the total inventory count.
+        /// </summary>
+        int TotalInventoryCount { get; }
     }
 }
