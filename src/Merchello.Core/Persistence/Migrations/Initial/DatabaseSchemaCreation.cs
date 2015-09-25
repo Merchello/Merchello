@@ -11,6 +11,8 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
 
+    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
+
     /// <summary>
     /// Represents the initial database schema creation by running CreateTable for all DTOs against the database.
     /// </summary>

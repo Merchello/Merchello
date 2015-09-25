@@ -10,6 +10,8 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
+    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
+
     /// <summary>
     /// Create merchInvoice2EntityCollection table in the database.
     /// </summary>

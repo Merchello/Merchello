@@ -10,6 +10,8 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
+    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
+
     /// <summary>
     /// The create product 2 product collection table.
     /// </summary>
