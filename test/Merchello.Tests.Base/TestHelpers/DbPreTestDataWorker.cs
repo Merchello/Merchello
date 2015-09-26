@@ -15,6 +15,7 @@ using Umbraco.Core.Persistence;
 namespace Merchello.Tests.Base.TestHelpers
 {
     using global::Umbraco.Core.Logging;
+    using global::Umbraco.Core.Persistence.SqlSyntax;
 
     using Merchello.Core.Events;
     using Merchello.Core.Persistence;
@@ -29,20 +30,26 @@ namespace Merchello.Tests.Base.TestHelpers
     {
         
         private readonly ServiceContext _serviceContext;
+
+        public ISqlSyntaxProvider SqlSyntaxProvider { get; set; }
         public UmbracoDatabase Database { get; private set; }
         public IWarehouseCatalog WarehouseCatalog;
+        public ILogger TestLogger { get; set; }
 
         public DbPreTestDataWorker()
         {
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
-            // sets up the Umbraco SqlSyntaxProvider Singleton
+
+            // sets up the Umbraco SqlSyntaxProvider Singleton OBSOLETE
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
+
+            this.SqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
 
             var uowProvider = new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object);
 
             Database = uowProvider.GetUnitOfWork().Database;
-            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
-            _serviceContext = new ServiceContext(new RepositoryFactory(), new PetaPocoUnitOfWorkProvider(logger), logger, new TransientMessageFactory());
+            TestLogger = Logger.CreateWithDefaultLog4NetConfiguration();
+            _serviceContext = new ServiceContext(new RepositoryFactory(), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
 
             WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
             {
@@ -51,6 +58,8 @@ namespace Merchello.Tests.Base.TestHelpers
         }
 
         internal DbSyntax SqlSyntax { get; set; }
+
+
 
         public DbPreTestDataWorker(ServiceContext serviceContext)
         {
@@ -545,7 +554,7 @@ namespace Merchello.Tests.Base.TestHelpers
         private void RebuildDatabase()
         {
             // migration
-            var schema = new DatabaseSchemaCreation(Database);
+            var schema = new DatabaseSchemaCreation(Database, TestLogger, new DatabaseSchemaHelper(Database, TestLogger, this.SqlSyntaxProvider), this.SqlSyntaxProvider);
 
             // drop all the tables
             schema.UninstallDatabaseSchema();
@@ -554,7 +563,7 @@ namespace Merchello.Tests.Base.TestHelpers
             schema.InitializeDatabaseSchema();
 
             // add the default data
-            var baseDataCreation = new BaseDataCreation(Database);
+            var baseDataCreation = new BaseDataCreation(Database, TestLogger);
             baseDataCreation.InitializeBaseData("merchDBTypeField");
             baseDataCreation.InitializeBaseData("merchInvoiceStatus");
             baseDataCreation.InitializeBaseData("merchOrderStatus");

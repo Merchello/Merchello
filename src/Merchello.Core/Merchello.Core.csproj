@@ -566,11 +566,11 @@
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
-    <Compile Include="Persistence\Migrations\DatabaseSchemaHelperExtensions.cs" />
-    <Compile Include="Persistence\Migrations\DatabaseSchemaHelperOld.cs">
+    <Compile Include="Persistence\Migrations\DatabaseSchemaHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
+    <Compile Include="Persistence\Migrations\MerchelloDatabaseSchemaHelper.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />

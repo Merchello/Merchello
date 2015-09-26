@@ -18,6 +18,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
     using Moq;
 
+    using umbraco.BusinessLogic;
+
     using Umbraco.Core.Logging;
     using Umbraco.Web;
 
@@ -39,7 +41,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             var applicationMock = new Mock<UmbracoApplication>();
 
             // Merchello CoreBootStrap
-            var bootManager = new Web.WebBootManager();
+            var bootManager = new Web.WebBootManager(logger);
             bootManager.Initialize();
 
 

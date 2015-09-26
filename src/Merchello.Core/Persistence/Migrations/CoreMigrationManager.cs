@@ -94,65 +94,66 @@
         /// </returns>
         private bool UpgradeMerchello(Database database)
         {
-            var databaseSchemaCreation = new DatabaseSchemaCreation(database);
-            var schemaResult = databaseSchemaCreation.ValidateSchema();
-            var dbVersion = schemaResult.DetermineInstalledVersion();
+            // TODO RSS - MIGRATION FIX
+            //var databaseSchemaCreation = new DatabaseSchemaCreation(database);
+            //var schemaResult = databaseSchemaCreation.ValidateSchema();
+            //var dbVersion = schemaResult.DetermineInstalledVersion();
 
-            if (dbVersion != MerchelloVersion.Current)
-            {
-                try
-                {
-                    LogHelper.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
-                    var runner = new MigrationRunner(
-                        MerchelloConfiguration.ConfigurationStatusVersion,
-                        MerchelloVersion.Current,
-                        MerchelloConfiguration.MerchelloMigrationName);
-                    var upgraded = runner.Execute(database);
-                    if (upgraded)
-                    {
-                        var migrationKey = this.EnsureMigrationKey(schemaResult);
+            //if (dbVersion != MerchelloVersion.Current)
+            //{
+            //    try
+            //    {
+            //        LogHelper.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
+            //        var runner = new MigrationRunner(
+            //            MerchelloConfiguration.ConfigurationStatusVersion,
+            //            MerchelloVersion.Current,
+            //            MerchelloConfiguration.MerchelloMigrationName);
+            //        var upgraded = runner.Execute(database);
+            //        if (upgraded)
+            //        {
+            //            var migrationKey = this.EnsureMigrationKey(schemaResult);
 
-                        var record = new MigrationRecord()
-                                         {
-                                             MigrationKey = migrationKey,
-                                             CurrentVersion = dbVersion.ToString(),
-                                             TargetVersion = MerchelloVersion.Current.ToString(),
-                                             DbProvider = database.GetDatabaseProvider().ToString(),
-                                             InstallDate = DateTime.Now,
-                                             IsUpgrade = true
-                                         };
+            //            var record = new MigrationRecord()
+            //                             {
+            //                                 MigrationKey = migrationKey,
+            //                                 CurrentVersion = dbVersion.ToString(),
+            //                                 TargetVersion = MerchelloVersion.Current.ToString(),
+            //                                 DbProvider = database.GetDatabaseProvider().ToString(),
+            //                                 InstallDate = DateTime.Now,
+            //                                 IsUpgrade = true
+            //                             };
 
-                        this.OnUpgraded(record);
+            //            this.OnUpgraded(record);
 
-                        LogHelper.Info<CoreMigrationManager>("Merchello Schema Migration completed successfully");
-                    }
+            //            LogHelper.Info<CoreMigrationManager>("Merchello Schema Migration completed successfully");
+            //        }
 
-                    LogHelper.Debug<CoreMigrationManager>("Merchello migration runner returned false.");
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Error<CoreMigrationManager>("Merchello Database Schema Upgrade Failed", ex);
-                    throw;
-                }
-            }
-            else
-            {
-                    // this is a new install                  
-                    var migrationKey = this.EnsureMigrationKey(schemaResult);
+            //        LogHelper.Debug<CoreMigrationManager>("Merchello migration runner returned false.");
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        LogHelper.Error<CoreMigrationManager>("Merchello Database Schema Upgrade Failed", ex);
+            //        throw;
+            //    }
+            //}
+            //else
+            //{
+            //        // this is a new install                  
+            //        var migrationKey = this.EnsureMigrationKey(schemaResult);
 
-                    var record = new MigrationRecord()
-                                     {
-                                         MigrationKey = migrationKey,
-                                         CurrentVersion = MerchelloConfiguration.ConfigurationStatus,
-                                         TargetVersion = MerchelloVersion.Current.ToString(),
-                                         DbProvider = database.GetDatabaseProvider().ToString(),
-                                         InstallDate = DateTime.Now,
-                                         IsUpgrade = !MerchelloConfiguration.ConfigurationStatus.Equals("0.0.0")
-                                     };
-                    this.OnUpgraded(record);
-            }
+            //        var record = new MigrationRecord()
+            //                         {
+            //                             MigrationKey = migrationKey,
+            //                             CurrentVersion = MerchelloConfiguration.ConfigurationStatus,
+            //                             TargetVersion = MerchelloVersion.Current.ToString(),
+            //                             DbProvider = database.GetDatabaseProvider().ToString(),
+            //                             InstallDate = DateTime.Now,
+            //                             IsUpgrade = !MerchelloConfiguration.ConfigurationStatus.Equals("0.0.0")
+            //                         };
+            //        this.OnUpgraded(record);
+            //}
             
-            MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
+            //MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
 
             return true;
         }

@@ -504,7 +504,7 @@
                 _productService = new Lazy<IProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _productVariantService.Value));
 
             if (_storeSettingsService == null)
-                _storeSettingsService = new Lazy<IStoreSettingService>(() => new StoreSettingService());
+                _storeSettingsService = new Lazy<IStoreSettingService>(() => new StoreSettingService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_shipCountryService == null)
                 _shipCountryService = new Lazy<IShipCountryService>(() => new ShipCountryService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _storeSettingsService.Value));

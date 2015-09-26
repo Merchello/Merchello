@@ -22,14 +22,24 @@
         private readonly Database _database;
 
         /// <summary>
+        /// The <see cref="ILogger"/>.
+        /// </summary>
+        private readonly ILogger _logger;
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BaseDataCreation"/> class.
         /// </summary>
         /// <param name="database">
         /// The database.
         /// </param>
-        public BaseDataCreation(Database database)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public BaseDataCreation(Database database, ILogger logger)
         {
             _database = database;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,7 +49,7 @@
         /// <param name="tableName">Name of the table to create base data for</param>
         public void InitializeBaseData(string tableName)
         {
-            LogHelper.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
+            _logger.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
 
             if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();   
 
@@ -49,11 +59,11 @@
 
             if (tableName.Equals("merchOrderStatus")) CreateOrderStatusData();
 
-            if (tableName.EndsWith("merchShipmentStatus")) this.CreateShipmentStatusData();
+            if (tableName.Equals("merchShipmentStatus")) this.CreateShipmentStatusData();
          
-            if (tableName.EndsWith("merchGatewayProviderSettings")) CreateGatewayProviderSettingsData();
+            if (tableName.Equals("merchGatewayProviderSettings")) CreateGatewayProviderSettingsData();
 
-            if (tableName.EndsWith("merchStoreSetting")) CreateStoreSettingData();          
+            if (tableName.Equals("merchStoreSetting")) CreateStoreSettingData();          
         }
 
         /// <summary>
