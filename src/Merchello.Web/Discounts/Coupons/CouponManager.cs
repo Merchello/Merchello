@@ -8,7 +8,6 @@
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Trees;
-    using Merchello.Web.Workflow.InvoiceCreation;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
