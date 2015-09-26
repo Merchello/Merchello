@@ -364,6 +364,7 @@
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="EntityCollections\QueryableEntityCollectionProviderBase.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
+    <Compile Include="Events\TransientMessageFactory.cs" />
     <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Exceptions\SkuExistsException.cs" />
@@ -565,6 +566,10 @@
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
+    <Compile Include="Persistence\Migrations\DatabaseSchemaHelperExtensions.cs" />
+    <Compile Include="Persistence\Migrations\DatabaseSchemaHelperOld.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
@@ -601,6 +606,12 @@
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\ShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWorkProvider.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShipmentLineItemVisitor.cs" />
     <Compile Include="Gateways\Shipping\FixedRate\FixedRateShippingGatewayMethod.cs" />
@@ -663,7 +674,6 @@
     <Compile Include="Persistence\Factories\OrderStatusFactory.cs" />
     <Compile Include="Persistence\Mappers\NotificationMessageMapper.cs" />
     <Compile Include="Persistence\Mappers\NotificationMethodMapper.cs" />
-    <Compile Include="Persistence\Migrations\DatabaseSchemaHelper.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceLineItemRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IInvoiceStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IItemCacheLineItemRepository.cs" />
@@ -1076,8 +1086,6 @@
     <Compile Include="Persistence\Repositories\StoreSettingRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseRepository.cs" />
     <Compile Include="Persistence\TransactionType.cs" />
-    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
-    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWorkProvider.cs" />
     <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Persistence\UnitOfWork\IUnitOfWorkRepository.cs" />
     <Compile Include="BootManagerBase.cs" />
@@ -1162,6 +1170,7 @@
     <Compile Include="Services\Interfaces\IPaymentService.cs" />
     <Compile Include="Services\Interfaces\IStaticCollectionService{T}.cs" />
     <Compile Include="Services\Interfaces\IWarehouseCatalogService.cs" />
+    <Compile Include="Services\MerchelloRepositoryService.cs" />
     <Compile Include="Services\NotificationMessageService.cs" />
     <Compile Include="Services\NotificationMethodService.cs" />
     <Compile Include="Services\OfferRedeemedService.cs" />

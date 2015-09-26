@@ -36,6 +36,11 @@
             <param name="name"></param>
             <param name="config"></param>
         </member>
+        <member name="F:UmbracoExamine.BaseUmbracoIndexer._internalSearcherLocker">
+            <summary>
+            Used to aquire the internal searcher
+            </summary>
+        </member>
         <member name="M:UmbracoExamine.BaseUmbracoIndexer.RebuildIndex">
             <summary>
             override to check if we can actually initialize. 
@@ -176,20 +181,9 @@
             <param name="xpath"></param>
             <returns></returns>
         </member>
-        <member name="M:UmbracoExamine.DataServices.UmbracoContentService.GetPage(System.Int32)">
-            <summary>
-            Unfortunately, we need to implement our own IsProtected method since 
-            the Umbraco core code requires an HttpContext for this method and when we're running
-            async, there is no context
-            </summary>
-            <param name="documentId"></param>
-            <returns></returns>
-        </member>
         <member name="M:UmbracoExamine.DataServices.UmbracoContentService.IsProtected(System.Int32,System.String)">
             <summary>
-            Unfortunately, we need to implement our own IsProtected method since 
-            the Umbraco core code requires an HttpContext for this method and when we're running
-            async, there is no context
+            Check if the node is protected
             </summary>
             <param name="nodeId"></param>
             <param name="path"></param>
@@ -259,7 +253,7 @@
         <member name="T:UmbracoExamine.LocalStorage.LocalTempStorageDirectory">
             <summary>
             Used to read data from local temp storage and write to both local storage and main storage
-            </summary>
+            </summary>    
         </member>
         <member name="M:UmbracoExamine.LocalStorage.LocalTempStorageDirectory.FileExists(System.String)">
             <summary>Returns true if a file with the given name exists. </summary>
@@ -287,14 +281,76 @@
             Returns a stream reading an existing file.
             </summary>
         </member>
+        <member name="M:UmbracoExamine.LocalStorage.LocalTempStorageDirectory.OpenInput(System.String,System.Int32)">
+            <summary>
+            Creates an IndexInput for the file with the given name. 
+            </summary>
+        </member>
+        <member name="M:UmbracoExamine.LocalStorage.LocalTempStorageDirectory.Sync(System.String)">
+            <summary>
+            Ensure that any writes to this file are moved to
+                        stable storage.  Lucene uses this to properly commit
+                        changes to the index, to prevent a machine/OS crash
+                        from corrupting the index. 
+            </summary>
+        </member>
+        <member name="M:UmbracoExamine.LocalStorage.LocalTempStorageDirectory.GetLockID">
+            <summary>
+            Return a string identifier that uniquely differentiates
+                        this Directory instance from other Directory instances.
+                        This ID should be the same if two Directory instances
+                        (even in different JVMs and/or on different machines)
+                        are considered "the same index".  This is how locking
+                        "scopes" to the right index.
+            
+            </summary>
+        </member>
         <member name="P:UmbracoExamine.LocalStorage.LocalTempStorageDirectory.Enabled">
             <summary>
             If initialization fails, it will be disabled and then this will just wrap the 'real directory'
             </summary>
         </member>
+        <member name="M:UmbracoExamine.LocalStorage.LocalTempStorageIndexer.TryCreateWriterWithRetry(Lucene.Net.Store.Directory,Lucene.Net.Analysis.Analyzer)">
+            <summary>
+            Attempts to create an index writer, it will retry on failure 5 times and on the last time will try to forcefully unlock the index files
+            </summary>
+            <param name="baseLuceneDirectory"></param>
+            <param name="analyzer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:UmbracoExamine.LocalStorage.MultiIndexLock">
+            <summary>
+            Lock that wraps multiple locks
+            </summary>
+        </member>
+        <member name="M:UmbracoExamine.LocalStorage.MultiIndexLock.Obtain">
+            <summary>
+            Attempts to obtain exclusive access and immediately return
+                        upon success or failure.
+            </summary>
+            <returns>
+            true iff exclusive access is obtained
+            </returns>
+        </member>
+        <member name="M:UmbracoExamine.LocalStorage.MultiIndexLock.Release">
+            <summary>
+            Releases exclusive access. 
+            </summary>
+        </member>
+        <member name="M:UmbracoExamine.LocalStorage.MultiIndexLock.IsLocked">
+            <summary>
+            Returns true if the resource is currently locked.  Note that one must
+                        still call <see cref="M:Lucene.Net.Store.Lock.Obtain"/> before using the resource. 
+            </summary>
+        </member>
+        <member name="T:UmbracoExamine.LocalStorage.MultiIndexLockFactory">
+            <summary>
+            Lock factory that wraps multiple factories
+            </summary>
+        </member>
         <member name="T:UmbracoExamine.UmbracoMemberIndexer">
             <summary>
-            
+            Custom indexer for members
             </summary>
         </member>
         <member name="T:UmbracoExamine.UmbracoContentIndexer">
@@ -602,7 +658,7 @@
             XSLT extensions will ONLY work for provider that have a base class of BaseUmbracoIndexer
             </remarks>
         </member>
-        <member name="M:UmbracoExamine.XsltExtensions.Search(System.String,System.Boolean,Examine.LuceneEngine.Providers.LuceneSearcher,System.String)">
+        <member name="M:UmbracoExamine.XsltExtensions.Search(System.String,System.Boolean,Examine.Providers.BaseSearchProvider,System.String)">
             <summary>
              Uses the provider specified to search, returning an XPathNodeIterator
             </summary>
@@ -717,12 +773,6 @@
             </summary>
             <param name="searchText"></param>
             <returns></returns>
-        </member>
-        <member name="M:UmbracoExamine.XsltExtensions.EnsureProvider(Examine.Providers.BaseSearchProvider)">
-            <summary>
-            Ensures the provider.
-            </summary>
-            <param name="p">The provider.</param>
         </member>
         <member name="M:UmbracoExamine.XsltExtensions.GetResultsAsXml(Examine.ISearchResults)">
             <summary>

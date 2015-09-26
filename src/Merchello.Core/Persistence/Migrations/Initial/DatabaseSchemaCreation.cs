@@ -11,7 +11,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
 
-    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
+
 
     /// <summary>
     /// Represents the initial database schema creation by running CreateTable for all DTOs against the database.
@@ -86,7 +86,7 @@
         /// </summary>
         internal void UninstallDatabaseSchema()
         {
-            DatabaseSchemaHelper.UninstallDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
+           // DatabaseSchemaHelper.UninstallMerchelloDatabaseSchema(OrderedTables, MerchelloVersion.Current.ToString());
         }
 
         /// <summary>
@@ -110,7 +110,7 @@
 
             if (!e.Cancel)
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
+               // DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
             }
 
             FireAfterCreation(e);

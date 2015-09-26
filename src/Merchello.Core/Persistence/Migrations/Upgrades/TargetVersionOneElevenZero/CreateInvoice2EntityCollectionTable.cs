@@ -10,7 +10,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
-    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
+    //using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
 
     /// <summary>
     /// Create merchInvoice2EntityCollection table in the database.
@@ -34,7 +34,7 @@
             var database = ApplicationContext.Current.DatabaseContext.Database;
             if (!database.TableExist("merchInvoice2EntityCollection"))
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
+                //DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
             }
         }
 

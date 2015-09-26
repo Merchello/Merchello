@@ -7,6 +7,7 @@
     using Merchello.Core.Models.Rdbms;
 
     using Umbraco.Core;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
@@ -32,7 +33,7 @@
         public override void Up()
         {
             var database = ApplicationContext.Current.DatabaseContext.Database;
-            DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "1.9.0 upgrade");
+            //DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "1.9.0 upgrade");
         }
 
         /// <summary>

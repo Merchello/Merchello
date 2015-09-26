@@ -13,8 +13,12 @@ using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
+    using Merchello.Core.Events;
+    using Merchello.Core.Persistence;
+
     using Moq;
 
+    using Umbraco.Core.Logging;
     using Umbraco.Web;
 
     public abstract class DatabaseIntegrationTestBase
@@ -26,8 +30,8 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         public virtual void FixtureSetup()
         {
             //AutoMapperMappings.CreateMappings();
-
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            var serviceContext = new ServiceContext(new RepositoryFactory(), new PetaPocoUnitOfWorkProvider(logger), logger, new TransientMessageFactory());
 
             _dbPreTestDataWorker = new DbPreTestDataWorker(serviceContext);
 

@@ -554,7 +554,7 @@
         </member>
         <member name="M:umbraco.editorControls.DefaultPrevalueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType,System.Boolean)">
             <summary>
-            The default editor for editing the build-in pre values in umbraco
+            The default editor for editing the built-in pre values in umbraco
             </summary>
             <param name="DataType">The DataType to be parsed</param>
             <param name="DisplayTextBox">Whether to use the default text box</param>
@@ -749,7 +749,7 @@
         </member>
         <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.GetSelectedMacosFromCheckList">
             <summary>
-            Returns the selected Macro's in a comma seperated string
+            Returns the selected Macro's in a comma separated string
             </summary>
         </member>
         <member name="M:umbraco.editorControls.macrocontainer.PrevalueEditor.Save">
@@ -1111,7 +1111,7 @@
         </member>
         <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTPResources.Desc_StoreAsComma">
             <summary>
-              Looks up a localized string similar to You can specify to store the data in Umbraco as comma seperated or as XML. By default it is stored as XML which makes it easier to use the saved value in XSLT, however, storing it as comma seperated makes it easier to work with the data using the API such as Node factory..
+              Looks up a localized string similar to You can specify to store the data in Umbraco as comma separated or as XML. By default it is stored as XML which makes it easier to use the saved value in XSLT, however, storing it as comma separated makes it easier to work with the data using the API such as Node factory..
             </summary>
         </member>
         <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTPResources.Desc_XPathExpression">
@@ -1532,7 +1532,7 @@
         </member>
         <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.StoreAsCommaDelimited">
             <summary>
-            Value indicating whether to store as comma seperated or Xml
+            Value indicating whether to store as comma separated or Xml
             </summary>
         </member>
         <member name="P:umbraco.editorControls.MultiNodeTreePicker.MNTP_DataType.PrevalueEditor">

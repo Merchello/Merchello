@@ -10,7 +10,6 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
-    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
 
     /// <summary>
     /// The create product variant 2 detached content type table.
@@ -34,7 +33,7 @@
             var database = ApplicationContext.Current.DatabaseContext.Database;
             if (!database.TableExist("merchProductVariantDetachedContent"))
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.12.0 upgrade");
+                //DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.12.0 upgrade");
             }
         }
 

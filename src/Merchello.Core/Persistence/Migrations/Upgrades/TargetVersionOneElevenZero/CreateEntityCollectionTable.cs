@@ -10,7 +10,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
-    using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
+    //using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
 
     /// <summary>
     /// The create product collection table.
@@ -34,7 +34,7 @@
             var database = ApplicationContext.Current.DatabaseContext.Database;
             if (!database.TableExist("merchEntityCollection"))
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
+                //DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
             }
         }
 

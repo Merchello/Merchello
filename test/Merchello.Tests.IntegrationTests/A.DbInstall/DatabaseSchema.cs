@@ -9,6 +9,8 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Tests.IntegrationTests.A.DbInstall
 {
+    using Umbraco.Core.Logging;
+
     [TestFixture]
     public class DatabaseSchema
     {
@@ -19,6 +21,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         {
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
             var worker = new DbPreTestDataWorker {SqlSyntax = syntax };
+            LoggerResolver.Current = new LoggerResolver(Logger.CreateWithDefaultLog4NetConfiguration());
             _database = worker.Database;
 
         }

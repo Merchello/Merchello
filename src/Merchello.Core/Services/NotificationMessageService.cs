@@ -12,32 +12,90 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
+    using Merchello.Core.Events;
+
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents a NotificationMessageService
     /// </summary>
-    internal class NotificationMessageService : INotificationMessageService
+    internal class NotificationMessageService : MerchelloRepositoryService, INotificationMessageService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessageService"/> class.
+        /// </summary>
         public NotificationMessageService()
-            : this(new RepositoryFactory())
-        { }
-
-        public NotificationMessageService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
-
-        public NotificationMessageService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
-        {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+            : this(LoggerResolver.Current.Logger)
+        {            
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessageService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NotificationMessageService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessageService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NotificationMessageService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessageService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NotificationMessageService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessageService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public NotificationMessageService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         /// <summary>
         /// Creates a <see cref="INotificationMessage"/> and saves it to the database
@@ -75,8 +133,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMessageRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMessageRepository(uow))
                 {
                     repository.AddOrUpdate(message);
                     uow.Commit();
@@ -104,8 +162,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMessageRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMessageRepository(uow))
                 {
 
                     repository.AddOrUpdate(notificationMessage);
@@ -132,8 +190,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMessageRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMessageRepository(uow))
                 {
                     foreach (var notificationMessage in notificationMessagesArray)
                     {
@@ -163,8 +221,8 @@ namespace Merchello.Core.Services
             
              using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMessageRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMessageRepository(uow))
                 {
                     repository.Delete(notificationMessage);
                     uow.Commit();
@@ -181,7 +239,7 @@ namespace Merchello.Core.Services
         /// <param name="key">The key (Guid) for the <see cref="INotificationMessage"/> to be retrieved</param>
         public INotificationMessage GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNotificationMessageRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -193,7 +251,7 @@ namespace Merchello.Core.Services
 		/// <param name="keys">The keys (Guid) for the collection of <see cref="INotificationMessage"/> to be retrieved</param>
 		public IEnumerable<INotificationMessage> GetByKeys(IEnumerable<Guid> keys)
 		{
-			using (var repository = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
+			using (var repository = RepositoryFactory.CreateNotificationMessageRepository(UowProvider.GetUnitOfWork()))
 			{
 				return repository.GetAll(keys.ToArray());
 			}
@@ -206,7 +264,7 @@ namespace Merchello.Core.Services
         /// <returns>Optional boolean indicating whether or not to raise events</returns>
         public IEnumerable<INotificationMessage> GetNotificationMessagesByMethodKey(Guid notificationMethodKey)
         {
-            using (var repostiory = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostiory = RepositoryFactory.CreateNotificationMessageRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<INotificationMessage>.Builder.Where(x => x.MethodKey == notificationMethodKey);
 
@@ -221,7 +279,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="INotificationMessage"/></returns>        
         public IEnumerable<INotificationMessage> GetNotificationMessagesByMonitorKey(Guid monitorKey)
         {
-            using (var repository = _repositoryFactory.CreateNotificationMessageRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNotificationMessageRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<INotificationMessage>.Builder.Where(x => x.MonitorKey == monitorKey);
 
