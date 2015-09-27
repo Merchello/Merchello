@@ -59,7 +59,7 @@ namespace Merchello.Core.Services
         /// The logger.
         /// </param>
         public OrderService(ILogger logger)
-            : this(new RepositoryFactory(), logger, new StoreSettingService(), new ShipmentService())
+            : this(new RepositoryFactory(), logger, new StoreSettingService(logger), new ShipmentService(logger))
         {
         }
 

@@ -12,7 +12,7 @@
     /// <summary>
     /// The customer data service.
     /// </summary>
-    internal class CustomerDataService : ICustomerDataService
+    internal class CustomerDataService : DataServiceBase, ICustomerDataService
     {
         /// <summary>
         /// The merchello context.
@@ -47,7 +47,7 @@
         /// </returns>
         public IEnumerable<ICustomer> GetAll()
         {
-            return new CustomerService().GetPage(1, 100).Items;
+            return new CustomerService(DataServiceLogger).GetPage(1, 100).Items;
         }
 
         /// <summary>

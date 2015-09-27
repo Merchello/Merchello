@@ -262,6 +262,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataServices\DataServiceBase.cs" />
     <Compile Include="SearchHelper.cs" />
     <Compile Include="DataServices\CustomerDataService.cs" />
     <Compile Include="DataServices\ICustomerDataService.cs" />
