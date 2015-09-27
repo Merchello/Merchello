@@ -9,6 +9,8 @@
     using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
+    using Semver;
+
     using umbraco.BusinessLogic;
 
     using Umbraco.Core;
@@ -104,17 +106,17 @@
         {
             if (MerchelloConfiguration.ConfigurationStatusVersion != MerchelloVersion.Current)
             {
-                _logger.Info<CoreMigrationManager>(
+                LogHelper.Info<CoreMigrationManager>(
                     "Merchello Versions did not match - initializing upgrade.");
 
                 if (UpgradeMerchello(_database))
                 {
-                    _logger.Info<CoreMigrationManager>("Upgrade completed successfully.");
+                    LogHelper.Info<CoreMigrationManager>("Upgrade completed successfully.");
                 }
             }
             else
             {
-                _logger.Debug<CoreMigrationManager>("Merchello Version Verified - no upgrade required.");
+                LogHelper.Debug<CoreMigrationManager>("Merchello Version Verified - no upgrade required.");
             }
         }
 
@@ -138,10 +140,14 @@
                 try
                 {
                     _logger.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
+                    var entryService = ApplicationContext.Current.Services.MigrationEntryService;
                     var runner = new MigrationRunner(
-                        MerchelloConfiguration.ConfigurationStatusVersion,
-                        MerchelloVersion.Current,
-                        MerchelloConfiguration.MerchelloMigrationName);
+                        ApplicationContext.Current.Services.MigrationEntryService,
+                        _logger,
+                        new SemVersion(MerchelloConfiguration.ConfigurationStatusVersion),
+                        new SemVersion(MerchelloVersion.Current),
+                        MerchelloConfiguration.MerchelloMigrationName,
+                        null);
                     var upgraded = runner.Execute(database);
                     if (upgraded)
                     {
