@@ -28,7 +28,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.Setup();
 
-            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new Mock<ILogger>().Object, new AnonymousCustomerService(new Mock<ILogger>().Object), new CustomerAddressService(new Mock<ILogger>().Object), new InvoiceService(new Mock<ILogger>().Object), new PaymentService(new Mock<ILogger>().Object));
+            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), Logger.CreateWithDefaultLog4NetConfiguration(), new AnonymousCustomerService(new Mock<ILogger>().Object), new CustomerAddressService(new Mock<ILogger>().Object), new InvoiceService(new Mock<ILogger>().Object), new PaymentService(new Mock<ILogger>().Object));
             Before = null;
             After = null;
 
