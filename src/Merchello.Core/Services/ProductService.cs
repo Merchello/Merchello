@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
@@ -12,6 +13,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
 
@@ -33,16 +35,6 @@
         private static readonly string[] ValidSortFields = { "sku", "name", "price" };
 
         /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
-        /// <summary>
         /// The product variant service.
         /// </summary>
         private readonly IProductVariantService _productVariantService;
@@ -51,8 +43,19 @@
         /// Initializes a new instance of the <see cref="ProductService"/> class.
         /// </summary>
         public ProductService()
-            : this(new RepositoryFactory(), new ProductVariantService())
+            : this(LoggerResolver.Current.Logger)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ProductService(ILogger logger)
+            : this(new RepositoryFactory(), logger, new ProductVariantService(logger))
+        {
         }
 
         /// <summary>
@@ -61,12 +64,15 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="productVariantService">
         /// The product variant service.
         /// </param>
-        public ProductService(RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, productVariantService)
-        {            
+        public ProductService(RepositoryFactory repositoryFactory, ILogger logger, IProductVariantService productVariantService)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, productVariantService)
+        {
         }
 
         /// <summary>
@@ -78,24 +84,45 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="productVariantService">
         /// The product variant service.
         /// </param>
-        public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IProductVariantService productVariantService)
+        public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IProductVariantService productVariantService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), productVariantService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="productVariantService">
+        /// The product variant service.
+        /// </param>
+        public ProductService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IProductVariantService productVariantService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
             Mandate.ParameterNotNull(productVariantService, "productVariantService");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
-
-            // included the ProductVariantService so that events will trigger if variants
-            // need to be deleted due to a product save removing attributes
             _productVariantService = productVariantService;
         }
 
         #region Event Handlers
+
+
 
         /// <summary>
         /// Occurs after Create
@@ -196,8 +223,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductRepository(uow))
                 {
                     repository.AddOrUpdate(product);
                     uow.Commit();
@@ -230,8 +257,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductRepository(uow))
                 {
                     repository.AddOrUpdate(product);
                     uow.Commit();
@@ -265,8 +292,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductRepository(uow))
                 {
                     foreach (var product in productArray)
                     {
@@ -305,8 +332,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductRepository(uow))
                 {
                     repository.Delete(product);
                     uow.Commit();
@@ -330,8 +357,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductRepository(uow))
                 {
                     foreach (var product in productArray)
                     {
@@ -356,7 +383,7 @@
         /// </returns>
         public IProduct GetBySku(string sku)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IProductVariant>.Builder.Where(x => x.Sku == sku && ((ProductVariant)x).Master);
                 var variant = repository.GetByQuery(query).FirstOrDefault();
@@ -371,7 +398,7 @@
         /// <returns><see cref="IProductVariant"/></returns>
         public override IProduct GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -397,7 +424,7 @@
         /// </returns>
         public override Page<IProduct> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetPage(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
             }
@@ -414,7 +441,7 @@
         /// </returns>
         public IEnumerable<IProduct> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -471,7 +498,7 @@
         [Obsolete("Only used in ProductQuery")]
         public int ProductsCount()
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IProduct>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -541,7 +568,7 @@
         /// </returns>
         public IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetByDetachedContentType(detachedContentTypeKey);
             }
@@ -586,7 +613,7 @@
         /// </param>
         public void AddToCollection(Guid productKey, Guid collectionKey)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.AddToCollection(productKey, collectionKey);
             }
@@ -606,7 +633,7 @@
         /// </returns>
         public bool ExistsInCollection(Guid productKey, Guid collectionKey)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.ExistsInCollection(productKey, collectionKey);
             }
@@ -651,7 +678,7 @@
         /// </param>
         public void RemoveFromCollection(Guid productKey, Guid collectionKey)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.RemoveFromCollection(productKey, collectionKey);
             }
@@ -685,7 +712,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
@@ -723,7 +750,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
@@ -737,7 +764,7 @@
         /// </returns>
         public IEnumerable<IProduct> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -771,7 +798,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeysFromCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
@@ -809,7 +836,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeysFromCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
@@ -843,7 +870,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeysNotInCollection(collectionKey, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             } 
@@ -881,7 +908,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeysNotInCollection(collectionKey, searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
@@ -921,7 +948,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysWithOption(
                     optionName,
@@ -961,7 +988,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysWithOption(
                     optionName,
@@ -1004,7 +1031,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysWithOption(
                     optionName,
@@ -1044,7 +1071,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysWithOption(
                     optionNames,
@@ -1087,7 +1114,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysInPriceRange(
                     min,
@@ -1135,7 +1162,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysInPriceRange(
                     min,
@@ -1176,7 +1203,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysByBarcode(
                     barcode,
@@ -1215,7 +1242,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysByBarcode(
                     barcodes,
@@ -1255,7 +1282,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysByManufacturer(
                     manufacturer,
@@ -1294,7 +1321,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysByManufacturer(
                     manufacturer,
@@ -1333,7 +1360,7 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeAllowOutOfStockPurchase = false)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysInStock(
                     page,
@@ -1363,7 +1390,7 @@
         /// </returns>
         internal Page<Guid> GetProductsKeysOnSale(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductsKeysOnSale(
                     page,
@@ -1386,7 +1413,7 @@
         /// </returns>
         internal override int Count(IQuery<IProduct> query)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }
@@ -1403,7 +1430,7 @@
         /// </returns>
         internal int Count(IQuery<IProductVariant> query)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }
@@ -1429,7 +1456,7 @@
         /// </returns>
         internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetPagedKeys(page, itemsPerPage, null, ValidateSortByField(sortBy), sortDirection);
             }
@@ -1458,7 +1485,7 @@
         /// </returns>
         internal Page<Guid> GetPagedKeys(string searchTerm, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy), sortDirection);
             }
@@ -1476,7 +1503,7 @@
         /// </returns>
         internal Guid GetKeyForSlug(string slug)
         {
-            using (var repository = _repositoryFactory.CreateProductRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetKeyForSlug(slug);
             }

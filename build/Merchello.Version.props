@@ -7,9 +7,9 @@
       <PropertyGroup>
         
         <VersionMajor>1</VersionMajor>
-        <VersionMinor>12</VersionMinor>
+        <VersionMinor>999</VersionMinor>
         <VersionPatch>0</VersionPatch>
-        <VersionSuffix>7</VersionSuffix>        
+        <VersionSuffix>4</VersionSuffix>        
         <BuildConfiguration>Release</BuildConfiguration>
         <ReleaseAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch)</ReleaseAssemblyInformationVersion>
         <DevAssemblyInformationVersion>$(VersionMajor).$(VersionMinor).$(VersionPatch).$(VersionSuffix)</DevAssemblyInformationVersion>
@@ -17,8 +17,8 @@
 
 
         <UmbracoVersionMajor>7</UmbracoVersionMajor>
-        <UmbracoVersionMinor>2</UmbracoVersionMinor>
-        <UmbracoVersionPatch>8</UmbracoVersionPatch>
+        <UmbracoVersionMinor>3</UmbracoVersionMinor>
+        <UmbracoVersionPatch>0</UmbracoVersionPatch>
         <UmbracoVersionSuffix>0</UmbracoVersionSuffix>
         <UmbracoVersion>$(UmbracoVersionMajor).$(UmbracoVersionMinor).$(UmbracoVersionPatch)</UmbracoVersion>
         

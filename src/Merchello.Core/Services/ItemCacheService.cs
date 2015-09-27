@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Models.TypeFields;
     using Persistence;
@@ -11,35 +14,89 @@
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the Customer Registry Service 
     /// </summary>
-    public class ItemCacheService : IItemCacheService
+    public class ItemCacheService : MerchelloRepositoryService, IItemCacheService
     {
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
+        #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheService"/> class.
+        /// </summary>
         public ItemCacheService()
-            : this(new RepositoryFactory())
-        {            
-        }
-
-        public ItemCacheService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
-        }
-
-        public ItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+            : this(LoggerResolver.Current.Logger)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ItemCacheService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ItemCacheService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public ItemCacheService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Creates a basket for a consumer with a given type
@@ -96,8 +153,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateItemCacheRepository(uow))
                 {
                     repository.AddOrUpdate(itemCache);
                     uow.Commit();
@@ -120,8 +177,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateItemCacheRepository(uow))
                 {
                     repository.AddOrUpdate(itemCache);
                     uow.Commit();
@@ -144,8 +201,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateItemCacheRepository(uow))
                 {
                     foreach (var basket in basketArray)
                     {
@@ -170,8 +227,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateItemCacheRepository(uow))
                 {
                     repository.Delete(itemCache);
                     uow.Commit();
@@ -193,8 +250,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateItemCacheRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateItemCacheRepository(uow))
                 {
                     foreach (var basket in caches)
                     {
@@ -214,7 +271,7 @@
         /// <returns><see cref="IItemCache"/></returns>
         public IItemCache GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -227,7 +284,7 @@
         /// <returns></returns>
         public IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -249,7 +306,7 @@
         /// <returns></returns>
         public IEnumerable<IItemCache> GetItemCacheByCustomer(ICustomerBase customer)
         {
-            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key);
                 return repository.GetByQuery(query);
@@ -261,7 +318,7 @@
         /// </summary>
         public IItemCache GetItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey)
         {
-            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IItemCache>.Builder.Where(x => x.EntityKey == customer.Key && x.ItemCacheTfKey == itemCacheTfKey);
                 return repository.GetByQuery(query).FirstOrDefault();
@@ -270,7 +327,7 @@
 
         public IEnumerable<IItemCache> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateItemCacheRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }

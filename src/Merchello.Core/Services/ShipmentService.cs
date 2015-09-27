@@ -12,41 +12,48 @@
     using Persistence;
     using Persistence.Querying;
     using Persistence.UnitOfWork;
+
+    using umbraco.BusinessLogic;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the ShipmentService
     /// </summary>
-    public class ShipmentService : IShipmentService
+    public class ShipmentService : MerchelloRepositoryService, IShipmentService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The Unit of Work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
 
         /// <summary>
         /// The store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
 
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipmentService"/> class.
         /// </summary>
         public ShipmentService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ShipmentService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
         }
 
         /// <summary>
@@ -55,9 +62,12 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public ShipmentService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, new StoreSettingService(repositoryFactory))
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ShipmentService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, new StoreSettingService(repositoryFactory, logger))
+        {
         }
 
         /// <summary>
@@ -69,20 +79,44 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store Setting Service.
         /// </param>
-        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), storeSettingService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        public ShipmentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
 
+
+        #endregion
 
         #region Event Handlers
 
@@ -257,8 +291,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipmentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipmentRepository(uow))
                 {
                     repository.AddOrUpdate(shipment);
                     uow.Commit();
@@ -312,8 +346,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipmentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipmentRepository(uow))
                 {
                     foreach (var shipment in shipmentsArray)
                     {
@@ -345,8 +379,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipmentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipmentRepository(uow))
                 {
                     UpdateOrderLineItemShipmentKeys(shipment);
                     repository.Delete(shipment);
@@ -371,8 +405,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipmentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipmentRepository(uow))
                 {
                     foreach (var shipment in shipmentsArray)
                     {
@@ -394,7 +428,7 @@
         /// <returns><see cref="IShipment"/></returns>
         public IShipment GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipmentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -407,7 +441,7 @@
         /// <returns>A collection of <see cref="IShipment"/></returns>
         public IEnumerable<IShipment> GetShipmentsByShipMethodKey(Guid shipMethodKey)
         {
-            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipmentRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IShipment>.Builder.Where(x => x.ShipMethodKey == shipMethodKey);
 
@@ -424,7 +458,7 @@
         /// <returns>List of <see cref="IShipment"/></returns>
         public IEnumerable<IShipment> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipmentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -443,7 +477,7 @@
         {
             var items = Enumerable.Empty<IOrderLineItem>();
 
-            using (var repository = _repositoryFactory.CreateOrderLineItemRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderLineItemRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOrderLineItem>.Builder.Where(x => x.ContainerKey == orderKey && x.ShipmentKey != Guid.Empty);
 
@@ -454,7 +488,7 @@
             if (orderLineItems.Any())
             {
                 var keys = orderLineItems.Where(x => x.ShipmentKey != null).Select(x => x.ShipmentKey.Value).ToArray();
-                using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+                using (var repository = RepositoryFactory.CreateShipmentRepository(UowProvider.GetUnitOfWork()))
                 {
                     return repository.GetAll(keys);
                 }
@@ -471,7 +505,7 @@
         /// <returns><see cref="IShipmentStatus"/></returns>
         public IShipmentStatus GetShipmentStatusByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateShipmentStatusRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipmentStatusRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -485,7 +519,7 @@
         /// </returns>
         public IEnumerable<IShipmentStatus> GetAllShipmentStatuses()
         {
-            using (var repository = _repositoryFactory.CreateShipmentStatusRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipmentStatusRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll().OrderBy(x => x.SortOrder);
             }
@@ -497,7 +531,7 @@
         /// <returns>A collection of <see cref="IShipment"/></returns>
         internal IEnumerable<IShipment> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateShipmentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipmentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -513,7 +547,7 @@
         /// </param>
         private void UpdateOrderLineItemShipmentKeys(IShipment shipment)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 // there really should only ever be one of these
                 var orderKeys = shipment.Items.Select(x => ((OrderLineItem) x).ContainerKey).Distinct();

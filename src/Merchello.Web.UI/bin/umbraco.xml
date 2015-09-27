@@ -11,6 +11,209 @@
             <param name="appContext"> </param>
             <param name="http"></param>
         </member>
+        <member name="T:Umbraco.Web.BatchedDatabaseServerMessengerStartup">
+            <summary>
+            Used to boot up the server messenger once the application succesfully starts
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Editors.BackOfficeNotificationsController">
+            <summary>
+            An abstract controller that automatically checks if any request is a non-GET and if the 
+            resulting message is INotificationModel in which case it will append any Event Messages
+            currently in the request.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Editors.UmbracoAuthorizedJsonController">
+            <summary>
+            An abstract API controller that only supports JSON and all requests must contain the correct csrf header
+            </summary>
+            <remarks>
+            Inheriting from this controller means that ALL of your methods are JSON methods that are called by Angular, 
+            methods that are not called by Angular or don't contain a valid csrf header will NOT work.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.UmbracoAuthorizedApiController">
+            <summary>
+            A base controller that ensures all requests are authorized - the user is logged in. 
+            </summary>
+            <remarks>
+            This controller will also append a custom header to the response if the user is logged in using forms authentication 
+            which indicates the seconds remaining before their timeout expires.
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.UmbracoApiController">
+            <summary>
+            The base class for auto-routed API controllers for Umbraco
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.WebApi.UmbracoApiControllerBase">
+            <summary>
+            The base class for API controllers that expose Umbraco services - THESE ARE NOT AUTO ROUTED
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.UmbracoApiControllerBase.TryGetHttpContext">
+            <summary>
+            Tries to retrieve the current HttpContext if one exists.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.UmbracoApiControllerBase.TryGetOwinContext">
+            <summary>
+            Tries to retrieve the current HttpContext if one exists.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.ApplicationContext">
+            <summary>
+            Returns the current ApplicationContext
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.Services">
+            <summary>
+            Returns a ServiceContext
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.DatabaseContext">
+            <summary>
+            Returns a DatabaseContext
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.Umbraco">
+            <summary>
+            Returns an UmbracoHelper object
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.UmbracoContext">
+            <summary>
+            Returns the current UmbracoContext
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.Security">
+            <summary>
+            Returns the WebSecurity instance
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.Members">
+            <summary>
+            Returns the MemberHelper instance
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoApiControllerBase.InstanceId">
+            <summary>
+            Useful for debugging
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebApi.UmbracoAuthorizedApiController.UmbracoUser">
+            <summary>
+            Returns the currently logged in Umbraco User
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HtmlHelperBackOfficeExtensions">
+            <summary>
+            HtmlHelper extensions for the back office
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperBackOfficeExtensions.BareMinimumServerVariablesScript(System.Web.Mvc.HtmlHelper,System.Web.Mvc.UrlHelper,System.String)">
+            <summary>
+            Outputs a script tag containing the bare minimum (non secure) server vars for use with the angular app
+            </summary>
+            <param name="html"></param>
+            <param name="uri"></param>
+            <param name="externalLoginsUrl">
+            The post url used to sign in with external logins - this can change depending on for what service the external login is service.
+            Example: normal back office login or authenticating upgrade login
+            </param>
+            <returns></returns>
+            <remarks>
+            These are the bare minimal server variables that are required for the application to start without being authenticated,
+            we will load the rest of the server vars after the user is authenticated.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperBackOfficeExtensions.AngularExternalLoginInfoValuesScript(System.Web.Mvc.HtmlHelper,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Used to render the script that will pass in the angular externalLoginInfo service on page load
+            </summary>
+            <param name="html"></param>
+            <param name="externalLoginErrors"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Install.Models.InstallSetupStep`1">
+            <summary>
+            Model to give to the front-end to collect the information for each step
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep.ViewModel">
+            <summary>
+            The view model used to render the view, by default is null but can be populated
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep.ServerOrder">
+            <summary>
+            Defines what order this step needs to execute on the server side since the 
+            steps might be shown out of order on the front-end
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep.StepType">
+            <summary>
+            Defines the step model type on the server side so we can bind it
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Install.Models.InstallSetupStep`1.Execute(`0)">
+            <summary>
+            The step execution method
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Install.Models.InstallSetupStep`1.RequiresExecution(`0)">
+            <summary>
+            Determines if this step needs to execute based on the current state of the application and/or install process
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep`1.StepType">
+            <summary>
+            Defines the step model type on the server side so we can bind it
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Install.InstallSteps.Version73FileCleanup.Execute(System.Object)">
+            <summary>
+            The step execution method
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Install.InstallSteps.Version73FileCleanup.RequiresExecution(System.Object)">
+            <summary>
+            Determines if this step needs to execute based on the current state of the application and/or install process
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.INotificationModel.Notifications">
+            <summary>
+            This is used to add custom localized messages/strings to the response for the app to use for localized UI purposes.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.SimpleNotificationModel.Notifications">
+            <summary>
+            This is used to add custom localized messages/strings to the response for the app to use for localized UI purposes.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.RequestLifespanMessagesFactory">
+            <summary>
+            Stores the instance of EventMessages in the current request so all events will share the same instance
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Scheduling.ILatchedBackgroundTask">
             <summary>
             Represents a latched background task.
@@ -75,6 +278,143 @@
             Indicates whether the background task can run asynchronously.
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions">
+            <summary>
+            Options used to configure auto-linking external OAuth providers
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions.GetDefaultUserType(Umbraco.Web.UmbracoContext,Microsoft.AspNet.Identity.Owin.ExternalLoginInfo)">
+            <summary>
+            The default User Type alias to use for auto-linking users
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions.GetDefaultAllowedSections(Umbraco.Web.UmbracoContext,Microsoft.AspNet.Identity.Owin.ExternalLoginInfo)">
+            <summary>
+            The default allowed sections to use for auto-linking users
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions.ShouldAutoLinkExternalAccount(Umbraco.Web.UmbracoContext,Microsoft.AspNet.Identity.Owin.ExternalLoginInfo)">
+            <summary>
+            For private external auth providers such as Active Directory, which when set to true will automatically
+            create a local user if the external provider login was successful.
+            
+            For public auth providers this should always be false!!!
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions.GetDefaultCulture(Umbraco.Web.UmbracoContext,Microsoft.AspNet.Identity.Owin.ExternalLoginInfo)">
+            <summary>
+            The default Culture to use for auto-linking users
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions.OnAutoLinking">
+            <summary>
+            A callback executed during account auto-linking and before the user is persisted
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Security.Identity.GetUserSecondsMiddleWare">
+            <summary>
+            Custom middleware to return the remaining seconds the user has before they are logged out
+            </summary>
+            <remarks>
+            This is quite a custom request because in most situations we just want to return the seconds and don't want
+            to renew the auth ticket, however if KeepUserLoggedIn is true, then we do want to renew the auth ticket for
+            this request!
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Media.EmbedProviders.OEmbedResponse">
+            <summary>
+            Wrapper class for OEmbed response
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Media.EmbedProviders.OEmbedResponse.GetHtml">
+            <summary>
+            Gets the HTML.
+            </summary>
+            <returns>The response html</returns>
+        </member>
+        <member name="T:Umbraco.Web.Security.Identity.IUmbracoBackOfficeTwoFactorOptions">
+            <summary>
+            Used to display a custom view in the back office if developers choose to implement their own custom 2 factor authentication
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.UmbracoDefaultOwinStartup">
+            <summary>
+            The default way to configure OWIN for Umbraco
+            </summary>
+            <remarks>
+            The startup type is specified in appSettings under owin:appStartup
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.IUmbracoContextAccessor">
+            <summary>
+            Used to retrieve the Umbraco context
+            </summary>
+            <remarks>
+            TODO: We could expose this to make working with UmbracoContext easier if we were to use it throughout the codebase
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.Relation.ParentId">
+            <summary>
+            Gets or sets the Parent Id of the Relation (Source)
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.Relation.ChildId">
+            <summary>
+            Gets or sets the Child Id of the Relation (Destination)
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.Relation.RelationType">
+            <summary>
+            Gets or sets the <see cref="P:Umbraco.Web.Models.ContentEditing.Relation.RelationType"/> for the Relation
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.Relation.Comment">
+            <summary>
+            Gets or sets a comment for the Relation
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HtmlStringUtilities">
+            <summary>
+            Utility class for working with strings and HTML in views
+            </summary>
+            <remarks>
+            The UmbracoHelper uses this class for it's string methods
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.HtmlStringUtilities.ReplaceLineBreaksForHtml(System.String)">
+            <summary>
+            Replaces text line breaks with html line breaks
+            </summary>
+            <param name="text">The text.</param>
+            <returns>The text with text line breaks replaced with html linebreaks (<br/>)</returns>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.RelationType.Name">
+            <summary>
+            Gets or sets the Name of the RelationType
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.RelationType.Alias">
+            <summary>
+            Gets or sets the Alias of the RelationType
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.RelationType.IsBidirectional">
+            <summary>
+            Gets or sets a boolean indicating whether the RelationType is Bidirectional (true) or Parent to Child (false)
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.RelationType.ParentObjectType">
+            <summary>
+            Gets or sets the Parents object type id
+            </summary>
+            <remarks>Corresponds to the NodeObjectType in the umbracoNode table</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.RelationType.ChildObjectType">
+            <summary>
+            Gets or sets the Childs object type id
+            </summary>
+            <remarks>Corresponds to the NodeObjectType in the umbracoNode table</remarks>
+        </member>
         <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Core.Models.IContent,System.Uri)">
             <summary>
             Gets the culture that would be selected to render a specified content,
@@ -84,18 +424,175 @@
             <param name="current">The request Uri.</param>
             <returns>The culture that would be selected to render the content.</returns>
         </member>
-        <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Web.UmbracoContext,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IContentService,System.Int32,System.String,System.Uri)">
+        <member name="M:Umbraco.Web.Models.ContentExtensions.GetCulture(Umbraco.Web.UmbracoContext,Umbraco.Core.Services.IDomainService,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IContentService,System.Int32,System.String,System.Uri)">
             <summary>
             Gets the culture that would be selected to render a specified content,
             within the context of a specified current request.
             </summary>
             <param name="umbracoContext">An <see cref="T:Umbraco.Web.UmbracoContext"/> instance.</param>
+            <param name="domainService">An <see cref="T:Umbraco.Core.Services.IDomainService"/> implementation.</param>
             <param name="localizationService">An <see cref="T:Umbraco.Core.Services.ILocalizationService"/> implementation.</param>
             <param name="contentService">An <see cref="T:Umbraco.Core.Services.IContentService"/> implementation.</param>
             <param name="contentId">The content identifier.</param>
             <param name="contentPath">The content path.</param>
             <param name="current">The request Uri.</param>
             <returns>The culture that would be selected to render the content.</returns>
+        </member>
+        <member name="T:Umbraco.Web.IDynamicPublishedContentQuery">
+            <summary>
+            Query methods used for accessing content dynamically in templates
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.IDynamicPublishedContentQuery.Search(System.String,System.Boolean,System.String)">
+            <summary>
+            Searches content
+            </summary>
+            <param name="term"></param>
+            <param name="useWildCards"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.IDynamicPublishedContentQuery.Search(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
+            <summary>
+            Searhes content
+            </summary>
+            <param name="criteria"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetContentByTag(System.String,System.String)">
+            <summary>
+            Returns all content that is tagged with the specified tag value and optional tag group
+            </summary>
+            <param name="tag"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetContentByTagGroup(System.String)">
+            <summary>
+            Returns all content that has been tagged with any tag in the specified group
+            </summary>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetMediaByTag(System.String,System.String)">
+            <summary>
+            Returns all Media that is tagged with the specified tag value and optional tag group
+            </summary>
+            <param name="tag"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetMediaByTagGroup(System.String)">
+            <summary>
+            Returns all Media that has been tagged with any tag in the specified group
+            </summary>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetAllTags(System.String)">
+            <summary>
+            Get every tag stored in the database (with optional group)
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetAllContentTags(System.String)">
+            <summary>
+            Get all tags for content items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetAllMediaTags(System.String)">
+            <summary>
+            Get all tags for media items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetAllMemberTags(System.String)">
+            <summary>
+            Get all tags for member items (with optional group)
+            </summary>
+            <param name="group"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetTagsForProperty(System.Int32,System.String,System.String)">
+            <summary>
+            Returns all tags attached to a property by entity id
+            </summary>
+            <param name="contentId"></param>
+            <param name="propertyTypeAlias"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITagQuery.GetTagsForEntity(System.Int32,System.String)">
+            <summary>
+            Returns all tags attached to an entity (content, media or member) by entity id
+            </summary>
+            <param name="contentId"></param>
+            <param name="tagGroup"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.ITypedPublishedContentQuery">
+            <summary>
+            Query methods used for accessing strongly typed content in templates
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.ITypedPublishedContentQuery.TypedSearch(System.String,System.Boolean,System.String)">
+            <summary>
+            Searches content
+            </summary>
+            <param name="term"></param>
+            <param name="useWildCards"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.ITypedPublishedContentQuery.TypedSearch(Examine.SearchCriteria.ISearchCriteria,Examine.Providers.BaseSearchProvider)">
+            <summary>
+            Searhes content
+            </summary>
+            <param name="criteria"></param>
+            <param name="searchProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.IUmbracoComponentRenderer">
+            <summary>
+            Methods used to render umbraco components as HTML in templates
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.IUmbracoComponentRenderer.RenderTemplate(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Renders the template for the specified pageId and an optional altTemplateId
+            </summary>
+            <param name="pageId"></param>
+            <param name="altTemplateId">If not specified, will use the template assigned to the node</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.IUmbracoComponentRenderer.RenderMacro(System.String)">
+            <summary>
+            Renders the macro with the specified alias.
+            </summary>
+            <param name="alias">The alias.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.IUmbracoComponentRenderer.RenderMacro(System.String,System.Object)">
+            <summary>
+            Renders the macro with the specified alias, passing in the specified parameters.
+            </summary>
+            <param name="alias">The alias.</param>
+            <param name="parameters">The parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.IUmbracoComponentRenderer.RenderMacro(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Renders the macro with the specified alias, passing in the specified parameters.
+            </summary>
+            <param name="alias">The alias.</param>
+            <param name="parameters">The parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.IUmbracoComponentRenderer.Field(Umbraco.Core.Models.IPublishedContent,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,Umbraco.Web.RenderFieldCaseType,Umbraco.Web.RenderFieldEncodingType,System.Boolean,System.Boolean,System.String)">
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Models.LegacyConvertedNode">
             <summary>
@@ -141,6 +638,32 @@
             </summary>
             <returns>The current TaskStatus of the task.</returns>
         </member>
+        <member name="T:Umbraco.Core.UrlHelperExtensions">
+            <summary>
+            Extension methods for UrlHelper
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.UrlHelperExtensions.GetSaveFileServicePath(System.Web.Mvc.UrlHelper)">
+            <summary>
+            Returns the base path (not including the 'action') of the MVC controller "SaveFileController"
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.UrlHelperExtensions.GetBulkPublishServicePath(System.Web.Mvc.UrlHelper)">
+            <summary>
+            Returns the base path (not including the 'action') of the MVC controller "BulkPublishController"
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.UrlHelperExtensions.GetCoreStringsControllerPath(System.Web.Mvc.UrlHelper)">
+            <summary>
+            Returns the base path (not including the 'action') of the MVC controller "CoreStringsController"
+            </summary>
+            <param name="url">The url helper.</param>
+            <returns>The base path of the controller.</returns>
+        </member>
         <member name="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1">
             <summary>
             Manages a queue of tasks of type <typeparamref name="T"/> and runs them in the background.
@@ -156,29 +679,32 @@
             <typeparam name="T">The type of the managed tasks.</typeparam>
             <remarks>The interface is not complete and exists only to have the contravariance on T.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor">
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(Umbraco.Core.Logging.ILogger)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String)">
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String,Umbraco.Core.Logging.ILogger)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class.
             </summary>
             <param name="name">The name of the runner.</param>
+            <param name="logger"></param>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions)">
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions,Umbraco.Core.Logging.ILogger)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class with a set of options.
             </summary>
             <param name="options">The set of options.</param>
+            <param name="logger"></param>
         </member>
-        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String,Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions)">
+        <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.#ctor(System.String,Umbraco.Web.Scheduling.BackgroundTaskRunnerOptions,Umbraco.Core.Logging.ILogger)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.BackgroundTaskRunner`1"/> class with a set of options.
             </summary>
             <param name="name">The name of the runner.</param>
             <param name="options">The set of options.</param>
+            <param name="logger"></param>
         </member>
         <member name="M:Umbraco.Web.Scheduling.BackgroundTaskRunner`1.Add(`0)">
             <summary>
@@ -286,32 +812,14 @@
             <returns>An awaitable instance.</returns>
             <remarks>Used to wait until the runner is terminated.</remarks>
         </member>
-        <member name="M:Umbraco.Web.BatchedServerMessenger.MessageSeversForIdsOrJson(System.Collections.Generic.IEnumerable{Umbraco.Core.Sync.IServerAddress},umbraco.interfaces.ICacheRefresher,Umbraco.Core.Sync.MessageType,System.Collections.Generic.IEnumerable{System.Object},System.String)">
+        <!-- Badly formed XML comment ignored for member "T:Umbraco.Web.BatchedDatabaseServerMessenger" -->
+        <member name="T:Umbraco.Web.BatchedWebServiceServerMessenger">
             <summary>
-            We need to check if distributed calls are enabled, if they are we also want to make sure 
-            that the current server's cache is updated internally in real time instead of at the end of
-            the call. This is because things like the URL cache, etc... might need to be updated during
-            the request that is making these calls.
+            An <see cref="T:Umbraco.Core.Sync.IServerMessenger"/> that works by messaging servers via web services.
             </summary>
-            <param name="servers"></param>
-            <param name="refresher"></param>
-            <param name="dispatchType"></param>
-            <param name="ids"></param>
-            <param name="jsonPayload"></param>
             <remarks>
-            See: http://issues.umbraco.org/issue/U4-2633#comment=67-15604
+            This binds to appropriate umbraco events in order to trigger the FlushBatch() calls
             </remarks>
-        </member>
-        <member name="M:Umbraco.Web.BatchedServerMessenger.PerformDistributedCall(System.Collections.Generic.IEnumerable{Umbraco.Core.Sync.IServerAddress},umbraco.interfaces.ICacheRefresher,Umbraco.Core.Sync.MessageType,System.Collections.Generic.IEnumerable{System.Object},System.Type,System.String)">
-            <summary>
-            This adds the call to batched list
-            </summary>
-            <param name="servers"></param>
-            <param name="refresher"></param>
-            <param name="dispatchType"></param>
-            <param name="ids"></param>
-            <param name="idArrayType"></param>
-            <param name="jsonPayload"></param>
         </member>
         <member name="T:Umbraco.Web.CacheHelperExtensions">
             <summary>
@@ -396,7 +904,6 @@
             -- CacheKeys.ContentTypePropertiesCacheKey + contentType.Id
             - ContentType.RemoveFromDataTypeCache (clears static object/dictionary cache)
             - InMemoryCacheProvider.Current.Clear();
-            - RuntimeCacheProvider.Current.Clear(); 
             - RoutesCache.Clear();        
             </remarks>
         </member>
@@ -432,25 +939,11 @@
             <param name="json"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Cache.DataTypeCacheRefresher.SerializeToJsonPayload(umbraco.cms.businesslogic.datatype.DataTypeDefinition[])">
-            <summary>
-            Creates the custom Json payload used to refresh cache amongst the servers
-            </summary>
-            <param name="dataTypes"></param>
-            <returns></returns>
-        </member>
         <member name="M:Umbraco.Web.Cache.DataTypeCacheRefresher.SerializeToJsonPayload(Umbraco.Core.Models.IDataTypeDefinition[])">
             <summary>
             Creates the custom Json payload used to refresh cache amongst the servers
             </summary>
             <param name="dataTypes"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DataTypeCacheRefresher.FromDataTypeDefinition(umbraco.cms.businesslogic.datatype.DataTypeDefinition)">
-            <summary>
-            Converts a macro to a jsonPayload object
-            </summary>
-            <param name="dataType"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Cache.DataTypeCacheRefresher.FromDataTypeDefinition(Umbraco.Core.Models.IDataTypeDefinition)">
@@ -467,378 +960,100 @@
         </member>
         <member name="T:Umbraco.Web.Cache.DistributedCache">
             <summary>
-            DistributedCache is used to invalidate cache throughout the application which also takes in to account load balancing environments automatically
+            Represents the entry point into Umbraco's distributed cache infrastructure.
             </summary>
             <remarks>
-            Distributing calls to all registered load balanced servers, ensuring that content are synced and cached on all servers.
-            Dispatcher is exendable, so 3rd party services can easily be integrated into the workflow, using the interfaces.ICacheRefresher interface.
-            
-            Dispatcher can refresh/remove content, templates and macros.
+            <para>
+            The distributed cache infrastructure ensures that distributed caches are
+            invalidated properly in load balancing environments.
+            </para>
+            <para>
+            Distribute caches include static (in-memory) cache, runtime cache, front-end content cache, Examine/Lucene indexes
+            </para>
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.#ctor">
             <summary>
-            Constructor
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Cache.DistributedCache"/> class.
             </summary>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.Refresh``1(System.Guid,System.Func{``0,System.Int32},``0[])">
             <summary>
-            Sends a request to all registered load-balanced servers to refresh node with the specified Id
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of specifieds item invalidation, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="factoryGuid"></param>
-            <param name="getNumericId">The callback method to retrieve the ID from an instance</param>
-            <param name="instances">The instances containing Ids</param>
+            <typeparam name="T">The type of the invalidated items.</typeparam>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="getNumericId">A function returning the unique identifier of items.</param>
+            <param name="instances">The invalidated items.</param>
             <remarks>
-            This method is much better for performance because it does not need to re-lookup an object instance
+            This method is much better for performance because it does not need to re-lookup object instances.
             </remarks>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.Refresh(System.Guid,System.Int32)">
             <summary>
-            Sends a request to all registered load-balanced servers to refresh node with the specified Id
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of a specified item invalidation, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <param name="factoryGuid">The unique identifier of the ICacheRefresher used to refresh the node.</param>
-            <param name="id">The id of the node.</param>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="id">The unique identifier of the invalidated item.</param>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.Refresh(System.Guid,System.Guid)">
             <summary>
-            Sends a request to all registered load-balanced servers to refresh the node with the specified guid
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of a specified item invalidation, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <param name="factoryGuid">The unique identifier of the ICacheRefresher used to refresh the node.</param>
-            <param name="id">The guid of the node.</param>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="id">The unique identifier of the invalidated item.</param>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.RefreshByJson(System.Guid,System.String)">
             <summary>
-            Sends a request to all registered load-balanced servers to refresh data based on the custom json payload
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <param name="factoryGuid"></param>
-            <param name="jsonPayload"></param>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="jsonPayload">The notification content.</param>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.RefreshAll(System.Guid)">
             <summary>
-            Sends a request to all registered load-balanced servers to refresh all nodes
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of a global invalidation for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <param name="factoryGuid">The unique identifier.</param>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.RefreshAll(System.Guid,System.Boolean)">
             <summary>
-            Sends a request to all registered load-balanced servers to refresh all nodes
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of a global invalidation for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <param name="factoryGuid">The unique identifier.</param>
-            <param name="allServers">
-            If true will send the request out to all registered LB servers, if false will only execute the current server
-            </param>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="allServers">If true, all servers in the load balancing environment are notified; otherwise,
+            only the local server is notified.</param>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.Remove(System.Guid,System.Int32)">
             <summary>
-            Sends a request to all registered load-balanced servers to remove the node with the specified id
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of a specified item removal, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <param name="factoryGuid">The unique identifier.</param>
-            <param name="id">The id.</param>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="id">The unique identifier of the removed item.</param>
         </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.Remove``1(System.Guid,System.Func{``0,System.Int32},``0[])">
             <summary>
-            Sends a request to all registered load-balanced servers to remove the node specified
-            using the specified ICacheRefresher with the guid factoryGuid.
+            Notifies the distributed cache of specifieds item removal, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="factoryGuid"></param>
-            <param name="getNumericId"></param>
-            <param name="instances"></param>
+            <typeparam name="T">The type of the removed items.</typeparam>
+            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
+            <param name="getNumericId">A function returning the unique identifier of items.</param>
+            <param name="instances">The removed items.</param>
+            <remarks>
+            This method is much better for performance because it does not need to re-lookup object instances.
+            </remarks>
         </member>
         <member name="P:Umbraco.Web.Cache.DistributedCache.Instance">
             <summary>
-            Singleton
+            Gets the static unique instance of the <see cref="T:Umbraco.Web.Cache.DistributedCache"/> class.
             </summary>
-            <returns></returns>
+            <returns>The static unique instance of the <see cref="T:Umbraco.Web.Cache.DistributedCache"/> class.</returns>
+            <remarks>Exists so that extension methods can be added to the distributed cache.</remarks>
         </member>
         <member name="T:Umbraco.Web.Cache.DistributedCacheExtensions">
             <summary>
-            Extension methods for DistrubutedCache
+            Extension methods for <see cref="T:Umbraco.Web.Cache.DistributedCache"/>
             </summary>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshTemplateCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Refreshes the cache amongst servers for a template
-            </summary>
-            <param name="dc"></param>
-            <param name="templateId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveTemplateCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Removes the cache amongst servers for a template
-            </summary>
-            <param name="dc"></param>
-            <param name="templateId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshDictionaryCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Refreshes the cache amongst servers for a dictionary item
-            </summary>
-            <param name="dc"></param>
-            <param name="dictionaryItemId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveDictionaryCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Refreshes the cache amongst servers for a dictionary item
-            </summary>
-            <param name="dc"></param>
-            <param name="dictionaryItemId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshDataTypeCache(Umbraco.Web.Cache.DistributedCache,umbraco.cms.businesslogic.datatype.DataTypeDefinition)">
-            <summary>
-            Refreshes the cache amongst servers for a data type
-            </summary>
-            <param name="dc"></param>
-            <param name="dataType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveDataTypeCache(Umbraco.Web.Cache.DistributedCache,umbraco.cms.businesslogic.datatype.DataTypeDefinition)">
-            <summary>
-            Removes the cache amongst servers for a data type
-            </summary>
-            <param name="dc"></param>
-            <param name="dataType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshDataTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IDataTypeDefinition)">
-            <summary>
-            Refreshes the cache amongst servers for a data type
-            </summary>
-            <param name="dc"></param>
-            <param name="dataType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveDataTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IDataTypeDefinition)">
-            <summary>
-            Removes the cache amongst servers for a data type
-            </summary>
-            <param name="dc"></param>
-            <param name="dataType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshAllPageCache(Umbraco.Web.Cache.DistributedCache)">
-            <summary>
-            Refreshes the cache amongst servers for all pages
-            </summary>
-            <param name="dc"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshPageCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Refreshes the cache amongst servers for a page
-            </summary>
-            <param name="dc"></param>
-            <param name="documentId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshPageCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IContent[])">
-            <summary>
-            Refreshes page cache for all instances passed in
-            </summary>
-            <param name="dc"></param>
-            <param name="content"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemovePageCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IContent[])">
-            <summary>
-            Removes the cache amongst servers for a page
-            </summary>
-            <param name="dc"></param>
-            <param name="content"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemovePageCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Removes the cache amongst servers for a page
-            </summary>
-            <param name="dc"></param>
-            <param name="documentId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshUnpublishedPageCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IContent[])">
-            <summary>
-            invokes the unpublished page cache refresher
-            </summary>
-            <param name="dc"></param>
-            <param name="content"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveUnpublishedPageCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IContent[])">
-            <summary>
-            invokes the unpublished page cache refresher
-            </summary>
-            <param name="dc"></param>
-            <param name="content"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveUnpublishedCachePermanently(Umbraco.Web.Cache.DistributedCache,System.Int32[])">
-            <summary>
-            invokes the unpublished page cache refresher to mark all ids for permanent removal
-            </summary>
-            <param name="dc"></param>
-            <param name="contentIds"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMemberCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMember[])">
-            <summary>
-            Refreshes the cache among servers for a member
-            </summary>
-            <param name="dc"></param>
-            <param name="members"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMemberCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMember[])">
-            <summary>
-            Removes the cache among servers for a member
-            </summary>
-            <param name="dc"></param>
-            <param name="members"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMemberCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Refreshes the cache among servers for a member
-            </summary>
-            <param name="dc"></param>
-            <param name="memberId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMemberCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Removes the cache among servers for a member
-            </summary>
-            <param name="dc"></param>
-            <param name="memberId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMemberGroupCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Refreshes the cache among servers for a member group
-            </summary>
-            <param name="dc"></param>
-            <param name="memberGroupId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMemberGroupCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Removes the cache among servers for a member group
-            </summary>
-            <param name="dc"></param>
-            <param name="memberGroupId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMediaCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMedia[])">
-            <summary>
-            Refreshes the cache amongst servers for media items
-            </summary>
-            <param name="dc"></param>
-            <param name="media"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMediaCacheAfterMoving(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Events.MoveEventInfo{Umbraco.Core.Models.IMedia}[])">
-            <summary>
-            Refreshes the cache amongst servers for a media item after it's been moved
-            </summary>
-            <param name="dc"></param>
-            <param name="media"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMediaCache(Umbraco.Web.Cache.DistributedCache,System.Int32)">
-            <summary>
-            Removes the cache amongst servers for a media item
-            </summary>
-            <param name="dc"></param>
-            <param name="mediaId"></param>
-            <remarks>
-            Clearing by Id will never work for load balanced scenarios for media since we require a Path
-            to clear all of the cache but the media item will be removed before the other servers can
-            look it up. Only here for legacy purposes.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMediaCacheAfterRecycling(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Events.MoveEventInfo{Umbraco.Core.Models.IMedia}[])">
-            <summary>
-            Removes the cache among servers for media items when they are recycled
-            </summary>
-            <param name="dc"></param>
-            <param name="media"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMediaCachePermanently(Umbraco.Web.Cache.DistributedCache,System.Int32[])">
-            <summary>
-            Removes the cache among servers for media items when they are permanently deleted
-            </summary>
-            <param name="dc"></param>
-            <param name="mediaIds"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.ClearAllMacroCacheOnCurrentServer(Umbraco.Web.Cache.DistributedCache)">
-            <summary>
-            Clears the cache for all macros on the current server
-            </summary>
-            <param name="dc"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMacroCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMacro)">
-            <summary>
-            Refreshes the cache amongst servers for a macro item
-            </summary>
-            <param name="dc"></param>
-            <param name="macro"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMacroCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMacro)">
-            <summary>
-            Removes the cache amongst servers for a macro item
-            </summary>
-            <param name="dc"></param>
-            <param name="macro"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMacroCache(Umbraco.Web.Cache.DistributedCache,umbraco.cms.businesslogic.macro.Macro)">
-            <summary>
-            Refreshes the cache amongst servers for a macro item
-            </summary>
-            <param name="dc"></param>
-            <param name="macro"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMacroCache(Umbraco.Web.Cache.DistributedCache,umbraco.cms.businesslogic.macro.Macro)">
-            <summary>
-            Removes the cache amongst servers for a macro item
-            </summary>
-            <param name="dc"></param>
-            <param name="macro"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMacroCache(Umbraco.Web.Cache.DistributedCache,umbraco.macro)">
-            <summary>
-            Removes the cache amongst servers for a macro item
-            </summary>
-            <param name="dc"></param>
-            <param name="macro"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshContentTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IContentType)">
-            <summary>
-            Remove all cache for a given content type
-            </summary>
-            <param name="dc"></param>
-            <param name="contentType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveContentTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IContentType)">
-            <summary>
-            Remove all cache for a given content type
-            </summary>
-            <param name="dc"></param>
-            <param name="contentType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMediaTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMediaType)">
-            <summary>
-            Remove all cache for a given media type
-            </summary>
-            <param name="dc"></param>
-            <param name="mediaType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMediaTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMediaType)">
-            <summary>
-            Remove all cache for a given media type
-            </summary>
-            <param name="dc"></param>
-            <param name="mediaType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RefreshMemberTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMemberType)">
-            <summary>
-            Remove all cache for a given media type
-            </summary>
-            <param name="dc"></param>
-            <param name="memberType"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCacheExtensions.RemoveMemberTypeCache(Umbraco.Web.Cache.DistributedCache,Umbraco.Core.Models.IMemberType)">
-            <summary>
-            Remove all cache for a given media type
-            </summary>
-            <param name="dc"></param>
-            <param name="memberType"></param>
         </member>
         <member name="T:Umbraco.Web.Cache.CacheRefresherEventHandler">
             <summary>
@@ -922,27 +1137,6 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.LanguageAfterSave(umbraco.cms.businesslogic.language.Language,umbraco.cms.businesslogic.SaveEventArgs)">
-            <summary>
-            Fires when a langauge is saved
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.LanguageNew(umbraco.cms.businesslogic.language.Language,umbraco.cms.businesslogic.NewEventArgs)">
-            <summary>
-            Fires when a langauge is created
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.LanguageAfterDelete(umbraco.cms.businesslogic.language.Language,umbraco.cms.businesslogic.DeleteEventArgs)">
-            <summary>
-            Fires when a langauge is deleted
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
         <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.ContentTypeServiceDeletedMediaType(Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Events.DeleteEventArgs{Umbraco.Core.Models.IMediaType})">
             <summary>
             Fires when a media type is deleted
@@ -995,34 +1189,6 @@
         <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.FileServiceSavedTemplate(Umbraco.Core.Services.IFileService,Umbraco.Core.Events.SaveEventArgs{Umbraco.Core.Models.ITemplate})">
             <summary>
             Refresh cache for template
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.TemplateAfterDelete(umbraco.cms.businesslogic.template.Template,umbraco.cms.businesslogic.DeleteEventArgs)">
-            <summary>
-            Removes cache for template
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.TemplateAfterSave(umbraco.cms.businesslogic.template.Template,umbraco.cms.businesslogic.SaveEventArgs)">
-            <summary>
-            Refresh cache for template
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.MacroAfterDelete(umbraco.cms.businesslogic.macro.Macro,umbraco.cms.businesslogic.DeleteEventArgs)">
-            <summary>
-            Flush macro from cache
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Web.Cache.CacheRefresherEventHandler.MacroAfterSave(umbraco.cms.businesslogic.macro.Macro,umbraco.cms.businesslogic.SaveEventArgs)">
-            <summary>
-            Flush macro from cache
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
@@ -1252,60 +1418,6 @@
             The API controller used for editing content
             </summary>
         </member>
-        <member name="M:Umbraco.Web.WebApi.UmbracoApiController.TryGetHttpContext">
-            <summary>
-            Tries to retrieve the current HttpContext if one exists.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.ApplicationContext">
-            <summary>
-            Returns the current ApplicationContext
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.Services">
-            <summary>
-            Returns a ServiceContext
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.DatabaseContext">
-            <summary>
-            Returns a DatabaseContext
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.Umbraco">
-            <summary>
-            Returns an UmbracoHelper object
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.UmbracoContext">
-            <summary>
-            Returns the current UmbracoContext
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.Security">
-            <summary>
-            Returns the WebSecurity instance
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.Members">
-            <summary>
-            Returns the MemberHelper instance
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoApiController.InstanceId">
-            <summary>
-            Useful for debugging
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Editors.AuthenticationController.GetRemainingTimeoutSeconds">
-            <summary>
-            This is a special method that will return the current users' remaining session seconds, the reason
-            it is special is because this route is ignored in the UmbracoModule so that the auth ticket doesn't get
-            updated with a new timeout.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Umbraco.Web.Editors.AuthenticationController.IsAuthenticated">
             <summary>
             Checks if the current user's cookie is valid and if so returns OK or a 400 (BadRequest)
@@ -1368,9 +1480,24 @@
             Useful for debugging
             </summary>
         </member>
+        <member name="P:Umbraco.Web.Mvc.PluginController.Members">
+            <summary>
+            Returns the MemberHelper instance
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.Mvc.PluginController.Umbraco">
             <summary>
             Returns an UmbracoHelper object
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.PluginController.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.PluginController.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
             </summary>
         </member>
         <member name="P:Umbraco.Web.Mvc.PluginController.UmbracoContext">
@@ -1502,11 +1629,6 @@
             see: http://issues.umbraco.org/issue/U4-1844
             </remarks>
         </member>
-        <member name="P:Umbraco.Web.Mvc.SurfaceController.Members">
-            <summary>
-            Returns the MemberHelper instance
-            </summary>
-        </member>
         <member name="P:Umbraco.Web.Mvc.SurfaceController.CurrentPage">
             <summary>
             Gets the current page.
@@ -1524,29 +1646,6 @@
         <member name="T:Umbraco.Web.Editors.ContentControllerBase">
             <summary>
             An abstract base controller used for media/content (and probably members) to try to reduce code replication.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Editors.UmbracoAuthorizedJsonController">
-            <summary>
-            An abstract API controller that only supports JSON and all requests must contain the correct csrf header
-            </summary>
-            <remarks>
-            Inheriting from this controller means that ALL of your methods are JSON methods that are called by Angular, 
-            methods that are not called by Angular or don't contain a valid csrf header will NOT work.
-            </remarks>
-        </member>
-        <member name="T:Umbraco.Web.WebApi.UmbracoAuthorizedApiController">
-            <summary>
-            A base controller that ensures all requests are authorized - the user is logged in. 
-            </summary>
-            <remarks>
-            This controller will also append a custom header to the response if the user is logged in using forms authentication 
-            which indicates the seconds remaining before their timeout expires.
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Web.WebApi.UmbracoAuthorizedApiController.UmbracoUser">
-            <summary>
-            Returns the currently logged in Umbraco User
             </summary>
         </member>
         <member name="M:Umbraco.Web.Editors.ContentControllerBase.#ctor">
@@ -1642,18 +1741,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.ContentController.UpdatePreviewContext(System.Int32)">
-            <summary>
-            Checks if the user is currently in preview mode and if so will update the preview content for this item
-            </summary>
-            <param name="contentId"></param>
-        </member>
-        <member name="M:Umbraco.Web.Editors.ContentController.MapPropertyValues(Umbraco.Web.Models.ContentEditing.ContentItemSave)">
-            <summary>
-            Maps the dto property values to the persisted model
-            </summary>
-            <param name="contentItem"></param>
-        </member>
         <member name="M:Umbraco.Web.Editors.ContentController.PostPublishById(System.Int32)">
             <summary>
             Publishes a document with a given ID
@@ -1713,6 +1800,18 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentController.UpdatePreviewContext(System.Int32)">
+            <summary>
+            Checks if the user is currently in preview mode and if so will update the preview content for this item
+            </summary>
+            <param name="contentId"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentController.MapPropertyValues(Umbraco.Web.Models.ContentEditing.ContentItemSave)">
+            <summary>
+            Maps the dto property values to the persisted model
+            </summary>
+            <param name="contentItem"></param>
         </member>
         <member name="M:Umbraco.Web.Editors.ContentController.ValidateMoveOrCopy(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
             <summary>
@@ -1972,11 +2071,6 @@
             This property cannot be set
             </remarks>
         </member>
-        <member name="P:Umbraco.Web.Models.ContentEditing.INotificationModel.Notifications">
-            <summary>
-            This is used to add custom localized messages/strings to the response for the app to use for localized UI purposes.
-            </summary>
-        </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.IErrorModel.Errors">
             <summary>
             This is used for validation of a content item.
@@ -2066,45 +2160,6 @@
         <member name="T:Umbraco.Web.Install.InstallStatusTracker">
             <summary>
             An internal in-memory status tracker for the current installation
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Install.Models.InstallSetupStep`1">
-            <summary>
-            Model to give to the front-end to collect the information for each step
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep.ViewModel">
-            <summary>
-            The view model used to render the view, by default is null but can be populated
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep.ServerOrder">
-            <summary>
-            Defines what order this step needs to execute on the server side since the 
-            steps might be shown out of order on the front-end
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep.StepType">
-            <summary>
-            Defines the step model type on the server side so we can bind it
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Install.Models.InstallSetupStep`1.Execute(`0)">
-            <summary>
-            The step execution method
-            </summary>
-            <param name="model"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Install.Models.InstallSetupStep`1.RequiresExecution(`0)">
-            <summary>
-            Determines if this step needs to execute based on the current state of the application and/or install process
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:Umbraco.Web.Install.Models.InstallSetupStep`1.StepType">
-            <summary>
-            Defines the step model type on the server side so we can bind it
             </summary>
         </member>
         <member name="T:Umbraco.Web.Install.InstallSteps.UpgradeStep">
@@ -2441,6 +2496,12 @@
             Overridden to ensure that the value is validated
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.PropertyEditors.PropertyValueEditorWrapper">
+            <summary>
+            Useful when returning a custom value editor when your property editor is attributed, it ensures the attribute
+            values are copied across to your custom value editor.
+            </summary>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.ValueConverters.MacroContainerValueConverter">
             <summary>
@@ -3252,12 +3313,6 @@
             <param name="sender"></param>
             <param name="e"></param>
         </member>
-        <member name="T:Umbraco.Web.PropertyEditors.PropertyValueEditorWrapper">
-            <summary>
-            Useful when returning a custom value editor when your property editor is attributed, it ensures the attribute
-            values are copied across to your custom value editor.
-            </summary>
-        </member>
         <member name="M:Umbraco.Web.PropertyEditors.ImageCropperPropertyValueEditor.ConvertEditorToDb(Umbraco.Core.Models.Editors.ContentPropertyData,System.Object)">
             <summary>
             Overrides the deserialize value so that we can save the file accordingly
@@ -3494,6 +3549,14 @@
             This is done during an update if the membership provider has changed some underlying data - we need to ensure that our model is consistent with that data
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.Editors.MemberController.RestoreProvidedUserName(Umbraco.Web.Models.ContentEditing.MemberSave,System.String)">
+            <summary>
+            Following a refresh of member data called during an update if the membership provider has changed some underlying data, 
+            we don't want to lose the provided, and potentiallly changed, username
+            </summary>
+            <param name="contentItem"></param>
+            <param name="providedUserName"></param>
+        </member>
         <member name="M:Umbraco.Web.Editors.MemberController.CreateWithMembershipProvider(Umbraco.Web.Models.ContentEditing.MemberSave,System.Web.Security.MembershipCreateStatus@)">
             <summary>
             This is going to create the user with the membership provider and check for validation
@@ -3689,7 +3752,7 @@
         </member>
         <member name="P:Umbraco.Web.PropertyEditors.DateTimePropertyEditor.DefaultPreValues">
             <summary>
-            Overridden because we ONLY support Date + Time format and we don't have pre-values in the db.
+            Overridden because we ONLY support Date + Time format
             </summary>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.DateTimeValidator">
@@ -3965,6 +4028,20 @@
             <summary>
             A class used to query for published content, media items
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentQuery.#ctor(Umbraco.Web.PublishedCache.ContextualPublishedContentCache,Umbraco.Web.PublishedCache.ContextualPublishedMediaCache)">
+            <summary>
+            Constructor used to return results from the caches
+            </summary>
+            <param name="contentCache"></param>
+            <param name="mediaCache"></param>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentQuery.#ctor(Umbraco.Web.ITypedPublishedContentQuery,Umbraco.Web.IDynamicPublishedContentQuery)">
+            <summary>
+            Constructor used to wrap the ITypedPublishedContentQuery and IDynamicPublishedContentQuery objects passed in
+            </summary>
+            <param name="typedContentQuery"></param>
+            <param name="dynamicContentQuery"></param>
         </member>
         <member name="M:Umbraco.Web.PublishedContentQuery.Search(System.String,System.Boolean,System.String)">
             <summary>
@@ -4289,9 +4366,172 @@
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> instance representing the execution of the background task,
             and returning a value indicating whether to repeat the task.</returns>
         </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.SetUmbracoLoggerFactory(Owin.IAppBuilder)">
+            <summary>
+            Sets the OWIN logger to use Umbraco's logging system
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.ConfigureUserManagerForUmbracoBackOffice(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Umbraco.Core.Security.MembershipProviderBase)">
+            <summary>
+            Configure Default Identity User Manager for Umbraco
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="userMembershipProvider"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.ConfigureUserManagerForUmbracoBackOffice(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Umbraco.Core.Security.MembershipProviderBase,Umbraco.Core.Security.BackOfficeUserStore)">
+            <summary>
+            Configure a custom UserStore with the Identity User Manager for Umbraco
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="userMembershipProvider"></param>
+            <param name="customUserStore"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.ConfigureUserManagerForUmbracoBackOffice``2(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,System.Func{Microsoft.AspNet.Identity.Owin.IdentityFactoryOptions{``0},Microsoft.Owin.IOwinContext,``0})">
+            <summary>
+            Configure a custom BackOfficeUserManager for Umbraco
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="userManager"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext)">
+            <summary>
+            Ensures that the UmbracoBackOfficeAuthenticationMiddleware is assigned to the pipeline
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeExternalCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext)">
+            <summary>
+            Ensures that the cookie middleware for validating external logins is assigned to the pipeline with the correct
+            Umbraco back office configuration
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AuthenticationOptionsExtensions.SetExternalSignInAutoLinkOptions(Microsoft.Owin.Security.AuthenticationOptions,Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions)">
+            <summary>
+            Used during the External authentication process to assign external sign-in options
+            that are used by the Umbraco authentication process.
+            </summary>
+            <param name="authOptions"></param>
+            <param name="options"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AuthenticationOptionsExtensions.GetExternalAuthenticationOptions(Microsoft.Owin.Security.AuthenticationDescription)">
+            <summary>
+            Used during the External authentication process to retrieve external sign-in options
+            that have been set with SetExternalAuthenticationOptions
+            </summary>
+            <param name="authenticationDescription"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AuthenticationOptionsExtensions.ForUmbracoBackOffice(Microsoft.Owin.Security.AuthenticationOptions,System.String,System.String,System.String)">
+            <summary>
+            Configures the properties of the authentication description instance for use with Umbraco back office
+            </summary>
+            <param name="options"></param>
+            <param name="style"></param>
+            <param name="icon"></param>
+            <param name="callbackPath">
+            This is important if the identity provider is to be able to authenticate when upgrading Umbraco. We will try to extract this from
+            any options passed in via reflection since none of the default OWIN providers inherit from a base class but so far all of them have a consistent
+            name for the 'CallbackPath' property which is of type PathString. So we'll try to extract it if it's not found or supplied.
+            
+            If a value is extracted or supplied, this will be added to an internal list which the UmbracoModule will use to allow the request to pass
+            through without redirecting to the installer.
+            </param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AuthenticationManagerExtensions.GetExternalLoginInfoAsync(Microsoft.Owin.Security.IAuthenticationManager,System.String,System.String,System.String)">
+            <summary>
+                Extracts login info out of an external identity
+            </summary>
+            <param name="manager"></param>
+            <param name="authenticationType"></param>
+            <param name="xsrfKey">key that will be used to find the userId to verify</param>
+            <param name="expectedValue">
+                the value expected to be found using the xsrfKey in the AuthenticationResult.Properties
+                dictionary
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AuthenticationManagerExtensions.GetExternalLoginInfoAsync(Microsoft.Owin.Security.IAuthenticationManager,System.String)">
+            <summary>
+                Extracts login info out of an external identity
+            </summary>
+            <param name="manager"></param>
+            <param name="authenticationType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Security.Identity.BackOfficeCookieManager">
+            <summary>
+            A custom cookie manager that is used to read the cookie from the request.
+            </summary>
+            <remarks>
+            Umbraco's back office cookie needs to be read on two paths: /umbraco and /install and /base therefore we cannot just set the cookie path to be /umbraco, 
+            instead we'll specify our own cookie manager and return null if the request isn't for an acceptable path.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.BackOfficeCookieManager.Microsoft#Owin#Infrastructure#ICookieManager#GetRequestCookie(Microsoft.Owin.IOwinContext,System.String)">
+            <summary>
+            Explicitly implement this so that we filter the request
+            </summary>
+            <param name="context"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Security.Identity.FormsAuthenticationSecureDataFormat">
+            <summary>
+            Custom secure format that uses the old FormsAuthentication format
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.FormsAuthenticationSecureDataFormat.Unprotect(System.String)">
+            <summary>
+            Unprotects the cookie
+            </summary>
+            <param name="protectedText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.OwinExtensions.HttpContextFromOwinContext(Microsoft.Owin.IOwinContext)">
+            <summary>
+            Nasty little hack to get httpcontextbase from an owin context
+            </summary>
+            <param name="owinContext"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Security.Identity.UmbracoBackOfficeCookieAuthOptions">
+            <summary>
+            Umbraco auth cookie options
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.ClearCsrfCookiesAfterUpgrade">
             <summary>
             After upgrade we clear out the csrf tokens
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Strategies.Migrations.MigrationStartupHander">
+            <summary>
+            Base class that can be used to run code after the migration runner has executed
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Strategies.Migrations.MigrationStartupHander.ApplicationStarting(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <summary>
+            Attach to event on starting
+            </summary>
+            <param name="umbracoApplication"></param>
+            <param name="applicationContext"></param>
+        </member>
+        <member name="P:Umbraco.Web.Strategies.Migrations.MigrationStartupHander.ExecuteWhenApplicationNotConfigured">
+            <summary>
+            Ensure this is run when not configured
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Strategies.Migrations.MigrationStartupHander.ExecuteWhenDatabaseNotConfigured">
+            <summary>
+            Ensure this is run when not configured
             </summary>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.ClearMediaXmlCacheForDeletedItemsAfterUpgrade">
@@ -4309,21 +4549,11 @@
             Creates the built in list view data types
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Strategies.Migrations.EnsureDefaultListViewDataTypesCreated.ApplicationStarting(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+        <member name="T:Umbraco.Web.Strategies.Migrations.OverwriteStylesheetFilesFromTempFiles">
             <summary>
-            Attach to event on starting
-            </summary>
-            <param name="umbracoApplication"></param>
-            <param name="applicationContext"></param>
-        </member>
-        <member name="P:Umbraco.Web.Strategies.Migrations.EnsureDefaultListViewDataTypesCreated.ExecuteWhenApplicationNotConfigured">
-            <summary>
-            Ensure this is run when not configured
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Strategies.Migrations.EnsureDefaultListViewDataTypesCreated.ExecuteWhenDatabaseNotConfigured">
-            <summary>
-            Ensure this is run when not configured
+            When upgrading version 7.3 the migration MigrateStylesheetDataToFile will execute but we don't want to overwrite the developers
+            files during the migration since other parts of the migration might fail. So once the migration is complete, we'll then copy over the temp
+            files that this migration created over top of the developer's files. We'll also create a backup of their files.
             </summary>
         </member>
         <member name="T:Umbraco.Web.Strategies.NotificationsHandler">
@@ -4335,6 +4565,19 @@
             <summary>
             A class that exposes methods used to query tag data in views
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.TagQuery.#ctor(Umbraco.Web.ITagQuery)">
+            <summary>
+            Constructor for wrapping ITagQuery, see http://issues.umbraco.org/issue/U4-6899
+            </summary>
+            <param name="wrappedQuery"></param>
+        </member>
+        <member name="M:Umbraco.Web.TagQuery.#ctor(Umbraco.Core.Services.ITagService,Umbraco.Web.ITypedPublishedContentQuery)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="tagService"></param>
+            <param name="typedContentQuery"></param>
         </member>
         <member name="M:Umbraco.Web.TagQuery.GetContentByTag(System.String,System.String)">
             <summary>
@@ -4610,6 +4853,27 @@
             </summary>
             <param name="xNode"></param>
         </member>
+        <member name="M:Umbraco.Web.Trees.LanguageTreeController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            The method called to render the contents of the tree structure
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings">
+            All of the query string parameters passed from jsTree
+            </param>
+            <remarks>
+            We are allowing an arbitrary number of query strings to be pased in so that developers are able to persist custom data from the front-end
+            to the back end to be used in the query for model data.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Trees.LanguageTreeController.GetMenuForNode(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Returns the menu structure for the node
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.Trees.LegacyBaseTreeAttribute">
             <summary>
             This attribute is used purely to maintain some compatibility with legacy webform tree pickers
@@ -4811,6 +5075,27 @@
             </summary>
             <param name="actionType"></param>
             <param name="menuItem"></param>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TemplatesTreeController.GetTreeNodes(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            The method called to render the contents of the tree structure
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings">
+            All of the query string parameters passed from jsTree
+            </param>
+            <remarks>
+            We are allowing an arbitrary number of query strings to be pased in so that developers are able to persist custom data from the front-end
+            to the back end to be used in the query for model data.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Trees.TemplatesTreeController.GetMenuForNode(System.String,System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Returns the menu structure for the node
+            </summary>
+            <param name="id"></param>
+            <param name="queryStrings"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.UI.JavaScript.AssetInitialization.ScanPropertyEditors(ClientDependency.Core.ClientDependencyType,System.Web.HttpContextBase)">
             <summary>
@@ -6086,6 +6371,66 @@
             xml structure since the file writes are queued.
             </remarks>
         </member>
+        <member name="T:Umbraco.Web.UmbracoComponentRenderer">
+            <summary>
+            Methods used to render umbraco components as HTML in templates
+            </summary>
+            <remarks>
+            Used by UmbracoHelper
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.RenderTemplate(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Renders the template for the specified pageId and an optional altTemplateId
+            </summary>
+            <param name="pageId"></param>
+            <param name="altTemplateId">If not specified, will use the template assigned to the node</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.RenderMacro(System.String)">
+            <summary>
+            Renders the macro with the specified alias.
+            </summary>
+            <param name="alias">The alias.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.RenderMacro(System.String,System.Object)">
+            <summary>
+            Renders the macro with the specified alias, passing in the specified parameters.
+            </summary>
+            <param name="alias">The alias.</param>
+            <param name="parameters">The parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.RenderMacro(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Renders the macro with the specified alias, passing in the specified parameters.
+            </summary>
+            <param name="alias">The alias.</param>
+            <param name="parameters">The parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.RenderMacro(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},umbraco.page)">
+            <summary>
+            Renders the macro with the specified alias, passing in the specified parameters.
+            </summary>
+            <param name="alias">The alias.</param>
+            <param name="parameters">The parameters.</param>
+            <param name="umbracoPage">The legacy umbraco page object that is required for some macros</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.RenderMacro(umbraco.macro,System.Collections.Generic.IDictionary{System.String,System.Object},umbraco.page)">
+            <summary>
+            Renders the macro with the specified alias, passing in the specified parameters.
+            </summary>
+            <param name="m">The macro.</param>
+            <param name="parameters">The parameters.</param>
+            <param name="umbracoPage">The legacy umbraco page object that is required for some macros</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoComponentRenderer.Field(Umbraco.Core.Models.IPublishedContent,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,Umbraco.Web.RenderFieldCaseType,Umbraco.Web.RenderFieldEncodingType,System.Boolean,System.Boolean,System.String)">
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.org.umbraco.our.Repository">
             <remarks/>
         </member>
@@ -6596,6 +6941,13 @@
             <param name="failedReason"></param>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.AppendCurrentEventMessagesAttribute">
+            <summary>
+            Automatically checks if any request is a non-GET and if the 
+            resulting message is INotificationModel in which case it will append any Event Messages
+            currently in the request.
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.ClearAngularAntiForgeryTokenAttribute">
             <summary>
             Clears the angular csrf cookie if the request was successful
@@ -6641,7 +6993,7 @@
             A filter that is used to remove the authorization cookie for the current user when the request is successful
             </summary>
             <remarks>
-            This is used so that we can log a user out in conjunction with using other filters that modify the cookies collection.
+            This is used so that we can log a user OUT in conjunction with using other filters that modify the cookies collection.
             SD: I beleive this is a bug with web api since if you modify the cookies collection on the HttpContext.Current and then 
             use a filter to write the cookie headers, the filter seems to have no affect at all.
             </remarks>
@@ -6692,8 +7044,7 @@
             <remarks>
             Code derived from http://ericpanorel.net/2013/07/28/spa-authentication-and-csrf-mvc4-antiforgery-implementation/
             
-            TODO: If/when we enable custom authorization (OAuth, or whatever) we'll need to detect that and disable this filter since with custom auth that 
-            doesn't come from the same website (cookie), this will always fail.
+            If the authentication type is cookie based, then this filter will execute, otherwise it will be disabled
             </remarks>
         </member>
         <member name="M:Umbraco.Web.WebApi.HttpControllerContextExtensions.InvokeAuthorizationFiltersForRequest(System.Web.Http.Controllers.HttpControllerContext)">
@@ -7126,6 +7477,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:Umbraco.Web.Security.MembershipHelper.CurrentUserName">
+            <summary>
+            Returns the currently logged in username
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Editors.SectionController">
             <summary>
             The API controller used for using the list of sections
@@ -7363,12 +7719,14 @@
             Declares how model mappings for content
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.ContentModelMapper.AfterMap(Umbraco.Core.Models.IContent,Umbraco.Web.Models.ContentEditing.ContentItemDisplay,Umbraco.Core.Services.IDataTypeService)">
+        <member name="M:Umbraco.Web.Models.Mapping.ContentModelMapper.AfterMap(Umbraco.Core.Models.IContent,Umbraco.Web.Models.ContentEditing.ContentItemDisplay,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.ILocalizedTextService)">
             <summary>
             Maps the generic tab with custom properties for content
             </summary>
             <param name="content"></param>
             <param name="display"></param>
+            <param name="dataTypeService"></param>
+            <param name="localizedText"></param>
         </member>
         <member name="M:Umbraco.Web.Models.Mapping.ContentModelMapper.GetPublishedDate(Umbraco.Core.Models.IContent,Umbraco.Core.ApplicationContext)">
             <summary>
@@ -7961,9 +8319,24 @@
             A base controller class containing all of the Umbraco objects as properties that a developer requires
             </summary>
         </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoController.Members">
+            <summary>
+            Returns the MemberHelper instance
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.Mvc.UmbracoController.Umbraco">
             <summary>
             Returns an UmbracoHelper object
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoController.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Mvc.UmbracoController.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
             </summary>
         </member>
         <member name="P:Umbraco.Web.Mvc.UmbracoController.UmbracoContext">
@@ -8026,6 +8399,13 @@
         <member name="M:Umbraco.Web.Editors.BackOfficeController.ServerVariables">
             <summary>
             Returns the JavaScript object representing the static server variables javascript object
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.BackOfficeController.RenderDefaultOrProcessExternalLoginAsync(System.Func{System.Web.Mvc.ActionResult},System.Func{System.Web.Mvc.ActionResult})">
+            <summary>
+            Used by Default and AuthorizeUpgrade to render as per normal if there's no external login info, otherwise
+            process the external login info.
             </summary>
             <returns></returns>
         </member>
@@ -8377,88 +8757,6 @@
         <member name="P:Umbraco.Web.Models.ContentEditing.ContentPropertyDto.PreValues">
             <summary>
             The current pre-values for this property
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Standalone.StandaloneApplication">
-            <summary>
-            An application standalone applications.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Umbraco.Web.Standalone.StandaloneApplication"/> class.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.GetBootManager">
-            <summary>
-            Provides the application boot manager.
-            </summary>
-            <returns>An application boot manager.</returns>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.GetApplication(System.String)">
-            <summary>
-            Gets the instance of the standalone Umbraco application.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.Start(System.Boolean)">
-            <summary>
-            Starts the application.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.WithApplicationEventHandler``1">
-            <summary>
-            Associates an <see cref="T:Umbraco.Core.IApplicationEventHandler"/> type with the application.
-            </summary>
-            <typeparam name="T">The type to associate.</typeparam>
-            <returns>The application.</returns>
-            <remarks>Types implementing <see cref="T:Umbraco.Core.IApplicationEventHandler"/> from within
-            an executable are not automatically discovered by Umbraco and have to be
-            explicitely associated with the application using this method.</remarks>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.WithoutApplicationEventHandler``1">
-            <summary>
-            Dissociates an <see cref="T:Umbraco.Core.IApplicationEventHandler"/> type from the application.
-            </summary>
-            <typeparam name="T">The type to dissociate.</typeparam>
-            <returns>The application.</returns>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.WithApplicationEventHandler(System.Type)">
-            <summary>
-            Associates an <see cref="T:Umbraco.Core.IApplicationEventHandler"/> type with the application.
-            </summary>
-            <param name="type">The type to associate.</param>
-            <returns>The application.</returns>
-            <remarks>Types implementing <see cref="T:Umbraco.Core.IApplicationEventHandler"/> from within
-            an executable are not automatically discovered by Umbraco and have to be
-            explicitely associated with the application using this method.</remarks>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.StandaloneApplication.WithoutApplicationEventHandler(System.Type)">
-            <summary>
-            Dissociates an <see cref="T:Umbraco.Core.IApplicationEventHandler"/> type from the application.
-            </summary>
-            <param name="type">The type to dissociate.</param>
-            <returns>The application.</returns>
-        </member>
-        <member name="P:Umbraco.Web.Standalone.StandaloneApplication.ApplicationContext">
-            <summary>
-            Gets the current <see cref="P:Umbraco.Web.Standalone.StandaloneApplication.ApplicationContext"/>.
-            </summary>
-            <remarks>This is a shortcut for scripts to be able to do <c>$app.ApplicationContext</c>.</remarks>
-        </member>
-        <member name="P:Umbraco.Web.Standalone.StandaloneApplication.UmbracoContext">
-            <summary>
-            Gets the current <see cref="P:Umbraco.Web.Standalone.StandaloneApplication.UmbracoContext"/>.
-            </summary>
-            <remarks>This is a shortcut for scripts to be able to do <c>$app.UmbracoContext</c>.</remarks>
-        </member>
-        <member name="T:Umbraco.Web.Standalone.StandaloneBootManager">
-            <summary>
-            A boot manager for use in standalone applications.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Web.Standalone.StandaloneHttpContext">
-            <summary>
-            An Http context for use in standalone applications.
             </summary>
         </member>
         <member name="T:Umbraco.Web.HttpRequestExtensions">
@@ -8862,6 +9160,13 @@
             http://stackoverflow.com/questions/488061/passing-multiple-parameters-to-controller-in-asp-net-mvc-also-generating-on-the
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.Mvc.QueryStringFilterAttribute.ToFormCollection(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Converts a dictionary to a FormCollection
+            </summary>
+            <param name="d"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.PublishedCache.ContextualPublishedContentCache">
             <summary>
             Provides access to cached documents in a specified context.
@@ -8885,14 +9190,6 @@
             Initializes a new instance of the <see cref="T:Umbraco.Web.PublishedCache.ContextualPublishedCache"/> with a context.
             </summary>
             <param name="umbracoContext">The context.</param>
-        </member>
-        <member name="M:Umbraco.Web.PublishedCache.ContextualPublishedCache.ContentHasChanged">
-            <summary>
-            Informs the contextual cache that content has changed.
-            </summary>
-            <remarks>The contextual cache may, although that is not mandatory, provide an immutable snapshot of
-            the content over the duration of the context. If you make changes to the content and do want to have
-            the cache update its snapshot, you have to explicitely ask it to do so by calling ContentHasChanged.</remarks>
         </member>
         <member name="M:Umbraco.Web.PublishedCache.ContextualPublishedCache.GetById(System.Int32)">
             <summary>
@@ -9445,6 +9742,18 @@
             Returns 'Media' as the item type
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Dictionary.DefaultCultureDictionary">
+            <summary>
+            A culture dictionary that uses the Umbraco ILocalizationService
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Dictionary.DefaultCultureDictionary.GetChildren(System.String)">
+            <summary>
+            Returns the child dictionary entries for a given key
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
         <member name="P:Umbraco.Web.Dictionary.DefaultCultureDictionary.Item(System.String)">
             <summary>
             Returns the dictionary value based on the key supplied
@@ -9741,7 +10050,7 @@
             Logs the user in
             </summary>
             <param name="user"></param>
-            <returns>returns the number of seconds until their session times out</returns>
+            <returns>returns the Forms Auth ticket created which is used to log them in</returns>
         </member>
         <member name="M:Umbraco.Web.Security.WebSecurity.ClearCurrentLogin">
             <summary>
@@ -9858,16 +10167,17 @@
             <param name="username"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Security.WebSecurity.IsAuthenticated">
+            <summary>
+            Ensures that a back office user is logged in
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:Umbraco.Web.Security.WebSecurity.CurrentUser">
             <summary>
             Gets the current user.
             </summary>
             <value>The current user.</value>
-        </member>
-        <member name="M:Umbraco.Web.Standalone.WriteableConfigSystem.Install">
-            <summary>
-            Re-initializes the ConfigurationManager, allowing us to merge in the settings from Core.Config
-            </summary>
         </member>
         <member name="T:Umbraco.Web.UI.JavaScript.Resources">
             <summary>
@@ -9937,7 +10247,7 @@
         </member>
         <member name="T:Umbraco.Web.Strategies.PublicAccessEventHandler">
             <summary>
-            Used to ensure that the access.xml file is kept up to date properly
+            Used to ensure that the public access data file is kept up to date properly
             </summary>
         </member>
         <member name="T:Umbraco.Web.UI.Bundles.JsApplicationLib">
@@ -10073,6 +10383,16 @@
         <member name="P:Umbraco.Web.UI.Controls.UmbracoUserControl.Security">
             <summary>
             Returns the current WebSecurity instance
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Controls.UmbracoUserControl.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Controls.UmbracoUserControl.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
             </summary>
         </member>
         <member name="P:Umbraco.Web.UI.Controls.UmbracoUserControl.UmbracoContext">
@@ -11390,6 +11710,16 @@
             </summary>
             <param name="e">The <see cref="T:System.EventArgs"></see> object that contains the event data.</param>
         </member>
+        <member name="P:Umbraco.Web.UI.Pages.BasePage.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Pages.BasePage.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.UI.Pages.BasePage.Url">
             <summary>
             Returns a UrlHelper
@@ -11560,17 +11890,12 @@
             Provides extension methods for <see cref="T:Umbraco.Web.UmbracoContext"/>.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.UmbracoContextExtensions.ContentHasChanged(Umbraco.Web.UmbracoContext)">
+        <member name="M:Umbraco.Web.UmbracoContextExtensions.GetCurrentEventMessages(Umbraco.Web.UmbracoContext)">
             <summary>
-            Informs the context that content has changed.
+            If there are event messages in the current request this will return them , otherwise it will return null
             </summary>
-            <param name="context">The context.</param>
-            <remarks>
-            <para>The contextual caches may, although that is not mandatory, provide an immutable snapshot of
-            the content over the duration of the context. If you make changes to the content and do want to have
-            the caches update their snapshot, you have to explicitely ask them to do so by calling ContentHasChanged.</para>
-            <para>The context informs the contextual caches that content has changed.</para>
-            </remarks>
+            <param name="umbracoContext"></param>
+            <returns></returns>
         </member>
         <member name="T:umbraco.cms.presentation.settings.stylesheet.editstylesheet">
             <summary>
@@ -11653,6 +11978,12 @@
             <summary>
             Summary description for EditStyleSheetProperty.
             </summary>
+        </member>
+        <member name="M:umbraco.cms.presentation.settings.stylesheet.EditStyleSheetProperty.OnLoad(System.EventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Web.UI.Control.Load"></see> event.
+            </summary>
+            <param name="e">The <see cref="T:System.EventArgs"></see> object that contains the event data.</param>
         </member>
         <member name="F:umbraco.cms.presentation.settings.stylesheet.EditStyleSheetProperty.Panel1">
             <summary>
@@ -12107,6 +12438,13 @@
             <summary>
             A custom converter for GUID's to format without hyphens
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.TryGetOwinContext(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Borrowed from the latest Microsoft.AspNet.WebApi.Owin package which we cannot use because of a later webapi dependency
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.TryGetHttpContext(System.Net.Http.HttpRequestMessage)">
             <summary>
@@ -13892,7 +14230,7 @@
             <para>The normalized uri of a domain begins with a scheme and ends with no slash, eg <c>http://example.com/</c>, <c>https://www.example.com/</c>, <c>http://example.com/foo/</c>.</para>
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainAndUri.#ctor(umbraco.cms.businesslogic.web.Domain,System.String)">
+        <member name="M:Umbraco.Web.Routing.DomainAndUri.#ctor(Umbraco.Core.Models.IDomain,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.DomainAndUri"/> class with a Domain and a uri scheme.
             </summary>
@@ -13905,9 +14243,9 @@
             </summary>
             <returns>A string that represents the current <see cref="T:Umbraco.Web.Routing.DomainAndUri"/> instance.</returns>
         </member>
-        <member name="P:Umbraco.Web.Routing.DomainAndUri.Domain">
+        <member name="P:Umbraco.Web.Routing.DomainAndUri.UmbracoDomain">
             <summary>
-            Gets or sets the Umbraco domain.
+            Gets the Umbraco domain.
             </summary>
         </member>
         <member name="P:Umbraco.Web.Routing.DomainAndUri.Uri">
@@ -14020,18 +14358,22 @@
             Resolves IUrlProvider objects.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Routing.UrlProviderResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Umbraco.Web.Routing.UrlProviderResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.UrlProviderResolver"/> class with an initial list of provider types.
             </summary>
+            <param name="logger"></param>
             <param name="providerTypes">The list of provider types.</param>
+            <param name="serviceProvider"></param>
             <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.UrlProviderResolver.#ctor(System.Type[])">
+        <member name="M:Umbraco.Web.Routing.UrlProviderResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Type[])">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.UrlProviderResolver"/> class with an initial list of provider types.
             </summary>
+            <param name="logger"></param>
             <param name="providerTypes">The list of provider types.</param>
+            <param name="serviceProvider"></param>
             <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
         </member>
         <member name="P:Umbraco.Web.Routing.UrlProviderResolver.Providers">
@@ -14039,7 +14381,7 @@
             Gets the providers.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Routing.NotFoundHandlerHelper.GetCurrentNotFoundPageId(Umbraco.Core.Configuration.UmbracoSettings.IContentErrorPage[],System.String,Umbraco.Core.Services.IEntityService,Umbraco.Web.PublishedContentQuery)">
+        <member name="M:Umbraco.Web.Routing.NotFoundHandlerHelper.GetCurrentNotFoundPageId(Umbraco.Core.Configuration.UmbracoSettings.IContentErrorPage[],System.String,Umbraco.Core.Services.IEntityService,Umbraco.Web.ITypedPublishedContentQuery,Umbraco.Core.Services.IDomainService)">
             <summary>
             Returns the Umbraco page id to use as the Not Found page based on the configured 404 pages and the current request
             </summary>
@@ -14049,9 +14391,10 @@
             </param>
             <param name="entityService"></param>
             <param name="publishedContentQuery"></param>
+            <param name="domainService"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Routing.NotFoundHandlerHelper.GetContentIdFromErrorPageConfig(Umbraco.Core.Configuration.UmbracoSettings.IContentErrorPage,Umbraco.Core.Services.IEntityService,Umbraco.Web.PublishedContentQuery)">
+        <member name="M:Umbraco.Web.Routing.NotFoundHandlerHelper.GetContentIdFromErrorPageConfig(Umbraco.Core.Configuration.UmbracoSettings.IContentErrorPage,Umbraco.Core.Services.IEntityService,Umbraco.Web.ITypedPublishedContentQuery)">
             <summary>
             Returns the content id based on the configured IContentErrorPage section
             </summary>
@@ -14062,7 +14405,43 @@
         </member>
         <member name="T:Umbraco.Web.Routing.EnsureRoutableOutcome">
             <summary>
-            Reasons a request was not routable on the front-end
+            Represents the outcome of trying to route an incoming request.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Routing.EnsureRoutableOutcome.IsRoutable">
+            <summary>
+            Request routes to a document.
+            </summary>
+            <remarks>
+            <para>Umbraco was ready and configured, and has content.</para>
+            <para>The request looks like it can be a route to a document. This does not
+            mean that there *is* a matching document, ie the request might end up returning
+            404.</para>
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.Routing.EnsureRoutableOutcome.NotDocumentRequest">
+            <summary>
+            Request does not route to a document.
+            </summary>
+            <remarks>
+            <para>Umbraco was ready and configured, and has content.</para>
+            <para>The request does not look like it can be a route to a document. Can be
+            anything else eg back-office, surface controller...</para>
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.Routing.EnsureRoutableOutcome.NotReady">
+            <summary>
+            Umbraco was not ready.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Routing.EnsureRoutableOutcome.NotConfigured">
+            <summary>
+            Umbraco was not configured.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Routing.EnsureRoutableOutcome.NoContent">
+            <summary>
+            There was no content at all.
             </summary>
         </member>
         <member name="T:Umbraco.Web.Security.LegacyDefaultAppMapping">
@@ -14091,10 +14470,11 @@
             <param name="nodeType">The nodeType is the same nodeType found in the UI.xml</param>
             <param name="defaultApp">The default app associated with this nodeType if the 'app' parameter was not detected</param>
         </member>
-        <member name="M:Umbraco.Web.Routing.PublishedContentRequestEngine.#ctor(Umbraco.Web.Routing.PublishedContentRequest)">
+        <member name="M:Umbraco.Web.Routing.PublishedContentRequestEngine.#ctor(Umbraco.Core.Configuration.UmbracoSettings.IWebRoutingSection,Umbraco.Web.Routing.PublishedContentRequest)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.PublishedContentRequestEngine"/> class with a content request.
             </summary>
+            <param name="webRoutingSection"></param>
             <param name="pcr">The content request.</param>
         </member>
         <member name="M:Umbraco.Web.Routing.PublishedContentRequestEngine.PrepareRequest">
@@ -14195,12 +14575,21 @@
             Provides urls.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Routing.UrlProvider.#ctor(Umbraco.Web.UmbracoContext,System.Collections.Generic.IEnumerable{Umbraco.Web.Routing.IUrlProvider})">
+        <member name="M:Umbraco.Web.Routing.UrlProvider.#ctor(Umbraco.Web.UmbracoContext,Umbraco.Core.Configuration.UmbracoSettings.IWebRoutingSection,System.Collections.Generic.IEnumerable{Umbraco.Web.Routing.IUrlProvider})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.UrlProvider"/> class with an Umbraco context and a list of url providers.
+            </summary>
+            <param name="umbracoContext">The Umbraco context.</param>
+            <param name="routingSettings"></param>
+            <param name="urlProviders">The list of url providers.</param>
+        </member>
+        <member name="M:Umbraco.Web.Routing.UrlProvider.#ctor(Umbraco.Web.UmbracoContext,System.Collections.Generic.IEnumerable{Umbraco.Web.Routing.IUrlProvider},Umbraco.Web.Routing.UrlProviderMode)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.UrlProvider"/> class with an Umbraco context and a list of url providers.
             </summary>
             <param name="umbracoContext">The Umbraco context.</param>
             <param name="urlProviders">The list of url providers.</param>
+            <param name="provider"></param>
         </member>
         <member name="M:Umbraco.Web.Routing.UrlProvider.GetUrl(System.Int32)">
             <summary>
@@ -14410,27 +14799,17 @@
             written to the 'new' applications.config and trees.config files upon upgrade to version 6.0
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Strategies.ServerRegistrationEventHandler">
+        <member name="P:Umbraco.Web.Strategies.Migrations.EnsureAppsTreesUpdatedOnUpgrade.ExecuteWhenApplicationNotConfigured">
             <summary>
-            This will ensure that the server is automatically registered in the database as an active node 
-            on application startup and whenever a back office request occurs.
+            Ensure this is run when not configured
             </summary>
-            <remarks>
-            We do this on app startup to ensure that the server is in the database but we also do it for the first 'x' times
-            a back office request is made so that we can tell if they are using https protocol which would update to that address
-            in the database. The first front-end request probably wouldn't be an https request.
-            
-            For back office requests (so that we don't constantly make db calls), we'll only update the database when we detect at least
-            a timespan of 1 minute between requests.
-            </remarks>
         </member>
-        <member name="M:Umbraco.Web.Strategies.ServerRegistrationEventHandler.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+        <member name="P:Umbraco.Web.Strategies.Migrations.EnsureAppsTreesUpdatedOnUpgrade.ExecuteWhenDatabaseNotConfigured">
             <summary>
-            Update the database with this entry and bind to request events
+            Ensure this is run when not configured
             </summary>
-            <param name="umbracoApplication"></param>
-            <param name="applicationContext"></param>
         </member>
+        <!-- Badly formed XML comment ignored for member "T:Umbraco.Web.Strategies.ServerRegistrationEventHandler" -->
         <member name="T:Umbraco.Web.Templates.TemplateRenderer">
             <summary>
             This is used purely for the RenderTemplate functionality in Umbraco
@@ -14559,6 +14938,16 @@
         <member name="P:Umbraco.Web.UI.Controls.UmbracoControl.Umbraco">
             <summary>
             Returns an UmbracoHelper object
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Controls.UmbracoControl.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Controls.UmbracoControl.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
             </summary>
         </member>
         <member name="P:Umbraco.Web.UI.Controls.UmbracoControl.Url">
@@ -16709,7 +17098,7 @@
             <summary>
             build a string array from a csv
             </summary>
-            <param name="csv">string of comma seperated values</param>
+            <param name="csv">string of comma separated values</param>
             <returns>An array of node ids as string.</returns>
         </member>
         <member name="M:umbraco.uQuery.GetXmlIds(System.String)">
@@ -17338,8 +17727,26 @@
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.#ctor">
             <summary>
-            Empty constructor to create an umbraco helper for access to methods that don't have dependencies or used for testing
+            Empty constructor to create an umbraco helper for access to methods that don't have dependencies
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.#ctor(Umbraco.Web.UmbracoContext,Umbraco.Core.Models.IPublishedContent,Umbraco.Web.ITypedPublishedContentQuery,Umbraco.Web.IDynamicPublishedContentQuery,Umbraco.Web.ITagQuery,Umbraco.Core.Services.IDataTypeService,Umbraco.Web.Routing.UrlProvider,Umbraco.Core.Dictionary.ICultureDictionary,Umbraco.Web.IUmbracoComponentRenderer,Umbraco.Web.Security.MembershipHelper)">
+            <summary>
+            Constructor accepting all dependencies
+            </summary>
+            <param name="umbracoContext"></param>
+            <param name="content"></param>
+            <param name="typedQuery"></param>
+            <param name="dynamicQuery"></param>
+            <param name="tagQuery"></param>
+            <param name="dataTypeService"></param>
+            <param name="urlProvider"></param>
+            <param name="cultureDictionary"></param>
+            <param name="componentRenderer"></param>
+            <param name="membershipHelper"></param>
+            <remarks>
+            This constructor can be used to create a testable UmbracoHelper
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.#ctor(Umbraco.Web.UmbracoContext,Umbraco.Core.Models.IPublishedContent)">
             <summary>
@@ -17385,24 +17792,6 @@
             <param name="parameters">The parameters.</param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.RenderMacro(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},umbraco.page)">
-            <summary>
-            Renders the macro with the specified alias, passing in the specified parameters.
-            </summary>
-            <param name="alias">The alias.</param>
-            <param name="parameters">The parameters.</param>
-            <param name="umbracoPage">The legacy umbraco page object that is required for some macros</param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.RenderMacro(umbraco.macro,System.Collections.Generic.IDictionary{System.String,System.Object},umbraco.page)">
-            <summary>
-            Renders the macro with the specified alias, passing in the specified parameters.
-            </summary>
-            <param name="m">The macro.</param>
-            <param name="parameters">The parameters.</param>
-            <param name="umbracoPage">The legacy umbraco page object that is required for some macros</param>
-            <returns></returns>
-        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Field(System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,Umbraco.Web.RenderFieldCaseType,Umbraco.Web.RenderFieldEncodingType,System.Boolean,System.Boolean,System.String)">
             <returns></returns>
         </member>
@@ -17416,21 +17805,19 @@
             <param name="key"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.IsProtected(System.Int32,System.String)">
+        <member name="M:Umbraco.Web.UmbracoHelper.IsProtected(System.String)">
             <summary>
             Check if a document object is protected by the "Protect Pages" functionality in umbraco
             </summary>
-            <param name="documentId">The identifier of the document object to check</param>
             <param name="path">The full path of the document object to check</param>
             <returns>True if the document object is protected</returns>
         </member>
-        <member name="M:Umbraco.Web.UmbracoHelper.MemberHasAccess(System.Int32,System.String)">
+        <member name="M:Umbraco.Web.UmbracoHelper.MemberHasAccess(System.String)">
             <summary>
             Check if the current user has access to a document
             </summary>
-            <param name="nodeId">The identifier of the document object to check</param>
             <param name="path">The full path of the document object to check</param>
-            <returns>True if the current user has access or if the current document isn't protected</returns>
+            <returns>True if the current user has access or if the current document isn't protected</returns>        
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.GetCurrentMember">
             <summary>
@@ -17559,12 +17946,32 @@
         </member>
         <member name="P:Umbraco.Web.UmbracoHelper.ContentQuery">
             <summary>
-            Lazy instantiates the query context
+            Lazy instantiates the query context if not specified in the constructor
             </summary>
         </member>
         <member name="P:Umbraco.Web.UmbracoHelper.UmbracoContext">
             <summary>
             Helper method to ensure an umbraco context is set when it is needed
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.MembershipHelper">
+            <summary>
+            Lazy instantiates the membership helper if not specified in the constructor
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.UrlProvider">
+            <summary>
+            Lazy instantiates the UrlProvider if not specified in the constructor
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.DataTypeService">
+            <summary>
+            Lazy instantiates the IDataTypeService if not specified in the constructor
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.UmbracoComponentRenderer">
+            <summary>
+            Lazy instantiates the IUmbracoComponentRenderer if not specified in the constructor
             </summary>
         </member>
         <member name="P:Umbraco.Web.UmbracoHelper.AssignedContentItem">
@@ -17579,6 +17986,11 @@
             this will only ever happen if the Helper is constructed with an UmbracoContext and it is not a front-end request
             </remarks>
             <exception cref="T:System.InvalidOperationException">Thrown if the UmbracoHelper is constructed with an UmbracoContext and it is not a front-end request</exception>
+        </member>
+        <member name="P:Umbraco.Web.UmbracoHelper.CultureDictionary">
+            <summary>
+            Returns the ICultureDictionary for access to dictionary items
+            </summary>
         </member>
         <member name="M:Umbraco.Web.Mvc.ViewContextExtensions.CopyWithModel(System.Web.Mvc.ViewContext,System.Object)">
             <summary>
@@ -17662,11 +18074,13 @@
             A resolver for storing IFilteredControllerFactories
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Mvc.FilteredControllerFactoriesResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Umbraco.Web.Mvc.FilteredControllerFactoriesResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
             Constructor
             </summary>
-            <param name="factories"></param>		
+            <param name="logger"></param>
+            <param name="factories"></param>
+            <param name="serviceProvider"></param>		
         </member>
         <member name="T:Umbraco.Web.Mvc.MasterControllerFactory">
             <summary>
@@ -17962,12 +18376,21 @@
             A bootstrapper for the Umbraco application which initializes all objects including the Web portion of the application 
             </summary>
         </member>
-        <member name="M:Umbraco.Web.WebBootManager.#ctor(Umbraco.Core.UmbracoApplicationBase,System.Boolean)">
+        <member name="M:Umbraco.Web.WebBootManager.#ctor(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.Logging.ProfilingLogger,System.Boolean)">
             <summary>
             Constructor for unit tests, ensures some resolvers are not initialized
             </summary>
             <param name="umbracoApplication"></param>
+            <param name="logger"></param>
             <param name="isForTesting"></param>
+        </member>
+        <member name="M:Umbraco.Web.WebBootManager.CreateServiceContext(Umbraco.Core.DatabaseContext,Umbraco.Core.Persistence.IDatabaseFactory)">
+            <summary>
+            Creates and returns the service context for the app
+            </summary>
+            <param name="dbContext"></param>
+            <param name="dbFactory"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.WebBootManager.Initialize">
             <summary>
@@ -17984,11 +18407,6 @@
         <member name="M:Umbraco.Web.WebBootManager.InitializeProfilerResolver">
             <summary>
             Ensure the current profiler is the web profiler
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.WebBootManager.InitializeApplicationEventsResolver">
-            <summary>
-            Adds custom types to the ApplicationEventsResolver
             </summary>
         </member>
         <member name="M:Umbraco.Web.WebBootManager.Complete(System.Action{Umbraco.Core.ApplicationContext})">
@@ -18071,8 +18489,7 @@
             <summary>
             Normally in MVC the way that the View object gets assigned to the result is to Execute the ViewResult, this however
             will write to the Response output stream which isn't what we want. Instead, this method will use the same logic inside
-            of MVC to assign the View object to the result but without executing it. This also ensures that the ViewData and the TempData
-            is assigned from the controller.
+            of MVC to assign the View object to the result but without executing it.
             This is only relavent for view results of PartialViewResult or ViewResult.
             </summary>
             <param name="result"></param>
@@ -18124,10 +18541,12 @@
             <param name="docRequest">The <c>PublishedContentRequest</c>.</param>		
             <returns>A value indicating whether an Umbraco document was found and assigned.</returns>
         </member>
-        <member name="M:Umbraco.Web.Media.ThumbnailProviders.ThumbnailProvidersResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Umbraco.Web.Media.ThumbnailProviders.ThumbnailProvidersResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
             Constructor
             </summary>
+            <param name="serviceProvider"></param>
+            <param name="logger"></param>
             <param name="providers"></param>		
         </member>
         <member name="P:Umbraco.Web.Media.ThumbnailProviders.ThumbnailProvidersResolver.Providers">
@@ -18264,23 +18683,6 @@
             Provides utilities to handle domains.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.GetAllDomains(System.Boolean)">
-            <summary>
-            Gets all domains defined in the system.
-            </summary>
-            <param name="includeWildcards">A value indicating whether to include wildcard domains.</param>
-            <returns>All domains defined in the system.</returns>
-            <remarks>This is to temporarily abstract Umbraco's API.</remarks>
-        </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.GetNodeDomains(System.Int32,System.Boolean)">
-            <summary>
-            Gets all domains defined in the system at a specified node.
-            </summary>
-            <param name="nodeId">The node identifier.</param>
-            <param name="includeWildcards">A value indicating whether to include wildcard domains.</param>
-            <returns>All domains defined in the system at the specified node.</returns>
-            <remarks>This is to temporarily abstract Umbraco's API.</remarks>
-        </member>
         <member name="M:Umbraco.Web.Routing.DomainHelper.DomainForNode(System.Int32,System.Uri)">
             <summary>
             Finds the domain for the specified node, if any, that best matches a specified uri.
@@ -18309,7 +18711,7 @@
             <remarks>If at least a domain is set on the node then the method returns the domains that
             best match the specified uri, else it returns null.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.DomainForUri(umbraco.cms.businesslogic.web.Domain[],System.Uri,System.Func{Umbraco.Web.Routing.DomainAndUri[],Umbraco.Web.Routing.DomainAndUri})">
+        <member name="M:Umbraco.Web.Routing.DomainHelper.DomainForUri(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IDomain},System.Uri,System.Func{Umbraco.Web.Routing.DomainAndUri[],Umbraco.Web.Routing.DomainAndUri})">
             <summary>
             Finds the domain that best matches a specified uri, into a group of domains.
             </summary>
@@ -18323,7 +18725,7 @@
             <para>The filter, if any, will be called only with a non-empty argument, and _must_ return something.</para>
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.DomainsForUri(umbraco.cms.businesslogic.web.Domain[],System.Uri)">
+        <member name="M:Umbraco.Web.Routing.DomainHelper.DomainsForUri(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IDomain},System.Uri)">
             <summary>
             Gets the domains that match a specified uri, into a group of domains.
             </summary>
@@ -18331,7 +18733,7 @@
             <param name="current">The uri, or null.</param>
             <returns>The domains and their normalized uris, that match the specified uri.</returns>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.SanitizeForBackwardCompatibility(umbraco.cms.businesslogic.web.Domain)">
+        <member name="M:Umbraco.Web.Routing.DomainHelper.SanitizeForBackwardCompatibility(Umbraco.Core.Models.IDomain)">
             <summary>
             Sanitize a Domain.
             </summary>
@@ -18342,7 +18744,7 @@
             all... and 4.10 throws on them, so here we just try to find a way so 4.11 does not throw.
             But really... no.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.ExistsDomainInPath(umbraco.cms.businesslogic.web.Domain[],System.String,System.Nullable{System.Int32})">
+        <member name="M:Umbraco.Web.Routing.DomainHelper.ExistsDomainInPath(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IDomain},System.String,System.Nullable{System.Int32})">
             <summary>
             Gets a value indicating whether there is another domain defined down in the path to a node under the current domain's root node.
             </summary>
@@ -18352,7 +18754,7 @@
             <returns>A value indicating if there is another domain defined down in the path.</returns>
             <remarks>Looks _under_ rootNodeId but not _at_ rootNodeId.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.FindDomainInPath(umbraco.cms.businesslogic.web.Domain[],System.String,System.Nullable{System.Int32})">
+        <member name="M:Umbraco.Web.Routing.DomainHelper.FindDomainInPath(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IDomain},System.String,System.Nullable{System.Int32})">
             <summary>
             Gets the deepest non-wildcard Domain, if any, from a group of Domains, in a node path.
             </summary>
@@ -18362,7 +18764,7 @@
             <returns>The deepest non-wildcard Domain in the path, or null.</returns>
             <remarks>Looks _under_ rootNodeId but not _at_ rootNodeId.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.DomainHelper.FindWildcardDomainInPath(umbraco.cms.businesslogic.web.Domain[],System.String,System.Nullable{System.Int32})">
+        <member name="M:Umbraco.Web.Routing.DomainHelper.FindWildcardDomainInPath(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IDomain},System.String,System.Nullable{System.Int32})">
             <summary>
             Gets the deepest wildcard Domain, if any, from a group of Domains, in a node path.
             </summary>
@@ -18386,18 +18788,22 @@
             Resolves IPublishedContentFinder objects.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Routing.ContentFinderResolver.#ctor(System.Collections.Generic.IEnumerable{System.Type})">
+        <member name="M:Umbraco.Web.Routing.ContentFinderResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Collections.Generic.IEnumerable{System.Type})">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.ContentFinderResolver"/> class with an initial list of finder types.
             </summary>
+            <param name="serviceProvider"></param>
+            <param name="logger"></param>
             <param name="finders">The list of finder types</param>
             <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
         </member>
-        <member name="M:Umbraco.Web.Routing.ContentFinderResolver.#ctor(System.Type[])">
+        <member name="M:Umbraco.Web.Routing.ContentFinderResolver.#ctor(System.IServiceProvider,Umbraco.Core.Logging.ILogger,System.Type[])">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.ContentFinderResolver"/> class with an initial list of finder types.
             </summary>
+            <param name="logger"></param>
             <param name="finders">The list of finder types</param>
+            <param name="serviceProvider"></param>
             <remarks>The resolver is created by the <c>WebBootManager</c> and thus the constructor remains internal.</remarks>
         </member>
         <member name="P:Umbraco.Web.Routing.ContentFinderResolver.Finders">
@@ -18411,12 +18817,14 @@
             by one specified template, using one specified Culture and RenderingEngine.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Routing.PublishedContentRequest.#ctor(System.Uri,Umbraco.Web.Routing.RoutingContext)">
+        <member name="M:Umbraco.Web.Routing.PublishedContentRequest.#ctor(System.Uri,Umbraco.Web.Routing.RoutingContext,Umbraco.Core.Configuration.UmbracoSettings.IWebRoutingSection,System.Func{System.String,System.Collections.Generic.IEnumerable{System.String}})">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Web.Routing.PublishedContentRequest"/> class with a specific Uri and routing context.
             </summary>
             <param name="uri">The request <c>Uri</c>.</param>
             <param name="routingContext">A routing context.</param>
+            <param name="getRolesForLogin">A callback method to return the roles for the provided login name when required</param>
+            <param name="routingConfig"></param>
         </member>
         <member name="M:Umbraco.Web.Routing.PublishedContentRequest.Prepare">
             <summary>
@@ -18608,7 +19016,7 @@
             Gets a value indicating whether the content request has a template.
             </summary>
         </member>
-        <member name="P:Umbraco.Web.Routing.PublishedContentRequest.Domain">
+        <member name="P:Umbraco.Web.Routing.PublishedContentRequest.UmbracoDomain">
             <summary>
             Gets or sets the content request's domain.
             </summary>
@@ -20137,7 +20545,6 @@
             <summary>
             Holds methods for parsing and building umbraco templates
             </summary>
-            
         </member>
         <member name="M:umbraco.template.Parse(umbraco.page)">
             <summary>
@@ -26635,6 +27042,16 @@
             Returns the current ApplicationContext
             </summary>
         </member>
+        <member name="P:Umbraco.Web.WebServices.UmbracoWebService.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebServices.UmbracoWebService.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.WebServices.UmbracoWebService.UmbracoContext">
             <summary>
             Returns the current UmbracoContext
@@ -27610,6 +28027,16 @@
             Returns the current ApplicationContext
             </summary>
         </member>
+        <member name="P:Umbraco.Web.WebServices.UmbracoHttpHandler.Logger">
+            <summary>
+            Returns an ILogger
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.WebServices.UmbracoHttpHandler.ProfilingLogger">
+            <summary>
+            Returns a ProfilingLogger
+            </summary>
+        </member>
         <member name="P:Umbraco.Web.WebServices.UmbracoHttpHandler.UmbracoContext">
             <summary>
             Returns the current UmbracoContext
@@ -28235,7 +28662,7 @@
         </member>
         <member name="P:umbraco.cms.presentation.user.NodePermissions.OnClientItemChecked">
             <summary>
-            The JavaScript method to call when a node is checked. The method will receive a comma seperated list of node IDs that are checked.
+            The JavaScript method to call when a node is checked. The method will receive a comma separated list of node IDs that are checked.
             </summary>
         </member>
         <member name="M:umbraco.cms.presentation.user.PermissionEditor.CheckUser(System.String)">
@@ -28378,39 +28805,8 @@
         </member>
         <member name="T:umbraco.presentation.webservices.CacheRefresher">
             <summary>
-            Summary description for CacheRefresher.
+            CacheRefresher web service.
             </summary>
-        </member>
-        <member name="M:umbraco.presentation.webservices.CacheRefresher.ContinueRefreshingForRequest(System.String,System.String,System.String)">
-            <summary>
-            This checks the passed in hash and verifies if it does not match the hash of the combination of appDomainAppId and machineName
-            passed in. If the hashes don't match, then cache refreshing continues.
-            </summary>
-            <param name="hash"></param>
-            <param name="appDomainAppId"></param>
-            <param name="machineName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:umbraco.presentation.webservices.CacheRefresher.RefreshByIds(System.Guid,System.String,System.String,System.String)">
-            <summary>
-            Refreshes objects for all Ids matched in the json string
-            </summary>
-            <param name="uniqueIdentifier"></param>
-            <param name="jsonIds">A JSON Serialized string of ids to match</param>
-            <param name="Login"></param>
-            <param name="Password"></param>
-        </member>
-        <member name="M:umbraco.presentation.webservices.CacheRefresher.RefreshByJson(System.Guid,System.String,System.String,System.String)">
-            <summary>
-            Refreshes objects using the passed in Json payload, it will be up to the cache refreshers to deserialize
-            </summary>
-            <param name="uniqueIdentifier"></param>
-            <param name="jsonPayload">A custom JSON payload used by the cache refresher</param>
-            <param name="Login"></param>
-            <param name="Password"></param>
-            <remarks>
-            NOTE: the cache refresher defined by the ID MUST be of type IJsonCacheRefresher or an exception will be thrown
-            </remarks>
         </member>
         <member name="T:umbraco.presentation.webservices.CheckForUpgrade">
             <summary>
@@ -28763,94 +29159,15 @@
             Used if not running in a web application (no real HttpContext)
             </summary>
         </member>
-        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.Security.WebSecurity)">
+        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.Security.WebSecurity,Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection,System.Collections.Generic.IEnumerable{Umbraco.Web.Routing.IUrlProvider},System.Boolean,System.Nullable{System.Boolean})">
             <summary>
-            This is a helper method which is called to ensure that the singleton context is created and the nice url and routing
-            context is created and assigned.
+            This is a helper method which is called to ensure that the singleton context is created
             </summary>
             <param name="httpContext"></param>
             <param name="applicationContext"></param>
             <param name="webSecurity"></param>
-            <returns>
-            The Singleton context object
-            </returns>
-            <remarks>
-            This is created in order to standardize the creation of the singleton. Normally it is created during a request
-            in the UmbracoModule, however this module does not execute during application startup so we need to ensure it
-            during the startup process as well.
-            See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext)">
-            <summary>
-            This is a helper method which is called to ensure that the singleton context is created and the nice url and routing
-            context is created and assigned.
-            </summary>
-            <param name="httpContext"></param>
-            <param name="applicationContext"></param>
-            <returns>
-            The Singleton context object
-            </returns>
-            <remarks>
-            This is created in order to standardize the creation of the singleton. Normally it is created during a request
-            in the UmbracoModule, however this module does not execute during application startup so we need to ensure it
-            during the startup process as well.
-            See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,System.Boolean)">
-            <summary>
-            This is a helper method which is called to ensure that the singleton context is created and the nice url and routing
-            context is created and assigned.
-            </summary>
-            <param name="httpContext"></param>
-            <param name="applicationContext"></param>
-            <param name="replaceContext">
-            if set to true will replace the current singleton with a new one, this is generally only ever used because
-            during application startup the base url domain will not be available so after app startup we'll replace the current
-            context with a new one in which we can access the httpcontext.Request object.
-            </param>
-            <returns>
-            The Singleton context object
-            </returns>
-            <remarks>
-            This is created in order to standardize the creation of the singleton. Normally it is created during a request
-            in the UmbracoModule, however this module does not execute during application startup so we need to ensure it
-            during the startup process as well.
-            See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.Security.WebSecurity,System.Boolean)">
-            <summary>
-            This is a helper method which is called to ensure that the singleton context is created and the nice url and routing
-            context is created and assigned.
-            </summary>
-            <param name="httpContext"></param>
-            <param name="applicationContext"></param>
-            <param name="webSecurity"></param>
-            <param name="replaceContext">
-            if set to true will replace the current singleton with a new one, this is generally only ever used because
-            during application startup the base url domain will not be available so after app startup we'll replace the current
-            context with a new one in which we can access the httpcontext.Request object.
-            </param>
-            <returns>
-            The Singleton context object
-            </returns>
-            <remarks>
-            This is created in order to standardize the creation of the singleton. Normally it is created during a request
-            in the UmbracoModule, however this module does not execute during application startup so we need to ensure it
-            during the startup process as well.
-            See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoContext.EnsureContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.Security.WebSecurity,System.Boolean,System.Nullable{System.Boolean})">
-            <summary>
-            This is a helper method which is called to ensure that the singleton context is created and the nice url and routing
-            context is created and assigned.
-            </summary>
-            <param name="httpContext"></param>
-            <param name="applicationContext"></param>
-            <param name="webSecurity"></param>
+            <param name="umbracoSettings"></param>
+            <param name="urlProviders"></param>
             <param name="replaceContext">
             if set to true will replace the current singleton with a new one, this is generally only ever used because
             during application startup the base url domain will not be available so after app startup we'll replace the current
@@ -29006,20 +29323,6 @@
             
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.UmbracoModule.AuthenticateRequest(System.Object,System.EventArgs)">
-            <summary>
-            Authenticates the request by reading the FormsAuthentication cookie and setting the 
-            context and thread principle object
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param> 
-            <remarks>
-            We will set the identity, culture, etc... for any request that is:
-            * A back office request
-            * An installer request
-            * A /base request (since these can be back office web service requests)
-            </remarks>
-        </member>
         <member name="M:Umbraco.Web.UmbracoModule.ShouldAuthenticateRequest(System.Web.HttpRequestBase,System.Uri)">
             <summary>
             Determines if we should authenticate the request
@@ -29033,18 +29336,6 @@
             * it is an installer request
             * it is a /base request
             * it is a preview request
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoModule.ShouldIgnoreTicketRenew(System.Uri,System.Web.HttpContextBase)">
-            <summary>
-            Determines if the authentication ticket should be renewed with a new timeout
-            </summary>
-            <param name="url"></param>
-            <param name="httpContext"></param>
-            <returns></returns>
-            <remarks>
-            We do not want to renew the ticket when we are checking for the user's remaining timeout unless -
-            UmbracoConfig.For.UmbracoSettings().Security.KeepUserLoggedIn == true
             </remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.EnsureUmbracoRoutablePage(Umbraco.Web.UmbracoContext,System.Web.HttpContextBase)">
@@ -29089,6 +29380,21 @@
             and there may be more than 1 application per application domain
             </summary>
             <param name="app"></param>
+        </member>
+        <member name="F:Umbraco.Web.UmbracoModule._combinedRouteCollection">
+            <summary>
+            This is used to be passed into the GlobalSettings.IsReservedPathOrUrl and will include some 'fake' routes
+            used to determine if a path is reserved.
+            </summary>
+            <remarks>
+            This is basically used to reserve paths dynamically
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UmbracoModule.ReservedPaths">
+            <summary>
+            This is used internally to track any registered callback paths for Identity providers. If the request path matches
+            any of the registered paths, then the module will let the request keep executing
+            </summary>
         </member>
         <member name="M:Umbraco.Web.UriUtility.ToFullUrl(System.String,System.Web.HttpContextBase)">
             <summary>
@@ -29256,8 +29562,8 @@
             <param name="indexerName"></param>
             <returns></returns>
             <remarks>
-            This is kind of rudimentary since there's no way we can know that the index has rebuilt, we'll just check
-            if the index is locked based on Lucene apis
+            This is kind of rudimentary since there's no way we can know that the index has rebuilt, we 
+            have a listener for the index op complete so we'll just check if that key is no longer there in the runtime cache
             </remarks>
         </member>
         <member name="M:Umbraco.Web.WebServices.ExamineManagementApiController.PostCheckOptimizeIndex(System.String)">

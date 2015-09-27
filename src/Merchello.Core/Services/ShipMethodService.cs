@@ -5,39 +5,98 @@
     using System.Data;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Persistence;
     using Persistence.Querying;
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Defines the ShipMethodService
     /// </summary>
-    internal class ShipMethodService : IShipMethodService
+    internal class ShipMethodService : MerchelloRepositoryService, IShipMethodService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethodService"/> class.
+        /// </summary>
         internal ShipMethodService()
-            : this(new RepositoryFactory())
-        { }
-
-        internal ShipMethodService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
-
-        internal ShipMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
-        {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+            : this(LoggerResolver.Current.Logger)
+        {            
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethodService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal ShipMethodService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethodService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal ShipMethodService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal ShipMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        internal ShipMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Creates a <see cref="IShipMethod"/>.  This is useful due to the data constraint
@@ -74,8 +133,8 @@
             
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
                 {
                     repository.AddOrUpdate(shipMethod);
                     uow.Commit();
@@ -89,7 +148,7 @@
 
         private bool ShipMethodExists(Guid providerKey, Guid shipCountryKey, string serviceCode)
         {
-            using(var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            using(var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
             {
             var query =
                Query<IShipMethod>.Builder.Where(
@@ -116,8 +175,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
                 {
                     repository.AddOrUpdate(shipMethod);
                     uow.Commit();
@@ -139,8 +198,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
                 {
                     foreach (var shipMethod in shipMethodsArray)
                     {
@@ -169,8 +228,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
                 {
                     repository.Delete(shipMethod);
                     uow.Commit();
@@ -194,8 +253,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
                 {
                     foreach (var method in methods)
                     {
@@ -217,7 +276,7 @@
         /// <returns><see cref="IShipMethod"/></returns>
         public IShipMethod GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -229,7 +288,7 @@
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey, Guid shipCountryKey)
         {
-            using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query =
                     Query<IShipMethod>.Builder.Where(
@@ -245,7 +304,7 @@
         /// <returns>A collection of <see cref="IShipMethod"/></returns>
         public IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey)
         {
-            using (var repository = _repositoryFactory.CreateShipMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query =
                     Query<IShipMethod>.Builder.Where(

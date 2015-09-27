@@ -18,6 +18,8 @@ using WebBootManager = Merchello.Web.WebBootManager;
 
 namespace Merchello.Tests.Base.TestHelpers
 {
+    using global::Umbraco.Core.Logging;
+
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
 
@@ -40,8 +42,9 @@ namespace Merchello.Tests.Base.TestHelpers
             DbPreTestDataWorker.ValidateDatabaseSetup();
             DbPreTestDataWorker.DeleteAllAnonymousCustomers();
 
+
             // Merchello CoreBootStrap
-            var bootManager = new WebBootManager();
+            var bootManager = new WebBootManager(DbPreTestDataWorker.TestLogger);
             bootManager.Initialize();    
             
 

@@ -11,32 +11,90 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Core.Services
 {
+    using Merchello.Core.Events;
+
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents a NotificationMethodService
     /// </summary>
-    internal class NotificationMethodService : INotificationMethodService
+    internal class NotificationMethodService : MerchelloRepositoryService, INotificationMethodService
     {
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public NotificationMethodService()
-            : this(new RepositoryFactory())
-        { }
+        #region Constructors
 
-        public NotificationMethodService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
-
-        public NotificationMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
-        {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMethodService"/> class.
+        /// </summary>
+        public NotificationMethodService()
+            : this(LoggerResolver.Current.Logger)
+        {            
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMethodService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NotificationMethodService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMethodService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NotificationMethodService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NotificationMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public NotificationMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         /// <summary>
         /// Creates a <see cref="INotificationMethod"/> and saves it to the database
@@ -66,8 +124,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMethodRepository(uow))
                 {
                     repository.AddOrUpdate(notificationMethod);
                     uow.Commit();
@@ -95,8 +153,8 @@ namespace Merchello.Core.Services
          
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMethodRepository(uow))
                 {
                     repository.AddOrUpdate(notificationMethod);
                     uow.Commit();
@@ -118,8 +176,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMethodRepository(uow))
                 {
                     foreach (var notificationMethod in notificationMethodsArray)
                     {
@@ -148,8 +206,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMethodRepository(uow))
                 {
                     repository.Delete(notificationMethod);
                     uow.Commit();
@@ -173,8 +231,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNotificationMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNotificationMethodRepository(uow))
                 {
                     foreach (var notificationMethod in notificationMethodsArray)
                     {
@@ -195,7 +253,7 @@ namespace Merchello.Core.Services
         /// <returns>The <see cref="INotificationMethod"/></returns>
         public INotificationMethod GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateNotificationMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNotificationMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -208,7 +266,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of all <see cref="INotificationMethod"/> associated with a provider</returns>
         public IEnumerable<INotificationMethod> GetNotifcationMethodsByProviderKey(Guid providerKey)
         {
-            using(var repository = _repositoryFactory.CreateNotificationMethodRepository(_uowProvider.GetUnitOfWork()))
+            using(var repository = RepositoryFactory.CreateNotificationMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<INotificationMethod>.Builder.Where(x => x.ProviderKey == providerKey);
 
@@ -222,7 +280,7 @@ namespace Merchello.Core.Services
         /// <remarks>Primarily used for testing</remarks>
         internal IEnumerable<INotificationMethod> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateNotificationMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNotificationMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }

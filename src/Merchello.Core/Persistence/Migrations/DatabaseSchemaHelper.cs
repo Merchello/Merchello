@@ -13,7 +13,7 @@
     /// <summary>
     /// The database schema helper.
     /// </summary>
-    internal sealed class DatabaseSchemaHelper
+    internal sealed class DatabaseSchemaHelperOld
     {
         /// <summary>
         /// The uninstall database schema.
@@ -69,7 +69,8 @@
         /// </param>
         internal static void InitializeDatabaseSchema(Database database, Dictionary<int, Type> orderedTables, string migrationName)
         {
-            LogHelper.Info<DatabaseSchemaHelper>(string.Format("Start InstallDataSchema {0}", migrationName));
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            logger.Info<DatabaseSchemaHelper>(string.Format("Start InstallDataSchema {0}", migrationName));
 
             foreach (var item in orderedTables.OrderBy(x => x.Key))
             {

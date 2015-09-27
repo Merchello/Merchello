@@ -7,18 +7,22 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Tests.IntegrationTests.A.DbInstall
 {
+    using Merchello.Core.Persistence.Migrations;
+
     [TestFixture]
     public class InitialDataTests
     {
-        private BaseDataCreation _creation;
         private UmbracoDatabase _database;
+
+        private BaseDataCreation _creation;
+        private MerchelloDatabaseSchemaHelper _schemaHelper;
 
         [TestFixtureSetUp]
         public void Init()
         {
             var worker = new DbPreTestDataWorker();
             _database = worker.Database;
-            _creation = new BaseDataCreation(_database);
+            _creation = new BaseDataCreation(worker.Database, worker.TestLogger);
         }
 
         [TestFixtureTearDown]

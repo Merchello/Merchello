@@ -2,11 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.Configuration;
     using Merchello.Core.Models.Rdbms;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
@@ -27,12 +30,28 @@
         };
 
         /// <summary>
+        /// The schema helper.
+        /// </summary>
+        private readonly DatabaseSchemaHelper _schemaHelper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateOneNineZeroTables"/> class.
+        /// </summary>
+        public CreateOneNineZeroTables()
+        {
+            var dbContext = ApplicationContext.Current.DatabaseContext;
+            _schemaHelper = new DatabaseSchemaHelper(dbContext.Database, LoggerResolver.Current.Logger, dbContext.SqlSyntax);
+        }
+
+        /// <summary>
         /// The up.
         /// </summary>
         public override void Up()
         {
-            var database = ApplicationContext.Current.DatabaseContext.Database;
-            DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "1.9.0 upgrade");
+            foreach (var item in OrderedTables.OrderBy(x => x.Key))
+            {
+                _schemaHelper.CreateTable(false, item.Value);
+            }
         }
 
         /// <summary>

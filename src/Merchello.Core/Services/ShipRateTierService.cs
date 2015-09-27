@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
@@ -12,32 +13,36 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the ShipRateTierService
     /// </summary>
-    internal class ShipRateTierService : IShipRateTierService
+    internal class ShipRateTierService : MerchelloRepositoryService, IShipRateTierService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipRateTierService"/> class.
         /// </summary>
-        internal ShipRateTierService()
-            : this(new RepositoryFactory())
+        public ShipRateTierService()
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipRateTierService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal ShipRateTierService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
         {
         }
 
@@ -47,8 +52,11 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        internal ShipRateTierService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal ShipRateTierService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
         {
         }
 
@@ -61,15 +69,35 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        internal ShipRateTierService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal ShipRateTierService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipRateTierService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        internal ShipRateTierService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         #region Event Handlers
 
@@ -123,8 +151,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipRateTierRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipRateTierRepository(uow))
                 {
                     repository.AddOrUpdate(shipRateTier);
                     uow.Commit();
@@ -146,8 +174,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipRateTierRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipRateTierRepository(uow))
                 {
                     foreach (var shipRateTier in shipRateTiersArray)
                     {
@@ -170,14 +198,14 @@
             if (raiseEvents)
             if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IShipRateTier>(shipRateTier), this))
             {
-                ((ShipRateTier) shipRateTier).WasCancelled = true;
+                ((ShipRateTier)shipRateTier).WasCancelled = true;
                 return;
             }
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipRateTierRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipRateTierRepository(uow))
                 {
                     repository.Delete(shipRateTier);
                     uow.Commit();
@@ -194,7 +222,7 @@
         /// <returns>A collection of <see cref="IShipRateTier"/></returns>
         public IEnumerable<IShipRateTier> GetShipRateTiersByShipMethodKey(Guid shipMethodKey)
         {
-            using (var repository = _repositoryFactory.CreateShipRateTierRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateShipRateTierRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IShipRateTier>.Builder.Where(x => x.ShipMethodKey == shipMethodKey);
                 return repository.GetByQuery(query);

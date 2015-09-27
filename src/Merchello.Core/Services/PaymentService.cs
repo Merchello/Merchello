@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
@@ -13,11 +14,12 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the PaymentService
     /// </summary>
-    public class PaymentService : IPaymentService
+    public class PaymentService : MerchelloRepositoryService, IPaymentService
     {
         #region Fields
 
@@ -27,38 +29,44 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
-        /// <summary>
         /// The applied payment service.
         /// </summary>
         private readonly IAppliedPaymentService _appliedPaymentService;
 
         #endregion
 
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentService"/> class.
         /// </summary>
         public PaymentService()
-            : this(new AppliedPaymentService())
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public PaymentService(ILogger logger)
+            : this(logger, new AppliedPaymentService(logger))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentService"/> class.
         /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="appliedPaymentService">
         /// The applied payment service.
         /// </param>
-        internal PaymentService(IAppliedPaymentService appliedPaymentService)
-            : this(new RepositoryFactory(), appliedPaymentService)
+        internal PaymentService(ILogger logger, IAppliedPaymentService appliedPaymentService)
+            : this(new RepositoryFactory(), logger, appliedPaymentService)
         {
         }
 
@@ -68,11 +76,14 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="appliedPaymentService">
         /// The applied payment service.
         /// </param>
-        internal PaymentService(RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, appliedPaymentService)
+        internal PaymentService(RepositoryFactory repositoryFactory, ILogger logger, IAppliedPaymentService appliedPaymentService)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, appliedPaymentService)
         {
         }
 
@@ -85,22 +96,46 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="appliedPaymentService">
         /// The applied payment service.
         /// </param>
-        internal PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IAppliedPaymentService appliedPaymentService)
+        internal PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IAppliedPaymentService appliedPaymentService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), appliedPaymentService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="appliedPaymentService">
+        /// The applied payment service.
+        /// </param>
+        internal PaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IAppliedPaymentService appliedPaymentService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+            Mandate.ParameterNotNull(appliedPaymentService, "appliedPaymentService");
             _appliedPaymentService = appliedPaymentService;
         }
 
+        #endregion
 
         #region Event Handlers
+
 
         /// <summary>
         /// Occurs after Create
@@ -192,8 +227,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentRepository(uow))
                 {
                     repository.AddOrUpdate(payment);
                     uow.Commit();
@@ -215,8 +250,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentRepository(uow))
                 {
                     foreach (var paymentMethod in paymentsArray)
                     {
@@ -245,8 +280,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentRepository(uow))
                 {
                     repository.Delete(payment);
                     uow.Commit();
@@ -272,9 +307,9 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
+                var uow = UowProvider.GetUnitOfWork();
 
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                using (var repository = RepositoryFactory.CreatePaymentRepository(uow))
                 {
                     foreach (var payment in paymentsArray)
                     {
@@ -295,7 +330,7 @@
         /// <returns><see cref="IPaymentMethod"/></returns>
         public IPayment GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -308,7 +343,7 @@
         /// <returns>List of <see cref="IProduct"/></returns>
         public IEnumerable<IPayment> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -321,7 +356,7 @@
         /// <returns>A collection of <see cref="IPayment"/></returns>
         public IEnumerable<IPayment> GetPaymentsByPaymentMethodKey(Guid? paymentMethodKey)
         {
-            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IPayment>.Builder.Where(x => x.PaymentMethodKey == paymentMethodKey);
 
@@ -352,7 +387,7 @@
         /// </returns>
         public IEnumerable<IPayment> GetPaymentsByCustomerKey(Guid customerKey)
         {
-            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IPayment>.Builder.Where(x => x.CustomerKey == customerKey);
 
@@ -454,8 +489,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentRepository(uow))
                 {
                     repository.AddOrUpdate(payment);
                     uow.Commit();
@@ -478,7 +513,7 @@
         /// </remarks>
         internal IEnumerable<IPayment> GetAll()
         {
-            using (var repository = _repositoryFactory.CreatePaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }

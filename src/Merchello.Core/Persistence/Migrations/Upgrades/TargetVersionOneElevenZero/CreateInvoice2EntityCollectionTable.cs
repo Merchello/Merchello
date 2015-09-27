@@ -7,8 +7,11 @@
     using Merchello.Core.Models.Rdbms;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
+
+    //using DatabaseSchemaHelper = Merchello.Core.Persistence.Migrations.DatabaseSchemaHelper;
 
     /// <summary>
     /// Create merchInvoice2EntityCollection table in the database.
@@ -17,22 +20,27 @@
     public class CreateInvoice2EntityCollectionTable : MigrationBase
     {
         /// <summary>
-        /// Tables in the order of creation or reverse deletion.
+        /// The schema helper.
         /// </summary>
-        private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
+        private readonly DatabaseSchemaHelper _schemaHelper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateInvoice2EntityCollectionTable"/> class.
+        /// </summary>
+        public CreateInvoice2EntityCollectionTable()
         {
-            { 0, typeof(Invoice2EntityCollectionDto) }
-        };
+            var dbContext = ApplicationContext.Current.DatabaseContext;
+            _schemaHelper = new DatabaseSchemaHelper(dbContext.Database, LoggerResolver.Current.Logger, dbContext.SqlSyntax);    
+        }
 
         /// <summary>
         /// Adds the table to the database
         /// </summary>
         public override void Up()
         {
-            var database = ApplicationContext.Current.DatabaseContext.Database;
-            if (!database.TableExist("merchInvoice2EntityCollection"))
+            if (!_schemaHelper.TableExist("merchInvoice2EntityCollection"))
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.11.0 upgrade");
+                _schemaHelper.CreateTable(false, typeof(Invoice2EntityCollectionDto));
             }
         }
 

@@ -9,10 +9,15 @@
     using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
+    using Semver;
+
+    using umbraco.BusinessLogic;
+
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     using Constants = Merchello.Core.Constants;
 
@@ -27,11 +32,32 @@
         private readonly Database _database;
 
         /// <summary>
+        /// The _sql syntax provider.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
+
+        /// <summary>
+        /// The _logger.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
         /// </summary>
         public CoreMigrationManager()
-            : this(ApplicationContext.Current.DatabaseContext.Database)
+            : this(ApplicationContext.Current)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoreMigrationManager"/> class.
+        /// </summary>
+        /// <param name="applicationContext">
+        /// The application context.
+        /// </param>
+        public CoreMigrationManager(ApplicationContext applicationContext)
+            : this(applicationContext.DatabaseContext.Database, applicationContext.DatabaseContext.SqlSyntax, LoggerResolver.Current.Logger)
+        {            
         }
 
         /// <summary>
@@ -40,10 +66,21 @@
         /// <param name="database">
         /// The database.
         /// </param>
-        public CoreMigrationManager(Database database)
+        /// <param name="sqlSyntaxProvider">
+        /// The SQL Syntax Provider.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public CoreMigrationManager(Database database, ISqlSyntaxProvider sqlSyntaxProvider, ILogger logger)
         {
             Mandate.ParameterNotNull(database, "database");
+            Mandate.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
+            Mandate.ParameterNotNull(logger, "logger");
+            
             _database = database;
+            _sqlSyntaxProvider = sqlSyntaxProvider;
+            _logger = logger;
         }
 
         /// <summary>
@@ -94,7 +131,7 @@
         /// </returns>
         private bool UpgradeMerchello(Database database)
         {
-            var databaseSchemaCreation = new DatabaseSchemaCreation(database);
+            var databaseSchemaCreation = new DatabaseSchemaCreation(_database, _logger, new DatabaseSchemaHelper(_database, _logger, _sqlSyntaxProvider), _sqlSyntaxProvider);
             var schemaResult = databaseSchemaCreation.ValidateSchema();
             var dbVersion = schemaResult.DetermineInstalledVersion();
 
@@ -102,11 +139,15 @@
             {
                 try
                 {
-                    LogHelper.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
+                    _logger.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
+                    var entryService = ApplicationContext.Current.Services.MigrationEntryService;
                     var runner = new MigrationRunner(
-                        MerchelloConfiguration.ConfigurationStatusVersion,
-                        MerchelloVersion.Current,
-                        MerchelloConfiguration.MerchelloMigrationName);
+                        ApplicationContext.Current.Services.MigrationEntryService,
+                        _logger,
+                        new SemVersion(MerchelloConfiguration.ConfigurationStatusVersion),
+                        new SemVersion(MerchelloVersion.Current),
+                        MerchelloConfiguration.MerchelloMigrationName,
+                        null);
                     var upgraded = runner.Execute(database);
                     if (upgraded)
                     {
@@ -124,14 +165,14 @@
 
                         this.OnUpgraded(record);
 
-                        LogHelper.Info<CoreMigrationManager>("Merchello Schema Migration completed successfully");
+                        _logger.Info<CoreMigrationManager>("Merchello Schema Migration completed successfully");
                     }
 
-                    LogHelper.Debug<CoreMigrationManager>("Merchello migration runner returned false.");
+                    _logger.Debug<CoreMigrationManager>("Merchello migration runner returned false.");
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error<CoreMigrationManager>("Merchello Database Schema Upgrade Failed", ex);
+                    _logger.Error<CoreMigrationManager>("Merchello Database Schema Upgrade Failed", ex);
                     throw;
                 }
             }

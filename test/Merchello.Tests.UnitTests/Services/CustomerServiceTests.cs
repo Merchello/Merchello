@@ -12,6 +12,10 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Moq;
+
+    using Umbraco.Core.Logging;
+
     [TestFixture]
     [Category("Services")]
     public class CustomerServiceTests : ServiceTestsBase<ICustomer>
@@ -24,7 +28,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.Setup();
 
-            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new AnonymousCustomerService(), new CustomerAddressService(), new InvoiceService(), new PaymentService());
+            _customerService = new CustomerService(new MockUnitOfWorkProvider(), new RepositoryFactory(), Logger.CreateWithDefaultLog4NetConfiguration(), new AnonymousCustomerService(new Mock<ILogger>().Object), new CustomerAddressService(new Mock<ILogger>().Object), new InvoiceService(new Mock<ILogger>().Object), new PaymentService(new Mock<ILogger>().Object));
             Before = null;
             After = null;
 
