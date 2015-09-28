@@ -106,17 +106,17 @@
         {
             if (MerchelloConfiguration.ConfigurationStatusVersion != MerchelloVersion.Current)
             {
-                LogHelper.Info<CoreMigrationManager>(
+                _logger.Info<CoreMigrationManager>(
                     "Merchello Versions did not match - initializing upgrade.");
 
                 if (UpgradeMerchello(_database))
                 {
-                    LogHelper.Info<CoreMigrationManager>("Upgrade completed successfully.");
+                    _logger.Info<CoreMigrationManager>("Upgrade completed successfully.");
                 }
             }
             else
             {
-                LogHelper.Debug<CoreMigrationManager>("Merchello Version Verified - no upgrade required.");
+                _logger.Debug<CoreMigrationManager>("Merchello Version Verified - no upgrade required.");
             }
         }
 
@@ -140,15 +140,18 @@
                 try
                 {
                     _logger.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
+                    
                     var entryService = ApplicationContext.Current.Services.MigrationEntryService;
+
                     var runner = new MigrationRunner(
-                        ApplicationContext.Current.Services.MigrationEntryService,
+                        entryService,
                         _logger,
                         new SemVersion(MerchelloConfiguration.ConfigurationStatusVersion),
                         new SemVersion(MerchelloVersion.Current),
-                        MerchelloConfiguration.MerchelloMigrationName,
-                        null);
+                        MerchelloConfiguration.MerchelloMigrationName);
+
                     var upgraded = runner.Execute(database);
+                    
                     if (upgraded)
                     {
                         var migrationKey = this.EnsureMigrationKey(schemaResult);
