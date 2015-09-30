@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<language alias="en_us" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+<language>
   <area alias="merchelloGeneral">
     <key alias="apply">Apply</key>
     <key alias="price">Price</key>
@@ -139,11 +139,11 @@
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
     <key alias="slug">URL Slug</key>
     <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
     <key alias="selectTemplate">Select an Umbraco template</key>
     <key alias="canBeRendered">Allow this content to be rendered.</key>
-    <key alias="productContentTypes">Product Content Types</key>
     <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
     <key alias="productContentType">Product Content Type</key>
     <key alias="umbracoContentTypeName">Umbraco Content Type</key>
@@ -155,17 +155,23 @@
       <p>This can be done through the Products context menu.</p>
       ]]>
     </key>
-    <key alias="noProductContentType"><![CDATA[
+    <key alias="noProductContentType">
+      <![CDATA[
       <h5>You have not selected a product content type</h5>
-    ]]></key>
-    <key alias="deleteWarning"><![CDATA[
+    ]]>
+    </key>
+    <key alias="deleteWarning">
+      <![CDATA[
     This will also delete ALL property data associated with products that use this product type.
-    ]]></key>
+    ]]>
+    </key>
     <key alias="removeDetachedContent">Remove Extended Content</key>
-    <key alias="removeDetachedContentWarning"><![CDATA[
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
     Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to
     fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
-    ]]></key>
+    ]]>
+    </key>
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Invoice</key>
@@ -180,10 +186,12 @@
     <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
     <key alias="processedBy">Processed by</key>
     <key alias="refundMethod">Refund method</key>
-    <key alias="noSales"><![CDATA[
+    <key alias="noSales">
+      <![CDATA[
         <h5>You Have No Sales Yet</h5>
         <p>But you will soon!</p>
-      ]]></key>
+      ]]>
+    </key>
     <key alias="emptySalesCollection">There are currently no sales in this collection</key>
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
@@ -192,6 +200,9 @@
     <key alias="noBillingAddress">No Billing Address</key>
     <key alias="shippingAddress">Shipping Address</key>
     <key alias="noShippingAddress">No Shipping Address</key>
+    <key alias="paid">Paid</key>
+    <key alias="unpaid">Unpaid</key>
+    <key alias="partial">Partial</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
@@ -218,37 +229,34 @@
       ]]>
     </key>
     <key alias="totalSpent">Total Spent</key>
-    <key alias="paid">Paid</key>
-    <key alias="unpaid">Unpaid</key>
-    <key alias="partial">Partial</key>
   </area>
-    <area alias="merchelloMarketing">
-      <key alias="currentOffers">Current Offers</key>
-      <key alias="offerCode">Offer Code</key>
-      <key alias="newOffer">New Offer</key>
-      <key alias="noOffer">No current offers</key>
-      <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
-      <key alias="offerInfo">Offer Settings</key>
-      <key alias="configOffer">Configure this offer</key>
-      <key alias="offerType">Type of Offer</key>
-      <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
-      <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
-      <key alias="offerNeverExpires">Does not expire.</key>
-      <key alias="offerValidDates">Offer Valid Dates</key>
-      <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
-      <key alias="offerConstraintsInfo">Constraints</key>
-      <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
-      <key alias="offerRewardsInfo">Rewards</key>
-      <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
-      <key alias="noConstraints">No Constraints Available</key>
-      <key alias="noRewards">No Rewards Available</key>
-      <key alias="noContraintsAssigned">No Constraints Assigned</key>
-      <key alias="noRewardsAssigned">No Rewards Assigned</key>
-      <key alias="componentAutoSaving">Component updated - auto saving</key>
-      <key alias="lineItemNameInfo">
-        <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
-      </key>
-    </area>
+  <area alias="merchelloMarketing">
+    <key alias="currentOffers">Current Offers</key>
+    <key alias="offerCode">Offer Code</key>
+    <key alias="newOffer">New Offer</key>
+    <key alias="noOffer">No current offers</key>
+    <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
+    <key alias="offerInfo">Offer Settings</key>
+    <key alias="configOffer">Configure this offer</key>
+    <key alias="offerType">Type of Offer</key>
+    <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
+    <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
+    <key alias="offerNeverExpires">Does not expire.</key>
+    <key alias="offerValidDates">Offer Valid Dates</key>
+    <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
+    <key alias="offerConstraintsInfo">Constraints</key>
+    <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
+    <key alias="offerRewardsInfo">Rewards</key>
+    <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+    <key alias="noConstraints">No Constraints Available</key>
+    <key alias="noRewards">No Rewards Available</key>
+    <key alias="noContraintsAssigned">No Constraints Assigned</key>
+    <key alias="noRewardsAssigned">No Rewards Assigned</key>
+    <key alias="componentAutoSaving">Component updated - auto saving</key>
+    <key alias="lineItemNameInfo">
+      <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
+    </key>
+  </area>
   <area alias="merchelloVariant">
     <!-- things -->
     <key alias="product">Product</key>
@@ -395,19 +403,20 @@
     <!-- actions -->
     <key alias="setVars">Set shipping variables: Weight, and dimensions</key>
     <!-- phrases -->
-      <key alias="editWarehouseHelper" >Edit your warehouse</key>
-      <key alias="editWarehouse" >Edit Warehouse</key>
-      <key alias="shippingMethods" >Shipping Methods</key>
-      <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
-      <key alias="addCountry" >Add a Country</key>
-      <key alias="addCatalog">Add a Catalog</key>
-      <key alias="selectCatalog">Select Catalog</key>
-      <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
-      <key alias="shipContriesInfo"><![CDATA[
+    <key alias="editWarehouseHelper" >Edit your warehouse</key>
+    <key alias="editWarehouse" >Edit Warehouse</key>
+    <key alias="shippingMethods" >Shipping Methods</key>
+    <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
+    <key alias="addCountry" >Add a Country</key>
+    <key alias="addCatalog">Add a Catalog</key>
+    <key alias="selectCatalog">Select Catalog</key>
+    <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
+    <key alias="shipContriesInfo">
+      <![CDATA[
         Shipping Countries
         <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
-      </key>
-     <key alias="warehouse">Warehouse</key>
+    </key>
+    <key alias="warehouse">Warehouse</key>
   </area>
   <area alias="merchelloInventory">
     <!-- things -->
@@ -430,7 +439,7 @@
     <key alias="currency">Currency</key>
     <key alias="dateFormat">Date Format</key>
     <key alias="startingOrderNumber">Starting Order No.</key>
-    <key alias="timeFormat">Time Format</key>   
+    <key alias="timeFormat">Time Format</key>
     <key alias="unitSystem">Unit System</key>
     <key alias="startingInvoiceNumber">Starting Invoice No.</key>
     <key alias="startingShipmentNumber">Starting Shipment No.</key>
