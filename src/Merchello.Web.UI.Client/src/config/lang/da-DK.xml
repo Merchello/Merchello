@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<language alias="da_dk" intName="Danish" localName="Dansk" lcid="" culture="da-DK">
+<language>
   <area alias="merchelloTableCaptions">
     <key alias="name">Navn</key>
     <key alias="startDate">Startdato</key>

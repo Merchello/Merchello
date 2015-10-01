@@ -570,7 +570,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
+    <Compile Include="Persistence\Migrations\IMerchelloMigration.cs" />
     <Compile Include="Persistence\Migrations\MerchelloDatabaseSchemaHelper.cs" />
+    <Compile Include="Persistence\Migrations\MigrationResolver.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
