@@ -22,7 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Merchello.Web.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -407,7 +408,6 @@
     <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="CheckoutExtensions.cs" />
     <Compile Include="Editors\AuditLogApiController.cs" />
-    <Compile Include="Localize.cs" />
     <Compile Include="Models\SaleHistory\AuditLogDisplay.cs" />
     <Compile Include="Models\Querying\QueryDisplay.cs" />
     <Compile Include="Models\Querying\QueryDisplayParameter.cs" />
