@@ -16,7 +16,7 @@
     /// Adds new database tables .
     /// </summary>
     [Migration("1.8.2", "1.9.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateOneNineZeroTables : MigrationBase
+    public class CreateOneNineZeroTables : IMerchelloMigration
     {
         /// <summary>
         /// Tables in the order of creation or reverse deletion.
@@ -46,7 +46,7 @@
         /// <summary>
         /// The up.
         /// </summary>
-        public override void Up()
+        public void Up()
         {
             foreach (var item in OrderedTables.OrderBy(x => x.Key))
             {
@@ -57,7 +57,7 @@
         /// <summary>
         /// Throws a data loss exception
         /// </summary>
-        public override void Down()
+        public void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.9.0 database to a prior version, the database schema has already been modified");
         }

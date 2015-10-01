@@ -17,7 +17,7 @@
     /// The create product 2 product collection table.
     /// </summary>
     [Migration("1.10.0", "1.11.0", 5, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateProduct2EntityCollectionTable : MigrationBase 
+    public class CreateProduct2EntityCollectionTable : IMerchelloMigration
     {
         /// <summary>
         /// The schema helper.
@@ -36,7 +36,7 @@
         /// <summary>
         /// Creates the merchProduct2ProductCollection table in the database
         /// </summary>
-        public override void Up()
+        public void Up()
         {
             if (!_schemaHelper.TableExist("merchProduct2EntityCollection"))
             {
@@ -50,7 +50,7 @@
         /// <exception cref="DataLossException">
         /// Throws a data loss exception on a downgrade attempt
         /// </exception>
-        public override void Down()
+        public void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.11.0 database to a prior version, the database schema has already been modified");
         }

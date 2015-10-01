@@ -315,6 +315,7 @@
     <Compile Include="MerchelloHelperTests\CachedInvoiceQueryTests.cs" />
     <Compile Include="MerchelloHelperTests\CachedProductQueryTests.cs" />
     <Compile Include="MerchelloHelperTests\ProductDataModiferTests.cs" />
+    <Compile Include="Migrations\MigrationsTest.cs" />
     <Compile Include="Notifications\NotificationContextTests.cs" />
     <Compile Include="Notifications\NotificationObservationTests.cs" />
     <Compile Include="Notifications\PatternFormatterTests.cs" />

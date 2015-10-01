@@ -18,7 +18,7 @@
     /// The create detached published content type table.
     /// </summary>
     [Migration("1.11.0", "1.11.0.1", 0, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateDetachedPublishedContentTypeTable : MigrationBase 
+    public class CreateDetachedPublishedContentTypeTable : IMerchelloMigration 
     {    
         /// <summary>
         /// The _database.
@@ -41,9 +41,9 @@
         }
 
         /// <summary>
-        /// Adds the merchDetatchedPublishedContentType table to the database
+        /// Adds the merchDetachedPublishedContentType table to the database
         /// </summary>
-        public override void Up()
+        public void Up()
         {
             if (!_schemaHelper.TableExist("merchDetachedContentType"))
             {
@@ -71,7 +71,7 @@
         /// <exception cref="DataLossException">'
         /// Throws a data loss exception on a downgrade attempt
         /// </exception>
-        public override void Down()
+        public void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.12.0 database to a prior version, the database schema has already been modified");
         }

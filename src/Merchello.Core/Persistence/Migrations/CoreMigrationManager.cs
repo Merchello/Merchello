@@ -32,7 +32,7 @@
         private readonly Database _database;
 
         /// <summary>
-        /// The _sql syntax provider.
+        /// The SQL syntax provider.
         /// </summary>
         private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
 
@@ -140,17 +140,41 @@
                 try
                 {
                     _logger.Info<CoreMigrationManager>("Merchello database upgraded required.  Initializing Upgrade.");
-                    
-                    var entryService = ApplicationContext.Current.Services.MigrationEntryService;
 
-                    var runner = new MigrationRunner(
-                        entryService,
-                        _logger,
-                        new SemVersion(MerchelloConfiguration.ConfigurationStatusVersion),
-                        new SemVersion(MerchelloVersion.Current),
-                        MerchelloConfiguration.MerchelloMigrationName);
+                    var resolver = new MigrationResolver(_logger, PluginManager.Current.ResolveMerchelloMigrations());
 
-                    var upgraded = runner.Execute(database);
+                    var migrations = resolver.OrderedUpgradeMigrations(
+                        MerchelloConfiguration.ConfigurationStatusVersion,
+                        MerchelloVersion.Current);
+
+                    bool upgraded;
+                    try
+                    {
+                        foreach (var m in migrations)
+                        {
+                            m.Up();
+                        }
+
+                        upgraded = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error<CoreMigrationManager>("Merchello migration failed", ex);
+                        upgraded = false;
+                    }
+
+
+                    //var entryService = ApplicationContext.Current.Services.MigrationEntryService;
+
+
+                    //var runner = new MigrationRunner(
+                    //    entryService,
+                    //    _logger,
+                    //    new SemVersion(MerchelloConfiguration.ConfigurationStatusVersion),
+                    //    new SemVersion(MerchelloVersion.Current),
+                    //    MerchelloConfiguration.MerchelloMigrationName);
+
+                    //var upgraded = runner.Execute(database);
                     
                     if (upgraded)
                     {

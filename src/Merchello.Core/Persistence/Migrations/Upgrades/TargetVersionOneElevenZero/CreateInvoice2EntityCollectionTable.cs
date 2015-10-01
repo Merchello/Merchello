@@ -17,7 +17,7 @@
     /// Create merchInvoice2EntityCollection table in the database.
     /// </summary>
     [Migration("1.10.0", "1.11.0", 4, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateInvoice2EntityCollectionTable : MigrationBase
+    public class CreateInvoice2EntityCollectionTable : IMerchelloMigration
     {
         /// <summary>
         /// The schema helper.
@@ -36,7 +36,7 @@
         /// <summary>
         /// Adds the table to the database
         /// </summary>
-        public override void Up()
+        public void Up()
         {
             if (!_schemaHelper.TableExist("merchInvoice2EntityCollection"))
             {
@@ -50,7 +50,7 @@
         /// <exception cref="DataLossException">
         /// Throws a data loss exception on a downgrade attempt
         /// </exception>
-        public override void Down()
+        public void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.11.0 database to a prior version, the database schema has already been modified");
         }
