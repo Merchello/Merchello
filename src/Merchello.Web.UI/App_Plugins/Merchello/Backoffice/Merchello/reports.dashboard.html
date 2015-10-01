@@ -1,7 +1,26 @@
 <div data-ng-controller="Merchello.Backoffice.MerchelloReportsDashboardController" data-ng-show="loaded">
     <div class="span6">
-        <canvas id="sixmonth" class="chart chart-bar"
-                chart-data="data" chart-labels="annualLabels">
-        </canvas>
+        <div class="panel">
+            <div class="panel-heading">Six Months</div>
+            <div class="panel-body">
+                <div class="chart-container">
+            <canvas id="sixmonth" class="chart chart-bar"
+                    chart-data="data" chart-labels="annualLabels">
+            </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="panel">
+            <div class="panel-heading">Top Products</div>
+            <div class="panel-body">
+                <div class="chart-container">
+                    <canvas id="bestsellers" class="chart chart-pie"
+                            chart-data="piedata" chart-labels="pielabels">
+                    </canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

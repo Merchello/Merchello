@@ -3041,6 +3041,9 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
                     [28, 48, 40, 19, 86, 27, 90]
                 ];
 
+                $scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+                $scope.piedata = [300, 500, 100];
+
                 $scope.onClick = function (points, evt) {
                     console.log(points, evt);
                 };
