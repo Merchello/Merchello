@@ -133,8 +133,28 @@
                 PostalCode = invoice.BillToPostalCode,
                 CountryCode = invoice.BillToCountryCode,
                 Phone = invoice.BillToPhone,
-                Email = invoice.BillToEmail
+                Email = invoice.BillToEmail,
+                AddressType = AddressType.Billing
             };
+        }
+
+        /// <summary>
+        /// Gets the collection of shipping addresses.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IAddress}"/>.
+        /// </returns>
+        public static IEnumerable<IAddress> GetShippingAddresses(this IInvoice invoice)
+        {
+            var shippingLineItems = invoice.ShippingLineItems().ToArray();
+            if (!shippingLineItems.Any()) return Enumerable.Empty<IAddress>();
+
+            var addresses = shippingLineItems.Select(item => item.ExtendedData.GetShipment<InvoiceLineItem>().GetDestinationAddress()).ToList();
+
+            return addresses;
         }
 
         /// <summary>
