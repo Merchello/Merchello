@@ -28,7 +28,7 @@
     /// </summary>
     [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
-    public class MerchelloTreeController : TreeController
+    public sealed class MerchelloTreeController : TreeController
     {
         /// <summary>
         /// The dialogs path.
@@ -551,6 +551,7 @@
 
             var atts = types.Select(x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).OrderBy(x => x.SortOrder);
 
+            // TODO RSS refactor
             return
                 atts.Select(
                     att =>
