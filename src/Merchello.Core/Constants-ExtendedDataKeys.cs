@@ -381,6 +381,14 @@
                 get { return "merchBillingAddress"; }
             }
 
+            /// <summary>
+            /// Gets the note reserved extended data key.
+            /// </summary>
+            public static string Note
+            {
+                get { return "merchNote"; }
+            }
+
             //// LineItem -----------------------------------------------------------------------
 
             /// <summary>

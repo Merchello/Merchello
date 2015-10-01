@@ -8,6 +8,7 @@
     using Merchello.Core.Models.EntityBase;
 
     using Umbraco.Core;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The invoice.
@@ -120,6 +121,11 @@
         private static readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
 
         /// <summary>
+        /// The notes selector.
+        /// </summary>
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, List<Note>>(x => x.Notes);
+
+        /// <summary>
         /// The customer key.
         /// </summary>
         private Guid? _customerKey;
@@ -228,6 +234,11 @@
         /// The orders.
         /// </summary>
         private OrderCollection _orders;
+
+        /// <summary>
+        /// The notes.
+        /// </summary>
+        private List<Note> _notes;
 
         #endregion
 
@@ -776,6 +787,31 @@
             {
                 _orders = value;
                 _orders.CollectionChanged += OrdersChanged;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets or sets the collection of notes associated with the invoice
+        /// </summary>
+        [DataMember]
+        public List<Note> Notes
+        {
+            get
+            {
+                return _notes;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _notes = value;
+                        return _notes;
+                    },
+                _notes,
+                NotesSelector);
             }
         }
 
