@@ -20,7 +20,7 @@
     /// <summary>
     /// Represents an entity collection service.
     /// </summary>
-    internal class EntityCollectionService : IEntityCollectionService
+    public class EntityCollectionService : IEntityCollectionService
     {
         #region Fields
 
