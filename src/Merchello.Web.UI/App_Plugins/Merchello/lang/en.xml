@@ -242,7 +242,7 @@
       <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
       <key alias="noConstraints">No Constraints Available</key>
       <key alias="noRewards">No Rewards Available</key>
-      <key alias="noContraintsAssigned">No Constraints Assigned</key>
+      <key alias="noConstraintsAssigned">No Constraints Assigned</key>
       <key alias="noRewardsAssigned">No Rewards Assigned</key>
       <key alias="componentAutoSaving">Component updated - auto saving</key>
       <key alias="lineItemNameInfo">
