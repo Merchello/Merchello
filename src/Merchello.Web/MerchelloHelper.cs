@@ -158,6 +158,22 @@
         }
 
         /// <summary>
+        /// Gets a <see cref="IProductContent"/> by it's SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypeProductContentBySku(string sku)
+        {
+            var display = Query.Product.GetBySku(sku);
+            return display == null ? null :
+                display.AsProductContent();
+        }
+
+        /// <summary>
         /// The typed product content from collection.
         /// </summary>
         /// <param name="collectionKey">
