@@ -10,6 +10,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using System.Diagnostics.CodeAnalysis;
+    using Merchello.Core.Models.TypeFields;
 
     /// <summary>
     /// The note.
@@ -76,6 +77,7 @@
                 Key = note.Key,
                 EntityKey = note.EntityKey,
                 EntityTfKey = note.EntityTfKey,
+                EntityType = EnumTypeFieldConverter.EntityType.GetTypeField(note.EntityTfKey ?? new Guid()),
                 RecordDate = note.CreateDate
             };
         }

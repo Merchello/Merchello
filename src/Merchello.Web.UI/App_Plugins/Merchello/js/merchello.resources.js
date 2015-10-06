@@ -51,7 +51,7 @@
     /**
      * @ngdoc resource
      * @name noteResource
-     * @description Loads in data and allows modification of audit logs
+     * @description Loads in data and allows modification of notes
      **/
     angular.module('merchello.resources').factory('noteResource', [
         '$http', 'umbRequestHelper',
