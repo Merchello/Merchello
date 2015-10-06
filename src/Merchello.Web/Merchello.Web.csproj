@@ -248,6 +248,7 @@
     <Compile Include="Discounts\Coupons\Rewards\CouponFreeShippingReward.cs" />
     <Compile Include="Discounts\Coupons\Rewards\CouponRewardAdjustmentAudit.cs" />
     <Compile Include="Editors\DetachedContentApiController.cs" />
+    <Compile Include="Editors\NoteApiController.cs" />
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="LocalizationHelper.cs" />

@@ -65,6 +65,10 @@
                 url.GetUmbracoApiServiceBaseUrl<AuditLogApiController>(
                     controller => controller.GetSalesHistoryByInvoiceKey(Guid.Empty)));
 
+            merchelloUrls.Add(
+             "merchelloNoteApiBaseUrl",
+             url.GetUmbracoApiServiceBaseUrl<NoteApiController>(
+                 controller => controller.GetByEntityKey(Guid.Empty)));
 
             merchelloUrls.Add(
                 "merchelloCustomerApiBaseUrl",

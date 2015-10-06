@@ -664,7 +664,7 @@
                .Append("INNER JOIN [merchCatalogInventory]")
                .Append("ON	[merchProductVariant].[pk] = [merchCatalogInventory].[productVariantKey]")
                .Append("WHERE ([merchCatalogInventory].[count] > 0 AND [merchProductVariant].[trackInventory] = 1)")
-               .Append("OR [merchProductVaraint].[trackInventory] = 0")
+               .Append("OR [merchProductVariant].[trackInventory] = 0")
                .Append(") [merchProductVariant]")
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");

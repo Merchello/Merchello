@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
 
     using umbraco.webservices;
@@ -136,10 +137,18 @@
         [DataMember]
         OrderCollection Orders { get; set; }
 
+       
         /// <summary>
         /// Accepts visitor class to visit invoice line items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
         void Accept(ILineItemVisitor visitor);  
+
+        
+        /// <summary>
+        /// Gets or sets the notes associated with the Invoice
+        /// </summary>
+        [DataMember]
+        List<Note> Notes { get; set; }
     }
 }

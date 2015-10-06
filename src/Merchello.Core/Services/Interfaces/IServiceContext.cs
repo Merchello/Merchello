@@ -12,6 +12,11 @@
         IAuditLogService AuditLogService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IAuditLogService"/>
+        /// </summary>
+        INoteService NoteService { get; }
+
+        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         ICustomerService CustomerService { get; }

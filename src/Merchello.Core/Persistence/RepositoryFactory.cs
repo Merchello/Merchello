@@ -82,6 +82,20 @@
         }
 
         /// <summary>
+        /// Creates an instance of the <see cref="INoteRepository"/>
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work
+        /// </param>
+        /// <returns>
+        /// The <see cref="INoteRepository"/>.
+        /// </returns>
+        internal virtual INoteRepository CreateNoteRepository(IDatabaseUnitOfWork uow)
+        {
+            return new NoteRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="ICustomerRepository"/>
         /// </summary>
         /// <param name="uow">
