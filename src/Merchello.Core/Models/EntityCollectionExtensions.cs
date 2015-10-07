@@ -231,7 +231,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEnityCollection}"/>.
         /// </returns>
-        internal static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
+        public static IEnumerable<IEntityCollection> ChildCollections(this IEntityCollection collection)
         {
             return !MerchelloContext.HasCurrent ? 
                 Enumerable.Empty<IEntityCollection>() : 

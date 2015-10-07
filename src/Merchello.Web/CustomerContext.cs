@@ -29,8 +29,9 @@ namespace Merchello.Web
         /// The Umbraco <see cref="MembershipHelper"/>.
         /// </summary>
         /// <remarks>
-        /// This is actually used within the property. ReSharper is just hiccuping on it.
+        /// This is actually used within the property.
         /// </remarks>
+        // ReSharper disable once UnassignedField.Compiler
         private MembershipHelper _membershipHelper;
 
         #region Constructors

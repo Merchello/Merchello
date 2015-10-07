@@ -128,6 +128,11 @@
         public bool ApplyTaxesToInvoice { get; set; }
 
         /// <summary>
+        /// Gets or sets a prefix to be prepended to an invoice number.
+        /// </summary>
+        public string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
         /// Gets the offer codes.
         /// </summary>
         internal IEnumerable<string> OfferCodes
@@ -345,6 +350,7 @@
 
             if (attempt.Success)
             {
+                attempt.Result.InvoiceNumberPrefix = InvoiceNumberPrefix;
                 InvoicePrepared.RaiseEvent(new SalesPreparationEventArgs<IInvoice>(attempt.Result), this);
 
                 return attempt.Result;

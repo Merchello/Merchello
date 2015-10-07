@@ -102,7 +102,8 @@
         /// </returns>
         public override ProductDisplay GetByKey(Guid key)
         {
-            return this.ModifyData(GetDisplayObject(key));
+            //// modify data is handled in GetDisplayObject!
+            return GetDisplayObject(key);
         }
 
         /// <summary>
@@ -785,7 +786,7 @@
 
             ReindexEntity(entity);
 
-            return AutoMapper.Mapper.Map<ProductDisplay>(entity);
+            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
         }
 
         /// <summary>
