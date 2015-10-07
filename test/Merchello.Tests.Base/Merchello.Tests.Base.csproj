@@ -41,7 +41,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="businesslogic">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\businesslogic.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\businesslogic.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ClientDependency.Core, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -53,11 +53,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="cms">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\cms.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\cms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="controls">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\controls.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2">
@@ -77,19 +77,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ImageProcessor">
-      <HintPath>..\..\src\packages\ImageProcessor.1.9.5.0\lib\ImageProcessor.dll</HintPath>
+      <HintPath>..\..\src\packages\ImageProcessor.2.3.0.0\lib\net45\ImageProcessor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ImageProcessor.Web">
-      <HintPath>..\..\src\packages\ImageProcessor.Web.3.3.1.0\lib\net45\ImageProcessor.Web.dll</HintPath>
+      <HintPath>..\..\src\packages\ImageProcessor.Web.4.4.0.0\lib\net45\ImageProcessor.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="interfaces">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\interfaces.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\log4net.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Lucene.Net">
@@ -97,7 +97,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
@@ -165,18 +165,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLCE4Umbraco">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\SQLCE4Umbraco.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\SQLCE4Umbraco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\System.Data.SqlServerCe.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
@@ -234,43 +234,43 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TidyNet">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\TidyNet.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\TidyNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\umbraco.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\umbraco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Core">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\Umbraco.Core.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\Umbraco.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.DataLayer">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\umbraco.DataLayer.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\umbraco.DataLayer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.editorControls">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\umbraco.editorControls.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\umbraco.editorControls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.MacroEngines">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\umbraco.MacroEngines.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\umbraco.MacroEngines.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="umbraco.providers">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\umbraco.providers.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\umbraco.providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Umbraco.Web.UI">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\Umbraco.Web.UI.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\Umbraco.Web.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UmbracoExamine">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\UmbracoExamine.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\UmbracoExamine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="UrlRewritingNet.UrlRewriter">
-      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0-RC\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+      <HintPath>..\..\src\packages\UmbracoCms.Core.7.3.0\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebMatrix.Data">
