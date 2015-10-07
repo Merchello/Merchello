@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI.WebControls.WebParts;
-using Merchello.Core;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Services;
-using Umbraco.Core.Models;
-using Umbraco.Web;
-
-namespace Merchello.Web
+﻿namespace Merchello.Web
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+
+    using Merchello.Core;
+    using Merchello.Core.Models.Interfaces;
+
+    using Umbraco.Core.Models;
+    using Umbraco.Web;
+
     /// <summary>
     /// 
     /// </summary>

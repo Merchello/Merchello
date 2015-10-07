@@ -253,8 +253,6 @@
                 }
             }
             
-            product.OnSale = this.GetProductOnSaleValue(product);
-
             using (new WriteLock(Locker))
             {
                 var uow = UowProvider.GetUnitOfWork();
@@ -297,7 +295,6 @@
                 {
                     foreach (var product in productArray)
                     {
-                        product.OnSale = this.GetProductOnSaleValue(product);
                         repository.AddOrUpdate(product);
                     }
 
@@ -1600,20 +1597,6 @@
             }
 
             return product;
-        }
-
-        /// <summary>
-        /// Gets the product for a product with variants.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private bool GetProductOnSaleValue(IProduct product)
-        {
-            return !product.ProductVariants.Any() ? product.OnSale : product.ProductVariants.All(x => x.OnSale);
         }
     }
 }
