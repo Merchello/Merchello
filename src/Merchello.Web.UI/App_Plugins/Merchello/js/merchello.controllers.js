@@ -7051,11 +7051,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function getEditUrl(product) {
-                if (product.hasVariants()) {
-                    return '#/merchello/merchello/producteditwithoptions/' + product.key;
-                } else {
+               // if (product.hasVariants()) {
+               //     return '#/merchello/merchello/producteditwithoptions/' + product.key;
+               // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
-                }
+               // }
             }
 
             // Initialize the controller
@@ -7488,6 +7488,19 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProdu
 
         function getTreeId() {
             return "products";
+        }
+
+        init();
+}]);
+
+angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMultiProductDialogController',
+    ['$scope',
+    function($scope) {
+
+        $scope.loaded = false;
+
+        function init() {
+            $scope.loaded = true;
         }
 
         init();

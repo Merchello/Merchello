@@ -143,11 +143,11 @@
             }
 
             function getEditUrl(product) {
-                if (product.hasVariants()) {
-                    return '#/merchello/merchello/producteditwithoptions/' + product.key;
-                } else {
+               // if (product.hasVariants()) {
+               //     return '#/merchello/merchello/producteditwithoptions/' + product.key;
+               // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
-                }
+               // }
             }
 
             // Initialize the controller
