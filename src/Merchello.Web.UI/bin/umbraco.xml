@@ -209,6 +209,84 @@
             This is used to add custom localized messages/strings to the response for the app to use for localized UI purposes.
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Models.PublishedContentWithKeyBase">
+            <summary>
+            Provide an abstract base class for <c>IPublishedContent</c> implementations.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Models.PublishedContentBase">
+            <summary>
+            Provide an abstract base class for <c>IPublishedContent</c> implementations.
+            </summary>
+            <remarks>This base class does which (a) consitently resolves and caches the Url, (b) provides an implementation
+            for this[alias], and (c) provides basic content set management.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Models.PublishedContentBase.GetProperty(System.String)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The property identified by the alias.</returns>
+            <remarks>
+            <para>If no property with the specified alias exists, returns <c>null</c>.</para>
+            <para>The returned property may have no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Models.PublishedContentBase.GetProperty(System.String,System.Boolean)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
+            <returns>The property identified by the alias.</returns>
+            <remarks>
+            <para>Navigate the tree upwards and look for a property with that alias and with a value (ie <c>HasValue</c> is <c>true</c>).
+            If found, return the property. If no property with that alias is found, having a value or not, return <c>null</c>. Otherwise
+            return the first property that was found with the alias but had no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Url">
+            <summary>
+            Gets the url of the content.
+            </summary>
+            <remarks>
+            If this content is Content, the url that is returned is the one computed by the NiceUrlProvider, otherwise if 
+            this content is Media, the url returned is the value found in the 'umbracoFile' property.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Parent">
+            <summary>
+            Gets the parent of the content.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Children">
+            <summary>
+            Gets the children of the content.
+            </summary>
+            <remarks>Children are sorted by their sortOrder.</remarks>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Properties">
+            <summary>
+            Gets the properties of the content.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.PublishedContentBase.Item(System.String)">
+            <summary>
+            Gets the value of a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The value of the property identified by the alias.</returns>
+            <remarks>
+            <para>If <c>GetProperty(alias)</c> is <c>null</c> then returns <c>null</c> else return <c>GetProperty(alias).Value</c>.</para>
+            <para>So if the property has no value, returns the default value for that property type.</para>
+            <para>This one is defined here really because we cannot define index extension methods, but all it should do is:
+            <code>var p = GetProperty(alias); return p == null ? null : p.Value;</code> and nothing else.</para>
+            <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.RequestLifespanMessagesFactory">
             <summary>
             Stores the instance of EventMessages in the current request so all events will share the same instance
@@ -2523,79 +2601,6 @@
             Exposes a member object as IPublishedContent
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Models.PublishedContentBase">
-            <summary>
-            Provide an abstract base class for <c>IPublishedContent</c> implementations.
-            </summary>
-            <remarks>This base class does which (a) consitently resolves and caches the Url, (b) provides an implementation
-            for this[alias], and (c) provides basic content set management.</remarks>
-        </member>
-        <member name="M:Umbraco.Web.Models.PublishedContentBase.GetProperty(System.String)">
-            <summary>
-            Gets a property identified by its alias.
-            </summary>
-            <param name="alias">The property alias.</param>
-            <returns>The property identified by the alias.</returns>
-            <remarks>
-            <para>If no property with the specified alias exists, returns <c>null</c>.</para>
-            <para>The returned property may have no value (ie <c>HasValue</c> is <c>false</c>).</para>
-            <para>The alias is case-insensitive.</para>
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.Models.PublishedContentBase.GetProperty(System.String,System.Boolean)">
-            <summary>
-            Gets a property identified by its alias.
-            </summary>
-            <param name="alias">The property alias.</param>
-            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
-            <returns>The property identified by the alias.</returns>
-            <remarks>
-            <para>Navigate the tree upwards and look for a property with that alias and with a value (ie <c>HasValue</c> is <c>true</c>).
-            If found, return the property. If no property with that alias is found, having a value or not, return <c>null</c>. Otherwise
-            return the first property that was found with the alias but had no value (ie <c>HasValue</c> is <c>false</c>).</para>
-            <para>The alias is case-insensitive.</para>
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Web.Models.PublishedContentBase.Url">
-            <summary>
-            Gets the url of the content.
-            </summary>
-            <remarks>
-            If this content is Content, the url that is returned is the one computed by the NiceUrlProvider, otherwise if 
-            this content is Media, the url returned is the value found in the 'umbracoFile' property.
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Web.Models.PublishedContentBase.Parent">
-            <summary>
-            Gets the parent of the content.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Models.PublishedContentBase.Children">
-            <summary>
-            Gets the children of the content.
-            </summary>
-            <remarks>Children are sorted by their sortOrder.</remarks>
-        </member>
-        <member name="P:Umbraco.Web.Models.PublishedContentBase.Properties">
-            <summary>
-            Gets the properties of the content.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Web.Models.PublishedContentBase.Item(System.String)">
-            <summary>
-            Gets the value of a property identified by its alias.
-            </summary>
-            <param name="alias">The property alias.</param>
-            <returns>The value of the property identified by the alias.</returns>
-            <remarks>
-            <para>If <c>GetProperty(alias)</c> is <c>null</c> then returns <c>null</c> else return <c>GetProperty(alias).Value</c>.</para>
-            <para>So if the property has no value, returns the default value for that property type.</para>
-            <para>This one is defined here really because we cannot define index extension methods, but all it should do is:
-            <code>var p = GetProperty(alias); return p == null ? null : p.Value;</code> and nothing else.</para>
-            <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
-            <para>The alias is case-insensitive.</para>
-            </remarks>
-        </member>
         <member name="T:Umbraco.Web.PublishedCache.RawValueProperty">
             <summary>
             A published property base that uses a raw object value
@@ -4176,6 +4181,12 @@
             <param name="height">
             The height of the output image.
             </param>
+            <param name="imageCropperValue">
+            The Json data from the Umbraco Core Image Cropper property editor
+            </param>
+            <param name="cropAlias">
+            The crop alias.
+            </param>
             <param name="quality">
             Quality percentage of the output image.
             </param>
@@ -4185,17 +4196,11 @@
             <param name="imageCropAnchor">
             The image crop anchor.
             </param>
-            <param name="imageCropperValue">
-            The Json data from the Umbraco Core Image Cropper property editor
-            </param>
-            <param name="cropAlias">
-            The crop alias.
-            </param>
             <param name="preferFocalPoint">
             Use focal point to generate an output image using the focal point instead of the predefined crop if there is one
             </param>
             <param name="useCropDimensions">
-            Use crop dimensions to have the output image sized according to the predefined crop sizes, this will override the width and height parameters&gt;.
+            Use crop dimensions to have the output image sized according to the predefined crop sizes, this will override the width and height parameters
             </param>
             <param name="cacheBusterValue">
             Add a serialised date of the last edit of the item to ensure client cache refresh when updated
@@ -4205,10 +4210,10 @@
             </param>
             <param name="ratioMode">
             Use a dimension as a ratio
-            </param>  
+            </param>
             <param name="upScale">
             If the image should be upscaled to requested dimensions
-            </param>         
+            </param>
             <returns>
             The <see cref="T:System.String"/>.
             </returns>
@@ -17868,6 +17873,94 @@
             <param name="contentId">The content identifier.</param>
             <returns>The absolute url for the content.</returns>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Int32[])">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.String[])">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Object[])">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Int32[])">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.String[])">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the contents corresponding to the identifiers.
+            </summary>
+            <param name="ids">The content identifiers.</param>
+            <returns>The existing contents corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Object)">
             <summary>
             Overloaded method accepting an 'object' type
@@ -17879,6 +17972,102 @@
             this result in to this method.
             This method will throw an exception if the value is not of type int or string.
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Object[])">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Int32[])">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.String[])">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Media(System.Object[])">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Media(System.Int32[])">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Media(System.String[])">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Media(System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Media(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Media(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the medias corresponding to the identifiers.
+            </summary>
+            <param name="ids">The media identifiers.</param>
+            <returns>The existing medias corresponding to the identifiers.</returns>
+            <remarks>If an identifier does not match an existing media, it will be missing in the returned value.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Search(System.String,System.Boolean,System.String)">
             <summary>
@@ -28785,23 +28974,6 @@
             </summary>
             <param name="nodeId"></param>
             <returns></returns>
-        </member>
-        <member name="T:umbraco.webService">
-            <summary>
-            Summary description for webService.
-            </summary>
-            
-        </member>
-        <member name="M:umbraco.webService.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="M:umbraco.webService.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
         </member>
         <member name="T:umbraco.presentation.webservices.CacheRefresher">
             <summary>

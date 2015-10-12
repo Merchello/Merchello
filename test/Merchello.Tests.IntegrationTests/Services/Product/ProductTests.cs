@@ -291,48 +291,49 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// http://issues.merchello.com/youtrack/issue/M-561
-        /// </remarks>
-        [Test]
-        public void Can_Verify_That_VariantsOnSale_Product_IsMarked_OnSale_Or_NotOnSale()
-        {
-            //// Arrange
-            var product = PreTestDataWorker.MakeExistingProduct();
-            var key = product.Key;
-            product.ProductOptions.Add(new ProductOption("Color"));
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <remarks>
+        ///// http://issues.merchello.com/youtrack/issue/M-561
+        ///// M-866 makes this obsolete - changes behavior.
+        ///// </remarks>
+        //[Test]
+        //public void Can_Verify_That_VariantsOnSale_Product_IsMarked_OnSale_Or_NotOnSale()
+        //{
+        //    //// Arrange
+        //    var product = PreTestDataWorker.MakeExistingProduct();
+        //    var key = product.Key;
+        //    product.ProductOptions.Add(new ProductOption("Color"));
 
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Grey", "Grey"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
+        //    product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Grey", "Grey"));
 
 
-            _productService.Save(product);
+        //    _productService.Save(product);
 
-            Assert.IsTrue(product.ProductVariants.Any());
-            Assert.IsTrue(product.ProductVariants.All(x => !x.OnSale));
-            Assert.IsFalse(product.OnSale);
+        //    Assert.IsTrue(product.ProductVariants.Any());
+        //    Assert.IsTrue(product.ProductVariants.All(x => !x.OnSale));
+        //    Assert.IsFalse(product.OnSale);
             
-            //// Act
-            foreach (var variant in product.ProductVariants)
-            {
-                variant.OnSale = true;
-            }
-            _productService.Save(product);
+        //    //// Act
+        //    foreach (var variant in product.ProductVariants)
+        //    {
+        //        variant.OnSale = true;
+        //    }
+        //    _productService.Save(product);
 
-            //// Assert
-            Assert.IsTrue(product.ProductVariants.All(x => x.OnSale), "Not all variants are on sale");
-            Assert.IsTrue(product.OnSale, "Product is not on sale");
+        //    //// Assert
+        //    Assert.IsTrue(product.ProductVariants.All(x => x.OnSale), "Not all variants are on sale");
+        //    Assert.IsTrue(product.OnSale, "Product is not on sale");
 
-            product.ProductVariants.First().OnSale = false;
-            _productService.Save(product);
-            Assert.IsFalse(product.ProductVariants.All(x => x.OnSale), "All variants are on sale");
-            Assert.IsFalse(product.OnSale, "Product is on sale");
+        //    product.ProductVariants.First().OnSale = false;
+        //    _productService.Save(product);
+        //    Assert.IsFalse(product.ProductVariants.All(x => x.OnSale), "All variants are on sale");
+        //    Assert.IsFalse(product.OnSale, "Product is on sale");
 
-        }
+        //}
 
         /// <summary>
         /// Relates to http://issues.merchello.com/youtrack/issue/M-733

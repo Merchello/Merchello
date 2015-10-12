@@ -2156,6 +2156,11 @@
             Guid for a Template object.
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.LockObject">
+            <summary>
+            Guid for a Lock object.
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Constants.System">
             <summary>
             Defines the identifiers for Umbraco system nodes.
@@ -4098,6 +4103,119 @@
             Overridden to make the retrieval lazy
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Models.IPublishedContentWithKey">
+            <summary>
+            Represents a cached content with a GUID key.
+            </summary>
+            <remarks>This is temporary, because we cannot add the Key property to IPublishedContent without
+            breaking backward compatibility. With v8, it will be merged into IPublishedContent.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.IPublishedContent">
+            <summary>
+            Represents a cached content.
+            </summary>
+            <remarks>
+            <para>SD: A replacement for INode which needs to occur since INode doesn't contain the document type alias
+            and INode is poorly formatted with mutable properties (i.e. Lists instead of IEnumerable).</para>
+            <para>Stephan: initially, that was for cached published content only. Now, we're using it also for
+            cached preview (so, maybe unpublished) content. A better name would therefore be ICachedContent, as
+            has been suggested. However, can't change now. Maybe in v7?</para>
+            </remarks>	
+        </member>
+        <member name="M:Umbraco.Core.Models.IPublishedContent.GetIndex">
+            <summary>
+            Gets the index of the published content within its current owning content set.
+            </summary>
+            <returns>The index of the published content within its current owning content set.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The property identified by the alias.</returns>
+            <remarks>
+            <para>If the content type has no property with that alias, including inherited properties, returns <c>null</c>,</para>
+            <para>otherwise return a property -- that may have no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String,System.Boolean)">
+            <summary>
+            Gets a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
+            <returns>The property identified by the alias.</returns>
+            <remarks>
+            <para>Navigate the tree upwards and look for a property with that alias and with a value (ie <c>HasValue</c> is <c>true</c>).
+            If found, return the property. If no property with that alias is found, having a value or not, return <c>null</c>. Otherwise
+            return the first property that was found with the alias but had no value (ie <c>HasValue</c> is <c>false</c>).</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.ContentSet">
+            <summary>
+            Gets the content set to which the content belongs.
+            </summary>
+            <remarks>The default set consists in the siblings of the content (including the content 
+            itself) ordered by <c>sortOrder</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.ContentType">
+            <summary>
+            Gets the content type.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.ItemType">
+            <summary>
+            Gets a value indicating whether the content is a content (aka a document) or a media.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.IsDraft">
+            <summary>
+            Gets a value indicating whether the content is draft.
+            </summary>
+            <remarks>A content is draft when it is the unpublished version of a content, which may
+            have a published version, or not.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Parent">
+            <summary>
+            Gets the parent of the content.
+            </summary>
+            <remarks>The parent of root content is <c>null</c>.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Children">
+            <summary>
+            Gets the children of the content.
+            </summary>
+            <remarks>Children are sorted by their sortOrder.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Properties">
+            <summary>
+            Gets the properties of the content.
+            </summary>
+            <remarks>
+            <para>Contains one <c>IPublishedProperty</c> for each property defined for the content type, including
+            inherited properties. Some properties may have no value.</para>
+            <para>The properties collection of an IPublishedContent instance should be read-only ie it is illegal
+            to add properties to the collection.</para>
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.IPublishedContent.Item(System.String)">
+            <summary>
+            Gets the value of a property identified by its alias.
+            </summary>
+            <param name="alias">The property alias.</param>
+            <returns>The value of the property identified by the alias.</returns>
+            <remarks>
+            <para>If <c>GetProperty(alias)</c> is <c>null</c> then returns <c>null</c> else return <c>GetProperty(alias).Value</c>.</para>
+            <para>So if the property has no value, returns the default value for that property type.</para>
+            <para>This one is defined here really because we cannot define index extension methods, but all it should do is:
+            <code>var p = GetProperty(alias); return p == null ? null : p.Value;</code> and nothing else.</para>
+            <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
+            <para>The alias is case-insensitive.</para>
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.Sync.IServerAddress">
             <summary>
             Provides the address of a server.
@@ -4118,6 +4236,11 @@
             Gets or sets a value indicating whether the server is active.
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Models.IServerRegistration.IsMaster">
+            <summary>
+            Gets or sets a value indicating whether the server is master.
+            </summary>
+        </member>
         <member name="P:Umbraco.Core.Models.IServerRegistration.Registered">
             <summary>
             Gets the date and time the registration was created.
@@ -4136,6 +4259,83 @@
         <member name="M:Umbraco.Core.Models.PublicAccessRule.AddingEntity">
             <summary>
             Method to call on entity saved when first added
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped">
+            <summary>
+            Provides an abstract base class for <c>IPublishedContent</c> implementations that
+            wrap and extend another <c>IPublishedContent</c>.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped.#ctor(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Initialize a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped"/> class
+            with an <c>IPublishedContent</c> instance to wrap and extend.
+            </summary>
+            <param name="content">The content to wrap and extend.</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped.Unwrap">
+            <summary>
+            Gets the wrapped content.
+            </summary>
+            <returns>The wrapped content, that was passed as an argument to the constructor.</returns>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended">
+            <summary>
+            Provides methods to handle extended content.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.AddProperty(Umbraco.Core.Models.IPublishedProperty)">
+            <summary>
+            Adds a property to the extended content.
+            </summary>
+            <param name="property">The property to add.</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.SetContentSet(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedContent})">
+            <summary>
+            Sets the content set of the extended content.
+            </summary>
+            <param name="contentSet"></param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.ClearContentSet">
+            <summary>
+            Resets the content set of the extended content.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.SetIndex(System.Int32)">
+            <summary>
+            Sets the index of the extended content.
+            </summary>
+            <param name="value">The index value.</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.ClearIndex">
+            <summary>
+            Resets the index of the extended content.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.HasAddedProperties">
+            <summary>
+            Gets a value indicating whether properties were added to the extended content.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModel">
+            <summary>
+            Represents a strongly-typed published content.
+            </summary>
+            <remarks>Every strongly-typed published content class should inherit from <c>PublishedContentModel</c>
+            (or inherit from a class that inherits from... etc.) so they are picked by the factory.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModel.#ctor(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentModel"/> class with
+            an original <see cref="T:Umbraco.Core.Models.IPublishedContent"/> instance.
+            </summary>
+            <param name="content">The original content.</param>
+        </member>
+        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentWithKeyWrapped">
+            <summary>
+            Provides an abstract base class for <c>IPublishedContentWithKey</c> implementations that
+            wrap and extend another <c>IPublishedContentWithKey</c>.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Media.Exif.BitConverterEx">
@@ -5166,6 +5366,12 @@
         <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
             <summary>
             Marker interface for database migrations
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenThreeZero.CleanUpCorruptedPublishedFlags">
+            <summary>
+            Older corrupted dbs might have multiple published flags for a content item, this shouldn't be possible
+            so we need to clear the content flag on the older version
             </summary>
         </member>
         <member name="T:Umbraco.Core.Media.Exif.IFD">
@@ -6517,6 +6723,13 @@
             <param name="manager"/><param name="user"/><param name="authenticationType"/>
             <returns/>
         </member>
+        <member name="M:Umbraco.Core.Security.BackOfficeCookieAuthenticationProvider.ValidateIdentity(Microsoft.Owin.Security.Cookies.CookieValidateIdentityContext)">
+            <summary>
+            Ensures that the culture is set correctly for the current back office user
+            </summary>
+            <param name="context"/>
+            <returns/>
+        </member>
         <member name="M:Umbraco.Core.Security.BackOfficeSignInManager.PasswordSignInAsync(System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             Sign in the user in using the user name and password
@@ -7089,7 +7302,7 @@
             </summary>
             <param name="content"></param>
             <param name="ruleType"></param>
-            <param name="ruleValue"></param>
+            <param name="newRuleValue"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.IPublicAccessService.RemoveRule(Umbraco.Core.Models.IContent,System.String,System.String)">
@@ -7136,7 +7349,18 @@
             <summary>
             Return all active servers.
             </summary>
-            <returns></returns>
+            <returns>All active servers.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IServerRegistrationService.GetCurrentServerRole">
+            <summary>
+            Gets the role of the current server.
+            </summary>
+            <returns>The role of the current server.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Services.IServerRegistrationService.CurrentServerIdentity">
+            <summary>
+            Gets the current server identity.
+            </summary>
         </member>
         <member name="M:Umbraco.Core.Services.ITaskService.Save(Umbraco.Core.Models.Task)">
             <summary>
@@ -7215,7 +7439,7 @@
             </summary>
             <param name="content"></param>
             <param name="ruleType"></param>
-            <param name="ruleValue"></param>
+            <param name="newRuleValue"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.PublicAccessService.RemoveRule(Umbraco.Core.Models.IContent,System.String,System.String)">
@@ -7270,7 +7494,7 @@
         </member>
         <member name="T:Umbraco.Core.Services.OperationStatusType">
             <summary>
-            A status type of the result of publishing a content item
+            A status type of the result of saving an item
             </summary>
             <remarks>
             Anything less than 10 = Success!
@@ -9795,150 +10019,6 @@
             Used to track the property types that are visible/editable on member profiles
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended">
-            <summary>
-            Provides methods to handle extended content.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.IPublishedContent">
-            <summary>
-            Represents a cached content.
-            </summary>
-            <remarks>
-            <para>SD: A replacement for INode which needs to occur since INode doesn't contain the document type alias
-            and INode is poorly formatted with mutable properties (i.e. Lists instead of IEnumerable).</para>
-            <para>Stephan: initially, that was for cached published content only. Now, we're using it also for
-            cached preview (so, maybe unpublished) content. A better name would therefore be ICachedContent, as
-            has been suggested. However, can't change now. Maybe in v7?</para>
-            </remarks>	
-        </member>
-        <member name="M:Umbraco.Core.Models.IPublishedContent.GetIndex">
-            <summary>
-            Gets the index of the published content within its current owning content set.
-            </summary>
-            <returns>The index of the published content within its current owning content set.</returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String)">
-            <summary>
-            Gets a property identified by its alias.
-            </summary>
-            <param name="alias">The property alias.</param>
-            <returns>The property identified by the alias.</returns>
-            <remarks>
-            <para>If the content type has no property with that alias, including inherited properties, returns <c>null</c>,</para>
-            <para>otherwise return a property -- that may have no value (ie <c>HasValue</c> is <c>false</c>).</para>
-            <para>The alias is case-insensitive.</para>
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Models.IPublishedContent.GetProperty(System.String,System.Boolean)">
-            <summary>
-            Gets a property identified by its alias.
-            </summary>
-            <param name="alias">The property alias.</param>
-            <param name="recurse">A value indicating whether to navigate the tree upwards until a property with a value is found.</param>
-            <returns>The property identified by the alias.</returns>
-            <remarks>
-            <para>Navigate the tree upwards and look for a property with that alias and with a value (ie <c>HasValue</c> is <c>true</c>).
-            If found, return the property. If no property with that alias is found, having a value or not, return <c>null</c>. Otherwise
-            return the first property that was found with the alias but had no value (ie <c>HasValue</c> is <c>false</c>).</para>
-            <para>The alias is case-insensitive.</para>
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.ContentSet">
-            <summary>
-            Gets the content set to which the content belongs.
-            </summary>
-            <remarks>The default set consists in the siblings of the content (including the content 
-            itself) ordered by <c>sortOrder</c>.</remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.ContentType">
-            <summary>
-            Gets the content type.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.ItemType">
-            <summary>
-            Gets a value indicating whether the content is a content (aka a document) or a media.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.IsDraft">
-            <summary>
-            Gets a value indicating whether the content is draft.
-            </summary>
-            <remarks>A content is draft when it is the unpublished version of a content, which may
-            have a published version, or not.</remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.Parent">
-            <summary>
-            Gets the parent of the content.
-            </summary>
-            <remarks>The parent of root content is <c>null</c>.</remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.Children">
-            <summary>
-            Gets the children of the content.
-            </summary>
-            <remarks>Children are sorted by their sortOrder.</remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.Properties">
-            <summary>
-            Gets the properties of the content.
-            </summary>
-            <remarks>
-            <para>Contains one <c>IPublishedProperty</c> for each property defined for the content type, including
-            inherited properties. Some properties may have no value.</para>
-            <para>The properties collection of an IPublishedContent instance should be read-only ie it is illegal
-            to add properties to the collection.</para>
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.IPublishedContent.Item(System.String)">
-            <summary>
-            Gets the value of a property identified by its alias.
-            </summary>
-            <param name="alias">The property alias.</param>
-            <returns>The value of the property identified by the alias.</returns>
-            <remarks>
-            <para>If <c>GetProperty(alias)</c> is <c>null</c> then returns <c>null</c> else return <c>GetProperty(alias).Value</c>.</para>
-            <para>So if the property has no value, returns the default value for that property type.</para>
-            <para>This one is defined here really because we cannot define index extension methods, but all it should do is:
-            <code>var p = GetProperty(alias); return p == null ? null : p.Value;</code> and nothing else.</para>
-            <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
-            <para>The alias is case-insensitive.</para>
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.AddProperty(Umbraco.Core.Models.IPublishedProperty)">
-            <summary>
-            Adds a property to the extended content.
-            </summary>
-            <param name="property">The property to add.</param>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.SetContentSet(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.IPublishedContent})">
-            <summary>
-            Sets the content set of the extended content.
-            </summary>
-            <param name="contentSet"></param>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.ClearContentSet">
-            <summary>
-            Resets the content set of the extended content.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.SetIndex(System.Int32)">
-            <summary>
-            Sets the index of the extended content.
-            </summary>
-            <param name="value">The index value.</param>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.ClearIndex">
-            <summary>
-            Resets the index of the extended content.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.PublishedContent.IPublishedContentExtended.HasAddedProperties">
-            <summary>
-            Gets a value indicating whether properties were added to the extended content.
-            </summary>
-        </member>
         <member name="T:Umbraco.Core.Models.PublishedContent.PublishedPropertyBase">
             <summary>
             Provides a base class for <c>IPublishedProperty</c> implementations which converts and caches
@@ -9978,39 +10058,6 @@
             PublishedContentModelFactoryResolver.Current.SetFactory(factory);
             </code>
             </remarks>
-        </member>
-        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModel">
-            <summary>
-            Represents a strongly-typed published content.
-            </summary>
-            <remarks>Every strongly-typed published content class should inherit from <c>PublishedContentModel</c>
-            (or inherit from a class that inherits from... etc.) so they are picked by the factory.</remarks>
-        </member>
-        <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped">
-            <summary>
-            Provides an abstract base class for <c>IPublishedContent</c> implementations that
-            wrap and extend another <c>IPublishedContent</c>.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped.#ctor(Umbraco.Core.Models.IPublishedContent)">
-            <summary>
-            Initialize a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped"/> class
-            with an <c>IPublishedContent</c> instance to wrap and extend.
-            </summary>
-            <param name="content">The content to wrap and extend.</param>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped.Unwrap">
-            <summary>
-            Gets the wrapped content.
-            </summary>
-            <returns>The wrapped content, that was passed as an argument to the constructor.</returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublishedContent.PublishedContentModel.#ctor(Umbraco.Core.Models.IPublishedContent)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.PublishedContent.PublishedContentModel"/> class with
-            an original <see cref="T:Umbraco.Core.Models.IPublishedContent"/> instance.
-            </summary>
-            <param name="content">The original content.</param>
         </member>
         <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentModelFactoryResolver">
             <summary>
@@ -10081,6 +10128,7 @@
             <summary>
             Gets or sets the Content of a File
             </summary>
+            <remarks>Marked as DoNotClone, because it should be lazy-reloaded from disk.</remarks>
         </member>
         <member name="P:Umbraco.Core.Models.File.VirtualPath">
             <summary>
@@ -10404,6 +10452,18 @@
             <summary>
             Defines an SqlSyntaxProvider
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviderBase`1.FormatDateTime(System.DateTime,System.Boolean)">
+            <summary>
+            This is used ONLY if we need to format datetime without using SQL parameters (i.e. during migrations)
+            </summary>
+            <param name="date"></param>
+            <param name="includeTime"></param>
+            <returns></returns>
+            <remarks>
+            MSSQL has a DateTime standard that is unambiguous and works on all servers:
+            YYYYMMDD HH:mm:ss
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.DefaultPropertyValueConverterAttribute">
             <summary>
@@ -11812,7 +11872,7 @@
             Initialiazes a new instance of the <see cref="T:Umbraco.Core.Models.ServerRegistration"/> class.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Models.ServerRegistration.#ctor(System.Int32,System.String,System.String,System.DateTime,System.DateTime,System.Boolean)">
+        <member name="M:Umbraco.Core.Models.ServerRegistration.#ctor(System.Int32,System.String,System.String,System.DateTime,System.DateTime,System.Boolean,System.Boolean)">
             <summary>
             Initialiazes a new instance of the <see cref="T:Umbraco.Core.Models.ServerRegistration"/> class.
             </summary>
@@ -11822,6 +11882,7 @@
             <param name="registered">The date and time the registration was created.</param>
             <param name="accessed">The date and time the registration was last accessed.</param>
             <param name="isActive">A value indicating whether the registration is active.</param>
+            <param name="isMaster">A value indicating whether the registration is master.</param>
         </member>
         <member name="M:Umbraco.Core.Models.ServerRegistration.#ctor(System.String,System.String,System.DateTime)">
             <summary>
@@ -11850,6 +11911,11 @@
         <member name="P:Umbraco.Core.Models.ServerRegistration.IsActive">
             <summary>
             Gets or sets a value indicating whether the server is active.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.ServerRegistration.IsMaster">
+            <summary>
+            Gets or sets a value indicating whether the server is master.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.ServerRegistration.Registered">
@@ -15590,6 +15656,18 @@
             <summary>
             Represents an SqlSyntaxProvider for MySql
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.SqlSyntax.MySqlSyntaxProvider.FormatDateTime(System.DateTime,System.Boolean)">
+            <summary>
+            This is used ONLY if we need to format datetime without using SQL parameters (i.e. during migrations)
+            </summary>
+            <param name="date"></param>
+            <param name="includeTime"></param>
+            <returns></returns>
+            <remarks>
+            MySQL has a DateTime standard that is unambiguous and works on all servers:
+            YYYYMMDDHHMMSS
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.Persistence.SqlSyntax.SqlCeSyntaxProvider">
             <summary>
@@ -20207,11 +20285,23 @@
         <member name="M:Umbraco.Core.Services.IContentService.Copy(Umbraco.Core.Models.IContent,System.Int32,System.Boolean,System.Int32)">
             <summary>
             Copies an <see cref="T:Umbraco.Core.Models.IContent"/> object by creating a new Content object of the same type and copies all data from the current 
+            to the new copy, which is returned. Recursively copies all children.
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to copy</param>
+            <param name="parentId">Id of the Content's new Parent</param>
+            <param name="relateToOriginal">Boolean indicating whether the copy should be related to the original</param>
+            <param name="userId">Optional Id of the User copying the Content</param>
+            <returns>The newly created <see cref="T:Umbraco.Core.Models.IContent"/> object</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentService.Copy(Umbraco.Core.Models.IContent,System.Int32,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Copies an <see cref="T:Umbraco.Core.Models.IContent"/> object by creating a new Content object of the same type and copies all data from the current 
             to the new copy which is returned.
             </summary>
             <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to copy</param>
             <param name="parentId">Id of the Content's new Parent</param>
             <param name="relateToOriginal">Boolean indicating whether the copy should be related to the original</param>
+            <param name="recursive">A value indicating whether to recursively copy children.</param>
             <param name="userId">Optional Id of the User copying the Content</param>
             <returns>The newly created <see cref="T:Umbraco.Core.Models.IContent"/> object</returns>
         </member>
@@ -20879,11 +20969,23 @@
         <member name="M:Umbraco.Core.Services.ContentService.Copy(Umbraco.Core.Models.IContent,System.Int32,System.Boolean,System.Int32)">
             <summary>
             Copies an <see cref="T:Umbraco.Core.Models.IContent"/> object by creating a new Content object of the same type and copies all data from the current 
+            to the new copy which is returned. Recursively copies all children.
+            </summary>
+            <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to copy</param>
+            <param name="parentId">Id of the Content's new Parent</param>
+            <param name="relateToOriginal">Boolean indicating whether the copy should be related to the original</param>
+            <param name="userId">Optional Id of the User copying the Content</param>
+            <returns>The newly created <see cref="T:Umbraco.Core.Models.IContent"/> object</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.Copy(Umbraco.Core.Models.IContent,System.Int32,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Copies an <see cref="T:Umbraco.Core.Models.IContent"/> object by creating a new Content object of the same type and copies all data from the current 
             to the new copy which is returned.
             </summary>
             <param name="content">The <see cref="T:Umbraco.Core.Models.IContent"/> to copy</param>
             <param name="parentId">Id of the Content's new Parent</param>
             <param name="relateToOriginal">Boolean indicating whether the copy should be related to the original</param>
+            <param name="recursive">A value indicating whether to recursively copy children.</param>
             <param name="userId">Optional Id of the User copying the Content</param>
             <returns>The newly created <see cref="T:Umbraco.Core.Models.IContent"/> object</returns>
         </member>
@@ -26380,6 +26482,17 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ServerRegistrationService.GetCurrentServerRole">
+            <summary>
+            Gets the role of the current server.
+            </summary>
+            <returns>The role of the current server.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Services.ServerRegistrationService.CurrentServerIdentity">
+            <summary>
+            Gets the local server identity.
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Services.PackagingService">
             <summary>
             Represents the Packaging Service, which provides import/export functionality for the Core models of the API
@@ -27774,29 +27887,63 @@
             <param name="getLoginAndPassword">A function providing a login and a password.</param>
             <remarks>Distribution will be enabled based on the umbraco config setting.</remarks>
         </member>
-        <member name="T:Umbraco.Core.Sync.CurrentServerEnvironmentStatus">
+        <member name="T:Umbraco.Core.Sync.IServerRegistrar2">
             <summary>
-            The current status of the server in the Umbraco environment
+            Provides server registrations to the distributed cache.
+            </summary>
+            <remarks>This interface exists because IServerRegistrar could not be modified
+            for backward compatibility reasons - but IServerRegistrar is broken because it
+            does not support server role management. So ppl should really implement
+            IServerRegistrar2, and the two interfaces will get merged in v8.</remarks>
+        </member>
+        <member name="T:Umbraco.Core.Sync.IServerRegistrar">
+            <summary>
+            Provides server registrations to the distributed cache.
+            </summary>
+            <remarks>You should implement IServerRegistrar2 instead.</remarks>
+        </member>
+        <member name="P:Umbraco.Core.Sync.IServerRegistrar.Registrations">
+            <summary>
+            Gets the server registrations.
             </summary>
         </member>
-        <member name="F:Umbraco.Core.Sync.CurrentServerEnvironmentStatus.Master">
+        <member name="M:Umbraco.Core.Sync.IServerRegistrar2.GetCurrentServerRole">
             <summary>
-            If the current server is detected as the 'master' server when configured in a load balanced scenario
+            Gets the role of the current server in the application environment.
             </summary>
         </member>
-        <member name="F:Umbraco.Core.Sync.CurrentServerEnvironmentStatus.Slave">
+        <member name="M:Umbraco.Core.Sync.IServerRegistrar2.GetCurrentServerUmbracoApplicationUrl">
             <summary>
-            If the current server is detected as a 'slave' server when configured in a load balanced scenario
+            Gets the current umbraco application url.
+            </summary>
+            <remarks>
+            <para>If the registrar does not provide the umbraco application url, should return null.</para>
+            <para>Must return null, or a url that ends with SystemDirectories.Umbraco, and contains a scheme, eg "http://www.mysite.com/umbraco".</para>
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Sync.ServerRole">
+            <summary>
+            The role of a server in an application environment.
             </summary>
         </member>
-        <member name="F:Umbraco.Core.Sync.CurrentServerEnvironmentStatus.Unknown">
+        <member name="F:Umbraco.Core.Sync.ServerRole.Unknown">
             <summary>
-            If the current server cannot be detected as a 'slave' or 'master' when configured in a load balanced scenario
+            The server role is unknown.
             </summary>
         </member>
-        <member name="F:Umbraco.Core.Sync.CurrentServerEnvironmentStatus.Single">
+        <member name="F:Umbraco.Core.Sync.ServerRole.Single">
             <summary>
-            If load balancing is not enabled and this is the only server in the umbraco environment
+            The server is the single server of a single-server environment.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Sync.ServerRole.Slave">
+            <summary>
+            In a multi-servers environment, the server is a slave server.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Sync.ServerRole.Master">
+            <summary>
+            In a multi-servers environment, the server is the master server.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Sync.DatabaseServerMessenger">
@@ -27968,16 +28115,22 @@
             <see cref="T:Umbraco.Core.Sync.IServerAddress"/>
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Sync.ServerEnvironmentHelper">
+        <member name="T:Umbraco.Core.Sync.ApplicationUrlHelper">
             <summary>
-            A helper used to determine the current server environment status
+            A helper used to determine the current server umbraco application url.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Sync.ServerEnvironmentHelper.GetStatus(Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection)">
+        <member name="P:Umbraco.Core.Sync.ApplicationUrlHelper.ApplicationUrlProvider">
             <summary>
-            Returns the current environment status for the current server
+            Gets or sets a custom provider for the umbraco application url.
             </summary>
-            <returns></returns>
+            <remarks>
+            <para>Receives the current request as a parameter, and it may be null. Must return a properly
+            formatted url with scheme and umbraco dir and no trailing slash eg "http://www.mysite.com/umbraco",
+            or <c>null</c>. To be used in auto-load-balancing scenarios where the application url is not
+            in config files but is determined programmatically.</para>
+            <para>Must be assigned before resolution is frozen.</para>
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.Sync.RefreshMethodType">
             <summary>
@@ -28068,22 +28221,22 @@
             A registrar that stores registered server nodes in the database.
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Sync.IServerRegistrar">
-            <summary>
-            Provides server registrations to the distributed cache.
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Sync.IServerRegistrar.Registrations">
-            <summary>
-            Gets the server registrations.
-            </summary>
-        </member>
         <member name="M:Umbraco.Core.Sync.DatabaseServerRegistrar.#ctor(System.Lazy{Umbraco.Core.Services.IServerRegistrationService},Umbraco.Core.Sync.DatabaseServerRegistrarOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Umbraco.Core.Sync.DatabaseServerRegistrar"/> class.
             </summary>
             <param name="registrationService">The registration service.</param>
             <param name="options">Some options.</param>
+        </member>
+        <member name="M:Umbraco.Core.Sync.DatabaseServerRegistrar.GetCurrentServerRole">
+            <summary>
+            Gets the role of the current server in the application environment.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Sync.DatabaseServerRegistrar.GetCurrentServerUmbracoApplicationUrl">
+            <summary>
+            Gets the current umbraco application url.
+            </summary>
         </member>
         <member name="P:Umbraco.Core.Sync.DatabaseServerRegistrar.Options">
             <summary>
@@ -29175,15 +29328,6 @@
             http://stackoverflow.com/questions/2477787/difference-between-appdomain-getassemblies-and-buildmanager-getreferencedassembl
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.TypeFinder.GetBinAssemblies">
-            <summary>
-            Returns only assemblies found in the bin folder that have been loaded into the app domain.
-            </summary>
-            <returns></returns>
-            <remarks>
-            This will be used if we implement App_Plugins from Umbraco v5 but currently it is not used.
-            </remarks>
-        </member>
         <member name="M:Umbraco.Core.TypeFinder.GetAssembliesWithKnownExclusions(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
             <summary>
             Return a list of found local Assemblies excluding the known assemblies we don't want to scan 
@@ -30095,6 +30239,29 @@
             <param name="filePath">The filename passed to the file handler from the upload field.</param>
             <returns>A safe filename without any path specific chars.</returns>
         </member>
+        <member name="M:Umbraco.Core.IO.PhysicalFileSystem.GetRelativePath(System.String)">
+            <summary>
+            Gets the relative path.
+            </summary>
+            <param name="fullPathOrUrl">The full path or url.</param>
+            <returns>The path, relative to this filesystem's root.</returns>
+            <remarks>
+            <para>The relative path is relative to this filesystem's root, not starting with any
+            directory separator. If input was recognized as a url (path), then output uses url (path) separator
+            chars.</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.IO.PhysicalFileSystem.GetFullPath(System.String)">
+            <summary>
+            Gets the full path.
+            </summary>
+            <param name="path">The full or relative path.</param>
+            <returns>The full path.</returns>
+            <remarks>
+            <para>On the physical filesystem, the full path is the rooted (ie non-relative), safe (ie within this
+            filesystem's root) path. All separators are converted to Path.DirectorySeparatorChar.</para>
+            </remarks>
+        </member>
         <member name="P:Umbraco.Core.IO.SystemDirectories.Root">
             <summary>
             Gets the root path of the application
@@ -30132,11 +30299,12 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.StringExtensions.CleanForXss(System.String)">
+        <member name="M:Umbraco.Core.StringExtensions.CleanForXss(System.String,System.Char[])">
             <summary>
             Cleans string to aid in preventing xss attacks.
             </summary>
             <param name="input"></param>
+            <param name="ignoreFromClean"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.StringExtensions.GenerateStreamFromString(System.String)">
