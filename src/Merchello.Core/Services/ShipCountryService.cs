@@ -7,19 +7,26 @@
     using System.IO;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Models.Interfaces;
     using Persistence;
     using Persistence.Querying;
     using Persistence.UnitOfWork;
+
+    using umbraco.BusinessLogic;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// The ship country service.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
-    internal class ShipCountryService : IShipCountryService
+    internal class ShipCountryService : MerchelloRepositoryService, IShipCountryService
     {
         /// <summary>
         /// The locker.
@@ -27,28 +34,31 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
-        /// <summary>
         /// The store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
 
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
         /// </summary>
         public ShipCountryService()
-            : this(new RepositoryFactory(), new StoreSettingService())
+            : this(LoggerResolver.Current.Logger)
         {            
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ShipCountryService(ILogger logger)
+            : this(new RepositoryFactory(), logger, new StoreSettingService(logger))
+        {
+        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
@@ -56,13 +66,16 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
-        public ShipCountryService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
+        public ShipCountryService(RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, storeSettingService)
         {
-            
+
         }
 
         /// <summary>
@@ -74,19 +87,45 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
-        public ShipCountryService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+        public ShipCountryService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), storeSettingService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(storeSettingService, "settingsService");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipCountryService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        public ShipCountryService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
+
+        #endregion
+
+
 
         /// <summary>
         /// The create ship country with key.
@@ -151,8 +190,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
                 {
                     repository.AddOrUpdate(shipCountry);
                     uow.Commit();
@@ -181,8 +220,8 @@
             
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
                 {
                     repository.AddOrUpdate(shipCountry);
                     uow.Commit();
@@ -208,8 +247,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipCountryRepository(uow, _storeSettingService))
                 {
                     repository.Delete(shipCountry);
                     uow.Commit();
@@ -226,7 +265,7 @@
         /// <returns>A collection of <see cref="IShipCountry"/></returns>
         public IEnumerable<IShipCountry> GetShipCountriesByCatalogKey(Guid catalogKey)
         {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
+            using (var repository = RepositoryFactory.CreateShipCountryRepository(UowProvider.GetUnitOfWork(), _storeSettingService))
             {
                 var query = Query<IShipCountry>.Builder.Where(x => x.CatalogKey == catalogKey);
                 return repository.GetByQuery(query);
@@ -257,7 +296,7 @@
         /// <returns></returns>
         public IShipCountry GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
+            using (var repository = RepositoryFactory.CreateShipCountryRepository(UowProvider.GetUnitOfWork(), _storeSettingService))
             {
                 return repository.Get(key);
             }
@@ -266,7 +305,7 @@
         // used for testing
         internal IEnumerable<IShipCountry> GetAllShipCountries()
         {
-            using (var repository = _repositoryFactory.CreateShipCountryRepository(_uowProvider.GetUnitOfWork(), _storeSettingService))
+            using (var repository = RepositoryFactory.CreateShipCountryRepository(UowProvider.GetUnitOfWork(), _storeSettingService))
             {
                 return repository.GetAll();
             }

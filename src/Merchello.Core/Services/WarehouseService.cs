@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
@@ -12,11 +13,12 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the Warehouse Service 
     /// </summary>
-    internal class WarehouseService : IWarehouseService
+    internal class WarehouseService : MerchelloRepositoryService, IWarehouseService
     {
         /// <summary>
         /// The locker.
@@ -24,26 +26,29 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
-        /// <summary>
         /// The warehouse catalog service.
         /// </summary>
         private readonly IWarehouseCatalogService _warehouseCatalogService;
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WarehouseService"/> class.
         /// </summary>
         public WarehouseService()
-            : this(new RepositoryFactory(), new WarehouseCatalogService())
+            : this(LoggerResolver.Current.Logger)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarehouseService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public WarehouseService(ILogger logger)
+            : this(new RepositoryFactory(), logger, new WarehouseCatalogService(logger))
+        {
         }
 
         /// <summary>
@@ -52,11 +57,14 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="warehouseCatalogService">
         /// The warehouse Catalog Service.
         /// </param>
-        public WarehouseService(RepositoryFactory repositoryFactory, IWarehouseCatalogService warehouseCatalogService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, warehouseCatalogService)
+        public WarehouseService(RepositoryFactory repositoryFactory, ILogger logger, IWarehouseCatalogService warehouseCatalogService)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, warehouseCatalogService)
         {
         }
 
@@ -69,19 +77,44 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="warehouseCatalogService">
         /// The warehouse Catalog Service.
         /// </param>
-        public WarehouseService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IWarehouseCatalogService warehouseCatalogService)
+        public WarehouseService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IWarehouseCatalogService warehouseCatalogService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), warehouseCatalogService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(warehouseCatalogService, "warehouseCatalogService");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WarehouseService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="warehouseCatalogService">
+        /// The warehouse catalog service.
+        /// </param>
+        public WarehouseService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IWarehouseCatalogService warehouseCatalogService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+            Mandate.ParameterNotNull(warehouseCatalogService, "warehouseCatalogService");
             _warehouseCatalogService = warehouseCatalogService;
         }
+
+
+        #endregion
 
         #region Event Handlers
 
@@ -128,8 +161,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateWarehouseRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateWarehouseRepository(uow))
                 {
                     repository.AddOrUpdate(warehouse);
                     uow.Commit();
@@ -152,8 +185,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateWarehouseRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateWarehouseRepository(uow))
                 {
                     foreach (var warehouse in warehouseArray)
                     {
@@ -173,7 +206,7 @@
         /// <returns>The default <see cref="IWarehouse"/></returns>
         public IWarehouse GetDefaultWarehouse()
         {
-            using (var repository = _repositoryFactory.CreateWarehouseRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateWarehouseRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IWarehouse>.Builder.Where(x => x.IsDefault);
                 return repository.GetByQuery(query).FirstOrDefault();
@@ -187,7 +220,7 @@
         /// <returns>The <see cref="IWarehouse"/></returns>
         public IWarehouse GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateWarehouseRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateWarehouseRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -200,7 +233,7 @@
         /// <returns>A collection of <see cref="IWarehouse"/></returns>
         public IEnumerable<IWarehouse> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateWarehouseRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateWarehouseRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -354,8 +387,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateWarehouseRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateWarehouseRepository(uow))
                 {
                     repository.Delete(warehouse);
                     uow.Commit();
@@ -377,8 +410,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateWarehouseRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateWarehouseRepository(uow))
                 {
                     foreach (var warehouse in warehouseArray)
                     {

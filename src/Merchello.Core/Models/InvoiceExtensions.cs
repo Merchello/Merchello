@@ -13,7 +13,6 @@
     using Gateways.Payment;
     using Gateways.Taxation;
 
-    using Merchello.Core.Cache;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;

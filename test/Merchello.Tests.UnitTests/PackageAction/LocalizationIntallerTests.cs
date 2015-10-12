@@ -12,7 +12,7 @@ namespace Merchello.Tests.UnitTests.PackageAction
     [TestFixture]
     public class LocalizationIntallerTests
     {
-        [Test]
+        //[Test]
         public void Debug()
         {
             var merchelloFiles = AddLocalizationAreas.GetMerchelloLanguageFiles();
@@ -56,7 +56,7 @@ namespace Merchello.Tests.UnitTests.PackageAction
         }
 
 
-        [Test]
+        //[Test]
         public void Can_Get_A_List_Of_All_Umbraco_Lang_Files()
         {
             //// Arrange
@@ -72,7 +72,7 @@ namespace Merchello.Tests.UnitTests.PackageAction
         }
 
 
-        [Test]
+       // [Test]
         public void Can_Get_A_List_Of_All_Merchello_Lang_Files()
         {
             //// Arrange
@@ -88,7 +88,7 @@ namespace Merchello.Tests.UnitTests.PackageAction
             foreach(var f in files) Console.WriteLine(f.Name);
         }
 
-        [Test]
+       // [Test]
         public void Can_Get_A_List_Of_All_Language_Files_In_Common_Between_Umbraco_And_Merchello()
         {
             //// Act

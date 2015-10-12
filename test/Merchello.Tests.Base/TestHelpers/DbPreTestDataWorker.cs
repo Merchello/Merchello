@@ -14,6 +14,14 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Tests.Base.TestHelpers
 {
+    using global::Umbraco.Core.Logging;
+    using global::Umbraco.Core.Persistence.SqlSyntax;
+
+    using Merchello.Core.Events;
+    using Merchello.Core.Persistence;
+
+    using Moq;
+
     /// <summary>
     /// Assists with integration tests which require data to be present in the database and is useful in
     /// quickly populating the database with data for UI testing.
@@ -22,13 +30,36 @@ namespace Merchello.Tests.Base.TestHelpers
     {
         
         private readonly ServiceContext _serviceContext;
+
+        public ISqlSyntaxProvider SqlSyntaxProvider { get; set; }
         public UmbracoDatabase Database { get; private set; }
         public IWarehouseCatalog WarehouseCatalog;
+        public ILogger TestLogger { get; set; }
+
         public DbPreTestDataWorker()
-            : this(new ServiceContext(new PetaPocoUnitOfWorkProvider()))
-        { }
+        {
+            var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
+
+            // sets up the Umbraco SqlSyntaxProvider Singleton OBSOLETE
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
+
+            this.SqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
+
+            var uowProvider = new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object);
+
+            Database = uowProvider.GetUnitOfWork().Database;
+            TestLogger = Logger.CreateWithDefaultLog4NetConfiguration();
+            _serviceContext = new ServiceContext(new RepositoryFactory(), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
+
+            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
+            {
+                Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
+            }; 
+        }
 
         internal DbSyntax SqlSyntax { get; set; }
+
+
 
         public DbPreTestDataWorker(ServiceContext serviceContext)
         {
@@ -36,7 +67,7 @@ namespace Merchello.Tests.Base.TestHelpers
             // sets up the Umbraco SqlSyntaxProvider Singleton
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
 
-            var uowProvider = new PetaPocoUnitOfWorkProvider();
+            var uowProvider = new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object);
 
             Database = uowProvider.GetUnitOfWork().Database;
 
@@ -523,7 +554,7 @@ namespace Merchello.Tests.Base.TestHelpers
         private void RebuildDatabase()
         {
             // migration
-            var schema = new DatabaseSchemaCreation(Database);
+            var schema = new DatabaseSchemaCreation(Database, TestLogger, new DatabaseSchemaHelper(Database, TestLogger, this.SqlSyntaxProvider), this.SqlSyntaxProvider);
 
             // drop all the tables
             schema.UninstallDatabaseSchema();
@@ -532,7 +563,7 @@ namespace Merchello.Tests.Base.TestHelpers
             schema.InitializeDatabaseSchema();
 
             // add the default data
-            var baseDataCreation = new BaseDataCreation(Database);
+            var baseDataCreation = new BaseDataCreation(Database, TestLogger);
             baseDataCreation.InitializeBaseData("merchDBTypeField");
             baseDataCreation.InitializeBaseData("merchInvoiceStatus");
             baseDataCreation.InitializeBaseData("merchOrderStatus");

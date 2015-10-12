@@ -4,6 +4,21 @@
         <name>Merchello.Examine</name>
     </assembly>
     <members>
+        <member name="T:Merchello.Examine.DataServices.DataServiceBase">
+            <summary>
+            The data service base.
+            </summary>
+        </member>
+        <member name="M:Merchello.Examine.DataServices.DataServiceBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Examine.DataServices.DataServiceBase"/> class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Examine.DataServices.DataServiceBase.DataServiceLogger">
+            <summary>
+            Gets the data service logger.
+            </summary>
+        </member>
         <member name="T:Merchello.Examine.SearchHelper">
             <summary>
             The search provider extension.

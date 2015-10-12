@@ -15,22 +15,25 @@
     [TestFixture]
     public class CreateDatabasePackageActionTest
     {
-         private UmbracoDatabase _database;
+        private UmbracoDatabase _database;
+
+        private DbPreTestDataWorker _worker;
 
         [TestFixtureSetUp]
         public void Init()
         {
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
-            var worker = new DbPreTestDataWorker {SqlSyntax = syntax };
-            _database = worker.Database;
-            var deletions = new DatabaseSchemaCreation(_database);
+            _worker = new DbPreTestDataWorker {SqlSyntax = syntax };
+
+            var schemaHelper = new DatabaseSchemaHelper(_worker.Database, _worker.TestLogger, _worker.SqlSyntaxProvider);
+            var deletions = new DatabaseSchemaCreation(_worker.Database, _worker.TestLogger, schemaHelper, _worker.SqlSyntaxProvider);
             deletions.UninstallDatabaseSchema();
         }
 
         [Test]
         public void Can_ExecuteThePackageAction()
         {
-            var packageAction = new CreateDatabase(_database);
+            var packageAction = new CreateDatabase(_worker.Database, _worker.SqlSyntaxProvider, _worker.TestLogger);
             packageAction.Execute("merchello", null);
         }
     }

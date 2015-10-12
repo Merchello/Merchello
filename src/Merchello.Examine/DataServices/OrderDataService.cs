@@ -12,7 +12,7 @@
     /// <summary>
     /// The order data service.
     /// </summary>
-    internal class OrderDataService : IOrderDataService
+    internal class OrderDataService : DataServiceBase, IOrderDataService
     {
         /// <summary>
         /// The merchello context.
@@ -47,7 +47,7 @@
         /// </returns>
         public IEnumerable<IOrder> GetAll()
         {
-            return new OrderService().GetPage(1, 100).Items;
+            return new OrderService(DataServiceLogger).GetPage(1, 100).Items;
         }
 
         /// <summary>

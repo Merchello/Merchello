@@ -14,6 +14,8 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Umbraco.Core.Logging;
+
     [TestFixture]
     [Category("Service Events")]
     public class ServiceEventResolutionTests : ServiceTestsBase<IOrder>
@@ -29,7 +31,8 @@ namespace Merchello.Tests.UnitTests.Services
             var mockSettingService = new Mock<IStoreSettingService>();
             mockSettingService.Setup(x => x.GetNextOrderNumber(1)).Returns(111);
 
-            _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(), mockSettingService.Object, new Mock<ShipmentService>().Object);
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(), logger, new StoreSettingService(logger), new ShipmentService(logger));
 
             _orderStatusInvokeTester = new OrderStatusInvokeTester();
 
