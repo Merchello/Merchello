@@ -6,6 +6,10 @@
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.UnitOfWork;
 
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
     /// <see cref="ICustomerService"/>, <see cref="IGatewayProviderService"/>, <see cref="IInvoiceService"/>, <see cref="IItemCacheService"/> 
@@ -155,20 +159,38 @@
         /// <summary>
         /// The _warehouse catalog service.
         /// </summary>
-        private Lazy<IWarehouseCatalogService> _warehouseCatalogService; 
+        private Lazy<IWarehouseCatalogService> _warehouseCatalogService;
 
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceContext"/> class.
         /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository Factory.
+        /// </param>
         /// <param name="dbUnitOfWorkProvider">
         /// The database unit of work provider.
         /// </param>
-        public ServiceContext(IDatabaseUnitOfWorkProvider dbUnitOfWorkProvider)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event Messages Factory.
+        /// </param>
+        public ServiceContext(
+            RepositoryFactory repositoryFactory,
+            IDatabaseUnitOfWorkProvider dbUnitOfWorkProvider,
+            ILogger logger,
+            IEventMessagesFactory eventMessagesFactory)
         {
+            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+            Mandate.ParameterNotNull(dbUnitOfWorkProvider, "dbUnitOfWorkProvider");
+            Mandate.ParameterNotNull(logger, "logger");
+            Mandate.ParameterNotNull(eventMessagesFactory, "eventMessagesFactory");
+
             DatabaseUnitOfWorkProvider = dbUnitOfWorkProvider;
-            BuildServiceContext(dbUnitOfWorkProvider, new Lazy<RepositoryFactory>(() => new RepositoryFactory()));
+            BuildServiceContext(dbUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory);
         }
 
         #region IServiceContext Members
@@ -416,98 +438,108 @@
         /// <summary>
         /// Builds the various services
         /// </summary>
-        /// <param name="dbDatabaseUnitOfWorkProvider">Database unit of work provider used by the various services</param>
-        /// <param name="repositoryFactory">The <see cref="RepositoryFactory"/></param>
-        private void BuildServiceContext(IDatabaseUnitOfWorkProvider dbDatabaseUnitOfWorkProvider, Lazy<RepositoryFactory> repositoryFactory)
+        /// <param name="dbDatabaseUnitOfWorkProvider">
+        /// Database unit of work provider used by the various services
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The <see cref="RepositoryFactory"/>
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event Messages Factory.
+        /// </param>
+        private void BuildServiceContext(IDatabaseUnitOfWorkProvider dbDatabaseUnitOfWorkProvider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
         {
             if (_anonymousCustomerService == null)
-                _anonymousCustomerService = new Lazy<IAnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _anonymousCustomerService = new Lazy<IAnonymousCustomerService>(() => new AnonymousCustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_appliedPaymentService == null)
-                _appliedPaymentService = new Lazy<IAppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _appliedPaymentService = new Lazy<IAppliedPaymentService>(() => new AppliedPaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_auditLogService == null)
-                _auditLogService = new Lazy<IAuditLogService>(() => new AuditLogService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _auditLogService = new Lazy<IAuditLogService>(() => new AuditLogService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_customerAddressService == null)
-                _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_customerService == null)
-                _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _anonymousCustomerService.Value, _customerAddressService.Value, _invoiceService.Value, _paymentService.Value));
+                _customerService = new Lazy<ICustomerService>(() => new CustomerService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _anonymousCustomerService.Value, _customerAddressService.Value, _invoiceService.Value, _paymentService.Value));
 
             if (_detachedContentTypeService == null)
-                _detachedContentTypeService = new Lazy<IDetachedContentTypeService>(() => new DetachedContentTypeService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _detachedContentTypeService = new Lazy<IDetachedContentTypeService>(() => new DetachedContentTypeService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_digitalMediaService == null)
-                _digitalMediaService = new Lazy<IDigitalMediaService>(() => new DigitalMediaService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _digitalMediaService = new Lazy<IDigitalMediaService>(() => new DigitalMediaService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_entityCollectionService == null)
-                _entityCollectionService = new Lazy<IEntityCollectionService>(() => new EntityCollectionService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _entityCollectionService = new Lazy<IEntityCollectionService>(() => new EntityCollectionService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_itemCacheService == null)
-                _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _itemCacheService = new Lazy<IItemCacheService>(() => new ItemCacheService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_notificationMethodService == null)
-                _notificationMethodService = new Lazy<INotificationMethodService>(() => new NotificationMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _notificationMethodService = new Lazy<INotificationMethodService>(() => new NotificationMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_notificationMessageService == null)
-                _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_offerSettingsService == null)
-                _offerSettingsService = new Lazy<IOfferSettingsService>(() => new OfferSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _offerSettingsService = new Lazy<IOfferSettingsService>(() => new OfferSettingsService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_offerRedeemedService == null)
-                _offerRedeemedService = new Lazy<IOfferRedeemedService>(() => new OfferRedeemedService(DatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _offerRedeemedService = new Lazy<IOfferRedeemedService>(() => new OfferRedeemedService(DatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_paymentService == null)
-                _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value));
+                _paymentService = new Lazy<IPaymentService>(() => new PaymentService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _appliedPaymentService.Value));
 
             if (_paymentMethodService == null)
-                _paymentMethodService = new Lazy<IPaymentMethodService>(() => new PaymentMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _paymentMethodService = new Lazy<IPaymentMethodService>(() => new PaymentMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_productVariantService == null)
-                _productVariantService = new Lazy<IProductVariantService>(() => new ProductVariantService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _productVariantService = new Lazy<IProductVariantService>(() => new ProductVariantService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_productService == null)
-                _productService = new Lazy<IProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
+                _productService = new Lazy<IProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _productVariantService.Value));
 
             if (_storeSettingsService == null)
-                _storeSettingsService = new Lazy<IStoreSettingService>(() => new StoreSettingService());
+                _storeSettingsService = new Lazy<IStoreSettingService>(() => new StoreSettingService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_shipCountryService == null)
-                _shipCountryService = new Lazy<IShipCountryService>(() => new ShipCountryService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+                _shipCountryService = new Lazy<IShipCountryService>(() => new ShipCountryService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _storeSettingsService.Value));
 
             if (_shipMethodService == null)
-                _shipMethodService = new Lazy<IShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _shipMethodService = new Lazy<IShipMethodService>(() => new ShipMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_shipRateTierService == null)
-                _shipRateTierService = new Lazy<IShipRateTierService>(() => new ShipRateTierService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _shipRateTierService = new Lazy<IShipRateTierService>(() => new ShipRateTierService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_shipmentService == null)
-                _shipmentService = new Lazy<IShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+                _shipmentService = new Lazy<IShipmentService>(() => new ShipmentService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _storeSettingsService.Value));
 
             if (_orderService == null)
-                _orderService = new Lazy<IOrderService>(() => new OrderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value, _shipmentService.Value));
+                _orderService = new Lazy<IOrderService>(() => new OrderService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _storeSettingsService.Value, _shipmentService.Value));
 
             if (_invoiceService == null)
-                _invoiceService = new Lazy<IInvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _appliedPaymentService.Value, _orderService.Value, _storeSettingsService.Value));
+                _invoiceService = new Lazy<IInvoiceService>(() => new InvoiceService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _appliedPaymentService.Value, _orderService.Value, _storeSettingsService.Value));
 
             if (_countryTaxRateService == null)
-                _countryTaxRateService = new Lazy<ITaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _storeSettingsService.Value));
+                _countryTaxRateService = new Lazy<ITaxMethodService>(() => new TaxMethodService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _storeSettingsService.Value));
 
             if (_gatewayProviderService == null)
-                _gatewayProviderService = new Lazy<IGatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _orderService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value, _notificationMethodService.Value, _notificationMessageService.Value, _warehouseService.Value));
+                _gatewayProviderService = new Lazy<IGatewayProviderService>(() => new GatewayProviderService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _shipMethodService.Value, _shipRateTierService.Value, _shipCountryService.Value, _invoiceService.Value, _orderService.Value, _countryTaxRateService.Value, _paymentService.Value, _paymentMethodService.Value, _notificationMethodService.Value, _notificationMessageService.Value, _warehouseService.Value));
 
             if (_warehouseCatalogService == null)
             {
-                _warehouseCatalogService = new Lazy<IWarehouseCatalogService>(() => new WarehouseCatalogService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _productVariantService.Value));
+                _warehouseCatalogService = new Lazy<IWarehouseCatalogService>(() => new WarehouseCatalogService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _productVariantService.Value));
             }
 
             if (_warehouseService == null)
-                _warehouseService = new Lazy<IWarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value, _warehouseCatalogService.Value));
+                _warehouseService = new Lazy<IWarehouseService>(() => new WarehouseService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _warehouseCatalogService.Value));
 
             if (_notificationMessageService == null)
-                _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _notificationMessageService = new Lazy<INotificationMessageService>(() => new NotificationMessageService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
         }
     }
 }

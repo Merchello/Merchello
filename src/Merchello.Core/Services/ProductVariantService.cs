@@ -7,6 +7,7 @@
     using System.Threading;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.UnitOfWork;
@@ -20,7 +21,7 @@
     /// <summary>
     /// Represents the ProductVariantService
     /// </summary>
-    public class ProductVariantService : IProductVariantService
+    public class ProductVariantService : MerchelloRepositoryService, IProductVariantService
     {
         /// <summary>
         /// The locker.
@@ -28,21 +29,22 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The database unit of work provider.
+        /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
         /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The _repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
+        public ProductVariantService()
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
         /// </summary>
-        public ProductVariantService()
-            : this(new RepositoryFactory())
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ProductVariantService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
         }
 
         /// <summary>
@@ -51,9 +53,12 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public ProductVariantService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ProductVariantService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
         }
 
         /// <summary>
@@ -65,16 +70,36 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public ProductVariantService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public ProductVariantService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public ProductVariantService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
         }
 
         #region Events
+
 
         /// <summary>
         /// Occurs after Create
@@ -159,8 +184,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductVariantRepository(uow))
                 {
                     repository.AddOrUpdate(productVariant);
                     uow.Commit();
@@ -268,8 +293,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductVariantRepository(uow))
                 {
                     repository.AddOrUpdate(productVariant);
                     uow.Commit();
@@ -294,8 +319,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductVariantRepository(uow))
                 {
                     foreach (var variant in productVariants)
                     {
@@ -352,8 +377,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductVariantRepository(uow))
                 {
                     repository.Delete(productVariant);
                     uow.Commit();
@@ -376,8 +401,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateProductVariantRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductVariantRepository(uow))
                 {
                     foreach (var product in productVariants)
                     {
@@ -398,7 +423,7 @@
         /// <returns><see cref="IProductVariant"/></returns>
         public IProductVariant GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -415,7 +440,7 @@
         /// </returns>
         public IProductVariant GetBySku(string sku)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IProductVariant>.Builder.Where(x => x.Sku == sku);
                 return repository.GetByQuery(query).FirstOrDefault();
@@ -429,7 +454,7 @@
         /// <returns>List of <see cref="IProduct"/></returns>
         public IEnumerable<IProductVariant> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -437,7 +462,7 @@
 
         internal IEnumerable<IProductVariant> GetAll(params Guid[] keys)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys);
             }
@@ -450,7 +475,7 @@
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         public IEnumerable<IProductVariant> GetByProductKey(Guid productKey)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetByProductKey(productKey);
             }
@@ -463,7 +488,7 @@
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         public IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetByWarehouseKey(warehouseKey);
             }
@@ -516,7 +541,7 @@
         /// </summary>
         public IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductVariantWithAttributes(product, attributeKeys);
             }
@@ -531,7 +556,7 @@
         /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
         public bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.ProductVariantWithAttributesExists(product, attributes);
             }
@@ -544,7 +569,7 @@
         /// <returns></returns>
         public bool SkuExists(string sku)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.SkuExists(sku);
             }
@@ -552,7 +577,7 @@
 
         internal int Count(IQuery<IProductVariant> query)
         {
-            using (var repository = _repositoryFactory.CreateProductVariantRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }

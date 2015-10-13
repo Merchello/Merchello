@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
@@ -13,6 +14,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
@@ -20,7 +22,7 @@
     /// <summary>
     /// Represents an entity collection service.
     /// </summary>
-    public class EntityCollectionService : IEntityCollectionService
+    public class EntityCollectionService : MerchelloRepositoryService, IEntityCollectionService
     {
         #region Fields
 
@@ -34,24 +36,27 @@
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
         #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionService"/> class.
         /// </summary>
         internal EntityCollectionService()
-            : this(new RepositoryFactory())
-        {            
+            : this(LoggerResolver.Current.Logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityCollectionService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal EntityCollectionService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
         }
 
         /// <summary>
@@ -60,9 +65,12 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        internal EntityCollectionService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal EntityCollectionService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
         }
 
         /// <summary>
@@ -74,15 +82,39 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        internal EntityCollectionService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal EntityCollectionService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityCollectionService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        internal EntityCollectionService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
+
         #region Event Handlers
+
+
 
         /// <summary>
         /// Occurs after Create
@@ -191,8 +223,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateEntityCollectionRepository(uow))
                 {
                     repository.AddOrUpdate(entityCollection);
                     uow.Commit();
@@ -219,8 +251,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateEntityCollectionRepository(uow))
                 {
                     foreach (var collection in collectionsArray)
                     {
@@ -258,8 +290,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateEntityCollectionRepository(uow))
                 {
                     repository.Delete(entityCollection);
                     uow.Commit();
@@ -280,7 +312,7 @@
         /// </returns>
         public IEntityCollection GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -297,7 +329,7 @@
         /// </returns>
         public IEnumerable<IEntityCollection> GetByEntityTfKey(Guid entityTfKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.EntityTfKey == entityTfKey);
                 return repository.GetByQuery(query);
@@ -315,7 +347,7 @@
         /// </returns>
         public IEnumerable<IEntityCollection> GetByProviderKey(Guid providerKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ProviderKey == providerKey);
                 return repository.GetByQuery(query);
@@ -330,7 +362,7 @@
         /// </returns>
         public IEnumerable<IEntityCollection> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -347,7 +379,7 @@
         /// </returns>
         public IEnumerable<IEntityCollection> GetChildren(Guid collectionKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
                 return repository.GetByQuery(query);
@@ -368,7 +400,7 @@
         /// </returns>
         public bool ExistsInCollection(Guid? parentKey, Guid collectionKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == parentKey && x.Key == collectionKey);
                 return repository.Count(query) > 0;
@@ -383,7 +415,7 @@
         /// </returns>
         public IEnumerable<IEntityCollection> GetRootLevelEntityCollections()
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null);
                 return repository.GetByQuery(query);
@@ -416,7 +448,7 @@
         /// </returns>
         public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null && x.EntityTfKey == entityTfKey);
                 return repository.GetByQuery(query);
@@ -451,7 +483,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
                 return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
@@ -469,7 +501,7 @@
         /// </returns>
         public int ChildEntityCollectionCount(Guid collectionKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == collectionKey);
                 return repository.Count(query);
@@ -513,8 +545,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateEntityCollectionRepository(uow))
                 {
                     foreach (var collection in collectionsArray)
                     {
@@ -588,8 +620,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateEntityCollectionRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateEntityCollectionRepository(uow))
                 {
                     repository.AddOrUpdate(collection);
                     uow.Commit();
@@ -613,7 +645,7 @@
         /// </returns>
         internal IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetEntityCollectionsByProductKey(productKey);                
             }
@@ -630,7 +662,7 @@
         /// </returns>
         internal IEnumerable<IEntityCollection> GetEntityCollectionsByInvoiceKey(Guid invoiceKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetEntityCollectionsByInvoiceKey(invoiceKey);
             }
@@ -647,7 +679,7 @@
         /// </returns>
         internal IEnumerable<IEntityCollection> GetEntityCollectionsByCustomerKey(Guid customerKey)
         {
-            using (var repository = _repositoryFactory.CreateEntityCollectionRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetEntityCollectionsByCustomerKey(customerKey);
             }

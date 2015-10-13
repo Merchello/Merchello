@@ -118,9 +118,6 @@
         /// <returns>
         /// The ship methods cache key
         /// </returns>
-        /// <remarks>
-        /// TODO RSS - this should be reviewed as it infers that a collection is in cache rather than single entities
-        /// </remarks>
         internal static string ShippingGatewayShipMethodsCacheKey(Guid providerKey)
         {
             return string.Format("merchello.shippingateway.shipmethods.{0}", providerKey);

@@ -7,12 +7,14 @@
     using Core.Models;
     using Core.Services;
     using Providers;
+
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.UnitOfWork;
 
     /// <summary>
     /// The product data service.
     /// </summary>
-    internal class ProductDataService : IProductDataService
+    internal class ProductDataService : DataServiceBase, IProductDataService
     {
         /// <summary>
         /// The _merchello context.
@@ -47,7 +49,7 @@
         /// </returns>
         public IEnumerable<IProduct> GetAll()
         {
-            return new ProductService().GetAll();
+            return new ProductService(DataServiceLogger).GetAll();
             //.GetPage(1, 100).Items;
         }
 

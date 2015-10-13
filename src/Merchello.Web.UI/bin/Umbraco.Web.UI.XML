@@ -1062,6 +1062,15 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.PathPrefix">
+            <summary>
+            PathPrefix control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
         <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.NameTxt">
             <summary>
             NameTxt control.

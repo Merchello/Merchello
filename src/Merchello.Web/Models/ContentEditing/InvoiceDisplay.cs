@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Models;
@@ -190,6 +192,22 @@
                 Phone = invoice.BillToPhone,
                 Email = invoice.BillToEmail
             };
+        }
+
+        /// <summary>
+        /// Gets an invoice number with a prefix (if any).
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The prefixed invoice number.
+        /// </returns>
+        public static string PrefixedInvoiceNumber(this InvoiceDisplay invoice)
+        {
+            return string.IsNullOrEmpty(invoice.InvoiceNumberPrefix)
+                ? invoice.InvoiceNumber.ToString(CultureInfo.InvariantCulture)
+                : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
         }
     }
 }

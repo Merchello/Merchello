@@ -14,7 +14,7 @@
     /// The add entity collection type field.
     /// </summary>
     [Migration("1.10.0", "1.11.0", 2, MerchelloConfiguration.MerchelloMigrationName)]
-    public class AddEntityCollectionTypeField : MigrationBase
+    public class AddEntityCollectionTypeField : IMerchelloMigration
     {
         /// <summary>
         /// The _database.
@@ -32,7 +32,7 @@
         /// <summary>
         /// Inserts the entity collection type field.
         /// </summary>
-        public override void Up()
+        public void Up()
         {
             var entity = new EntityTypeField();
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.EntityCollection.TypeKey, Alias = entity.EntityCollection.Alias, Name = entity.EntityCollection.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
@@ -41,7 +41,7 @@
         /// <summary>
         /// Deletes the entity collection type field.
         /// </summary>
-        public override void Down()
+        public void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.9.0 database to a prior version, the database schema has already been modified");
         }

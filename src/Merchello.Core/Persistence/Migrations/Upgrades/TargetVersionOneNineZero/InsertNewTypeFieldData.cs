@@ -13,12 +13,12 @@
     /// The insert new type field data.
     /// </summary>
     [Migration("1.8.2", "1.9.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
-    public class InsertNewTypeFieldData : MigrationBase
+    public class InsertNewTypeFieldData : IMerchelloMigration
     {
         /// <summary>
         /// The up.
         /// </summary>
-        public override void Up()
+        public void Up()
         {
             var database = ApplicationContext.Current.DatabaseContext.Database;
             var entity = new PaymentMethodTypeField();
@@ -28,7 +28,7 @@
         /// <summary>
         /// Throws a data loss exception
         /// </summary>
-        public override void Down()
+        public void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.9.0 database to a prior version, the database schema has already been modified");
         }

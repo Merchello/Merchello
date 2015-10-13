@@ -9,6 +9,8 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Umbraco.Core.Logging;
+
     [TestFixture]
     public class SettingsServiceTests
     {
@@ -17,7 +19,8 @@ namespace Merchello.Tests.UnitTests.Services
         [SetUp]
         public void Init()
         {
-            _storeSettingService = new StoreSettingService();
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            _storeSettingService = new StoreSettingService(logger);
         }
 
         [Test]
