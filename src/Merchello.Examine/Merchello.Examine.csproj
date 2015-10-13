@@ -268,6 +268,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataServices\DataServiceBase.cs" />
+    <Compile Include="LocalStorage\DeletePolicyTracker.cs" />
+    <Compile Include="LocalStorage\Extensions\DelegateExtensions.cs" />
+    <Compile Include="LocalStorage\LocalStorageType.cs" />
+    <Compile Include="LocalStorage\LocalTempStorageDirectory.cs" />
+    <Compile Include="LocalStorage\LocalTempStorageDirectoryTracker.cs" />
+    <Compile Include="LocalStorage\LocalTempStorageIndexer.cs" />
+    <Compile Include="LocalStorage\MultiIndexLock.cs" />
+    <Compile Include="LocalStorage\MultiIndexLockFactory.cs" />
+    <Compile Include="LocalStorage\MultiIndexOutput.cs" />
     <Compile Include="SearchHelper.cs" />
     <Compile Include="DataServices\CustomerDataService.cs" />
     <Compile Include="DataServices\ICustomerDataService.cs" />
