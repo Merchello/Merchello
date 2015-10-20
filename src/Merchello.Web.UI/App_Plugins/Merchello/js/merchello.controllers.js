@@ -8680,6 +8680,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                        } else {
                            $scope.currencySymbol = combined.currencySymbol;
                        }
+                   } else {
+                       $scope.currencySymbol = $scope.invoice.currency.symbol;
                    }
                });
            }
