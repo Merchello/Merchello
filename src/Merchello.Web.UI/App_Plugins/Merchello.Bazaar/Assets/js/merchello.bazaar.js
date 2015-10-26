@@ -297,6 +297,7 @@
 
         checkout: {
             bind: function () {
+                  $('#shipping-address').hide();
                 if ($('#addresses-form').length) {
                     // copy the billing address if needed
                     $('#addresses-form').submit(function(event) {
@@ -342,6 +343,7 @@
                                 $('#billing-address').hide();
                                 $('#billing-vcard').show();
                                 merchello.bazaar.checkout.setCustomerAddress('billing', $(this).val());
+                                
                             } else {
                                 $('#billing-address').show();
                                 $('#billing-vcard').hide();
@@ -402,7 +404,12 @@
                 }
             },
             toggleBillingIsShipping: function () {
-                $('#shipping-address').toggle($('#billing-is-shipping').checked);
+                if ($('#billing-is-shipping').is(':checked')) {
+                    $('#shipping-address').hide();
+                } else
+                {
+                    $('#shipping-address').show();
+                }
                 merchello.bazaar.checkout.refreshCustomerAddressViewSettings();
             },
             refreshCustomerAddressViewSettings: function () {
