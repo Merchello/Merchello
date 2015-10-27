@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using global::Examine;
+
     using Merchello.Core;
     using Merchello.Core.Gateways.Shipping.FixedRate;
     using Merchello.Core.Models;
@@ -71,6 +73,10 @@
             pg.SetValue("products", _collections["specializedSoap"].ToString());
             _services.ContentService.SaveAndPublishWithStatus(pg);
 
+            var gen = _services.ContentService.CreateContent("Generic", root.Id, "BazaarProductCollection");
+            gen.SetValue("products", _collections["generic"].ToString());
+            _services.ContentService.SaveAndPublishWithStatus(gen);
+
             LogHelper.Info<BazaarDataInstaller>("Adding example eCommerce workflow pages");
             var basket = _services.ContentService.CreateContent("Basket", root.Id, "BazaarBasket");
             _services.ContentService.SaveAndPublishWithStatus(basket);
@@ -101,6 +107,9 @@
             Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
             Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
 
+            // TODO figure out why the index does not build on load
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
+
             return root;
         }
 
@@ -109,6 +118,11 @@
         /// </summary>
         private void AddMerchelloData()
         {
+            if (!MerchelloContext.HasCurrent)
+            {
+                LogHelper.Info<BazaarDataInstaller>("MerchelloContext was null");
+            }
+
             var merchelloServices = MerchelloContext.Current.Services;
 
             LogHelper.Info<BazaarDataInstaller>("Updating Default Warehouse Address");
@@ -165,20 +179,38 @@
             rateTableProvider.SaveShippingGatewayMethod(gatewayShipMethod);
 
             // Add the product collections
+            LogHelper.Info<BazaarDataInstaller>("Adding example product collections");
             var featuredProducts =
                 merchelloServices.EntityCollectionService.CreateEntityCollectionWithKey(
                     EntityType.Product,
                     Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
                     "Featured Products");
-            var specializedSoap =
+            var soap =
                 merchelloServices.EntityCollectionService.CreateEntityCollectionWithKey(
                     EntityType.Product,
                     Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
-                    "Specialized Soap");
+                    "Soap");
+            
+            var specializedSoap = merchelloServices.EntityCollectionService.CreateEntityCollection(
+                EntityType.Product,
+                Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
+                "Specialized Soap");
+            specializedSoap.ParentKey = soap.Key;
+
+            var generic =
+                merchelloServices.EntityCollectionService.CreateEntityCollection(
+                    EntityType.Product,
+                    Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
+                    "Generic");
+            generic.ParentKey = soap.Key;
+            merchelloServices.EntityCollectionService.Save(new[] { specializedSoap, generic });
+
             _collections.Add("featuredProducts", featuredProducts.Key);
             _collections.Add("specializedSoap", specializedSoap.Key);
+            _collections.Add("generic", generic.Key);
 
             // Add the detached content type
+            LogHelper.Info<BazaarDataInstaller>("Getting information for detached content");
             var contentType = _services.ContentTypeService.GetContentType("BazaarProductContent");
             var detachedContentTypeService =
                 ((Core.Services.ServiceContext)merchelloServices).DetachedContentTypeService;
@@ -187,29 +219,28 @@
                 contentType.Key,
                 "Bazaar Product");
             detachedContentType.Description = "Default Bazaar Product Content";
-            detachedContentTypeService.Save(detachedContentType);
-
-            LogHelper.Info<BazaarDataInstaller>("Adding an example product");
-            var barOfSoap = merchelloServices.ProductService.CreateProduct("Bar of Soap", "soapbar", 5M);
-            barOfSoap.Shippable = true;
-            barOfSoap.Taxable = true;
-            barOfSoap.TrackInventory = false;
-            barOfSoap.Available = true;
-            barOfSoap.Weight = 1M;
-            barOfSoap.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(barOfSoap, false);
+            detachedContentTypeService.Save(detachedContentType);            
+            LogHelper.Info<BazaarDataInstaller>("Adding an example product Avocado Bar");
+            var avocadoBar = merchelloServices.ProductService.CreateProduct("Avocado Bar", "avocadobar", 5M);
+            avocadoBar.Shippable = true;
+            avocadoBar.OnSale = false;
+            avocadoBar.SalePrice = 3M;
+            avocadoBar.Taxable = true;
+            avocadoBar.TrackInventory = false;
+            avocadoBar.Available = true;
+            avocadoBar.Weight = 1M;
+            avocadoBar.AddToCatalogInventory(catalog);
+            merchelloServices.ProductService.Save(avocadoBar, false);
 
             // add to collections
-            barOfSoap.AddToCollection(featuredProducts);
-            barOfSoap.AddToCollection(specializedSoap);
-
-            var rootMedia = _services.MediaService.GetRootMedia().ToArray();
-
-            barOfSoap.DetachedContents.Add(
+            avocadoBar.AddToCollection(featuredProducts);
+            avocadoBar.AddToCollection(specializedSoap);
+            
+            avocadoBar.DetachedContents.Add(
                 new ProductVariantDetachedContent(
-                    barOfSoap.ProductVariantKey,
+                    avocadoBar.ProductVariantKey,
                     detachedContentType,
-                    "en-US",
+                    "en-US",                    
                     new DetachedDataValuesCollection(
                         new[]
                             {
@@ -221,9 +252,94 @@
                                     "\"Avocado Moisturizing Bar is great for dry skin.\""),
                                 new KeyValuePair<string, string>(
                                     "image",
-                                    rootMedia.FirstOrDefault(x => x.Name == "avocadobars.jpg") != null ? "\"" + rootMedia.FirstOrDefault(x => x.Name == "avocadobars.jpg").Id.ToString() + "\"" : "\"\""), 
-                            })));            
-            merchelloServices.ProductService.Save(barOfSoap);
+                                    "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1035/avocadobars.jpg\" }"), 
+                            }))
+                    {
+                        CanBeRendered = true
+                    });            
+            merchelloServices.ProductService.Save(avocadoBar);
+
+            LogHelper.Info<BazaarDataInstaller>("Adding an example product Liquid Soap");
+            var liquidSoap = merchelloServices.ProductService.CreateProduct("Liquid Soap", "liquidsoap", 16M);
+            liquidSoap.OnSale = true;
+            liquidSoap.SalePrice = 12M;
+            liquidSoap.Taxable = true;
+            liquidSoap.TrackInventory = false;
+            liquidSoap.Available = true;
+            liquidSoap.Weight = 1M;
+            liquidSoap.AddToCatalogInventory(catalog);
+            merchelloServices.ProductService.Save(liquidSoap, false);
+
+            // add to collections
+            liquidSoap.AddToCollection(featuredProducts);
+            liquidSoap.AddToCollection(specializedSoap);
+
+            liquidSoap.DetachedContents.Add(
+               new ProductVariantDetachedContent(
+                   liquidSoap.ProductVariantKey,
+                   detachedContentType,
+                   "en-US",
+                   new DetachedDataValuesCollection(
+                       new[]
+                            {
+                                new KeyValuePair<string, string>(
+                                    "description",
+                                    "\"<p>Soap is better liquefied.</p>\""),
+                                new KeyValuePair<string, string>(
+                                    "brief",
+                                    "\"Liquid Soap.\""),
+                                new KeyValuePair<string, string>(
+                                    "image",
+                                    "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1037/beeswaxlotionbase_lotionbee_main_a.jpg\" }"), 
+                            }))
+                   {
+                       CanBeRendered = true
+                   });
+            merchelloServices.ProductService.Save(liquidSoap);
+
+            LogHelper.Info<BazaarDataInstaller>("Adding an example product Generic Soap");
+            var genericSoap = merchelloServices.ProductService.CreateProduct("Generic Soap", "generic", 3M);
+            genericSoap.OnSale = false;
+            genericSoap.SalePrice = 2M;
+            genericSoap.Taxable = true;
+            genericSoap.TrackInventory = false;
+            genericSoap.Available = true;
+            genericSoap.Weight = 1M;
+            genericSoap.AddToCatalogInventory(catalog);
+            genericSoap.ProductOptions.Add(new ProductOption("Color"));
+            genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("White", "White"));
+            genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
+            genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
+            genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Pink", "Pink"));
+            genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Purple", "Purple"));
+            merchelloServices.ProductService.Save(genericSoap, false);
+
+            // add to collections
+            genericSoap.AddToCollection(generic);
+
+            genericSoap.DetachedContents.Add(
+               new ProductVariantDetachedContent(
+                   genericSoap.ProductVariantKey,
+                   detachedContentType,
+                   "en-US",
+                   new DetachedDataValuesCollection(
+                       new[]
+                            {
+                                new KeyValuePair<string, string>(
+                                    "description",
+                                    "\"<p>A substance used with water for washing and cleaning, made of a compound of natural oils or fats with sodium hydroxide or another strong alkali, and typically having perfume and coloring added.</p>\""),
+                                new KeyValuePair<string, string>(
+                                    "brief",
+                                    "\"Generic soap.\""),
+                                new KeyValuePair<string, string>(
+                                    "image",
+                                    "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1038/bathbombs.jpg\" }"), 
+                            }))
+                   {
+                       CanBeRendered = true
+                   });
+
+            merchelloServices.ProductService.Save(genericSoap);
         }
     }
 }

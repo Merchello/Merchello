@@ -84,9 +84,16 @@
                 },
 
                 saveProductContent: function(product, cultureName, files) {
-                    console.info('culture check ' + cultureName);
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.toArray();
+                    });
+
+                    angular.forEach(product.productVariants, function(pv) {
+                      if (pv.detachedContents.length > 0) {
+                          angular.forEach(pv.detachedContents, function(pvdc) {
+                            pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                          });
+                      }
                     });
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
@@ -103,16 +110,15 @@
                             }
                         },
                         function (data, status, headers, config) {
+
                             deferred.resolve(data);
+
+                        }, function(reason) {
+                            deferred.reject('Failed to save product content ' + reason)
                         });
 
                     return deferred.promise;
 
-                   // return umbRequestHelper.resourcePromise(
-                    //    $http.post(url,
-                    //        { display: product, cultureName: cultureName, uploadedFiles: files }
-                    //    ),
-                    //    'Failed to save data for product key ' + product.key);
                 },
 
                 /**
@@ -137,11 +143,35 @@
                         dc.detachedDataValues = dc.detachedDataValues.toArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.postMultiPartRequest(
+                        url,
+                        { key: "detachedContentItem", value: { display: productVariant, cultureName: cultureName} },
+                        function (data, formData) {
+                            //now add all of the assigned files
+                            for (var f in files) {
+                                //each item has a property alias and the file object, we'll ensure that the alias is suffixed to the key
+                                // so we know which property it belongs to on the server side
+                                formData.append("file_" + files[f].alias, files[f].file);
+                            }
+                        },
+                        function (data, status, headers, config) {
+                            deferred.resolve(data);
+                        }, function(reason) {
+                            deferred.reject(reason);
+                        });
+
+                    return deferred.promise;
+                },
+
+                copyProduct: function(product, name, sku) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PostCopyProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
-                            { display: productVariant, cultureName: cultureName, uploadedFiles: files }
+                            { product: product, name: name, sku: sku }
                         ),
-                        'Failed to save data for product variant key ' + productVariant.key);
+                        'Failed to delete detached content');
                 },
 
                 /**

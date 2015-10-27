@@ -11,7 +11,7 @@
     /// <summary>
     /// The invoice data service.
     /// </summary>
-    internal class InvoiceDataService : IInvoiceDataService
+    internal class InvoiceDataService : DataServiceBase, IInvoiceDataService
     {
         /// <summary>
         /// The merchello context.
@@ -47,7 +47,7 @@
         /// </returns>
         public IEnumerable<IInvoice> GetAll()
         {
-            return new InvoiceService().GetPage(1, 100).Items;
+            return new InvoiceService(DataServiceLogger).GetPage(1, 100).Items;
         }
 
 

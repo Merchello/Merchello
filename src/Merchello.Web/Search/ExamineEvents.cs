@@ -401,7 +401,7 @@
         /// </summary>
         static void ProductVariantServiceCreated(IProductVariantService sender, Core.Events.NewEventArgs<IProductVariant> e)
         {
-            if(e.Entity.HasIdentity) IndexProductVariant(e.Entity);
+            if (e.Entity.HasIdentity) IndexProductVariant(e.Entity);
         }
 
         /// <summary>

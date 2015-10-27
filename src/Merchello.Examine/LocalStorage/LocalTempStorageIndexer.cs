@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Web;
-using Examine.LuceneEngine;
-using Lucene.Net.Analysis;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
-using Merchello.Examine.LocalStorage.Extensions;
-using Umbraco.Core;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
-using Directory = Lucene.Net.Store.Directory;
-
-namespace Merchello.Examine.LocalStorage
+﻿namespace Merchello.Examine.LocalStorage
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Linq;
+    using System.Web;
+
+    using global::Examine.LuceneEngine;
+
+    using Lucene.Net.Analysis;
+    using Lucene.Net.Index;
+    using Lucene.Net.Store;
+
+    using Umbraco.Core;
+    using Umbraco.Core.IO;
+    using Umbraco.Core.Logging;
+
+    using DelegateExtensions = Merchello.Examine.LocalStorage.Extensions.DelegateExtensions;
+    using Directory = Lucene.Net.Store.Directory;
+
     internal enum InitializeDirectoryFlags
     {
         Success = 0,

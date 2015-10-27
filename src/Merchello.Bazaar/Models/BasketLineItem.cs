@@ -3,6 +3,7 @@
     using System;
 
     using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Core.Models;
 
     /// <summary>
     /// The basket line item.
@@ -17,6 +18,7 @@
         /// <summary>
         /// Gets or sets the content id.
         /// </summary>
+        [Obsolete("Use IProductContent")]
         public int ContentId { get; set; }
 
         /// <summary>
@@ -48,6 +50,11 @@
         /// Gets or sets the quantity.
         /// </summary>
         public int Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
+        public ExtendedDataCollection ExtendedData { get; set; }
 
         /// <summary>
         /// Gets or sets the product.

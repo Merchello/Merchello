@@ -52,6 +52,7 @@
 			get { return UnitOfWork.Database; }			
 		}
 
+
 		#region Abstract Methods
 
         /// <summary>

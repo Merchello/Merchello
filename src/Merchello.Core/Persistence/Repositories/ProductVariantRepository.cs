@@ -37,6 +37,20 @@
         {            
         }
 
+        /// <summary>
+        /// Gets a value indicating whether is cached repository.
+        /// </summary>
+        /// <remarks>
+        /// TODO the ProductVariantService should eventually be made internal (or removed)
+        /// All access to IProductVariant should be done through IProduct for better Cache management
+        /// </remarks>
+        protected override bool IsCachedRepository
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
@@ -117,6 +131,19 @@
 
             return Database.Fetch<ProductVariantDto>(sql).Any();
         }
+
+        ///// <summary>
+        ///// Deletes all detached content for culture.
+        ///// </summary>
+        ///// <param name="cultureName">
+        ///// The culture name.
+        ///// </param>
+        //public void DeleteAllDetachedContentForCulture(string cultureName)
+        //{
+        //    Database.Execute(
+        //        "DELETE FROM merchProductVariantDetachedContent WHERE cultureName = @Cn",
+        //        new { @Cn = cultureName });
+        //}
 
         /// <summary>
         /// The get product attribute collection.

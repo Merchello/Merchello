@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
@@ -13,13 +14,14 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// The tax method service.
     /// </summary>
-    internal class TaxMethodService : ITaxMethodService
+    internal class TaxMethodService : MerchelloRepositoryService, ITaxMethodService
     {
         /// <summary>
         /// The thread locker.
@@ -27,26 +29,29 @@
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
-        /// <summary>
         /// The store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaxMethodService"/> class.
         /// </summary>
         public TaxMethodService()
-            : this(new RepositoryFactory(), new StoreSettingService())
+            : this(LoggerResolver.Current.Logger)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxMethodService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public TaxMethodService(ILogger logger)
+            : this(new RepositoryFactory(), logger, new StoreSettingService(logger))
+        {
         }
 
         /// <summary>
@@ -55,12 +60,15 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
-        public TaxMethodService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService)
-        {            
+        public TaxMethodService(RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, storeSettingService)
+        {
         }
 
         /// <summary>
@@ -72,22 +80,47 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
-        public TaxMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService)
+        public TaxMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), storeSettingService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(storeSettingService, "settingsService");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaxMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        public TaxMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
             _storeSettingService = storeSettingService;
         }
 
+        #endregion
 
         #region Event Handlers
+
+
 
         /// <summary>
         /// Occurs after Create
@@ -142,8 +175,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateTaxMethodRepository(uow))
                 {
                     repository.AddOrUpdate(taxMethod);
                     uow.Commit();
@@ -166,8 +199,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateTaxMethodRepository(uow))
                 {
                     foreach (var countryTaxRate in taxMethodsArray)
                     {
@@ -196,8 +229,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateTaxMethodRepository(uow))
                 {
                     repository.Delete(taxMethod);
                     uow.Commit();
@@ -221,8 +254,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateTaxMethodRepository(uow))
                 {
                     foreach (var method in methods)
                     {
@@ -244,7 +277,7 @@
         /// <returns><see cref="ITaxMethod"/></returns>
         public ITaxMethod GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -258,7 +291,7 @@
         /// </returns>
         public IEnumerable<ITaxMethod> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -272,7 +305,7 @@
         /// <returns><see cref="ITaxMethod"/></returns>
         public ITaxMethod GetTaxMethodByCountryCode(Guid providerKey, string countryCode)
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var allTaxMethods = repository.GetAll().ToArray();
 
@@ -298,7 +331,7 @@
         /// </remarks>
         public ITaxMethod GetTaxMethodForProductPricing()
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<ITaxMethod>.Builder.Where(x => x.ProductTaxMethod);
                 return repository.GetByQuery(query).FirstOrDefault();
@@ -317,7 +350,7 @@
         /// </remarks>
         public IEnumerable<ITaxMethod> GetTaxMethodsByCountryCode(string countryCode)
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query =
                     Query<ITaxMethod>.Builder.Where(x => x.CountryCode == countryCode || x.CountryCode == Constants.CountryCodes.EverywhereElse);
@@ -333,7 +366,7 @@
         /// <returns>A collection of <see cref="ITaxMethod"/></returns>
         public IEnumerable<ITaxMethod> GetTaxMethodsByProviderKey(Guid providerKey)
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<ITaxMethod>.Builder.Where(x => x.ProviderKey == providerKey);
 
@@ -396,8 +429,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateTaxMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateTaxMethodRepository(uow))
                 {
                     repository.AddOrUpdate(taxMethod);
                     uow.Commit();
@@ -439,7 +472,7 @@
         /// </returns>
         private bool CountryTaxRateExists(Guid providerKey, string countryCode)
         {
-            using (var repository = _repositoryFactory.CreateTaxMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateTaxMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var allTaxMethods = repository.GetAll().ToArray();
 

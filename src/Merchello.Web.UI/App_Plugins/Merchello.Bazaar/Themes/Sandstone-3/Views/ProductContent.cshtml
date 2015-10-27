@@ -11,23 +11,17 @@
         <h1>@Model.Name</h1>
     </div>
     <div class="row-fluid">
-        <div class="col-md-8">
+        <div class="col-md-9">
             @if (Model.HasValue("image"))
             {
-               // var image = Umbraco.TypedMedia(Model.GetPropertyValue("image"));
-                <img class="img-responsive" src="" alt="@Model.Name">
-            }
-            
-            @if (Model.ProductVariants.Any())
-            {
-                <h4 class="pull-right">@ModelExtensions.FormatPrice(Model.Price, BazaarContentHelper.GetStoreCurrency())</h4>
-            }
+                <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height: 300)" alt="@Model.Name">
+            }            
             <h4>
                 <a href="#">@Model.Name</a>
             </h4>
             @Model.GetPropertyValue("description")
         </div>
-        <div class="pull-right">
+        <div class="pull-right col-md-3">
             @Html.Action("RenderAddItem", "BazaarBasket", new { area = "Bazaar", model = Model.BuildAddItemModel(BazaarContentHelper.GetStoreCurrency(), BazaarContentHelper.ShowWishList()) })
         </div>
     </div>

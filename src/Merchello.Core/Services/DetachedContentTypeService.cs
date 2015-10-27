@@ -5,11 +5,8 @@
     using System.Linq;
     using System.Threading;
 
-    using Lucene.Net.Search;
-
-    using Merchello.Core.Models;
+    using Merchello.Core.Events;
     using Merchello.Core.Models.DetachedContent;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
@@ -17,31 +14,36 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a detached content type service.
     /// </summary>
-    internal class DetachedContentTypeService : IDetachedContentTypeService
+    internal class DetachedContentTypeService : MerchelloRepositoryService, IDetachedContentTypeService
     {        
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedContentTypeService"/> class.
         /// </summary>
         public DetachedContentTypeService()
+            : this(LoggerResolver.Current.Logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DetachedContentTypeService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public DetachedContentTypeService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
         {            
         }
 
@@ -51,8 +53,11 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public DetachedContentTypeService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public DetachedContentTypeService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
         {
         }
 
@@ -65,14 +70,35 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public DetachedContentTypeService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public DetachedContentTypeService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DetachedContentTypeService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public DetachedContentTypeService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         #region Event Handlers
 
@@ -234,8 +260,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(uow))
                 {
                     repository.AddOrUpdate(detachedContent);
                     uow.Commit();
@@ -268,8 +294,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(uow))
                 {
                     repository.AddOrUpdate(detachedContentType);
                     uow.Commit();
@@ -296,8 +322,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(uow))
                 {
                     foreach (var detachedContent in detachedContentArray)
                     {
@@ -332,8 +358,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(uow))
                 {
                     repository.Delete(detachedContentType);
                     uow.Commit();
@@ -354,7 +380,7 @@
         /// </returns>
         public IDetachedContentType GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -371,7 +397,7 @@
         /// </returns>
         public IEnumerable<IDetachedContentType> GetDetachedContentTypesByEntityTfKey(Guid entityTfKey)
         {
-            using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IDetachedContentType>.Builder.Where(x => x.EntityTfKey == entityTfKey);
                 return repository.GetByQuery(query);
@@ -389,7 +415,7 @@
         /// </returns>
         public IEnumerable<IDetachedContentType> GetDetachedContentTypesByContentTypeKey(Guid contentTypeKey)
         {
-            using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IDetachedContentType>.Builder.Where(x => x.ContentTypeKey == contentTypeKey);
                 return repository.GetByQuery(query);
@@ -404,7 +430,7 @@
         /// </returns>
         public IEnumerable<IDetachedContentType> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -428,8 +454,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDetachedContentTypeRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDetachedContentTypeRepository(uow))
                 {
                     foreach (var detachedContent in detachedContentArray)
                     {

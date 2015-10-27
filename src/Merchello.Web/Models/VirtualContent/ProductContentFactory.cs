@@ -2,13 +2,11 @@
 {
     using System.Linq;
 
-    using Merchello.Core.Configuration;
     using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core.Events;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
-    using Umbraco.Web;
 
     /// <summary>
     /// Represents a ProductContentFactory.

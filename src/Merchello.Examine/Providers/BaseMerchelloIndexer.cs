@@ -1,11 +1,4 @@
-﻿using Examine.LuceneEngine.Config;
-using Examine.Providers;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
-using Merchello.Examine.LocalStorage;
-using Umbraco.Core;
-
-namespace Merchello.Examine.Providers
+﻿namespace Merchello.Examine.Providers
 {
     using System;
     using System.Collections.Generic;
@@ -14,12 +7,23 @@ namespace Merchello.Examine.Providers
     using System.Linq;
     using System.Security;
     using System.Xml.Linq;
-    using DataServices;
-    using global::Examine;
-    using global::Examine.LuceneEngine.Providers;
-    using Lucene.Net.Analysis;
 
-    using Umbraco.Core.Logging;
+    using global::Examine;
+
+    using global::Examine.LuceneEngine.Config;
+
+    using global::Examine.LuceneEngine.Providers;
+
+    using global::Examine.Providers;
+
+    using Lucene.Net.Analysis;
+    using Lucene.Net.Index;
+    using Lucene.Net.Store;
+
+    using Merchello.Examine.DataServices;
+    using Merchello.Examine.LocalStorage;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The base merchello indexer.

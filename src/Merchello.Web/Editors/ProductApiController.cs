@@ -8,8 +8,13 @@
     using System.Web.Http;
     using System.Web.Http.ModelBinding;
 
+    using global::Examine;
+
     using Merchello.Core;
+    using Merchello.Core.Chains.CopyEntity.Product;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Examine.Providers;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
@@ -216,6 +221,37 @@
         }
 
         /// <summary>
+        /// The post copy product.
+        /// </summary>
+        /// <param name="productCopySave">
+        /// The product copy save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the original product is not found
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Throws an exception if the copy attempt failed.
+        /// </exception>
+        [HttpPost]
+        public ProductDisplay PostCopyProduct(ProductCopySave productCopySave)
+        {
+            var original = _productService.GetByKey(productCopySave.Product.Key);
+            
+            if (original == null) throw new NullReferenceException("Product was not found");
+
+            var taskChain = new CopyProductTaskChain(original, productCopySave.Name, productCopySave.Sku);
+
+            var attempt = taskChain.Copy();
+
+            if (!attempt.Success) throw attempt.Exception;
+
+            return attempt.Result.ToProductDisplay();
+        }
+
+        /// <summary>
         /// Updates an existing product
         /// 
         /// PUT /umbraco/Merchello/ProductApi/PutProduct
@@ -299,6 +335,8 @@
             [ModelBinder(typeof(ProductVariantContentSaveBinder))]
             ProductVariantContentSave detachedContentItem)
         {
+            ProductVariantDetachedContentHelper<ProductVariantContentSave, ProductVariantDisplay>.MapDetachedProperties(detachedContentItem);
+
             var variant = _productVariantService.GetByKey(detachedContentItem.Display.Key);
             variant = detachedContentItem.Display.ToProductVariant(variant);
 

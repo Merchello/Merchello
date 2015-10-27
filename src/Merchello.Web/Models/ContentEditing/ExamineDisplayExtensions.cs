@@ -241,7 +241,7 @@
             var jarray = JArray.Parse(result.Fields[alias]);
             
             var contents = new List<ProductVariantDetachedContentDisplay>();
-
+            
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var j in jarray)
             {
@@ -254,7 +254,9 @@
                             Key = jtoken.GetValue("Key").ToObject<Guid>(),
                             Slug = jtoken.SelectToken("Slug").ToString(),
                             TemplateId = (int)j.SelectToken("TemplateId"),
-                            CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString())
+                            CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString()),
+                            CreateDate = contentType.CreateDate,
+                            UpdateDate = contentType.UpdateDate
                         };
 
                 contents.Add(pvdc.ToProductVariantDetachedContentDisplay());

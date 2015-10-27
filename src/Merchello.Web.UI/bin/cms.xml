@@ -459,6 +459,11 @@
             When this applicatio is refactored, this constuctor should be made private.
             </summary>
         </member>
+        <member name="T:umbraco.BusinessLogic.Actions.ActionRestore">
+            <summary>
+            This action is invoked when the content item is to be restored from the recycle bin
+            </summary>
+        </member>
         <member name="T:umbraco.BusinessLogic.Actions.LegacyActionMenuItemAttribute">
             <summary>
             The attribute to assign to any IAction objects.
@@ -2440,7 +2445,7 @@
         </member>
         <member name="M:umbraco.cms.businesslogic.datatype.DefaultPreValueEditor.#ctor(umbraco.cms.businesslogic.datatype.BaseDataType,System.Boolean)">
             <summary>
-            The default editor for editing the build-in pre values in umbraco
+            The default editor for editing the built-in pre values in umbraco
             </summary>
             <param name="DataType">The DataType to be parsed</param>
             <param name="DisplayTextBox">Whether to use the default text box</param>
@@ -2497,23 +2502,6 @@
             <param name="dataTypeDefId"></param>
             <returns></returns>
         </member>
-        <member name="T:umbraco.cms.businesslogic.Dictionary">
-            <summary>
-            The Dictionary is used for storing and retrieving language translated textpieces in Umbraco. It uses
-            umbraco.cms.businesslogic.language.Item class as storage and can be used from the public website of umbraco
-            all text are cached in memory.
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.Dictionary.EnsureCache">
-            <summary>
-            Reads all items from the database and stores in local cache
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.Dictionary.ClearCache">
-            <summary>
-            Used by the cache refreshers to clear the cache on distributed servers
-            </summary>
-        </member>
         <member name="P:umbraco.cms.businesslogic.Dictionary.getTopMostItems">
             <summary>
             Retrieve a list of toplevel DictionaryItems
@@ -2525,25 +2513,11 @@
             associated to a key in various language translations
             </summary>
         </member>
-        <member name="M:umbraco.cms.businesslogic.Dictionary.DictionaryItem.#ctor(System.Int32,System.String,System.Guid,System.Guid)">
+        <member name="M:umbraco.cms.businesslogic.Dictionary.DictionaryItem.Value">
             <summary>
-            Used internally to construct a new item object and store in cache
+            Returns the default value based on the default language for this item
             </summary>
-            <param name="id"></param>
-            <param name="key"></param>
-            <param name="uniqueKey"></param>
-            <param name="parentId"></param>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.Dictionary.DictionaryItem.IsTopMostItem">
-            <summary>
-            Returns if the dictionaryItem is the root item.            
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.Dictionary.DictionaryItem.setValue(System.String)">
-            <summary>
-            This sets the value for the placeholder language (id = 0), not for a language with an ID
-            </summary>
-            <param name="value"></param>
+            <returns></returns>
         </member>
         <member name="M:umbraco.cms.businesslogic.Dictionary.DictionaryItem.Save">
             <summary>
@@ -2659,7 +2633,7 @@
         </member>
         <member name="M:umbraco.cms.businesslogic.language.Language.Save">
             <summary>
-            Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
+            Used to persist object changes to the database
             </summary>
         </member>
         <member name="M:umbraco.cms.businesslogic.language.Language.Delete">
@@ -2723,25 +2697,6 @@
         <member name="T:umbraco.cms.businesslogic.language.Language.DeleteEventHandler">
             <summary>
             The delete event handler
-            </summary>
-        </member>
-        <member name="T:umbraco.cms.businesslogic.language.Item">
-            <summary>
-            THIS CLASS IS NOT INTENDED TO BE USED DIRECTLY IN YOUR CODE, USE THE umbraco.cms.businesslogic.Dictionary class instead
-            </summary>
-            <remarks>
-            This class is used by the DictionaryItem, all caching is handled in the DictionaryItem.Save() method which will ensure that
-            cache is invalidated if anything is changed.
-            </remarks>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.language.Item.EnsureCache">
-            <summary>
-            Populates the global hash table with the data from the database.
-            </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.language.Item.ClearCache">
-            <summary>
-            Clears the cache, this is used for cache refreshers to ensure that the cache is up to date across all servers 
             </summary>
         </member>
         <member name="M:umbraco.cms.businesslogic.language.Item.Text(System.Guid,System.Int32)">
@@ -4830,7 +4785,7 @@
         </member>
         <member name="M:umbraco.cms.businesslogic.relation.Relation.Save">
             <summary>
-            Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
+            Used to persist object changes to the database
             </summary>
         </member>
         <member name="T:umbraco.cms.businesslogic.relation.RelationType">
@@ -4838,14 +4793,14 @@
             Summary description for RelationType.
             </summary>
         </member>
-        <member name="M:umbraco.cms.businesslogic.relation.RelationType.#ctor">
+        <member name="M:umbraco.cms.businesslogic.relation.RelationType.#ctor(Umbraco.Core.Models.IRelationType)">
             <summary>
             Internal constructor to create a new relation type
             </summary>
         </member>
         <member name="M:umbraco.cms.businesslogic.relation.RelationType.Save">
             <summary>
-            Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
+            Used to persist object changes to the databasey
             </summary>
         </member>
         <member name="M:umbraco.cms.businesslogic.relation.RelationType.GetAll">
@@ -5000,23 +4955,6 @@
             <summary>
             Removes any references to this templates from child templates, documenttypes and documents
             </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.template.Template.DetermineRenderingEngine(umbraco.cms.businesslogic.template.Template,System.String)">
-            <summary>
-            This checks what the default rendering engine is set in config but then also ensures that there isn't already 
-            a template that exists in the opposite rendering engine's template folder, then returns the appropriate 
-            rendering engine to use.
-            </summary>
-            <param name="t"></param>
-            <param name="design">If a template body is specified we'll check if it contains master page markup, if it does we'll auto assume its webforms </param>
-            <returns></returns>
-            <remarks>
-            The reason this is required is because for example, if you have a master page file already existing under ~/masterpages/Blah.aspx
-            and then you go to create a template in the tree called Blah and the default rendering engine is MVC, it will create a Blah.cshtml 
-            empty template in ~/Views. This means every page that is using Blah will go to MVC and render an empty page. 
-            This is mostly related to installing packages since packages install file templates to the file system and then create the 
-            templates in business logic. Without this, it could cause the wrong rendering engine to be used for a package.
-            </remarks>
         </member>
         <member name="M:umbraco.cms.businesslogic.template.Template.FireBeforeSave(umbraco.cms.businesslogic.SaveEventArgs)">
             <summary>
@@ -5304,12 +5242,6 @@
             <summary>
             Summary description for Access.
             </summary>
-        </member>
-        <member name="M:umbraco.cms.businesslogic.web.Access.UpdateInMemoryDocument(System.Xml.XmlDocument)">
-            <summary>
-            Used to refresh cache among servers in an LB scenario
-            </summary>
-            <param name="newDoc"></param>
         </member>
         <member name="T:umbraco.cms.businesslogic.web.Document">
             <summary>
@@ -6094,6 +6026,11 @@
             Used to persist object changes to the database. In Version3.0 it's just a stub for future compatibility
             </summary>
         </member>
+        <member name="M:umbraco.cms.businesslogic.web.StyleSheet.setupNode">
+            <summary>
+            Sets up the internal data of the CMSNode, used by the various constructors
+            </summary>
+        </member>
         <member name="M:umbraco.cms.businesslogic.web.StyleSheet.FireBeforeSave(umbraco.cms.businesslogic.SaveEventArgs)">
             <summary>
             Raises the <see cref="E:BeforeSave"/> event.
@@ -6123,6 +6060,27 @@
             Raises the <see cref="E:AfterDelete"/> event.
             </summary>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.web.StyleSheet.sortOrder">
+            <summary>
+            Sort order does nothing for Stylesheets
+            </summary>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.web.StyleSheet.Level">
+            <summary>
+            Sort order does nothing for Stylesheets
+            </summary>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.web.StyleSheet.CreateDateTime">
+            <summary>
+            Gets or sets the create date time.
+            </summary>
+            <value>The create date time.</value>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.web.StyleSheet.Text">
+            <summary>
+            Human readable name/label
+            </summary>
         </member>
         <member name="E:umbraco.cms.businesslogic.web.StyleSheet.BeforeSave">
             <summary>
@@ -6164,6 +6122,11 @@
             The delete event handler
             </summary>
         </member>
+        <member name="M:umbraco.cms.businesslogic.web.StylesheetProperty.setupNode">
+            <summary>
+            Sets up the internal data of the CMSNode, used by the various constructors
+            </summary>
+        </member>
         <member name="M:umbraco.cms.businesslogic.web.StylesheetProperty.FireBeforeSave(umbraco.cms.businesslogic.SaveEventArgs)">
             <summary>
             Raises the <see cref="E:BeforeSave"/> event.
@@ -6193,6 +6156,11 @@
             Raises the <see cref="E:AfterDelete"/> event.
             </summary>
             <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="P:umbraco.cms.businesslogic.web.StylesheetProperty.Text">
+            <summary>
+            Human readable name/label
+            </summary>
         </member>
         <member name="E:umbraco.cms.businesslogic.web.StylesheetProperty.BeforeSave">
             <summary>

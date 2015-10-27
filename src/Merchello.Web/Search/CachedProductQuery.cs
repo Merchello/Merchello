@@ -15,6 +15,7 @@
     using Merchello.Core.Chains;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
+    using Merchello.Web.DataModifiers.Product;
 
     using Models.ContentEditing;
     using Models.Querying;
@@ -101,7 +102,8 @@
         /// </returns>
         public override ProductDisplay GetByKey(Guid key)
         {
-            return this.ModifyData(GetDisplayObject(key));
+            //// modify data is handled in GetDisplayObject!
+            return GetDisplayObject(key);
         }
 
         /// <summary>
@@ -147,7 +149,8 @@
 
             var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
 
-            if (display != null) return this.ModifyData(display);
+            // Don't modifiy the data here as it would have been modified in the PerformMapSearchResultToDisplayObject
+            if (display != null) return display;
 
             var key = _productService.GetKeyForSlug(slug);
 
@@ -734,6 +737,29 @@
         internal void ReindexEntity(IProductVariant entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
+        }        
+
+        /// <summary>
+        /// The modify data.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of data to be modified
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        internal T ModifyData<T>(T data)
+            where T : class, IProductVariantDataModifierData
+        {
+            if (!EnableDataModifiers) return data;
+            var attempt = _dataModifier.Value.Modify(data);
+            if (!attempt.Success) return data;
+
+            var modified = attempt.Result as T;
+            return modified ?? data;
         }
 
         /// <summary>
@@ -760,32 +786,8 @@
 
             ReindexEntity(entity);
 
-            return AutoMapper.Mapper.Map<ProductDisplay>(entity);
+            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
         }
-
-        /// <summary>
-        /// The modify data.
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <typeparam name="T">
-        /// The type of data to be modified
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="T"/>.
-        /// </returns>
-        internal T ModifyData<T>(T data)
-            where T : class, IProductVariantDataModifierData
-        {
-            if (!EnableDataModifiers) return data;
-            var attempt = _dataModifier.Value.Modify(data);
-            if (!attempt.Success) return data;
-
-            var modified = attempt.Result as T;
-            return modified ?? data;
-        }
-
 
         /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="ProductDisplay"/>
@@ -798,7 +800,7 @@
         /// </returns>
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return result.ToProductDisplay(GetVariantsByProduct);
+            return this.ModifyData(result.ToProductDisplay(GetVariantsByProduct));
         }
      
 

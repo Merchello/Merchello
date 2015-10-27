@@ -31,6 +31,10 @@ ol, ul {
     .sale-price {
         color: red;
     }
+    .original-price {
+        margin-left: .5em;
+        text-decoration: line-through;
+    }
 }
 
 div.price {

@@ -17,8 +17,6 @@
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 
-    using umbraco.developer;
-
     /// <summary>
     /// The product mapping extensions.
     /// </summary>
@@ -189,21 +187,6 @@
         }
 
         /// <summary>
-        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ProductDisplay"/>.
-        /// </returns>
-        internal static ProductDisplay ToProductDisplay(this IProduct product)
-        {            
-            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
-            return productDisplay;
-        }
-
-        /// <summary>
         /// Maps a <see cref="ProductDisplay"/> to <see cref="ProductVariantDisplay"/>.
         /// </summary>
         /// <param name="product">
@@ -215,10 +198,25 @@
         /// <remarks>
         /// Used for adding items to item caches in <see cref="CustomerItemCacheBase"/>
         /// </remarks>
-        internal static ProductVariantDisplay AsMasterVariantDisplay(this ProductDisplay product)
+        public static ProductVariantDisplay AsMasterVariantDisplay(this ProductDisplay product)
         {
             return AutoMapper.Mapper.Map<ProductVariantDisplay>(product);
         }
+
+        /// <summary>
+        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public static ProductDisplay ToProductDisplay(this IProduct product)
+        {            
+            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+            return productDisplay;
+        }        
                
         #endregion
 
@@ -356,7 +354,37 @@
             }
 
             return variantContent;
-        } 
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not this object can be rendered as virtual content.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool HasVirtualContent(this ProductDisplay display)
+        {
+            return display.Available && display.DetachedContents.Any(x => x.CanBeRendered);
+        }
+
+        /// <summary>
+        /// Creates <see cref="IProductContent"/> from the display object.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public static IProductContent AsProductContent(this ProductDisplay display)
+        {
+            if (!display.HasVirtualContent()) return null;
+            var factory = new ProductContentFactory();
+            return factory.BuildContent(display);
+        }
 
         /// <summary>
         /// Gets the default slug.

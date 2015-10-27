@@ -1,5 +1,7 @@
-﻿using Merchello.Core.Configuration;
+﻿using System;
+using Merchello.Core.Configuration;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Logging;
 
 namespace Merchello.Core.Persistence.UnitOfWork
 {
@@ -15,8 +17,8 @@ namespace Merchello.Core.Persistence.UnitOfWork
         /// <summary>
         /// Parameterless constructor uses defaults
         /// </summary>
-        public PetaPocoUnitOfWorkProvider()
-            : this(new DefaultDatabaseFactory(MerchelloConfiguration.Current.Section.DefaultConnectionStringName))
+        public PetaPocoUnitOfWorkProvider(ILogger logger)
+            : this(new DefaultDatabaseFactory(MerchelloConfiguration.Current.Section.DefaultConnectionStringName, logger))
         {
             
         }
@@ -24,16 +26,18 @@ namespace Merchello.Core.Persistence.UnitOfWork
         /// <summary>
         /// Constructor accepting custom connectino string and provider name
         /// </summary>
+        /// <param name="logger"></param>
         /// <param name="connectionString">Connection String to use with Database</param>
         /// <param name="providerName">Database Provider for the Connection String</param>
-        public PetaPocoUnitOfWorkProvider(string connectionString, string providerName) : this(new DefaultDatabaseFactory(connectionString, providerName))
+        public PetaPocoUnitOfWorkProvider(ILogger logger, string connectionString, string providerName) 
+			: this(new DefaultDatabaseFactory(connectionString, providerName, logger))
         {}
 
 		/// <summary>
 		/// Constructor accepting an IDatabaseFactory instance
 		/// </summary>
 		/// <param name="dbFactory"></param>
-	    internal PetaPocoUnitOfWorkProvider(IDatabaseFactory dbFactory)
+	    public PetaPocoUnitOfWorkProvider(IDatabaseFactory dbFactory)
 	    {
 		    Mandate.ParameterNotNull(dbFactory, "dbFactory");
 		    _dbFactory = dbFactory;
@@ -61,9 +65,9 @@ namespace Merchello.Core.Persistence.UnitOfWork
 		/// Static helper method to return a new unit of work
 		/// </summary>
 		/// <returns></returns>
-		internal static IDatabaseUnitOfWork CreateUnitOfWork()
-		{
-            var provider = new PetaPocoUnitOfWorkProvider();
+        internal static IDatabaseUnitOfWork CreateUnitOfWork(ILogger logger)
+        {
+            var provider = new PetaPocoUnitOfWorkProvider(logger);
 			return provider.GetUnitOfWork();
 		}
     }

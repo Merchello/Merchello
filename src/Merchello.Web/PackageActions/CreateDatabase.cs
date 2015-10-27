@@ -3,6 +3,7 @@
     using System;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Initial;
 
     using umbraco.cms.businesslogic.packager.standardPackageActions;
@@ -10,6 +11,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     using umbraco.interfaces;
 
@@ -19,26 +21,53 @@
     public class CreateDatabase : IPackageAction
     {
         /// <summary>
-        /// The _is test.
+        /// The schema helper.
+        /// </summary>
+        private readonly MerchelloDatabaseSchemaHelper _schemaHelper;
+
+        /// <summary>
+        /// The _database.
         /// </summary>
         private readonly Database _database;
+
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateDatabase"/> class.
         /// </summary>
-        public CreateDatabase() : this(ApplicationContext.Current.DatabaseContext.Database)
+        public CreateDatabase() 
+            : this(ApplicationContext.Current)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateDatabase"/> class.
         /// </summary>
-        /// <param name="isTest">
-        /// The is test.
+        /// <param name="applicationContext">
+        /// The application context.
         /// </param>
-        internal CreateDatabase(Database database)
+        public CreateDatabase(ApplicationContext applicationContext)
+            : this(applicationContext.DatabaseContext.Database, applicationContext.DatabaseContext.SqlSyntax, LoggerResolver.Current.Logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateDatabase"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        /// <param name="sqlSyntaxProvider">
+        /// The sql Syntax Provider.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal CreateDatabase(Database database, ISqlSyntaxProvider sqlSyntaxProvider, ILogger logger)
         {
             _database = database;
+            _logger = logger;
+            _schemaHelper = new MerchelloDatabaseSchemaHelper(database, logger, sqlSyntaxProvider);
         }
 
         /// <summary>
@@ -61,10 +90,9 @@
 
             try
             {
-                var creation = new DatabaseSchemaCreation(_database);
-                creation.InitializeDatabaseSchema();
+                _schemaHelper.CreateDatabaseSchema();
 
-                var creationData = new BaseDataCreation(_database);
+                var creationData = new BaseDataCreation(_database, _logger);
                 var dataCreationResult = CreateInitialMerchelloData(creationData);
 
                 return true;
@@ -98,8 +126,7 @@
         {
             try
             {
-                var deletions = new DatabaseSchemaCreation(Umbraco.Core.ApplicationContext.Current.DatabaseContext.Database);
-                deletions.UninstallDatabaseSchema();
+                _schemaHelper.UninstallDatabaseSchema();
 
                 return true;
             }

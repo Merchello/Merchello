@@ -119,7 +119,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.loaded = true;
 
                     if ($scope.productVariant.hasDetachedContent()) {
-                        $scope.productVariant.assertLanguageContent($scope.languages);
+                        var missing = $scope.productVariant.assertLanguageContent(_.pluck($scope.languages, 'isoCode'));
+                        if (missing.length > 0) {
+                            var detachedContentType = $scope.productVariant.detachedContentType();
+                            createDetachedContent(detachedContentType, missing);
+                        }
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
                         $scope.isConfigured = true;
                         loadScaffold();
@@ -179,10 +183,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }
             }
 
-            function createDetachedContent(detachedContent) {
-                if(!$scope.productVariant.hasDetachedContent()) {
+            function createDetachedContent(detachedContent, missing) {
+                if(!$scope.productVariant.hasDetachedContent() || missing !== undefined) {
                     // create detached content values for each language present
-                    var isoCodes = _.pluck($scope.languages, 'isoCode');
+                    var isoCodes = missing === undefined ?  _.pluck($scope.languages, 'isoCode') : missing;
                     contentResource.getScaffold(-20, detachedContent.umbContentType.alias).then(function(scaffold) {
                         filterTabs(scaffold);
                         angular.forEach(isoCodes, function(cultureName) {
@@ -193,7 +197,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         // we have to save here without assigning the scope.detachedContent otherwise we will only save the scaffold for the current language
                         // but the helper is expecting the scope value to be set.
                         saveWithoutEvents();
-
                     });
                 }
             }
@@ -282,12 +285,19 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function fillValues() {
+
                 if ($scope.contentTabs.length > 0) {
                     angular.forEach($scope.contentTabs, function(ct) {
                         angular.forEach(ct.properties, function(p) {
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
-                                p.value = angular.fromJson(stored);
+                                try {
+                                    p.value = angular.fromJson(stored);
+                                }
+                                catch (e) {
+                                    // Hack fix for some property editors
+                                    p.value = stored.substring(1, stored.length-1);
+                                }
                             }
                         });
                     });

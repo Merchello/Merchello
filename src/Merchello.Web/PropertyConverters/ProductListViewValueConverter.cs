@@ -65,12 +65,7 @@
             try
             {
                 var key = new Guid(collectionKey);
-                var products = merchello.Query.Product.GetFromCollection(key, 1, long.MaxValue).Items
-                    .Select(x => (ProductDisplay)x)
-                    .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
-
-                var factory = new ProductContentFactory();
-                return products.Select(factory.BuildContent);
+                return merchello.TypedProductContentFromCollection(key);
             }
             catch (Exception ex)
             {

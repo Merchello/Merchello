@@ -11,6 +11,7 @@
 
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
+    using Umbraco.Web.Models;
 
     /// <summary>
     /// The product variant detached content display.
@@ -57,6 +58,18 @@
         /// Gets or sets the detached data values.
         /// </summary>
         public IEnumerable<KeyValuePair<string, string>> DetachedDataValues { get; set; }
+
+        // Some properties use the create and update dates for caching - like ImageCropper
+
+        /// <summary>
+        /// Gets or sets the create date.
+        /// </summary>
+        public DateTime CreateDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the update date.
+        /// </summary>
+        public DateTime UpdateDate { get; set; }
     }
 
     /// <summary>
@@ -166,7 +179,16 @@
             foreach (var value in pvd.DetachedDataValues)
             {
                 var propType = contentType.GetPropertyType(value.Key);
-                var valObj = JsonConvert.DeserializeObject<object>(value.Value);
+                object valObj;
+                try
+                {
+                    valObj = JsonConvert.DeserializeObject<object>(value.Value);
+                }
+                catch
+                {                    
+                    valObj = value.Value.Substring(1, value.Value.Length - 1);
+                }
+
                 if (propType != null)
                 {
                     properties.Add(new DetachedPublishedProperty(propType, valObj));

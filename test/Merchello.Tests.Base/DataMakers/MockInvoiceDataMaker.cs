@@ -55,7 +55,7 @@ namespace Merchello.Tests.Base.DataMakers
 
 
 
-            var invoiceService = new InvoiceService();
+            var invoiceService = new InvoiceService(TestLogger);
 
             var invoice = invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
 

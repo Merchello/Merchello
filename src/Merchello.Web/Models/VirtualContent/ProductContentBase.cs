@@ -509,7 +509,7 @@
         {
             get
             {
-                return DateTime.MinValue;
+                return _detachedContentDisplay.CreateDate;
             }
         }
 
@@ -523,7 +523,7 @@
         {
             get
             {
-                return DateTime.MinValue;
+                return _detachedContentDisplay.UpdateDate;
             }
         }
 

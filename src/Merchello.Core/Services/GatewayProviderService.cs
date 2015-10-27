@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
@@ -13,16 +14,13 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the GatewayProviderService
     /// </summary>    
-    public class GatewayProviderService : IGatewayProviderService
+    public class GatewayProviderService : MerchelloRepositoryService, IGatewayProviderService
     {
-        //TODO - we are adding so many services here, we should consider refactoring GatewayProviderBase to 
-        // TODO simply accept the ServiceContext
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
         private readonly IInvoiceService _invoiceService;
         private readonly IOrderService _orderService;
         private readonly IShipMethodService _shipMethodService;
@@ -37,26 +35,121 @@
 
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         /// <summary>
-         /// Constructor
-         /// </summary>
-         public GatewayProviderService()
-            : this(new RepositoryFactory(), new ShipMethodService(), new ShipRateTierService(), new ShipCountryService(), new InvoiceService(), new OrderService(), new TaxMethodService(), new PaymentService(),  new PaymentMethodService(), new NotificationMethodService(), new NotificationMessageService(), new WarehouseService())
-        { }
+        #region Constructors
 
-         internal GatewayProviderService(RepositoryFactory repositoryFactory, IShipMethodService shipMethodService, 
-             IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
-             IInvoiceService invoiceService, IOrderService orderService,
-             ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService,
-             INotificationMethodService notificationMethodService, INotificationMessageService notificationMessageService, IWarehouseService warehouseService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, shipMethodService, 
-             shipRateTierService, shipCountryService, invoiceService, orderService, taxMethodService,
-             paymentService, paymentMethodService,
-             notificationMethodService, notificationMessageService, warehouseService)
-        { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GatewayProviderService"/> class.
+        /// </summary>
+        public GatewayProviderService()
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
 
-        internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, 
-            IShipMethodService shipMethodService, IShipRateTierService shipRateTierService, 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GatewayProviderService"/> class. 
+        /// Constructor
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public GatewayProviderService(ILogger logger)
+            : this(
+                logger,
+                new RepositoryFactory(),
+                new ShipMethodService(logger),
+                new ShipRateTierService(logger),
+                new ShipCountryService(logger),
+                new InvoiceService(logger),
+                new OrderService(logger),
+                new TaxMethodService(logger),
+                new PaymentService(logger),
+                new PaymentMethodService(logger),
+                new NotificationMethodService(logger),
+                new NotificationMessageService(logger),
+                new WarehouseService(logger))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GatewayProviderService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="shipMethodService">
+        /// The ship method service.
+        /// </param>
+        /// <param name="shipRateTierService">
+        /// The ship rate tier service.
+        /// </param>
+        /// <param name="shipCountryService">
+        /// The ship country service.
+        /// </param>
+        /// <param name="invoiceService">
+        /// The invoice service.
+        /// </param>
+        /// <param name="orderService">
+        /// The order service.
+        /// </param>
+        /// <param name="taxMethodService">
+        /// The tax method service.
+        /// </param>
+        /// <param name="paymentService">
+        /// The payment service.
+        /// </param>
+        /// <param name="paymentMethodService">
+        /// The payment method service.
+        /// </param>
+        /// <param name="notificationMethodService">
+        /// The notification method service.
+        /// </param>
+        /// <param name="notificationMessageService">
+        /// The notification message service.
+        /// </param>
+        /// <param name="warehouseService">
+        /// The warehouse service.
+        /// </param>
+        internal GatewayProviderService(
+            ILogger logger,
+            RepositoryFactory repositoryFactory,
+            IShipMethodService shipMethodService,
+            IShipRateTierService shipRateTierService,
+            IShipCountryService shipCountryService,
+            IInvoiceService invoiceService,
+            IOrderService orderService,
+            ITaxMethodService taxMethodService,
+            IPaymentService paymentService,
+            IPaymentMethodService paymentMethodService,
+            INotificationMethodService notificationMethodService,
+            INotificationMessageService notificationMessageService,
+            IWarehouseService warehouseService)
+            : this(
+                new PetaPocoUnitOfWorkProvider(logger),
+                repositoryFactory,
+                logger,
+                shipMethodService,
+                shipRateTierService,
+                shipCountryService,
+                invoiceService,
+                orderService,
+                taxMethodService,
+                paymentService,
+                paymentMethodService,
+                notificationMethodService,
+                notificationMessageService,
+                warehouseService)
+        {            
+        }
+
+        internal GatewayProviderService(
+            IDatabaseUnitOfWorkProvider provider, 
+            RepositoryFactory repositoryFactory, 
+            ILogger logger, 
+            IShipMethodService shipMethodService, 
+            IShipRateTierService shipRateTierService, 
             IShipCountryService shipCountryService, 
             IInvoiceService invoiceService, 
             IOrderService orderService, 
@@ -66,9 +159,33 @@
             INotificationMethodService notificationMethodService, 
             INotificationMessageService notificationMessageService,
             IWarehouseService warehouseService)
+            : this(
+                provider,
+                repositoryFactory,
+                logger,
+                new TransientMessageFactory(),
+                shipMethodService,
+                shipRateTierService,
+                shipCountryService,
+                invoiceService,
+                orderService,
+                taxMethodService,
+                paymentService,
+                paymentMethodService,
+                notificationMethodService,
+                notificationMessageService,
+                warehouseService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
+
+        internal GatewayProviderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory,
+            IShipMethodService shipMethodService, 
+             IShipRateTierService shipRateTierService, IShipCountryService shipCountryService, 
+             IInvoiceService invoiceService, IOrderService orderService,
+             ITaxMethodService taxMethodService, IPaymentService paymentService, IPaymentMethodService paymentMethodService,
+             INotificationMethodService notificationMethodService, INotificationMessageService notificationMessageService, IWarehouseService warehouseService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
             Mandate.ParameterNotNull(shipMethodService, "shipMethodService");
             Mandate.ParameterNotNull(shipRateTierService, "shipRateTierService");
             Mandate.ParameterNotNull(shipCountryService, "shipCountryService");
@@ -81,8 +198,6 @@
             Mandate.ParameterNotNull(notificationMessageService, "notificationMessageService");
             Mandate.ParameterNotNull(warehouseService, "warehouseService");
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
             _shipMethodService = shipMethodService;
             _shipRateTierService = shipRateTierService;
             _shipCountryService = shipCountryService;
@@ -96,6 +211,7 @@
             _warehouseService = warehouseService;
         }
 
+        #endregion
 
         #region Event Handlers
 
@@ -145,8 +261,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateGatewayProviderRepository(uow))
                 {
                     repository.AddOrUpdate(gatewayProviderSettings);
                     uow.Commit();
@@ -192,8 +308,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateGatewayProviderRepository(uow))
                 {
                     repository.Delete(gatewayProviderSettings);
                     uow.Commit();
@@ -218,8 +334,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateGatewayProviderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateGatewayProviderRepository(uow))
                 {
                     foreach (var gatewayProvider in gatewayProviderArray)
                     {
@@ -239,7 +355,7 @@
         /// <returns></returns>
         public IGatewayProviderSettings GetGatewayProviderByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateGatewayProviderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -252,7 +368,7 @@
         /// <returns></returns>
         public IEnumerable<IGatewayProviderSettings> GetGatewayProvidersByType(GatewayProviderType gatewayProviderType)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateGatewayProviderRepository(UowProvider.GetUnitOfWork()))
             {
                 var query =
                     Query<IGatewayProviderSettings>.Builder.Where(
@@ -271,7 +387,7 @@
         /// <returns></returns>
         public IEnumerable<IGatewayProviderSettings> GetGatewayProvidersByShipCountry(IShipCountry shipCountry)
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateGatewayProviderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetGatewayProvidersByShipCountryKey(shipCountry.Key);
             }
@@ -283,7 +399,7 @@
         /// <returns></returns>
         public IEnumerable<IGatewayProviderSettings> GetAllGatewayProviders()
         {
-            using (var repository = _repositoryFactory.CreateGatewayProviderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateGatewayProviderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }

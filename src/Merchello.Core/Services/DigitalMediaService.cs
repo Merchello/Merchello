@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence;
@@ -12,33 +13,37 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents a <see cref="IDigitalMediaService"/>.
     /// </summary>
-    public class DigitalMediaService : IDigitalMediaService
+    public class DigitalMediaService : MerchelloRepositoryService, IDigitalMediaService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DigitalMediaService"/> class.
         /// </summary>
         public DigitalMediaService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DigitalMediaService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public DigitalMediaService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {            
         }
 
         /// <summary>
@@ -47,8 +52,11 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public DigitalMediaService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public DigitalMediaService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
         {
         }
 
@@ -61,14 +69,35 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public DigitalMediaService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public DigitalMediaService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DigitalMediaService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public DigitalMediaService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         #region Event Handlers
 
@@ -132,8 +161,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDigitalMediaRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDigitalMediaRepository(uow))
                 {
                     repository.AddOrUpdate(digitalMedia);
                     uow.Commit();
@@ -160,8 +189,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDigitalMediaRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDigitalMediaRepository(uow))
                 {
                     repository.AddOrUpdate(digitalMedia);
                     uow.Commit();
@@ -188,9 +217,9 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
+                var uow = UowProvider.GetUnitOfWork();
 
-                using (var repository = _repositoryFactory.CreateDigitalMediaRepository(uow))
+                using (var repository = RepositoryFactory.CreateDigitalMediaRepository(uow))
                 {
                     foreach (var digitalMedia in digitalMediaArray)
                     {
@@ -219,8 +248,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDigitalMediaRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDigitalMediaRepository(uow))
                 {
                     repository.Delete(digitalMedia);
                     uow.Commit();
@@ -247,8 +276,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateDigitalMediaRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateDigitalMediaRepository(uow))
                 {
                     foreach (var digitalMedia in digitalMediaArray)
                     {
@@ -273,7 +302,7 @@
         /// </returns>
         public IDigitalMedia GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateDigitalMediaRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDigitalMediaRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -290,7 +319,7 @@
         /// </returns>
         public IEnumerable<IDigitalMedia> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateDigitalMediaRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDigitalMediaRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -307,7 +336,7 @@
         /// </remarks>
         internal IEnumerable<IDigitalMedia> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateDigitalMediaRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateDigitalMediaRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }

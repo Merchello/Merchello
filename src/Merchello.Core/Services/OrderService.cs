@@ -12,6 +12,7 @@ namespace Merchello.Core.Services
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using RepositoryFactory = Persistence.RepositoryFactory;
@@ -32,16 +33,6 @@ namespace Merchello.Core.Services
         private static readonly string[] ValidSortFields = { "orderdate", "ordernumber" };
 
         /// <summary>
-        /// The uow provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
-        /// <summary>
         /// The store setting service.
         /// </summary>
         private readonly IStoreSettingService _storeSettingService;
@@ -51,11 +42,24 @@ namespace Merchello.Core.Services
         /// </summary>
         private readonly IShipmentService _shipmentService;
 
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderService"/> class.
         /// </summary>
         public OrderService()
-            : this(new RepositoryFactory(), new StoreSettingService(), new ShipmentService())
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OrderService(ILogger logger)
+            : this(new RepositoryFactory(), logger, new StoreSettingService(logger), new ShipmentService(logger))
         {
         }
 
@@ -65,14 +69,17 @@ namespace Merchello.Core.Services
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
         /// <param name="shipmentService">
         /// The shipment service.
         /// </param>
-        public OrderService(RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory, storeSettingService, shipmentService)
+        public OrderService(RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService, IShipmentService shipmentService)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger, storeSettingService, shipmentService)
         {
         }
 
@@ -85,27 +92,55 @@ namespace Merchello.Core.Services
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="storeSettingService">
         /// The store setting service.
         /// </param>
         /// <param name="shipmentService">
         /// The shipment service.
         /// </param>
-        public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
+        public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IStoreSettingService storeSettingService, IShipmentService shipmentService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), storeSettingService, shipmentService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
-            Mandate.ParameterNotNull(shipmentService, "shipmentService");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
-            _storeSettingService = storeSettingService;
-            _shipmentService = shipmentService;
-
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        /// <param name="shipmentService">
+        /// The shipment service.
+        /// </param>
+        public OrderService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory, IStoreSettingService storeSettingService, IShipmentService shipmentService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+            Mandate.ParameterNotNull(storeSettingService, "storeSettingService");
+            Mandate.ParameterNotNull(shipmentService, "shipmentService");
+            _storeSettingService = storeSettingService;
+            _shipmentService = shipmentService;
+        }
+
+        #endregion
+
         #region Event Handlers
+
+
 
         /// <summary>
         /// Occurs after Create
@@ -238,8 +273,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOrderRepository(uow))
                 {
                     repository.AddOrUpdate(order);
                     uow.Commit();
@@ -281,8 +316,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOrderRepository(uow))
                 {
                     repository.AddOrUpdate(order);
                     uow.Commit();
@@ -331,8 +366,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOrderRepository(uow))
                 {
                     foreach (var order in ordersArray)
                     {
@@ -370,8 +405,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOrderRepository(uow))
                 {
                     repository.Delete(order);
                     uow.Commit();
@@ -393,8 +428,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOrderRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOrderRepository(uow))
                 {
                     foreach (var order in ordersArray)
                     {
@@ -419,7 +454,7 @@ namespace Merchello.Core.Services
         /// <returns>The <see cref="IOrder"/></returns>
         public override IOrder GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -445,7 +480,7 @@ namespace Merchello.Core.Services
         /// </returns>
         public override Page<IOrder> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -461,7 +496,7 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IOrder"/></returns>
         public IOrder GetByOrderNumber(int orderNumber)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.OrderNumber == orderNumber);
 
@@ -476,7 +511,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IOrder"/></returns>
         public IEnumerable<IOrder> GetOrdersByInvoiceKey(Guid invoiceKey)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.InvoiceKey == invoiceKey);
 
@@ -491,7 +526,7 @@ namespace Merchello.Core.Services
         /// <returns>List of <see cref="IOrder"/></returns>
         public IEnumerable<IOrder> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -506,7 +541,7 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IInvoiceStatus"/></returns>
         public IOrderStatus GetOrderStatusByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateOrderStatusRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderStatusRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -517,7 +552,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IEnumerable<IOrderStatus> GetAllOrderStatuses()
         {
-            using (var repository = _repositoryFactory.CreateOrderStatusRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderStatusRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -532,7 +567,7 @@ namespace Merchello.Core.Services
         /// </returns>
         internal IEnumerable<IOrder> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -549,7 +584,7 @@ namespace Merchello.Core.Services
         /// </returns>
         internal override int Count(IQuery<IOrder> query)
         {
-            using (var repository = _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }
@@ -575,7 +610,7 @@ namespace Merchello.Core.Services
         /// </returns>        
         internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = (OrderRepository)_repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = (OrderRepository)RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IOrder>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -612,7 +647,7 @@ namespace Merchello.Core.Services
             SortDirection sortDirection = SortDirection.Descending)
         {
             return GetPagedKeys(
-                _repositoryFactory.CreateOrderRepository(_uowProvider.GetUnitOfWork()),
+                RepositoryFactory.CreateOrderRepository(UowProvider.GetUnitOfWork()),
                 query,
                 page,
                 itemsPerPage,

@@ -92,15 +92,11 @@
         [HttpPost]
         public ActionResult AddToBasket(AddItemModel model)
         {
-            // This is an example of using the ExtendedDataCollection to add some custom functionality.
-            // In this case, we are creating a direct reference to the content (Product Detail Page) so
-            // that we can provide a link, thumbnail and description in the cart per this design.  In other 
-            // designs, there may not be thumbnails or descriptions and the link could be to a completely
-            // different website.
-            var extendedData = new ExtendedDataCollection();
-            extendedData.SetValue("umbracoContentId", model.ContentId.ToString(CultureInfo.InvariantCulture));
 
-            // NEW IN 1.9.1 
+            // This is for legacy implementations of the Bazaar.  Using IProductContent we don't need this anymore.
+            var extendedData = new ExtendedDataCollection();
+            extendedData.SetValue("umbracoContentId", model.ContentId.ToString(CultureInfo.InvariantCulture));           
+
             // We've added some data modifiers that can handle such things as including taxes in product
             // pricing.  The data modifiers can either get executed when the item is added to the basket or
             // as a result from a MerchelloHelper query - you just don't want them to execute twice.

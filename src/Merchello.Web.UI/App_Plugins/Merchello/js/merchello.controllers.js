@@ -5536,6 +5536,22 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         init();
 }]);
 
+angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyController',
+    ['$scope',
+    function($scope) {
+
+        $scope.wasFormSubmitted = false;
+        $scope.save = save;
+
+
+        function save() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.copyProductForm.name.$valid && $scope.copyProductForm.sku.$valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+}]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Product.Dialogs.AddProductContentTypeController
@@ -6160,7 +6176,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.loaded = true;
 
                     if ($scope.productVariant.hasDetachedContent()) {
-                        $scope.productVariant.assertLanguageContent($scope.languages);
+                        var missing = $scope.productVariant.assertLanguageContent(_.pluck($scope.languages, 'isoCode'));
+                        if (missing.length > 0) {
+                            var detachedContentType = $scope.productVariant.detachedContentType();
+                            createDetachedContent(detachedContentType, missing);
+                        }
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
                         $scope.isConfigured = true;
                         loadScaffold();
@@ -6220,10 +6240,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }
             }
 
-            function createDetachedContent(detachedContent) {
-                if(!$scope.productVariant.hasDetachedContent()) {
+            function createDetachedContent(detachedContent, missing) {
+                if(!$scope.productVariant.hasDetachedContent() || missing !== undefined) {
                     // create detached content values for each language present
-                    var isoCodes = _.pluck($scope.languages, 'isoCode');
+                    var isoCodes = missing === undefined ?  _.pluck($scope.languages, 'isoCode') : missing;
                     contentResource.getScaffold(-20, detachedContent.umbContentType.alias).then(function(scaffold) {
                         filterTabs(scaffold);
                         angular.forEach(isoCodes, function(cultureName) {
@@ -6234,7 +6254,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         // we have to save here without assigning the scope.detachedContent otherwise we will only save the scaffold for the current language
                         // but the helper is expecting the scope value to be set.
                         saveWithoutEvents();
-
                     });
                 }
             }
@@ -6323,12 +6342,19 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function fillValues() {
+
                 if ($scope.contentTabs.length > 0) {
                     angular.forEach($scope.contentTabs, function(ct) {
                         angular.forEach(ct.properties, function(p) {
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
-                                p.value = angular.fromJson(stored);
+                                try {
+                                    p.value = angular.fromJson(stored);
+                                }
+                                catch (e) {
+                                    // Hack fix for some property editors
+                                    p.value = stored.substring(1, stored.length-1);
+                                }
                             }
                         });
                     });
@@ -6417,6 +6443,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // Exposed methods
             $scope.save = save;
+            $scope.openCopyProductDialog = openCopyProductDialog;
             $scope.loadAllWarehouses = loadAllWarehouses;
             $scope.deleteProductDialog = deleteProductDialog;
 
@@ -6610,12 +6637,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                  if ($scope.product.hasVariants()) {
+                 /* if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    }
+                    } */
 
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -6644,6 +6671,29 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 });
             }
 
+            function openCopyProductDialog() {
+                var dialogData = {
+                    product: $scope.product,
+                    name: '',
+                    sku: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.copy.html',
+                    show: true,
+                    callback: processCopyProduct,
+                    dialogData: dialogData
+                });
+            }
+
+
+            function processCopyProduct(dialogData) {
+                productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
+                    notificationsService.success("Product copied");
+                    $timeout(function() {
+                        $location.url("/merchello/merchello/productedit/" + result.key);
+                    }, 1000);
+                });
+            }
 
             /**
              * @ngdoc method
@@ -6698,9 +6748,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      * The controller for product edit with options view
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditWithOptionsController',
-        ['$scope', '$routeParams', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
+        ['$scope', '$routeParams', '$timeout', '$location', '$q', 'assetsService', 'notificationsService', 'dialogService', 'serverValidationManager',
             'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
+        function($scope, $routeParams, $timeout, $location, $q, assetsService, notificationsService, dialogService, serverValidationManager,
             merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
 
             $scope.loaded = false;
@@ -6712,6 +6762,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // exposed methods
             $scope.save = save;
+            $scope.openCopyProductDialog = openCopyProductDialog;
             $scope.deleteProductDialog = deleteProductDialog;
             $scope.init = init;
 
@@ -6825,6 +6876,32 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     notificationsService.error("Product Deletion Failed", reason.message);
                 });
             }
+
+            function openCopyProductDialog() {
+                var dialogData = {
+                    product: $scope.product,
+                    name: '',
+                    sku: ''
+                };
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.copy.html',
+                    show: true,
+                    callback: processCopyProduct,
+                    dialogData: dialogData
+                });
+            }
+
+
+            function processCopyProduct(dialogData) {
+                productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
+                    notificationsService.success("Product copied");
+                    $timeout(function() {
+                        $location.url("/merchello/merchello/productedit/" + result.key);
+                    }, 1000);
+                });
+            }
+
+
 
             // Initialize the controller
             init();
@@ -6974,11 +7051,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function getEditUrl(product) {
-                if (product.hasVariants()) {
-                    return '#/merchello/merchello/producteditwithoptions/' + product.key;
-                } else {
+               // if (product.hasVariants()) {
+               //     return '#/merchello/merchello/producteditwithoptions/' + product.key;
+               // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
-                }
+               // }
             }
 
             // Initialize the controller
@@ -7411,6 +7488,19 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProdu
 
         function getTreeId() {
             return "products";
+        }
+
+        init();
+}]);
+
+angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMultiProductDialogController',
+    ['$scope',
+    function($scope) {
+
+        $scope.loaded = false;
+
+        function init() {
+            $scope.loaded = true;
         }
 
         init();
@@ -8590,6 +8680,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                        } else {
                            $scope.currencySymbol = combined.currencySymbol;
                        }
+                   } else {
+                       $scope.currencySymbol = $scope.invoice.currency.symbol;
                    }
                });
            }

@@ -7,13 +7,11 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
-    using Umbraco.Core.Models;
     using Umbraco.Core.Models.Editors;
     using Umbraco.Core.PropertyEditors;
-    using Umbraco.Core.Services;
 
     /// <summary>
-    /// The product variant detached content helper.
+    /// Utility helper for correctly emulating content properties.
     /// </summary>
     /// <typeparam name="TSaveModel">
     /// The Type of save model
@@ -33,6 +31,10 @@
         public static void MapDetachedProperties(TSaveModel detachedContentItem)
         {
             if (!detachedContentItem.Display.DetachedContents.Any()) return;
+
+            // property values in the updated content are just raw strings at this point and they
+            // need to be passed to the resprective property editors so that they can do whatever it is 
+            // they do with the value.
             var updatedContent =
                 detachedContentItem.Display.DetachedContents.FirstOrDefault(
                     x => x.CultureName == detachedContentItem.CultureName);
@@ -59,11 +61,12 @@
 
             var dataTypeService = ApplicationContext.Current.Services.DataTypeService;
 
+            // a new container for property values returning from editors
             var updatedValues = new List<KeyValuePair<string, string>>();
+
             foreach (var p in contentType.CompositionPropertyTypes.ToArray())
             {
                 //// create the property data to send to the property editor
-
                 var d = new Dictionary<string, object>();
                 //// add the files if any
                 var files = detachedContentItem.UploadedFiles.Where(x => x.PropertyAlias == p.Alias).ToArray();
@@ -84,23 +87,21 @@
                     }
                     else
                     {
-                        // TODO there has to be a better way of doing this
+                        // TODO there has to be a better way of getting the preValues
                         var preValues = dataTypeService.GetPreValuesCollectionByDataTypeId(p.DataTypeDefinitionId);
 
-                        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue), preValues, d);
+                        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue.Trim()), preValues, d);
 
                         var valueEditor = editor.ValueEditor;
                         if (valueEditor.IsReadOnly == false)
                         {
-                            var current = JsonConvert.DeserializeObject(detachedValue);
                             var propVal = editor.ValueEditor.ConvertEditorToDb(data, null);
 
-                            // TODO fighting internals
-                            // var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
+                            //// TODO fighting internals
+                            //// var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
 
-                            // TODO - this is a total hack around catching a string value compared to json
                             detachedValue = propVal == null ? string.Empty : 
-                                propVal.ToString().StartsWith("{") && propVal.ToString().EndsWith("}") ? 
+                                IsJsonObject(propVal) ? 
                                     propVal.ToString() : 
                                     string.Format("\"{0}\"", propVal);
 
@@ -111,6 +112,23 @@
             }
 
             updatedContent.DetachedDataValues = updatedValues;           
+        }
+
+        /// <summary>
+        /// Simple check to guess if a property value is a JSON string
+        /// </summary>
+        /// <param name="propVal">
+        /// The prop val.
+        /// </param>
+        /// <returns>
+        /// The guess.
+        /// </returns>
+        private static bool IsJsonObject(object propVal)
+        {
+            var stringify = propVal.ToString().Trim();
+
+            return (stringify.StartsWith("{") && stringify.EndsWith("}")) || 
+                   (stringify.StartsWith("[") && stringify.EndsWith("]"));
         }
     }
 }

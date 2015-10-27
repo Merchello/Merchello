@@ -8,9 +8,12 @@
     using global::Examine;
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core.Events;
+    using Merchello.Core.Persistence;
     using Merchello.Examine;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// The query base.
@@ -59,7 +62,8 @@
 
         private static IMerchelloContext BuildContext()
         {
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            var serviceContext = new ServiceContext(new RepositoryFactory(), new PetaPocoUnitOfWorkProvider(logger), logger, new TransientMessageFactory());
             return new MerchelloContext(serviceContext, new GatewayContext(serviceContext, GatewayProviderResolver.Current), new CacheHelper(new NullCacheProvider(), new NullCacheProvider(), new NullCacheProvider()));
         }
 
