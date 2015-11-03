@@ -500,7 +500,7 @@
                                     choice.Key,
                                     optionKey = choice.OptionKey,
                                     name = choice.Name,
-                                    sortOrder = choice.SortOrder
+                                    sortOrder = choice.SortOrder,
                                     sku = choice.Sku,
                                 });
                     }
