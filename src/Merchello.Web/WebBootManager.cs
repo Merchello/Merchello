@@ -6,7 +6,10 @@
     using Merchello.Web.Reporting;
     using Merchello.Web.Ui;
 
+    using umbraco.BusinessLogic;
+
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
 
     using CoreBootManager = Merchello.Core.CoreBootManager;
     using IBootManager = Merchello.Core.IBootManager;
@@ -26,6 +29,7 @@
         /// A boot strap class for the Merchello plugin which initializes all objects including the Web portion of the plugin
         /// </summary>
         public WebBootManager()
+            : base(LoggerResolver.Current.Logger)
         {
         }
 
@@ -33,10 +37,14 @@
         /// Initializes a new instance of the <see cref="WebBootManager"/> class. 
         /// Constructor for unit tests, ensures some resolvers are not initialized
         /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="isForTesting">
         /// The is For Testing.
         /// </param>
-        internal WebBootManager(bool isForTesting = false)
+        internal WebBootManager(ILogger logger, bool isForTesting = false)
+            : base(logger)
         {
             _isForTesting = isForTesting;
         }

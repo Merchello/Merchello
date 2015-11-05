@@ -29,18 +29,18 @@
         /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
         /// </summary>
         public WebMigrationManager()
-            : this(ApplicationContext.Current.DatabaseContext.Database)
+            : this(ApplicationContext.Current)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
         /// </summary>
-        /// <param name="database">
-        /// The database.
+        /// <param name="applicationContext">
+        /// The application Context.
         /// </param>
-        public WebMigrationManager(Database database)
-            : base(database)
+        public WebMigrationManager(ApplicationContext applicationContext)
+            : base(applicationContext.DatabaseContext.Database, applicationContext.DatabaseContext.SqlSyntax, LoggerResolver.Current.Logger)
         {
         }
 

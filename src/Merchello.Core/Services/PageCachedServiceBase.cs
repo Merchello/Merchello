@@ -9,9 +9,14 @@
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.Repositories;
+    using Merchello.Core.Persistence.UnitOfWork;
 
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
-    using Umbraco.Core.Persistence.Querying; 
+    using Umbraco.Core.Persistence.Querying;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// The page cached service base.
@@ -19,9 +24,29 @@
     /// <typeparam name="TEntity">
     /// The type of entity
     /// </typeparam>
-    public abstract class PageCachedServiceBase<TEntity> : IPageCachedService<TEntity>
+    public abstract class PageCachedServiceBase<TEntity> : MerchelloRepositoryService, IPageCachedService<TEntity>
         where TEntity : class, IEntity
-    { 
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageCachedServiceBase{TEntity}"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        protected PageCachedServiceBase(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
         /// <summary>
         /// Gets an entity by it's unique key.
         /// </summary>

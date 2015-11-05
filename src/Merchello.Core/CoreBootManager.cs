@@ -2,6 +2,7 @@
 {
     using System;
     using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
 
     using Cache;
     using Configuration;
@@ -9,7 +10,9 @@
 
     using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Events;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Persistence;
 
     using Observation;
     using Persistence.UnitOfWork;
@@ -34,6 +37,11 @@
         private DisposableTimer _timer;
 
         /// <summary>
+        /// The logger.
+        /// </summary>
+        private ILogger _logger;
+
+        /// <summary>
         /// The is complete.
         /// </summary>
         private bool _isComplete;
@@ -46,7 +54,22 @@
         /// <summary>
         /// The peta poco unit of work provider.
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
         private PetaPocoUnitOfWorkProvider _unitOfWorkProvider;
+
+        #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CoreBootManager"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        internal CoreBootManager(ILogger logger)
+        {
+            Mandate.ParameterNotNull(logger, "Logger");
+            _logger = logger;
+        }
 
         /// <summary>
         /// Gets a value indicating whether Merchello is started.
@@ -62,8 +85,6 @@
         /// Gets or sets a value indicating whether or not this is a unit test
         /// </summary>
         internal bool IsUnitTest { get; set; }
-
-        #endregion
 
         /// <summary>
         /// The initialize.
@@ -81,17 +102,17 @@
 
             OnMerchelloInit();
 
-            _timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
+            //_timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
  
             // create the service context for the MerchelloAppContext   
             var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
             var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;
 
-            AutoMapperMappings.CreateMappings();
+            AutoMapperMappings.CreateMappings();            
 
-            _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(connString, providerName);
+            _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(_logger, connString, providerName);
 
-            var serviceContext = new ServiceContext(_unitOfWorkProvider);
+            var serviceContext = new ServiceContext(new RepositoryFactory(), _unitOfWorkProvider, _logger, new TransientMessageFactory());
 
 
             var cache = ApplicationContext.Current == null

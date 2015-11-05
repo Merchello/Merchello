@@ -6637,12 +6637,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                  if ($scope.product.hasVariants()) {
+                 /* if ($scope.product.hasVariants()) {
                         // short pause to make sure examine index has a chance to update
                         $timeout(function() {
                             $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
                         }, 400);
-                    }
+                    } */
 
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -7051,11 +7051,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
             function getEditUrl(product) {
-                if (product.hasVariants()) {
-                    return '#/merchello/merchello/producteditwithoptions/' + product.key;
-                } else {
+               // if (product.hasVariants()) {
+               //     return '#/merchello/merchello/producteditwithoptions/' + product.key;
+               // } else {
                     return "#/merchello/merchello/productedit/" + product.key;
-                }
+               // }
             }
 
             // Initialize the controller
@@ -7488,6 +7488,19 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloProdu
 
         function getTreeId() {
             return "products";
+        }
+
+        init();
+}]);
+
+angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMultiProductDialogController',
+    ['$scope',
+    function($scope) {
+
+        $scope.loaded = false;
+
+        function init() {
+            $scope.loaded = true;
         }
 
         init();
@@ -8695,6 +8708,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                        } else {
                            $scope.currencySymbol = combined.currencySymbol;
                        }
+                   } else {
+                       $scope.currencySymbol = $scope.invoice.currency.symbol;
                    }
                });
            }

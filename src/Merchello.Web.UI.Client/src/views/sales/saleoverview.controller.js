@@ -207,6 +207,8 @@
                        } else {
                            $scope.currencySymbol = combined.currencySymbol;
                        }
+                   } else {
+                       $scope.currencySymbol = $scope.invoice.currency.symbol;
                    }
                });
            }

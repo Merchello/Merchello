@@ -225,17 +225,17 @@
         {
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, productVariant.ProductKey.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductVariantKey, productVariant.Key.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productVariant.CostOfGoods.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productVariant.Weight.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productVariant.Width.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productVariant.Height.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productVariant.Length.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productVariant.CostOfGoods == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.CostOfGoods).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productVariant.Weight == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Weight).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productVariant.Width == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Width).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productVariant.Height == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Height).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productVariant.Length == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Length).ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productVariant.Barcode);
             extendedData.SetValue(Constants.ExtendedDataKeys.Price, productVariant.Price.ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productVariant.OnSale.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productVariant.Manufacturer);
             extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productVariant.ManufacturerModelNumber);
-            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : productVariant.SalePrice.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.SalePrice).ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productVariant.TrackInventory.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productVariant.OutOfStockPurchase.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, productVariant.Taxable.ToString());
@@ -956,7 +956,7 @@
         /// <param name="modifier">
         /// The modifier.
         /// </param>
-        internal static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
+        public static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
         {
             if (modifier.ModifiedDataLogs == null) return;
             foreach (var log in modifier.ModifiedDataLogs)

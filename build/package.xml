@@ -31,10 +31,10 @@
     <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
     <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">
       <MerchelloIndexSets>
-        <IndexSet SetName="MerchelloProductIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Product/" />
-        <IndexSet SetName="MerchelloInvoiceIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Invoice/" />
-        <IndexSet SetName="MerchelloOrderIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Order/" />
-        <IndexSet SetName="MerchelloCustomerIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/Merchello/Customer/" />
+        <IndexSet SetName="MerchelloProductIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/{machinename}/Merchello/Product/" />
+        <IndexSet SetName="MerchelloInvoiceIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/{machinename}/Merchello/Invoice/" />
+        <IndexSet SetName="MerchelloOrderIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/{machinename}/Merchello/Order/" />
+        <IndexSet SetName="MerchelloCustomerIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/{machinename}/Merchello/Customer/" />
       </MerchelloIndexSets>
       <MerchelloIndexProviders>
           <add name="MerchelloProductIndexer" type="Merchello.Examine.Providers.ProductIndexer, Merchello.Examine" />

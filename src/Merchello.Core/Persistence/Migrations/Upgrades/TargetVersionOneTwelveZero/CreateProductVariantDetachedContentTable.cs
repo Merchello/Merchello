@@ -7,39 +7,46 @@
     using Merchello.Core.Models.Rdbms;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
+
 
     /// <summary>
     /// The create product variant 2 detached content type table.
     /// </summary>
     [Migration("1.11.0", "1.11.0.1", 1, MerchelloConfiguration.MerchelloMigrationName)]
-    public class CreateProductVariantDetachedContentTable : MigrationBase
+    public class CreateProductVariantDetachedContentTable : IMerchelloMigration
     {
         /// <summary>
-        /// Tables in the order of creation or reverse deletion.
+        /// The schema helper.
         /// </summary>
-        private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
+        private readonly DatabaseSchemaHelper _schemaHelper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateProductVariantDetachedContentTable"/> class.
+        /// </summary>
+        public CreateProductVariantDetachedContentTable()
         {
-            { 0, typeof(ProductVariantDetachedContentDto) }
-        };
+            var dbContext = ApplicationContext.Current.DatabaseContext;
+            _schemaHelper = new DatabaseSchemaHelper(dbContext.Database, LoggerResolver.Current.Logger, dbContext.SqlSyntax);
+        }
 
         /// <summary>
         /// Creates the ProductVariant2DetachedContentType table
         /// </summary>
-        public override void Up()
+        public void Up()
         {
-            var database = ApplicationContext.Current.DatabaseContext.Database;
-            if (!database.TableExist("merchProductVariantDetachedContent"))
+            if (!_schemaHelper.TableExist("merchProductVariantDetachedContent"))
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(database, OrderedTables, "Merchello 1.12.0 upgrade");
+                _schemaHelper.CreateTable(false, typeof(ProductVariantDetachedContentDto));
             }
         }
 
         /// <summary>
         /// The down.
         /// </summary>
-        public override void Down()
+        public  void Down()
         {
             throw new DataLossException("Cannot downgrade from a version 1.12.0 database to a prior version, the database schema has already been modified");
         }

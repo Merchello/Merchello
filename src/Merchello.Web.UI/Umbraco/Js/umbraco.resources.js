@@ -61,6 +61,24 @@ function authResource($q, $http, umbRequestHelper, angularHelper) {
                 'Login failed for user ' + username);
         },
         
+        unlinkLogin: function (loginProvider, providerKey) {
+            if (!loginProvider || !providerKey) {
+                return angularHelper.rejectedPromise({
+                    errorMsg: 'loginProvider or providerKey cannot be empty'
+                });
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "PostUnLinkLogin"), {
+                            loginProvider: loginProvider,
+                            providerKey: providerKey
+                        }),
+                'Unlinking login provider failed');
+        },
+
         /**
          * @ngdoc method
          * @name umbraco.resources.authResource#performLogout
@@ -113,6 +131,16 @@ function authResource($q, $http, umbRequestHelper, angularHelper) {
                         "authenticationApiBaseUrl",
                         "GetCurrentUser")),
                 'Server call failed for getting current user'); 
+        },
+
+        getCurrentUserLinkedLogins: function () {
+
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "GetCurrentUserLinkedLogins")),
+                'Server call failed for getting current users linked logins');
         },
         
         /**
@@ -688,7 +716,7 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 $http.get(
                     umbRequestHelper.getApiUrl(
                         "contentApiBaseUrl",
-                        "GetHasPermission",
+                        "HasPermission",
                         [{ permissionToCheck: permission },{ nodeId: id }])),
                 'Failed to check permission for item ' + id);
         },
@@ -700,7 +728,7 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves changes made to a content item to its current version, if the content item is new, the isNew paramater must be passed to force creation
-         * if the content item needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the content item needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -733,7 +761,7 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves and publishes changes made to a content item to a new version, if the content item is new, the isNew paramater must be passed to force creation
-         * if the content item needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the content item needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -2067,7 +2095,7 @@ function mediaResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves changes made to a media item, if the media item is new, the isNew paramater must be passed to force creation
-         * if the media item needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the media item needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -2404,7 +2432,7 @@ function memberResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves changes made to a member, if the member is new, the isNew paramater must be passed to force creation
-         * if the member needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the member needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -2564,6 +2592,71 @@ function packageResource($q, $http, umbDataFormatter, umbRequestHelper) {
 angular.module('umbraco.resources').factory('packageResource', packageResource);
 
 /**
+  * @ngdoc service
+  * @name umbraco.resources.relationResource
+  * @description Handles loading of relation data
+  **/
+function relationResource($q, $http, umbRequestHelper) {
+    return {
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.relationResource#getByChildId
+         * @methodOf umbraco.resources.relationResource
+         *
+         * @description
+         * Retrieves the relation data for a given child ID
+         * 
+         * @param {int} id of the child item
+         * @param {string} alias of the relation type
+         * @returns {Promise} resourcePromise object containing the relations array.
+         *
+         */
+        getByChildId: function (id, alias) {
+          
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "relationApiBaseUrl",
+                        "GetByChildId",
+                        [{ childId: id, relationTypeAlias: alias }])),
+                "Failed to get relation by child ID " + id + " and type of " + alias);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.relationResource#deleteById
+         * @methodOf umbraco.resources.relationResource
+         *
+         * @description
+         * Deletes a relation item with a given id
+         *
+         * ##usage
+         * <pre>
+         * relationResource.deleteById(1234)
+         *    .then(function() {
+         *        alert('its gone!');
+         *    });
+         * </pre> 
+         * 
+         * @param {Int} id id of relation item to delete
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        deleteById: function (id) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "relationApiBaseUrl",
+                        "DeleteById",
+                        [{ id: id }])),
+                'Failed to delete item ' + id);
+        }
+    };
+}
+
+angular.module('umbraco.resources').factory('relationResource', relationResource);
+/**
     * @ngdoc service
     * @name umbraco.resources.sectionResource
     * @description Loads in data for section
@@ -2631,36 +2724,7 @@ function stylesheetResource($q, $http, umbRequestHelper) {
                        "stylesheetApiBaseUrl",
                        "GetAll")),
                'Failed to retrieve stylesheets ');
-        },
-
-        /**
-         * @ngdoc method
-         * @name umbraco.resources.stylesheetResource#getRules
-         * @methodOf umbraco.resources.stylesheetResource
-         *
-         * @description
-         * Returns all defined child rules for a stylesheet with a given ID
-         *
-         * ##usage
-         * <pre>
-         * stylesheetResource.getRules(2345)
-         *    .then(function(rules) {
-         *        alert('its here!');
-         *    });
-         * </pre> 
-         * 
-         * @returns {Promise} resourcePromise object containing the rules.
-         *
-         */
-        getRules: function (id) {            
-            return umbRequestHelper.resourcePromise(
-               $http.get(
-                   umbRequestHelper.getApiUrl(
-                       "stylesheetApiBaseUrl",
-                       "GetRules",
-                       [{ id: id }])),
-               'Failed to retrieve stylesheets ');
-        },
+        },       
 
         /**
          * @ngdoc method

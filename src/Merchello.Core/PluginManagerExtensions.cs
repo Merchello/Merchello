@@ -2,13 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+
     using Gateways;
 
     using Merchello.Core.Chains.OfferConstraints;
+    using Merchello.Core.Configuration;
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Persistence.Migrations;
 
     using Observation;
     using Umbraco.Core;
+    using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
     /// Extension methods for the <see cref="PluginManager"/>
@@ -84,5 +89,20 @@
         {
             return pluginManager.ResolveTypesWithAttribute<IEntityCollectionProvider, EntityCollectionProviderAttribute>();
         }
+
+        /// <summary>
+        /// Resolves Merchello specific migrations.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Type}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveMerchelloMigrations(this PluginManager pluginManager)
+        {
+            return
+                pluginManager.ResolveTypesWithAttribute<IMerchelloMigration, MigrationAttribute>();
+        } 
     }
 }

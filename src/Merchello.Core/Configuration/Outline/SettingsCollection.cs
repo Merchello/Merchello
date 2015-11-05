@@ -27,7 +27,7 @@
         /// The get trees.
         /// </summary>
         /// <returns>
-        /// The collection of <see cref="TreeElement"/>.
+        /// The collection of <see cref="SettingsElement"/>.
         /// </returns>
         public IEnumerable<SettingsElement> AllSettings()
         {

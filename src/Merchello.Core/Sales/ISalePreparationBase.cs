@@ -34,6 +34,11 @@
         bool RaiseCustomerEvents { get; set; }
 
         /// <summary>
+        /// Gets or sets a prefix to be prepended to an invoice number.
+        /// </summary>
+        string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
         /// Restarts the checkout process, deleting all persisted data
         /// </summary>
         void Reset();

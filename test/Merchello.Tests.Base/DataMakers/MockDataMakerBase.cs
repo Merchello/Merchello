@@ -4,10 +4,14 @@ using System.Linq;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    using global::Umbraco.Core.Logging;
+
     using Merchello.Core.Models;
 
     public abstract class MockDataMakerBase
     {
+        public static ILogger TestLogger = Logger.CreateWithDefaultLog4NetConfiguration();
+
         public static Random NoWhammyStop = new Random();
 
 

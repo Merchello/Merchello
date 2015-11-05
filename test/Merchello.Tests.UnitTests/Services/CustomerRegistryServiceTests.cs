@@ -13,6 +13,10 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Moq;
+
+    using Umbraco.Core.Logging;
+
     [TestFixture]
     [Category("Services")]
     public class CustomerRegistryServiceTests : ServiceTestsBase<IItemCache>
@@ -26,7 +30,7 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.FixtureSetup();
 
-            _itemCacheService = new ItemCacheService(new MockUnitOfWorkProvider(), new RepositoryFactory());
+            _itemCacheService = new ItemCacheService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new Mock<ILogger>().Object);
             Before = null;
             After = null;
 
