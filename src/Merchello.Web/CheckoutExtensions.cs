@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Merchello.Core;
-    using Merchello.Core.Configuration;
-    using Merchello.Core.Models;
-    using Merchello.Core.Strategies.Packaging;
-    using Merchello.Web.Workflow;
+    using Core;
+    using Core.Configuration;
+    using Core.Models;
+    using Core.Strategies.Packaging;
     using Umbraco.Core.Logging;
+    using Workflow;
 
     /// <summary>
     /// Extension methods for the <see cref="IBasket"/>
@@ -55,8 +55,12 @@
         /// <summary>
         /// Gets the <see cref="IBasketSalePreparation"/>
         /// </summary>
-        /// <param name="basket">The basket with items use in the checkout</param>
-        /// <returns>A <see cref="IBasketSalePreparation"/></returns>
+        /// <param name="basket">
+        /// The basket with items use in the checkout
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBasketSalePreparation"/>
+        /// </returns>
         /// <remarks>
         /// TODO change this to return IBasketSalePreparation
         /// </remarks>
@@ -126,9 +130,15 @@
         /// <summary>
         /// Gets the <see cref="IBasketSalePreparation"/>
         /// </summary>
-        /// <param name="basket">The basket with items use in the checkout</param>
-        /// <param name="merchelloContext">The <see cref="IMerchelloContext"/></param>
-        /// <returns>A <see cref="IBasketSalePreparation"/></returns>
+        /// <param name="basket">
+        /// The basket with items use in the checkout
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="IBasketSalePreparation"/>
+        /// </returns>
         internal static BasketSalePreparation SalePreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
             return BasketSalePreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
