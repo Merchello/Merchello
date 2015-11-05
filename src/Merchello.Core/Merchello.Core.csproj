@@ -312,7 +312,6 @@
     <Compile Include="Chains\CopyEntity\Product\SaveProductCopyTask.cs" />
     <Compile Include="Chains\IDataModifierChain{T}.cs" />
     <Compile Include="Chains\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
-    <Compile Include="Chains\InvoiceCreation\AddNotesToInvoiceTask.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferConstraintChainTask.cs" />
@@ -414,7 +413,6 @@
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityCollection.cs" />
     <Compile Include="Models\Interfaces\INote.cs" />
-    <Compile Include="Models\NoteDisplay.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\EntityCollectionExtensions.cs" />
     <Compile Include="Models\Interfaces\ICurrencyFormat.cs" />
@@ -589,6 +587,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettingsMigrationKey.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\CreateOneNineZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\InsertNewTypeFieldData.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneThirteenOne\CreateNoteTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />

@@ -330,6 +330,7 @@
     <Compile Include="Models\ContentEditing\Content\UmbContentTypeDisplay.cs" />
     <Compile Include="Models\ContentEditing\Content\UmbTemplateDisplay.cs" />
     <Compile Include="Models\ContentEditing\ExtendedDataExtensions.cs" />
+    <Compile Include="Models\ContentEditing\NoteDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferComponentDefinitionDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\OfferSettingsDisplay.cs" />
@@ -521,6 +522,7 @@
     <Compile Include="Workflow\IBasketConversionBase.cs" />
     <Compile Include="Workflow\CustomerItemCache\ICustomerItemCacheBase.cs" />
     <Compile Include="Workflow\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
+    <Compile Include="Workflow\InvoiceCreation\AddNotesToInvoiceTask.cs" />
     <Compile Include="Workflow\IWishList.cs" />
     <Compile Include="Editors\SettingsApiController.cs" />
     <Compile Include="Editors\ShippingGatewayApiController.cs" />

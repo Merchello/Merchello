@@ -8620,22 +8620,22 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
             }
 
+
             /**
-         * @ngdoc method
-         * @name loadNotes
-         * @function
-         *
-         * @description
-         * Load the Notes for the invoice via API.
-         */
+             * @ngdoc method
+             * @name loadNotes
+             * @function
+             *
+             * @description
+             * Load the Notes for the invoice via API.
+             */
             function loadNotes(key) {
                 if (key !== undefined) {
                     var promise = noteResource.getByEntityKey(key);
                     promise.then(function (response) {
-                        
                         var notes = noteDisplayBuilder.transform(response);
                         // TODO this is a patch for a problem in the API
-                        if (notes.length) {
+                        if (notes.length > 0) {
                             $scope.invoiceNotes = notes;
                         }
                         $scope.notesLoaded = notes.length > 0;
