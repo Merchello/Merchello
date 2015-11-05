@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Models.Interfaces;
     using Models.TypeFields;
@@ -11,6 +14,7 @@
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using RepositoryFactory = Persistence.RepositoryFactory;
@@ -32,15 +36,6 @@
         /// </summary>
         private static readonly string[] ValidSortFields = { "createdate" };
 
-        /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
 
         #endregion
 
@@ -48,7 +43,18 @@
         /// Initializes a new instance of the <see cref="NoteService"/> class.
         /// </summary>
         public NoteService()
-            : this(new PetaPocoUnitOfWorkProvider(), new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoteService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public NoteService(ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), new RepositoryFactory(), logger)
         {            
         }
 
@@ -61,13 +67,36 @@
         /// <param name="repositoryFactory">
         /// The <see cref="RepositoryFactory"/>
         /// </param>
-        public NoteService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The Umbraco logger
+        /// </param>
+        public NoteService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoteService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public NoteService(
+            IDatabaseUnitOfWorkProvider provider,
+            Persistence.RepositoryFactory repositoryFactory,
+            ILogger logger,
+            IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {            
         }
 
         #region Event Handlers
@@ -117,7 +146,7 @@
         /// </returns>  
         public override INote GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateNoteRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNoteRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -200,8 +229,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNoteRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNoteRepository(uow))
                 {
                     repository.AddOrUpdate(note);
                     uow.Commit();
@@ -234,8 +263,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNoteRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNoteRepository(uow))
                 {
                     repository.AddOrUpdate(note);
                     uow.Commit();
@@ -263,8 +292,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNoteRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNoteRepository(uow))
                 {
                     foreach (var note in notesArray)
                     {
@@ -298,8 +327,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNoteRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNoteRepository(uow))
                 {
                     repository.Delete(note);
                     uow.Commit();
@@ -327,8 +356,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateNoteRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateNoteRepository(uow))
                 {
                     foreach (var note in notesArray)
                     {
@@ -353,7 +382,7 @@
         /// </returns>        
         public IEnumerable<INote> GetNotesByEntityKey(Guid entityKey)
         {
-            using (var repository = _repositoryFactory.CreateNoteRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNoteRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<INote>.Builder.Where(x => x.EntityKey == entityKey);
 
@@ -385,7 +414,7 @@
         /// </returns>
         public Page<INote> GetNotesByEntityTfKey(Guid entityTfKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateNoteRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNoteRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<INote>.Builder.Where(x => x.EntityTfKey == entityTfKey);
 
@@ -416,7 +445,7 @@
         {
             var query = Persistence.Querying.Query<INote>.Builder.Where(x => x.Key != Guid.Empty);
 
-            using (var repository = _repositoryFactory.CreateNoteRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNoteRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
             }
@@ -433,7 +462,7 @@
         /// </returns>
         internal override int Count(IQuery<INote> query)
         {
-            using (var repository = _repositoryFactory.CreateNoteRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateNoteRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }
@@ -461,7 +490,7 @@
         {
             var query = Persistence.Querying.Query<INote>.Builder.Where(x => x.Key != Guid.Empty);
             return GetPagedKeys(
-                _repositoryFactory.CreateNoteRepository(_uowProvider.GetUnitOfWork()),
+                RepositoryFactory.CreateNoteRepository(UowProvider.GetUnitOfWork()),
                 query,
                 page,
                 itemsPerPage,

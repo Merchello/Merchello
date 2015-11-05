@@ -476,7 +476,7 @@
 
 
             if (_noteService == null)
-                _noteService = new Lazy<INoteService>(() => new NoteService(dbDatabaseUnitOfWorkProvider, repositoryFactory.Value));
+                _noteService = new Lazy<INoteService>(() => new NoteService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
 
             if (_customerAddressService == null)
