@@ -266,6 +266,18 @@
                 }
             }
 
+            if (invoice.Notes != null)
+            {
+                // Add invoice key to notes
+                foreach (var note in invoice.Notes)
+                {
+                    note.EntityKey = invoice.Key;
+                }
+                NoteService noteService = new NoteService();
+                noteService.Save(invoice.Notes);
+            }
+            
+
             if (!raiseEvents) return;
 
             Saved.RaiseEvent(new SaveEventArgs<IInvoice>(invoice), this);
