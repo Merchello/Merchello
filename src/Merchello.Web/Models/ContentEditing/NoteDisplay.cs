@@ -1,16 +1,14 @@
-﻿namespace Merchello.Core.Models
+﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
-    using System.Collections.Specialized;
-    using System.Reflection;
-    using System.Runtime.Serialization;
+    using System.Diagnostics.CodeAnalysis;
 
-    using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
+
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
-    using System.Diagnostics.CodeAnalysis;
-    using Merchello.Core.Models.TypeFields;
 
     /// <summary>
     /// The note.

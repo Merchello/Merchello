@@ -13,6 +13,7 @@
     using Umbraco.Core;
     using Umbraco.Web.Mvc;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
     /// The note api controller.
