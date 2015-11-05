@@ -18,7 +18,7 @@
     internal class AddNotesToInvoiceTask : InvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddBillingInfoToInvoiceTask"/> class.
+        /// Initializes a new instance of the <see cref="AddNotesToInvoiceTask"/> class. 
         /// </summary>
         /// <param name="salePreparation">
         /// The sale preparation.
@@ -39,27 +39,29 @@
         /// </returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-                var noteDisplay = this.SalePreparation.Customer.ExtendedData.GetNote();
-                if (noteDisplay != null)
-                {
-                    var note = new Note();
-                    note.EntityKey = value.Key;
-                    note.EntityTfKey = EnumTypeFieldConverter.EntityType.GetTypeField(EntityType.Invoice).TypeKey;
-                    note.Message = noteDisplay.Message;
-                    if (value.Notes != null)
-                    {
-                        if (!value.Notes.Where(x => x.Message == note.Message).Any())
-                        {
-                            value.Notes.Add(note);
-                        }
-                    }
-                    else
-                    {
-                        value.Notes = new System.Collections.Generic.List<Note>();
-                        value.Notes.Add(note);
-                    }
+            var noteDisplay = SalePreparation.Customer.ExtendedData.GetNote();
 
+            if (noteDisplay == null) return Attempt<IInvoice>.Succeed(value);
+
+            var note = new Note
+                           {
+                               EntityKey = value.Key,
+                               EntityTfKey =
+                                   EnumTypeFieldConverter.EntityType.GetTypeField(EntityType.Invoice).TypeKey,
+                               Message = noteDisplay.Message
+                           };
+
+            if (value.Notes != null)
+            {
+                if (value.Notes.All(x => x.Message != note.Message))
+                {
+                    value.Notes.Add(note);
                 }
+            }
+            else
+            {
+                value.Notes = new System.Collections.Generic.List<Note> { note };
+            }
 
             return Attempt<IInvoice>.Succeed(value);            
         }

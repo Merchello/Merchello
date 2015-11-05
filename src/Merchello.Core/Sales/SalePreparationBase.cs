@@ -178,35 +178,7 @@
             _customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
             SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
-
-        /// <summary>
-        /// Saves the note
-        /// </summary>
-        /// <param name="note">The <see cref="INote"/></param>
-        public virtual void SaveNote(NoteDisplay note)
-        {
-            // Check for existing note and modify it if it already exists so we don't end up with lots of orphan notes if the customer keeps submitting.
-            var existingNote = GetNote();
-            if (existingNote != null)
-            {
-                existingNote.Message = note.Message;
-            }
-            else
-            {
-                _customer.ExtendedData.AddNote(note);
-            }
-            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
-        }
-
-        /// <summary>
-        /// Saves the note
-        /// </summary>
-        /// <param name="message">The message to save into a note</param>
-        public virtual void SaveNote(string message)
-        {           
-            _customer.ExtendedData.AddNote(new NoteDisplay() { Message = message});  
-            SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
-        }
+      
 
         /// <summary>
         /// Gets the bill to address
@@ -226,14 +198,6 @@
             return _customer.ExtendedData.GetAddress(AddressType.Shipping);
         }
 
-        /// <summary>
-        /// Gets the note
-        /// </summary>
-        /// <returns>Return the <see cref="INote"/></returns>
-        public NoteDisplay GetNote()
-        {
-            return _customer.ExtendedData.GetNote();
-        }
 
         /// <summary>
         /// Saves a <see cref="IShipmentRateQuote"/> as a shipment line item
@@ -678,6 +642,30 @@
         }
 
         /// <summary>
+        /// Saves the current customer
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise Events.
+        /// </param>
+        protected static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
+        {
+            if (typeof(AnonymousCustomer) == customer.GetType())
+            {
+                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer, raiseEvents);
+            }
+            else
+            {
+                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer, raiseEvents);
+            }
+        }
+
+        /// <summary>
         /// Makes the 'unique' RuntimeCache Key for the RuntimeCache
         /// </summary>
         /// <returns>
@@ -706,30 +694,6 @@
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Saves the current customer
-        /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello Context.
-        /// </param>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// The raise Events.
-        /// </param>
-        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
-        {
-            if (typeof(AnonymousCustomer) == customer.GetType())
-            {
-                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer, raiseEvents);
-            }
-            else
-            {
-                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer, raiseEvents);
-            }
         }
 
         /// <summary>

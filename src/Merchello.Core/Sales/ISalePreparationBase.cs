@@ -55,12 +55,6 @@
         /// <param name="shipToAddress">The shipping <see cref="IAddress"/></param>
         void SaveShipToAddress(IAddress shipToAddress);
 
-        /// <summary>
-        /// Saves the sale note
-        /// </summary>
-        /// <param name="note">The shipping <see cref="INote"/></param>
-        void SaveNote(NoteDisplay note);
-
         //void SaveOfferCode(string offerCode);
 
         /// <summary>
@@ -75,13 +69,6 @@
         /// <remarks>Returns the shipping <see cref="IAddress"/></remarks>
         /// <returns>A shipping <see cref="IAddress"/></returns>
         IAddress GetShipToAddress();
-
-        /// <summary>
-        /// Gets the sale note
-        /// </summary>
-        /// <remarks>Returns the <see cref="INote"/></remarks>
-        /// <returns>A <see cref="INote"/></returns>
-        NoteDisplay GetNote();
 
         /// <summary>
         /// Saves a single <see cref="IShipmentRateQuote"/>
