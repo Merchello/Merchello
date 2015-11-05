@@ -54,7 +54,7 @@
             data-ng-class="{active: variant.selected}"
             data-ng-click="toggleAVariant(variant)">
             <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="toggleAVariant(variant)" /></td>
-            <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
+            <td data-ng-repeat="attribute in variant.attributes | orderBy:'sortOrder'">{{attribute.name}}</td>
             <td>{{variant.sku}}</td>
             <!-- availability -->
             <td data-ng-hide="variant.available"><localize key="general_no" /></td>
