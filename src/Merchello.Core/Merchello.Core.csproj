@@ -412,6 +412,8 @@
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityCollection.cs" />
+    <Compile Include="Models\Interfaces\INote.cs" />
+    <Compile Include="Models\Note.cs" />
     <Compile Include="Models\EntityCollectionExtensions.cs" />
     <Compile Include="Models\Interfaces\ICurrencyFormat.cs" />
     <Compile Include="Models\Interfaces\IDataModifierData.cs" />
@@ -464,6 +466,7 @@
     <Compile Include="Models\DetachedContent\ProductVariantDetachedContent.cs" />
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\Invoice2EntityCollectionDto.cs" />
@@ -550,6 +553,7 @@
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="PathHelper.cs" />
+    <Compile Include="Persistence\Factories\NoteFactory.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DetachedContentTypeFactory.cs" />
     <Compile Include="Persistence\Factories\DigitalMediaFactory.cs" />
@@ -558,6 +562,7 @@
     <Compile Include="Persistence\Factories\OfferSettingsFactory.cs" />
     <Compile Include="Persistence\Factories\ProductVariantDetachedContentFactory.cs" />
     <Compile Include="Persistence\Factories\ShipmentStatusFactory.cs" />
+    <Compile Include="Persistence\Mappers\NoteMapper.cs" />
     <Compile Include="Persistence\Mappers\AuditLogMapper.cs" />
     <Compile Include="Persistence\Mappers\DetachedContentTypeMapper.cs" />
     <Compile Include="Persistence\Mappers\DigitalMediaMapper.cs" />
@@ -582,16 +587,19 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneEightTwo\InsertNewMerchelloSettingsMigrationKey.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\CreateOneNineZeroTables.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneNineZero\InsertNewTypeFieldData.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneThirteenOne\CreateNoteTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
+    <Compile Include="Persistence\Repositories\NoteRepository.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\DetachedContentTypeRepository.cs" />
     <Compile Include="Persistence\Repositories\DigitalMediaRepository.cs" />
     <Compile Include="Persistence\Repositories\EntityCollectionRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAssertsDocumentNumber.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\INoteRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IAuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IDetachedContentTypeRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IDigitalMediaRepository.cs" />
@@ -1149,6 +1157,7 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\NoteService.cs" />
     <Compile Include="Services\AuditLogService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
     <Compile Include="Services\DetachedContentTypeService.cs" />
@@ -1156,6 +1165,7 @@
     <Compile Include="Services\EntityCollectionService.cs" />
     <Compile Include="Services\Interfaces\IAnonymousCustomerService.cs" />
     <Compile Include="Services\Interfaces\IAppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\INoteService.cs" />
     <Compile Include="Services\Interfaces\IAuditLogService.cs" />
     <Compile Include="Services\Interfaces\ICustomerAddressService.cs" />
     <Compile Include="Services\Interfaces\IDetachedContentTypeService.cs" />

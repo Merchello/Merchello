@@ -8,7 +8,6 @@
     using Merchello.Core.Chains;
     using Merchello.Core.Events;
     using Merchello.Core.Models;
-    using Merchello.Web.DataModifiers;
     using Merchello.Web.DataModifiers.Product;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Validation;
