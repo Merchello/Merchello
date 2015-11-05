@@ -151,7 +151,7 @@
     <key alias="tabs">Tabs</key>
     <key alias="noDetachedContentTypes">
       <![CDATA[
-      <h5>You have not associated and Umbraco content types with Merchello</h5>
+      <h5>You have not associated any Umbraco content types with Merchello</h5>
       <p>This can be done through the Products context menu.</p>
       ]]>
     </key>
