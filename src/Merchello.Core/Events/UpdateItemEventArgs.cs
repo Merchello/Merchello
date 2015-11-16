@@ -15,6 +15,11 @@
     public class UpdateItemEventArgs<T> : CancellableObjectEventArgs<T>
     {
         /// <summary>
+        /// The result.
+        /// </summary>
+        private readonly T _result;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UpdateItemEventArgs{T}"/> class.
         /// </summary>
         /// <param name="result">
@@ -23,12 +28,18 @@
         public UpdateItemEventArgs(T result)            
             : base(result, true)
         {
-            this.Result = result;
+            _result = result;
         }
 
         /// <summary>
         /// Gets the result.
         /// </summary>
-        public T Result { get; }
+        public T Result
+        {
+            get
+            {
+                return _result;
+            }
+        }
     }
 }
