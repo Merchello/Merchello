@@ -6359,6 +6359,11 @@
             <param name="stream">The <see cref="T:System.IO.Stream"/> to read.</param>
             <returns>Contents of the <paramref name="stream"/> as a byte array.</returns>
         </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenThreeOne.UpdateUserLanguagesToIsoCode">
+            <summary>
+            This fixes the storage of user languages from the old format like en_us to en-US
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.PetaPocoRepositoryBase`2">
             <summary>
             Represent an abstract Repository for PetaPoco based repositories
@@ -6756,9 +6761,36 @@
             Generic Back office user manager
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Security.BackOfficeUserManager`1.CheckPasswordAsync(`0,System.String)">
+            <summary>
+            Logic used to validate a username and password
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+            <remarks>
+            By default this uses the standard ASP.Net Identity approach which is:
+            * Get password store
+            * Call VerifyPasswordAsync with the password store + user + password
+            * Uses the PasswordHasher.VerifyHashedPassword to compare the stored password
+            
+            In some cases people want simple custom control over the username/password check, for simplicity
+            sake, developers would like the users to simply validate against an LDAP directory but the user
+            data remains stored inside of Umbraco. 
+            See: http://issues.umbraco.org/issue/U4-7032 for the use cases.
+            
+            We've allowed this check to be overridden with a simple callback so that developers don't actually
+            have to implement/override this class.
+            </remarks>
+        </member>
         <member name="P:Umbraco.Core.Security.BackOfficeUserManager`1.SupportsUserTwoFactor">
             <summary>
             Developers will need to override this to support custom 2 factor auth
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Security.BackOfficeUserManager`1.BackOfficeUserPasswordChecker">
+            <summary>
+            Gets/sets the default back office user password checker
             </summary>
         </member>
         <member name="M:Umbraco.Core.Security.BackOfficeUserManager.Create(Microsoft.AspNet.Identity.Owin.IdentityFactoryOptions{Umbraco.Core.Security.BackOfficeUserManager},Umbraco.Core.Services.IUserService,Umbraco.Core.Services.IExternalLoginService,Umbraco.Core.Security.MembershipProviderBase)">
@@ -6788,6 +6820,11 @@
             <param name="membershipProvider"></param>
             <param name="options"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Security.BackOfficeUserPasswordCheckerResult">
+            <summary>
+            The result returned from the IBackOfficeUserPasswordChecker
+            </summary>
         </member>
         <member name="M:Umbraco.Core.Security.BackOfficeUserStore.DisposeResources">
             <summary>
@@ -7020,6 +7057,12 @@
             </summary>
             <param name="user"/><param name="enabled"/>
             <returns/>
+        </member>
+        <member name="T:Umbraco.Core.Security.IBackOfficeUserPasswordChecker">
+            <summary>
+            Used by the BackOfficeUserManager to check the username/password which allows for developers to more easily 
+            set the logic for this procedure.
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Security.MembershipPasswordHasher">
             <summary>
@@ -7296,13 +7339,13 @@
             <param name="contentPath"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Services.IPublicAccessService.AddOrUpdateRule(Umbraco.Core.Models.IContent,System.String,System.String)">
+        <member name="M:Umbraco.Core.Services.IPublicAccessService.AddRule(Umbraco.Core.Models.IContent,System.String,System.String)">
             <summary>
-            Adds/updates a rule, if an entry doesn't exist one will be created with the new rule
+            Adds a rule if the entry doesn't already exist
             </summary>
             <param name="content"></param>
             <param name="ruleType"></param>
-            <param name="newRuleValue"></param>
+            <param name="ruleValue"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.IPublicAccessService.RemoveRule(Umbraco.Core.Models.IContent,System.String,System.String)">
@@ -7433,13 +7476,13 @@
             <param name="contentPath"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Services.PublicAccessService.AddOrUpdateRule(Umbraco.Core.Models.IContent,System.String,System.String)">
+        <member name="M:Umbraco.Core.Services.PublicAccessService.AddRule(Umbraco.Core.Models.IContent,System.String,System.String)">
             <summary>
-            Adds/updates a rule
+            Adds a rule
             </summary>
             <param name="content"></param>
             <param name="ruleType"></param>
-            <param name="newRuleValue"></param>
+            <param name="ruleValue"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.PublicAccessService.RemoveRule(Umbraco.Core.Models.IContent,System.String,System.String)">
@@ -17840,7 +17883,11 @@
             Gets or sets the weight of the object type.
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter" -->
+        <member name="T:Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter">
+            <summary>
+            Maps a property source value to a data object.
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.PropertyEditors.IPropertyEditorValueConverter.IsConverterFor(System.Guid,System.String,System.String)">
             <summary>
             Returns a value indicating whether this provider applies to the specified property.
@@ -18198,51 +18245,6 @@
             Gets the umbraco license.
             </summary>
             <value>The license.</value>
-        </member>
-        <member name="T:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer">
-            <summary>
-            Structure that checks in logarithmic time
-            if a given string starts with one of the added keys.
-            </summary>
-        </member>
-        <member name="F:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer._list">
-            <summary>Internal sorted list of keys.</summary>
-        </member>
-        <member name="M:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer.Add(System.String)">
-            <summary>
-            Adds the specified new key.
-            </summary>
-            <param name="newKey">The new key.</param>
-        </member>
-        <member name="M:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer.StartsWith(System.String)">
-            <summary>
-            Checks if the given string starts with any of the added keys.
-            </summary>
-            <param name="target">The target.</param>
-            <returns>true if a key is found that matches the start of target</returns>
-            <remarks>
-            Runs in O(s*log(n)), with n the number of keys and s the length of target.
-            </remarks>
-        </member>
-        <member name="T:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer.StartsWithComparator">
-            <summary>Comparator that tests if a string starts with another.</summary>
-            <remarks>Not a real comparator, since it is not reflexive. (x==y does not imply y==x)</remarks>
-        </member>
-        <member name="F:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer.StartsWithComparator._stringComparer">
-            <summary>Default string comparer.</summary>
-        </member>
-        <member name="F:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer.StartsWithComparator.Instance">
-            <summary>Gets an instance of the StartsWithComparator.</summary>
-        </member>
-        <member name="M:Umbraco.Core.Configuration.GlobalSettings.StartsWithContainer.StartsWithComparator.Compare(System.String,System.String)">
-            <summary>
-            Tests if whole begins with all characters of part.
-            </summary>
-            <param name="part">The part.</param>
-            <param name="whole">The whole.</param>
-            <returns>
-            Returns 0 if whole starts with part, otherwise performs standard string comparison.
-            </returns>
         </member>
         <member name="T:Umbraco.Core.CustomBooleanTypeConverter">
             <summary>

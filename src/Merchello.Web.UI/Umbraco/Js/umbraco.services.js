@@ -6980,7 +6980,7 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
 }
 angular.module('umbraco.services').factory('umbRequestHelper', umbRequestHelper);
 angular.module('umbraco.services')
-    .factory('userService', function ($rootScope, eventsService, $q, $location, $log, securityRetryQueue, authResource, dialogService, $timeout, angularHelper) {
+    .factory('userService', function ($rootScope, eventsService, $q, $location, $log, securityRetryQueue, authResource, dialogService, $timeout, angularHelper, $http) {
 
         var currentUser = null;
         var lastUserId = null;
@@ -7231,7 +7231,7 @@ angular.module('umbraco.services')
                             }
 
                             setCurrentUser(data);
-                            currentUser.avatar = 'https://www.gravatar.com/avatar/' + data.emailHash + '?s=40&d=404';
+
                             deferred.resolve(currentUser);
                         });
 
@@ -8333,9 +8333,6 @@ function xmlhelper($http) {
         fromJson: function (json) {
             var xml = x2js.json2xml_str(json);
             return xml;
-        },
-        parseFeed: function (url) {
-            return $http.jsonp('//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=50&callback=JSON_CALLBACK&q=' + encodeURIComponent(url));
         }
     };
 }

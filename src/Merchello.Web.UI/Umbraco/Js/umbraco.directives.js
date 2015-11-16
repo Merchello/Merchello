@@ -974,34 +974,6 @@ angular.module("umbraco.directives")
 });
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbAvatar
-* @restrict E
-**/
-function avatarDirective() {
-    return {
-        restrict: "E",    // restrict to an element
-        replace: true,   // replace the html element with the template
-        templateUrl: 'views/directives/umb-avatar.html',
-        scope: {
-            name: '@',
-            email: '@',
-            hash: '@'
-        },
-        link: function(scope, element, attr, ctrl) {
-
-            scope.$watch("hash", function (val) {
-                //set the gravatar url
-                scope.gravatar = "https://www.gravatar.com/avatar/" + val + "?s=40";
-            });
-            
-        }
-    };
-}
-
-angular.module('umbraco.directives').directive("umbAvatar", avatarDirective);
-
-/**
-* @ngdoc directive
 * @name umbraco.directives.directive:umbProperty
 * @restrict E
 **/
@@ -2392,14 +2364,16 @@ angular.module("umbraco.directives")
             restrict: 'E',
             replace: true,        
             templateUrl: 'views/directives/umb-property.html',
-
+            link: function(scope) {
+                scope.propertyAlias = Umbraco.Sys.ServerVariables.isDebuggingEnabled === true ? scope.property.alias : null;
+            },
             //Define a controller for this directive to expose APIs to other directives
             controller: function ($scope, $timeout) {
                
                 var self = this;
 
                 //set the API properties/methods
-
+                
                 self.property = $scope.property;
                 self.setPropertyError = function(errorMsg) {
                     $scope.property.propertyErrorMessage = errorMsg;
