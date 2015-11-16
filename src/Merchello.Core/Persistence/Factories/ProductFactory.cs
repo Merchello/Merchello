@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
     using System;
+    using System.Linq;
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
@@ -119,7 +120,6 @@
         /// </returns>
         public ProductDto BuildDto(IProduct entity)
         {
-            
             var dto = new ProductDto()
             {
                 Key = entity.Key,
@@ -130,6 +130,5 @@
 
             return dto;
         }
-
     }
 }
