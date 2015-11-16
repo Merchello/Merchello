@@ -90,6 +90,16 @@
         public event TypedEventHandler<CustomerItemCacheBase, Core.Events.NewEventArgs<ILineItem>> AddedItem;
 
         /// <summary>
+        /// Occurs before an item quatity is updated.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, Core.Events.UpdateItemEventArgs<ILineItem>> UpdatingItem;
+
+        /// <summary>
+        /// Occurs after an item quatity is updated.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, Core.Events.UpdateItemEventArgs<ILineItem>> UpdatedItem;
+
+        /// <summary>
         /// Occurs before removing an item.
         /// </summary>
         public event TypedEventHandler<CustomerItemCacheBase, DeleteEventArgs<ILineItem>> RemovingItem;
@@ -612,7 +622,11 @@
                 return;
             }
 
+            UpdatingItem.RaiseEvent(new UpdateItemEventArgs<ILineItem>(_itemCache.Items[sku]), this);
+
             _itemCache.Items[sku].Quantity = quantity;
+
+            UpdatedItem.RaiseEvent(new UpdateItemEventArgs<ILineItem>(_itemCache.Items[sku]), this);
         }
 
         /// <summary>
