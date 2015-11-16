@@ -362,6 +362,7 @@
         {
             return Query.Invoice.GetByCustomerKey(customerKey.EncodeAsGuid());
         }
+
         /// <summary>
         /// Searches the Merchello Invoice index. 
         /// </summary>
