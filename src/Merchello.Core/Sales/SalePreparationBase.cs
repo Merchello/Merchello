@@ -178,7 +178,7 @@
             _customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
             SaveCustomer(_merchelloContext, _customer, RaiseCustomerEvents);
         }
-
+      
 
         /// <summary>
         /// Gets the bill to address
@@ -197,6 +197,7 @@
         {
             return _customer.ExtendedData.GetAddress(AddressType.Shipping);
         }
+
 
         /// <summary>
         /// Saves a <see cref="IShipmentRateQuote"/> as a shipment line item
@@ -641,6 +642,30 @@
         }
 
         /// <summary>
+        /// Saves the current customer
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise Events.
+        /// </param>
+        protected static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
+        {
+            if (typeof(AnonymousCustomer) == customer.GetType())
+            {
+                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer, raiseEvents);
+            }
+            else
+            {
+                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer, raiseEvents);
+            }
+        }
+
+        /// <summary>
         /// Makes the 'unique' RuntimeCache Key for the RuntimeCache
         /// </summary>
         /// <returns>
@@ -669,30 +694,6 @@
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Saves the current customer
-        /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello Context.
-        /// </param>
-        /// <param name="customer">
-        /// The customer.
-        /// </param>
-        /// <param name="raiseEvents">
-        /// The raise Events.
-        /// </param>
-        private static void SaveCustomer(IMerchelloContext merchelloContext, ICustomerBase customer, bool raiseEvents = true)
-        {
-            if (typeof(AnonymousCustomer) == customer.GetType())
-            {
-                merchelloContext.Services.CustomerService.Save(customer as AnonymousCustomer, raiseEvents);
-            }
-            else
-            {
-                ((CustomerService)merchelloContext.Services.CustomerService).Save(customer as Customer, raiseEvents);
-            }
         }
 
         /// <summary>

@@ -146,7 +146,7 @@
                         dictionary[Constants.ExtendedDataKeys.Name],
                         dictionary[Constants.ExtendedDataKeys.Sku],
                         int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
-                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price]),
+                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price], NumberStyles.Any, CultureInfo.InvariantCulture),
                         new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])
                     };
                                
@@ -700,6 +700,7 @@
 
         #endregion
 
+       
         #region IShipment
 
 

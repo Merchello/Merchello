@@ -147,6 +147,7 @@
                 ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.GetShipCountryByCountryCode(
                     catalog.Key,
                     "US");
+
             // Add the ship country
             if (shipCountry == null || shipCountry.CountryCode == "ELSE")
             {
@@ -295,6 +296,7 @@
                    {
                        CanBeRendered = true
                    });
+
             merchelloServices.ProductService.Save(liquidSoap);
 
             LogHelper.Info<BazaarDataInstaller>("Adding an example product Generic Soap");

@@ -47,6 +47,7 @@ namespace Merchello.Core.Persistence.Mappers
         private MerchelloMapper()
         {
             CacheMapper(typeof(IAuditLog), typeof(AuditLogMapper));
+            CacheMapper(typeof(INote), typeof(NoteMapper));
             CacheMapper(typeof(ITaxMethod), typeof(TaxMethodMapper));
             CacheMapper(typeof(ICustomerAddress), typeof(CustomerAddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
     using System;
+    using System.Linq;
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
@@ -91,6 +92,18 @@
                 CreateDate = dto.CreateDate
             };
 
+            // Fix sort order of attributes in each variant.
+            // Since no more than one attribute from a single option can be in a variants Attributes list,
+            // it is safe to just take the option's sortOrder and use it as the sortOrder of the "variant-attribute".
+            foreach (var pvariant in product.ProductVariants)
+            {
+                pvariant.Attributes.Select(x =>
+                {
+                    x.SortOrder = product.ProductOptions.First(o => o.Key == x.OptionKey).SortOrder; // This should not return null! Otherwise there was a problem building the entity.
+                    return x;
+                }).ToList();
+            }
+
             product.ResetDirtyProperties();
 
             return product;
@@ -107,7 +120,6 @@
         /// </returns>
         public ProductDto BuildDto(IProduct entity)
         {
-            
             var dto = new ProductDto()
             {
                 Key = entity.Key,
@@ -118,6 +130,5 @@
 
             return dto;
         }
-
     }
 }

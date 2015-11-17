@@ -8509,12 +8509,12 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService', 'invoiceHelper',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
-            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder',
+            'auditLogResource', 'noteResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
+            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder', 'noteDisplayBuilder',
             'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService, invoiceHelper,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 auditLogResource, noteResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
+                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, noteDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
@@ -8523,12 +8523,14 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.invoice = {};
             $scope.tabs = [];
             $scope.historyLoaded = false;
+            $scope.notesLoaded = false;
             $scope.remainingBalance = 0.0;
             $scope.shippingTotal = 0.0;
             $scope.taxTotal = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
+            $scope.invoiceNotes = {};
             $scope.paymentMethods = [];
             $scope.allPayments = [];
             $scope.payments = [];
@@ -8618,6 +8620,31 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
             }
 
+
+            /**
+             * @ngdoc method
+             * @name loadNotes
+             * @function
+             *
+             * @description
+             * Load the Notes for the invoice via API.
+             */
+            function loadNotes(key) {
+                if (key !== undefined) {
+                    var promise = noteResource.getByEntityKey(key);
+                    promise.then(function (response) {
+                        var notes = noteDisplayBuilder.transform(response);
+                        // TODO this is a patch for a problem in the API
+                        if (notes.length > 0) {
+                            $scope.invoiceNotes = notes;
+                        }
+                        $scope.notesLoaded = notes.length > 0;
+                    }, function (reason) {
+                        notificationsService.error('Failed to load notes', reason.message);
+                    });
+                }
+            }
+
             /**
              * @ngdoc method
              * @name loadInvoice
@@ -8641,6 +8668,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
+                    loadNotes(id);
                     loadShippingAddress(id);
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
@@ -8680,6 +8708,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                        } else {
                            $scope.currencySymbol = combined.currencySymbol;
                        }
+                   } else {
+                       $scope.currencySymbol = $scope.invoice.currency.symbol;
                    }
                });
            }

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Bazaar.Controllers.Surface
 {
+    using System;
     using System.Web.Mvc;
     using System.Web.Security;
 
@@ -69,15 +70,15 @@
             switch (status)
             {
                 case MembershipCreateStatus.InvalidPassword:
-                    ModelState.AddModelError(string.Empty, "Invalid password");
+                    ModelState.AddModelError("HandleSignUpError", "Invalid password");
                     return this.CurrentUmbracoPage();
 
                 case MembershipCreateStatus.DuplicateEmail:
-                    ModelState.AddModelError(string.Empty, "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
+                    ModelState.AddModelError("HandleSignUpError", "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
                     return this.CurrentUmbracoPage();
 
                 case MembershipCreateStatus.DuplicateUserName:
-                    ModelState.AddModelError(string.Empty, "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
+                    ModelState.AddModelError("HandleSignUpError", "The email address " + model.Registration.EmailAddress + " is already associated with a customer.");
                     return this.CurrentUmbracoPage();
 
                 default:
@@ -89,12 +90,39 @@
                     {
                         Services.MemberService.Save(member);
                         Services.MemberService.AssignRole(member.Id, "MerchelloCustomers");
+                        
+                             var stringResult = SendEmailRegisterMember(model);
+                        ModelState.AddModelError("HandleSignUpError", stringResult);
                     }
 
                     break;
             }
 
             return RedirectToUmbracoPage(model.AccountPageId);
+        }
+        
+        public string SendEmailRegisterMember(CombinedRegisterLoginModel model)
+        {
+            string result = "";
+            try
+            {
+                System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
+                message.To.Add(model.Registration.EmailAddress);
+                message.Subject = "Account Registration confirm";
+                message.From = new System.Net.Mail.MailAddress("info@xyzc.com");
+                message.Body = string.Format("Hi {0}, <br/> registration confirmed. login {1} - password {2} .<br/>Thanks.", model.Registration.FirstName, model.Registration.EmailAddress, model.Registration.Password);
+                message.IsBodyHtml = true;
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
+                smtp.Send(message);
+                result = "Ok. Sent to " + model.Registration.EmailAddress;
+            }
+            catch (Exception ex)
+            {
+                result = "Error: " + ex.Message;
+            }
+
+            return result;
+
         }
 
         /// <summary>

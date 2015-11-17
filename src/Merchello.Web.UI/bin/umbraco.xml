@@ -1094,14 +1094,6 @@
             </summary>
             <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
         </member>
-        <member name="M:Umbraco.Web.Cache.DistributedCache.RefreshAll(System.Guid,System.Boolean)">
-            <summary>
-            Notifies the distributed cache of a global invalidation for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
-            </summary>
-            <param name="factoryGuid">The unique identifier of the ICacheRefresher.</param>
-            <param name="allServers">If true, all servers in the load balancing environment are notified; otherwise,
-            only the local server is notified.</param>
-        </member>
         <member name="M:Umbraco.Web.Cache.DistributedCache.Remove(System.Guid,System.Int32)">
             <summary>
             Notifies the distributed cache of a specified item removal, for a specified <see cref="T:umbraco.interfaces.ICacheRefresher"/>.
@@ -2918,6 +2910,11 @@
             Boolean indicating whether copying the object should create a relation to it's original
             </summary>
         </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.MoveOrCopy.Recursive">
+            <summary>
+            Boolean indicating whether copying the object should be recursive
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.MacroParameter">
             <summary>
             Represents a macro parameter with an editor
@@ -3193,7 +3190,7 @@
             Creates the tabs collection with properties assigned for display models
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.MapGenericProperties``1(``0,Umbraco.Web.Models.ContentEditing.ContentItemDisplayBase{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay[])">
+        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.MapGenericProperties``1(``0,Umbraco.Web.Models.ContentEditing.ContentItemDisplayBase{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},System.Collections.Generic.IEnumerable{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay},System.Action{System.Collections.Generic.List{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay}})">
             <summary>
             Maps properties on to the generic properties tab
             </summary>
@@ -3202,6 +3199,7 @@
             <param name="customProperties">
             Any additional custom properties to assign to the generic properties tab. 
             </param>
+            <param name="onGenericPropertiesMapped"></param>
             <remarks>
             The generic properties tab is mapped during AfterMap and is responsible for 
             setting up the properties such as Created date, updated date, template selected, etc...
@@ -7724,7 +7722,7 @@
             Declares how model mappings for content
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.ContentModelMapper.AfterMap(Umbraco.Core.Models.IContent,Umbraco.Web.Models.ContentEditing.ContentItemDisplay,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.ILocalizedTextService)">
+        <member name="M:Umbraco.Web.Models.Mapping.ContentModelMapper.AfterMap(Umbraco.Core.Models.IContent,Umbraco.Web.Models.ContentEditing.ContentItemDisplay,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.ILocalizedTextService,Umbraco.Core.Services.IContentTypeService)">
             <summary>
             Maps the generic tab with custom properties for content
             </summary>
@@ -7732,6 +7730,7 @@
             <param name="display"></param>
             <param name="dataTypeService"></param>
             <param name="localizedText"></param>
+            <param name="contentTypeService"></param>
         </member>
         <member name="M:Umbraco.Web.Models.Mapping.ContentModelMapper.GetPublishedDate(Umbraco.Core.Models.IContent,Umbraco.Core.ApplicationContext)">
             <summary>
@@ -13336,6 +13335,67 @@
             <param name="htmlHelper"></param>
             <param name="actionName"></param>
             <param name="surfaceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Gets the ImageProcessor Url of a media item by the crop alias (using default media item property alias of "umbracoFile")
+            </summary>
+            <param name="htmlHelper"></param>
+            <param name="mediaItem"></param>
+            <param name="cropAlias"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,Umbraco.Core.Models.IPublishedContent,System.String,System.String)">
+            <summary>
+            Gets the ImageProcessor Url of a media item by the property alias and crop alias.
+            </summary>
+            <param name="htmlHelper"></param>
+            <param name="mediaItem"></param>
+            <param name="propertyAlias"></param>
+            <param name="cropAlias"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,Umbraco.Core.Models.IPublishedContent,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{Umbraco.Web.Models.ImageCropMode},System.Nullable{Umbraco.Web.Models.ImageCropAnchor},System.Boolean,System.Boolean,System.Boolean,System.String,System.Nullable{Umbraco.Web.Models.ImageCropRatioMode},System.Boolean)">
+            <summary>
+            Gets the ImageProcessor Url of a media item
+            </summary>
+            <param name="htmlHelper"></param>
+            <param name="mediaItem"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+            <param name="propertyAlias"></param>
+            <param name="cropAlias"></param>
+            <param name="quality"></param>
+            <param name="imageCropMode"></param>
+            <param name="imageCropAnchor"></param>
+            <param name="preferFocalPoint"></param>
+            <param name="useCropDimensions"></param>
+            <param name="cacheBuster"></param>
+            <param name="furtherOptions"></param>
+            <param name="ratioMode"></param>
+            <param name="upScale"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{Umbraco.Web.Models.ImageCropMode},System.Nullable{Umbraco.Web.Models.ImageCropAnchor},System.Boolean,System.Boolean,System.String,System.String,System.Nullable{Umbraco.Web.Models.ImageCropRatioMode},System.Boolean)">
+            <summary>
+            Gets the ImageProcessor Url from the media path
+            </summary>
+            <param name="htmlHelper"></param>
+            <param name="imageUrl"></param>
+            <param name="width"></param>
+            <param name="height"></param>
+            <param name="imageCropperValue"></param>
+            <param name="cropAlias"></param>
+            <param name="quality"></param>
+            <param name="imageCropMode"></param>
+            <param name="imageCropAnchor"></param>
+            <param name="preferFocalPoint"></param>
+            <param name="useCropDimensions"></param>
+            <param name="cacheBusterValue"></param>
+            <param name="furtherOptions"></param>
+            <param name="ratioMode"></param>
+            <param name="upScale"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.BeginUmbracoForm(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Web.Mvc.FormMethod)">
