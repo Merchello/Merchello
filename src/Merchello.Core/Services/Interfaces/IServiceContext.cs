@@ -22,6 +22,11 @@
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        IDetachedContentTypeService DetachedContentTypeService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IDigitalMediaService"/>.
         /// </summary>
         IDigitalMediaService DigitalMediaService { get;  }
