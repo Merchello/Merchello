@@ -296,6 +296,7 @@
                    {
                        CanBeRendered = true
                    });
+
             merchelloServices.ProductService.Save(liquidSoap);
 
             LogHelper.Info<BazaarDataInstaller>("Adding an example product Generic Soap");
