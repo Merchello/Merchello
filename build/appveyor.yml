@@ -1,0 +1,32 @@
+# version format
+version: 1.13.1.{build}
+
+# UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
+# example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
+init:
+  - set UMBRACO_PACKAGE_PRERELEASE_SUFFIX=
+
+build_script:
+- build-appveyor.cmd
+
+test:
+  assemblies:
+    - 'Merchello.Tests.IntegrationTests.dll'
+
+artifacts:
+  - path: artifacts\*.nupkg
+  - path: artifacts\*.zip
+
+deploy:
+     # MyGet Deployment for builds & releases
+  - provider: NuGet
+    server: https://www.myget.org/F/merchello/api/v2/
+    symbol_server: https://nuget.symbolsource.org/MyGet/umbraco-ditto
+    api_key:
+      secure: Q1/4K8VSwr7BjwmKDTef8y5lOc7S+jK9ELuWy67y6OVRpjxmnF9M3Gfs1kT+ir8x
+    artifact: /.*\.nupkg/
+    on:
+      branch: develop
+
+ #9af0279b-c6c1-4dfd-b3cb-901515f7a753
+ #https://www.myget.org/F/merchello/symbols/
