@@ -147,6 +147,7 @@
                 ((Core.Services.ServiceContext)merchelloServices).ShipCountryService.GetShipCountryByCountryCode(
                     catalog.Key,
                     "US");
+
             // Add the ship country
             if (shipCountry == null || shipCountry.CountryCode == "ELSE")
             {
