@@ -225,6 +225,17 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        public IDetachedContentTypeService DetachedContentTypeService
+        {
+            get
+            {
+                return _detachedContentTypeService.Value;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IDigitalMediaService"/>.
         /// </summary>
         public IDigitalMediaService DigitalMediaService
@@ -360,16 +371,6 @@
             get { return _anonymousCustomerService.Value; }
         }
 
-        /// <summary>
-        /// Gets the <see cref="IDetachedContentTypeService"/>.
-        /// </summary>
-        internal IDetachedContentTypeService DetachedContentTypeService
-        {
-            get
-            {
-                return _detachedContentTypeService.Value;
-            }
-        }
 
         /// <summary>
         /// Gets the <see cref="ITaxMethodService"/>

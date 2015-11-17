@@ -13,7 +13,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class ProductVariantDetachedContent : Entity, IProductVariantDetachedContent
+    public class ProductVariantDetachedContent : Entity, IProductVariantDetachedContent
     {
         /// <summary>
         /// The template id selector.
@@ -57,7 +57,7 @@
         /// <param name="cultureName">
         /// The culture name.
         /// </param>
-        internal ProductVariantDetachedContent(Guid productVariantKey, IDetachedContentType detachedContentType, string cultureName)
+        public ProductVariantDetachedContent(Guid productVariantKey, IDetachedContentType detachedContentType, string cultureName)
             : this(productVariantKey, detachedContentType, cultureName, new DetachedDataValuesCollection())
         {
         }
@@ -77,7 +77,7 @@
         /// <param name="detachedDataValuesCollection">
         /// The detached data values collection.
         /// </param>
-        internal ProductVariantDetachedContent(
+        public ProductVariantDetachedContent(
             Guid productVariantKey,
             IDetachedContentType detachedContentType,
             string cultureName,

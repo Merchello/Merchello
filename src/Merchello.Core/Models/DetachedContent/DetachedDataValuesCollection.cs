@@ -12,7 +12,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedDataValuesCollection"/> class.
         /// </summary>
-        internal DetachedDataValuesCollection()
+        public DetachedDataValuesCollection()
         {            
         }
 
@@ -22,7 +22,7 @@
         /// <param name="keyValues">
         /// The key values.
         /// </param>
-        internal DetachedDataValuesCollection(IEnumerable<KeyValuePair<string, string>> keyValues)
+        public DetachedDataValuesCollection(IEnumerable<KeyValuePair<string, string>> keyValues)
         {
             this.Load(keyValues);
         }
