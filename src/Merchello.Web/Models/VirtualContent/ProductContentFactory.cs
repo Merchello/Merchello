@@ -1,12 +1,20 @@
 ﻿namespace Merchello.Web.Models.VirtualContent
 {
+    using System;
     using System.Linq;
 
+    using Merchello.Core;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
 
+    using umbraco.cms.businesslogic.web;
+
+    using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
+
+    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// Represents a ProductContentFactory.
@@ -14,15 +22,43 @@
     public class ProductContentFactory : IProductContentFactory
     {
         /// <summary>
+        /// The <see cref="IStoreSettingService"/>.
+        /// </summary>
+        private readonly IStoreSettingService _storeSettingService;
+
+        /// <summary>
         /// The parent.
         /// </summary>
         private IPublishedContent _parent;
 
         /// <summary>
+        /// The collection of all languages.
+        /// </summary>
+        private ILanguage[] _allLanguages;
+
+        /// <summary>
+        /// The default store language.
+        /// </summary>
+        private string _defaultStoreLanguage;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
         /// </summary>
         public ProductContentFactory()
+            : this(MerchelloContext.Current.Services.StoreSettingService)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
+        /// </summary>
+        /// <param name="storeSettingService">
+        /// The <see cref="IStoreSettingService"/>.
+        /// </param>
+        internal ProductContentFactory(IStoreSettingService storeSettingService)
+        {
+            _storeSettingService = storeSettingService;
+
             this.Initialize();
         }
 
@@ -51,7 +87,7 @@
 
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
             
-            return new ProductContent(publishedContentType, display, _parent);
+            return new ProductContent(publishedContentType, display, _parent, _defaultStoreLanguage);
         }
 
         /// <summary>
@@ -62,6 +98,21 @@
             var args = new VirtualContentEventArgs(_parent);
             Initializing.RaiseEvent(args, this);
             _parent = args.Parent;
+
+            //// http://issues.merchello.com/youtrack/issue/M-878
+            _allLanguages = ApplicationContext.Current.Services.LocalizationService.GetAllLanguages().ToArray();
+
+            _defaultStoreLanguage =
+                _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value;
+
+            if (_allLanguages.Any())
+            {
+
+                _defaultStoreLanguage = _allLanguages.Any(x => x.CultureInfo.Name == _defaultStoreLanguage)
+                                            ? _defaultStoreLanguage
+                                            : _allLanguages.First().CultureInfo.Name;
+            }
+
         }
     }
 }
