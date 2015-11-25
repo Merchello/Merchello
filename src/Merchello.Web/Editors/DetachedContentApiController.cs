@@ -27,7 +27,7 @@
     /// An API controller for handling detached content related operations in the Merchello back office.
     /// </summary>
     [PluginController("Merchello")]
-    public class DetachedContentApiController : MerchelloApiController
+    public sealed class DetachedContentApiController : MerchelloApiController
     {
         /// <summary>
         /// Umbraco's <see cref="IContentTypeService"/>.
@@ -61,7 +61,6 @@
         public DetachedContentApiController(IMerchelloContext merchelloContext)
             : this(merchelloContext, UmbracoContext.Current)
         {
-            this.Initialize();
         }
 
         /// <summary>
@@ -81,6 +80,8 @@
             _contentTypeService = ApplicationContext.Services.ContentTypeService;
 
             _detachedContentTypeService = ((ServiceContext)merchelloContext.Services).DetachedContentTypeService;
+
+            this.Initialize();
         }
 
         #region Localization
@@ -104,7 +105,7 @@
                             });
         }
 
-            #endregion
+        #endregion
 
         #region ContentTypes
 

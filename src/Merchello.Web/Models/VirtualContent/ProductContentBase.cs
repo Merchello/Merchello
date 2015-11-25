@@ -49,7 +49,7 @@
         /// <param name="specificCulture">
         /// Specifically sets the culture
         /// </param>
-        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, string specificCulture = "en-US")
+        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, string specificCulture)
         {
             Mandate.ParameterNotNull(productBase, "productBase");
             _productBase = productBase;
