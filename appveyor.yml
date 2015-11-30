@@ -9,9 +9,9 @@ init:
 build_script:
 - build-appveyor.cmd
 
-test:
-  assemblies:
-    - 'Merchello.Tests.IntegrationTests.dll'
+#test:
+#  assemblies:
+#    - 'Merchello.Tests.IntegrationTests.dll'
 
 artifacts:
   - path: artifacts\*.nupkg
@@ -21,9 +21,9 @@ deploy:
      # MyGet Deployment for builds & releases
   - provider: NuGet
     server: https://www.myget.org/F/merchello/api/v2/
-    symbol_server: https://nuget.symbolsource.org/MyGet/umbraco-ditto
+    symbol_server: https://www.myget.org/F/merchello/symbols/
     api_key:
-      secure: Q1/4K8VSwr7BjwmKDTef8y5lOc7S+jK9ELuWy67y6OVRpjxmnF9M3Gfs1kT+ir8x
+      secure: 34B4mXhAYW6XOw8H9ZVh+KhbKKjXnb8QIp8bpoIKrkx5Uivcg0D4cRbu/pvdI65o
     artifact: /.*\.nupkg/
     on:
       branch: appveyor
