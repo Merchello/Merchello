@@ -16,24 +16,24 @@
 
 	<!-- SHARED PROPERTIES -->
 	<PropertyGroup>
-		<PackageName>Ditto</PackageName>
-		<MinUmbracoVersion>6.2.5</MinUmbracoVersion>
-		<Readme>Ditto - the friendly POCO mapper for Umbraco</Readme>
-		<AuthorName>Lee Kelleher, Matt Brailsford, James Jackson-South</AuthorName>
-		<AuthorUrl>https://github.com/leekelleher/umbraco-ditto/graphs/contributors</AuthorUrl>
+		<PackageName>Merchello</PackageName>
+		<MinUmbracoVersion>7.3.0</MinUmbracoVersion>
+		<Readme>Merchello - Open source eCommerce package for Umbraco</Readme>
+		<AuthorName>Rusty Swayne and community contributors</AuthorName>
+		<AuthorUrl>https://github.com/rustyswayne/Merchello/graphs/contributors</AuthorUrl>
 		<PackageLicenseName>MIT license</PackageLicenseName>
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
-		<ProjectUrl>https://github.com/leekelleher/umbraco-ditto</ProjectUrl>
+		<ProjectUrl>https://github.com/Merchello/Merchello</ProjectUrl>
 	</PropertyGroup>
 
 	<!-- NUGET ONLY PROPERTIES -->
 	<PropertyGroup>
-		<PackageId>Our.Umbraco.Ditto</PackageId>
-		<Copyright>Copyright &#169; 2014 Umbrella Inc Ltd, Our Umbraco and other contributors</Copyright>
+		<PackageId>Merchello.Core</PackageId>
+		<Copyright>Copyright &#169; 2015 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
 		<Owners>Umbrella Inc Ltd</Owners>
-		<IconUrl>https://raw.githubusercontent.com/leekelleher/umbraco-ditto/master/docs/assets/img/logo.png</IconUrl>
-		<Tags>umbraco poco mapping strongly-typed</Tags>
-		<Language>en-GB</Language>
+		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
+		<Tags>umbraco ecommerce merchello</Tags>
+		<Language>en-US</Language>
 		<RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 	</PropertyGroup>
 
@@ -75,7 +75,7 @@
 		<BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
 		<BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
 		<ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
-		<ProjectDir>$(RootDir)\src\Our.Umbraco.Ditto</ProjectDir>
+		<ProjectDir>$(RootDir)\src</ProjectDir>
 	</PropertyGroup>
 
 	<!-- TARGETS -->
@@ -103,25 +103,34 @@
 			<VersionMinor Include="$(ProductVersion.Split('.')[1])" />
 		</ItemGroup>
 		<AssemblyInfo CodeLanguage="CS"
-			OutputFile="$(ProjectDir)\Properties\VersionInfo.cs"
+			OutputFile="$(ProjectDir)\Merchello.Core\Properties\AssemblyInfo.cs"
 			AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
 			AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Web\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Examine\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
 	</Target>
 
 	<!-- COMPILE -->
 	<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
-		<MSBuild Projects="$(ProjectDir)\Our.Umbraco.Ditto.csproj" Properties="Configuration=$(BuildConfig)" />
-		<MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" />
+    <Message Text="Build config $(ProjectDir)" Importance="high" />
+		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig)" />
+    <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
 	</Target>
 
 	<!-- PREPARE FILES -->
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
-		<ItemGroup>
-			<BinFiles Include="$(ProjectDir)\bin\$(BuildConfig)\Our.Umbraco.Ditto.dll" />
-			<PdbFiles Include="$(ProjectDir)\bin\$(BuildConfig)\Our.Umbraco.Ditto.pdb" />
+    <ItemGroup>
+      <BinFiles Include="$(BuildDir)*Merchello.*" Exclude="$(BuildDir)*Tests.*;$(BuildDir)*nunit.*;$(BuildDir)*Moq.*;$(BuildDir)*UI.*;$(BuildDir)*.sdf;" />
+			<PdbFiles Include="$(BuildDir)$(BuildConfig)\*Merchello.*.pdb" Exclude="$(BuildDir)*.Tests.*" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
-			<NuSpecFile Include="$(MSBuildProjectDirectory)\package.nuspec" />
+			<NuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />

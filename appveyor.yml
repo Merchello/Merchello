@@ -26,7 +26,7 @@ deploy:
       secure: Q1/4K8VSwr7BjwmKDTef8y5lOc7S+jK9ELuWy67y6OVRpjxmnF9M3Gfs1kT+ir8x
     artifact: /.*\.nupkg/
     on:
-      branch: develop
+      branch: appveyor
 
  #9af0279b-c6c1-4dfd-b3cb-901515f7a753
  #https://www.myget.org/F/merchello/symbols/
