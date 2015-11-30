@@ -70,6 +70,7 @@
 	<!-- PATHS -->
 	<PropertyGroup>
 		<BuildConfig>Release</BuildConfig>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
 		<RootDir>$(MSBuildProjectDirectory)\..</RootDir>
 		<BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
 		<BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
@@ -119,12 +120,13 @@
 	<!-- COMPILE -->
 	<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
     <Message Text="Build config $(ProjectDir)" Importance="high" />
-		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig)" />
+		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
     <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
 	</Target>
 
 	<!-- PREPARE FILES -->
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
+    <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
     <ItemGroup>
       <BinFiles Include="$(BuildDir)*Merchello.*" Exclude="$(BuildDir)*Tests.*;$(BuildDir)*nunit.*;$(BuildDir)*Moq.*;$(BuildDir)*UI.*;$(BuildDir)*.sdf;" />
 			<PdbFiles Include="$(BuildDir)$(BuildConfig)\*Merchello.*.pdb" Exclude="$(BuildDir)*.Tests.*" />
@@ -166,7 +168,7 @@
 			<ManifestFiles Include="$(BuildNuGetDir)\**\*" Exclude="$(BuildNuGetDir)\Merchello.Core.nuspec" />
 		</ItemGroup>
 		<MSBuild.NuGet.Tasks.ManifestUpdate
-			ManifestFile="$(BuildNuGetDir)\package.nuspec"
+			ManifestFile="$(BuildNuGetDir)\Merchello.Core.nuspec"
 			WorkingDirectory="$(BuildNuGetDir)"
 			Title="$(PackageName)"
 			Description="$(Readme)"
