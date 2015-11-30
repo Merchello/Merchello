@@ -163,7 +163,7 @@
 	<!-- MANIFEST FOR NUGET PACKAGE -->
 	<Target Name="ManifestNuGet" DependsOnTargets="PrepareFiles">
 		<ItemGroup>
-			<ManifestFiles Include="$(BuildNuGetDir)\**\*" Exclude="$(BuildNuGetDir)\package.nuspec" />
+			<ManifestFiles Include="$(BuildNuGetDir)\**\*" Exclude="$(BuildNuGetDir)\Merchello.Core.nuspec" />
 		</ItemGroup>
 		<MSBuild.NuGet.Tasks.ManifestUpdate
 			ManifestFile="$(BuildNuGetDir)\package.nuspec"
