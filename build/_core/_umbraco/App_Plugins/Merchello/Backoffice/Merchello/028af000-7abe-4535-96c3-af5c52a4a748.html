@@ -1,0 +1,91 @@
+<div data-ng-controller="Merchello.Backoffice.TaxationProvidersController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloTaxation_taxation" /></h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></a>
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+
+            <div class="merchello-pane row-fluid">
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloTaxation_taxMethods" />
+                        <small><localize key="merchelloTaxation_taxMethodsHelper" /></small>
+                    </label>
+
+                    <div class="merchello-controls row-fluid">
+
+                        <div class="row-fluid col-xs-8 span8">
+
+                            <table class="table table-striped merchello-striped-table settings-table tax-table form-horizontal">
+                                <tbody>
+                                <tr data-ng-repeat="country in availableCountries | orderBy: 'sortOrder'">
+                                    <td class="col-xs-4 span4"><h4 data-ng-bind="country.name"></h4></td>
+                                    <td class="col-xs-6 span6">
+                                        <select name="method-type" class="col-xs-12 span12" data-ng-model="country.provider" data-ng-options="p.name for p in taxationGatewayProviders"></select>
+                                        <div data-ng-show="settings.globalTaxationApplication === 'Product' && country.provider.taxationByProductProvider" class="product-tax-method">
+                                            <input type="checkbox" data-ng-click="ensureSingleProductTaxMethod(country)" class="product-taxation-checkbox" data-ng-model="country.addTaxesToProduct" /> <small><localize key="merchelloTaxation_taxIncludeInProductPrice" /></small>
+                                        </div>
+                                    </td>
+                                    <td class="col-xs-1 span1">
+                                        <div data-ng-show="country.taxMethod.hasProvinces()">
+                                            <merchello-edit-icon do-edit="editTaxMethodProvinces(country)"></merchello-edit-icon>
+                                        </div>
+                                    </td>
+                                    <td class="col-xs-3 span3">
+                                        <div class="input-append" data-ng-show="country.taxMethod.providerKey === 'a4ad4331-c278-4231-8607-925e0839a6cd'">
+                                            <input type="number" class="col-xs-6 tax-rate" data-ng-model="country.taxMethod.percentageTaxRate" />
+                                            <span class="add-on">%</span>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="merchello-pane row-fluid debug-pane">
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <label><input data-ng-model="debugging" type="checkbox" /> Debug</label>
+                        <small>Check to show debugging info</small>
+                    </label>
+
+                    <div class="merchello-controls">
+
+                        <div data-ng-show="debugging">
+                            <h3>taxationGatewayProviders</h3>
+                            <div class="jsonInfo">{{taxationGatewayProviders | json}}</div>
+                                                
+                            <h3>availableCountries</h3>
+                            <div class="jsonInfo">{{availableCountries | json}}</div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>-->
+
+
+        </merchello-panel>
+    </umb-panel>
+</div>

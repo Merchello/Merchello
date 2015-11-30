@@ -1,0 +1,42 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.ProductVariantBulkChangePricesController">
+    <div class="umb-modalcolumn-header">
+        <h4>Change Prices For All Selected Items</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when Change Prices is clicked -->
+        <form>
+            <div class="form-group row-fluid input-prepend">
+                <label for="new-price">New Price</label>
+                <span class="add-on">{{dialogData.currencySymbol}}</span>
+                <input name="new-price" data-ng-model="dialogData.price" class=" col-xs-5 span5" type="number" />
+            </div>
+            <div class="form-group row-fluid">
+                <label class="label-checkbox"><input name="includeSalePrice" type="checkbox" data-ng-model="dialogData.includeSalePrice"> <span>Update sale price.</span></label>
+            </div>
+            <div class="form-group row-fluid input-prepend"  data-ng-show="dialogData.includeSalePrice">
+                <label for="new-price">New Sale Price</label>
+                <span class="add-on">{{dialogData.currencySymbol}}</span>
+                <input name="new-sale-price" data-ng-model="dialogData.salePrice" class="col-xs-5 span5" type="number" />
+            </div>
+        </form>
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

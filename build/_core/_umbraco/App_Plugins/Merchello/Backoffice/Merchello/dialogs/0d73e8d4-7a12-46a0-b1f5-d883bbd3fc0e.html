@@ -1,0 +1,36 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.CashPaymentMethodAuthorizePaymentController">
+    <div class="umb-modalcolumn-header">
+        <h4>Authorize {{dialogData.paymentMethodName}} Payment</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="control-group row-fluid">
+            <p>
+                <localize key="merchelloOrder_processedBy" /> <strong>{{dialogData.paymentMethodName}}</strong><br />
+            </p>
+            <div class="input-prepend col-xs-12 span12">
+                <span class="add-on">{{dialogData.currencySymbol}}</span>
+                <input class="col-xs-4 span4" type="text" data-ng-model="dialogData.amount">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button
+                        class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="merchelloOrder_processPayment" />
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -128,17 +128,26 @@
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
     <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
     <ItemGroup>
-      <BinFiles Include="$(BuildDir)*Merchello.*" Exclude="$(BuildDir)*Tests.*;$(BuildDir)*nunit.*;$(BuildDir)*Moq.*;$(BuildDir)*UI.*;$(BuildDir)*.sdf;" />
+      
+      <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" Exclude="$(BuildDir)*Tests.*;$(BuildDir)*nunit.*;$(BuildDir)*Moq.*;$(BuildDir)*UI.*;$(BuildDir)*.sdf;" />
+      <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
+      <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
+      <UaaSTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
 			<PdbFiles Include="$(BuildDir)$(BuildConfig)\*Merchello.*.pdb" Exclude="$(BuildDir)*.Tests.*" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 			<NuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
+    <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
+    <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!--Copy SourceFiles="@(UaaSTransformFiles)" DestinationFolder="$(BuildUmbDir)" /-->
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
 		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
-		<Copy SourceFiles="@(SrcFiles)" DestinationFiles="@(SrcFiles->'$(BuildNuGetDir)\src\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!--
+		<Copy SourceFiles="@(SrcFiles)" DestinationFiles="@(SrcFiles->'$(BuildNuGetDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    -->
 		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)" />
 	</Target>
 
@@ -164,7 +173,8 @@
 
 	<!-- MANIFEST FOR NUGET PACKAGE -->
 	<Target Name="ManifestNuGet" DependsOnTargets="PrepareFiles">
-		<ItemGroup>
+		<!--
+    <ItemGroup>
 			<ManifestFiles Include="$(BuildNuGetDir)\**\*" Exclude="$(BuildNuGetDir)\Merchello.Core.nuspec" />
 		</ItemGroup>
 		<MSBuild.NuGet.Tasks.ManifestUpdate
@@ -186,6 +196,7 @@
 			RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
 			Tags="$(Tags)"
 			Files="@(ManifestFiles)" />
+      -->
 	</Target>
 
 	<!-- PACKAGE -->
@@ -199,14 +210,16 @@
 			OutputDirectory="$(ArtifactsDir)"
 			Files="@(PackageFiles)" />
 
-		<MSBuild.NuGet.Tasks.Pack NuGetExePath="$(RootDir)\src\.nuget\NuGet.exe"
+    <!--MSBuild.NuGet.Tasks.Pack NuGetExePath="$(RootDir)\src\.nuget\NuGet.exe"
 			ManifestFile="$(BuildNuGetDir)\package.nuspec"
 			BasePath="$(BuildNuGetDir)"
 			Version="$(ProductVersion)"
 			OutputDirectory="$(ArtifactsDir)"
-			Symbols="true" />
+			Symbols="true" /-->
 
+    <!--
 		<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
+    -->
 
 	</Target>
 

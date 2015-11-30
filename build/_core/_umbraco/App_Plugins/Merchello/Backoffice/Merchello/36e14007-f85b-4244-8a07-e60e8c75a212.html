@@ -1,0 +1,76 @@
+<div data-ng-controller="Merchello.Backoffice.InvoicePaymentsController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <!-- New Order Button -->
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <!-- Main Content Area -->
+            <div class="merchello-pane primary">
+                <div class="control-group umb-control-group">
+                    <div class="merchello-section-label">
+                        <localize key="merchelloPayment_paymentInfo" />
+                        <small>Payment methods &amp; dates</small>
+                    </div>
+                    <div class="merchello-controls">
+
+                        <div class="row-fluid">
+
+                            <div data-ng-repeat="payment in payments" data-ng-show="preValuesLoaded">
+                                <div style="padding: 8px">
+                                    <h4>
+                                        <localize key="merchelloPayment_paymentMethod" />: {{payment.paymentMethodName}}
+                                    </h4>
+
+                                    <div class="btn-toolbar pull-right umb-btn-toolbar">
+                                        <button class="btn btn-default text-right" data-ng-click="openVoidPaymentDialog(payment)" data-ng-show="showVoid(payment)"><localize key="merchelloButtons_void" /></button>
+                                        <button class="btn btn-default text-right" data-ng-show="showRefund(payment)" data-ng-click="openRefundPaymentDialog(payment)"><localize key="merchelloButtons_refund" /></button>
+                                    </div>
+
+                                    <h5>History</h5>
+                                </div>
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th class="text-right">Amount</th>
+                                        <th class="text-center" data-ng-hide="true"></th>
+                                    </tr>
+                                    <tr data-ng-repeat="applied in payment.appliedPayments">
+                                        <td>{{applied.createDate | date : settings.dateFormat }}</td>
+                                        <td>{{applied.description}}</td>
+                                        <td class="text-right">{{applied.amount | currency: currencySymbol }}</td>
+                                        <td class="text-center" data-ng-hide="true">
+                                            <button class="btn btn-default" data-ng-click="voidPayment()">
+                                                <localize key="actions_delete" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="text-right">Balance due:</td>
+                                        <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

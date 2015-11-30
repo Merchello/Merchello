@@ -1,0 +1,42 @@
+<div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Label</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Address 2</th>
+            <th>Locality</th>
+            <th>Region</th>
+            <th>Country</th>
+            <th>Postal</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="address in addresses" class="{{address.isDefault ? 'active' : 'normal'}}">
+            <td>{{ address.label }}</td>
+            <td>
+                {{ address.fullName }}
+                <!--span data-ng-show="address.phone != ''" class="phone">t: {{address.phone}}</span-->
+            </td>
+            <td>{{ address.address1 }}</td>
+            <td>{{ address.address2 }}</td>
+            <td>{{ address.locality }}</td>
+            <td>{{ address.region }}</td>
+            <td>{{ address.countryCode }}</td>
+            <td>{{ address.postalCode }}</td>
+            <td>
+                <div class="btn-group">
+                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Actions <i class="icon-navigation-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a data-ng-click="openAddressAddEditDialog(address)">Edit address</a></li>
+                        <li><a data-ng-click="openDeleteAddressDialog(address)">Delete address</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+    <a data-ng-click="openAddressAddEditDialog()" class="btn btn-default">Add New Address</a>
+</div>

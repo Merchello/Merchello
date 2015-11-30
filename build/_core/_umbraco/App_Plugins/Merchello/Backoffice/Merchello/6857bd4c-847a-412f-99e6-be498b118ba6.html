@@ -1,0 +1,50 @@
+<div data-ng-controller="Merchello.Backoffice.NotificationProvidersController" data-ng-show="loaded">
+
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloNotifications_notifications" /></h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+
+            <div class="merchello-pane row-fluid" data-ng-show="preValuesLoaded">
+
+                <div class="control-group umb-control-group" data-ng-repeat="provider in notificationGatewayProviders">
+                    <label class="merchello-control-label">
+                        {{provider.name}}
+                        <small data-ng-bind="provider.description"></small>
+                        <div data-ng-show="provider.gatewayResources.length > 0">
+                            <a data-ng-click="provider.showSelectResource = !provider.showSelectResource"><i class="icon-chat"></i><localize key="merchelloNotifications_addNotification" /> </a>
+                            <div class="well" data-ng-class="{ 'open': provider.showSelectResource, 'closed': (!provider.showSelectResource) }">
+                                <label><localize key="merchelloPayment_resourceType" /> </label>
+                                <select class="form-control col-xs-12 span12" data-ng-model="provider.selectedGatewayResource" data-ng-options="r.name for r in provider.gatewayResources track by r.serviceCode"></select>
+                                <a data-ng-click="addNotificationMethod(provider, provider.selectedGatewayResource)"><localize key="general_add" /></a>
+                            </div>
+                        </div>
+                    </label>
+
+                    <div class="merchello-controls">
+                            <notification-methods></notification-methods>
+                    </div>
+                </div>
+
+                <div class="control-group umb-control-group warning" data-ng-show="preValuesLoaded && notificationGatewayProviders.length == 0">
+                    There are no providers activated.  Please go to the Gateway Providers section and activate a Notification provider.
+                </div>
+
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</div>

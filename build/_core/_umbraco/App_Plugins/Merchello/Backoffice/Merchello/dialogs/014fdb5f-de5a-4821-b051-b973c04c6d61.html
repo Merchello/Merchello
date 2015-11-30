@@ -1,0 +1,103 @@
+<div class="umb-panel merchello-side-panel constraint-product-selector" ng-controller="Merchello.Marketing.Dialogs.OfferConstraintProductSelectionFilterController" data-ng-show="loaded">
+
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloProductEdit_selectMerchelloProduct" />s</h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="merchello-pane">
+            <!-- selected products -->
+            <div class="add-product-controls">
+            <strong>Select products</strong>
+            <a href class="btn pull-right" data-ng-click="context = 'search'"><i class="icon-add pull-right col-xs-1"></i></a>
+            </div>
+            <div data-ng-repeat="constraint in selectedProducts" class="col-xs-11 well" data-ng-show="selectedProducts.length > 0">
+                <button class="btn pull-right" data-ng-click="removeProduct(constraint)"><i class="icon-trash"></i></button>
+                <span class="product-name">{{constraint.product.name}}</span>
+                <small class="product-info">{{constraint.product.sku}} <span class="price">Price: {{constraint.product.price | currency : currencySymbol}}</span></small>
+                <div data-ng-show="constraint.product.hasVariants()">
+                    <small><a href data-ng-click="constraint.editorOpen = !constraint.editorOpen">Limit to specific variants</a></small>
+                    <div class="control-group variant-selection" data-ng-show="constraint.editorOpen">
+                        <label data-ng-repeat="variant in constraint.selectedVariants"><input type="checkbox" value="{{variant.key}}" data-ng-model="variant.checked" /> {{variant.name}}</label>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+        <form class="form-horizontal product-selection-form" data-ng-show="context === 'search'">
+        <div class="merchello-pane">
+
+                <div class="form-group control-group row-fluid">
+
+                    <div class="col-xs-7 span7 controls">
+                        <label for="productFilter"><localize key="merchelloGeneral_filterBy"/></label>
+                        <input id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@placeholders_filter" />
+                        <button id="productFilterGo" class="btn" data-ng-click="getFilteredProducts(filtertext)"><localize key="merchelloGeneral_filter">Filter</localize></button>
+                    </div>
+
+
+                </div>
+
+        </div>
+
+        <div class="merchello-pane">
+            <div class="col-xs-2 span2" data-ng-show="dialogData.products.length > 0">
+                <select name="limitSelect" class="col-xs-2 span2" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+
+            <merchello-pager></merchello-pager>
+        </div>
+
+        <table class="table table-hover merchello-selectable-table sortable">
+            <thead>
+            <tr>
+                <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloVariant_product"/>
+                </th>
+                <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
+                </th>
+                <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
+                    <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
+                </th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="product in products"
+                data-ng-class="{active: product.selected}">
+                <td>{{product.name}}</td>
+                <td>{{product.sku}}</td>
+                <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
+                <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+                <td>
+                    <a class="btn btn-default btn-xs btn-mini" href data-ng-click="addProduct(product)" data-ng-show="!productIsSelected(product)"><localize key="buttons_select" /></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </form>
+    </div>
+
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <button class="btn btn-primary"
+                        data-ng-click="save()" data-ng-disabled="selectedProducts.length === 0">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

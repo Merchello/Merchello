@@ -1,0 +1,49 @@
+<div class="umb-panel merchello-side-panel">
+
+    <div class="umb-modalcolumn-header">
+        <h4>{{dialogData.method.name}}</h4>
+        <h5><localize key="merchelloShippingMethod_adjustIndividualRegions" /></h5>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+        <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
+            <thead>
+            <tr>
+                <th><localize key="merchelloShippingMethod_region" /></th>
+                <th><localize key="merchelloShippingMethod_adjustRate" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="province in dialogData.country.taxMethod.provinces">
+                <td>
+                    {{province.name}}
+                </td>
+                <td>
+                    <div class="input-prepend">
+                        <input type="number" data-ng-model="province.percentAdjustment" class="col-xs-1 tax-rate" />
+                        <span class="add-on"><localize key="merchelloGeneral_percentSymbol" /></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button
+                        class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

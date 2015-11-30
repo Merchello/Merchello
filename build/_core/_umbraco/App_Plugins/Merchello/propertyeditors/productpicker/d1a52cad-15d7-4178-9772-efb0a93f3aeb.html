@@ -1,0 +1,22 @@
+﻿<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductSelectorController">
+    
+    <div class="merchello-product-picker">
+        <div class="selector">
+            <a data-ng-click="selectProduct()" class="btn btn-primary"><localize key="merchelloProductEdit_selectProduct" /></a>
+            <a data-ng-click="disableProduct()" class="btn btn-default"><localize key="actions_disable" /></a>
+        </div>
+        <div class="well">
+            <h4 data-ng-bind="product.name"></h4>
+            <table>
+                <tr>
+                    <th><localize key="merchelloGeneral_price"/></th>
+                    <td><span data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</span><span data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</span></td>                   
+                </tr>
+                <tr class="sku">
+                    <th><localize key="merchelloGeneral_sku"/></th><td><span data-ng-bind="product.sku"></span></td>                    
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>

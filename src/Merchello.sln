@@ -14,23 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5269BF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A6C6EBCD-38C9-4FAD-975A-97FA97578537}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{07393251-2FF9-45FA-AAFA-81720405834F}"
-	ProjectSection(SolutionItems) = preProject
-		..\build\appveyor.yml = ..\build\appveyor.yml
-		..\build\build-appveyor.cmd = ..\build\build-appveyor.cmd
-		..\build\build.bat = ..\build\build.bat
-		..\build\build.cmd = ..\build\build.cmd
-		..\build\install.md = ..\build\install.md
-		..\build\Merchello.build = ..\build\Merchello.build
-		..\build\NuSpec\Merchello.Core.nuspec = ..\build\NuSpec\Merchello.Core.nuspec
-		..\tools\Merchello\Merchello.props = ..\tools\Merchello\Merchello.props
-		..\tools\Merchello\Merchello.targets = ..\tools\Merchello\Merchello.targets
-		..\build\NuSpec\Merchello.TestsBase.nuspec = ..\build\NuSpec\Merchello.TestsBase.nuspec
-		..\build\Merchello.Version.props = ..\build\Merchello.Version.props
-		..\build\package.xml = ..\build\package.xml
-		..\build\readme.md = ..\build\readme.md
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web", "Merchello.Web\Merchello.Web.csproj", "{81D9E7DA-5A5A-444A-823F-1D97D7D5FEDF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{463673C8-16DA-466D-9306-011FB5A9105C}"
@@ -83,6 +66,16 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI", "http://
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		SlnRelativePath = "Merchello.Web.UI\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Package", "Build Package", "{766C83BC-AE02-4904-BB8C-B337E2101600}"
+	ProjectSection(SolutionItems) = preProject
+		..\appveyor.yml = ..\appveyor.yml
+		..\build-appveyor.cmd = ..\build-appveyor.cmd
+		..\build.cmd = ..\build.cmd
+		..\build\Merchello.proj = ..\build\Merchello.proj
+		..\build\package.proj = ..\build\package.proj
+		..\build\package.xml = ..\build\package.xml
 	EndProjectSection
 EndProject
 Global

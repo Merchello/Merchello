@@ -1,0 +1,112 @@
+<form novalidate name="customerForm" data-ng-controller="Merchello.Backoffice.CustomerOverviewController" data-ng-show="loaded" data-ng-submit="save()">
+    <umb-panel val-show-validation>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1>{{customer.firstName}} {{customer.lastName}}</h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
+                        <ul class="dropdown-menu merchello-action-menu">
+                            <li><a data-ng-click="openDeleteCustomerDialog()"><localize key="general_delete" /></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <div class="merchello-pane secondary span12">
+                <div class="row-fluid flex-row">
+                    <!-- Customer Info -->
+                    <div class="span4">
+                        <div class="well customer-info flex-col">
+                            <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
+                            <!-- ACTION: Edit Info -->
+
+                            <div class="pull-right">
+                                <merchello-edit-icon do-edit="openEditInfoDialog()"></merchello-edit-icon>
+                            </div>
+
+                            <h4 class="span10">{{customer.firstName}} {{customer.lastName}}</h4>
+                            <div class="span12"><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
+                        </div>
+                    </div>
+                    <!-- Billing Address -->
+                    <div class="span4">
+                        <div class="well billing-address-info flex-col">
+                            <h4 class="span10">
+                                <localize key="merchelloSales_billingAddress"></localize>
+                            </h4>
+                            <div class="pull-right">
+                                <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultBillingAddress)"></merchello-edit-icon>
+                            </div>
+                            <div class="vcard span12" data-ng-show="!defaultBillingAddress.isEmpty()">
+                                <h5>{{defaultBillingAddress.label}}</h5>
+                                <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
+                                <span class="org" data-ng-show="defaultBillingAddress.company != ''">{{defaultBillingAddress.company}}</span>
+                                <span class="adr">
+                                    <span class="street-address">{{defaultBillingAddress.address1}}</span>
+                                    <span class="extended-address" data-ng-show="defaultBillingAddress.address2 != ''">{{defaultBillingAddress.address2}}</span>
+                                    <span class="locality">{{defaultBillingAddress.locality}}</span>, <span class="region">{{defaultBillingAddress.region}}</span>, <span class="postal-code">{{defaultBillingAddress.postalCode}}</span>
+                                    <span class="country-name">{{defaultBillingAddress.countryCode}}</span>
+                                    <span class="tel" data-ng-show="defaultBillingAddress.phone != ''">Phone: {{defaultBillingAddress.phone}}</span>
+                                </span>
+                            </div>
+                            <div class="span12" data-ng-show="defaultBillingAddress.isEmpty()">
+                                <h5><localize key="merchelloSales_noBillingAddress"></localize></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Shipping Address -->
+                    <div class="span4">
+                        <div class="well shipping-address-info flex-col">
+                            <h4 class="span10"><localize key="merchelloSales_shippingAddress"></localize></h4>
+                            <div class="pull-right">
+                                <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultShippingAddress)"></merchello-edit-icon>
+                            </div>
+                            <div class="vcard span12" data-ng-show="!defaultShippingAddress.isEmpty()">
+                                <h5>{{defaultShippingAddress.label}}</h5>
+                                <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
+                                <span class="org" data-ng-show="defaultShippingAddress.company != ''">{{defaultShippingAddress.company}}</span>
+                                <span class="adr">
+                                    <span class="street-address">{{defaultShippingAddress.address1}}</span>
+                                    <span class="extended-address" data-ng-show="defaultShippingAddress.address2 != ''">{{defaultShippingAddress.address2}}</span>
+                                    <span class="locality">{{defaultShippingAddress.locality}}</span>, <span class="region">{{defaultShippingAddress.region}}</span>, <span class="postal-code">{{defaultShippingAddress.postalCode}}</span>
+                                    <span class="country-name">{{defaultShippingAddress.countryCode}}</span>
+                                    <span class="tel" data-ng-show="defaultShippingAddress.phone != ''">Phone: {{defaultShippingAddress.phone}}</span>
+                                </span>
+                            </div>
+                            <div class="span12" data-ng-show="defaultShippingAddress.isEmpty()">
+                                <h5><localize key="merchelloSales_noShippingAddress"></localize></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="merchello-pane sales-history primary span12">
+                <h4><localize key="merchelloCustomers_customerSaleHistory"></localize></h4>
+                <merchello-list-view builder="invoiceDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="listViewEntityType" ready="preValuesLoaded" disable-collections no-title no-filter>
+            </div>
+
+                <div class="control-group umb-control-group">
+                    <label class="merchello-section-label" for="customer-note">
+                        <localize key="merchelloCustomers_customerNotes" />
+                    </label>
+                    <div class="merchello-controls">
+                        <div class="well new-note row-fluid">
+                            <div class="form-group col-xs-12 span12">
+                                <textarea name="note-message" name="customer-note" rows="8" class="span12" data-ng-model="customer.notes"></textarea>
+                            </div>
+                            <input type="submit" class="btn btn-primary" value="Save Note" data-ng-click="saveCustomer()" />
+                        </div>
+                    </div>
+                </div>
+                <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="customer" />
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</form>
