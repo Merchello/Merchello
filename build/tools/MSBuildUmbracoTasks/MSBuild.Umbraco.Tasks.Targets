@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<MSBuildUmbracoTasksPath Condition="'$(MSBuildUmbracoTasksPath)' == ''">$(MSBuildProjectDirectory)\MSBuildTasks</MSBuildUmbracoTasksPath>
+		<MSBuildUmbracoTasksLib>$(MSBuildUmbracoTasksPath)\MSBuild.Umbraco.Tasks.dll</MSBuildUmbracoTasksLib>
+	</PropertyGroup>
+
+	<UsingTask AssemblyFile="$(MSBuildUmbracoTasksLib)" TaskName="MSBuild.Umbraco.Tasks.ManifestUpdate" />
+	<UsingTask AssemblyFile="$(MSBuildUmbracoTasksLib)" TaskName="MSBuild.Umbraco.Tasks.Package" />
+	<UsingTask AssemblyFile="$(MSBuildUmbracoTasksLib)" TaskName="MSBuild.Umbraco.Tasks.TimestampOffset" />
+
+</Project>
