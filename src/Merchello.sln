@@ -72,8 +72,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Package", "Build Pack
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
 		..\build-appveyor.cmd = ..\build-appveyor.cmd
+		..\build-grunt.cmd = ..\build-grunt.cmd
 		..\build.cmd = ..\build.cmd
+		..\build\NuSpec\Merchello.Core.nuspec = ..\build\NuSpec\Merchello.Core.nuspec
 		..\build\Merchello.proj = ..\build\Merchello.proj
+		..\build\NuSpec\Merchello.TestsBase.nuspec = ..\build\NuSpec\Merchello.TestsBase.nuspec
 		..\build\package.proj = ..\build\package.proj
 		..\build\package.xml = ..\build\package.xml
 	EndProjectSection

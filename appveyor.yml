@@ -35,12 +35,8 @@ build_script:
 - build-appveyor.cmd
 
 test:
-   # run tests
-   - xunit.console .\..\test\Merchello.Tests.IntegrationTest\bin\Release\Merchello.Tests.IntegrationTests.dll /xml .\xunit-results.xml
-
-   # upload results to AppVeyor
-   $wc = New-Object 'System.Net.WebClient'
-   $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\xunit-results.xml))
+   assemblies:
+      - '.\..\test\Merchello.Tests.IntegrationTest\bin\Release\Merchello.Tests.IntegrationTests.dll'
 
 artifacts:
   - path: artifacts\*.nupkg
