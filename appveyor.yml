@@ -30,6 +30,7 @@ install:
   - npm install -g grunt-cli
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello
+  - ps: cd  ..\..
 
 build_script:
 - build-appveyor.cmd
