@@ -151,11 +151,10 @@
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
     <!--Copy SourceFiles="@(UaaSTransformFiles)" DestinationFolder="$(BuildUmbDir)" /-->
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
-		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
-		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
-		<!--<Copy SourceFiles="@(SrcFiles)" DestinationFiles="@(SrcFiles->'$(BuildNuGetDir)\%(RecursiveDir)%(Filename)%(Extension)')" />-->
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
+		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
 
-		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)" />
+		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)\Core" />
 	</Target>
 
 	<!-- MANIFEST UMBRACO -->
@@ -180,13 +179,13 @@
 
 	<!-- MANIFEST FOR NUGET PACKAGE -->
 	<Target Name="ManifestNuGet" DependsOnTargets="PrepareFiles">
-
+    <Message Text="Packaging Merchello.Core.nupkg" />
     <ItemGroup>
-			<ManifestFiles Include="$(BuildNuGetDir)\**\*" Exclude="$(BuildNuGetDir)\Merchello.Core.nuspec" />
+			<ManifestFiles Include="$(BuildNuGetDir)\Core\**\*" Exclude="$(BuildNuGetDir)\Core\Merchello.Core.nuspec" />
 		</ItemGroup>
 		<MSBuild.NuGet.Tasks.ManifestUpdate
-			ManifestFile="$(BuildNuGetDir)\Merchello.Core.nuspec"
-			WorkingDirectory="$(BuildNuGetDir)"
+			ManifestFile="$(BuildNuGetDir)\Core\Merchello.Core.nuspec"
+			WorkingDirectory="$(BuildNuGetDir)\Core"
 			Title="$(PackageName)"
 			Description="$(Readme)"
 			Summary="$(Readme)"
@@ -217,8 +216,8 @@
 			Files="@(PackageFiles)" />
 
     <MSBuild.NuGet.Tasks.Pack NuGetExePath="$(RootDir)\src\.nuget\NuGet.exe"
-			ManifestFile="$(BuildNuGetDir)\Merchello.Core.nuspec"
-			BasePath="$(BuildNuGetDir)"
+			ManifestFile="$(BuildNuGetDir)\Core\Merchello.Core.nuspec"
+			BasePath="$(BuildNuGetDir)\Core"
 			Version="$(ProductVersion)"
 			OutputDirectory="$(ArtifactsDir)"
 			Symbols="true" />

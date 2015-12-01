@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
 		<id>Merchello.Core</id>
-		<version>1.13.1</version>
+		<version>0.1.0-alpha-000100</version>
 		<title>Merchello</title>
 		<authors>Rusty Swayne and community contributors</authors>
 		<owners>Across the Pond, LLC</owners>
