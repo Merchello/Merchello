@@ -7,14 +7,33 @@
 		<MSBuildUmbracoTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildUmbracoTasks</MSBuildUmbracoTasksPath>
 		<MSBuildNugetTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildNugetTasks</MSBuildNugetTasksPath>
 		<AppVeyorUmbracoPath>$(MSBuildProjectDirectory)\tools\AppVeyorUmbraco</AppVeyorUmbracoPath>
+    <MSBUILDNodePath>$(MSBuildProjectDirectory)\tools\MSBUILDNode</MSBUILDNodePath>
+    <MSBUILDGruntPath>$(MSBuildProjectDirectory)\tools\MSBUILDGrunt</MSBUILDGruntPath>
 	</PropertyGroup>
+
+  <!-- PATHS -->
+  <PropertyGroup>
+    <BuildConfig>Release</BuildConfig>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
+    <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
+    <BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
+    <BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
+    <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
+    <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
+    <ProjectDir>$(RootDir)\src</ProjectDir>
+    <MerchelloUIClientDir>$(ProjectDir)\Merchello.Web.UI.Client</MerchelloUIClientDir>
+  </PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
 	<Import Project="$(MSBuildUmbracoTasksPath)\MSBuild.Umbraco.Tasks.Targets" />
 	<Import Project="$(MSBuildNugetTasksPath)\MSBuild.NuGet.Tasks.Targets" />
 	<Import Project="$(AppVeyorUmbracoPath)\AppVeyorUmbraco.Targets" />
+  <Import Project="$(MSBUILDNodePath)\MSBuild.Node.props" Condition="Exists('$(MSBUILDNodePath)\MSBuild.Node.props')" />
+  <Import Project="$(MSBUILDNodePath)\MSBuild.Node.Targets" />
+  <Import Project="$(MSBUILDGruntPath)\MSBuild.Grunt.Props" />
+  <Import Project="$(MSBUILDGruntPath)\MSBuild.Grunt.Targets" />
 
-	<!-- SHARED PROPERTIES -->
+  <!-- SHARED PROPERTIES -->
 	<PropertyGroup>
 		<PackageName>Merchello</PackageName>
 		<MinUmbracoVersion>7.3.0</MinUmbracoVersion>
@@ -67,18 +86,6 @@
 		</Otherwise>
 	</Choose>
 
-	<!-- PATHS -->
-	<PropertyGroup>
-		<BuildConfig>Release</BuildConfig>
-    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
-		<RootDir>$(MSBuildProjectDirectory)\..</RootDir>
-		<BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
-		<BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
-		<BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
-		<ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
-		<ProjectDir>$(RootDir)\src</ProjectDir>
-	</PropertyGroup>
-
 	<!-- TARGETS -->
 	<Target Name="GetProductVersion">
 		<Error Condition="$(AbortBuild) == 'true'" Text="Aborting the build as the UMBRACO_PACKAGE_PRERELEASE_SUFFIX suffix is set 'rtm' but APPVEYOR_REPO_TAG is not 'true'" />
@@ -123,6 +130,7 @@
 		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
     <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
 	</Target>
+
 
 	<!-- PREPARE FILES -->
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
