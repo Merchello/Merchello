@@ -8,10 +8,18 @@ init:
 
 # Test against this version of Node.js
 environment:
+  ruby_version: 22-x64
   nodejs_version: "0.10"
+
+cache:
+- C:\Ruby%ruby_version%\lib\ruby\gems
+- C:\mingw64
 
 # Install scripts. (runs after repo cloning)
 install:
+  - git clone https://github.com/sass/sassc.git
+  - git clone https://github.com/sass/sass-spec.git
+  - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
