@@ -24,15 +24,14 @@ install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
-  - path: src\Merchello.Web.UI.Client
-  - npm install
+  - npm install --prefix ./src/Merchello.Web.Client.UI
 
 build_script:
 - build-appveyor.cmd
 
 #test:
-#  assemblies:
-#    - 'Merchello.Tests.IntegrationTests.dll'
+assemblies:
+   - 'Merchello.Tests.IntegrationTests.dll'
 
 artifacts:
   - path: artifacts\*.nupkg
