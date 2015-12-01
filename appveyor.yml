@@ -17,8 +17,9 @@ cache:
 
 # Install scripts. (runs after repo cloning)
 install:
-  - git clone https://github.com/sass/sassc.git
-  - git clone https://github.com/sass/sass-spec.git
+  # don't need this - should be a npm dependency
+  # git clone https://github.com/sass/sassc.git
+  # git clone https://github.com/sass/sass-spec.git
   - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
