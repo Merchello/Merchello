@@ -1,0 +1,23 @@
+<div class="merchello-controls">
+    <table class="table table-striped merchello-striped-table settings-table shipping-table">
+        <thead>
+        <th><localize key="merchelloGatewayProvider_providerName" /></th>
+        <th colspan="2"><localize key="merchelloNotificationsEdit_description" /></th>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="gatewayProvider in providerList">
+            <td>{{gatewayProvider.name}}</td>
+            <td>{{gatewayProvider.description}}</td>
+            <td style="text-align: right">
+                <div data-ng-show="gatewayProvider.activated">
+                    <merchello-icon-bar data-ng-if="gatewayProvider.activated" show-activate="false" show-add="false" show-edit="gatewayProvider.dialogEditorView.editorView !=='' && gatewayProvider.activated" show-delete="true" do-edit="configure({provider: gatewayProvider})" do-delete="deactivate({provider: gatewayProvider})"></merchello-icon-bar>
+                </div>
+                <div data-ng-hide="gatewayProvider.activated">
+                    <merchello-icon-bar data-ng-if="!gatewayProvider.activated" show-activate="true" show-add="false" show-edit="false" show-delete="false" do-activate="activate({provider: gatewayProvider})"></merchello-icon-bar>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>

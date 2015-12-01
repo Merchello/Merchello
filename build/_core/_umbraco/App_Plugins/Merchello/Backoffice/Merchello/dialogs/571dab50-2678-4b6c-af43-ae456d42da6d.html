@@ -1,0 +1,30 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Marketing.Dialogs.OfferConstraintFilterQuantityRulesController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
+        <h4>Set line item quantity filter rules</h4>
+    </div>
+    <form name="priceConstraintForm" id="priceConstraintForm">
+        <div class="umb-panel-body with-header with-footer">
+            <div class="form-group row-fluid">
+                <label for="quantity">Quantity of line items<small>Values should be entered as positive numbers.</small></label>
+                <input name="quantity" data-ng-model="quantity" class=" col-xs-5 span5" type="number" />
+            </div>
+            <div class="form-group row-fluid offer-constraint-controls">
+                <comparison-operator-radio-buttons operator="operator"></comparison-operator-radio-buttons>
+            </div>
+        </div>
+
+        <div class="umb-panel-footer" >
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+                    <!-- ACTION: Cancel -->
+                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+
+                    <button class="btn btn-primary"
+                            data-ng-click="save()">
+                        <localize key="buttons_save">Save</localize>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

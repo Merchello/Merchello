@@ -1,0 +1,50 @@
+﻿<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Common.Dialogs.EditAddressController">
+    <div class="umb-modalcolumn-header">
+        <h4>Edit Address</h4>
+
+    </div>
+    <form name="editAddressForm" id="editAddressForm">
+        <div class="umb-panel-body with-header with-footer">
+            <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
+                <p class="text-warning">{{ dialogData.warning }}</p>
+            </div>
+            <div class="form-group row-fluid">
+                <label for="name">Full Name:</label>
+                <input name="name" type="text" class="span12" data-ng-model="address.name" />
+                <label for="org">Company:</label>
+                <input name="org" type="text" class="span12" data-ng-model="address.organization" />
+                <label for="address1">*Address:</label>
+                <!--<div class="error" data-ng-show="editAddressForm.address1.$invalid && wasFormSubmitted">Address is a required field.</div>-->
+                <input name="address1" type="text" class="span12" data-ng-model="address.address1" required />
+                <label for="address2">Address Line 2:</label>
+                <input name="address2" type="text" class="span12" data-ng-model="address.address2" />
+                <label for="locality">City:</label>
+                <!--<div class="error" data-ng-show="editAddressForm.locality.$invalid && wasFormSubmitted">City is a required field.</div>-->
+                <input name="locality" type="text" class="span12" data-ng-model="address.locality" required />
+                <label for="country">Country:</label>
+                <!--<div class="error" data-ng-show="$scope.dialogData.filters.country.id == -1 && wasFormSubmitted">Country is a required field.</div>-->
+                <select name="country" class="span12" data-ng-model="dialogData.selectedCountry" data-ng-options="option.name for option in dialogData.countries"></select>
+                <label for="region">State/Province:</label>
+                <input name="region" type="text" class="span12" data-ng-hide="dialogData.selectedCountry.provinces.length > 0" data-ng-model="dialogData.address.region" />
+                <select name="regionSelect" class="span12" data-ng-hide="dialogData.selectedCountry.provinces.length === 0" data-ng-model="dialogData.selectedProvince" data-ng-options="option.name for option in dialogData.selectedCountry.provinces"></select>
+                <label for="postalCode">Zip/Postal Code:</label>
+                <input name="postalCode" type="text" class="span12" data-ng-model="address.postalCode" required />
+                <label for="phone" data-ng-hide="!dialogData.showPhone">Phone:</label>
+                <input name="phone" type="tel" class="span12"  data-ng-hide="!dialogData.showPhone" data-ng-model="dialogData.address.phone" />
+                <label for="phone" data-ng-hide="!dialogData.showEmail">Email:</label>
+                <input name="phone" type="tel" class="span12"  data-ng-hide="!dialogData.showEmail" data-ng-model="dialogData.address.email" />
+               <br />
+            </div>
+        </div>
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+                    <!-- ACTION: Cancel -->
+                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                    <!-- ACTION: Submit DialogData -->
+                    <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save"></localize></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

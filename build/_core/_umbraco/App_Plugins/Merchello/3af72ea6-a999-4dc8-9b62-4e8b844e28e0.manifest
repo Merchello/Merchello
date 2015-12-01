@@ -1,0 +1,30 @@
+﻿{     
+	propertyEditors: [      
+		{ 
+			alias: 'Merchello.ProductSelector',
+			name: 'Merchello Product Selector',
+			editor: {
+				view: '~/App_Plugins/Merchello/propertyeditors/productpicker/merchello.productselector.html'
+			}
+		},
+		{
+			alias: 'Merchello.ProductListView',
+			name: 'Merchello Product List View',
+			editor: {
+				view: '~/App_Plugins/Merchello/propertyeditors/productlistview/merchello.productlistview.html'
+			}
+		}
+	],
+	javascript: [
+		'~/App_Plugins/Merchello/js/merchello.module.js',
+		'~/App_Plugins/Merchello/js/merchello.models.js',
+		'~/App_Plugins/Merchello/js/merchello.filters.js',
+		'~/App_Plugins/Merchello/js/merchello.resources.js',
+		'~/App_Plugins/Merchello/js/merchello.services.js',
+		'~/App_Plugins/Merchello/js/merchello.directives.js',
+		'~/App_Plugins/Merchello/js/merchello.controllers.js'
+	],
+	css: [
+		'~/App_Plugins/Merchello/assets/Css/merchello.css'
+	]
+}

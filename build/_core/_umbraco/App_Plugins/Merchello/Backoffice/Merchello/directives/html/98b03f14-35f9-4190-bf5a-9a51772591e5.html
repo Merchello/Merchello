@@ -1,0 +1,8 @@
+<div class="row-fluid">
+    <ul class="nav nav-tabs umb-nav-tabs span12">
+        <li data-ng-repeat="tab in tabs.items" class="{{tab.active ? 'active' : '' }}" data-ng-show="tab.visible">
+            <a href="{{tab.url}}" data-ng-show="tab.callback === undefined"><localize key="{{tab.name}}" /></a>
+            <a href="#" data-ng-click="tab.callback(tab.id)" data-ng-hide="tab.callback === undefined" prevent-default>{{tab.name}}</a>
+        </li>
+    </ul>
+</div>

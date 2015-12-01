@@ -1,0 +1,520 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Navn</key>
+    <key alias="startDate">Startdato</key>
+    <key alias="endDate">Slutdato</key>
+    <key alias="alias">Alias</key>
+    <key alias="active">Aktiv</key>
+    <key alias="sortOrder">Sortér efter</key>
+  </area>
+  <area alias="merchelloTree">
+    <key alias="products">Produkter</key>
+    <key alias="sales">Salg</key>
+    <key alias="customers">Kunder</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Samlinger</key>
+    <key alias="reports">Rapporter</key>
+    <key alias="gateways">Gateway udbydere</key>
+  </area>
+  <area alias="merchelloTabs">
+    <key alias="productListing">Produkt lister</key>
+    <key alias="product">Produkter</key>
+    <key alias="productVariants">Produkt varianter</key>
+    <key alias="productOptions">Produkt muligheder</key>
+    <key alias="productVariantEditor">Produkt variant editor</key>
+    <key alias="salesListing">Salgs lister</key>
+    <key alias="sales">Salg</key>
+    <key alias="payments">Betalinger</key>
+    <key alias="payment">Betaling</key>
+    <key alias="shipments">Leveringer</key>
+    <key alias="shipping">Levering</key>
+    <key alias="customerListing">Kunde lister</key>
+    <key alias="customer">Kunde</key>
+    <key alias="customerAddresses">Adresse</key>
+    <key alias="gatewayProviders">Gateway udbydere</key>
+    <key alias="notification">Notifikation</key>
+    <key alias="taxation">Afgift</key>
+    <key alias="offerListing">Rabat lister</key>
+    <key alias="offer">Rabat</key>
+    <key alias="coupon">Kupon</key>
+    <key alias="reportListing">Rapporter</key>
+  </area>
+  <area alias="merchelloProviders">
+    <key alias="unpaidInvoiceCollection">Ubetalte fakturaer</key>
+    <key alias="partialPaidInvoiceCollection">Delvist betalte fakturaer</key>
+    <key alias="paidInvoiceCollection">Betalte fakturaer</key>
+    <key alias="notFulfilledOrderCollection">Uafsluttede ordre</key>
+    <key alias="openOrderCollection">Åbne ordre</key>
+    <key alias="fulfilledOrderCollection">Afsluttede ordre</key>
+  </area>
+  <area alias="merchelloCollections">
+    <key alias="providers">Samlings udbydere</key>
+    <key alias="newCollection">Ny samling</key>
+    <key alias="manageCollection">Administrer samling</key>
+    <key alias="addEntities">Tilføj nye samlings elementer</key>
+    <key alias="removeEntities">Fjern samlings elementer</key>
+    <key alias="sortCollections">Sortér samlinger</key>
+    <key alias="staticProviders">Statiske samlinger</key>
+    <key alias="staticProvidersInfo">Tillad brugere at oprette navngivne samlinger hvor elementer kan blive tilføjet.</key>
+    <key alias="product">Produkt samlinger</key>
+    <key alias="customer">Kunde samlinger</key>
+    <key alias="invoice">Faktura samlinger</key>
+    <key alias="emptyCollection">Samlinger er tom.</key>
+    <key alias="noQualifyingEntities">Der er ikke andre elementer som kan blive tilføjet til samlingen.</key>
+    <key alias="collectionPickerTitle">Samlinger</key>
+    <key alias="collectionPickerInfo">Tilføj dette element til en eller flere samlinger.</key>
+    <key alias="allItems">Alle elementer</key>
+    <key alias="productCollections">Produkt samlinger</key>
+    <key alias="invoiceCollections">Faktura samlinger</key>
+    <key alias="customerCollections">Kunde samlinger</key>
+  </area>
+  <area alias="merchelloValidation">
+    <key alias="nameFieldRequired">Navn er krævet</key>
+  </area>
+  <area alias="merchelloProducts">
+    <key alias="emptyProductCollection">Der er ingen produkter i denne samling</key>
+  </area>
+  <area alias="merchelloSales">
+    <key alias="noSales"><![CDATA[
+        <h5>Du har ingen salg endnu</h5>
+        <p>Men det vil du snart have!</p>
+      ]]></key>
+    <key alias="emptySalesCollection">Der er ingen salg i denne samling</key>
+    <key alias="invoiceNumber">Faktura #</key>
+    <key alias="paymentStatus">Betalingsstatus</key>
+    <key alias="fulfillmentStatus">Ordrestatus</key>
+  </area>
+  <area alias="merchelloCustomers">
+    <key alias="newCustomer">Ny kunde</key>
+    <key alias="noCustomers"><![CDATA[
+        <h5>Du har ingen kunder endnu</h5>
+        <p>Men det vil du snart have!</p>
+      ]]></key>
+    <key alias="emptyCustomerCollection">Der er ingen kunder i denne samling</key>
+    <key alias="customerNotes"><![CDATA[
+      Kunde noter
+      <small>Noter om kunder (ikke salgs specifik)</small>
+      ]]></key>
+  </area>
+  <area alias="merchelloButtons">
+    <key alias="void">Annuller</key>
+    <key alias="refund">Refundér</key>
+    <key alias="delete">Slet</key>
+    <key alias="save">Gem</key>
+    <key alias="select">Vælg</key>
+    <key alias="remove">Fjern</key>
+  </area>
+  <area alias="merchelloHeadline">
+    <key alias="catalog">Katalog</key>
+  </area>
+  <area alias="merchelloVariant">
+    <!-- things -->
+    <key alias="product">Produkt</key>
+    <key alias="variant">Variant</key>
+    <key alias="sku">SKU</key>
+    <key alias="baseSku">Basis SKU</key>
+    <key alias="barcode">Stregkode</key>
+    <key alias="manufacturer">Forhandler</key>
+    <key alias="manufacturerModel">Forhandler model nr.</key>
+    <key alias="variantInfo">Produktinformation</key>
+    <key alias="variantOptions">Varianter</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="downloads">Digitale downloads</key>
+    <key alias="optionName">Navn på valgmulighed</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="optionValues">Værdier for valgmuligheden</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <!-- actions -->
+    <key alias="newProduct">Nyt produkt</key>
+    <key alias="createProduct">Opret et produkt</key>
+    <key alias="createProductSub">Navn (ovenfor), pris og SKU er obligatoriske felter. De øvrige felter er valgfrie.</key>
+    <key alias="newVariant">Ny variant</key>
+    <key alias="newVariantFor">Ny variant til</key>
+    <key alias="newVariantOn">Dette bliver en ny variant på</key>
+    <key alias="addVariant">Tilføj en variant</key>
+    <key alias="addVariantSub">Dette bliver en ny variant på produktet %0%.</key>
+    <key alias="addOption">Tilføj valgmulighed</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="addOptions">Tilføj muligheder til varianten og auto-udfyld ekstra varianter for hver valgmulighed</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="deleteProduct">Slet produkt</key>
+    <key alias="deleteVariant">Slet variant</key>
+    <key alias="configVariant">Konfigurér denne variant</key>
+    <key alias="selectVariantOptions">Vælg de varianter/muligheder der skal oprettes.</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="addFile">Tilføj en fil på din produktvariant</key>
+    <key alias="trackInventory">Spor lagerstatus for denne variant</key>
+    <key alias="setInventoryPreferences">Vælg hvordan udsolgte varer håndteres og justér varekatalog for denne variant.</key>
+    <!-- phrases -->
+    <key alias="barcodeExamples">f.eks. UPC, ISBN</key>
+    <key alias="optionNameExamples">(f.eks. størrelse, type, farve)</key>
+    <key alias="optionValueExamples">(f.eks. rød, grøn, blå)</key>
+    <key alias="hasDigitalDownload">Denne vare er digital</key>
+    <key alias="hasOptions">Denne variant har muligheder som f.eks. "størrelse" eller "farve"</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="isTaxable">Denne variant kan beskattes</key>
+    <key alias="isShippable">Denne variant kan leveres</key>
+    <key alias="noProduct">Du har ingen produkter.</key>
+    <key alias="newProductPrompt">Vil du oprette et produkt? Så klik på knappen "Nyt produkt".</key>
+    <key alias="limitSelect">Antal produkter der skal vises</key>
+    <key alias="mustUniqueSku">Skal have et unikt SKU</key>
+    <key alias="inventoryWarning"><![CDATA[<p>Vigtigt: Hvis du vælger at spore lagerbeholdningen, skal det opsættes manuelt for hver enkelt variant (herunder), når produktet er gemt. Du kan opsætte en basis lagerbeholdning, som tilknyttes <strong>alle varianter</strong> her.</p>]]></key>
+    <key alias="startingInventoryWarning"><![CDATA[(Dette vil opsætte en start lagerbeholdning for <strong>alle varianter</strong> og <strong>alle lagre</strong>)]]></key>
+    <!-- WHat is this?-->
+    <key alias="productOnSale">Produkt på tilbud</key>
+    <key alias="toggleOnSale">På tilbud</key>
+    <key alias="toggleAvailable">Tilgængelig</key>
+    <key alias="isOnSale">Denne variant er på tilbud</key>
+    <key alias="isAvailable">Denne variant er tilgængelig til køb</key>
+    <key alias="costOfGoods">Kostpris af varer</key>
+  </area>
+  <area alias="merchelloOrder">
+    <!-- things -->
+    <key alias="invoice">Faktura</key>
+    <key alias="invoiceNumber">Faktura #</key>
+    <key alias="order">Ordre</key>
+    <key alias="orders">Ordrer</key>
+    <key alias="orderNumber">Ordre #</key>
+    <key alias="paymentStatus">Betalingsstatus</key>
+    <key alias="fulfillmentStatus">Ordrestatus</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="lineItems">Ordrelinier</key>
+    <key alias="orderName">[Ordrenavn]</key>
+    <!-- actions -->
+    <key alias="filter">Filtrér ordre</key>
+    <key alias="capturePayment">Træk betaling</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="processPayment">Gennemfør betaling</key>
+    <key alias="createOrder">Opret ordre</key>
+    <key alias="sales">Salg</key>
+    <key alias="saleInformation">Salgsinformation</key>
+    <!-- actions -->
+    <key alias="addDateFilters">Tilføj dato filtrer</key>
+    <key alias="removeDateFilters">Fjern dato filtrer</key>
+    <key alias="voidPayment">Annuller betaling</key>
+    <key alias="refundPayment">Refundér betaling</key>
+    <key alias="voidPaymentConfirmMessage">Er du sikker du vil refundere denne betaling?</key>
+    <!-- phrases -->
+    <key alias="invoicesPerPage">Fakturaer / Side</key>
+    <key alias="noOrders">Du har ingen ordrer.</key>
+    <key alias="attentionRequired">Der er ordrer der skal behandles</key>
+    <key alias="paymentExpirationWarning">Du modtager muligvis ikke betaling, hvis tilladelsen udløber.</key>
+    <key alias="processedBy">Behandlet af</key>
+    <key alias="refundMethod">Tilbagebetalingsmetode</key>
+    <key alias="resetFilters">Nulstil filtrer</key>
+    <key alias="archiveSales">Arkivér salg</key>
+    <key alias="unarchiveSales">Annuller arkivering af salg</key>
+    <key alias="noSalesYet">Du har ingen salg endnu</key>
+    <key alias="butSoonYouWill">men det vil du snart have!</key>
+  </area>
+  <area alias="merchelloOrderView">
+    <!-- things -->
+    <key alias="invoiceNumber">Faktura nummer</key>
+    <key alias="customerInformation">Kundeinformation</key>
+    <key alias="shippingAddress">Leveringsadresse</key>
+    <key alias="billingAddress">Faktureringsadresse</key>
+    <key alias="orderInformation">Ordreinformation</key>
+    <!-- actions -->
+    <!-- phrases -->
+    <key alias="billingAndShippingAddressHelper">Betaling- og leveringsadresser</key>
+    <key alias="orderInformationHelper"><![CDATA[Ordrelinier og omkostninger]]></key>
+    <key alias="captureUpTo">Indløs op til</key>
+    <key alias="salesTax">Moms</key>
+    <key alias="authorized">Autoriseret</key>
+    <key alias="captured">Trukket</key>
+    <key alias="paymentHistory">Betalingshistorik</key>
+    <key alias="paymentHistoryHelper">Status registreringer for en eller flere betalinger</key>
+    <!-- TODO: Figure out context - is it right? -->
+    <key alias="paymentProcessedBy">Betaling gennemført af:</key>
+    <key alias="saleHistory">Salgshistorik</key>
+    <key alias="resetFilters">Nulstil filtrer</key>
+  </area>
+  <area alias="merchelloFulfillShipment">
+    <!-- phrases -->
+    <key alias="fulfillManually">Udfyld manuelt</key>
+    <key alias="createShipment">Opret forsendelsesmetode</key>
+  </area>
+  <area alias="merchelloWarehouse">
+    <!-- things -->
+    <key alias="warehouse">Lager</key>
+    <key alias="warehouses">Lagre</key>
+    <key alias="stock">Beholdning</key>
+    <key alias="lowCount">Lavt antal</key>
+    <!-- actions -->
+    <!-- phrases -->
+    <key alias="location">Lokation</key>
+  </area>
+  <area alias="merchelloShipping">
+    <!-- things -->
+    <key alias="shipping">Forsendelse</key>
+    <key alias="info">Forsendelsesinformation</key>
+    <key alias="weight">Vægt</key>
+    <key alias="dimensions">Dimensioner</key>
+    <!-- actions -->
+    <key alias="setVars">Opsæt forsendelsesvariabler: Vægt og dimensioner</key>
+    <!-- phrases -->
+    <key alias="editWarehouseHelper">Redigér dit lager</key>
+    <key alias="editWarehouse">Redigér lager</key>
+    <key alias="shippingMethods">Forsendelsesmuligheder</key>
+    <key alias="shippingMethodsHelper">Tilføj forsendelsesmuligheder til eksisterende regioner eller opret en ny region</key>
+    <key alias="addCountry">Tilføj et land</key>
+  </area>
+  <area alias="merchelloInventory">
+    <!-- things -->
+    <key alias="base">Basis lagerbeholdning</key>
+    <key alias="inventory">Lagerbeholdning</key>
+    <key alias="tracking">Sporing af lagerbeholdning</key>
+    <!-- actions -->
+    <!-- phrases -->
+  </area>
+  <area alias="merchelloPlaceholders">
+    <key alias="enterProduct">Angiv et produkt navn</key>
+    <key alias="enterOrder">Skriv et ordrenummer eller navn...</key>
+    <key alias="addStyle">Tilføj type...</key>
+    <key alias="enterOffer">Indtast et navn for rabatten</key>
+  </area>
+  <area alias="merchelloGeneral">
+    <key alias="apply">Ansøg</key>
+    <key alias="price">Pris</key>
+    <key alias="customer">Kunde</key>
+    <key alias="total">Total</key>
+    <key alias="salePrice">Salgspris</key>
+    <key alias="filter">Filter</key>
+    <key alias="filterBy">Sorter efter</key>
+    <key alias="chooseMedia">Vælg medier</key>
+    <key alias="multipleOptions">Flere muligheder</key>
+    <key alias="optional">(valgfri)</key>
+    <key alias="percentSymbol">%</key>
+    <key alias="moneySymbol">DKK</key>
+    <key alias="trackingNumber">Sporingsnummer</key>
+    <key alias="shipment">Forsendelse</key>
+    <key alias="sku">SKU</key>
+    <key alias="quantity">Antal</key>
+    <key alias="fulfill">Udfyld</key>
+    <key alias="status">Status</key>
+    <key alias="type">Type</key>
+    <key alias="amount">Beløb</key>
+    <key alias="via">Gennem</key>
+    <key alias="options">Muligheder</key>
+    <key alias="select">Vælg</key>
+    <key alias="all">Alle</key>
+    <key alias="none">Ingen</key>
+    <key alias="expired">Udløbet</key>
+  </area>
+  <area alias="merchelloSettings">
+    <key alias="storeDefaults">Standard indstillinger for butik</key>
+    <key alias="setDefaultSettingsHelper">Opsæt standard instillingerne</key>
+    <key alias="currency">Valuta</key>
+    <key alias="dateFormat">Datoformat</key>
+    <key alias="startingOrderNumber">Startende ordrenummer</key>
+    <key alias="timeFormat">Format for dato/tid</key>
+    <key alias="startingInvoiceNumber">Startende fakturanummer</key>
+    <key alias="startingShipmentNumber">Startende forsendelsesnummer</key>
+    <key alias="catalogDefaults">Standard Katalog</key>
+    <key alias="catalogDefaultsHelper">Opsæt standard katelog enheders (produkt) muligheder. Kan ændres pr. enhed senere.</key>
+    <key alias="globalTaxable">Alle enheder er momspligtige</key>
+    <key alias="globalShippable">Alle enheder kan afsendes</key>
+    <key alias="globalTrackInventory"><![CDATA[Spor inventar for alle elementer og varianter]]></key>
+    <key alias="globalShippingIsTaxable">Der skal betales moms af forsendelsesomkostningerne</key>
+    <key alias="unitSystem">Enhedssystem</key>
+    <key alias="globalTaxationApplication">Opsæt hvordan moms er tilføjet</key>
+  </area>
+  <area alias="merchelloShippingCountry">
+    <key alias="addCountry">Tilføj et land</key>
+    <key alias="typeCountryName">Skriv landenavn</key>
+    <key alias="noneSelected">-- ingen valgt --</key>
+  </area>
+  <area alias="merchelloShippingWarehouse">
+    <key alias="deleteComfirm">Er du sikker på at du vil fjerne lageret?</key>
+    <key alias="address">Adresse</key>
+    <key alias="primaryWarehouse">Primært lager</key>
+    <key alias="streetAddress">Adresse</key>
+    <key alias="extendedAddress">Adresse 2</key>
+    <key alias="city">By</key>
+    <key alias="stateProvince">Stat/provins</key>
+    <key alias="zip">Postnummer</key>
+    <key alias="country">Land</key>
+    <key alias="selectCountry">Vælg land</key>
+    <key alias="makePrimaryWarehouse">Gør dette til mit primære lager</key>
+    <key alias="addWarehouse">Tilføj et lager</key>
+    <key alias="editWarehouse">Redigér lager</key>
+  </area>
+  <area alias="merchelloShippingMethod">
+    <key alias="addEditShippingMethod">Tilføj/Redigér pris for en forsendelsesmetode</key>
+    <key alias="method">Metode</key>
+    <key alias="setRange">Opsæt interval</key>
+    <key alias="addNewRange">Tilføj nye intervaller</key>
+    <key alias="adjustIndividualRegions">Tilpas til individuelle regioner</key>
+    <key alias="region">Region</key>
+    <key alias="adjustRate">Tilpas beløb</key>
+    <key alias="adjustBy">Tilpas ud fra</key>
+  </area>
+  <area alias="merchelloShippingProvider">
+    <key alias="provider">Udbyder</key>
+    <key alias="addProvider">Tilføj en udbyder</key>
+    <key alias="selectProvider">Vælg din udbyder</key>
+    <key alias="selectResource">Vælg din kilde</key>
+  </area>
+  <area alias="merchelloShippingHistory">
+    <key alias="shipmentHistory">Forsendelseshistorik</key>
+    <key alias="shipmentHistoryHelper">Status registreringer for en eller flere forsendelser</key>
+    <!--TODO: Figure out context -->
+    <key alias="shipment">Forsendelse</key>
+    <key alias="trackingNumber">Sporingsnummer</key>
+  </area>
+  <area alias="merchelloTaxation">
+    <key alias="taxation">Afgifter</key>
+    <key alias="taxMethods">Afgifts metoder</key>
+    <key alias="taxMethodsHelper">Opsæt en flad beskatning/afgift til dine forsendelesregioner</key>
+    <key alias="taxIncludeInProductPrice">Inkludér i produkt pris</key>
+  </area>
+  <area alias="merchelloNotifications">
+    <key alias="notifications">Notifikationer</key>
+    <key alias="addNotification">Tilføj notifikation</key>
+  </area>
+  <area alias="merchelloNotificationsEdit">
+    <key alias="emailTemplate">E-mail skabelon</key>
+    <key alias="emailTemplateHelper">Redigér notifikationsskabelon</key>
+    <key alias="emailTemplateEditBody">Redigér brødteksten</key>
+    <key alias="notificationSettings">Notifikationsindstillinger</key>
+    <key alias="notificationSettingsHelper">Vælg hvem din notifikation skal sendes til og hvornår</key>
+    <key alias="description">Beskrivelse</key>
+    <key alias="attachedEvent">Vedhæftet begivenhed</key>
+    <key alias="eventAlias">Alias for begivenhed:</key>
+    <key alias="sendTo"><![CDATA[Send til <small>(i.e. orders@yourdomain.com)</small>]]></key>
+    <key alias="replyTo"><![CDATA[Svar til <small>(i.e. reply@yourdomain.com)</small>]]></key>
+    <key alias="emailCustomer">Send e-mail til kunden</key>
+    <key alias="resourceType" />
+  </area>
+  <area alias="merchelloNotificationsEditTemplate">
+    <key alias="header">Header</key>
+    <key alias="footer">Footer</key>
+    <key alias="templateHelper">Du kan tilføje basale HTML tags til din e-mail header og footer skabeloner, som f.eks. &lt;br /&gt; for at lave et linjeskift.</key>
+  </area>
+  <area alias="merchelloNotificationsDelete">
+    <key alias="merchelloNotificationsDelete_deleteNotification">Slet en notifikations metode</key>
+  </area>
+  <area alias="merchelloNotificationsMessage">
+    <add alias="replyTo">Svar til</add>
+    <key alias="addEditMessage">Tilføj/Redigér notifikations besked</key>
+    <key alias="attachedEvent">Vedhæftet begivenhed</key>
+    <key alias="fromEmail"><![CDATA[Fra e-mail adresse<small>(i.e. confirmation@yourdomain.com)</small>]]></key>
+  </area>
+  <area alias="merchelloNotificationsMethod">
+    <key alias="addEditMethod">Tilføj/Redigér en notifikations metode</key>
+    <key alias="notificationsMethodResource">Notifikations metode</key>
+    <key alias="message">Besked</key>
+    <key alias="notification">Notifikation</key>
+    <key alias="event">Begivenhed</key>
+    <key alias="sendTo">Send til</key>
+    <key alias="emailCustomer">E-mail kunde</key>
+  </area>
+  <area alias="merchelloGatewayProvider">
+    <key alias="host">Vært</key>
+    <key alias="enableSSL">Aktivér SSL</key>
+    <key alias="encryptProviderConfiguration"> Kryptér udbyder konfiguration</key>
+    <key alias="gatewayProvider">Gateway udbydere</key>
+    <key alias="notificationProvider">Notifikations udbydere</key>
+    <key alias="notificationProviderHelper">Aktivér/Deaktivér dine notifikations udbydere</key>
+    <key alias="paymentProvider">Betalingsudbydere</key>
+    <key alias="paymentProviderHelper">Aktivér/Deaktivér betalings udbydere</key>
+    <key alias="shippingProvider">Forsendelses udbydere</key>
+    <key alias="shippingProviderHelper">Aktivér/Deaktivér forsendelses udbydere</key>
+    <key alias="taxationProvider">Afgifts udbydere</key>
+    <key alias="taxationProviderHelper">Aktivér/Deaktivér afgifts udbydere</key>
+    <key alias="username">Brugernavn</key>
+    <key alias="password">Kodeord</key>
+    <key alias="providerName">Udbyder navn</key>
+    <key alias="activate">aktivér</key>
+    <key alias="deactivate">deaktivér</key>
+  </area>
+  <area alias="merchelloPayment">
+    <key alias="payment">Betaling</key>
+    <key alias="addPaymentMethod">Tilføj betalingsmetode</key>
+    <key alias="resourceType">Betalingstype:</key>
+    <key alias="deletePayment">Fjern en betalingsmetode</key>
+    <key alias="paymentInfo">Betalings information</key>
+    <key alias="paymentMethod">Betalingsmetode</key>
+  </area>
+  <area alias="merchelloPaymentMethod">
+    <key alias="addEditPayment">Tilføj/Redigér en betalingsmetode</key>
+  </area>
+  <area alias="merchelloMethodDelete">
+    <key alias="deleteConfirmation">Er du sikker på du vil fjerne betalingsmetoden?</key>
+  </area>
+  <area alias="merchelloProductEdit">
+    <key alias="enterProductName">Indtast et produktnavn</key>
+    <key alias="dragAndReorder">Træk for at sortere muligheder og varianter</key>
+    <key alias="reorderVariants">Sorter varianter</key>
+    <key alias="dragAndReorderHelper">Hvis du sorterer dine muligheder og varianter vil det ændre den rækkefølge de fremstår i på din webshop. Træk dine muligheder (f.eks. størrelse eller type) vertikalt og varianter (f.eks. kvinder eller lille) horisontalt.</key>
+    <key alias="changePrices">Ret priser</key>
+    <key alias="updateInventory">Opdater lagerbehandling</key>
+    <key alias="duplicateVariant">Duplikér variant</key>
+    <key alias="inAnother">I en anden</key>
+    <key alias="editOptions">Redigér muligheder</key>
+    <key alias="editOptionsHelper">Redigér/Tilføj muligheder, som automatisk opdaterer dine varianter</key>
+    <key alias="optionName">Navn på valgmulighed</key>
+    <key alias="optionNameHelper">(f.eks. størrelse, type, farve)</key>
+    <key alias="optionValue">Værdier for valgmulighed</key>
+    <key alias="optionValueHelper">(f.eks. rød, grøn, blå)</key>
+    <key alias="addStyle">Tilføj type...</key>
+    <key alias="addAnotherOption">Tilføj ny valgmulighed</key>
+    <key alias="variantInformation">Variantinformation</key>
+    <key alias="variantInformationHelper">Redigér varianter på dette produkt.</key>
+    <key alias="selectProduct">Vælg produkt...</key>
+    <key alias="selectMerchelloProduct">Vælg Merchello Produkt</key>
+    <key alias="selectYourProduct">Vælg dit produkt</key>
+    <key alias="toggleAvailable">Skift "tilgængelighed"</key>
+    <key alias="toggleOnSale">Skift "på tilbud"</key>
+    <key alias="removeProduct">Fjern dette produkt</key>
+    <key alias="itemLocation">Produkt lokation</key>
+  </area>
+  <area alias="merchelloAuditLogs">
+    <key alias="notificationShipping">Forsendelse bekræftelse e-mail sendt til %0%</key>
+    <key alias="notificationSalesConfirmation">Salg bekræftelse e-mail sendt til %0%</key>
+    <key alias="paymentCaptured">Vi har trukket %0% %1%</key>
+    <key alias="paymentAuthorize">Vi fik tilladelse til at trække %0% %1%</key>
+    <key alias="paymentVoided">Betaling blev annulleret</key>
+    <key alias="paymentDeclined">Betaling blev afvist</key>
+    <key alias="paymentRefunded">Vi refunderede %0% %1% af en betaling</key>
+    <key alias="invoiceDeleted">Faktura %0% blev slettet</key>
+    <key alias="paymentDeleted">Betaling blev slettet</key>
+    <key alias="invoiceCreated">Salg blev foretaget. Faktura %0%</key>
+    <key alias="invoiceStatusChanged">Faktura blev markeret %0%</key>
+    <key alias="orderCreated">Ordre %0% blev oprettet</key>
+    <key alias="shipmentCreated">Forsendelse blev oprettet med %0% linjeposter</key>
+    <key alias="shipmentStatusChanged">Status på forsendelse blev ændret til %0%</key>
+  </area>
+  <area alias="merchelloMarketing">
+    <key alias="campaigns">Marketing kampagner</key>
+    <key alias="activities">Aktiviteter</key>
+    <key alias="btnNewCampaign">Ny kampagne</key>
+    <key alias="btnDeleteCampaign">Slet</key>
+    <key alias="enterCampaignName">Indtast et navn for kampagnen</key>
+    <key alias="campaignInfo">Kampagneindstillinger</key>
+    <key alias="configCampaign">Konfigurér denne marketing kampagne</key>
+    <key alias="isActive">Er aktiv</key>
+    <key alias="currentOffers">Aktuelle tilbud</key>
+    <key alias="offerCode">Kode for tilbud</key>
+    <key alias="newOffer">Nyt tilbud</key>
+    <key alias="noOffer">Ingen aktuelle tilbud</key>
+    <key alias="newOfferPrompt">Du har ikke tilbudt dine kunde nogle specielle tilbud. Hvorfor ikke oprette et?</key>
+    <key alias="offerInfo">Indstilling for tilbud</key>
+    <key alias="configOffer">Konfigurér dette tilbud</key>
+    <key alias="offerType">Type af tilbud</key>
+    <key alias="mustUniqueOfferCode">Tilbudskoder skal være unikke.</key>
+    <key alias="offerSetExpires">Dette tilbud er kun gyldig for specifikke datoer.</key>
+    <key alias="offerNeverExpires">Udløber ikke.</key>
+    <key alias="offerValidDates">Gyldige datoer for tilbud</key>
+    <key alias="offerValidDatesInfo">Angiv datoerne hvor dette tilbud er gyldig.</key>
+    <key alias="offerConstraintsInfo">Restriktioner</key>
+    <key alias="offerConstraintsConfig">Konfigurer betingelser forbundet med dette tilbud.</key>
+    <key alias="offerRewardsInfo">Belønninger</key>
+    <key alias="offerRewardsConfig">Konfigurér belønninger forbundet med dette tilbud.</key>
+  </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Slet bekræftelse</key>
+    <key alias="deleteConfirmMessage">Er du sikker du vil fjerne elementet</key>
+  </area>
+</language>

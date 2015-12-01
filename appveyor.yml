@@ -16,8 +16,8 @@ cache:
 
 # Install scripts. (runs after repo cloning)
 install:
-  - git clone https://github.com/sass/sassc.git
-  - git clone https://github.com/sass/sass-spec.git
+  #- git clone https://github.com/sass/sassc.git
+  #- git clone https://github.com/sass/sass-spec.git
   - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - gem install sass
   # Get the latest stable version of Node.js or io.js

@@ -1,0 +1,40 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Common.Dialogs.DateRangeSelectionController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloGeneral_setDateRange" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+            <div class="input-append date datepicker" id="filterStartDate">
+                <label><localize key="merchelloGeneral_starting">Starting</localize></label>
+                <input name="datepicker" data-ng-format="dateFormat"  type="text" data-ng-model="rangeStart" />
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+                </span>
+            </div>
+
+            <div class="input-append date datepicker" id="filterEndDate">
+                <label><localize key="merchelloGeneral_ending">Ending</localize></label>
+                <input name="datepicker" data-ng-format="dateFormat" type="text" data-ng-model="rangeEnd" />
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+                </span>
+            </div>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="buttons_save" />
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

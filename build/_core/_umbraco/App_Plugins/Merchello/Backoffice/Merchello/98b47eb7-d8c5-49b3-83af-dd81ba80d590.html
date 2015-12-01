@@ -1,0 +1,35 @@
+<div ng-controller="Merchello.Backoffice.ProductListController" ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloHeadline_catalog" /></h1>
+                </div>
+            </div>
+            <div class="span5">
+
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+            <div class="merchello-pane" data-ng-show="preValuesLoaded">
+
+                <merchello-list-view builder="productDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
+
+                </merchello-list-view>
+
+                <!-- Prompt to create products if no products in the catalog -->
+                <div class="pager well" data-ng-show="products.length == 0 && collectionKey===''">
+                    <h5><localize key="merchelloVariant_noProduct"/></h5>
+                    <p><localize key="merchelloVariant_newProductPrompt"/></p>
+                    <a href="#/merchello/merchello/productedit/create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
+                </div>
+                <div class="pager well" data-ng-show="products.length == 0 && collectionKey!==''">
+                    <h5><localize key="merchelloProducts_emptyProductCollection"/></h5>
+                </div>
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</div>

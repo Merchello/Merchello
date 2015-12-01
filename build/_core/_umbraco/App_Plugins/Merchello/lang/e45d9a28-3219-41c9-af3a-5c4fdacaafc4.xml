@@ -1,0 +1,626 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="merchelloGeneral">
+    <key alias="apply">Apply</key>
+    <key alias="price">Price</key>
+    <key alias="customer">Customer</key>
+    <key alias="total">Total</key>
+    <key alias="salePrice">Sale Price</key>
+    <key alias="filter">Filter</key>
+    <key alias="filterBy">Filter By</key>
+    <key alias="chooseMedia">Choose Media</key>
+    <key alias="multipleOptions">Multiple Options</key>
+    <key alias="optional">(optional)</key>
+    <key alias="percentSymbol" >%</key>
+    <key alias="moneySymbol" >$</key>
+    <key alias="trackingNumber" >Tracking # </key>
+    <key alias="shipment" >Shipment</key>
+    <key alias="sku" >SKU</key>
+    <key alias="quantity" >Qty</key>
+    <key alias="fulfill"> Fulfill</key>
+    <key alias="status"> Status</key>
+    <key alias="type"> Type</key>
+    <key alias="amount"> Amount</key>
+    <key alias="via">Via</key>
+    <key alias="options">Options</key>
+    <key alias="select">Select</key>
+    <key alias="all">All</key>
+    <key alias="none">None</key>
+    <key alias="expired">Expired</key>
+    <key alias="configured">Configured</key>
+    <key alias="notConfigured">Not Configured</key>
+    <key alias="some">Some</key>
+    <key alias="lineItems">Line Items</key>
+    <key alias="setDateRange">Set Date Range</key>
+    <key alias="allDates">All Dates</key>
+    <key alias="starting">Starting</key>
+    <key alias="ending">Ending</key>
+  </area>
+  <area alias="merchelloTree">
+    <key alias="products">Products</key>
+    <key alias="sales">Sales</key>
+    <key alias="customers">Customers</key>
+    <key alias="marketing">Marketing</key>
+    <key alias="collections">Collections</key>
+    <key alias="reports">Reports</key>
+    <key alias="gateways">Gateway Providers</key>
+  </area>
+  <area alias="merchelloTabs">
+    <key alias="productListing">Product Listing</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="product">Product</key>
+    <key alias="productVariants">Product Variants</key>
+    <key alias="productOptions">Product Options</key>
+    <key alias="productVariantEditor">Product Variant Editor</key>
+    <key alias="detachedContent">Extended Content</key>
+    <key alias="salesListing">Sales Listing</key>
+    <key alias="sales">Sale</key>
+    <key alias="payments">Payments</key>
+    <key alias="payment">Payment</key>
+    <key alias="shipments">Shipments</key>
+    <key alias="shipping">Shipping</key>
+    <key alias="customerListing">Customer Listing</key>
+    <key alias="customer">Customer</key>
+    <key alias="customerAddresses">Addresses</key>
+    <key alias="gatewayProviders">Gateway Providers</key>
+    <key alias="notification">Notification</key>
+    <key alias="taxation">Taxation</key>
+    <key alias="offerListing">Offer Listing</key>
+    <key alias="message">Message</key>
+    <key alias="offer">Offer</key>
+    <key alias="coupon">Coupon</key>
+    <key alias="reportListing">Reports</key>
+    <key alias="render">Render</key>
+  </area>
+  <area alias="merchelloProviders">
+    <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
+    <key alias="partialPaidInvoiceCollection">Partially paid invoices</key>
+    <key alias="paidInvoiceCollection">Paid invoices</key>
+    <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
+    <key alias="openOrderCollection">Open orders</key>
+    <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+    <key alias="addProvider">Add provider</key>
+  </area>
+  <area alias="merchelloCollections">
+    <key alias="providers">Collection Providers</key>
+    <key alias="newCollection">New Collection</key>
+    <key alias="manageCollection">Manage Collection</key>
+    <key alias="addEntities">Add new collection items</key>
+    <key alias="removeEntities">Remove collection items</key>
+    <key alias="sortCollections">Sort Collections</key>
+    <key alias="staticProviders">Static Collections</key>
+    <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
+    <key alias="product">Product Collections</key>
+    <key alias="customer">Customer Collections</key>
+    <key alias="invoice">Invoice Collections</key>
+    <key alias="emptyCollection">The collection is empty.</key>
+    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
+    <key alias="collectionPickerTitle">Collections</key>
+    <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
+    <key alias="allItems">All items</key>
+    <key alias="allProduct">All Products</key>
+    <key alias="allCustomer">All Customers</key>
+    <key alias="allInvoice">All Sales</key>
+    <key alias="allOffer">All Offers</key>
+    <key alias="productCollections">Product Collections</key>
+    <key alias="invoiceCollections">Invoice Collections</key>
+    <key alias="customerCollections">Customer Collections</key>
+  </area>
+  <area alias="merchelloButtons">
+    <key alias="void">Void</key>
+    <key alias="refund">Refund</key>
+    <key alias="delete">Delete</key>
+    <key alias="select">Select</key>
+    <key alias="remove">Remove</key>
+  </area>
+  <area alias="merchelloHeadline">
+    <key alias="catalog">Catalog</key>
+  </area>
+  <area alias="merchelloValidation">
+    <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="contentTypeRequired">Content type is required</key>
+  </area>
+  <area alias="merchelloTableCaptions">
+    <key alias="name">Name</key>
+    <key alias="alias">Alias</key>
+    <key alias="startDate">Start Date</key>
+    <key alias="endDate">End Date</key>
+    <key alias="active">Active</key>
+    <key alias="sortOrder">Sort Order</key>
+  </area>
+  <area alias="merchelloProducts">
+    <key alias="emptyProductCollection">There are currently no products in this collection</key>
+    <key alias="shippable">Shippable</key>
+    <key alias="taxable">Taxable</key>
+    <key alias="available">Available</key>
+    <key alias="copyProduct">Copy Product</key>
+    <key alias="newProductName">New Product Name</key>
+    <key alias="newProductSku">New Product SKU</key>
+  </area>
+  <area alias="merchelloDetachedContent">
+    <key alias="selectContentType">Select Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="slug">URL Slug</key>
+    <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
+    <key alias="selectTemplate">Select an Umbraco template</key>
+    <key alias="canBeRendered">Allow this content to be rendered.</key>
+    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
+    <key alias="productContentType">Product Content Type</key>
+    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
+    <key alias="tabs">Tabs</key>
+    <key alias="noDetachedContentTypes">
+      <![CDATA[
+      <h5>You have not associated any Umbraco content types with Merchello</h5>
+      <p>This can be done through the Products context menu.</p>
+      ]]>
+    </key>
+    <key alias="noProductContentType">
+      <![CDATA[
+      <h5>You have not selected a product content type</h5>
+    ]]>
+    </key>
+    <key alias="deleteWarning">
+      <![CDATA[
+    This will also delete ALL property data associated with products that use this product type.
+    ]]>
+    </key>
+    <key alias="removeDetachedContent">Remove Extended Content</key>
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
+    Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to
+    fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
+    ]]>
+    </key>
+  </area>
+  <area alias="merchelloSales">
+    <key alias="invoice">Invoice</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="paymentStatus">Payment Status</key>
+    <key alias="sales">Sales</key>
+    <key alias="capturePayment">Capture Payment</key>
+    <key alias="processPayment">Process Payment</key>
+    <key alias="voidPayment">Void Payment</key>
+    <key alias="refundPayment">Refund Payment</key>
+    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
+    <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+    <key alias="processedBy">Processed by</key>
+    <key alias="refundMethod">Refund method</key>
+    <key alias="noSales">
+      <![CDATA[
+        <h5>You Have No Sales Yet</h5>
+        <p>But you will soon!</p>
+      ]]>
+    </key>
+    <key alias="emptySalesCollection">There are currently no sales in this collection</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="paymentStatus">Payment status</key>
+    <key alias="fulfillmentStatus">Fulfillment status</key>
+    <key alias="billingAddress">Billing Address</key>
+    <key alias="noBillingAddress">No Billing Address</key>
+    <key alias="shippingAddress">Shipping Address</key>
+    <key alias="noShippingAddress">No Shipping Address</key>
+    <key alias="paid">Paid</key>
+    <key alias="unpaid">Unpaid</key>
+    <key alias="partial">Partial</key>
+  </area>
+  <area alias="merchelloCustomers">
+    <key alias="loginName">Login</key>
+    <key alias="newCustomer">New Customer</key>
+    <key alias="lastInvoiceTotal">Last Invoice Total</key>
+    <key alias="location">Location</key>
+    <key alias="noCustomers">
+      <![CDATA[
+        <h5>You Have No Customers</h5>
+        <p>But you will soon!</p>
+      ]]>
+    </key>
+    <key alias="customerSaleHistory">
+      <![CDATA[
+      Sales History
+      <small>A list of the customer's sales and their status</small>
+      ]]>
+    </key>
+    <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
+    <key alias="customerNotes">
+      <![CDATA[
+      Customer Notes
+      <small>Notes about the customer (not sale specific)</small>
+      ]]>
+    </key>
+    <key alias="totalSpent">Total Spent</key>
+  </area>
+  <area alias="merchelloMarketing">
+    <key alias="currentOffers">Current Offers</key>
+    <key alias="offerCode">Offer Code</key>
+    <key alias="newOffer">New Offer</key>
+    <key alias="noOffer">No current offers</key>
+    <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
+    <key alias="offerInfo">Offer Settings</key>
+    <key alias="configOffer">Configure this offer</key>
+    <key alias="offerType">Type of Offer</key>
+    <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
+    <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
+    <key alias="offerNeverExpires">Does not expire.</key>
+    <key alias="offerValidDates">Offer Valid Dates</key>
+    <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
+    <key alias="offerConstraintsInfo">Constraints</key>
+    <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
+    <key alias="offerRewardsInfo">Rewards</key>
+    <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+    <key alias="noConstraints">No Constraints Available</key>
+    <key alias="noRewards">No Rewards Available</key>
+    <key alias="noContraintsAssigned">No Constraints Assigned</key>
+    <key alias="noRewardsAssigned">No Rewards Assigned</key>
+    <key alias="componentAutoSaving">Component updated - auto saving</key>
+    <key alias="lineItemNameInfo">
+      <![CDATA[Line item name<small>This is the text that will appear on the invoice when the reward is awarded.</small>]]>
+    </key>
+  </area>
+  <area alias="merchelloVariant">
+    <!-- things -->
+    <key alias="product">Product</key>
+    <key alias="variant">Variant</key>
+    <key alias="sku">SKU</key>
+    <key alias="costOfGoods">Cost of Goods</key>
+    <key alias="baseSku">Base Sku</key>
+    <key alias="barcode">Barcode</key>
+    <key alias="manufacturer">Manufacturer</key>
+    <key alias="manufacturerModel">Manufacturer's Model No.</key>
+    <key alias="variantInfo">Variant Information</key>
+    <key alias="variantOptions">Variant Options</key>
+    <key alias="downloads">Digital Downloads</key>
+    <key alias="optionName">Option Name</key>
+    <key alias="optionValues">Option Values</key>
+    <!-- actions -->
+    <key alias="newProduct">New Product</key>
+    <key alias="createProduct">Create a Product</key>
+    <key alias="createProductSub">The Name field (above), Price, and SKU are required.  Everything else is optional.</key>
+    <key alias="newVariant">New Variant</key>
+    <key alias="newVariantFor">New Variant for</key>
+    <key alias="newVariantOn">This will be a new variant on the</key>
+    <key alias="addVariant">Add a Variant</key>
+    <key alias="addVariantSub">This will be a new variant on the %0% product.</key>
+    <key alias="addOption">Add Another Option</key>
+    <key alias="addOptions">Add options to this variant and auto-populate additional variants for each option</key>
+    <key alias="deleteProduct">Delete Product</key>
+    <key alias="deleteVariant">Delete Variant</key>
+    <key alias="toggleOnSale">On Sale</key>
+    <key alias="toggleAvailable">Available</key>
+    <key alias="configVariant">Configure this variant</key>
+    <key alias="selectVariantOptions">Select the variant/options that you would like to create.</key>
+    <key alias="addFile">Add a file to your product variant</key>
+    <key alias="trackInventory">Track inventory for this variant</key>
+    <key alias="setInventoryPreferences">Set preferences for handling out of stock and adjust inventory for this variant</key>
+    <!-- phrases -->
+    <key alias="barcodeExamples">e.g. UPC, ISBN</key>
+    <key alias="optionNameExamples">(e.g. Size, Style, Color)</key>
+    <key alias="optionValueExamples">(e.g. red, green, blue)</key>
+    <key alias="hasDigitalDownload">This variant has digital goods</key>
+    <key alias="hasOptions">This variant has options (like size or color)</key>
+    <key alias="isTaxable">This variant is taxable</key>
+    <key alias="isShippable">This variant is shippable</key>
+    <key alias="isOnSale">This variant is on sale</key>
+    <key alias="isAvailable">This variant is available to purchase</key>
+    <key alias="noProduct">You have no products.</key>
+    <key alias="newProductPrompt">How about creating one now? Simply press the New Product button.</key>
+    <key alias="limitSelect">Number of products to display</key>
+    <key alias="mustUniqueSku">Must have a unique SKU</key>
+    <key alias="inventoryWarning"><![CDATA[<p>Important: If you choose to track inventory, it must be set manually for each variant (listed below) once this product has been saved.  However, you can set a base default inventory, applied to <strong>all variants</strong> here.</p>]]></key>
+    <key alias="startingInventoryWarning"><![CDATA[(Will set starting inventory for <strong>all variants</strong> and <strong>all warehouses</strong>)]]></key>
+    <key alias="productOnSale">On sale</key>
+    <key alias="allowOutOfStockPurchase">Allow out of stock purchase</key>
+  </area>
+  <area alias="merchelloOrder">
+    <!-- moved to sales -->
+    <key alias="invoice">Invoice</key>
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="sales">Sales</key>
+    <key alias="saleInformation">Sale Information</key>
+    <key alias="paymentStatus">Payment Status</key>
+    <key alias="capturePayment">Capture Payment</key>
+    <key alias="processPayment">Process Payment</key>
+    <key alias="voidPayment">Void Payment</key>
+    <key alias="refundPayment">Refund Payment</key>
+    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
+    <key alias="paymentExpirationWarning">You may not receive payment for expired authorization.</key>
+    <key alias="processedBy">Processed by</key>
+    <key alias="refundMethod">Refund method</key>
+
+    <!-- moved to general -->
+    <key alias="lineItems">Line Items</key>
+
+    <key alias="order">Order</key>
+    <key alias="orders">Orders</key>
+    <key alias="orderNumber">Order #</key>
+
+    <key alias="fulfillmentStatus">Fulfillment Status</key>
+    <key alias="orderName">[Order Name]</key>
+    <key alias="createOrder">Create Order</key>
+
+    <!-- to be removed -->
+    <key alias="filter">Filter Invoices</key>
+    <key alias="addDateFilters">Add date filters</key>
+    <key alias="removeDateFilters">Remove date filters</key>
+    <key alias="resetFilters">Reset Filters</key>
+    <key alias="invoicesPerPage">Invoices / Page</key>
+    <key alias="archiveSales">Archive Sales</key>
+    <key alias="unarchiveSales">Unarchive Sales</key>
+    <key alias="noSalesYet">You have no sales yet</key>
+    <key alias="butSoonYouWill">but soon you will!</key>
+
+    <!-- phrases -->
+    <key alias="noOrders">You have no orders.</key>
+    <key alias="attentionRequired">You Have Orders That Require Attention</key>
+    <key alias="fulfilled">Fulfilled</key>
+    <key alias="unfulfilled">Unfulfilled</key>
+    <key alias="open">Open</key>
+  </area>
+  <area alias="merchelloOrderView">
+    <!-- things -->
+    <key alias="invoiceNumber">Invoice #</key>
+    <key alias="customerInformation">Customer Information</key>
+    <key alias="shippingAddress">Shipping Address</key>
+    <key alias="billingAddress">Billing Address</key>
+    <key alias="orderInformation">Order Information</key>
+    <!-- actions -->
+    <!-- phrases -->
+    <key alias="billingAndShippingAddressHelper">Billing and Shipping addresses</key>
+    <key alias="orderInformationHelper"><![CDATA[Line items & costs]]></key>
+    <key alias="captureUpTo">Capture Up To</key>
+    <key alias="salesTax">Sales Tax</key>
+    <key alias="authorized">Authorized</key>
+    <key alias="captured">Captured</key>
+    <key alias="paymentHistory"> Payment History</key>
+    <key alias="saleHistory">Sale History</key>
+    <key alias="paymentHistoryHelper">Status records for one or more payments</key>
+    <key alias="paymentProcessedBy">Payment processed by:</key>
+    <key alias="resetFilters">Reset Filters</key>
+  </area>
+  <area alias="merchelloFulfillShipment">
+    <!-- phrases -->
+    <key alias="fulfillManually">Fulfill Manually</key>
+    <key alias="createShipment">Create Shipment</key>
+  </area>
+  <area alias="merchelloWarehouse">
+    <!-- things -->
+    <key alias="warehouse">Warehouse</key>
+    <key alias="warehouses">Warehouses</key>
+    <key alias="stock">Stock</key>
+    <key alias="lowCount">Low Count</key>
+    <key alias="location">Location</key>
+    <!-- actions -->
+    <!-- phrases -->
+  </area>
+
+  <!-- TODO KEEP THE MERCHELLO SHIPPING AREA -->
+  <area alias="merchelloShipping">
+    <!-- things -->
+    <key alias="shipping">Shipping</key>
+    <key alias="info">Shipping Information</key>
+    <key alias="weight">Weight</key>
+    <key alias="dimensions">Dimensions</key>
+    <!-- actions -->
+    <key alias="setVars">Set shipping variables: Weight, and dimensions</key>
+    <!-- phrases -->
+    <key alias="editWarehouseHelper" >Edit your warehouse</key>
+    <key alias="editWarehouse" >Edit Warehouse</key>
+    <key alias="shippingMethods" >Shipping Methods</key>
+    <key alias="shippingMethodsHelper" >Add shipping methods to existing regions or create a new region</key>
+    <key alias="addCountry" >Add a Country</key>
+    <key alias="addCatalog">Add a Catalog</key>
+    <key alias="selectCatalog">Select Catalog</key>
+    <key alias="shippingProvidersMethodsTitle">Shipping Providers &amp; Methods</key>
+    <key alias="shipContriesInfo">
+      <![CDATA[
+        Shipping Countries
+        <small>A list of the catalog's shipping providers and methods, sorted by country.</small>]]>
+    </key>
+    <key alias="warehouse">Warehouse</key>
+  </area>
+  <area alias="merchelloInventory">
+    <!-- things -->
+    <key alias="base">Base Inventory</key>
+    <key alias="inventory">Inventory</key>
+    <key alias="tracking">Inventory Tracking</key>
+    <!-- actions -->
+    <!-- phrases -->
+  </area>
+  <area alias="merchelloPlaceholders">
+    <key alias="enterProduct">Enter a product name</key>
+    <key alias="enterOrder">Start typing an order number or name...</key>to
+    <key alias="addStyle">Add a style...</key>
+    <key alias="enterOffer">Enter a name for the offer</key>
+  </area>
+
+  <area alias="merchelloSettings">
+    <key alias="storeDefaults">Store Defaults</key>
+    <key alias="setDefaultSettingsHelper">Set the default settings</key>
+    <key alias="currency">Currency</key>
+    <key alias="dateFormat">Date Format</key>
+    <key alias="startingOrderNumber">Starting Order No.</key>
+    <key alias="timeFormat">Time Format</key>
+    <key alias="unitSystem">Unit System</key>
+    <key alias="startingInvoiceNumber">Starting Invoice No.</key>
+    <key alias="startingShipmentNumber">Starting Shipment No.</key>
+    <key alias="catalogDefaults">Catalog Defaults</key>
+    <key alias="catalogDefaultsHelper">Set the default catalog item (product) options. Can be changed later on a per item basis.</key>
+    <key alias="globalTaxable">All items are taxable</key>
+    <key alias="globalShippable">All items are shippable</key>
+    <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
+    <key alias="globalShippingIsTaxable">Shipping charges are taxable</key>
+    <key alias="globalTaxationApplication">Set how taxes are applied</key>
+    <key alias="defaultCultureName">Set the default extended content culture</key>
+  </area>
+
+  <area alias="merchelloShippingCountry">
+    <key alias="addCountry">Add a Country</key>
+    <key alias="typeCountryName" >Type your Country Name</key>
+    <key alias="noneSelected" >-- none selected --</key>
+  </area>
+  <area alias="merchelloShippingWarehouse">
+    <key alias="deleteComfirm" >Are you sure you want to remove the warehouse</key>
+    <key alias="address">Address</key>
+    <key alias="primaryWarehouse" >Primary Warehouse</key>
+    <key alias="streetAddress" >Street Address</key>
+    <key alias="extendedAddress">Extended Address</key>
+    <key alias="city">City</key>
+    <key alias="stateProvince">State/Province</key>
+    <key alias="zip"> Zip/Postal Code</key>
+    <key alias="country"> Country</key>
+    <key alias="selectCountry" >Select a Country</key>
+    <key alias="makePrimaryWarehouse" >Make this my primary warehouse</key>
+    <key alias="addWarehouse" >Add a Warehouse</key>
+    <key alias="editWarehouse" >Edit Warehouse</key>
+  </area>
+  <area alias="merchelloShippingMethod">
+    <key alias="addEditShippingMethod">Add/Edit a Shipping Method Rate for</key>
+    <key alias="method" >Method</key>
+    <key alias="setRange" >Set Range</key>
+    <key alias="addNewRange" >Add New Range</key>
+    <key alias="adjustIndividualRegions" >Adjust for Individual Regions</key>
+    <key alias="region" >Region</key>
+    <key alias="adjustRate" >Adjust Rate</key>
+    <key alias="adjustBy" >Adjust By</key>
+  </area>
+  <area alias="merchelloShippingProvider">
+    <key alias="provider" >Provider</key>
+    <key alias="addProvider" >Add a Provider</key>
+    <key alias="selectProvider" >Select Your Provider</key>
+    <key alias="selectResource" >Select Your Resource</key>
+  </area>
+  <area alias="merchelloShippingHistory">
+    <key alias="shipmentHistory" >Shipment History</key>
+    <key alias="shipmentHistoryHelper" >Status records for one or more shipments</key>
+    <key alias="shipment" >Shipment</key>
+    <key alias="trackingNumber" >Tracking #</key>
+  </area>
+  <area alias="merchelloTaxation">
+    <key alias="taxation" >Taxation</key>
+    <key alias="taxMethods" >Tax Methods</key>
+    <key alias="taxMethodsHelper" >Set flat tax rates for your shipping regions</key>
+    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
+  </area>
+  <area alias="merchelloNotifications">
+    <key alias="notifications" >Notifications</key>
+    <key alias="addNotification" >Add a Notification</key>
+  </area>
+  <area alias="merchelloNotificationsEdit">
+    <key alias="emailTemplate" >Email Template</key>
+    <key alias="emailTemplateHelper" >Edit your notification template</key>
+    <key alias="emailTemplateEditBody" >Edit the Body Text</key>
+    <key alias="notificationSettings" >Notification Settings</key>
+    <key alias="notificationSettingsHelper" >Set who to send your notification to and when</key>
+    <key alias="description" >Description</key>
+    <key alias="attachedEvent" >Attached Event</key>
+    <key alias="resourceType"></key>
+    <key alias="eventAlias" >Event Alias:</key>
+    <key alias="sendTo" ><![CDATA[Send To <small>(i.e. orders@yourdomain.com)</small>]]></key>
+    <key alias="replyTo" ><![CDATA[Reply To <small>(i.e. reply@yourdomain.com)</small>]]></key>
+    <key alias="emailCustomer" >Email the customer</key>
+  </area>
+  <area alias="merchelloNotificationsEditTemplate">
+    <key alias="header" >Header</key>
+    <key alias="footer" >Footer</key>
+    <key alias="templateHelper" >You may add basic HTML tags to your email header and footer templates such as &lt;br /&gt; to create a new line of text.</key>
+  </area>
+  <area alias="merchelloNotificationsDelete">
+    <key alias="merchelloNotificationsDelete_deleteNotification">Delete a Notification Method</key>
+  </area>
+  <area alias="merchelloNotificationsMessage">
+    <add alias="replyTo">Reply to</add>
+    <key alias="addEditMessage" >Add/Edit a Notification Message</key>
+    <key alias="attachedEvent" >Attached Event</key>
+    <key alias="fromEmail" ><![CDATA[From Email Address<small>(i.e. confirmation@yourdomain.com)</small>]]></key>
+  </area>
+  <area alias="merchelloNotificationsMethod">
+    <key alias="addEditMethod" >Add/Edit a Notification Method</key>
+    <key alias="notificationsMethodResource" >Notification Method</key>
+    <key alias="message" >Message</key>
+    <key alias="notification" >Notification</key>
+    <key alias="event" >Event</key>
+    <key alias="sendTo" >Send To</key>
+    <key alias="emailCustomer" >Email Customer</key>
+  </area>
+  <area alias="merchelloGatewayProvider">
+    <key alias="gatewayProvider" >Gateway Providers</key>
+    <key alias="notificationProvider" >Notification Providers</key>
+    <key alias="notificationProviderHelper" >Activate/Deactivate your Notification Providers</key>
+    <key alias="paymentProvider" >Payment Providers</key>
+    <key alias="paymentProviderHelper" >Activate/Deactivate your Payment Providers</key>
+    <key alias="shippingProvider" > Shipping Providers</key>
+    <key alias="shippingProviderHelper" >Activate/Deactivate your Shipping Providers</key>
+    <key alias="taxationProvider" > Taxation Providers</key>
+    <key alias="taxationProviderHelper" >Activate/Deactivate your Taxation Providers</key>
+    <key alias="host" >Host</key>
+    <key alias="username" >Username</key>
+    <key alias="password" >Password</key>
+    <key alias="enableSSL" >Enable SSL</key>
+    <key alias="encryptProviderConfiguration" > Encrypt Provider Configuration</key>
+    <key alias="providerName" >Provider Name</key>
+    <key alias="activate">activate</key>
+    <key alias="deactivate" >deactivate</key>
+  </area>
+  <area alias="merchelloPayment">
+    <key alias="paymentInfo">Payment Information</key>
+    <key alias="payment" >Payment</key>
+    <key alias="addPaymentMethod" >Add a Method</key>
+    <key alias="resourceType" >Resource Type:</key>
+    <key alias="deletePayment" >Delete a Payment Method</key>
+    <key alias="paymentMethod">Payment Method</key>
+  </area>
+  <area alias="merchelloPaymentMethod">
+    <key alias="addEditPayment" >Add/Edit a Payment Method</key>
+  </area>
+  <area alias="merchelloMethodDelete">
+    <key alias="deleteConfirmation">Are you sure you want to remove the method</key>
+  </area>
+  <area alias="merchelloDelete">
+    <key alias="deleteConfirmation">Delete Confirmation</key>
+    <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+  </area>
+  <area alias="merchelloProductEdit">
+    <key alias="enterProductName">Enter a product name</key>
+    <key alias="dragAndReorder">Drag to Reorder Options and Variants</key>
+    <key alias="reorderVariants">Reorder variants</key>
+    <key alias="dragAndReorderHelper">If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</key>
+    <key alias="changePrices">Change prices</key>
+    <key alias="updateInventory">Update inventory</key>
+    <key alias="toggleAvailable">Toggle Available</key>
+    <key alias="toggleOnSale">Toggle On Sale</key>
+    <key alias="duplicateVariant"> Duplicate Variant</key>
+    <key alias="inAnother">In another</key>
+    <key alias="editOptions">Edit Options</key>
+    <key alias="editOptionsHelper">Edit or add options, which will auto-update your variants</key>
+    <key alias="optionName">Option Name</key>
+    <key alias="optionNameHelper">(e.g. Size, Style, Color)</key>
+    <key alias="optionValue">Option Values</key>
+    <key alias="optionValueHelper">(e.g. red, green, blue)</key>
+    <key alias="addStyle">Add a style...</key>
+    <key alias="addAnotherOption">Add Another Option</key>
+    <key alias="variantInformation">Product Information</key>
+    <key alias="variantInformationHelper">Edit the variants for this product.</key>
+    <key alias="selectProduct">Select Product...</key>
+    <key alias="selectMerchelloProduct">Select Merchello Product</key>
+    <key alias="selectYourProduct">Select Your Product</key>
+    <key alias="removeProduct">Disconnect This Product</key>
+    <key alias="itemLocation">Item Location</key>
+  </area>
+
+  <area alias="merchelloAuditLogs">
+    <key alias="notificationShipping">Shipping confirmation email sent to %0%</key>
+    <key alias="notificationSalesConfirmation">Sales confirmation email sent to %0%</key>
+    <key alias="paymentCaptured">We successfully captured %0% %1%</key>
+    <key alias="paymentAuthorize">We were authorized to capture %0% %1%</key>
+    <key alias="paymentVoided">Payment was voided</key>
+    <key alias="paymentDeclined">Payment was declined</key>
+    <key alias="paymentRefunded">We refunded %0% %1% of a payment</key>
+    <key alias="invoiceDeleted">Invoice %0% was deleted</key>
+    <key alias="paymentDeleted">Payment was deleted</key>
+    <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
+    <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
+    <key alias="orderCreated">Order %0% was created</key>
+    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
+    <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
+  </area>
+</language>

@@ -1,0 +1,54 @@
+<div data-ng-controller="Merchello.Backoffice.MerchelloDashboardController" data-ng-show="loaded">
+    <h1 class="logo"><a href="http://merchello.com" target="_blank">Merchello, the eCommerce package</a></h1>
+    <h2>Version {{merchelloVersion}}</h2>
+    <div class="row merchello-links">
+        <div class="span3">
+            <p>Learn about Merchello in the <a href="http://merchello.com/documentation/">Documentation</a></p>
+        </div>
+        <div class="span3">
+            <p>Read about the latest news on our <a href="http://merchello.com/blog">Blog</a></p>
+        </div>
+        <div class="span3">
+            <p>Ask questions on the <a href="http://our.umbraco.org/projects/collaboration/merchello/merchello">forum</a></p>
+        </div>
+        <div class="span3">
+            <p>Connect with us on <a href="https://twitter.com/ourmerchello">twitter</a></p>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="span4 merchello-documentation">
+            <div class="dashboard-overflow">
+                <img src="/App_Plugins/Merchello/assets/images/ourumbracoorg_thumb.jpg" class="img-rounded" alt="Download Merchello">
+            </div>
+            <div class="caption">
+                <h3>The Merchello Package</h3>
+                <p>The Merchello package is available on Our Umbraco.</p>
+
+                <button class="btn btn-default btn-documentation" onclick="window.open('http://our.umbraco.org/projects/collaboration/merchello','_blank')">Download</button>
+            </div>
+
+        </div>
+        <div class="span4 merchello-documentation">
+            <div class="dashboard-overflow">
+                <img src="/App_Plugins/Merchello/assets/images/youtrack_thumb.jpg"  class="img-rounded" alt="Issue Tracker">
+            </div>
+            <div class="caption">
+                <h3>Merchello Issue Tracker</h3>
+                <p>Get involved by reporting and discussing issues or requesting features</p>
+                <button class="btn btn-default btn-documentation" onclick="window.open('http://issues.merchello.com/youtrack/issues/M','_blank')">YouTrack Dashboard</button>
+            </div>
+        </div>
+        <div class="span4 merchello-documentation">
+            <div class="dashboard-overflow">
+                <img src="/App_Plugins/Merchello/assets/images/github_thumb.jpg"  class="img-rounded" alt="Source Code">
+            </div>
+            <div class="caption">
+                <h3>Merchello on GitHub</h3>
+                <p>Ready to code?  You can find the source code on GitHub and we welcome contributions.</p>
+                <button class="btn btn-default btn-documentation" onclick="window.open('https://github.com/Merchello/Merchello','_blank')">Source Code</button>
+            </div>
+        </div>
+    </div>
+</div>
