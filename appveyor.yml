@@ -6,6 +6,17 @@ version: 1.13.1.{build}
 init:
   - set UMBRACO_PACKAGE_PRERELEASE_SUFFIX=
 
+# Test against this version of Node.js
+environment:
+  nodejs_version: "0.10"
+
+# Install scripts. (runs after repo cloning)
+install:
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - npm install
+
 build_script:
 - build-appveyor.cmd
 

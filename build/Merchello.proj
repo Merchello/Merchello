@@ -217,9 +217,7 @@
 			OutputDirectory="$(ArtifactsDir)"
 			Symbols="true" /-->
 
-    <!--
 		<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
-    -->
 
 	</Target>
 
