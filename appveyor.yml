@@ -24,9 +24,12 @@ install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
-  - npm install --prefix ./src/Merchello.Web.Client.UI
+  - cmd: ECHO Changing directory to Merchello.Web.UI.Client
+  - ps: cd  src\Merchello.Web.UI.Client
+  - npm install
   - npm install -g grunt-cli
-  - build-grunt.cmd
+  - ps: grunt build
+  - cmd: ECHO Changing directory back to Merchello
 
 build_script:
 - build-appveyor.cmd
