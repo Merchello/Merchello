@@ -13,7 +13,6 @@ environment:
 
 cache:
 - C:\Ruby%ruby_version%\lib\ruby\gems
-- C:\mingw64
 
 # Install scripts. (runs after repo cloning)
 install:

@@ -181,7 +181,7 @@
 
 	<!-- MANIFEST FOR NUGET PACKAGE -->
 	<Target Name="ManifestNuGet" DependsOnTargets="PrepareFiles">
-		<!--
+
     <ItemGroup>
 			<ManifestFiles Include="$(BuildNuGetDir)\**\*" Exclude="$(BuildNuGetDir)\Merchello.Core.nuspec" />
 		</ItemGroup>
@@ -204,7 +204,6 @@
 			RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
 			Tags="$(Tags)"
 			Files="@(ManifestFiles)" />
-      -->
 	</Target>
 
 	<!-- PACKAGE -->
