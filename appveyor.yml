@@ -20,18 +20,7 @@ install:
   - git clone https://github.com/sass/sassc.git
   - git clone https://github.com/sass/sass-spec.git
   - set PATH=C:\Ruby%ruby_version%\bin;%PATH%
-  - ps: |
-      if(!(gem which minitest 2>$nul)) { gem install minitest --no-ri --no-rdoc }
-      if ($env:Compiler -eq "mingw" -AND -Not (Test-Path "C:\mingw64")) {
-        # Install MinGW.
-        $file = "x86_64-4.9.2-release-win32-seh-rt_v4-rev3.7z"
-        $url  = "https://bintray.com/artifact/download/drewwells/generic/"
-        $url += $file
-        Invoke-WebRequest -UserAgent wget -Uri $url -OutFile $file
-        &7z x -oC:\ $file > $null
-      }
-  - set PATH=C:\mingw64\bin;%PATH%
-  - set CC=gcc
+  - gem install sass
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
@@ -39,7 +28,6 @@ install:
   - ps: cd  src\Merchello.Web.UI.Client
   - npm install
   - npm install -g grunt-cli
-  - npm install grunt-sass
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello
 
