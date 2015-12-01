@@ -39,6 +39,7 @@ install:
   - ps: cd  src\Merchello.Web.UI.Client
   - npm install
   - npm install -g grunt-cli
+  - npm install grunt-sass
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello
 
