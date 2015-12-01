@@ -26,6 +26,7 @@ install:
   # install modules
   - npm install --prefix ./src/Merchello.Web.Client.UI
   - npm install -g grunt-cli
+  - build-grunt.cmd
 
 build_script:
 - build-appveyor.cmd
