@@ -64,7 +64,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test confirms that a collection of ProductVariants that HAVE YET to be created can be retrieved for a product
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Get_A_List_Of_All_Possible_Variants_That_Can_Be_Created()
         {
             //// Arrange

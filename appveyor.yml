@@ -15,8 +15,8 @@ cache:
 - C:\Ruby%ruby_version%\lib\ruby\gems
 
 # enable service required for build/tests
-services:
-  - mssql2014           # start SQL Server 2014 Express
+#services:
+#  - mssql2014           # start SQL Server 2014 Express
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -45,7 +45,6 @@ test:
 # run custom scripts before tests
 before_test:
 
-
 artifacts:
   - path: artifacts\*.nupkg
   - path: artifacts\*.zip
@@ -64,7 +63,7 @@ deploy:
 # scripts to run after deployment
 after_deploy:
    # run tests
-   - nunit-console test\Merchello.Tests.IntegrationTests\bin\Release\Merchello.Tests.IntegrationTests.dll /exclude:LongRunning /xml .\nunit-results.xml
+   #- nunit-console test\Merchello.Tests.IntegrationTests\bin\Release\Merchello.Tests.IntegrationTests.dll /exclude:LongRunning /xml .\nunit-results.xml
    # upload results to AppVeyor
-   - $wc = New-Object 'System.Net.WebClient'
-   - $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\nunit-results.xml))
+   #- $wc = New-Object 'System.Net.WebClient'
+   #- $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\nunit-results.xml))

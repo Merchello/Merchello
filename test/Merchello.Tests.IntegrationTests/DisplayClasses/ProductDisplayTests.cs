@@ -170,7 +170,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(productChoice.Sku, productChoiceDisplay.Sku);
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Build_Product_From_ProductDisplay()
         {
             //// Arrange
