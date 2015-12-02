@@ -61,12 +61,10 @@ deploy:
     on:
       branch: appveyor
 
-# scripts to run before deployment
-before_deploy:
+# scripts to run after deployment
+after_deploy:
    # run tests
    - nunit-console test\Merchello.Tests.IntegrationTests\bin\Release\Merchello.Tests.IntegrationTests.dll /exclude:LongRunning /xml .\nunit-results.xml
    # upload results to AppVeyor
    - $wc = New-Object 'System.Net.WebClient'
    - $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\nunit-results.xml))
-   on:
-       appveyor_repo_tag: true        # Test on tag push only
