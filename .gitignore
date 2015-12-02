@@ -186,3 +186,4 @@ Plugin/Payments/AuthorizeNet/src/Merchello.Plugin.Payments.AuthorizeNet/App_Plug
 src/Merchello.Web.UI/bin/Merchello.Bazaar.dll
 Umbraco.Web.UI/config/umbracoSettings.Release.config
 artifacts/
+build/_core/

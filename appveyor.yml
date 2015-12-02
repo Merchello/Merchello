@@ -40,7 +40,7 @@ build_script:
 
 test:
    assemblies:
-      - Merchello.Tests.IntegrationTests.dll
+      - '..\test\Merchello.Tests.IntegrationTests\bin\Release\Merchello.Tests.IntegrationTests.dll'
 
 artifacts:
   - path: artifacts\*.nupkg
