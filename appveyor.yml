@@ -12,7 +12,8 @@ environment:
   nodejs_version: "0.10"
 
 cache:
-- C:\Ruby%ruby_version%\lib\ruby\gems
+- C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
+- C:\projects\merchello\src\Merchello.Web.UI.Client\node_modules -> appveyor.yml
 
 # enable service required for build/tests
 #services:
