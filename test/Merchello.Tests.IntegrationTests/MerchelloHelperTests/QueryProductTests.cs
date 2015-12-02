@@ -49,7 +49,7 @@
         /// <summary>
         /// 
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_RetrieveProductOptions_From_ProductInIndex()
         {            
             //// Arrange

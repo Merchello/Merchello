@@ -120,7 +120,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         /// <summary>
         /// Test to verify a product can be retrieved with 3 options each with choices
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Retrieve_A_Product_With_3_Options_With_Choices()
         {
             //// Arrange

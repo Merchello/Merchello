@@ -76,7 +76,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             provider.AddProductToIndex(product);
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Build_ProductVariantDisplay_From_Indexed_ProductVariant()
         {
             //// Arrange
@@ -113,7 +113,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
         //    Assert.NotNull(product);
         //}
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Build_ProductDisplay_From_Product()
         {
             //// Arrange
@@ -170,7 +170,7 @@ namespace Merchello.Tests.IntegrationTests.DisplayClasses
             Assert.AreEqual(productChoice.Sku, productChoiceDisplay.Sku);
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Build_Product_From_ProductDisplay()
         {
             //// Arrange

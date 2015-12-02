@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+	<metadata>
+		<id>Merchello.Core</id>
+		<version>0.1.0-alpha-000100</version>
+		<title>Merchello</title>
+		<authors>Rusty Swayne and community contributors</authors>
+		<owners>Across the Pond, LLC</owners>
+		<projectUrl>https://github.com/Merchello/Merchello</projectUrl>
+		<iconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Merchello - Open source eCommerce package for Umbraco</description>
+		<summary>Merchello - Open source eCommerce package for Umbraco</summary>
+		<copyright>Copyright © 2015 Across the Pond, LLC, Our Umbraco and other contributors</copyright>
+		<licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+		<language>en-US</language>
+		<tags>umbraco ecommerce merchello</tags>
+		<dependencies>
+			<dependency id="UmbracoCms.Core" version="7.3.0" />
+		</dependencies>
+	</metadata>
+</package>

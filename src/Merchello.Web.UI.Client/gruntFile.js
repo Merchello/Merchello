@@ -29,6 +29,7 @@
         distdir: 'build/App_Plugins/Merchello',
         bowerfiles: 'bower_components',
         vsdir: '../Merchello.Web.UI/App_Plugins/Merchello',
+        appdir: '../Merchello.Web.UI',
         pkg: grunt.file.readJSON('package.json'),
 
         // The comment block that is inserted at the top of files during build
@@ -117,7 +118,8 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/products' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' },
-                    { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' }
+                    { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' },
+                    { dest: '<%= appdir %>', src: '**', expand: true, cwd: '<%= distdir %>/config/transforms'}
                 ]
             }
         },

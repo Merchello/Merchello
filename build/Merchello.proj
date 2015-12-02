@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Package" ToolsVersion="4.0">
+
+	<!-- IMPORTS -->
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+		<MSBuildUmbracoTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildUmbracoTasks</MSBuildUmbracoTasksPath>
+		<MSBuildNugetTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildNugetTasks</MSBuildNugetTasksPath>
+		<AppVeyorUmbracoPath>$(MSBuildProjectDirectory)\tools\AppVeyorUmbraco</AppVeyorUmbracoPath>
+    <MSBUILDNodePath>$(MSBuildProjectDirectory)\tools\MSBUILDNode</MSBUILDNodePath>
+    <MSBUILDGruntPath>$(MSBuildProjectDirectory)\tools\MSBUILDGrunt</MSBUILDGruntPath>
+	</PropertyGroup>
+
+  <!-- PATHS -->
+  <PropertyGroup>
+    <BuildConfig>Release</BuildConfig>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
+    <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
+    <BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
+    <BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
+    <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
+    <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
+    <ProjectDir>$(RootDir)\src</ProjectDir>
+    <MerchelloUIClientDir>$(ProjectDir)\Merchello.Web.UI.Client</MerchelloUIClientDir>
+  </PropertyGroup>
+
+	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+	<Import Project="$(MSBuildUmbracoTasksPath)\MSBuild.Umbraco.Tasks.Targets" />
+	<Import Project="$(MSBuildNugetTasksPath)\MSBuild.NuGet.Tasks.Targets" />
+	<Import Project="$(AppVeyorUmbracoPath)\AppVeyorUmbraco.Targets" />
+  <Import Project="$(MSBUILDNodePath)\MSBuild.Node.props" Condition="Exists('$(MSBUILDNodePath)\MSBuild.Node.props')" />
+  <Import Project="$(MSBUILDNodePath)\MSBuild.Node.Targets" />
+  <Import Project="$(MSBUILDGruntPath)\MSBuild.Grunt.Props" />
+  <Import Project="$(MSBUILDGruntPath)\MSBuild.Grunt.Targets" />
+
+  <!-- SHARED PROPERTIES -->
+	<PropertyGroup>
+		<PackageName>Merchello</PackageName>
+		<MinUmbracoVersion>7.3.0</MinUmbracoVersion>
+		<Readme>Merchello - Open source eCommerce package for Umbraco</Readme>
+		<AuthorName>Rusty Swayne and community contributors</AuthorName>
+		<AuthorUrl>https://github.com/rustyswayne/Merchello/graphs/contributors</AuthorUrl>
+		<PackageLicenseName>MIT license</PackageLicenseName>
+		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+		<ProjectUrl>https://github.com/Merchello/Merchello</ProjectUrl>
+	</PropertyGroup>
+
+	<!-- NUGET ONLY PROPERTIES -->
+	<PropertyGroup>
+		<PackageId>Merchello.Core</PackageId>
+		<Copyright>Copyright &#169; 2015 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
+		<Owners>Across the Pond, LLC</Owners>
+		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
+		<Tags>umbraco ecommerce merchello</Tags>
+		<Language>en-US</Language>
+		<RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+	</PropertyGroup>
+
+	<!-- APPVEYOR PROPERTIES -->
+	<PropertyGroup>
+		<FileVersion>$(APPVEYOR_BUILD_VERSION)</FileVersion>
+	</PropertyGroup>
+	<Choose>
+		<When Condition="$(APPVEYOR_BUILD_NUMBER) != '' And $(APPVEYOR_REPO_TAG) != 'true' ">
+			<PropertyGroup>
+				<Release>false</Release>
+			</PropertyGroup>
+		</When>
+		<Otherwise>
+			<PropertyGroup>
+				<Release>true</Release>
+			</PropertyGroup>
+		</Otherwise>
+	</Choose>
+
+	<Choose>
+		<When Condition="$(Release) == 'false' And $(UMBRACO_PACKAGE_PRERELEASE_SUFFIX) == 'rtm'">
+			<PropertyGroup>
+				<AbortBuild>true</AbortBuild>
+			</PropertyGroup>
+		</When>
+		<Otherwise>
+			<PropertyGroup>
+				<AbortBuild>false</AbortBuild>
+			</PropertyGroup>
+		</Otherwise>
+	</Choose>
+
+	<!-- TARGETS -->
+	<Target Name="GetProductVersion">
+		<Error Condition="$(AbortBuild) == 'true'" Text="Aborting the build as the UMBRACO_PACKAGE_PRERELEASE_SUFFIX suffix is set 'rtm' but APPVEYOR_REPO_TAG is not 'true'" />
+		<GetProductVersion BuildVersion="$(APPVEYOR_BUILD_VERSION)" BuildSuffix="$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)" Release="$(Release)">
+			<Output TaskParameter="ProductVersion" PropertyName="ProductVersion"/>
+		</GetProductVersion>
+	</Target>
+
+	<!-- CLEAN -->
+	<Target Name="Clean" DependsOnTargets="GetProductVersion">
+		<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
+		<RemoveDir Directories="$(ArtifactsDir)" Condition="Exists('$(ArtifactsDir)')" />
+		<MakeDir Directories="$(BuildDir)" />
+		<MakeDir Directories="$(BuildUmbDir)" />
+		<MakeDir Directories="$(BuildNuGetDir)" />
+		<MakeDir Directories="$(ArtifactsDir)" />
+	</Target>
+
+	<!-- UPDATE PROJECT ASSEMBLEY VERSION -->
+	<Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
+		<ItemGroup>
+			<VersionMajor Include="$(ProductVersion.Split('.')[0])" />
+			<VersionMinor Include="$(ProductVersion.Split('.')[1])" />
+		</ItemGroup>
+		<AssemblyInfo CodeLanguage="CS"
+			OutputFile="$(ProjectDir)\Merchello.Core\Properties\AssemblyInfo.cs"
+			AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+			AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Web\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Examine\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
+	</Target>
+
+	<!-- COMPILE -->
+	<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
+    <Message Text="Build config $(ProjectDir)" Importance="high" />
+		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
+    <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
+	</Target>
+
+
+	<!-- PREPARE FILES -->
+	<Target Name="PrepareFiles" DependsOnTargets="Compile">
+    <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
+    <ItemGroup>
+      
+      <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
+      <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
+      <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
+      <UaaSTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
+			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
+			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
+			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
+			<NuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
+		</ItemGroup>
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
+    <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
+    <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <!--Copy SourceFiles="@(UaaSTransformFiles)" DestinationFolder="$(BuildUmbDir)" /-->
+		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
+		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
+
+		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)\Core" />
+	</Target>
+
+	<!-- MANIFEST UMBRACO -->
+	<Target Name="ManifestUmbraco" DependsOnTargets="PrepareFiles">
+		<ItemGroup>
+			<ManifestFiles Include="$(BuildUmbDir)\**\*" Exclude="$(BuildUmbDir)\package.xml" />
+		</ItemGroup>
+		<ManifestUpdate
+			ManifestFile="$(BuildUmbDir)\package.xml"
+			WorkingDirectory="$(BuildUmbDir)"
+			MinimumRequiredUmbracoVersion="$(MinUmbracoVersion)"
+			PackageName="$(PackageName)"
+			PackageVersion="$(ProductVersion)"
+			AuthorName="$(AuthorName)"
+			AuthorUrl="$(AuthorUrl)"
+			Readme="$(Readme)"
+			PackageLicenseName="$(PackageLicenseName)"
+			PackageLicenseUrl="$(PackageLicenseUrl)"
+			PackageUrl="$(ProjectUrl)"
+			Files="@(ManifestFiles)" />
+	</Target>
+
+	<!-- MANIFEST FOR NUGET PACKAGE -->
+	<Target Name="ManifestNuGet" DependsOnTargets="PrepareFiles">
+    <Message Text="Packaging Merchello.Core.nupkg" />
+    <ItemGroup>
+			<ManifestFiles Include="$(BuildNuGetDir)\Core\**\*" Exclude="$(BuildNuGetDir)\Core\Merchello.Core.nuspec" />
+		</ItemGroup>
+		<MSBuild.NuGet.Tasks.ManifestUpdate
+			ManifestFile="$(BuildNuGetDir)\Core\Merchello.Core.nuspec"
+			WorkingDirectory="$(BuildNuGetDir)\Core"
+			Title="$(PackageName)"
+			Description="$(Readme)"
+			Summary="$(Readme)"
+			Version="$(ProductVersion)"
+			MinimumRequiredUmbracoVersion ="$(MinUmbracoVersion)"
+			Authors="$(AuthorName)"
+			Owners="$(Owners)"
+			Copyright="$(Copyright)"
+			LicenseUrl="$(PackageLicenseUrl)"
+			ProjectUrl="$(ProjectUrl)"
+			Id="$(PackageId)"
+			IconUrl="$(IconUrl)"
+			Language="$(Language)"
+			RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
+			Tags="$(Tags)"
+			Files="@(ManifestFiles)" />
+	</Target>
+
+  
+	<!-- PACKAGE -->
+	<Target Name="Package" DependsOnTargets="ManifestUmbraco; ManifestNuGet">
+		<ItemGroup>
+			<PackageFiles Include="$(BuildUmbDir)\**\*.*" />
+		</ItemGroup>
+
+		<Package ManifestFile="$(BuildUmbDir)\package.xml"
+			WorkingDirectory="$(BuildUmbDir)"
+			OutputDirectory="$(ArtifactsDir)"
+			Files="@(PackageFiles)" />
+
+    <MSBuild.NuGet.Tasks.Pack NuGetExePath="$(RootDir)\src\.nuget\NuGet.exe"
+			ManifestFile="$(BuildNuGetDir)\Core\Merchello.Core.nuspec"
+			BasePath="$(BuildNuGetDir)\Core"
+			Version="$(ProductVersion)"
+			OutputDirectory="$(ArtifactsDir)"
+			Symbols="true" />
+
+		<!--<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />-->
+
+	</Target>
+
+</Project>

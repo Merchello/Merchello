@@ -16,8 +16,10 @@
 		
 		<Message Text="Build number is $(AssemblyInformationVersion)" Importance="high" />
 
+    <!-- 
 		<RemoveDir Directories="$(BuildBinariesFolder);$(BuildPackageFolder);" />
-		
+		-->
+    
 	</Target>
 
 	<!-- MERCHELLO UMBRACO PACKAGE -->
@@ -39,8 +41,9 @@
 		</ItemGroup>
 
 				
-				<Message Text="$(BuildPackageFolder)package.xml" Importance="high" />
-		<ManifestUpdate ManifestFile="$(BuildPackageFolder)package.xml"
+	  <Message Text="$(BuildPackageFolder)package.xml" Importance="high" />
+		
+    <ManifestUpdate ManifestFile="$(BuildPackageFolder)package.xml"
 			WorkingDirectory="$(BuildPackageFolder2)"
 			MinimumRequiredUmbracoVersion="$(UmbracoVersion)"
 			PackageVersion="$(AssemblyInformationVersion)"
@@ -55,6 +58,7 @@
 			<BinFiles Include="$(BuildBinariesFolder)*.*" />
       <AppTrayIcon Include="$(RootDir)\src\Merchello.Web.UI\Umbraco\images\tray\*.*" />
       <AppPluginFiles Include="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
+      <ConfigTransformFiles Include="$(RootDir)\src\Merchello.Web.UI\*.xdt.config" />
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 
 		</ItemGroup>
@@ -63,6 +67,7 @@
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildPackageFolder)umbraco\images\tray" />
 
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildPackageFolder)App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(ConfigTransformFiles)" DestinationFolder="$(BuildPackageFolder)" />
     <Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildPackageFolder)" />
 		
 	</Target>
