@@ -146,7 +146,7 @@ namespace Merchello.Tests.IntegrationTests.Workflow
         /// <summary>
         /// Test verifies that a simple checkout scenario
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Complete_Simple_Checkout_Scenario()
         {
             // The basket is empty

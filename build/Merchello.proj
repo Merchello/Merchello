@@ -204,6 +204,7 @@
 			Files="@(ManifestFiles)" />
 	</Target>
 
+  
 	<!-- PACKAGE -->
 	<Target Name="Package" DependsOnTargets="ManifestUmbraco; ManifestNuGet">
 		<ItemGroup>

@@ -166,7 +166,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         /// <summary>
         /// Test to verify that product options & variants can be manipulated correctly 
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Create_A_Product_Then_Add_Options_And_Modify_Choices1()
         {
             //// Arrange
