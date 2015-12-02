@@ -49,7 +49,9 @@
         /// </returns>
         public IEnumerable<IProduct> GetAll()
         {
-            return new ProductService(DataServiceLogger).GetAll();
+            return MerchelloContext.HasCurrent
+                       ? new ProductService(DataServiceLogger).GetAll()
+                       : Enumerable.Empty<IProduct>();
             //.GetPage(1, 100).Items;
         }
 

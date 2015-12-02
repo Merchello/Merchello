@@ -135,6 +135,7 @@
             var schemaResult = databaseSchemaCreation.ValidateSchema();
             var dbVersion = schemaResult.DetermineInstalledVersion();
 
+
             if (dbVersion != MerchelloVersion.Current)
             {
                 try

@@ -90,7 +90,20 @@
 		</Otherwise>
 	</Choose>
 
-	<!-- TARGETS -->
+  <Choose>
+    <When Condition="$(Release) == 'false'">
+      <PropertyGroup>
+        <AssemblyVersion>$(APPVEYOR_BUILD_VERSION)</AssemblyVersion>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <AssemblyVersion>$(PACKAGE_VERISON)</AssemblyVersion>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- TARGETS -->
 	<Target Name="GetProductVersion">
 		<Error Condition="$(AbortBuild) == 'true'" Text="Aborting the build as the UMBRACO_PACKAGE_PRERELEASE_SUFFIX suffix is set 'rtm' but APPVEYOR_REPO_TAG is not 'true'" />
 		<GetProductVersion BuildVersion="$(APPVEYOR_BUILD_VERSION)" BuildSuffix="$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)" Release="$(Release)">
@@ -108,6 +121,22 @@
 		<MakeDir Directories="$(ArtifactsDir)" />
 	</Target>
 
+  <!-- GLOBALLY SET THE VERSION NUMBERS -->
+  <Target Name="SetVersionNumber" DependsOnTargets="UpdateAssemblyInfo">
+
+    <Message Text="Assembly version: $(AssemblyVersion)" />
+
+    <FileUpdate
+        Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
+        Regex="(\d+)\.(\d+)\.(\d+)(.(\d+))?"
+        ReplacementText="$(AssemblyVersion)"/>
+    
+    <FileUpdate Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
+      Regex="CurrentComment { get { return &quot;([a-zA-Z]+)?&quot;"
+      ReplacementText="CurrentComment { get { return &quot;$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)&quot;"/>
+
+  </Target>
+  
 	<!-- UPDATE PROJECT ASSEMBLEY VERSION -->
 	<Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
 		<ItemGroup>
@@ -129,7 +158,7 @@
 	</Target>
 
 	<!-- COMPILE -->
-	<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
+	<Target Name="Compile" DependsOnTargets="SetVersionNumber">
     <Message Text="Build config $(ProjectDir)" Importance="high" />
 		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
     <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->

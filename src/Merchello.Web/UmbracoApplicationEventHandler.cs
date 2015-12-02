@@ -15,6 +15,7 @@
 
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.Persistence.Migrations;
     using Merchello.Web.Routing;
 
     using Models.SaleHistory;
@@ -58,6 +59,10 @@
             base.ApplicationStarting(umbracoApplication, applicationContext);
 
             BootManagerBase.MerchelloStarted += BootManagerBaseOnMerchelloStarted;
+
+            // TODO RSS - Moved this here to get an install/UaaS deploy working.  Needs a more permanent solution.
+            Log.Info("Verifying Merchello Database is present.");
+            EnsureDatabase();
 
             // Initialize Merchello
             Log.Info("Attempting to initialize Merchello");
@@ -410,6 +415,21 @@
             var migrationManager = new WebMigrationManager();
             migrationManager.Upgraded += MigrationManagerOnUpgraded;
             migrationManager.EnsureMerchelloVersion();
+        }
+
+        private bool EnsureDatabase()
+        {
+  
+            if (MerchelloConfiguration.ConfigurationStatusVersion == new Version("0.0.0"))
+            {
+                var database = ApplicationContext.Current.DatabaseContext.Database;
+                var syntax = ApplicationContext.Current.DatabaseContext.SqlSyntax;
+
+                var databaseDeployHelper = new DatabaseDeployHelper(database, Logger.CreateWithDefaultLog4NetConfiguration(), syntax);
+                databaseDeployHelper.EnsureDatabase();
+                return true;
+            }
+            return true;
         }
 
         /// <summary>
