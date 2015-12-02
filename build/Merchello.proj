@@ -21,6 +21,7 @@
     <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
     <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
     <ProjectDir>$(RootDir)\src</ProjectDir>
+    <TestDir>$(RootDir)\test</TestDir>
     <MerchelloUIClientDir>$(ProjectDir)\Merchello.Web.UI.Client</MerchelloUIClientDir>
   </PropertyGroup>
 
@@ -36,8 +37,10 @@
   <!-- SHARED PROPERTIES -->
 	<PropertyGroup>
 		<PackageName>Merchello</PackageName>
+    <TestPackageName>Merchello Test Helpers</TestPackageName>
 		<MinUmbracoVersion>7.3.0</MinUmbracoVersion>
 		<Readme>Merchello - Open source eCommerce package for Umbraco</Readme>
+    <TestReadme>Merchello - Provides testing base classes for extending Merchello</TestReadme>
 		<AuthorName>Rusty Swayne and community contributors</AuthorName>
 		<AuthorUrl>https://github.com/rustyswayne/Merchello/graphs/contributors</AuthorUrl>
 		<PackageLicenseName>MIT license</PackageLicenseName>
@@ -48,6 +51,7 @@
 	<!-- NUGET ONLY PROPERTIES -->
 	<PropertyGroup>
 		<PackageId>Merchello.Core</PackageId>
+    <TestPackageId>Merchello.TestsBase</TestPackageId>
 		<Copyright>Copyright &#169; 2015 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
 		<Owners>Across the Pond, LLC</Owners>
 		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
@@ -138,13 +142,16 @@
     <ItemGroup>
       
       <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
+      <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
       <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
       <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
       <UaaSTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
 			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
+      <TestPdbFiles Include="@(PdbFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.pdb" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 			<NuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
+      <TestNuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.TestsBase.nuspec" />
 		</ItemGroup>
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
@@ -153,8 +160,10 @@
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
 		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
-
+    <Copy SourceFiles="@(TestBaseFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
+    <Copy SourceFiles="@(TestPdbFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
 		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)\Core" />
+  <Copy SourceFiles="@(TestNuSpecFile)" DestinationFolder="$(BuildNuGetDir)\TestBase" />
 	</Target>
 
 	<!-- MANIFEST UMBRACO -->
@@ -182,6 +191,7 @@
     <Message Text="Packaging Merchello.Core.nupkg" />
     <ItemGroup>
 			<ManifestFiles Include="$(BuildNuGetDir)\Core\**\*" Exclude="$(BuildNuGetDir)\Core\Merchello.Core.nuspec" />
+      <TestManifestFiles Include="$(BuildNuGetDir)\TestBase\**\*" Exclude="$(BuildNuGetDir)\TestBase\Merchello.TestsBase.nuspec" />
 		</ItemGroup>
 		<MSBuild.NuGet.Tasks.ManifestUpdate
 			ManifestFile="$(BuildNuGetDir)\Core\Merchello.Core.nuspec"
@@ -202,6 +212,26 @@
 			RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
 			Tags="$(Tags)"
 			Files="@(ManifestFiles)" />
+  
+  <MSBuild.NuGet.Tasks.ManifestUpdate
+			ManifestFile="$(BuildNuGetDir)\TestBase\Merchello.TestsBase.nuspec"
+			WorkingDirectory="$(BuildNuGetDir)\TestBase"
+			Title="$(TestPackageName)"
+			Description="$(TestReadme)"
+			Summary="$(TestReadme)"
+			Version="$(ProductVersion)"
+			MinimumRequiredUmbracoVersion ="$(MinUmbracoVersion)"
+			Authors="$(AuthorName)"
+			Owners="$(Owners)"
+			Copyright="$(Copyright)"
+			LicenseUrl="$(PackageLicenseUrl)"
+			ProjectUrl="$(ProjectUrl)"
+			Id="$(TestPackageId)"
+			IconUrl="$(IconUrl)"
+			Language="$(Language)"
+			RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
+			Tags="$(Tags) testing"
+			Files="@(TestManifestFiles)" />
 	</Target>
 
   
@@ -223,6 +253,13 @@
 			OutputDirectory="$(ArtifactsDir)"
 			Symbols="true" />
 
+    <MSBuild.NuGet.Tasks.Pack NuGetExePath="$(RootDir)\src\.nuget\NuGet.exe"
+			ManifestFile="$(BuildNuGetDir)\TestBase\Merchello.TestsBase.nuspec"
+			BasePath="$(BuildNuGetDir)\TestBase"
+			Version="$(ProductVersion)"
+			OutputDirectory="$(ArtifactsDir)"
+			Symbols="true" />
+    
 		<!--<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />-->
 
 	</Target>
