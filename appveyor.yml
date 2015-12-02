@@ -14,6 +14,7 @@ environment:
 cache:
 - C:\Ruby%ruby_version%\lib\ruby\gems -> appveyor.yml
 - C:\projects\merchello\src\Merchello.Web.UI.Client\node_modules -> appveyor.yml
+- C:\projects\merchello\src\packages -> appveyor.yml
 
 # enable service required for build/tests
 #services:
@@ -59,7 +60,7 @@ deploy:
       secure: 34B4mXhAYW6XOw8H9ZVh+KhbKKjXnb8QIp8bpoIKrkx5Uivcg0D4cRbu/pvdI65o
     artifact: /.*\.nupkg/
     on:
-      branch: appveyor
+      branch: merchello-dev
 
 # scripts to run after deployment
 after_deploy:
