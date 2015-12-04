@@ -15,6 +15,8 @@
 
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Web.Routing;
 
     using Models.SaleHistory;
@@ -23,6 +25,7 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
     using Umbraco.Web.Routing;
 
@@ -43,6 +46,24 @@
         /// The _merchello is started.
         /// </summary>
         private static bool merchelloIsStarted = false;
+
+        /// <summary>
+        /// The application initialized.
+        /// </summary>
+        /// <param name="umbracoApplication">
+        /// The <see cref="UmbracoApplicationBase"/>.
+        /// </param>
+        /// <param name="applicationContext">
+        /// The <see cref="ApplicationContext"/>.
+        /// </param>
+        protected override void ApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        {
+            base.ApplicationInitialized(umbracoApplication, applicationContext);
+
+            // TODO RSS - Moved this here to get an install/UaaS deploy working.  Needs a more permanent solution.
+            Log.Info("Verifying Merchello Database is present.");
+            EnsureDatabase();
+        }
 
         /// <summary>
         /// The Umbraco Application Starting event.
@@ -410,6 +431,22 @@
             var migrationManager = new WebMigrationManager();
             migrationManager.Upgraded += MigrationManagerOnUpgraded;
             migrationManager.EnsureMerchelloVersion();
+        }
+
+        private void EnsureDatabase()
+        {
+            var database = ApplicationContext.Current.DatabaseContext.Database;
+            var syntax = ApplicationContext.Current.DatabaseContext.SqlSyntax;
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            var databaseSchemaCreation = new DatabaseSchemaCreation(database, logger, new DatabaseSchemaHelper(database, logger, syntax), syntax);
+            var schemaResult = databaseSchemaCreation.ValidateSchema();
+            var databaseVersion = schemaResult.DetermineInstalledVersion();
+
+            if (databaseVersion == new Version("0.0.0"))
+            {
+                var databaseDeployHelper = new DatabaseDeployHelper(database, Logger.CreateWithDefaultLog4NetConfiguration(), syntax);
+                databaseDeployHelper.EnsureDatabase();
+            }
         }
 
         /// <summary>

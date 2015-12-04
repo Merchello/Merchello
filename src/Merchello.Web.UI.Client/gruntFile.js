@@ -27,6 +27,7 @@
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/App_Plugins/Merchello',
+        transformdir: 'build/transforms',
         bowerfiles: 'bower_components',
         vsdir: '../Merchello.Web.UI/App_Plugins/Merchello',
         appdir: '../Merchello.Web.UI',
@@ -81,7 +82,11 @@
             },
 
             config: {
-              files: [{ dest: '<%= distdir %>/config', src: '**/*.config', expand: true, cwd: 'src/config/'}]
+              files: [{ dest: '<%= distdir %>/config', src: 'merchello.config', expand: true, cwd: 'src/config/'}]
+            },
+
+            transforms: {
+                files: [{ dest: '<%= transformdir %>/', src: '**/*.config', expand: true, cwd: 'src/config/transforms/' }]
             },
 
             lang: {
@@ -119,7 +124,8 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' },
                     { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' },
-                    { dest: '<%= appdir %>', src: '**', expand: true, cwd: '<%= distdir %>/config/transforms'}
+                    { dest: '<%= appdir %>', src: '**', expand: true, cwd: '<%= transformdir %>' },
+                    { dest: '<%= appdir %>/Config', src: '**', expand: true, cwd: '<%= transformdir %>/umbconfig' }
                 ]
             }
         },

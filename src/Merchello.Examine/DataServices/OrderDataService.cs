@@ -47,7 +47,10 @@
         /// </returns>
         public IEnumerable<IOrder> GetAll()
         {
-            return new OrderService(DataServiceLogger).GetPage(1, 100).Items;
+            return MerchelloContext.HasCurrent
+                       ? new OrderService(DataServiceLogger).GetPage(1, 100).Items
+                       : Enumerable.Empty<IOrder>();
+
         }
 
         /// <summary>

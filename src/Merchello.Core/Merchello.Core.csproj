@@ -573,6 +573,7 @@
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
+    <Compile Include="Persistence\Migrations\DatabaseDeployHelper.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\IMerchelloMigration.cs" />
     <Compile Include="Persistence\Migrations\MerchelloDatabaseSchemaHelper.cs" />

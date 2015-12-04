@@ -76,7 +76,7 @@
 
             if (!this.ValidTables.Contains("merchProductCollection")
                 || !this.ValidTables.Contains("merchProduct2ProductCollection")
-                || !this.ValidTables.Contains("merchDetatchedContentType"))
+                || !this.ValidTables.Contains("merchDetachedContentType"))
             {
                 return new Version(1, 10, 0);
             }

@@ -28,7 +28,7 @@
     /// </summary>
     [Tree("merchello", "merchello", "Merchello")]
     [PluginController("Merchello")]
-    public class MerchelloTreeController : TreeController
+    public sealed class MerchelloTreeController : TreeController
     {
         /// <summary>
         /// The dialogs path.

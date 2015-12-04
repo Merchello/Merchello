@@ -19,6 +19,7 @@
     <BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
     <BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
     <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
+    <BuildTransformsDir>$(BuildDir)\_transforms</BuildTransformsDir>
     <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
     <ProjectDir>$(RootDir)\src</ProjectDir>
     <TestDir>$(RootDir)\test</TestDir>
@@ -63,6 +64,7 @@
 	<!-- APPVEYOR PROPERTIES -->
 	<PropertyGroup>
 		<FileVersion>$(APPVEYOR_BUILD_VERSION)</FileVersion>
+    <MerchelloVersion>$(APPVEYOR_BUILD_VERSION)</MerchelloVersion>
 	</PropertyGroup>
 	<Choose>
 		<When Condition="$(APPVEYOR_BUILD_NUMBER) != '' And $(APPVEYOR_REPO_TAG) != 'true' ">
@@ -89,8 +91,9 @@
 			</PropertyGroup>
 		</Otherwise>
 	</Choose>
+  
 
-	<!-- TARGETS -->
+  <!-- TARGETS -->
 	<Target Name="GetProductVersion">
 		<Error Condition="$(AbortBuild) == 'true'" Text="Aborting the build as the UMBRACO_PACKAGE_PRERELEASE_SUFFIX suffix is set 'rtm' but APPVEYOR_REPO_TAG is not 'true'" />
 		<GetProductVersion BuildVersion="$(APPVEYOR_BUILD_VERSION)" BuildSuffix="$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)" Release="$(Release)">
@@ -108,6 +111,25 @@
 		<MakeDir Directories="$(ArtifactsDir)" />
 	</Target>
 
+  <!-- GLOBALLY SET THE VERSION NUMBERS -->
+  <Target Name="SetVersionNumber" DependsOnTargets="UpdateAssemblyInfo">
+
+    <PropertyGroup>
+      <!-- Change BranchName value if BranchName equals 'master' -->
+      <MerchelloVersion Condition="$(Release) =='true'">$(ProductVersion)</MerchelloVersion>
+    </PropertyGroup>
+
+    <FileUpdate
+        Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
+        Regex="(\d+)\.(\d+)\.(\d+)(.(\d+))?"
+        ReplacementText="$(MerchelloVersion)"/>
+    
+    <FileUpdate Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
+      Regex="CurrentComment { get { return &quot;([a-zA-Z]+)?&quot;"
+      ReplacementText="CurrentComment { get { return &quot;$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)&quot;"/>
+
+  </Target>
+  
 	<!-- UPDATE PROJECT ASSEMBLEY VERSION -->
 	<Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
 		<ItemGroup>
@@ -129,7 +151,7 @@
 	</Target>
 
 	<!-- COMPILE -->
-	<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
+	<Target Name="Compile" DependsOnTargets="SetVersionNumber">
     <Message Text="Build config $(ProjectDir)" Importance="high" />
 		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
     <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
@@ -140,12 +162,12 @@
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
     <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
     <ItemGroup>
-      
       <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
       <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
       <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
-      <UaaSTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
+      <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
+      <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\Config\*.xdt.config" />
 			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
       <TestPdbFiles Include="@(PdbFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.pdb" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
@@ -156,7 +178,8 @@
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <!--Copy SourceFiles="@(UaaSTransformFiles)" DestinationFolder="$(BuildUmbDir)" /-->
+    <Copy SourceFiles="@(UaaSWebTransformFiles)" DestinationFiles="@(UaaSWebTransformFiles -> '$(BuildTransformsDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(UaaSConfigTransformFiles)" DestinationFiles="@(UaaSConfigTransformFiles -> '$(BuildTransformsDir)\Config\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
 		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
@@ -239,7 +262,11 @@
 	<Target Name="Package" DependsOnTargets="ManifestUmbraco; ManifestNuGet">
 		<ItemGroup>
 			<PackageFiles Include="$(BuildUmbDir)\**\*.*" />
+      <UaaSTransformFiles Include="$(BuildTransformsDir)\**\*.*" />
 		</ItemGroup>
+    <PropertyGroup>
+        <UaaSTransformZipFile>Merchello.UaaSTransforms.$(ProductVersion).zip</UaaSTransformZipFile>
+    </PropertyGroup>
 
 		<Package ManifestFile="$(BuildUmbDir)\package.xml"
 			WorkingDirectory="$(BuildUmbDir)"
@@ -259,8 +286,15 @@
 			Version="$(ProductVersion)"
 			OutputDirectory="$(ArtifactsDir)"
 			Symbols="true" />
+
+    <Message Text="Starting to zip to $(UaaSTransformZipFile)" Importance="high" />
+
+    <Zip Files="@(UaaSTransformFiles)"
+      WorkingDirectory="$(BuildTransformsDir)"
+      ZipFileName="$(ArtifactsDir)\$(UaaSTransformZipFile)" 
+      ZipLevel="9" />
     
-		<!--<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />-->
+		<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
 
 	</Target>
 
