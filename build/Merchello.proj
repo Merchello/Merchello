@@ -289,8 +289,6 @@
 
     <Message Text="Starting to zip to $(UaaSTransformZipFile)" Importance="high" />
 
-    <!--<Exec WorkingDirectory="$(ArtifactsDir)" Command="tools\7zip\7za.exe a -r %22$(UaaSTransformZipFile)%22 %22$(BuildTransformsDir)%22" />-->
-
     <Zip Files="@(UaaSTransformFiles)"
       WorkingDirectory="$(BuildTransformsDir)"
       ZipFileName="$(ArtifactsDir)\$(UaaSTransformZipFile)" 
