@@ -19,6 +19,7 @@
     <BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
     <BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
     <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
+    <BuildTransformsDir>$(BuildDir)\_transforms</BuildTransformsDir>
     <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
     <ProjectDir>$(RootDir)\src</ProjectDir>
     <TestDir>$(RootDir)\test</TestDir>
@@ -165,7 +166,8 @@
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
       <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
       <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
-      <UaaSTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
+      <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
+      <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\Config\*.xdt.config" />
 			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
       <TestPdbFiles Include="@(PdbFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.pdb" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
@@ -176,7 +178,8 @@
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <!--Copy SourceFiles="@(UaaSTransformFiles)" DestinationFolder="$(BuildUmbDir)" /-->
+    <Copy SourceFiles="@(UaaSWebTransformFiles)" DestinationFiles="@(UaaSWebTransformFiles -> '$(BuildTransformsDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(UaaSConfigTransformFiles)" DestinationFiles="@(UaaSConfigTransformFiles -> '$(BuildTransformsDir)\Config\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
 		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
 		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
@@ -259,7 +262,11 @@
 	<Target Name="Package" DependsOnTargets="ManifestUmbraco; ManifestNuGet">
 		<ItemGroup>
 			<PackageFiles Include="$(BuildUmbDir)\**\*.*" />
+      <UaaSTransformFiles Include="$(BuildTransformsDir)\**\*.*" />
 		</ItemGroup>
+    <PropertyGroup>
+        <UaaSTransformZipFile>Merchello.UaaSTransforms.$(ProductVersion).zip</UaaSTransformZipFile>
+    </PropertyGroup>
 
 		<Package ManifestFile="$(BuildUmbDir)\package.xml"
 			WorkingDirectory="$(BuildUmbDir)"
@@ -279,8 +286,17 @@
 			Version="$(ProductVersion)"
 			OutputDirectory="$(ArtifactsDir)"
 			Symbols="true" />
+
+    <Message Text="Starting to zip to $(UaaSTransformZipFile)" Importance="high" />
+
+    <!--<Exec WorkingDirectory="$(ArtifactsDir)" Command="tools\7zip\7za.exe a -r %22$(UaaSTransformZipFile)%22 %22$(BuildTransformsDir)%22" />-->
+
+    <Zip Files="@(UaaSTransformFiles)"
+      WorkingDirectory="$(BuildTransformsDir)"
+      ZipFileName="$(ArtifactsDir)\$(UaaSTransformZipFile)" 
+      ZipLevel="9" />
     
-		<!--<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />-->
+		<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
 
 	</Target>
 
