@@ -1,5 +1,5 @@
 # version format
-version: 1.13.1.{build}
+version: 1.13.2.{build}
 
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
@@ -49,7 +49,7 @@ artifacts:
   - path: artifacts\*.zip
 
 deploy:
-     # MyGet Deployment for builds & releases
+  # MyGet Deployment for builds & releases
   - provider: NuGet
     server: https://www.myget.org/F/merchello/api/v2/
     symbol_server: https://www.myget.org/F/merchello/api/v2/package
@@ -58,6 +58,27 @@ deploy:
     artifact: /.*\.nupkg/
     on:
       branch: merchello-dev
+
+  # GitHub Deployment for releases
+  - provider: GitHub
+    auth_token:
+      secure: X9DSeYEmUc7IQBYgj1SuiDhpb/FpPBWrE2LeRBA6mayUstv4bRcpNucipYcqsQcI
+    artifact: /.*\.zip/            # upload all Zip packages to release assets
+    draft: false
+    prerelease: false
+    on:
+      branch: master
+      appveyor_repo_tag: true        # deploy on tag push only
+
+  # NuGet Deployment for releases
+  - provider: NuGet
+    server: 
+    api_key:
+      secure: hbZFYwZU83KRyLOFBL2FDoc0BI6A6Z1dOZCXMqeOVZTA6UHD0+hGxX3e0lWMs4Up
+    artifact: /.*\.nupkg/
+    on:
+      branch: master
+      appveyor_repo_tag: true
 
 # scripts to run after deployment
 after_deploy:
