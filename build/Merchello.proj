@@ -63,6 +63,7 @@
 	<!-- APPVEYOR PROPERTIES -->
 	<PropertyGroup>
 		<FileVersion>$(APPVEYOR_BUILD_VERSION)</FileVersion>
+    <MerchelloVersion>$(APPVEYOR_BUILD_VERSION)</MerchelloVersion>
 	</PropertyGroup>
 	<Choose>
 		<When Condition="$(APPVEYOR_BUILD_NUMBER) != '' And $(APPVEYOR_REPO_TAG) != 'true' ">
@@ -89,19 +90,7 @@
 			</PropertyGroup>
 		</Otherwise>
 	</Choose>
-
-  <Choose>
-    <When Condition="$(Release) == 'false'">
-      <PropertyGroup>
-        <AssemblyVersion>$(APPVEYOR_BUILD_VERSION)</AssemblyVersion>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <AssemblyVersion>$(PACKAGE_VERISON)</AssemblyVersion>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
+  
 
   <!-- TARGETS -->
 	<Target Name="GetProductVersion">
@@ -124,12 +113,15 @@
   <!-- GLOBALLY SET THE VERSION NUMBERS -->
   <Target Name="SetVersionNumber" DependsOnTargets="UpdateAssemblyInfo">
 
-    <Message Text="Assembly version: $(AssemblyVersion)" />
+    <PropertyGroup>
+      <!-- Change BranchName value if BranchName equals 'master' -->
+      <MerchelloVersion Condition="$(Release) =='true'">$(ProductVersion)</MerchelloVersion>
+    </PropertyGroup>
 
     <FileUpdate
         Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
         Regex="(\d+)\.(\d+)\.(\d+)(.(\d+))?"
-        ReplacementText="$(AssemblyVersion)"/>
+        ReplacementText="$(MerchelloVersion)"/>
     
     <FileUpdate Files="..\src\Merchello.Core\Configuration\MerchelloVersion.cs"
       Regex="CurrentComment { get { return &quot;([a-zA-Z]+)?&quot;"
@@ -169,7 +161,6 @@
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
     <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
     <ItemGroup>
-      
       <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
       <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
