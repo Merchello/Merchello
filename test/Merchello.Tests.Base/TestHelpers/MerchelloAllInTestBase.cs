@@ -44,7 +44,7 @@ namespace Merchello.Tests.Base.TestHelpers
 
 
             // Merchello CoreBootStrap
-            var bootManager = new WebBootManager(DbPreTestDataWorker.TestLogger);
+            var bootManager = new WebBootManager(DbPreTestDataWorker.TestLogger, DbPreTestDataWorker.SqlSyntaxProvider);
             bootManager.Initialize();    
             
 

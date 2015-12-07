@@ -48,7 +48,7 @@
         public IEnumerable<IInvoice> GetAll()
         {
             return MerchelloContext.HasCurrent
-                       ? new InvoiceService(DataServiceLogger).GetPage(1, 100).Items
+                       ? MerchelloContext.Current.Services.InvoiceService.GetPage(1, 100).Items
                        : Enumerable.Empty<IInvoice>();
         }
 

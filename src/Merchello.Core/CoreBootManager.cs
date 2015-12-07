@@ -22,6 +22,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -36,14 +37,19 @@
         #region Fields
 
         /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// The _sql syntax provider.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
+
+        /// <summary>
         /// The timer.
         /// </summary>
         private DisposableTimer _timer;
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        private ILogger _logger;
 
         /// <summary>
         /// The is complete.
@@ -69,10 +75,16 @@
         /// <param name="logger">
         /// The logger.
         /// </param>
-        internal CoreBootManager(ILogger logger)
+        /// <param name="sqlSyntaxProvider">
+        /// The <see cref="ISqlSyntaxProvider"/>.
+        /// </param>
+        internal CoreBootManager(ILogger logger, ISqlSyntaxProvider sqlSyntaxProvider)
         {
             Mandate.ParameterNotNull(logger, "Logger");
+            Mandate.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
+
             _logger = logger;
+            _sqlSyntaxProvider = sqlSyntaxProvider;
         }
 
         /// <summary>
@@ -116,7 +128,7 @@
 
             _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(_logger, connString, providerName);
 
-            var serviceContext = new ServiceContext(new RepositoryFactory(), _unitOfWorkProvider, _logger, new TransientMessageFactory());
+            var serviceContext = new ServiceContext(new RepositoryFactory(_logger, _sqlSyntaxProvider), _unitOfWorkProvider, _logger, new TransientMessageFactory());
 
 
             var cache = ApplicationContext.Current == null

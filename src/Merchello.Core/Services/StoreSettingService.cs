@@ -19,6 +19,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the Store Settings Service
@@ -57,6 +58,20 @@
         /// </param>
         public StoreSettingService(ILogger logger)
             : this(new RepositoryFactory(), logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public StoreSettingService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
         {
         }
 

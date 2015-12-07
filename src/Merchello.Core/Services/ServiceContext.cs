@@ -9,6 +9,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
@@ -166,6 +167,8 @@
         /// </summary>
         private Lazy<IWarehouseCatalogService> _warehouseCatalogService;
 
+        private readonly RepositoryFactory _repositoryFactory;
+
         #endregion
 
         /// <summary>
@@ -194,6 +197,7 @@
             Mandate.ParameterNotNull(logger, "logger");
             Mandate.ParameterNotNull(eventMessagesFactory, "eventMessagesFactory");
 
+            _repositoryFactory = repositoryFactory;
             DatabaseUnitOfWorkProvider = dbUnitOfWorkProvider;
             BuildServiceContext(dbUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory);
         }
@@ -445,6 +449,17 @@
         internal IWarehouseCatalogService WarehouseCatalogService
         {
             get { return _warehouseCatalogService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ISqlSyntaxProvider"/>.
+        /// </summary>
+        internal ISqlSyntaxProvider SqlSyntax
+        {
+            get
+            {
+                return _repositoryFactory.SqlSyntax;
+            }
         }
 
         #endregion

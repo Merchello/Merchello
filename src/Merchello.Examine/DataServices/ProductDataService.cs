@@ -50,7 +50,7 @@
         public IEnumerable<IProduct> GetAll()
         {
             return MerchelloContext.HasCurrent
-                       ? new ProductService(DataServiceLogger).GetAll()
+                       ? MerchelloContext.Current.Services.ProductService.GetAll()
                        : Enumerable.Empty<IProduct>();
             //.GetPage(1, 100).Items;
         }
