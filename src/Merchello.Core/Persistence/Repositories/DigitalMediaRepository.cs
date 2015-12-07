@@ -13,8 +13,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The digital media repository.
@@ -30,8 +32,8 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public DigitalMediaRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        public DigitalMediaRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
         }
 
@@ -124,7 +126,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<DigitalMediaDto>();
+               .From<DigitalMediaDto>(SqlSyntax);
 
             return sql;
         }

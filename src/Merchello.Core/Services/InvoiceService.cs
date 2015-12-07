@@ -18,6 +18,7 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the InvoiceService
@@ -70,8 +71,14 @@
         /// The logger.
         /// </param>
         public InvoiceService(ILogger logger)
-            : this(new Persistence.RepositoryFactory(), logger, new AppliedPaymentService(logger), new OrderService(logger), new StoreSettingService(logger))
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {
+        }
+
+        internal InvoiceService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new Persistence.RepositoryFactory(logger, sqlSyntax), logger, new AppliedPaymentService(logger, sqlSyntax), new OrderService(logger, sqlSyntax), new StoreSettingService(logger, sqlSyntax))
+        {
+            
         }
 
         /// <summary>

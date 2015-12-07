@@ -17,8 +17,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents an offer settings repository.
@@ -34,8 +36,14 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public OfferSettingsRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public OfferSettingsRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
         }
 
@@ -191,7 +199,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<OfferSettingsDto>();
+                .From<OfferSettingsDto>(SqlSyntax);
 
             return sql;
         }
@@ -260,22 +268,6 @@
         }
 
         /// <summary>
-        /// The ensure components have the offer settings key set.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        private void EnsureComponentsOfferSettingsKeys(IOfferSettings entity)
-        {
-            var configurations = entity.ComponentDefinitions.Select(x => x.AsOfferComponentConfiguration()).ToArray();
-            foreach (var config in configurations.ToArray())
-            {
-                // TODO fix this hack 
-                config.OfferSettingsKey = entity.Key;
-            }
-        }
-
-        /// <summary>
         /// Builds an offer search query.
         /// </summary>
         /// <param name="searchTerm">
@@ -290,7 +282,7 @@
             var terms = searchTerm.Split(' ').Select(x => x.Trim()).ToArray();
 
             var sql = new Sql();
-            sql.Select("*").From<OfferSettingsDto>();
+            sql.Select("*").From<OfferSettingsDto>(SqlSyntax);
             if (terms.Any())
             {
                 sql.Where("name LIKE @term OR offerCode LIKE @offerCode", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), offerCode = string.Format("%{0}%", string.Join("% ", terms)).Trim() });

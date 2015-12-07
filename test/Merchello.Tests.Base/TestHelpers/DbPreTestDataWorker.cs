@@ -49,7 +49,7 @@ namespace Merchello.Tests.Base.TestHelpers
 
             Database = uowProvider.GetUnitOfWork().Database;
             TestLogger = Logger.CreateWithDefaultLog4NetConfiguration();
-            _serviceContext = new ServiceContext(new RepositoryFactory(), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
+            _serviceContext = new ServiceContext(new RepositoryFactory(TestLogger, SqlSyntaxProvider), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
 
             WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
             {
@@ -63,9 +63,7 @@ namespace Merchello.Tests.Base.TestHelpers
 
         public DbPreTestDataWorker(ServiceContext serviceContext)
         {
-            var syntax = (DbSyntax)Enum.Parse(typeof (DbSyntax), ConfigurationManager.AppSettings["syntax"]);
-            // sets up the Umbraco SqlSyntaxProvider Singleton
-            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
+            this.SqlSyntaxProvider = serviceContext.SqlSyntax;
 
             var uowProvider = new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object);
 

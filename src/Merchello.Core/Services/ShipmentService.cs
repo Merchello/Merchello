@@ -18,6 +18,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the ShipmentService
@@ -52,7 +53,21 @@
         /// The logger.
         /// </param>
         public ShipmentService(ILogger logger)
-            : this(new RepositoryFactory(), logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipmentService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The sql syntax.
+        /// </param>
+        public ShipmentService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
         {
         }
 

@@ -2,7 +2,6 @@
 using System.Linq;
 using Merchello.Core;
 using Merchello.Core.Models;
-using Merchello.Core.Persistence;
 using Merchello.Core.Services;
 using Merchello.Tests.Base.DataMakers;
 using Merchello.Tests.Base.Respositories;
@@ -13,9 +12,16 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Merchello.Core.Cache;
+    using Merchello.Core.Persistence.UnitOfWork;
+
     using Moq;
 
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     [TestFixture]
     [Category("Services")]
@@ -29,8 +35,25 @@ namespace Merchello.Tests.UnitTests.Services
         public override void FixtureSetup()
         {
             base.FixtureSetup();
+            //IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger
 
-            _itemCacheService = new ItemCacheService(new MockUnitOfWorkProvider(), new RepositoryFactory(), new Mock<ILogger>().Object);
+            var repositoryFactory = new Mock<RepositoryFactory>(
+                false,
+                new NullCacheProvider(),
+                new NullCacheProvider(),
+                Logger.CreateWithDefaultLog4NetConfiguration(),
+                SqlSyntaxProvider);
+
+            //bool disableAllCache,
+            //IRuntimeCacheProvider nullCacheProvider,
+            //IRuntimeCacheProvider runtimeCacheProvider,
+            //ILogger logger,
+            //ISqlSyntaxProvider sqlSyntaxProvider
+
+            var uow = new MockUnitOfWorkProvider();
+
+
+            _itemCacheService = new ItemCacheService(uow, repositoryFactory.Object, new Mock<ILogger>().Object);
             Before = null;
             After = null;
 

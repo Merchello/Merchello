@@ -13,8 +13,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The customer repository.
@@ -38,8 +40,14 @@
         /// <param name="customerAddressRepository">
         /// The customer Address Repository.
         /// </param>
-        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICustomerAddressRepository customerAddressRepository) 
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICustomerAddressRepository customerAddressRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
 
@@ -459,9 +467,9 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<CustomerDto>()
-                .InnerJoin<CustomerIndexDto>()
-                .On<CustomerDto, CustomerIndexDto>(left => left.Key, right => right.CustomerKey);
+                .From<CustomerDto>(SqlSyntax)
+                .InnerJoin<CustomerIndexDto>(SqlSyntax)
+                .On<CustomerDto, CustomerIndexDto>(SqlSyntax, left => left.Key, right => right.CustomerKey);
 
             return sql;
         }
@@ -598,7 +606,7 @@
             var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
 
             var sql = new Sql();
-            sql.Select("*").From<CustomerDto>();
+            sql.Select("*").From<CustomerDto>(SqlSyntax);
 
             if (terms.Any())
             {

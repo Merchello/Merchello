@@ -9,7 +9,10 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Moq;
+
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     [TestFixture]
     public class SettingsServiceTests
@@ -20,7 +23,8 @@ namespace Merchello.Tests.UnitTests.Services
         public void Init()
         {
             var logger = Logger.CreateWithDefaultLog4NetConfiguration();
-            _storeSettingService = new StoreSettingService(logger);
+            var syntax = new Mock<ISqlSyntaxProvider>().Object;
+            _storeSettingService = new StoreSettingService(logger, syntax);
         }
 
         [Test]

@@ -10,6 +10,7 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     using CoreBootManager = Merchello.Core.CoreBootManager;
     using IBootManager = Merchello.Core.IBootManager;
@@ -29,7 +30,7 @@
         /// A boot strap class for the Merchello plugin which initializes all objects including the Web portion of the plugin
         /// </summary>
         public WebBootManager()
-            : base(LoggerResolver.Current.Logger)
+            : base(LoggerResolver.Current.Logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {
         }
 
@@ -40,11 +41,14 @@
         /// <param name="logger">
         /// The logger.
         /// </param>
+        /// <param name="sqlSyntax">
+        /// The <see cref="ISqlSyntaxProvider"/>
+        /// </param>
         /// <param name="isForTesting">
         /// The is For Testing.
         /// </param>
-        internal WebBootManager(ILogger logger, bool isForTesting = false)
-            : base(logger)
+        internal WebBootManager(ILogger logger, ISqlSyntaxProvider sqlSyntax, bool isForTesting = false)
+            : base(logger, sqlSyntax)
         {
             _isForTesting = isForTesting;
         }

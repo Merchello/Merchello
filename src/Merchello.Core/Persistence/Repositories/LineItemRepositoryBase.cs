@@ -3,9 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Models;
-    using UnitOfWork;
+
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
+    using UnitOfWork;
 
     /// <summary>
     /// A line item repository base class
@@ -13,8 +18,23 @@
     /// <typeparam name="T">The type T of the <see cref="ILineItem"/></typeparam>
     internal abstract class LineItemRepositoryBase<T> : MerchelloPetaPocoRepositoryBase<T>, ILineItemRepositoryBase<T> where T : class, ILineItem
     {
-        protected LineItemRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LineItemRepositoryBase{T}"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        protected LineItemRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {            
         }
 
@@ -32,7 +52,7 @@
         }
 
         /// <summary>
-        /// Saves a collection of <see cref="ILineItem"/> asscoiated with a container
+        /// Saves a collection of <see cref="ILineItem"/> associated with a container
         /// </summary>
         /// <param name="items">The collection of <see cref="ILineItem"/></param>
         /// <param name="containerKey">The "Container" or parent collection key</param>

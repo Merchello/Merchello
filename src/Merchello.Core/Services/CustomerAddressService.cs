@@ -15,6 +15,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The customer address service.
@@ -43,8 +44,22 @@
         /// The logger.
         /// </param>
         public CustomerAddressService(ILogger logger)
-            : this(new RepositoryFactory(), logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddressService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public CustomerAddressService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
+        {
         }
 
         /// <summary>
