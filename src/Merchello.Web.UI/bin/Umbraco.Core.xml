@@ -1473,7 +1473,7 @@
         </member>
         <member name="F:Umbraco.Core.Constants.Applications.Forms">
             <summary>
-            Application alias for the users section.
+            Application alias for the forms section.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Constants.Trees">
@@ -1978,12 +1978,12 @@
         </member>
         <member name="F:Umbraco.Core.Constants.PropertyEditors.TextboxMultiple">
             <summary>
-            Guid for the Textbox multiple datatype.
+            Guid for the Textarea datatype.
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.PropertyEditors.TextboxMultipleAlias">
             <summary>
-            Alias for the Textbox multiple datatype.
+            Alias for the Textarea datatype.
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.PropertyEditors.TinyMCEv3">
@@ -5361,6 +5361,18 @@
         <member name="T:Umbraco.Core.Persistence.Factories.TaskFactory">
             <summary>
             Creates the model mappings for Tasks
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Mappers.TaskTypeMapper">
+            <summary>
+            Represents a <see cref="T:Umbraco.Core.Models.TaskType"/> to DTO mapper used to translate the properties of the public api 
+            implementation to that of the database's DTO as sql: [tableName].[columnName].
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenThreeTwo.EnsureMigrationsTableIdentityIsCorrect">
+            <summary>
+            This reinserts all migrations in the migrations table to account for initial rows inserted
+            on creation without identity enabled.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
@@ -19283,23 +19295,11 @@
             Returns the current back office identity if an admin is authenticated otherwise null
             </returns>
         </member>
-        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLogout(System.Web.HttpContextBase)">
-            <summary>
-            This clears the forms authentication cookie
-            </summary>
-        </member>
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLogoutWebApi(System.Net.Http.HttpResponseMessage)">
             <summary>
             This clears the forms authentication cookie for webapi since cookies are handled differently
             </summary>
             <param name="response"></param>
-        </member>
-        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLoginWebApi(System.Net.Http.HttpResponseMessage,Umbraco.Core.Models.Membership.IUser)">
-            <summary>
-            This adds the forms authentication cookie for webapi since cookies are handled differently
-            </summary>
-            <param name="response"></param>
-            <param name="user"></param>
         </member>
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.UmbracoLogout(System.Web.HttpContext)">
             <summary>
@@ -19309,7 +19309,14 @@
         </member>
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.RenewUmbracoAuthTicket(System.Web.HttpContextBase)">
             <summary>
-            Renews the Umbraco authentication ticket
+            This will force ticket renewal in the OWIN pipeline
+            </summary>
+            <param name="http"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Security.AuthenticationExtensions.RenewUmbracoAuthTicket(System.Web.HttpContext)">
+            <summary>
+            This will force ticket renewal in the OWIN pipeline
             </summary>
             <param name="http"></param>
             <returns></returns>
@@ -19349,7 +19356,6 @@
             <param name="http"></param>
             <param name="cookieName"></param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Umbraco.Core.Security.AuthenticationExtensions.RenewAuthTicket(System.Web.HttpContextBase,System.String,System.String,System.Int32)" -->
         <member name="M:Umbraco.Core.Security.AuthenticationExtensions.CreateAuthTicketAndCookie(System.Web.HttpContextBase,System.String,System.String,System.Int32,System.Int32,System.String,System.String)">
             <summary>
             Creates a custom FormsAuthentication ticket with the data specified
