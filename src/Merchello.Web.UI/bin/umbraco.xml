@@ -287,6 +287,36 @@
             <para>The alias is case-insensitive.</para>
             </remarks>
         </member>
+        <member name="T:Umbraco.Web.Mvc.IRenderController">
+            <summary>
+            A marker interface to designate that a controller will be used for Umbraco front-end requests and/or route hijacking
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Mvc.RenderIndexActionSelectorAttribute">
+            <summary>
+            A custom ActionMethodSelector which will ensure that the RenderMvcController.Index(RenderModel model) action will be executed
+            if the 
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.RenderIndexActionSelectorAttribute.IsValidForRequest(System.Web.Mvc.ControllerContext,System.Reflection.MethodInfo)">
+            <summary>
+            Determines whether the action method selection is valid for the specified controller context.
+            </summary>
+            <returns>
+            true if the action method selection is valid for the specified controller context; otherwise, false.
+            </returns>
+            <param name="controllerContext">The controller context.</param><param name="methodInfo">Information about the action method.</param>
+        </member>
+        <member name="T:Umbraco.Web.Mvc.ValidateMvcAngularAntiForgeryTokenAttribute">
+            <summary>
+            A filter to check for the csrf token based on Angular's standard approach
+            </summary>
+            <remarks>
+            Code derived from http://ericpanorel.net/2013/07/28/spa-authentication-and-csrf-mvc4-antiforgery-implementation/
+            
+            If the authentication type is cookie based, then this filter will execute, otherwise it will be disabled
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.RequestLifespanMessagesFactory">
             <summary>
             Stores the instance of EventMessages in the current request so all events will share the same instance
@@ -389,6 +419,35 @@
             A callback executed during account auto-linking and before the user is persisted
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "T:Umbraco.Web.Security.Identity.FixWindowsAuthMiddlware" -->
+        <member name="T:Umbraco.Web.Security.Identity.ForceRenewalCookieAuthenticationHandler">
+            <summary>
+            If a flag is set on the context to force renew the ticket, this will do it
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ForceRenewalCookieAuthenticationHandler.AuthenticateCoreAsync">
+            <summary>
+            This handler doesn't actually do any auth so we return null;
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ForceRenewalCookieAuthenticationHandler.GetTicket">
+            <summary>
+            Gets the ticket from the request
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.ForceRenewalCookieAuthenticationHandler.ApplyResponseGrantAsync">
+            <summary>
+            This will check if the token exists in the request to force renewal
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Security.Identity.ForceRenewalCookieAuthenticationMiddleware">
+            <summary>
+            This middleware is used simply to force renew the auth ticket if a flag to do so is found in the request
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Security.Identity.GetUserSecondsMiddleWare">
             <summary>
             Custom middleware to return the remaining seconds the user has before they are logged out
@@ -414,6 +473,29 @@
             <summary>
             Used to display a custom view in the back office if developers choose to implement their own custom 2 factor authentication
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.OwinExtensions.TryGetHttpContext(Microsoft.Owin.IOwinContext)">
+            <summary>
+            Nasty little hack to get httpcontextbase from an owin context
+            </summary>
+            <param name="owinContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.WebAuthExtensions.SetPrincipalForRequest(System.Net.Http.HttpRequestMessage,Umbraco.Core.Models.Membership.IUser)">
+            <summary>
+            This will set a an authenticated IPrincipal to the current request given the IUser object
+            </summary>
+            <param name="request"></param>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.WebAuthExtensions.SetPrincipalForRequest(System.Web.HttpContextBase,Umbraco.Core.Security.UserData)">
+            <summary>
+            This will set a an authenticated IPrincipal to the current request given the IUser object
+            </summary>
+            <param name="httpContext"></param>
+            <param name="userData"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.UmbracoDefaultOwinStartup">
             <summary>
@@ -2800,6 +2882,15 @@
             </remarks>
         </member>
         <!-- Badly formed XML comment ignored for member "M:Umbraco.Web.Editors.MacroController.GetMacroResultAsHtmlForEditor(System.String,System.Int32,System.Collections.Generic.IDictionary{System.String,System.Object})" -->
+        <member name="M:Umbraco.Web.Editors.MacroController.GetMacroResultAsHtmlForEditor(Umbraco.Web.Editors.MacroController.MacroParameterModel)">
+            <summary>
+            Gets a rendered macro as html for rendering in the rich text editor.
+            Using HTTP POST instead of GET allows for more parameters to be passed as it's not dependant on URL-length limitations like GET.
+            The method using GET is kept to maintain backwards compatibility
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.Editors.MemberTypeController">
             <summary>
             An API controller used for dealing with content types
@@ -4486,6 +4577,22 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Security.Identity.BackOfficeCookieManager.ShouldAuthenticateRequest(Microsoft.Owin.IOwinContext,System.Uri,System.Boolean)">
+            <summary>
+            Determines if we should authenticate the request
+            </summary>
+            <param name="ctx"></param>
+            <param name="originalRequestUrl"></param>
+            <param name="checkForceAuthTokens"></param>
+            <returns></returns>
+            <remarks>
+            We auth the request when:
+            * it is a back office request
+            * it is an installer request
+            * it is a /base request
+            * it is a preview request
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.Security.Identity.FormsAuthenticationSecureDataFormat">
             <summary>
             Custom secure format that uses the old FormsAuthentication format
@@ -4496,13 +4603,6 @@
             Unprotects the cookie
             </summary>
             <param name="protectedText"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.Security.Identity.OwinExtensions.HttpContextFromOwinContext(Microsoft.Owin.IOwinContext)">
-            <summary>
-            Nasty little hack to get httpcontextbase from an owin context
-            </summary>
-            <param name="owinContext"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Security.Identity.UmbracoBackOfficeCookieAuthOptions">
@@ -6991,16 +7091,6 @@
             A filter to set the csrf cookie token based on angular conventions
             </summary>
         </member>
-        <member name="T:Umbraco.Web.WebApi.Filters.UmbracoBackOfficeLogoutAttribute">
-            <summary>
-            A filter that is used to remove the authorization cookie for the current user when the request is successful
-            </summary>
-            <remarks>
-            This is used so that we can log a user OUT in conjunction with using other filters that modify the cookies collection.
-            SD: I beleive this is a bug with web api since if you modify the cookies collection on the HttpContext.Current and then 
-            use a filter to write the cookie headers, the filter seems to have no affect at all.
-            </remarks>
-        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.UmbracoTreeAuthorizeAttribute">
             <summary>
             Ensures that the current user has access to the application for which the specified tree(s) belongs
@@ -7520,6 +7610,13 @@
             <param name="cookieName"></param>
         </member>
         <member name="M:Umbraco.Web.HttpCookieExtensions.HasPreviewCookie(System.Web.HttpRequestBase)">
+            <summary>
+            Does a preview cookie exist ?
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HttpCookieExtensions.HasPreviewCookie(Microsoft.Owin.IOwinRequest)">
             <summary>
             Does a preview cookie exist ?
             </summary>
@@ -10048,13 +10145,6 @@
             </summary>
             <param name="userId">The user Id</param>
             <returns>returns the number of seconds until their session times out</returns>
-        </member>
-        <member name="M:Umbraco.Web.Security.WebSecurity.PerformLogin(Umbraco.Core.Models.Membership.IUser)">
-            <summary>
-            Logs the user in
-            </summary>
-            <param name="user"></param>
-            <returns>returns the Forms Auth ticket created which is used to log them in</returns>
         </member>
         <member name="M:Umbraco.Web.Security.WebSecurity.ClearCurrentLogin">
             <summary>
@@ -18394,7 +18484,7 @@
         </member>
         <member name="T:Umbraco.Web.Mvc.RenderMvcController">
             <summary>
-            A controller to render front-end requests
+            The default controller to render front-end requests
             </summary>
         </member>
         <member name="M:Umbraco.Web.Mvc.RenderMvcController.EnsurePhsyicalViewExists(System.String)">
@@ -29553,21 +29643,6 @@
             files/folders exist there and we cannot set the RouteCollection.RouteExistingFiles = true since that will muck a lot of other things up.
             So we handle it here and explicitly execute the MVC controller.
             
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Web.UmbracoModule.ShouldAuthenticateRequest(System.Web.HttpRequestBase,System.Uri)">
-            <summary>
-            Determines if we should authenticate the request
-            </summary>
-            <param name="request"></param>
-            <param name="originalRequestUrl"></param>
-            <returns></returns>
-            <remarks>
-            We auth the request when:
-            * it is a back office request
-            * it is an installer request
-            * it is a /base request
-            * it is a preview request
             </remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoModule.EnsureUmbracoRoutablePage(Umbraco.Web.UmbracoContext,System.Web.HttpContextBase)">
