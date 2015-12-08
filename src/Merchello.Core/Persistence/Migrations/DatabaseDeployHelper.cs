@@ -33,7 +33,9 @@
             _sqlSyntaxProvider = syntaxProvider;
         }
 
-
+        /// <summary>
+        /// Ensures the Merchello database has been installed on deploy.
+        /// </summary>
         public void EnsureDatabase()
         {
             var databaseSchemaCreation = new DatabaseSchemaCreation(_database, _logger, new DatabaseSchemaHelper(_database, _logger, _sqlSyntaxProvider), _sqlSyntaxProvider);

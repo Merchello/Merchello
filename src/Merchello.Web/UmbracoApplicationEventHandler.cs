@@ -48,6 +48,11 @@
         private static bool merchelloIsStarted = false;
 
         /// <summary>
+        /// The _web migration manager.
+        /// </summary>
+        private WebMigrationManager _webMigrationManager = new WebMigrationManager();
+
+        /// <summary>
         /// The application initialized.
         /// </summary>
         /// <param name="umbracoApplication">
@@ -62,7 +67,9 @@
 
             // TODO RSS - Moved this here to get an install/UaaS deploy working.  Needs a more permanent solution.
             Log.Info("Verifying Merchello Database is present.");
-            EnsureDatabase();
+            _webMigrationManager.Upgraded += MigrationManagerOnUpgraded;
+            var record = _webMigrationManager.EnsureDatabase();
+            if (record != null) Log.Info("Merchello database tables installed");
         }
 
         /// <summary>
@@ -129,22 +136,10 @@
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
             // Detached Content
-            //LocalizationService.SavedLanguage += LocalizationServiceOnSavedLanguage;
-            //LocalizationService.DeletedLanguage += LocalizationServiceOnDeletedLanguage;
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
         }
-
-        //private void LocalizationServiceOnDeletedLanguage(ILocalizationService sender, DeleteEventArgs<ILanguage> deleteEventArgs)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private void LocalizationServiceOnSavedLanguage(ILocalizationService sender, SaveEventArgs<ILanguage> saveEventArgs)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         /// <summary>
         /// Registers Merchello content finders.
@@ -428,26 +423,9 @@
         private void VerifyMerchelloVersion()
         {
             LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
-            var migrationManager = new WebMigrationManager();
-            migrationManager.Upgraded += MigrationManagerOnUpgraded;
-            migrationManager.EnsureMerchelloVersion();
+            _webMigrationManager.EnsureMerchelloVersion();
         }
 
-        private void EnsureDatabase()
-        {
-            var database = ApplicationContext.Current.DatabaseContext.Database;
-            var syntax = ApplicationContext.Current.DatabaseContext.SqlSyntax;
-            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
-            var databaseSchemaCreation = new DatabaseSchemaCreation(database, logger, new DatabaseSchemaHelper(database, logger, syntax), syntax);
-            var schemaResult = databaseSchemaCreation.ValidateSchema();
-            var databaseVersion = schemaResult.DetermineInstalledVersion();
-
-            if (databaseVersion == new Version("0.0.0"))
-            {
-                var databaseDeployHelper = new DatabaseDeployHelper(database, Logger.CreateWithDefaultLog4NetConfiguration(), syntax);
-                databaseDeployHelper.EnsureDatabase();
-            }
-        }
 
         /// <summary>
         /// The migration manager on upgraded.

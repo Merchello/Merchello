@@ -121,6 +121,59 @@
         }
 
         /// <summary>
+        /// Ensures the Merchello database has been installed.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public MigrationRecord EnsureDatabase()
+        {
+            var syntax = ApplicationContext.Current.DatabaseContext.SqlSyntax;
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            var databaseSchemaCreation = new DatabaseSchemaCreation(_database, logger, new DatabaseSchemaHelper(_database, logger, syntax), syntax);
+            var schemaResult = databaseSchemaCreation.ValidateSchema();
+            var databaseVersion = schemaResult.DetermineInstalledVersion();
+
+            if (databaseVersion == new Version("0.0.0"))
+            {
+                // install the database
+                var schemaHelper = new MerchelloDatabaseSchemaHelper(this._database, this._logger, this._sqlSyntaxProvider);
+                schemaHelper.CreateDatabaseSchema();
+
+                var baseDataCreation = new BaseDataCreation(this._database, this._logger);
+                baseDataCreation.InitializeBaseData("merchTypeField");
+                baseDataCreation.InitializeBaseData("merchInvoiceStatus");
+                baseDataCreation.InitializeBaseData("merchOrderStatus");
+                baseDataCreation.InitializeBaseData("merchWarehouse");
+                baseDataCreation.InitializeBaseData("merchGatewayProviderSettings");
+                baseDataCreation.InitializeBaseData("merchStoreSetting");
+                baseDataCreation.InitializeBaseData("merchShipmentStatus");
+
+                var migrationKey = this.EnsureMigrationKey(databaseSchemaCreation.ValidateSchema());
+
+                _logger.Info<CoreMigrationManager>("Migration key found: " + migrationKey.ToString());
+
+                var record = new MigrationRecord()
+                {
+                    MigrationKey = migrationKey,
+                    CurrentVersion = databaseVersion.ToString(),
+                    TargetVersion = MerchelloVersion.Current.ToString(),
+                    DbProvider = _database.GetDatabaseProvider().ToString(),
+                    InstallDate = DateTime.Now,
+                    IsUpgrade = false
+                };
+
+                //OnUpgraded(record);
+
+                MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
+
+                return record;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Executes the Migration runner.
         /// </summary>
         /// <param name="database">
@@ -204,23 +257,7 @@
                     throw;
                 }
             }
-            else
-            {
-                    // this is a new install                  
-                    var migrationKey = this.EnsureMigrationKey(schemaResult);
 
-                    var record = new MigrationRecord()
-                                     {
-                                         MigrationKey = migrationKey,
-                                         CurrentVersion = MerchelloConfiguration.ConfigurationStatus,
-                                         TargetVersion = MerchelloVersion.Current.ToString(),
-                                         DbProvider = database.GetDatabaseProvider().ToString(),
-                                         InstallDate = DateTime.Now,
-                                         IsUpgrade = !MerchelloConfiguration.ConfigurationStatus.Equals("0.0.0")
-                                     };
-                    this.OnUpgraded(record);
-            }
-            
             MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
 
             return true;
