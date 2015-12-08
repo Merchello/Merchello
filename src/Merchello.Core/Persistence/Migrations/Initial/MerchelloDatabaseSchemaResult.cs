@@ -74,11 +74,16 @@
                 return new Version(1, 9, 0);
             }
 
-            if (!this.ValidTables.Contains("merchProductCollection")
-                || !this.ValidTables.Contains("merchProduct2ProductCollection")
-                || !this.ValidTables.Contains("merchDetachedContentType"))
+            if (!this.ValidTables.Contains("merchEntityCollection")
+                || !this.ValidTables.Contains("merchProduct2EntityCollection"))
             {
                 return new Version(1, 10, 0);
+            }
+
+            if (!this.ValidTables.Contains("merchDetachedContentType")
+                || !this.ValidTables.Contains("merchProductVariantDetachedContent"))
+            {
+                return new Version(1, 11, 0);
             }
 
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
