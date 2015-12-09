@@ -3,6 +3,7 @@
     using System;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     using Cache;
     using Configuration;
@@ -12,12 +13,16 @@
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Events;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
     using Observation;
     using Persistence.UnitOfWork;
     using Services;
+
+    using umbraco.BusinessLogic;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -101,6 +106,17 @@
         /// Gets or sets a value indicating whether or not this is a unit test
         /// </summary>
         internal bool IsUnitTest { get; set; }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        internal ILogger Logger
+        {
+            get
+            {
+                return _logger;
+            }
+        }
 
         /// <summary>
         /// The initialize.
@@ -197,8 +213,8 @@
             _isComplete = true;
 
             return this;
-        }  
-       
+        }
+
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
@@ -264,6 +280,8 @@
         /// </remarks>
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
         {
+            _logger.Info<CoreBootManager>("Initializing Merchello GatewayResolver");
+
             if (!GatewayProviderResolver.HasCurrent)
                 GatewayProviderResolver.Current = new GatewayProviderResolver(
                 PluginManager.Current.ResolveGatewayProviders(),

@@ -296,6 +296,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ProductApiController.cs" />
+    <Compile Include="BootManager\WebBootManagerTests.cs" />
     <Compile Include="Builders\BuilderTestBase.cs" />
     <Compile Include="Builders\InvoiceBuilderTests.cs" />
     <Compile Include="Builders\OrderBuilderTests.cs" />

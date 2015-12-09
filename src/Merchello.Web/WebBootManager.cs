@@ -2,11 +2,8 @@
 {
     using Merchello.Core;
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Web.Mvc;
     using Merchello.Web.Reporting;
     using Merchello.Web.Ui;
-
-    using umbraco.BusinessLogic;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -60,12 +57,27 @@
         /// <returns>The <see cref="IBootManager"/></returns>
         public override IBootManager Initialize()
         {
+            EnsureDatabase();
+
             base.Initialize();
 
             // initialize the AutoMapperMappings
             AutoMapperMappings.CreateMappings();
 
             return this;
+        }
+
+        /// <summary>
+        /// The ensure database.
+        /// </summary>
+        protected void EnsureDatabase()
+        {
+            Logger.Info<WebBootManager>("Verifying Merchello Database is present.");
+            var manager = new WebMigrationManager();
+            if (!manager.EnsureDatabase())
+            {
+                Logger.Info<WebBootManager>("Merchello database tables installed");
+            }
         }
 
         /// <summary>

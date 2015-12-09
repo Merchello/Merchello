@@ -573,7 +573,6 @@
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
-    <Compile Include="Persistence\Migrations\DatabaseDeployHelper.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
     <Compile Include="Persistence\Migrations\IMerchelloMigration.cs" />
     <Compile Include="Persistence\Migrations\MerchelloDatabaseSchemaHelper.cs" />
@@ -592,6 +591,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
     <Compile Include="Persistence\Repositories\NoteRepository.cs" />
