@@ -66,20 +66,6 @@
         }
 
         /// <summary>
-        /// The ensure database.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool EnsureDatabase()
-        {
-            var record = EnsureDatabaseInstall();
-            Logger.Info<WebMigrationManager>("Migration record was null == " + (record == null).ToString());
-            if (record != null) PostAnalyticInfo(record);
-            return record != null;
-        }
-
-        /// <summary>
         /// The post analytic info.
         /// </summary>
         /// <param name="record">
@@ -88,7 +74,9 @@
         public async void PostAnalyticInfo(MigrationRecord record)
         {
             if (!MerchelloConfiguration.Current.Section.EnableInstallTracking) return;
+            
             var client = new HttpClient();
+            
             try
             {
                 var data = JsonConvert.SerializeObject(record);

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Merchello.Tests.IntegrationTests.BootManager
+﻿namespace Merchello.Tests.IntegrationTests.BootManager
 {
+    using System;
     using System.Configuration;
 
     using Merchello.Core.Persistence.Migrations.Analytics;
@@ -28,7 +23,7 @@ namespace Merchello.Tests.IntegrationTests.BootManager
 
         private Database _database;
 
-        [TestFixtureSetUp]
+        //[TestFixtureSetUp]
         public void Init()
         {
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
@@ -43,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.BootManager
             _database = new PetaPocoUnitOfWorkProvider(_logger).GetUnitOfWork().Database;
         }
 
-        [Test]
+        //[Test]
         public void Can_EnsureDatabaseIsInstalled()
         {
             var manager = new WebMigrationManager(_database, _sqlSyntax, _logger);
@@ -51,7 +46,7 @@ namespace Merchello.Tests.IntegrationTests.BootManager
             Assert.IsTrue(installed);
         }
 
-        [Test]
+        //[Test]
         public void Can_CreateAMigrationRecord()
         {
             var record = new MigrationRecord();

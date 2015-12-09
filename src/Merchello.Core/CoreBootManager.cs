@@ -22,6 +22,8 @@
     using Persistence.UnitOfWork;
     using Services;
 
+    using umbraco.BusinessLogic;
+
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
@@ -104,6 +106,17 @@
         /// Gets or sets a value indicating whether or not this is a unit test
         /// </summary>
         internal bool IsUnitTest { get; set; }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        internal ILogger Logger
+        {
+            get
+            {
+                return _logger;
+            }
+        }
 
         /// <summary>
         /// The initialize.

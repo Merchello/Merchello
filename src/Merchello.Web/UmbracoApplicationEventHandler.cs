@@ -75,14 +75,6 @@
         {
             base.ApplicationStarting(umbracoApplication, applicationContext);
 
-            // TODO RSS - Moved this here to get an install/UaaS deploy working.  Needs a more permanent solution.
-            Log.Info("Verifying Merchello Database is present.");
-            var manager = new WebMigrationManager();
-            if (!manager.EnsureDatabase())
-            {
-                Log.Info("Merchello database tables installed");
-            }
-
             BootManagerBase.MerchelloStarted += BootManagerBaseOnMerchelloStarted;
 
             try
