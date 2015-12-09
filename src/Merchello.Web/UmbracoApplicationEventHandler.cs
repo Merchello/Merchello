@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
 
     using log4net;
     using Core;
@@ -48,11 +49,6 @@
         private static bool merchelloIsStarted = false;
 
         /// <summary>
-        /// The _web migration manager.
-        /// </summary>
-        private WebMigrationManager _webMigrationManager = new WebMigrationManager();
-
-        /// <summary>
         /// The application initialized.
         /// </summary>
         /// <param name="umbracoApplication">
@@ -64,12 +60,6 @@
         protected override void ApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             base.ApplicationInitialized(umbracoApplication, applicationContext);
-
-            // TODO RSS - Moved this here to get an install/UaaS deploy working.  Needs a more permanent solution.
-            Log.Info("Verifying Merchello Database is present.");
-            _webMigrationManager.Upgraded += MigrationManagerOnUpgraded;
-            var record = _webMigrationManager.EnsureDatabase();
-            if (record != null) Log.Info("Merchello database tables installed");
         }
 
         /// <summary>
@@ -85,12 +75,20 @@
         {
             base.ApplicationStarting(umbracoApplication, applicationContext);
 
+            // TODO RSS - Moved this here to get an install/UaaS deploy working.  Needs a more permanent solution.
+            Log.Info("Verifying Merchello Database is present.");
+            var manager = new WebMigrationManager();
+            if (!manager.EnsureDatabase())
+            {
+                Log.Info("Merchello database tables installed");
+            }
+
             BootManagerBase.MerchelloStarted += BootManagerBaseOnMerchelloStarted;
 
-            // Initialize Merchello
-            Log.Info("Attempting to initialize Merchello");
             try
             {
+                // Initialize Merchello
+                Log.Info("Attempting to initialize Merchello");
                 MerchelloBootstrapper.Init(new WebBootManager());
                 Log.Info("Initialization of Merchello complete");                
             }
@@ -423,7 +421,9 @@
         private void VerifyMerchelloVersion()
         {
             LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
-            _webMigrationManager.EnsureMerchelloVersion();
+            var manager = new WebMigrationManager();
+            manager.Upgraded += MigrationManagerOnUpgraded;
+            manager.EnsureMerchelloVersion();
         }
 
 

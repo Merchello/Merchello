@@ -100,6 +100,17 @@
         public event UpgradedEventHandler Upgraded;
 
         /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        public ILogger Logger
+        {
+            get
+            {
+                return _logger;
+            }
+        }
+
+        /// <summary>
         /// Checks the binary version against the web.config configuration status version.
         /// </summary>
         public void EnsureMerchelloVersion()
@@ -126,11 +137,9 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public MigrationRecord EnsureDatabase()
+        protected MigrationRecord EnsureDatabaseInstall()
         {
-            var syntax = ApplicationContext.Current.DatabaseContext.SqlSyntax;
-            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
-            var databaseSchemaCreation = new DatabaseSchemaCreation(_database, logger, new DatabaseSchemaHelper(_database, logger, syntax), syntax);
+            var databaseSchemaCreation = new DatabaseSchemaCreation(_database, _logger, new DatabaseSchemaHelper(_database, _logger, _sqlSyntaxProvider), _sqlSyntaxProvider);
             var schemaResult = databaseSchemaCreation.ValidateSchema();
             var databaseVersion = schemaResult.DetermineInstalledVersion();
 
@@ -153,21 +162,29 @@
 
                 _logger.Info<CoreMigrationManager>("Migration key found: " + migrationKey.ToString());
 
-                var record = new MigrationRecord()
+                try
                 {
-                    MigrationKey = migrationKey,
-                    CurrentVersion = databaseVersion.ToString(),
-                    TargetVersion = MerchelloVersion.Current.ToString(),
-                    DbProvider = _database.GetDatabaseProvider().ToString(),
-                    InstallDate = DateTime.Now,
-                    IsUpgrade = false
-                };
+                    var record = new MigrationRecord()
+                                     {
+                                         MigrationKey = migrationKey,
+                                         CurrentVersion = databaseVersion.ToString(),
+                                         TargetVersion = MerchelloVersion.Current.ToString(),
+                                         DbProvider =
+                                             _database.GetMerchelloDatabaseProvider().ToString(),
+                                         InstallDate = DateTime.Now,
+                                         IsUpgrade = false
+                                     };
 
-                //OnUpgraded(record);
 
-                MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
+                    return record;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error<CoreMigrationManager>("Failed to create MigrationRecord", ex);
+                }
 
-                return record;
+                //// MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
+
             }
 
             return null;
@@ -216,19 +233,6 @@
                         _logger.Error<CoreMigrationManager>("Merchello migration failed", ex);
                         upgraded = false;
                     }
-
-
-                    //var entryService = ApplicationContext.Current.Services.MigrationEntryService;
-
-
-                    //var runner = new MigrationRunner(
-                    //    entryService,
-                    //    _logger,
-                    //    new SemVersion(MerchelloConfiguration.ConfigurationStatusVersion),
-                    //    new SemVersion(MerchelloVersion.Current),
-                    //    MerchelloConfiguration.MerchelloMigrationName);
-
-                    //var upgraded = runner.Execute(database);
                     
                     if (upgraded)
                     {

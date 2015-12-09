@@ -3,6 +3,7 @@
     using System;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     using Cache;
     using Configuration;
@@ -12,7 +13,9 @@
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Events;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.Persistence.Migrations.Analytics;
     using Merchello.Core.Persistence.Migrations.Initial;
 
     using Observation;
@@ -197,8 +200,8 @@
             _isComplete = true;
 
             return this;
-        }  
-       
+        }
+
         /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
@@ -264,6 +267,8 @@
         /// </remarks>
         private void InitializeGatewayResolver(IServiceContext serviceContext, CacheHelper cache)
         {
+            _logger.Info<CoreBootManager>("Initializing Merchello GatewayResolver");
+
             if (!GatewayProviderResolver.HasCurrent)
                 GatewayProviderResolver.Current = new GatewayProviderResolver(
                 PluginManager.Current.ResolveGatewayProviders(),

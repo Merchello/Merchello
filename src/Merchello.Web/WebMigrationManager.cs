@@ -14,6 +14,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The web migration manager.
@@ -42,6 +43,40 @@
         public WebMigrationManager(ApplicationContext applicationContext)
             : base(applicationContext.DatabaseContext.Database, applicationContext.DatabaseContext.SqlSyntax, LoggerResolver.Current.Logger)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
+        internal WebMigrationManager(Database database, ISqlSyntaxProvider sqlSyntax, ILogger logger)
+            : base(database, sqlSyntax, logger)
+        {
+        }
+
+        /// <summary>
+        /// The ensure database.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool EnsureDatabase()
+        {
+            var record = EnsureDatabaseInstall();
+            Logger.Info<WebMigrationManager>("Migration record was null == " + (record == null).ToString());
+            if (record != null) PostAnalyticInfo(record);
+            return record != null;
         }
 
         /// <summary>
