@@ -21,6 +21,14 @@ if "%APPVEYOR_REPO_TAG%" == "true" (
 	SET MERCHELLO_VERSION = %APPVEYOR_BUILD_VERSION%
 )
 
+
+
+if exist ".\src\Merchello.Web.UI\App_Plugins\Merchello" (
+	RMDIR /S /Q ".\src\Merchello.Web.UI\App_Plugins\Merchello"
+)
+
+CALL build-grunt.cmd
+
 build-appveyor.cmd
 
 @IF %ERRORLEVEL% NEQ 0 GOTO err
