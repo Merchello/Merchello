@@ -185,3 +185,5 @@ Plugin/Payments/BrainTree/build/Merchello.Plugin.Braintree.2.1.0.0.nupkg
 Plugin/Payments/AuthorizeNet/src/Merchello.Plugin.Payments.AuthorizeNet/App_Plugins/Merchello.AuthorizeNet/.idea/
 src/Merchello.Web.UI/bin/Merchello.Bazaar.dll
 Umbraco.Web.UI/config/umbracoSettings.Release.config
+artifacts/
+*.old
