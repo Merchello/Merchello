@@ -107,7 +107,8 @@
             Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
             Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
 
-            // TODO figure out why the index does not build on load
+            //// TODO figure out why the index does not build on load
+            LogHelper.Info<BazaarDataInstaller>("Rebuilding Product Index");
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
 
             return root;
@@ -231,7 +232,7 @@
             avocadoBar.Available = true;
             avocadoBar.Weight = 1M;
             avocadoBar.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(avocadoBar, false);
+            merchelloServices.ProductService.Save(avocadoBar);
 
             // add to collections
             avocadoBar.AddToCollection(featuredProducts);
@@ -257,7 +258,8 @@
                             }))
                     {
                         CanBeRendered = true
-                    });            
+                    });   
+                     
             merchelloServices.ProductService.Save(avocadoBar);
 
             LogHelper.Info<BazaarDataInstaller>("Adding an example product Liquid Soap");
@@ -269,7 +271,7 @@
             liquidSoap.Available = true;
             liquidSoap.Weight = 1M;
             liquidSoap.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(liquidSoap, false);
+            merchelloServices.ProductService.Save(liquidSoap);
 
             // add to collections
             liquidSoap.AddToCollection(featuredProducts);
@@ -314,7 +316,7 @@
             genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
             genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Pink", "Pink"));
             genericSoap.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Purple", "Purple"));
-            merchelloServices.ProductService.Save(genericSoap, false);
+            merchelloServices.ProductService.Save(genericSoap);
 
             // add to collections
             genericSoap.AddToCollection(generic);

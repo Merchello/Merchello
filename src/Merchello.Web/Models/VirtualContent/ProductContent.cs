@@ -49,6 +49,9 @@
         /// <param name="parent">
         /// The parent <see cref="IPublishedContent"/>
         /// </param>
+        /// <param name="specificCulture">
+        /// The specific culture name
+        /// </param>
         /// <param name="isPreviewing">
         /// The is previewing.
         /// </param>
@@ -56,8 +59,9 @@
             PublishedContentType contentType,
             ProductDisplay display,           
             IPublishedContent parent = null,
+            string specificCulture = "en-US",
             bool isPreviewing = false)
-            : base(display, contentType)
+            : base(display, contentType, specificCulture)
         {
             this._display = display;
             this._parent = parent;

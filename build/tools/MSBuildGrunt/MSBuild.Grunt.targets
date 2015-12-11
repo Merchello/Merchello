@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Target Name="EnsureGrunt">
+        <PropertyGroup>
+            <GruntNotFoundError>Grunt module not found. Please install Grunt in the node module path '$(NodeModulePath)'.</GruntNotFoundError>
+            <GruntExecutable>$(NodeModulePath)\grunt.cmd</GruntExecutable>
+            <GruntOut>$([System.IO.Path]::GetTempFileName())</GruntOut>
+            <GruntExitCode>0</GruntExitCode>
+            <GruntTaskDeprecationWarning>The 'GruntTask' property is deprecated and will be removed in a future version. Please use 'GruntBuildTask' instead.</GruntTaskDeprecationWarning>
+        </PropertyGroup>
+        <Message Text="Ensuring Grunt is installed" Importance="low" />
+
+        <Exec Command="$(WINDIR)\system32\where.exe grunt"
+            ContinueOnError="true"
+            IgnoreExitCode="true"
+            Condition=" !Exists('$(GruntExecutable)') ">
+            <Output TaskParameter="ExitCode" PropertyName="GruntExitCode" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="GruntExecutable" />
+        </Exec>
+        <Error Condition=" '$(GruntExitCode)' != '0' " Text="'$(GruntNotFoundError)'" />
+
+        <!-- Deprecated Warning & Fallback -->
+        <Warning Condition=" '$(GruntTask)' != '' " Text="'$(GruntTaskDeprecationWarning)'" />
+        <PropertyGroup Condition=" '$(GruntTask)' != '' ">
+            <GruntBuildTask>$(GruntTask)</GruntBuildTask>
+        </PropertyGroup>
+
+        <PropertyGroup>
+            <RunGruntBuildCmd>$(EnsureNodeInPathCmd) "$(GruntExecutable)" --no-color --gruntfile "$(GruntFile)" $(GruntBuildTask)"</RunGruntBuildCmd>
+            <RunGruntCleanCmd>$(EnsureNodeInPathCmd) "$(GruntExecutable)" --no-color --gruntfile "$(GruntFile)" $(GruntCleanTask) > "$(GruntOut)"</RunGruntCleanCmd>
+
+            <GruntBuildTaskError>Error running grunt task '$(GruntBuildTask)'. See Warnings for details.</GruntBuildTaskError>
+            <GruntCleanTaskError>Error running grunt task '$(GruntCleanTask)'. See Warnings for details.</GruntCleanTaskError>
+        </PropertyGroup>
+
+        <Message Text="Grunt found: '$(GruntExecutable)'" />
+    </Target>
+
+    <Target Name="RunGruntBuild" 
+        DependsOnTargets="EnsureNodeModules;EnsureGrunt"
+        BeforeTargets="Build"
+        Condition=" Exists('$(GruntFile)') AND '$(GruntBuildTask)' != '' " >
+        <Exec Command="$(RunGruntBuildCmd)"
+            ContinueOnError="true"
+            IgnoreExitCode="true"
+            ConsoleToMsBuild="true"
+            WorkingDirectory="$(GruntWorkingDirectory)" >
+            <Output TaskParameter="ExitCode" PropertyName="GruntExitCode"/>
+        </Exec>
+        <ReadLinesFromFile File="$(GruntOut)">
+            <Output TaskParameter="Lines" ItemName="GruntOutLines"/> 
+        </ReadLinesFromFile>
+        <Delete Files="$(GruntOut)"/>
+        <Warning Condition=" '$(GruntExitCode)' != '0' " Text="%(GruntOutLines.Identity)" />
+        <Error Condition=" '$(GruntExitCode)' != '0' " Text="$(GruntBuildTaskError)" />
+    </Target>
+
+    <Target Name="RunGruntClean" 
+        DependsOnTargets="EnsureNodeModules;EnsureGrunt"
+        AfterTargets="Clean"
+        Condition=" Exists('$(GruntFile)') AND '$(GruntCleanTask)' != '' " >
+        <Exec Command="$(RunGruntCleanCmd)"
+            ContinueOnError="true"
+            IgnoreExitCode="true"
+            ConsoleToMsBuild="true"
+            WorkingDirectory="$(GruntWorkingDirectory)" >
+            <Output TaskParameter="ExitCode" PropertyName="GruntExitCode"/>
+        </Exec>
+        <ReadLinesFromFile File="$(GruntOut)">
+            <Output TaskParameter="Lines" ItemName="GruntOutLines"/> 
+        </ReadLinesFromFile>
+        <Delete Files="$(GruntOut)"/>
+        <Warning Condition=" '$(GruntExitCode)' != '0' " Text="%(GruntOutLines.Identity)" />
+        <Error Condition=" '$(GruntExitCode)' != '0' " Text="$(GruntCleanTaskError)" />
+    </Target>
+<!-- vim: set ft=xml sw=4 :-->
+</Project>

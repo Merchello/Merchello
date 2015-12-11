@@ -1,25 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.UnitOfWork;
-using Merchello.Core.Persistence.Querying;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
+    /// <summary>
+    /// The invoice line item repository.
+    /// </summary>
     internal class InvoiceLineItemRepository : LineItemRepositoryBase<IInvoiceLineItem>, IInvoiceLineItemRepository
     {
-        public InvoiceLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
-            : base(work, cache)
-        { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvoiceLineItemRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The <see cref="IDatabaseUnitOfWork"/>.
+        /// </param>
+        /// <param name="cache">
+        /// The <see cref="IRuntimeCacheProvider"/>
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public InvoiceLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
+        {            
+        }
 
+        /// <summary>
+        /// Gets a <see cref="IInvoiceLineItem"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoiceLineItem"/>.
+        /// </returns>
         protected override IInvoiceLineItem PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -34,6 +66,15 @@ namespace Merchello.Core.Persistence.Repositories
             return factory.BuildEntity(dto);
         }
 
+        /// <summary>
+        /// Gets a collection of all <see cref="IInvoiceLineItem"/>.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IInvoiceLineItem}"/>.
+        /// </returns>
         protected override IEnumerable<IInvoiceLineItem> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -54,6 +95,15 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IInvoiceLineItem"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IInvoiceLineItem}"/>.
+        /// </returns>
         protected override IEnumerable<IInvoiceLineItem> PerformGetByQuery(IQuery<IInvoiceLineItem> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -65,20 +115,41 @@ namespace Merchello.Core.Persistence.Repositories
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
+        /// <summary>
+        /// The base SQL query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<InvoiceItemDto>();
+                .From<InvoiceItemDto>(SqlSyntax);
 
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchInvoiceItem.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets a list of delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IInvoiceLineItem}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -89,6 +160,12 @@ namespace Merchello.Core.Persistence.Repositories
             return list;
         }
 
+        /// <summary>
+        /// Saves a new item to the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IInvoiceLineItem entity)
         {
             ((Entity)entity).AddingEntity();
@@ -103,6 +180,12 @@ namespace Merchello.Core.Persistence.Repositories
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Updates an existing item in the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IInvoiceLineItem entity)
         {
             ((Entity)entity).UpdatingEntity();

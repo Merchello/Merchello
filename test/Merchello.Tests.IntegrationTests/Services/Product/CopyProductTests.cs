@@ -212,7 +212,7 @@
 
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Copy_Product_As_A_Clone_Of_Original()
         {
             //// Arrange

@@ -15,6 +15,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the PaymentService
@@ -52,7 +53,7 @@
         /// The logger.
         /// </param>
         public PaymentService(ILogger logger)
-            : this(logger, new AppliedPaymentService(logger))
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {
         }
 
@@ -62,11 +63,28 @@
         /// <param name="logger">
         /// The logger.
         /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public PaymentService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(logger, sqlSyntax, new AppliedPaymentService(logger, sqlSyntax))
+        {   
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax
+        /// </param>
         /// <param name="appliedPaymentService">
         /// The applied payment service.
         /// </param>
-        internal PaymentService(ILogger logger, IAppliedPaymentService appliedPaymentService)
-            : this(new RepositoryFactory(), logger, appliedPaymentService)
+        internal PaymentService(ILogger logger, ISqlSyntaxProvider sqlSyntax, IAppliedPaymentService appliedPaymentService)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger, appliedPaymentService)
         {
         }
 

@@ -26,9 +26,17 @@
   <Languages />
   <DataTypes />
   <Actions>
+    
+    <!-- TODO: INVESTIGATE WEB.CONFIG TRANSFORM FOR UAAS -->
     <Action runat="install" undo="true" alias="Merchello_AddAppConfigKey" />
-    <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />                   
+    <Action runat="install" undo="true" alias="Merchello_AddConfigSection" />   
+    
+    
+    <!-- THIS NEEDS TO MOVE TO A MIGRATION VIA AN INSTALL HELPER -->
     <Action runat="install" undo="true" alias="Merchello_CreateDatabase" />
+
+    <!-- THIS CAN REMAIN AS A PACKAGE ACTION -->
+    
     <Action runat="install" undo="true" alias="Merchello_AddExamineConfigs">
       <MerchelloIndexSets>
         <IndexSet SetName="MerchelloProductIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/{machinename}/Merchello/Product/" />
@@ -50,8 +58,12 @@
       </MerchelloSearchProviders>
     </Action>
     <Action runat="install" undo="true" alias="Merchello_AddLanguageFileKey" language="en" position="end" area="sections" key="merchello" value="Merchello" />
-    <Action runat="install" undo="true" alias="Merchello_AddLocalizationAreas" />
+    <!--Action runat="install" undo="true" alias="Merchello_AddLocalizationAreas" /-->
+    
+    <!-- TODO: TEST TO SEE IF THIS IS TRANSFERABLE IN UAAS -->
     <Action runat="install" undo="true" alias="Merchello_GrantPermissionForApp" userLogin="$currentUser" appName="merchello"/>
+    
+    <!-- THIS CAN REMAIN AS A PACKAGE ACTION -->
     <Action runat="install" undo="false" alias="addDashboardSection" dashboardAlias="MerchelloDashboard">
       <section alias="MerchelloSection">
         <areas>

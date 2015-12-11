@@ -10,8 +10,11 @@
     using Querying;    
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using UnitOfWork;
 
     /// <summary>
@@ -19,11 +22,32 @@
     /// </summary>
     internal class ItemCacheLineItemRepository : LineItemRepositoryBase<IItemCacheLineItem>, IItemCacheLineItemRepository
     {
-        public ItemCacheLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheLineItemRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public ItemCacheLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {            
         }
 
+        /// <summary>
+        /// Overrides the delete.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         public override void Delete(IItemCacheLineItem entity)
         {
             var deletes = GetDeleteClauses();
@@ -33,6 +57,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a <see cref="IItemCacheLineItem"/> by it's keey.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCacheLineItem"/>.
+        /// </returns>
         protected override IItemCacheLineItem PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -47,6 +80,15 @@
             return factory.BuildEntity(dto);
         }
 
+        /// <summary>
+        /// Gets a collection of all <see cref="IItemCacheLineItem"/>.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCacheLineItem}"/>.
+        /// </returns>
         protected override IEnumerable<IItemCacheLineItem> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -67,6 +109,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IItemCacheLineItem"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCacheLineItem}"/>.
+        /// </returns>
         protected override IEnumerable<IItemCacheLineItem> PerformGetByQuery(IQuery<IItemCacheLineItem> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -78,20 +129,41 @@
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
+        /// <summary>
+        /// Gets the base SQL clause.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<ItemCacheItemDto>();
+                .From<ItemCacheItemDto>(SqlSyntax);
 
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchItemCacheItem.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets a list of the delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -102,6 +174,12 @@
             return list;
         }
 
+        /// <summary>
+        /// Adds a new item to the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IItemCacheLineItem entity)
         {
             ((Entity)entity).AddingEntity();
@@ -116,6 +194,12 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Updates an existing item in the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IItemCacheLineItem entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -127,7 +211,5 @@
 
             entity.ResetDirtyProperties();
         }
-
-
     }
 }

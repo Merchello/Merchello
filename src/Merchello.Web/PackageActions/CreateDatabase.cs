@@ -90,10 +90,14 @@
 
             try
             {
-                _schemaHelper.CreateDatabaseSchema();
+                //// RSS - removed the database install portion of the package action
+                //// to rely on tests in CoreMigrationManager for UaaS deploys
+                //// Uninstall will need to be done manually.
 
-                var creationData = new BaseDataCreation(_database, _logger);
-                var dataCreationResult = CreateInitialMerchelloData(creationData);
+                //_schemaHelper.CreateDatabaseSchema();
+
+                //var creationData = new BaseDataCreation(_database, _logger);
+                //var dataCreationResult = CreateInitialMerchelloData(creationData);
 
                 return true;
             }

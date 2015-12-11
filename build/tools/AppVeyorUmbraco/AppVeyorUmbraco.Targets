@@ -1,0 +1,49 @@
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask
+    TaskName="GetProductVersion"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+	<ParameterGroup>
+    <BuildVersion ParameterType="System.String" Required="true" />
+	  <BuildSuffix ParameterType="System.String" Required="false" />
+	  <ProductVersion ParameterType="System.String" Output="true" />
+  	<Release ParameterType="System.String" Required="true" />
+	</ParameterGroup>	
+    <Task>
+      <Using Namespace="System"/>
+      <Using Namespace="System.IO"/>
+      <Code Type="Fragment" Language="cs">
+<![CDATA[
+            var pos = BuildVersion.LastIndexOf('.');
+            var len = BuildVersion.Length - pos - 1;
+            
+            var buildNumberWithZeros = BuildVersion.Substring(pos + 1, len).PadLeft(6, '0');
+
+            var baseVersion = BuildVersion.Substring(0, pos);
+
+            if ((string.IsNullOrEmpty(BuildSuffix) || BuildSuffix == "rtm") && Release == "true")
+            {
+                ProductVersion = baseVersion;
+            }
+            else if (string.IsNullOrEmpty(BuildSuffix) && Release == "false")
+            {
+                ProductVersion = baseVersion + "-alpha-" + buildNumberWithZeros;
+            }
+            else if (!string.IsNullOrEmpty(BuildSuffix) && Release == "true")
+            {
+                ProductVersion = baseVersion + "-" + BuildSuffix;
+            }
+            else if (!string.IsNullOrEmpty(BuildSuffix) && BuildSuffix != "rtm" && Release == "false")
+            {
+                ProductVersion = baseVersion + "-" + BuildSuffix + "-" + buildNumberWithZeros;
+            }
+            else
+            {
+                ProductVersion = "";
+            }          
+//Log.LogError(OutputVer);
+]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>
