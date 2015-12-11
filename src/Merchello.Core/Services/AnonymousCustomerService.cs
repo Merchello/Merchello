@@ -14,6 +14,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents an anonymous customer service.
@@ -46,8 +47,22 @@
         /// The logger.
         /// </param>
         public AnonymousCustomerService(ILogger logger)
-            : this(logger, new RepositoryFactory())
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnonymousCustomerService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public AnonymousCustomerService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(logger, new RepositoryFactory(logger, sqlSyntax))
+        {
         }
 
         /// <summary>

@@ -12,7 +12,7 @@
         /// <summary>
         /// The version.
         /// </summary>
-        private static readonly Version Version = new Version("1.13.1");
+        private static readonly Version Version = new Version("1.13.2");
 
         /// <summary>
         /// Gets the current version of Merchello.
@@ -30,10 +30,8 @@
         /// Gets the version comment (like beta or RC).
         /// </summary>
         /// <value>The version comment.</value>
-        public static string CurrentComment
-        {
-            get { return "0"; }
-        }
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1500:CurlyBracketsForMultiLineStatementsMustNotShareLine", Justification = "Reviewed. Suppression is OK here.")]
+        public static string CurrentComment { get { return "0"; } }
 
         /// <summary>
         /// Gets the assembly version.

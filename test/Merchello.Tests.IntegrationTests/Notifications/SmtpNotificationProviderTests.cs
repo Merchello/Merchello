@@ -99,7 +99,7 @@ namespace Merchello.Tests.IntegrationTests.Notifications
             Assert.AreEqual("127.0.0.1", settings.Host);
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Create_A_SmtpNotificationGatewayMethod()
         {
             //// Arrange

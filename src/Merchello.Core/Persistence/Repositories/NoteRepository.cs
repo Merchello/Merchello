@@ -14,8 +14,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the note repository.
@@ -31,8 +33,14 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public NoteRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public NoteRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
         }
 
@@ -67,7 +75,7 @@
             var terms = searchTerm.Split(' ');
 
             var sql = new Sql();
-            sql.Select("*").From<NoteDto>();
+            sql.Select("*").From<NoteDto>(SqlSyntax);
 
             if (terms.Any())
             {
@@ -168,7 +176,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<NoteDto>();
+               .From<NoteDto>(SqlSyntax);
 
             return sql;
         }

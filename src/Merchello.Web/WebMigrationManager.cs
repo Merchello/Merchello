@@ -14,6 +14,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The web migration manager.
@@ -45,6 +46,26 @@
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <remarks>
+        /// Used for testing
+        /// </remarks>
+        internal WebMigrationManager(Database database, ISqlSyntaxProvider sqlSyntax, ILogger logger)
+            : base(database, sqlSyntax, logger)
+        {
+        }
+
+        /// <summary>
         /// The post analytic info.
         /// </summary>
         /// <param name="record">
@@ -53,7 +74,9 @@
         public async void PostAnalyticInfo(MigrationRecord record)
         {
             if (!MerchelloConfiguration.Current.Section.EnableInstallTracking) return;
+            
             var client = new HttpClient();
+            
             try
             {
                 var data = JsonConvert.SerializeObject(record);

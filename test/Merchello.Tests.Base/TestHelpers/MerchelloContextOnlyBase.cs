@@ -14,7 +14,7 @@
             var dbPreTestDataWorker = new DbPreTestDataWorker();
 
             // Merchello CoreBootStrap
-            var bootManager = new WebBootManager(dbPreTestDataWorker.TestLogger);
+            var bootManager = new WebBootManager(dbPreTestDataWorker.TestLogger, dbPreTestDataWorker.SqlSyntaxProvider);
             bootManager.Initialize();
 
 

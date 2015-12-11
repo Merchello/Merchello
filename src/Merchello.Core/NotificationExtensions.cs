@@ -17,12 +17,13 @@
         /// <param name="alias">
         /// The alias.
         /// </param>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        public static void Notify(this IPaymentResult result, string alias, object model)
+        /// <remarks>
+        /// This extension is intended for internal emails only.  To use to notify a customer,
+        /// use the overloaded version and pass an array of contact addresses.
+        /// </remarks>
+        public static void Notify(this IPaymentResult result, string alias)
         {
-            result.Notify(alias, model, new string[] { });
+            result.Notify(alias, new string[] { });
         }
 
         /// <summary>
@@ -34,13 +35,10 @@
         /// <param name="alias">
         /// The alias.
         /// </param>
-        /// <param name="model">
-        /// The model.
-        /// </param>
         /// <param name="contacts">
         /// The contacts.
         /// </param>
-        public static void Notify(this IPaymentResult result, string alias, object model, IEnumerable<string> contacts)
+        public static void Notify(this IPaymentResult result, string alias, IEnumerable<string> contacts)
         {
             Notification.Trigger(alias, result, contacts);
         }       

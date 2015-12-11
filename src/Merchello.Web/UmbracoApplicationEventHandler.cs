@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
 
     using log4net;
     using Core;
@@ -15,6 +16,8 @@
 
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Web.Routing;
 
     using Models.SaleHistory;
@@ -23,6 +26,7 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
     using Umbraco.Web.Routing;
 
@@ -45,6 +49,20 @@
         private static bool merchelloIsStarted = false;
 
         /// <summary>
+        /// The application initialized.
+        /// </summary>
+        /// <param name="umbracoApplication">
+        /// The <see cref="UmbracoApplicationBase"/>.
+        /// </param>
+        /// <param name="applicationContext">
+        /// The <see cref="ApplicationContext"/>.
+        /// </param>
+        protected override void ApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+        {
+            base.ApplicationInitialized(umbracoApplication, applicationContext);
+        }
+
+        /// <summary>
         /// The Umbraco Application Starting event.
         /// </summary>
         /// <param name="umbracoApplication">
@@ -59,10 +77,10 @@
 
             BootManagerBase.MerchelloStarted += BootManagerBaseOnMerchelloStarted;
 
-            // Initialize Merchello
-            Log.Info("Attempting to initialize Merchello");
             try
             {
+                // Initialize Merchello
+                Log.Info("Attempting to initialize Merchello");
                 MerchelloBootstrapper.Init(new WebBootManager());
                 Log.Info("Initialization of Merchello complete");                
             }
@@ -108,22 +126,10 @@
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
             // Detached Content
-            //LocalizationService.SavedLanguage += LocalizationServiceOnSavedLanguage;
-            //LocalizationService.DeletedLanguage += LocalizationServiceOnDeletedLanguage;
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
         }
-
-        //private void LocalizationServiceOnDeletedLanguage(ILocalizationService sender, DeleteEventArgs<ILanguage> deleteEventArgs)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //private void LocalizationServiceOnSavedLanguage(ILocalizationService sender, SaveEventArgs<ILanguage> saveEventArgs)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         /// <summary>
         /// Registers Merchello content finders.
@@ -407,10 +413,11 @@
         private void VerifyMerchelloVersion()
         {
             LogHelper.Info<UmbracoApplicationEventHandler>("Verifying Merchello Version.");
-            var migrationManager = new WebMigrationManager();
-            migrationManager.Upgraded += MigrationManagerOnUpgraded;
-            migrationManager.EnsureMerchelloVersion();
+            var manager = new WebMigrationManager();
+            manager.Upgraded += MigrationManagerOnUpgraded;
+            manager.EnsureMerchelloVersion();
         }
+
 
         /// <summary>
         /// The migration manager on upgraded.

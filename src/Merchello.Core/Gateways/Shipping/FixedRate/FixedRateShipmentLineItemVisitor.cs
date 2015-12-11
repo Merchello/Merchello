@@ -25,8 +25,8 @@ namespace Merchello.Core.Gateways.Shipping.FixedRate
             if(UseOnSalePriceIfOnSale)
             {
                 TotalPrice += lineItem.ExtendedData.GetOnSaleValue()
-                    ? lineItem.ExtendedData.GetSalePriceValue()
-                    : lineItem.ExtendedData.GetPriceValue();
+                    ? lineItem.ExtendedData.GetSalePriceValue() * lineItem.Quantity
+                    : lineItem.ExtendedData.GetPriceValue() * lineItem.Quantity;
             }
             else
             {

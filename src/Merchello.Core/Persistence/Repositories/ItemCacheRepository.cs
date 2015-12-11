@@ -10,17 +10,43 @@
     using Querying;
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using IDatabaseUnitOfWork = UnitOfWork.IDatabaseUnitOfWork;
 
+    /// <summary>
+    /// The item cache repository.
+    /// </summary>
     internal class ItemCacheRepository : MerchelloPetaPocoRepositoryBase<IItemCache>, IItemCacheRepository
     {
+        /// <summary>
+        /// The <see cref="IItemCacheLineItemRepository"/>.
+        /// </summary>
         private readonly IItemCacheLineItemRepository _itemCacheLineItemRepository;
 
-
-        public ItemCacheRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IItemCacheLineItemRepository itemCacheLineItemRepository)
-            : base(work, cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="itemCacheLineItemRepository">
+        /// The item cache line item repository.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public ItemCacheRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IItemCacheLineItemRepository itemCacheLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
             _itemCacheLineItemRepository = itemCacheLineItemRepository;
         }
@@ -28,7 +54,15 @@
 
         #region Overrides of RepositoryBase<IItemCache>
 
-
+        /// <summary>
+        /// Gets a <see cref="IItemCache"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
         protected override IItemCache PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -51,6 +85,15 @@
             return itemCache;
         }
 
+        /// <summary>
+        /// Gets all <see cref="IItemCache"/>.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCache}"/>.
+        /// </returns>
         protected override IEnumerable<IItemCache> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -75,20 +118,41 @@
 
         #region Overrides of MerchelloPetaPocoRepositoryBase<IItemCache>
 
+        /// <summary>
+        /// Gets base SQL query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<ItemCacheDto>();
+               .From<ItemCacheDto>(SqlSyntax);
 
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="String"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchItemCache.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets a list of delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -100,6 +164,12 @@
             return list;
         }
 
+        /// <summary>
+        /// Adds a new item to the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IItemCache entity)
         {
             ((Entity)entity).AddingEntity();
@@ -114,6 +184,12 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Updates an existing item in the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IItemCache entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -127,6 +203,12 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Deletes an existing item from the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistDeletedItem(IItemCache entity)
         {
             var deletes = GetDeleteClauses();
@@ -136,6 +218,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IItemCache"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCache}"/>.
+        /// </returns>
         protected override IEnumerable<IItemCache> PerformGetByQuery(IQuery<IItemCache> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -149,11 +240,20 @@
 
         #endregion
 
+        /// <summary>
+        /// Gets a <see cref="LineItemCollection"/> by an item cache key.
+        /// </summary>
+        /// <param name="itemCacheKey">
+        /// The item cache key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="LineItemCollection"/>.
+        /// </returns>
         private LineItemCollection GetLineItemCollection(Guid itemCacheKey)
         {
             var sql = new Sql();
             sql.Select("*")
-                .From<ItemCacheItemDto>()
+                .From<ItemCacheItemDto>(SqlSyntax)
                 .Where<ItemCacheItemDto>(x => x.ContainerKey == itemCacheKey);
 
             var dtos = Database.Fetch<ItemCacheItemDto>(sql);

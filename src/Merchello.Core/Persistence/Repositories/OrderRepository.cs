@@ -10,8 +10,11 @@
     using Querying;    
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using UnitOfWork;
 
     /// <summary>
@@ -19,10 +22,31 @@
     /// </summary>
     internal class OrderRepository : PagedRepositoryBase<IOrder, OrderDto>, IOrderRepository
     {
+        /// <summary>
+        /// The order line item repository.
+        /// </summary>
         private readonly ILineItemRepositoryBase<IOrderLineItem> _orderLineItemRepository;
 
-        public OrderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository)
-            : base(work, cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="orderLineItemRepository">
+        /// The order line item repository.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public OrderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "lineItemRepository");
 
@@ -39,6 +63,15 @@
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets a <see cref="IOrder"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOrder"/>.
+        /// </returns>
         protected override IOrder PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -55,6 +88,15 @@
             return factory.BuildEntity(dto);
         }
 
+        /// <summary>
+        /// Gets all <see cref="IOrder"/>.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOrder}"/>.
+        /// </returns>
         protected override IEnumerable<IOrder> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -74,6 +116,15 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="IOrder"/>.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOrder}"/>.
+        /// </returns>
         protected override IEnumerable<IOrder> PerformGetByQuery(IQuery<IOrder> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -85,24 +136,45 @@
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
+        /// <summary>
+        /// Gets the base SQL query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<OrderDto>()
-               .InnerJoin<OrderIndexDto>()
-               .On<OrderDto, OrderIndexDto>(left => left.Key, right => right.OrderKey)
-               .InnerJoin<OrderStatusDto>()
-               .On<OrderDto, OrderStatusDto>(left => left.OrderStatusKey, right => right.Key);
+               .From<OrderDto>(SqlSyntax)
+               .InnerJoin<OrderIndexDto>(SqlSyntax)
+               .On<OrderDto, OrderIndexDto>(SqlSyntax, left => left.Key, right => right.OrderKey)
+               .InnerJoin<OrderStatusDto>(SqlSyntax)
+               .On<OrderDto, OrderStatusDto>(SqlSyntax, left => left.OrderStatusKey, right => right.Key);
 
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchOrder.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets a list of delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -115,9 +187,14 @@
             return list;
         }
 
+        /// <summary>
+        /// Saves a new item to the databse.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IOrder entity)
         {
-
             ((Entity)entity).AddingEntity();
 
             var factory = new OrderFactory(entity.Items);
@@ -137,6 +214,12 @@
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IInvoice>(entity.InvoiceKey));
         }
 
+        /// <summary>
+        /// Updates an existing item in the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IOrder entity)
         {
             ((Entity)entity).UpdatingEntity();

@@ -26,9 +26,53 @@
         private readonly IUnitOfWork _work;
 
         /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
         /// The runtime cache provider.
         /// </summary>
         private readonly IRuntimeCacheProvider _cache;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloRepositoryBase{TEntity}"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The unit of work.
+        /// </param>
+        /// <param name="cache">
+        /// The runtime cache provider.
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/>.
+        /// </param>
+        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger)
+        {
+            Mandate.ParameterNotNull(work, "work");
+            Mandate.ParameterNotNull(cache, "cache");
+            Mandate.ParameterNotNull(logger, "logger");
+
+            _work = work;
+            _cache = cache;
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// Gets the unit of work key. Used for testing purposes
+        /// </summary>
+        internal Guid UnitKey
+        {
+            get { return (Guid)_work.Key; }
+        }
+
+        /// <summary>
+        /// Gets the Unit of Work added to the repository
+        /// </summary>
+        protected internal IUnitOfWork UnitOfWork
+        {
+            get { return _work; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether is cached repository.
@@ -48,45 +92,19 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MerchelloRepositoryBase{TEntity}"/> class.
-        /// </summary>
-        /// <param name="work">
-        /// The unit of work.
-        /// </param>
-        /// <param name="cache">
-        /// The runtime cache provider.
-        /// </param>
-        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache)
-		{
-            Mandate.ParameterNotNull(work, "work");
-            Mandate.ParameterNotNull(cache, "cache");
-		    
-            _work = work;
-			_cache = cache;
-		}
-
-        /// <summary>
-        /// Gets the unit of work key. Used for testing purposes
-        /// </summary>
-        internal Guid UnitKey
-        {
-            get { return (Guid)_work.Key; }
-        }
-
-        /// <summary>
-        /// Gets the Unit of Work added to the repository
-        /// </summary>
-        protected internal IUnitOfWork UnitOfWork
-        {
-            get { return _work; }
-        }
-
-        /// <summary>
         /// Gets the runtime cache.
         /// </summary>
         protected IRuntimeCacheProvider RuntimeCache
         {
             get { return _cache; }
+        }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        protected ILogger Logger
+        {
+            get { return _logger; }
         }
 
         #region IUnitOfWorkRepository Members

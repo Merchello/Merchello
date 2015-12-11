@@ -2,6 +2,9 @@
 {
     using System;
 
+    using global::Examine;
+
+    using Umbraco.Core.Logging;
     using Umbraco.Web.UI.Controls;
 
     /// <summary>
