@@ -47,9 +47,11 @@
         /// </returns>
         public IEnumerable<ICustomer> GetAll()
         {
-            return MerchelloContext.HasCurrent
-                       ? MerchelloContext.Current.Services.CustomerService.GetPage(1, 100).Items
-                       : Enumerable.Empty<ICustomer>();
+            return new CustomerService().GetPage(1, 100).Items;
+
+            //return MerchelloContext.HasCurrent
+            //           ? MerchelloContext.Current.Services.CustomerService.GetPage(1, 100).Items
+            //           : Enumerable.Empty<ICustomer>();
         }
 
         /// <summary>

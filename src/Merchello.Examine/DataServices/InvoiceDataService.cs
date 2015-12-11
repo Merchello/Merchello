@@ -47,9 +47,11 @@
         /// </returns>
         public IEnumerable<IInvoice> GetAll()
         {
-            return MerchelloContext.HasCurrent
-                       ? MerchelloContext.Current.Services.InvoiceService.GetPage(1, 100).Items
-                       : Enumerable.Empty<IInvoice>();
+            return new InvoiceService().GetPage(1, 100).Items;
+
+            //return MerchelloContext.HasCurrent
+            //           ? MerchelloContext.Current.Services.InvoiceService.GetPage(1, 100).Items
+            //           : Enumerable.Empty<IInvoice>();
         }
 
 
