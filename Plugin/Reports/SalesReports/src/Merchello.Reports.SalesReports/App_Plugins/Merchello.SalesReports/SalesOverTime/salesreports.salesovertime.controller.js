@@ -1,7 +1,7 @@
 angular.module('merchello.salesreports').controller('Merchello.Plugins.SalesReports.SalesOverTimeController',
-    ['$scope', '$element', 'angularHelper', 'notificationsService', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    ['$scope', '$element', 'angularHelper', 'notificationsService', 'settingsResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
         'salesOverTimeResultBuilder', 'salesOverTimeResource',
-    function($scope, $element, angularHelper, notificationsService, queryDisplayBuilder, queryResultDisplayBuilder, saleOverTimeResultBuilder,
+    function($scope, $element, angularHelper, notificationsService, settingsResource, queryDisplayBuilder, queryResultDisplayBuilder, saleOverTimeResultBuilder,
              salesOverTimeResource) {
 
         $scope.loaded = false;
@@ -12,7 +12,7 @@ angular.module('merchello.salesreports').controller('Merchello.Plugins.SalesRepo
         $scope.filterStartDate = '';
         $scope.filterEndDate = '';
         $scope.currentFilters = [];
-
+        $scope.currencySymbol = '';
 
         // exposed methods
         $scope.filterWithDates = filterWithDates;
@@ -26,8 +26,12 @@ angular.module('merchello.salesreports').controller('Merchello.Plugins.SalesRepo
          * Initializes the controller
          */
         function init() {
-            setDefaultDates(new Date());
-            defaultData();
+
+            settingsResource.getCurrencySymbol().then(function (symbol) {
+                $scope.currencySymbol = symbol;
+                setDefaultDates(new Date());
+                defaultData();
+            });
         }
 
         /**
