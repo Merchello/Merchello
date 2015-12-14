@@ -134,6 +134,28 @@
                 </div>
 
                 <entity-static-collections pre-values-loaded="preValuesLoaded"  entity-type="entityType" entity="invoice" />
+                <div class="control-group umb-control-group" data-ng-hide="!notesLoaded">
+                    <div class="merchello-section-label">
+                        Notes
+                        <small>Notes about this order</small>
+                    </div>
+                    <div class="merchello-controls">
+                        <div class="row-fluid" data-ng-repeat="item in invoiceNotes">
+                            <table class="table">
+                                <tbody>
+                                <thead>
+                                <tr>
+                                    <th colspan="2">{{item.recordDate | date : settings.dateFormat }}</th>
+                                </tr>
+                                </thead>
+                                <tr>
+                                    <td>{{ item.message }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Sidebar -->
             <div class="merchello-pane secondary span3">

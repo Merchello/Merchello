@@ -9,6 +9,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
@@ -35,6 +36,11 @@
         /// The audit log service.
         /// </summary>
         private Lazy<IAuditLogService> _auditLogService;
+
+        /// <summary>
+        /// The note service.
+        /// </summary>
+        private Lazy<INoteService> _noteService;
 
         /// <summary>
         /// The country tax rate service.
@@ -161,6 +167,8 @@
         /// </summary>
         private Lazy<IWarehouseCatalogService> _warehouseCatalogService;
 
+        private readonly RepositoryFactory _repositoryFactory;
+
         #endregion
 
         /// <summary>
@@ -189,6 +197,7 @@
             Mandate.ParameterNotNull(logger, "logger");
             Mandate.ParameterNotNull(eventMessagesFactory, "eventMessagesFactory");
 
+            _repositoryFactory = repositoryFactory;
             DatabaseUnitOfWorkProvider = dbUnitOfWorkProvider;
             BuildServiceContext(dbUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory);
         }
@@ -204,11 +213,30 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="INoteService"/>
+        /// </summary>
+        public INoteService NoteService
+        {
+            get { return _noteService.Value; }
+        }
+
+        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         public ICustomerService CustomerService
         {
             get { return _customerService.Value;  }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        public IDetachedContentTypeService DetachedContentTypeService
+        {
+            get
+            {
+                return _detachedContentTypeService.Value;
+            }
         }
 
         /// <summary>
@@ -347,16 +375,6 @@
             get { return _anonymousCustomerService.Value; }
         }
 
-        /// <summary>
-        /// Gets the <see cref="IDetachedContentTypeService"/>.
-        /// </summary>
-        internal IDetachedContentTypeService DetachedContentTypeService
-        {
-            get
-            {
-                return _detachedContentTypeService.Value;
-            }
-        }
 
         /// <summary>
         /// Gets the <see cref="ITaxMethodService"/>
@@ -433,6 +451,17 @@
             get { return _warehouseCatalogService.Value; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="ISqlSyntaxProvider"/>.
+        /// </summary>
+        internal ISqlSyntaxProvider SqlSyntax
+        {
+            get
+            {
+                return _repositoryFactory.SqlSyntax;
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -460,6 +489,11 @@
 
             if (_auditLogService == null)
                 _auditLogService = new Lazy<IAuditLogService>(() => new AuditLogService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
+
+
+            if (_noteService == null)
+                _noteService = new Lazy<INoteService>(() => new NoteService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
+
 
             if (_customerAddressService == null)
                 _customerAddressService = new Lazy<ICustomerAddressService>(() => new CustomerAddressService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));

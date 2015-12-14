@@ -32,7 +32,7 @@ namespace Merchello.Tests.IntegrationTests.Api
             DbPreTestDataWorker.DeleteAllProducts();
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Add_A_Product_From_New_Product_Display()
         {
             //// Arrange

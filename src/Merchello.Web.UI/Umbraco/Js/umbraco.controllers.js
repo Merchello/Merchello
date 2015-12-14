@@ -21,7 +21,11 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
     //the null is important because we do an explicit bool check on this in the view
     //the avatar is by default the umbraco logo    
     $scope.authenticated = null;
-    $scope.avatar = "assets/img/application/logo.png";
+    $scope.avatar = [
+        { value: "assets/img/application/logo.png" },
+        { value: "assets/img/application/logo@2x.png" },
+        { value: "assets/img/application/logo@3x.png" }
+    ];
     $scope.touchDevice = appState.getGlobalState("touchDevice");
     
 
@@ -92,20 +96,32 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
             tmhDynamicLocale.set($scope.user.locale);
         }
 
-        if($scope.user.emailHash){
-            $timeout(function () {                
-                //yes this is wrong.. 
-                $("#avatar-img").fadeTo(1000, 0, function () {
-                    $timeout(function () {
-                        //this can be null if they time out
-                        if ($scope.user && $scope.user.emailHash) {
-                            $scope.avatar = "//www.gravatar.com/avatar/" + $scope.user.emailHash + ".jpg?s=64&d=mm";
-                        }
+        if ($scope.user.emailHash) {
+
+            //let's attempt to load the avatar, it might not exist or we might not have 
+            // internet access so we'll detect it first
+            $http.get("https://www.gravatar.com/avatar/" + $scope.user.emailHash + ".jpg?s=64&d=404")
+                .then(
+                    function successCallback(response) {                        
+                        $("#avatar-img").fadeTo(1000, 0, function () {
+                            $scope.$apply(function () {
+                                //this can be null if they time out
+                                if ($scope.user && $scope.user.emailHash) {
+	                            var avatarBaseUrl = "https://www.gravatar.com/avatar/",
+	                                hash = $scope.user.emailHash;
+
+	                            $scope.avatar = [
+	                                { value: avatarBaseUrl + hash + ".jpg?s=30&d=mm" },
+	                                { value: avatarBaseUrl + hash + ".jpg?s=60&d=mm" },
+	                                { value: avatarBaseUrl + hash + ".jpg?s=90&d=mm" }
+	                            ];
+                                }
+                            });
+                            $("#avatar-img").fadeTo(1000, 1);
+                        });
+                    }, function errorCallback(response) {
+                        //cannot load it from the server so we cannot do anything
                     });
-                    $("#avatar-img").fadeTo(1000, 1);
-                });
-                
-              }, 3000);  
         }
 
     }));
@@ -608,16 +624,23 @@ function ContentEditDialogController($scope, editorState, $routeParams, $q, $tim
 angular.module("umbraco")
 	.controller("Umbraco.Dialogs.Content.EditController", ContentEditDialogController);
 angular.module("umbraco")
-    .controller("Umbraco.Dialogs.HelpController", function ($scope, $location, $routeParams, helpService, userService) {
+    .controller("Umbraco.Dialogs.HelpController", function ($scope, $location, $routeParams, helpService, userService, localizationService) {
         $scope.section = $routeParams.section;
         $scope.version = Umbraco.Sys.ServerVariables.application.version + " assembly: " + Umbraco.Sys.ServerVariables.application.assemblyVersion;
         
         if(!$scope.section){
-            $scope.section ="content";
+            $scope.section = "content";
         }
+
+        $scope.sectionName = $scope.section;
 
         var rq = {};
         rq.section = $scope.section;
+
+        //translate section name
+        localizationService.localize("sections_" + rq.section).then(function (value) {
+            $scope.sectionName = value;
+        });
         
         userService.getCurrentUser().then(function(user){
         	
@@ -1138,11 +1161,12 @@ angular.module("umbraco")
             $scope.submitFolder = function(e) {
                 if (e.keyCode === 13) {
                     e.preventDefault();
-                    $scope.showFolderInput = false;
-
+                    
                     mediaResource
                         .addFolder($scope.newFolderName, $scope.options.formData.currentFolder)
                         .then(function(data) {
+                            $scope.showFolderInput = false;
+                            $scope.newFolderName = "";
 
                             //we've added a new folder so lets clear the tree cache for that specific item
                             treeService.clearCache({
@@ -1184,7 +1208,7 @@ angular.module("umbraco")
                 $scope.options.formData.currentFolder = folder.id;
                 $scope.currentFolder = folder;      
             };
-
+            
             //This executes prior to the whole processing which we can use to get the UI going faster,
             //this also gives us the start callback to invoke to kick of the whole thing
             $scope.$on('fileuploadadd', function (e, data) {
@@ -1480,6 +1504,14 @@ angular.module("umbraco").controller('Umbraco.Dialogs.Template.QueryBuilderContr
 					query.sort.direction = "ascending";
 				}
 			};
+		});
+angular.module("umbraco").controller('Umbraco.Dialogs.Template.SnippetController',
+		function($scope) {
+		    $scope.type = $scope.dialogOptions.type;
+		    $scope.section = {
+                name: "",
+                required: false
+		    };
 		});
 //used for the media picker dialog
 angular.module("umbraco").controller("Umbraco.Dialogs.TreePickerController",
@@ -1913,7 +1945,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.TreePickerController",
 	    });
 	});
 angular.module("umbraco")
-    .controller("Umbraco.Dialogs.UserController", function ($scope, $location, $timeout, userService, historyService, eventsService, externalLoginInfo, authResource) {
+    .controller("Umbraco.Dialogs.UserController", function ($scope, $location, $timeout, userService, historyService, eventsService, externalLoginInfo, authResource, currentUserResource, formHelper) {
 
         $scope.history = historyService.getCurrent();
         $scope.version = Umbraco.Sys.ServerVariables.application.version + " assembly: " + Umbraco.Sys.ServerVariables.application.assemblyVersion;
@@ -2016,7 +2048,48 @@ angular.module("umbraco")
 
         });
 
+        //create the initial model for change password property editor
+        $scope.changePasswordModel = {
+            alias: "_umb_password",
+            view: "changepassword",
+            config: {},
+            value: {}
+        };
+
+        //go get the config for the membership provider and add it to the model
+        currentUserResource.getMembershipProviderConfig().then(function (data) {
+            $scope.changePasswordModel.config = data;
+            //ensure the hasPassword config option is set to true (the user of course has a password already assigned)
+            //this will ensure the oldPassword is shown so they can change it
+            $scope.changePasswordModel.config.hasPassword = true;
+            $scope.changePasswordModel.config.disableToggle = true;
+        });
+
+        ////this is the model we will pass to the service
+        //$scope.profile = {};
+
+        $scope.changePassword = function () {
+
+            if (formHelper.submitForm({ scope: $scope })) {
+                currentUserResource.changePassword($scope.changePasswordModel.value).then(function (data) {
+
+                    //if the password has been reset, then update our model
+                    if (data.value) {
+                        $scope.changePasswordModel.value.generatedPassword = data.value;
+                    }
+
+                    formHelper.resetForm({ scope: $scope, notifications: data.notifications });
+
+                }, function (err) {
+
+                    formHelper.handleError(err);
+
+                });
+            }
+        };
+
     });
+
 /**
  * @ngdoc controller
  * @name Umbraco.Dialogs.LegacyDeleteController
@@ -2051,7 +2124,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.YsodController", YsodContr
 */
 function LegacyController($scope, $routeParams, $element) {
 
-    var url = decodeURIComponent($routeParams.url.toLowerCase().replace(/javascript\:/g, ""));
+    var url = decodeURIComponent($routeParams.url.replace(/javascript\:/gi, ""));
     //split into path and query
     var urlParts = url.split("?");
     var extIndex = urlParts[0].lastIndexOf(".");
@@ -2136,6 +2209,7 @@ angular.module("umbraco").controller("Umbraco.Editors.Content.CopyController",
 	        searchText = value + "...";
 	    });
 
+	    $scope.recursive = true;
 	    $scope.relateToOriginal = false;
 	    $scope.dialogTreeEventHandler = $({});
 	    $scope.busy = false;
@@ -2224,7 +2298,7 @@ angular.module("umbraco").controller("Umbraco.Editors.Content.CopyController",
 	        $scope.busy = true;
 	        $scope.error = false;
 
-	        contentResource.copy({ parentId: $scope.target.id, id: node.id, relateToOriginal: $scope.relateToOriginal })
+	        contentResource.copy({ parentId: $scope.target.id, id: node.id, relateToOriginal: $scope.relateToOriginal, recursive: $scope.recursive })
                 .then(function (path) {
                     $scope.error = false;
                     $scope.success = true;
@@ -3182,7 +3256,7 @@ function examineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeo
         umbRequestHelper.resourcePromise(
                 $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "GetSearchResults", {
                     searcherName: searcher.name,
-                    query: searcher.searchText,
+                    query: encodeURIComponent(searcher.searchText),
                     queryType: searcher.searchType
                 })),
                 'Failed to search')
@@ -4062,7 +4136,7 @@ angular.module("umbraco").controller("Umbraco.Editors.Member.EditController", Me
  * @description
  * The controller for the member list view
  */
-function MemberListController($scope, $routeParams, $location, $q, $window, appState, memberResource, entityResource, navigationService, notificationsService, angularHelper, serverValidationManager, contentEditingHelper, fileManager, formHelper, umbModelMapper, editorState) {
+function MemberListController($scope, $routeParams, $location, $q, $window, appState, memberResource, entityResource, navigationService, notificationsService, angularHelper, serverValidationManager, contentEditingHelper, fileManager, formHelper, umbModelMapper, editorState, localizationService) {
     
     //setup scope vars
     $scope.currentSection = appState.getSectionState("currentSection");
@@ -4073,6 +4147,13 @@ function MemberListController($scope, $routeParams, $location, $q, $window, appS
         .then(function (data) {
             $scope.loaded = true;
             $scope.content = data;
+
+            //translate "All Members"
+            if ($scope.content != null && $scope.content.name != null && $scope.content.name.replace(" ", "").toLowerCase() == "allmembers") {
+                localizationService.localize("member_allMembers").then(function (value) {
+                    $scope.content.name = value;
+                });
+            }
 
             editorState.set($scope.content);
 
@@ -4769,7 +4850,7 @@ angular.module("umbraco").controller("Umbraco.PrevalueEditors.MultiColorPickerCo
 //this controller simply tells the dialogs service to open a mediaPicker window
 //with a specified callback, this callback will receive an object with a selection on it
 
-function contentPickerController($scope, dialogService, entityResource, editorState, $log, iconHelper, $routeParams, fileManager, contentEditingHelper) {
+function contentPickerController($scope, dialogService, entityResource, editorState, $log, iconHelper, $routeParams, fileManager, contentEditingHelper, angularHelper, navigationService, $location) {
 
     function trim(str, chr) {
         var rgxtrim = (!chr) ? new RegExp('^\\s+|\\s+$', 'g') : new RegExp('^' + chr + '+|' + chr + '+$', 'g');
@@ -4817,7 +4898,9 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
     //the default pre-values
     var defaultConfig = {
         multiPicker: false,
-        showEditButton: false,        
+        showOpenButton: false,
+        showEditButton: false,
+        showPathOnHover: false,
         startNode: {
             query: "",
             type: "content",
@@ -4832,13 +4915,17 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
 
     //Umbraco persists boolean for prevalues as "0" or "1" so we need to convert that!
     $scope.model.config.multiPicker = ($scope.model.config.multiPicker === "1" ? true : false);
+    $scope.model.config.showOpenButton = ($scope.model.config.showOpenButton === "1" ? true : false);
     $scope.model.config.showEditButton = ($scope.model.config.showEditButton === "1" ? true : false);
-
+    $scope.model.config.showPathOnHover = ($scope.model.config.showPathOnHover === "1" ? true : false);
+ 
     var entityType = $scope.model.config.startNode.type === "member"
         ? "Member"
         : $scope.model.config.startNode.type === "media"
         ? "Media"
         : "Document";
+    $scope.allowOpenButton = entityType === "Document" || entityType === "Media";
+    $scope.allowEditButton = entityType === "Document";
 
     //the dialog options for the picker
     var dialogOptions = {
@@ -4855,6 +4942,7 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
                 $scope.clear();
                 $scope.add(data);
             }
+        angularHelper.getCurrentForm($scope).$setDirty();
         },
         treeAlias: $scope.model.config.startNode.type,
         section: $scope.model.config.startNode.type
@@ -4909,7 +4997,23 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
 
     $scope.remove = function (index) {
         $scope.renderModel.splice(index, 1);
+        angularHelper.getCurrentForm($scope).$setDirty();
     };
+
+    $scope.showNode = function (index) {
+        var item = $scope.renderModel[index];
+        var id = item.id;
+        var section = $scope.model.config.startNode.type.toLowerCase();
+
+        entityResource.getPath(id, entityType).then(function (path) {
+            navigationService.changeSection(section);
+            navigationService.showTree(section, {
+                tree: section, path: path, forceReload: false, activate: true
+            });
+            var routePath = section + "/" + section + "/edit/" + id.toString();
+            $location.path(routePath).search("");
+        });
+    }
         
     $scope.add = function (item) {
         var currIds = _.map($scope.renderModel, function (i) {
@@ -4918,7 +5022,7 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
 
         if (currIds.indexOf(item.id) < 0) {
             item.icon = iconHelper.convertFromLegacyIcon(item.icon);
-            $scope.renderModel.push({ name: item.name, id: item.id, icon: item.icon });
+            $scope.renderModel.push({ name: item.name, id: item.id, icon: item.icon, path: item.path });
         }
     };
 
@@ -4950,7 +5054,7 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
            
             if (entity) {
                 entity.icon = iconHelper.convertFromLegacyIcon(entity.icon);
-                $scope.renderModel.push({ name: entity.name, id: entity.id, icon: entity.icon });
+                $scope.renderModel.push({ name: entity.name, id: entity.id, icon: entity.icon, path: entity.path });
             }
             
            
@@ -5558,7 +5662,10 @@ angular.module("umbraco")
                     } else {
                         return val.slice(paddArray[0].length, 0);
                     }
-                }else{
+                } else {
+                    if (paddArray[1].length === 0) {
+                        return val.slice(paddArray[0].length);
+                    }
                     return val.slice(paddArray[0].length, -paddArray[1].length); 
                 }
             }
@@ -5648,7 +5755,7 @@ angular.module("umbraco")
     		};
 
     		$scope.percentage = function(spans){
-    		    return ((spans / $scope.columns) * 100).toFixed(1);
+    		    return ((spans / $scope.columns) * 100).toFixed(8);
     		};
 
     		$scope.toggleCollection = function(collection, toggle){
@@ -5717,7 +5824,7 @@ function RowConfigController($scope) {
     };
 
     $scope.percentage = function(spans) {
-        return ((spans / $scope.columns) * 100).toFixed(1);
+        return ((spans / $scope.columns) * 100).toFixed(8);
     };
 
     $scope.toggleCollection = function(collection, toggle) {
@@ -5878,7 +5985,8 @@ angular.module("umbraco")
                     $scope.control.value = {
                         focalPoint: data.focalPoint,
                         id: data.id,
-                        image: data.image
+                        image: data.image,
+                        altText: data.altText
                     };
 
                     $scope.setUrl();
@@ -6349,7 +6457,7 @@ angular.module("umbraco")
         };
 
         $scope.percentage = function (spans) {
-            return ((spans / $scope.model.config.items.columns) * 100).toFixed(1);
+            return ((spans / $scope.model.config.items.columns) * 100).toFixed(8);
         };
 
 
@@ -6813,7 +6921,7 @@ angular.module("umbraco")
         };
 
         $scope.percentage = function(spans){
-            return ((spans / $scope.model.value.columns) * 100).toFixed(1);
+            return ((spans / $scope.model.value.columns) * 100).toFixed(8);
         };
 
         $scope.zeroWidthFilter = function (cell) {
@@ -7254,7 +7362,7 @@ function includePropsPreValsController($rootScope, $scope, localizationService, 
 
 
 angular.module("umbraco").controller("Umbraco.PrevalueEditors.IncludePropertiesListViewController", includePropsPreValsController);
-function listViewController($rootScope, $scope, $routeParams, $injector, notificationsService, iconHelper, dialogService, editorState, localizationService, $location, appState) {
+function listViewController($rootScope, $scope, $routeParams, $injector, notificationsService, iconHelper, dialogService, editorState, localizationService, $location, appState, $timeout, $q) {
 
     //this is a quick check to see if we're in create mode, if so just exit - we cannot show children for content 
     // that isn't created yet, if we continue this will use the parent id in the route params which isn't what
@@ -7347,15 +7455,17 @@ function listViewController($rootScope, $scope, $routeParams, $injector, notific
         }
     });
 
-    function showNotificationsAndReset(err, reload) {
+    function showNotificationsAndReset(err, reload, successMsg) {
 
         //check if response is ysod
         if(err.status && err.status >= 500) {
             dialogService.ysodDialog(err);
         }
 
-        $scope.bulkStatus = "";        
-        $scope.actionInProgress = false;
+        $timeout(function() {
+            $scope.bulkStatus = "";
+            $scope.actionInProgress = false;
+        }, 500);
 
         if (reload === true) {
             $scope.reloadView($scope.contentId);
@@ -7365,6 +7475,9 @@ function listViewController($rootScope, $scope, $routeParams, $injector, notific
             for (var i = 0; i < err.data.notifications.length; i++) {
                 notificationsService.showNotification(err.data.notifications[i]);
             }
+        }
+        else if (successMsg) {
+            notificationsService.success("Done", successMsg);
         }
     }
 
@@ -7494,11 +7607,23 @@ function listViewController($rootScope, $scope, $routeParams, $injector, notific
                 $scope.reloadView($scope.contentId);
             }
         });
-    }, 200));
+    }, 1000));
 
-    $scope.enterSearch = function($event) {
+    $scope.filterResults = function (ev) {
+        //13: enter
+
+        switch (ev.keyCode) {
+            case 13:
+                $scope.options.pageNumber = 1;
+                $scope.actionInProgress = true;
+                $scope.reloadView($scope.contentId);
+                break;
+        }
+    };
+
+    $scope.enterSearch = function ($event) {
         $($event.target).next().focus();
-    }
+    };
 
     $scope.selectAll = function($event) {
         var checkbox = $event.target;
@@ -7533,101 +7658,58 @@ function listViewController($rootScope, $scope, $routeParams, $injector, notific
         return iconHelper.convertFromLegacyIcon(entry.icon);
     };
 
-    $scope.delete = function() {
-        var selected = _.filter($scope.listViewResultSet.items, function(item) {
+    function serial(selected, fn, getStatusMsg, index) {
+        return fn(selected, index).then(function (content) {
+            index++;
+            $scope.bulkStatus = getStatusMsg(index, selected.length);
+            return index < selected.length ? serial(selected, fn, getStatusMsg, index) : content;
+        }, function (err) {
+            var reload = index > 0;
+            showNotificationsAndReset(err, reload);
+            return err;
+        });
+    }
+
+    function applySelected(fn, getStatusMsg, getSuccessMsg, confirmMsg) {
+        var selected = _.filter($scope.listViewResultSet.items, function (item) {
             return item.selected;
         });
-        var total = selected.length;
-        if (total === 0) {
+        if (selected.length === 0)
             return;
-        }
-
-        if (confirm("Sure you want to delete?") == true) {
-            $scope.actionInProgress = true;
-            $scope.bulkStatus = "Starting with delete";
-            var current = 1;
-
-            var pluralSuffix = total == 1 ? "" : "s";
-
-            for (var i = 0; i < selected.length; i++) {
-                $scope.bulkStatus = "Deleted item " + current + " out of " + total + " item" + pluralSuffix;
-                deleteItemCallback(getIdCallback(selected[i])).then(function (data) {
-                    if (current === total) {
-                        //TODO: Should probably add notifications on the server side
-                        notificationsService.success("Bulk action", "Deleted " + total + " item" + pluralSuffix);
-                        showNotificationsAndReset(data, true);
-                    }
-                    current++;
-                }, function (err) {
-                    showNotificationsAndReset(err, false);
-                });
-            }
-        }
-
-    };
-
-    $scope.publish = function() {
-        var selected = _.filter($scope.listViewResultSet.items, function(item) {
-            return item.selected;
-        });
-        var total = selected.length;
-        if (total === 0) {
+        if (confirmMsg && !confirm(confirmMsg))
             return;
-        }
 
         $scope.actionInProgress = true;
-        $scope.bulkStatus = "Starting with publish";
-        var current = 1;
+        $scope.bulkStatus = getStatusMsg(0, selected.length);
 
-        var pluralSuffix = total == 1 ? "" : "s";
+        serial(selected, fn, getStatusMsg, 0).then(function (result) {
+            // executes once the whole selection has been processed
+            // in case of an error (caught by serial), result will be the error
+            if (!(result.data && angular.isArray(result.data.notifications)))
+                showNotificationsAndReset(result, true, getSuccessMsg(selected.length));
+        });
+    };
 
-        for (var i = 0; i < selected.length; i++) {
-            $scope.bulkStatus = "Publishing " + current + " out of " + total + " document" + pluralSuffix;
+    $scope.delete = function () {
+        applySelected(
+            function (selected, index) { return deleteItemCallback(getIdCallback(selected[index])) },
+            function (count, total) { return "Deleted " + count + " out of " + total + " document" + (total > 1 ? "s" : "") },
+            function (total) { return "Deleted " + total + " document" + (total > 1 ? "s" : "") },
+            "Sure you want to delete?");
+    };
 
-            contentResource.publishById(getIdCallback(selected[i]))
-                .then(function(content) {
-                    if (current == total) {
-                        notificationsService.success("Bulk action", "Published " + total + " document" + pluralSuffix);
-                        showNotificationsAndReset(content, true);
-                    }
-                    current++;
-                }, function(err) {
-                    showNotificationsAndReset(err, false);
-                });
-        }
+    $scope.publish = function () {
+        applySelected(
+            function (selected, index) { return contentResource.publishById(getIdCallback(selected[index])); },
+            function (count, total) { return "Published " + count + " out of " + total + " document" + (total > 1 ? "s" : "") },
+            function (total) { return "Published " + total + " document" + (total > 1 ? "s" : "") });
     };
 
     $scope.unpublish = function() {
-        var selected = _.filter($scope.listViewResultSet.items, function(item) {
-            return item.selected;
-        });
-        var total = selected.length;
-        if (total === 0) {
-            return;
-        }
-
-        $scope.actionInProgress = true;
-        $scope.bulkStatus = "Starting with publish";
-        var current = 1;
-
-        var pluralSuffix = total == 1 ? "" : "s";
-
-        for (var i = 0; i < selected.length; i++) {
-            $scope.bulkStatus = "Unpublishing " + current + " out of " + total + " document" + pluralSuffix;
-
-            contentResource.unPublish(getIdCallback(selected[i]))
-                .then(function(content) {
-
-                    if (current == total) {
-                        notificationsService.success("Bulk action", "Unpublished " + total + " document" + pluralSuffix);
-                        showNotificationsAndReset(content, true);
-                    }
-
-                    current++;
-                }, function(err) {
-                    showNotificationsAndReset(err, false);
-                });
-        }
+        applySelected(
+            function (selected, index) { return contentResource.unPublish(getIdCallback(selected[index])); },
+            function (count, total) { return "Unpublished " + count + " out of " + total + " document" + (total > 1 ? "s" : "") },
+            function (total) { return "Unpublished " + total + " document" + (total > 1 ? "s" : "") });
     };
 
     function getCustomPropertyValue(alias, properties) {
@@ -7952,7 +8034,7 @@ angular.module("umbraco").controller("Umbraco.PropertyEditors.MarkdownEditorCont
 //this controller simply tells the dialogs service to open a mediaPicker window
 //with a specified callback, this callback will receive an object with a selection on it
 angular.module('umbraco').controller("Umbraco.PropertyEditors.MediaPickerController",
-    function ($rootScope, $scope, dialogService, entityResource, mediaResource, mediaHelper, $timeout, userService) {
+    function ($rootScope, $scope, dialogService, entityResource, mediaResource, mediaHelper, $timeout, userService, angularHelper) {
 
         //check the pre-values for multi-picker
         var multiPicker = $scope.model.config.multiPicker && $scope.model.config.multiPicker !== '0' ? true : false;
@@ -8005,6 +8087,7 @@ angular.module('umbraco').controller("Umbraco.PropertyEditors.MediaPickerControl
         $scope.remove = function(index) {
             $scope.images.splice(index, 1);
             $scope.ids.splice(index, 1);
+            angularHelper.getCurrentForm($scope).$setDirty();
             $scope.sync();
         };
 
@@ -8027,6 +8110,7 @@ angular.module('umbraco').controller("Umbraco.PropertyEditors.MediaPickerControl
 
                         $scope.images.push(media);
                         $scope.ids.push(media.id);
+                        angularHelper.getCurrentForm($scope).$setDirty();
                     });
 
                     $scope.sync();
@@ -8193,7 +8277,7 @@ function memberGroupController($rootScope, $scope, dialogService, mediaResource,
 angular.module('umbraco').controller("Umbraco.PropertyEditors.MemberGroupController", memberGroupController);
 //this controller simply tells the dialogs service to open a memberPicker window
 //with a specified callback, this callback will receive an object with a selection on it
-function memberPickerController($scope, dialogService, entityResource, $log, iconHelper){
+function memberPickerController($scope, dialogService, entityResource, $log, iconHelper, angularHelper){
 
     function trim(str, chr) {
         var rgxtrim = (!chr) ? new RegExp('^\\s+|\\s+$', 'g') : new RegExp('^' + chr + '+|' + chr + '+$', 'g');
@@ -8220,6 +8304,7 @@ function memberPickerController($scope, dialogService, entityResource, $log, ico
                 $scope.clear();
                 $scope.add(data);
             }
+            angularHelper.getCurrentForm($scope).$setDirty();
         }
     };
 
@@ -8608,8 +8693,7 @@ angular.module("umbraco")
 
             //queue rules loading
             angular.forEach(editorConfig.stylesheets, function (val, key) {
-                stylesheets.push("../css/" + val + ".css?" + new Date().getTime());
-
+                stylesheets.push(Umbraco.Sys.ServerVariables.umbracoSettings.cssPath + "/" + val + ".css?" + new Date().getTime());
                 await.push(stylesheetResource.getRulesByName(val).then(function (rules) {
                     angular.forEach(rules, function (rule) {
                         var r = {};
@@ -9258,13 +9342,29 @@ angular.module('umbraco').controller("Umbraco.PropertyEditors.EmbeddedContentCon
 angular.module('umbraco').controller("Umbraco.PropertyEditors.UrlListController",
 	function($rootScope, $scope, $filter) {
 
-        function formatDisplayValue() {
-            $scope.renderModel = _.map($scope.model.value.split(","), function (item) {
-                return {
-                    url: item,
-                    urlTarget: ($scope.config && $scope.config.target) ? $scope.config.target : "_blank"
-                };
-            });
+	    function formatDisplayValue() {            
+	        if (angular.isArray($scope.model.value)) {
+	            //it's the json value
+	            $scope.renderModel = _.map($scope.model.value, function (item) {
+	                return {
+	                    url: item.url,
+	                    linkText: item.linkText,
+	                    urlTarget: (item.target) ? item.target : "_blank",
+	                    icon: (item.icon) ? item.icon : "icon-out"
+	                };
+	            });
+	        }
+	        else {
+                //it's the default csv value
+	            $scope.renderModel = _.map($scope.model.value.split(","), function (item) {
+	                return {
+	                    url: item,
+	                    linkText: "",
+	                    urlTarget: ($scope.config && $scope.config.target) ? $scope.config.target : "_blank",
+	                    icon: ($scope.config && $scope.config.icon) ? $scope.config.icon : "icon-out"
+	                };
+	            });
+	        }
         }
 
 	    $scope.getUrl = function(valueUrl) {

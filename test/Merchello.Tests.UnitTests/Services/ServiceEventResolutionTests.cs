@@ -15,6 +15,7 @@ using Umbraco.Core.Events;
 namespace Merchello.Tests.UnitTests.Services
 {
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     [TestFixture]
     [Category("Service Events")]
@@ -32,7 +33,8 @@ namespace Merchello.Tests.UnitTests.Services
             mockSettingService.Setup(x => x.GetNextOrderNumber(1)).Returns(111);
 
             var logger = Logger.CreateWithDefaultLog4NetConfiguration();
-            _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(), logger, new StoreSettingService(logger), new ShipmentService(logger));
+            var syntax = new Mock<ISqlSyntaxProvider>().Object;
+            _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(logger, syntax), logger, new StoreSettingService(logger, syntax), new ShipmentService(logger, syntax));
 
             _orderStatusInvokeTester = new OrderStatusInvokeTester();
 

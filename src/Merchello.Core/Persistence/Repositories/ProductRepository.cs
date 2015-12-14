@@ -14,8 +14,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The product repository.
@@ -39,8 +41,14 @@
         /// <param name="productVariantRepository">
         /// The product variant repository.
         /// </param>
-        public ProductRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IProductVariantRepository productVariantRepository)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public ProductRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IProductVariantRepository productVariantRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
            Mandate.ParameterNotNull(productVariantRepository, "productVariantRepository");
            _productVariantRepository = productVariantRepository;        
@@ -103,7 +111,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         public override Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
@@ -541,7 +549,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         public Page<Guid> GetProductsKeysByManufacturer(
             IEnumerable<string> manufacturer,
@@ -664,7 +672,7 @@
                .Append("INNER JOIN [merchCatalogInventory]")
                .Append("ON	[merchProductVariant].[pk] = [merchCatalogInventory].[productVariantKey]")
                .Append("WHERE ([merchCatalogInventory].[count] > 0 AND [merchProductVariant].[trackInventory] = 1)")
-               .Append("OR [merchProductVaraint].[trackInventory] = 0")
+               .Append("OR [merchProductVariant].[trackInventory] = 0")
                .Append(") [merchProductVariant]")
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
@@ -1137,11 +1145,11 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<ProductDto>()
-               .InnerJoin<ProductVariantDto>()
-               .On<ProductDto, ProductVariantDto>(left => left.Key, right => right.ProductKey)
-               .InnerJoin<ProductVariantIndexDto>()
-               .On<ProductVariantDto, ProductVariantIndexDto>(left => left.Key, right => right.ProductVariantKey)
+               .From<ProductDto>(SqlSyntax)
+               .InnerJoin<ProductVariantDto>(SqlSyntax)
+               .On<ProductDto, ProductVariantDto>(SqlSyntax, left => left.Key, right => right.ProductKey)
+               .InnerJoin<ProductVariantIndexDto>(SqlSyntax)
+               .On<ProductVariantDto, ProductVariantIndexDto>(SqlSyntax, left => left.Key, right => right.ProductVariantKey)
                .Where<ProductVariantDto>(x => x.Master);
 
             return sql;
@@ -1337,11 +1345,11 @@
         {
             var sql = new Sql();
             sql.Select("*")
-               .From<ProductOptionDto>()
-               .InnerJoin<Product2ProductOptionDto>()
-               .On<ProductOptionDto, Product2ProductOptionDto>(left => left.Key, right => right.OptionKey)
+               .From<ProductOptionDto>(SqlSyntax)
+               .InnerJoin<Product2ProductOptionDto>(SqlSyntax)
+               .On<ProductOptionDto, Product2ProductOptionDto>(SqlSyntax, left => left.Key, right => right.OptionKey)
                .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey)
-               .OrderBy<Product2ProductOptionDto>(x => x.SortOrder);
+               .OrderBy<Product2ProductOptionDto>(x => x.SortOrder, SqlSyntax);
 
             var dtos = Database.Fetch<ProductOptionDto, Product2ProductOptionDto>(sql);
 
@@ -1509,7 +1517,7 @@
         {
             var sql = new Sql();
             sql.Select("*")
-               .From<ProductAttributeDto>()
+               .From<ProductAttributeDto>(SqlSyntax)
                .Where<ProductAttributeDto>(x => x.OptionKey == optionKey);
 
             var dtos = Database.Fetch<ProductAttributeDto>(sql);
@@ -1640,7 +1648,7 @@
 
 
             var sql = new Sql();
-            sql.Select("*").From<ProductVariantDto>();
+            sql.Select("*").From<ProductVariantDto>(SqlSyntax);
 
             if (terms.Any())
             {

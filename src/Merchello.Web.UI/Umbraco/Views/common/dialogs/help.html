@@ -7,7 +7,7 @@
 	<div class="umb-panel-body umb-scrollable">
 		<div class="tab-content umb-control-group">
 			<div class="umb-pane">
-				<h5><localize key="help_helpTopicsFor">Help topics for</localize>: {{section}}</h5>
+				<h5><localize key="help_helpTopicsFor">Help topics for</localize>: {{sectionName}}</h5>
 				<ul class="unstyled list-icons" ng-show="topics">
 					<li ng-repeat="topic in topics">
 				    	<i class="icon icon-help-alt"></i>
@@ -31,13 +31,13 @@
 			</div>
 
 			<div class="umb-pane">
-				<h5><localize key="help_videoChaptersFor">Video chapters for</localize>: {{section}}</h5>
+				<h5><localize key="help_videoChaptersFor">Video chapters for</localize>: {{sectionName}}</h5>
 
 				<ul class="thumbnails" ng-show="videos">
 					<li class="span2" ng-repeat="video in videos">
 				    	<div class="thumbnail" style="margin-right: 20px">
 					    	<a target="_blank" href="{{video.link}}?utm_source=core&utm_medium=help&utm_content=link&utm_campaign=tv" title="{{video.title}}">
-                                <img ng-src="{{video.thumbnail}}" alt="{{video.title}}">
+                                <img ng-src="{{video.thumbnail}}?width=120" alt="{{video.title}}">
 					    	</a>
 				    	</div>
 				    </li>

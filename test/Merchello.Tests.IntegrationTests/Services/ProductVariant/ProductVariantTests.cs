@@ -48,7 +48,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test confirms that a collection of all possible product attribute combinations can be created.
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Get_A_List_Of_All_Possible_Attribute_Combinations()
         {
             //// Arrange
@@ -64,7 +64,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test confirms that a collection of ProductVariants that HAVE YET to be created can be retrieved for a product
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Get_A_List_Of_All_Possible_Variants_That_Can_Be_Created()
         {
             //// Arrange
@@ -102,7 +102,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a product variant cannot be created twice
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Not_Create_A_Duplicate_ProductVariant()
         {
             //// Arrange
@@ -122,7 +122,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a variant can be retrieved by it's key
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Retrieve_A_ProductVariant_by_Its_Key()
         {
             //// Arrange
@@ -142,7 +142,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a variant can be retrieved by it's sku
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Retrieve_A_ProductVariant_By_Its_Sku()
         {
             //// Arrange
@@ -161,7 +161,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that product variants can be retrieved for a particular product
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Retrieve_All_Variants_For_A_Product()
         {
             //// Arrange
@@ -178,7 +178,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a variant can be deleted
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Delete_A_Variant()
         {
             //// Arrange
@@ -198,7 +198,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies deleting an option also deletes its corresponding variants
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Verify_That_ProductVariant_Is_Deleted_When_An_Option_Is_Deleted()
         {
             //// Arrange
@@ -218,7 +218,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies deleting an attribute also deletes variants that are assoicated with the attribute
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Verify_Removing_An_Attribute_Deletes_Variants_That_Have_That_Attribute()
         {
             //// Arrange
@@ -236,7 +236,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a product variant can be retrieved given a product and a collection of attribute Ids
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Retrieve_A_ProductVariant_Given_A_Product_And_A_Collection_Of_AttributeIds()
         {
             //// Arrange
@@ -261,7 +261,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a warehouse can be associated with a variant
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Add_A_Warehouse_To_A_ProductVariant()
         {
             //// Arrange
@@ -276,7 +276,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a warehouse can be assoicated with a variant and saved
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Add_And_Save_A_Warehouse_To_A_ProductVariant()
         {
             //// Arrange
@@ -290,7 +290,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             Assert.IsTrue(_product.CatalogInventories.Count() == 1);
         }
 
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Update_A_ProductVariants_Inventory_Count()
         {
             //// Arrange
@@ -307,7 +307,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Test verifies that a CatalogInventory record can be updated once persisted
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Update_A_ProductVariants_CatalogInventory_After_Its_Been_Saved()
         {
             //// Arrange
@@ -333,7 +333,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
         /// <summary>
         /// Quick test to verify the CatalogInventoryCollection is treating keys correctly
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Add_A_ProductVariant_To_CategoryInventory_Twice_Without_Causing_An_Error()
         {
             //// Arrange

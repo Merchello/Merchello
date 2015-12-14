@@ -15,6 +15,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the Customer Registry Service 
@@ -40,7 +41,21 @@
         /// The logger.
         /// </param>
         public ItemCacheService(ILogger logger)
-            : this(new RepositoryFactory(), logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemCacheService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public ItemCacheService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
         {
         }
 

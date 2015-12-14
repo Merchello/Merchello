@@ -76,7 +76,8 @@
             { 43, typeof(Invoice2EntityCollectionDto) },
             { 44, typeof(Customer2EntityCollectionDto) },
             { 45, typeof(DetachedContentTypeDto) },
-            { 46, typeof(ProductVariantDetachedContentDto) }
+            { 46, typeof(ProductVariantDetachedContentDto) },
+            { 47, typeof(NoteDto) }
         };
 
         /// <summary>
@@ -208,11 +209,19 @@
 
             ValidateDbConstraints(result);
 
-            if (!result.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
+            if (
+                !result.MerchelloErrors.Any(
+                    x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
             {
                 // catch this so it doesn't kick off on an install
-                LoadMerchelloData(result);   
+                LoadMerchelloData(result);
             }
+            else
+            {
+                result.StoreSettings = Enumerable.Empty<StoreSettingDto>();
+                result.TypeFields = Enumerable.Empty<TypeFieldDto>();
+            }
+
 
             return result;
         }

@@ -14,8 +14,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The offer redeemed repository.
@@ -31,8 +33,14 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public OfferRedeemedRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public OfferRedeemedRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
         }
 
@@ -155,7 +163,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<OfferRedeemedDto>();
+                .From<OfferRedeemedDto>(SqlSyntax);
 
             return sql;
         }
@@ -240,7 +248,7 @@
             var terms = searchTerm.Split(' ').Select(x => x.Trim()).ToArray();
 
             var sql = new Sql();
-            sql.Select("*").From<OfferRedeemedDto>();
+            sql.Select("*").From<OfferRedeemedDto>(SqlSyntax);
 
             sql.Where("offerCode LIKE @term", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim() });
 

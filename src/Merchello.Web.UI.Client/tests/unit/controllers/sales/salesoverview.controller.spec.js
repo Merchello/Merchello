@@ -7,7 +7,7 @@ xdescribe('salesoverview.controller', function() {
 
     beforeEach(inject(function ($rootScope, $controller, $httpBackend, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService,
                                 settingsResource, shipmentResourceMock, orderResourceMocks,
-                                localizationMocks, auditLogResource, auditLogResourceMock, invoiceResource, orderResource, invoiceResourceMock,
+                                localizationMocks, auditLogResource, noteResource, auditLogResourceMock, invoiceResource, orderResource, invoiceResourceMock,
                                 paymentResource, paymentResourceMock, shipmentResource, settingResourceMock, dialogDataFactory, addressDisplayBuilder,
                                 salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, shipMethodsQueryDisplay) {
 
@@ -26,7 +26,7 @@ xdescribe('salesoverview.controller', function() {
         controller = $controller('Merchello.Dashboards.SalesOverviewController',
             { $scope: scope, $routeParams: { id: 'dd62d5a2-6a52-4de3-a740-193d2a25bbbb' }, $timeout: $timeout, $log: $log, $location: $location,
                 assetsService: assetsService, notificationsService: notificationsService, dialogService: dialogService, localizationService: localizationService,
-                auditLogResource: auditLogResource, invoiceResource: invoiceResource, settingsResource: settingsResource, orderResource: orderResource,
+                auditLogResource: auditLogResource, noteResource: noteResource, invoiceResource: invoiceResource, settingsResource: settingsResource, orderResource: orderResource,
                 paymentResource: paymentResource, shipmentResource: shipmentResource, dialogDataFactory: dialogDataFactory, addressDisplayBuilder: addressDisplayBuilder,
                 paymentDisplayBuilder: paymentDisplayBuilder, salesHistoryDisplayBuilder: salesHistoryDisplayBuilder,
                 invoiceDisplayBuilder: invoiceDisplayBuilder, shipMethodsQueryDisplay: shipMethodsQueryDisplay});

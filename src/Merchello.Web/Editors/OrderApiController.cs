@@ -16,7 +16,7 @@
 
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
-
+    
     /// <summary>
     /// The order api controller.
     /// </summary>
@@ -47,6 +47,11 @@
         ///// The backoffice.
         ///// </summary>
         //private IBackoffice _backoffice;
+
+        /// <summary>
+        /// The note service.
+        /// </summary>
+        private INoteService _noteService;
 
 
         /// <summary>
@@ -182,6 +187,22 @@
             }
 
             return shipment.GetDestinationAddress().ToAddressDisplay();
+        }
+
+
+        /// <summary>
+        /// Returns the notes by an invoice id (key) 
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="Note"/>s.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<INote> GetNotes(Guid id)
+        {
+            return _noteService.GetNotesByEntityKey(id);
         }
 
 

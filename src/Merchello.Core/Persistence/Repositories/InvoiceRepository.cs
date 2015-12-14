@@ -13,8 +13,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the Invoice Repository
@@ -46,8 +48,14 @@
         /// <param name="orderRepository">
         /// The order repository.
         /// </param>
-        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IInvoiceLineItemRepository invoiceLineItemRepository, IOrderRepository orderRepository) 
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax
+        /// </param>
+        public InvoiceRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IInvoiceLineItemRepository invoiceLineItemRepository, IOrderRepository orderRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(invoiceLineItemRepository, "lineItemRepository");
             Mandate.ParameterNotNull(orderRepository, "orderRepository");
@@ -1041,11 +1049,11 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-               .From<InvoiceDto>()
-               .InnerJoin<InvoiceIndexDto>()
-               .On<InvoiceDto, InvoiceIndexDto>(left => left.Key, right => right.InvoiceKey)
-               .InnerJoin<InvoiceStatusDto>()
-               .On<InvoiceDto, InvoiceStatusDto>(left => left.InvoiceStatusKey, right => right.Key);
+               .From<InvoiceDto>(SqlSyntax)
+               .InnerJoin<InvoiceIndexDto>(SqlSyntax)
+               .On<InvoiceDto, InvoiceIndexDto>(SqlSyntax, left => left.Key, right => right.InvoiceKey)
+               .InnerJoin<InvoiceStatusDto>(SqlSyntax)
+               .On<InvoiceDto, InvoiceStatusDto>(SqlSyntax, left => left.InvoiceStatusKey, right => right.Key);
 
             return sql;
         }
@@ -1135,7 +1143,7 @@
         /// <returns>
         /// The <see cref="Sql"/>.
         /// </returns>
-        private static Sql BuildInvoiceSearchSql(string searchTerm)
+        private Sql BuildInvoiceSearchSql(string searchTerm)
         {
             searchTerm = searchTerm.Replace(",", " ");
             var invidualTerms = searchTerm.Split(' ');
@@ -1158,7 +1166,9 @@
 
 
             var sql = new Sql();
-            sql.Select("*").From<InvoiceDto>();
+
+            sql.Select("*").From<InvoiceDto>(SqlSyntax);
+
             if (numbers.Any() && terms.Any())
             {
                 sql.Where("billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)", new { @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @email = string.Format("%{0}%", string.Join("% ", terms)).Trim(), @invNo = numbers.ToArray() });
@@ -1188,7 +1198,7 @@
         {
             var sql = new Sql();
             sql.Select("*")
-                .From<InvoiceItemDto>()
+                .From<InvoiceItemDto>(SqlSyntax)
                 .Where<InvoiceItemDto>(x => x.ContainerKey == invoiceKey);
 
             var dtos = Database.Fetch<InvoiceItemDto>(sql);

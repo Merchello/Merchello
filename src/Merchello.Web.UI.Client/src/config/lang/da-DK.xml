@@ -6,95 +6,95 @@
     <key alias="endDate">Slutdato</key>
     <key alias="alias">Alias</key>
     <key alias="active">Aktiv</key>
-    <key alias="sortOrder">Sort Order</key>
+    <key alias="sortOrder">Sortér efter</key>
   </area>
   <area alias="merchelloTree">
-    <key alias="products">Products</key>
-    <key alias="sales">Sales</key>
-    <key alias="customers">Customers</key>
+    <key alias="products">Produkter</key>
+    <key alias="sales">Salg</key>
+    <key alias="customers">Kunder</key>
     <key alias="marketing">Marketing</key>
-    <key alias="collections">Collections</key>
-    <key alias="reports">Reports</key>
-    <key alias="gateways">Gateway Providers</key>
+    <key alias="collections">Samlinger</key>
+    <key alias="reports">Rapporter</key>
+    <key alias="gateways">Gateway udbydere</key>
   </area>
   <area alias="merchelloTabs">
-    <key alias="productListing">Product Listing</key>
-    <key alias="product">Product</key>
-    <key alias="productVariants">Product Variants</key>
-    <key alias="productOptions">Product Options</key>
-    <key alias="productVariantEditor">Product Variant Editor</key>
-    <key alias="salesListing">Sales Listing</key>
-    <key alias="sales">Sale</key>
-    <key alias="payments">Payments</key>
-    <key alias="payment">Payment</key>
-    <key alias="shipments">Shipments</key>
-    <key alias="shipping">Shipping</key>
-    <key alias="customerListing">Customer Listing</key>
-    <key alias="customer">Customer</key>
-    <key alias="customerAddresses">Addresses</key>
-    <key alias="gatewayProviders">Gateway Providers</key>
-    <key alias="notification">Notification</key>
-    <key alias="taxation">Taxation</key>
-    <key alias="offerListing">Offer Listing</key>
-    <key alias="offer">Offer</key>
-    <key alias="coupon">Coupon</key>
-    <key alias="reportListing">Reports</key>
+    <key alias="productListing">Produkt lister</key>
+    <key alias="product">Produkter</key>
+    <key alias="productVariants">Produkt varianter</key>
+    <key alias="productOptions">Produkt muligheder</key>
+    <key alias="productVariantEditor">Produkt variant editor</key>
+    <key alias="salesListing">Salgs lister</key>
+    <key alias="sales">Salg</key>
+    <key alias="payments">Betalinger</key>
+    <key alias="payment">Betaling</key>
+    <key alias="shipments">Leveringer</key>
+    <key alias="shipping">Levering</key>
+    <key alias="customerListing">Kunde lister</key>
+    <key alias="customer">Kunde</key>
+    <key alias="customerAddresses">Adresse</key>
+    <key alias="gatewayProviders">Gateway udbydere</key>
+    <key alias="notification">Notifikation</key>
+    <key alias="taxation">Afgift</key>
+    <key alias="offerListing">Rabat lister</key>
+    <key alias="offer">Rabat</key>
+    <key alias="coupon">Kupon</key>
+    <key alias="reportListing">Rapporter</key>
   </area>
   <area alias="merchelloProviders">
-    <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
-    <key alias="partialPaidInvoiceCollection">Partially paid invoices</key>
-    <key alias="paidInvoiceCollection">Paid invoices</key>
-    <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
-    <key alias="openOrderCollection">Open orders</key>
-    <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+    <key alias="unpaidInvoiceCollection">Ubetalte fakturaer</key>
+    <key alias="partialPaidInvoiceCollection">Delvist betalte fakturaer</key>
+    <key alias="paidInvoiceCollection">Betalte fakturaer</key>
+    <key alias="notFulfilledOrderCollection">Uafsluttede ordre</key>
+    <key alias="openOrderCollection">Åbne ordre</key>
+    <key alias="fulfilledOrderCollection">Afsluttede ordre</key>
   </area>
   <area alias="merchelloCollections">
-    <key alias="providers">Collection Providers</key>
-    <key alias="newCollection">New Collection</key>
-    <key alias="manageCollection">Manage Collection</key>
-    <key alias="addEntities">Add new collection items</key>
-    <key alias="removeEntities">Remove collection items</key>
-    <key alias="sortCollections">Sort Collections</key>
-    <key alias="staticProviders">Static Collections</key>
-    <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
-    <key alias="product">Product Collections</key>
-    <key alias="customer">Customer Collections</key>
-    <key alias="invoice">Invoice Collections</key>
-    <key alias="emptyCollection">The collection is empty.</key>
-    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
-    <key alias="collectionPickerTitle">Collections</key>
-    <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
-    <key alias="allItems">All items</key>
-    <key alias="productCollections">Product Collections</key>
-    <key alias="invoiceCollections">Invoice Collections</key>
-    <key alias="customerCollections">Customer Collections</key>
+    <key alias="providers">Samlings udbydere</key>
+    <key alias="newCollection">Ny samling</key>
+    <key alias="manageCollection">Administrer samling</key>
+    <key alias="addEntities">Tilføj nye samlings elementer</key>
+    <key alias="removeEntities">Fjern samlings elementer</key>
+    <key alias="sortCollections">Sortér samlinger</key>
+    <key alias="staticProviders">Statiske samlinger</key>
+    <key alias="staticProvidersInfo">Tillad brugere at oprette navngivne samlinger hvor elementer kan blive tilføjet.</key>
+    <key alias="product">Produkt samlinger</key>
+    <key alias="customer">Kunde samlinger</key>
+    <key alias="invoice">Faktura samlinger</key>
+    <key alias="emptyCollection">Samlinger er tom.</key>
+    <key alias="noQualifyingEntities">Der er ikke andre elementer som kan blive tilføjet til samlingen.</key>
+    <key alias="collectionPickerTitle">Samlinger</key>
+    <key alias="collectionPickerInfo">Tilføj dette element til en eller flere samlinger.</key>
+    <key alias="allItems">Alle elementer</key>
+    <key alias="productCollections">Produkt samlinger</key>
+    <key alias="invoiceCollections">Faktura samlinger</key>
+    <key alias="customerCollections">Kunde samlinger</key>
   </area>
   <area alias="merchelloValidation">
-    <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="nameFieldRequired">Navn er krævet</key>
   </area>
   <area alias="merchelloProducts">
-    <key alias="emptyProductCollection">There are currently no products in this collection</key>
+    <key alias="emptyProductCollection">Der er ingen produkter i denne samling</key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales"><![CDATA[
-        <h5>You Have No Sales Yet</h5>
-        <p>But you will soon!</p>
+        <h5>Du har ingen salg endnu</h5>
+        <p>Men det vil du snart have!</p>
       ]]></key>
-    <key alias="emptySalesCollection">There are currently no sales in this collection</key>
-    <key alias="invoiceNumber">Invoice #</key>
-    <key alias="paymentStatus">Payment status</key>
-    <key alias="fulfillmentStatus">Fulfillment status</key>
+    <key alias="emptySalesCollection">Der er ingen salg i denne samling</key>
+    <key alias="invoiceNumber">Faktura #</key>
+    <key alias="paymentStatus">Betalingsstatus</key>
+    <key alias="fulfillmentStatus">Ordrestatus</key>
   </area>
   <area alias="merchelloCustomers">
-    <key alias="newCustomer">New Customer</key>
+    <key alias="newCustomer">Ny kunde</key>
     <key alias="noCustomers"><![CDATA[
-        <h5>You Have No Customers</h5>
-        <p>But you will soon!</p>
+        <h5>Du har ingen kunder endnu</h5>
+        <p>Men det vil du snart have!</p>
       ]]></key>
-    <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
+    <key alias="emptyCustomerCollection">Der er ingen kunder i denne samling</key>
     <key alias="customerNotes"><![CDATA[
-      Customer Notes
-      <small>Notes about the customer (not sale specific)</small>
+      Kunde noter
+      <small>Noter om kunder (ikke salgs specifik)</small>
       ]]></key>
   </area>
   <area alias="merchelloButtons">
@@ -103,7 +103,7 @@
     <key alias="delete">Slet</key>
     <key alias="save">Gem</key>
     <key alias="select">Vælg</key>
-    <key alias="remove">Remove</key>
+    <key alias="remove">Fjern</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Katalog</key>
@@ -167,7 +167,7 @@
     <key alias="toggleAvailable">Tilgængelig</key>
     <key alias="isOnSale">Denne variant er på tilbud</key>
     <key alias="isAvailable">Denne variant er tilgængelig til køb</key>
-    <key alias="costOfGoods">Cost of Goods</key>
+    <key alias="costOfGoods">Kostpris af varer</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
@@ -177,7 +177,7 @@
     <key alias="orders">Ordrer</key>
     <key alias="orderNumber">Ordre #</key>
     <key alias="paymentStatus">Betalingsstatus</key>
-    <key alias="fulfillmentStatus">Fulfillment Status</key>
+    <key alias="fulfillmentStatus">Ordrestatus</key>
     <!-- TODO: Figure out context - is it right? -->
     <key alias="lineItems">Ordrelinier</key>
     <key alias="orderName">[Ordrenavn]</key>
@@ -315,10 +315,10 @@
     <key alias="catalogDefaultsHelper">Opsæt standard katelog enheders (produkt) muligheder. Kan ændres pr. enhed senere.</key>
     <key alias="globalTaxable">Alle enheder er momspligtige</key>
     <key alias="globalShippable">Alle enheder kan afsendes</key>
-    <key alias="globalTrackInventory"><![CDATA[Track inventory for all items & variants]]></key>
+    <key alias="globalTrackInventory"><![CDATA[Spor inventar for alle elementer og varianter]]></key>
     <key alias="globalShippingIsTaxable">Der skal betales moms af forsendelsesomkostningerne</key>
     <key alias="unitSystem">Enhedssystem</key>
-    <key alias="globalTaxationApplication">Set how taxes are applied</key>
+    <key alias="globalTaxationApplication">Opsæt hvordan moms er tilføjet</key>
   </area>
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Tilføj et land</key>
@@ -367,7 +367,7 @@
     <key alias="taxation">Afgifter</key>
     <key alias="taxMethods">Afgifts metoder</key>
     <key alias="taxMethodsHelper">Opsæt en flad beskatning/afgift til dine forsendelesregioner</key>
-    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
+    <key alias="taxIncludeInProductPrice">Inkludér i produkt pris</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications">Notifikationer</key>
@@ -419,9 +419,9 @@
     <key alias="notificationProviderHelper">Aktivér/Deaktivér dine notifikations udbydere</key>
     <key alias="paymentProvider">Betalingsudbydere</key>
     <key alias="paymentProviderHelper">Aktivér/Deaktivér betalings udbydere</key>
-    <key alias="shippingProvider"> Forsendelses udbydere</key>
+    <key alias="shippingProvider">Forsendelses udbydere</key>
     <key alias="shippingProviderHelper">Aktivér/Deaktivér forsendelses udbydere</key>
-    <key alias="taxationProvider"> Afgifts udbydere</key>
+    <key alias="taxationProvider">Afgifts udbydere</key>
     <key alias="taxationProviderHelper">Aktivér/Deaktivér afgifts udbydere</key>
     <key alias="username">Brugernavn</key>
     <key alias="password">Kodeord</key>
@@ -434,8 +434,8 @@
     <key alias="addPaymentMethod">Tilføj betalingsmetode</key>
     <key alias="resourceType">Betalingstype:</key>
     <key alias="deletePayment">Fjern en betalingsmetode</key>
-    <key alias="paymentInfo">Payment Information</key>
-    <key alias="paymentMethod">Payment Method</key>
+    <key alias="paymentInfo">Betalings information</key>
+    <key alias="paymentMethod">Betalingsmetode</key>
   </area>
   <area alias="merchelloPaymentMethod">
     <key alias="addEditPayment">Tilføj/Redigér en betalingsmetode</key>
@@ -467,8 +467,8 @@
     <key alias="selectYourProduct">Vælg dit produkt</key>
     <key alias="toggleAvailable">Skift "tilgængelighed"</key>
     <key alias="toggleOnSale">Skift "på tilbud"</key>
-    <key alias="removeProduct">Frakobl dette produkt</key>
-    <key alias="itemLocation">Item Location</key>
+    <key alias="removeProduct">Fjern dette produkt</key>
+    <key alias="itemLocation">Produkt lokation</key>
   </area>
   <area alias="merchelloAuditLogs">
     <key alias="notificationShipping">Forsendelse bekræftelse e-mail sendt til %0%</key>
@@ -499,7 +499,7 @@
     <key alias="offerCode">Kode for tilbud</key>
     <key alias="newOffer">Nyt tilbud</key>
     <key alias="noOffer">Ingen aktuelle tilbud</key>
-    <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
+    <key alias="newOfferPrompt">Du har ikke tilbudt dine kunde nogle specielle tilbud. Hvorfor ikke oprette et?</key>
     <key alias="offerInfo">Indstilling for tilbud</key>
     <key alias="configOffer">Konfigurér dette tilbud</key>
     <key alias="offerType">Type af tilbud</key>
@@ -509,7 +509,7 @@
     <key alias="offerValidDates">Gyldige datoer for tilbud</key>
     <key alias="offerValidDatesInfo">Angiv datoerne hvor dette tilbud er gyldig.</key>
     <key alias="offerConstraintsInfo">Restriktioner</key>
-    <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
+    <key alias="offerConstraintsConfig">Konfigurer betingelser forbundet med dette tilbud.</key>
     <key alias="offerRewardsInfo">Belønninger</key>
     <key alias="offerRewardsConfig">Konfigurér belønninger forbundet med dette tilbud.</key>
   </area>

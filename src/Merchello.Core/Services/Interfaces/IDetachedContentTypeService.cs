@@ -10,7 +10,7 @@
     /// <summary>
     /// Re DetachedContentTypeService.
     /// </summary>
-    internal interface IDetachedContentTypeService : IService
+    public interface IDetachedContentTypeService : IService
     {
         /// <summary>
         /// Creates a <see cref="IDetachedContentType"/> without saving it to the database.

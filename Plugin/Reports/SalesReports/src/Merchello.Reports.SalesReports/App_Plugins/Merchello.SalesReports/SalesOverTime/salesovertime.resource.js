@@ -2,12 +2,14 @@ angular.module('merchello.salesreports').factory('salesOverTimeResource',
     ['$http', 'umbRequestHelper',
     function($http, umbRequestHelper) {
 
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloReportSalesOverTime'];
+
         return {
 
             getDefaultData: function () {
                 return umbRequestHelper.resourcePromise(
                     $http({
-                        url: umbRequestHelper.getApiUrl('merchelloReportSalesOverTime', 'GetDefaultReportData'),
+                        url: baseUrl + 'GetDefaultReportData',
                         method: "GET"
                     }),
                     'Failed to get default data from the service');
@@ -20,8 +22,9 @@ angular.module('merchello.salesreports').factory('salesOverTimeResource',
              **/
             searchByDateRange: function (query) {
                 console.info(query);
+                var url = baseUrl + 'SearchByDateRange';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl('merchelloReportSalesOverTime', 'SearchByDateRange'), query),
+                    $http.post(url, query),
                     'Failed to retreive report data from the service');
             }
         };
