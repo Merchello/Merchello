@@ -90,6 +90,8 @@
 
             _logger = logger;
             _sqlSyntaxProvider = sqlSyntaxProvider;
+
+            SetUnitOfWorkProvider();
         }
 
         /// <summary>
@@ -119,6 +121,17 @@
         }
 
         /// <summary>
+        /// Gets the sql syntax.
+        /// </summary>
+        internal ISqlSyntaxProvider SqlSyntax
+        {
+            get
+            {
+                return _sqlSyntaxProvider;
+            }
+        }
+
+        /// <summary>
         /// The initialize.
         /// </summary>
         /// <returns>
@@ -137,13 +150,9 @@
             //_timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
  
             // create the service context for the MerchelloAppContext   
-            var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
-            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;
 
             AutoMapperMappings.CreateMappings();            
-
-            _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(_logger, connString, providerName);
-
+            
             var serviceContext = new ServiceContext(new RepositoryFactory(_logger, _sqlSyntaxProvider), _unitOfWorkProvider, _logger, new TransientMessageFactory());
 
 
@@ -266,6 +275,18 @@
         }
 
         /// <summary>
+        /// Gets the database.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Database"/>.
+        /// </returns>
+        protected Database GetDatabase()
+        {
+            if (_unitOfWorkProvider == null) throw new NullReferenceException("Unit of work provider has not been set");
+            return _unitOfWorkProvider.GetUnitOfWork().Database;
+        }
+
+        /// <summary>
         /// Responsible for the special case initialization of the gateway resolver.
         /// </summary>
         /// <param name="serviceContext">
@@ -305,6 +326,16 @@
                    PluginManager.Current.ResolveEnityCollectionProviders(),
                    merchelloContext);                 
             }
+        }
+
+        /// <summary>
+        /// Sets up unit of work provider.
+        /// </summary>
+        private void SetUnitOfWorkProvider()
+        {
+            var connString = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ConnectionString;
+            var providerName = ConfigurationManager.ConnectionStrings[MerchelloConfiguration.Current.Section.DefaultConnectionStringName].ProviderName;
+            _unitOfWorkProvider = new PetaPocoUnitOfWorkProvider(_logger, connString, providerName);
         }
     }
 }
