@@ -152,6 +152,8 @@
             PerformIndexAll(IndexTypes.ProductVariant);
         }
 
+
+
         /// <summary>
         /// Adds all variants for a given product to the index
         /// </summary>

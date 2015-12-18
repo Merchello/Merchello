@@ -27,7 +27,7 @@
             this._warehouse = warehouseService.GetDefaultWarehouse();
 
             this._provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
-            this._provider.RebuildIndex();
+            //this._provider.RebuildIndex();
         }
 
         

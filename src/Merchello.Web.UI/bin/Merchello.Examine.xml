@@ -518,6 +518,16 @@
             The base merchello indexer.
             </summary>
         </member>
+        <member name="F:Merchello.Examine.Providers.BaseMerchelloIndexer._logger">
+            <summary>
+            The <see cref="T:Umbraco.Core.Logging.ILogger"/>.
+            </summary>
+        </member>
+        <member name="F:Merchello.Examine.Providers.BaseMerchelloIndexer._sqlSyntaxProvider">
+            <summary>
+            The <see cref="T:Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Examine.Providers.BaseMerchelloIndexer.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Examine.Providers.BaseMerchelloIndexer"/> class.
