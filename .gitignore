@@ -188,3 +188,4 @@ Umbraco.Web.UI/config/umbracoSettings.Release.config
 artifacts/
 build/_core/
 *.old
+src/Merchello.Web.UI/web.rss.config

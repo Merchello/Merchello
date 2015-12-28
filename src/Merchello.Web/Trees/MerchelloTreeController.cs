@@ -153,20 +153,20 @@
             if (id == "products")
             {
                 menu.Items.Add<NewCollectionAction>(
-                    _textService.Localize(string.Format("merchelloVariant/newProduct"), _culture),
+                    _textService.Localize("merchelloVariant/newProduct", _culture),
                     false).NavigateToRoute("merchello/merchello/productedit/create");
 
                 menu.Items.Add<NewProductContentTypeAction>(
-                    _textService.Localize(string.Format("merchelloDetachedContent/productContentType"), _culture),
+                    _textService.Localize("merchelloDetachedContent/productContentType", _culture),
                     false)
-                    .LaunchDialogView(DialogsPath + "productcontenttype.add.html", _textService.Localize(string.Format("merchelloDetachedContent/productContentType"), _culture));
+                    .LaunchDialogView(DialogsPath + "productcontenttype.add.html", _textService.Localize("merchelloDetachedContent/productContentType", _culture));
             }
 
             if (id == "customers")
             {
                 menu.Items.Add<NewCollectionAction>(
-                    _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture), false)
-                    .LaunchDialogView(DialogsPath + "customer.newcustomer.html", _textService.Localize(string.Format("merchelloCustomers/newCustomer"), _culture));
+                    _textService.Localize("merchelloCustomers/newCustomer", _culture), false)
+                    .LaunchDialogView(DialogsPath + "customer.newcustomer.html", _textService.Localize("merchelloCustomers/newCustomer", _culture));
             }
 
             if (id == "marketing")

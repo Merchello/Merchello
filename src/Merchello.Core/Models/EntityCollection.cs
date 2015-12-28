@@ -15,7 +15,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class EntityCollection : Entity, IEntityCollection
+    internal class EntityCollection : DeployableEntity, IEntityCollection
     {
         /// <summary>
         /// The entity type field key selector.
