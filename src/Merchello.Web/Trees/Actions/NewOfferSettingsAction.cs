@@ -34,7 +34,7 @@
         {
             get
             {
-                return 'M';
+                return '3';
             }
         }
 

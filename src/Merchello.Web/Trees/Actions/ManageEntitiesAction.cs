@@ -34,7 +34,7 @@
         {
             get
             {
-                return 'C';
+                return '0';
             }
         }
 

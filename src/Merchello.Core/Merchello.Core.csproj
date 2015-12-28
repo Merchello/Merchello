@@ -411,7 +411,7 @@
     <Compile Include="Models\DetachedContent\DetachedContentType.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
-    <Compile Include="Models\EntityBase\IDeployableEntity.cs" />
+    <Compile Include="Models\EntityBase\DeployableEntity.cs" />
     <Compile Include="Models\EntityCollection.cs" />
     <Compile Include="Models\Interfaces\INote.cs" />
     <Compile Include="Models\Note.cs" />
