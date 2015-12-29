@@ -16,6 +16,7 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
     using Umbraco.Web.Models.TemplateQuery;
 
     /// <summary>
@@ -44,6 +45,20 @@
         /// </param>
         public ProductVariantService(ILogger logger)
             : this(new RepositoryFactory(), logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public ProductVariantService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
         {
         }
 

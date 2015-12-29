@@ -73,7 +73,8 @@
         protected void EnsureDatabase()
         {
             Logger.Info<WebBootManager>("Verifying Merchello Database is present.");
-            var manager = new WebMigrationManager();
+            var database = GetDatabase();
+            var manager = new WebMigrationManager(database, SqlSyntax, Logger);
             if (!manager.EnsureDatabase())
             {
                 Logger.Info<WebBootManager>("Merchello database tables installed");

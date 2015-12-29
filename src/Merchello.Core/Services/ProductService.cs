@@ -16,6 +16,7 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -55,6 +56,20 @@
         /// </param>
         public ProductService(ILogger logger)
             : this(new RepositoryFactory(), logger, new ProductVariantService(logger))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public ProductService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger, new ProductVariantService(logger, sqlSyntax))
         {
         }
 

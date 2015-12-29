@@ -37,7 +37,7 @@
         {
             get
             {
-                return 'C';
+                return '@';
             }
         }
 

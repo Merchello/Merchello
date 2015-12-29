@@ -24,12 +24,23 @@
     using Merchello.Examine.LocalStorage;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The base merchello indexer.
     /// </summary>
     public abstract class BaseMerchelloIndexer : LuceneIndexer
     {
+        /// <summary>
+        /// The <see cref="ILogger"/>.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// The <see cref="ISqlSyntaxProvider"/>.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
 
         #region Constructors
 
@@ -37,11 +48,8 @@
         /// Initializes a new instance of the <see cref="BaseMerchelloIndexer"/> class.
         /// </summary>
         protected BaseMerchelloIndexer()
-            : base()
         {            
         }
-
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseMerchelloIndexer"/> class. 

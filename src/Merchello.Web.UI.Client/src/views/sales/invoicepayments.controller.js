@@ -78,9 +78,9 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 var currencySymbolPromise = settingsResource.getAllCurrencies();
                 currencySymbolPromise.then(function (symbols) {
                     var currency = _.find(symbols, function(symbol) {
-                        return symbol.currencyCode === $scope.invoice.getCurrencyCode()
+                        return symbol.currencyCode === $scope.invoice.getCurrencyCode();
                     });
-                    if (currency !== undefined) {
+                    if (currency !== undefined && currency !== null) {
                         $scope.currencySymbol = currency.symbol;
                     } else {
                         // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
@@ -101,7 +101,7 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 if (payment.voided) {
                     return false;
                 }
-                var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
+                var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; });
                 if (exists !== undefined) {
                     return exists.voidPaymentEditorView.editorView !== '';
                 } else {
@@ -113,7 +113,7 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                 if (payment.voided || payment.appliedAmount() === 0) {
                     return false;
                 }
-                var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; })
+                var exists = _.find($scope.paymentMethods, function(pm) { return pm.key === payment.paymentMethodKey; });
                 if (exists !== undefined) {
                     return exists.refundPaymentEditorView.editorView !== '';
                 } else {
