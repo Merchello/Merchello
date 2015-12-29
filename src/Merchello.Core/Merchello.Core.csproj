@@ -1159,6 +1159,7 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IUaaSItemProviderService.cs" />
     <Compile Include="Services\NoteService.cs" />
     <Compile Include="Services\AuditLogService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
