@@ -1,21 +1,22 @@
-﻿using Merchello.Reports.SalesReports.Models;
-
-namespace Merchello.Reports.SalesReports.Controllers
+﻿namespace Merchello.Reports.SalesReports.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Http;
+
     using Merchello.Core;
+    using Merchello.Core.Services;
+    using Merchello.Reports.SalesReports.Models;
     using Merchello.Web;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Reporting;
     using Merchello.Web.Trees;
-    using Merchello.Core.Services;
+
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
-    using System.Globalization;
 
     /// <summary>
     /// The sales over time report controller.
@@ -40,7 +41,6 @@ namespace Merchello.Reports.SalesReports.Controllers
         public SalesOverTimeReportApiController()
             : this(Core.MerchelloContext.Current)
         {
-
         }
 
         /// <summary>

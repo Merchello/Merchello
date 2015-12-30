@@ -28,7 +28,7 @@
         protected ReportController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
-        } 
+        }
 
         /// <summary>
         /// Gets the runtime cache.

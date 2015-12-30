@@ -313,6 +313,8 @@
     <Compile Include="Editors\NoteApiController.cs" />
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
+    <Compile Include="Editors\Reports\ SalesOverTimeReportApiController.cs" />
+    <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
     <Compile Include="LocalizationHelper.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
@@ -345,6 +347,8 @@
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
+    <Compile Include="Models\Reports\SalesByItemResult.cs" />
+    <Compile Include="Models\Reports\SalesOverTimeResult.cs" />
     <Compile Include="Models\VirtualContent\DetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IDetachedPublishedProperty.cs" />
     <Compile Include="Models\VirtualContent\IProductContent.cs" />

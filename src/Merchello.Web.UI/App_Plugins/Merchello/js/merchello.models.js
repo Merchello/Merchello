@@ -4651,8 +4651,6 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
 
-
-
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
