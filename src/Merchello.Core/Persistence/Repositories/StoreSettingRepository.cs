@@ -53,7 +53,7 @@
         /// <returns>The next invoice number</returns>
         public int GetNextInvoiceNumber(Guid storeSettingKey, Func<int> validate, int invoicesCount = 1)
         {
-            Mandate.ParameterCondition(1 >= invoicesCount, "invoicesCount");
+            Mandate.ParameterCondition(1 <= invoicesCount, "invoicesCount");
 
             var setting = Get(storeSettingKey);
             if (string.IsNullOrEmpty(setting.Value)) setting.Value = "1";

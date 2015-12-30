@@ -12,7 +12,7 @@
     /// <summary>
     /// The EntityCollectionService interface.
     /// </summary>
-    public interface IEntityCollectionService : IService
+    public interface IEntityCollectionService : IUaaSItemProviderService
     {
         /// <summary>
         /// The create entity collection.
