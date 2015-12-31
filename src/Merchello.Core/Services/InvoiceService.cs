@@ -75,10 +75,18 @@
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvoiceService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The sql syntax.
+        /// </param>
         internal InvoiceService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : this(new Persistence.RepositoryFactory(logger, sqlSyntax), logger, new AppliedPaymentService(logger, sqlSyntax), new OrderService(logger, sqlSyntax), new StoreSettingService(logger, sqlSyntax))
         {
-            
         }
 
         /// <summary>
@@ -591,6 +599,26 @@
             return this.Count(Persistence.Querying.Query<IInvoice>.Builder.Where(x => x.Key != Guid.Empty));
         }
 
+        /// <summary>
+        /// Gets the total count of all invoices within a date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> representing the count of invoices.
+        /// </returns>
+        public int CountInvoices(DateTime startDate, DateTime endDate)
+        {
+            var query =
+                Persistence.Querying.Query<IInvoice>.Builder.Where(
+                    x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate);
+
+            return Count(query);
+        }
 
         /// <summary>
         /// Gets an <see cref="IInvoiceStatus"/> by it's key

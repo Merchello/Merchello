@@ -2,12 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
 
     using Merchello.Core;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.Querying;
+    using Merchello.Web.Models.Reports;
     using Merchello.Web.Reporting;
     using Merchello.Web.Trees;
 
+    using Umbraco.Core;
+    using Umbraco.Core.Services;
+    using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -17,9 +23,21 @@
     public class SalesOverTimeReportApiController : ReportController
     {
         /// <summary>
-        /// The <see cref="MerchelloHelper"/>.
+        /// The <see cref="CultureInfo"/>.
         /// </summary>
-        private readonly MerchelloHelper _merchello;
+        private readonly CultureInfo _culture;
+
+        /// <summary>
+        /// The <see cref="IInvoiceService"/>.
+        /// </summary>
+        private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The text service.
+        /// </summary>
+        private readonly ILocalizedTextService _textService;
+
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SalesOverTimeReportApiController"/> class.
@@ -33,12 +51,30 @@
         /// Initializes a new instance of the <see cref="SalesOverTimeReportApiController"/> class.
         /// </summary>
         /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>.
+        /// The merchello context.
         /// </param>
         public SalesOverTimeReportApiController(IMerchelloContext merchelloContext)
+            : this(merchelloContext, UmbracoContext.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SalesOverTimeReportApiController"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco Context.
+        /// </param>
+        public SalesOverTimeReportApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext)
         {
-            _merchello = new MerchelloHelper(merchelloContext.Services);
+            _culture = LocalizationHelper.GetCultureFromUser(umbracoContext.Security.CurrentUser);
+
+            _invoiceService = merchelloContext.Services.InvoiceService;
+
+            _textService = umbracoContext.Application.Services.TextService;
         }
 
         /// <summary>
@@ -62,10 +98,10 @@
         {
             var today = DateTime.Today;
             var endOfMonth = GetEndOfMonth(today);
-            var startMonth = endOfMonth.AddMonths(-12);
+            var startMonth = endOfMonth.AddMonths(-11);
             var startOfYear = GetFirstOfMonth(startMonth);
 
-            return _merchello.Query.Invoice.Search(startOfYear, endOfMonth, 1, long.MaxValue);
+            return BuildResult(startOfYear, endOfMonth);
         }
 
         /// <summary>
@@ -95,5 +131,52 @@
         {
             return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
         }
+
+        private QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate)
+        {
+            var count = 0;
+
+            var currentDate = startDate;
+            var results = new List<SalesOverTimeResult>();
+
+            while (currentDate <= endDate)
+            {
+                currentDate = startDate.AddMonths(1);
+                count++;
+                results.Add(GetResult(startDate, currentDate));
+                startDate = currentDate;
+            }
+
+            return new QueryResultDisplay()
+                       {
+                           Items = results,
+                           CurrentPage = 1,
+                           ItemsPerPage = count,
+                           TotalItems = count,
+                           TotalPages = 1
+                       };
+        }
+
+        /// <summary>
+        /// Gets the sales result.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="SalesOverTimeResult"/>.
+        /// </returns>
+        private SalesOverTimeResult GetResult(DateTime startDate, DateTime endDate)
+        {
+            var monthName = _textService.GetLocalizedMonthName(_culture, startDate.Month);
+
+            var count = _invoiceService.CountInvoices(startDate, endDate);
+
+            return new SalesOverTimeResult() { Month = monthName, Year = startDate.Year.ToString(), SalesCount = count };
+        }
+
     }
 }

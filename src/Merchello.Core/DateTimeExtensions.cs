@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core
 {
     using System;
+    using System.Globalization;
     using System.Runtime.Remoting.Messaging;
 
     /// <summary>

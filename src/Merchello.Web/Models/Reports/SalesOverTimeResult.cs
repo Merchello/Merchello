@@ -6,14 +6,14 @@
     public class SalesOverTimeResult
     {
         /// <summary>
-        /// Gets or sets the date string
+        /// Gets or sets the month name
         /// </summary>
-        public string Date { get; set; }
+        public string Month { get; set; }
 
         /// <summary>
-        ///  Gets or sets the total amount of sales
+        /// Gets or sets the year.
         /// </summary>
-        public decimal SalesTotal { get; set; }
+        public string Year { get; set; }
 
         /// <summary>
         ///  Gets or sets the number of sales

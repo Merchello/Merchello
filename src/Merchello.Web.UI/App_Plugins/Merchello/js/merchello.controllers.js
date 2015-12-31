@@ -7948,6 +7948,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
         function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
             $scope.loaded = false;
+            $scope.preValuesLoaded = false;
             $scope.tabs = [];
 
             function init() {
@@ -7961,7 +7962,8 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             function loadDefaultData() {
 
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
-                    $log.info(result);
+                    console.info(result);
+                    $scope.preValuesLoaded = true;
                     $scope.loaded = true;
 
                 });

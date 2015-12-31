@@ -35,6 +35,18 @@
     <key alias="allDates">All Dates</key>
     <key alias="starting">Starting</key>
     <key alias="ending">Ending</key>
+    <key alias="jan">January</key>
+    <key alias="feb">February</key>
+    <key alias="mar">March</key>
+    <key alias="apr">April</key>
+    <key alias="may">May</key>
+    <key alias="jun">June</key>
+    <key alias="jul">July</key>
+    <key alias="aug">August</key>
+    <key alias="sep">September</key>
+    <key alias="oct">October</key>
+    <key alias="nov">November</key>
+    <key alias="dec">December</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>

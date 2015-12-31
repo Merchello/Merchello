@@ -494,6 +494,7 @@
     <Compile Include="ProductContentEditing.cs" />
     <Compile Include="Ui\IPaymentMethodUiControllerResolver.cs" />
     <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
+    <Compile Include="UmbracoServiceExtensions.cs" />
     <Compile Include="Validation\BankingValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
     <Compile Include="Validation\CustomerItemCacheValidationChain.cs" />
