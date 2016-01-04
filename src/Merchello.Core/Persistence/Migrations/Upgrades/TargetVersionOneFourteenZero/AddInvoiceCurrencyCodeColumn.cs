@@ -1,0 +1,100 @@
+﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionOneFourteenZero
+{
+    using System;
+    using System.Linq;
+
+    using Merchello.Core.Configuration;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Migrations;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
+    /// <summary>
+    /// Alters the merchInvoice table to add a currency code column.
+    /// </summary>
+    [Migration("1.13.0", "1.13.4", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    internal class AddInvoiceCurrencyCodeColumn : MerchelloMigrationBase, IMerchelloMigration
+    {
+        /// <summary>
+        /// The Umbraco database.
+        /// </summary>
+        private readonly Database _database;
+
+        /// <summary>
+        /// The sql syntax provider.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntax;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddInvoiceCurrencyCodeColumn"/> class.
+        /// </summary>
+        public AddInvoiceCurrencyCodeColumn()
+            : base(
+                ApplicationContext.Current.DatabaseContext.SqlSyntax,
+                Umbraco.Core.Logging.Logger.CreateWithDefaultLog4NetConfiguration())
+        {
+            var dbContext = ApplicationContext.Current.DatabaseContext;
+            _database = dbContext.Database;
+            _sqlSyntax = dbContext.SqlSyntax;
+        }
+
+        /// <summary>
+        /// Upgrades the database.
+        /// </summary>
+        public override void Up()
+        {
+            //// Don't exeucte if the column is already there
+            var columns = _sqlSyntax.GetColumnsInSchema(_database).ToArray();
+            if (
+                columns.Any(
+                    x => x.TableName.InvariantEquals("merchInvoice") && x.ColumnName.InvariantEquals("currencySymbol"))
+                == false)
+            {
+                Create.Column("currencyCode").OnTable("merchInvoice").AsString(3).Nullable();
+
+                var sql = @"SELECT T1.pk,
+                    currencyCode = SUBSTRING(
+                    (SELECT TOP 1 extendedData FROM merchInvoiceItem WHERE invoiceKey = T1.pk), 
+                    PATINDEX('%<merchCurrencyCode>%', (SELECT TOP 1 extendedData FROM merchInvoiceItem WHERE invoiceKey = T1.pk)) + 19
+                    , 3) FROM merchInvoice T1";
+
+
+                var dtos = _database.Fetch<InvoiceCurrencyDto>(sql);
+
+                foreach (var dto in dtos)
+                {
+                    Update.Table("merchInvoice")
+                        .Set(new { currencyCode = dto.CurrencyCode })
+                        .Where(new { pk = dto.InvoiceKey });
+                }
+            }
+        }
+
+        /// <summary>
+        /// Downgrades the database.
+        /// </summary>
+        public override void Down()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// A simple DTO for updating the currency codes in the invoice table.
+        /// </summary>
+        private class InvoiceCurrencyDto
+        {
+            /// <summary>
+            /// Gets or sets the invoice key.
+            /// </summary>
+            [Column("pk")]
+            public Guid InvoiceKey { get; set; }
+
+            /// <summary>
+            /// Gets or sets the currency code.
+            /// </summary>
+            [Column("currencyCode")]
+            public string CurrencyCode { get; set; }
+        }
+    }
+}
