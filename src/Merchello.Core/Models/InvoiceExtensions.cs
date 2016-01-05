@@ -947,6 +947,7 @@
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("currencyCode", invoice.CurrencyCode);
                     writer.WriteAttributeString("currency", GetCurrencyJson(invoice.Currency()));
                     writer.WriteAttributeString("invoiceStatus", GetInvoiceStatusJson(invoice.InvoiceStatus));
                     writer.WriteAttributeString("invoiceItems", GetGenericItemsCollection(invoice.Items));

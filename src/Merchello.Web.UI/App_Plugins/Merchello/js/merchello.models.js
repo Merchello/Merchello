@@ -2760,6 +2760,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
+        self.currencyCode = '';
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
@@ -2819,6 +2820,11 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
+
+            if(this.currencyCode !== '') {
+                return this.currencyCode;
+            }
+
             if (this.currency.currencyCode === '') {
                 var first = this.items[0];
                 var currencyCode = first.extendedData.getValue('merchCurrencyCode');

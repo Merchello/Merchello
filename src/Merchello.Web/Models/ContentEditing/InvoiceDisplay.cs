@@ -114,6 +114,11 @@
         public string BillToCompany { get; set; }
 
         /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        public string CurrencyCode { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether exported.
         /// </summary>
         public bool Exported { get; set; }
