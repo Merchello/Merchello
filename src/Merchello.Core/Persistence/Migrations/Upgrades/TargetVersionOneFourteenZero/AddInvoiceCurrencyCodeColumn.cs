@@ -48,7 +48,7 @@
             var columns = _sqlSyntax.GetColumnsInSchema(_database).ToArray();
             if (
                 columns.Any(
-                    x => x.TableName.InvariantEquals("merchInvoice") && x.ColumnName.InvariantEquals("currencySymbol"))
+                    x => x.TableName.InvariantEquals("merchInvoice") && x.ColumnName.InvariantEquals("currencyCode"))
                 == false)
             {
 

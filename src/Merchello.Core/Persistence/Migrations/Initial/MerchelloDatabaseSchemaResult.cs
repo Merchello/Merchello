@@ -86,7 +86,8 @@
                 return new Version(1, 11, 0);
             }
 
-            if (!this.ValidColumns.Contains("merchInvoice,currencyCode"))
+            if (!this.ValidColumns.Contains("merchInvoice,currencyCode") || 
+                this.DbIndexDefinitions.Any(x => x.IndexName.InvariantEquals("IX_merchProductVariantSku")) == false)
             {
                 return new Version(1, 13, 0);
             }
@@ -96,14 +97,6 @@
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
                  && this.TableDefinitions.SelectMany(definition => definition.Columns).All(x => this.ValidColumns.Contains(x.Name))))
                 return MerchelloVersion.Current;
-
-
-            //// if the error is for umbracoServer
-            //if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchOfferSettings")))
-            //{
-            //    return new Version(1, 8, 3);
-            //}
-
 
             return MerchelloVersion.Current;
         }
