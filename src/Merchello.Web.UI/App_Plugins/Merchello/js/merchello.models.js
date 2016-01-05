@@ -2716,6 +2716,23 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
 /**
  * @ngdoc model
+ * @name ResultCurrencyValue
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's ResultCurrencyValue object
+ */
+var ResultCurrencyValue = function() {
+    var self = this;
+
+    self.currency = {};
+    self.value = 0;
+};
+
+angular.module('merchello.models').constant('ResultCurrencyValue', ResultCurrencyValue);
+
+/**
+ * @ngdoc model
  * @name SalesOverTimeResult
  * @function
  *
@@ -2729,7 +2746,20 @@ var SalesOverTimeResult = function() {
     self.month = '';
     self.year = '';
     self.salesCount = 0;
+    self.totals = [];
 };
+
+SalesOverTimeResult.prototype = (function() {
+
+    function getDateLabel() {
+        return this.month + ' ' + this.year.substring(2, 4);
+    }
+
+    return {
+        getDateLabel : getDateLabel
+    }
+
+})();
 
 angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTimeResult);
     /**
@@ -4670,7 +4700,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             function createReportsTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('reportslist', 'merchelloTabs_reports', '#/merchello/merchello/reportslist/manage');
+                tabs.addTab('reportsdashboard', 'merchelloTabs_reports', '#/merchello/merchello/reportsdashboard/manage');
                 return tabs;
             }
 
@@ -5273,9 +5303,46 @@ angular.module('merchello.models').factory('productVariantDetachedContentDisplay
                 }
             };
         }]);
+/**
+ * @ngdoc factory
+ * @name resultCurrencyValueBuilder
+ * @function
+ *
+ * @description
+ * Builds a ResultCurrencyValue
+ */
+angular.module('merchello.models').factory('resultCurrencyValueBuilder',
+    ['genericModelBuilder', 'currencyDisplayBuilder', 'ResultCurrencyValue',
+    function(genericModelBuilder, currencyDisplayBuilder, ResultCurrencyValue) {
+
+        var Constructor = ResultCurrencyValue;
+
+        return {
+            createDefault: function() {
+                var result = new Constructor();
+                result.currency = currencyDisplayBuilder.createDefault();
+            },
+            transform: function(jsonResult) {
+                var results = [];
+                if (angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var result = genericModelBuilder.transform(jsonResult[i], Constructor);
+                        result.currency = currencyDisplayBuilder.transform(jsonResult[i].currency);
+                        results.push(result);
+                    }
+                } else {
+                    results = genericModelBuilder.transform(jsonResult, Constructor);
+                    results.currency = currencyDisplayBuilder.transform(jsonResult.currency);
+                }
+                return results;
+            }
+        };
+
+}]);
+
 angular.module('merchello.models').factory('salesOverTimeResultBuilder',
-    ['genericModelBuilder', 'SalesOverTimeResult',
-        function(genericModelBuilder, SalesOverTimeResult) {
+    ['genericModelBuilder', 'resultCurrencyValueBuilder', 'SalesOverTimeResult',
+        function(genericModelBuilder, resultCurrencyValueBuilder, SalesOverTimeResult) {
 
             var Constructor = SalesOverTimeResult;
 
@@ -5284,7 +5351,18 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
                     return new Constructor();
                 },
                 transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
+                    var models = [];
+                    if(angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var model = genericModelBuilder.transform(jsonResult[i], Constructor);
+                            model.totals = resultCurrencyValueBuilder.transform(jsonResult[i].totals);
+                            models.push(model);
+                        }
+                    } else {
+                        models = genericModelBuilder.transform(jsonResult, Constructor);
+                        models.totals = resultCurrencyValueBuilder.transform(jsonResult.totals);
+                    }
+                    return models;
                 }
             };
 }]);

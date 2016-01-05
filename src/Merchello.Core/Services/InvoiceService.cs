@@ -621,6 +621,43 @@
         }
 
         /// <summary>
+        /// Gets the totals of invoices in a date range for a specific currency code.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <returns>
+        /// The sum of the invoice totals.
+        /// </returns>
+        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.SumInvoiceTotals(startDate, endDate, currencyCode);
+            }
+        }
+
+        /// <summary>
+        /// Gets distinct currency codes used in invoices.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
+        public IEnumerable<string> GetDistinctCurrencyCodes()
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetDistinctCurrencyCodes();
+            }
+        }
+
+        /// <summary>
         /// Gets an <see cref="IInvoiceStatus"/> by it's key
         /// </summary>
         /// <param name="key">The <see cref="IInvoiceStatus"/> key</param>

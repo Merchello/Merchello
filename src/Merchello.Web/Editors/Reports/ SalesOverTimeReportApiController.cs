@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Models.Reports;
     using Merchello.Web.Reporting;
@@ -36,7 +38,6 @@
         /// The text service.
         /// </summary>
         private readonly ILocalizedTextService _textService;
-
 
 
         /// <summary>
@@ -175,8 +176,19 @@
 
             var count = _invoiceService.CountInvoices(startDate, endDate);
 
-            return new SalesOverTimeResult() { Month = monthName, Year = startDate.Year.ToString(), SalesCount = count };
-        }
+            var totals = this.ActiveCurrencies.Select(c => new ResultCurrencyValue()
+                            {
+                                Currency = c.ToCurrencyDisplay(),
+                                Value = this._invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
+                            }).ToList();
 
+            return new SalesOverTimeResult()
+                       {
+                            Month = monthName,
+                            Year = startDate.Year.ToString(),
+                            SalesCount = count,
+                            Totals = totals
+                       };
+        }
     }
 }

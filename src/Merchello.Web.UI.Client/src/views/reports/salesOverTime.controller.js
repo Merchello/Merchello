@@ -1,11 +1,20 @@
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTimeController',
-    ['$scope', '$q', '$log', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
-        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
+    ['$scope', '$q', '$log', '$filter', 'assetsService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
+        function($scope, $q, $log, $filter, assetsService, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
+            $scope.labels = [];
+            $scope.series = [];
+            $scope.chartData = [];
+            $scope.reportData = [];
+
+            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                init();
+            });
+
 
             function init() {
                 $scope.tabs = merchelloTabsFactory.createReportsTabs();
@@ -16,15 +25,33 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             }
 
             function loadDefaultData() {
-
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
-                    console.info(result);
-                    $scope.preValuesLoaded = true;
-                    $scope.loaded = true;
-
+                    compileChart(result.items);
                 });
-
             }
 
-            init();
+            function compileChart(results) {
+
+                if (results.length > 0) {
+                    _.each(results[0].totals, function(t) {
+                        $scope.series.push(t.currency.symbol + ' ' + t.currency.currencyCode);
+                        $scope.chartData.push([]);
+                    })
+                }
+
+                _.each(results, function(item) {
+                    var j = 0;
+                    for(var i = 0; i < $scope.series.length; i++) {
+                        $scope.chartData[j].push(item.totals[i].value.toFixed(2));
+                        j++;
+                    }
+
+                    $scope.labels.push(item.getDateLabel());
+                });
+
+
+                $scope.preValuesLoaded = true;
+                $scope.loaded = true;
+            }
+
         }]);

@@ -1,0 +1,40 @@
+<div data-ng-controller="Merchello.Backoffice.MerchelloReportsDashboardController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloTree_reports" /></h1>
+                </div>
+            </div>
+            <div class="span5"></div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel>
+            <!-- Tabular Order List -->
+            <div class="merchello-pane">
+
+                <div class="panel">
+                    <div class="panel-heading">The Last 12 Months</div>
+                    <div class="panel-body">
+                        <div class="chart-container">
+                            <canvas id="sixmonth" class="chart chart-bar"
+                                    chart-data="data" chart-labels="annualLabels">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">Top Products</div>
+                    <div class="panel-body">
+                        <div class="chart-container">
+                            <canvas id="bestsellers" class="chart chart-pie"
+                                    chart-data="piedata" chart-labels="pielabels">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

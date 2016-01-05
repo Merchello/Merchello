@@ -204,7 +204,6 @@
                 new { @ikey = entityKey, @eckey = collectionKey });
         }
 
-
         /// <summary>
         /// The get invoice keys from collection.
         /// </summary>
@@ -458,6 +457,43 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets distinct currency codes used in invoices.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
+        public IEnumerable<string> GetDistinctCurrencyCodes()
+        {
+            return
+                Database.Fetch<DistinctCurrencyCodeDto>("SELECT DISTINCT(currencyCode) from merchInvoice")
+                    .Select(x => x.CurrencyCode);
+        }
+
+        /// <summary>
+        ///  Gets the totals of invoices in a date range for a specific currency code.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <returns>
+        /// The sum of the invoice totals.
+        /// </returns>
+        public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode)
+        {
+            var ends = endDate.AddDays(1);
+
+            const string sql = @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
+
+            return Database.ExecuteScalar<decimal>(sql, new { @starts = startDate, @ends = ends, @cc = currencyCode });
+        }
 
         #region Filter Queries
 

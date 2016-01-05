@@ -1400,7 +1400,7 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
         return {
 
             getDefaultReportData : function() {
-                console.info(salesOverTimeResultBuilder);
+
                 var deferred = $q.defer();
                 $q.all([
                     umbRequestHelper.resourcePromise(

@@ -3027,40 +3027,6 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashb
         init();
     }]);
 
-angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
-    ['$scope', '$element', 'assetsService',
-        function($scope, $element, assetsService) {
-
-            $scope.loaded = false;
-
-            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
-                $scope.annualLabels = ["January", "February", "March", "April", "May", "June", "July"];
-                $scope.series = ['Series A', 'Series B'];
-                $scope.data = [
-                    [65, 59, 80, 81, 56, 55, 40],
-                    [28, 48, 40, 19, 86, 27, 90]
-                ];
-
-                $scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-                $scope.piedata = [300, 500, 100];
-
-                $scope.onClick = function (points, evt) {
-                    console.log(points, evt);
-                };
-                $scope.loaded = true;
-            });
-
-            function init() {
-                loadAnnual();
-
-            }
-
-            function loadAnnual() {
-
-
-            }
-        }]);
-
 /**
  * @ngdoc controller
  * @name Merchello.Backoffice.SettingsController
@@ -7912,31 +7878,44 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
 
     }]);
 
-    /**
-     * @ngdoc controller
-     * @name Merchello.Backoffice.ReportsListController
-     * @function
-     *
-     * @description
-     * The controller for the invoice payments view
-     */
-    angular.module('merchello').controller('Merchello.Backoffice.ReportsListController',
-    ['$scope', 'merchelloTabsFactory',
-    function($scope, merchelloTabsFactory) {
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
+    ['$scope', '$element', 'assetsService', 'merchelloTabsFactory',
+        function($scope, $element, assetsService, merchelloTabsFactory) {
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
-        $scope.tabs = [];
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.tabs = [];
 
-        function init() {
-            $scope.tabs = merchelloTabsFactory.createReportsTabs();
-            $scope.tabs.setActive('reportslist');
-        }
+            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                init();
+            });
 
-        // initialize the controller
-        init();
+            $scope.onClick = function (points, evt) {
+                console.log(points, evt);
+            };
 
-    }]);
+            function init() {
+                $scope.tabs = merchelloTabsFactory.createReportsTabs();
+                $scope.tabs.setActive("reportsdashboard");
+                loadAnnual();
+            }
+
+            function loadAnnual() {
+                $scope.annualLabels = ["January", "February", "March", "April", "May", "June", "July"];
+                $scope.series = ['Series A', 'Series B'];
+                $scope.data = [
+                    [65, 59, 80, 81, 56, 55, 40],
+                    [28, 48, 40, 19, 86, 27, 90]
+                ];
+
+                $scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+                $scope.piedata = [300, 500, 100];
+
+                $scope.preValuesLoaded = true;
+                $scope.loaded = true;
+            }
+
+        }]);
 
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
@@ -7958,12 +7937,21 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItem
 
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTimeController',
-    ['$scope', '$q', '$log', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
-        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
+    ['$scope', '$q', '$log', '$filter', 'assetsService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
+        function($scope, $q, $log, $filter, assetsService, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
+            $scope.labels = [];
+            $scope.series = [];
+            $scope.chartData = [];
+            $scope.reportData = [];
+
+            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                init();
+            });
+
 
             function init() {
                 $scope.tabs = merchelloTabsFactory.createReportsTabs();
@@ -7974,17 +7962,35 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
             }
 
             function loadDefaultData() {
-
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
-                    console.info(result);
-                    $scope.preValuesLoaded = true;
-                    $scope.loaded = true;
-
+                    compileChart(result.items);
                 });
-
             }
 
-            init();
+            function compileChart(results) {
+
+                if (results.length > 0) {
+                    _.each(results[0].totals, function(t) {
+                        $scope.series.push(t.currency.symbol + ' ' + t.currency.currencyCode);
+                        $scope.chartData.push([]);
+                    })
+                }
+
+                _.each(results, function(item) {
+                    var j = 0;
+                    for(var i = 0; i < $scope.series.length; i++) {
+                        $scope.chartData[j].push(item.totals[i].value.toFixed(2));
+                        j++;
+                    }
+
+                    $scope.labels.push(item.getDateLabel());
+                });
+
+
+                $scope.preValuesLoaded = true;
+                $scope.loaded = true;
+            }
+
         }]);
 
 'use strict';

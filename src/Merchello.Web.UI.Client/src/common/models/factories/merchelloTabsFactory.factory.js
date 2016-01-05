@@ -111,7 +111,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             function createReportsTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('reportslist', 'merchelloTabs_reports', '#/merchello/merchello/reportslist/manage');
+                tabs.addTab('reportsdashboard', 'merchelloTabs_reports', '#/merchello/merchello/reportsdashboard/manage');
                 return tabs;
             }
 
