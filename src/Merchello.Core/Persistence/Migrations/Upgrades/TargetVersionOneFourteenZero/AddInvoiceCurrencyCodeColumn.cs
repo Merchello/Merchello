@@ -52,6 +52,8 @@
                 == false)
             {
 
+                Logger.Info(typeof(AddInvoiceCurrencyCodeColumn), "Adding currencyCode column to merchInvoice table.");
+
                 //// Add the new currency code column
                 Create.Column("currencyCode").OnTable("merchInvoice").AsString(3).Nullable();
 
