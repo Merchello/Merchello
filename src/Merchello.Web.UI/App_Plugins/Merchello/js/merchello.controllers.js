@@ -5595,13 +5595,15 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyCon
  * The controller for the adding product content types
  */
 angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductContentTypeController',
-    ['$scope', '$location', 'notificationsService', 'navigationService',  'detachedContentResource', 'detachedContentTypeDisplayBuilder',
-        function($scope, $location, notificationsService, navigationService, detachedContentResource, detachedContentTypeDisplayBuilder) {
+    ['$scope', '$location', 'notificationsService', 'navigationService', 'eventsService',  'detachedContentResource', 'detachedContentTypeDisplayBuilder',
+        function($scope, $location, notificationsService, navigationService, eventsService, detachedContentResource, detachedContentTypeDisplayBuilder) {
             $scope.loaded = true;
             $scope.wasFormSubmitted = false;
             $scope.contentType = {};
             $scope.name = '';
             $scope.description = '';
+
+            var eventName = 'merchello.contenttypedropdown.changed';
 
             $scope.save = function() {
                 $scope.wasFormSubmitted = true;
@@ -5621,6 +5623,18 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
                     });
                 }
             }
+
+            function init() {
+                eventsService.on(eventName, onSelectionChanged);
+            }
+
+            function onSelectionChanged(e, contentType) {
+                if (contentType.name !== null && contentType.name !== undefined) {
+                    $scope.name = contentType.name;
+                }
+            }
+
+            init();
         }]);
 
     /**
