@@ -39,7 +39,7 @@
         /// Gets or sets the invoice number.
         /// </summary>
         [Column("invoiceNumber")]
-        [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
+        [Index(IndexTypes.UniqueNonClustered, Name = "IX_merchInvoiceNumber")]
         public int InvoiceNumber { get; set; }
 
         /// <summary>
@@ -53,7 +53,7 @@
         /// Gets or sets the invoice date.
         /// </summary>
         [Column("invoiceDate")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceDate")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchInvoiceDate")]
         public DateTime InvoiceDate { get; set; }
 
         /// <summary>

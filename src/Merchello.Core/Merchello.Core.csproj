@@ -585,6 +585,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateProduct2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateEntityCollectionTable.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneFourteenZero\AddIndexToProductVariantSku.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneFourteenZero\AddInvoiceCurrencyCodeColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTenZero\AddTaxMethodColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTenZero\InsertNewMerchelloSettingsGlobalTaxationApplicationKey.cs" />
