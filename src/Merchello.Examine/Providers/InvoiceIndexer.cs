@@ -37,6 +37,7 @@
                 new StaticField("billToEmail", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("billtoPhone", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("billtoCompany", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("currencyCode", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("poNumber", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("archived", FieldIndexTypes.ANALYZED, false, string.Empty),

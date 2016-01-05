@@ -1,6 +1,6 @@
 /*! merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2015 Merchello;
+ * Copyright (c) 2016 Merchello;
  * Licensed MIT
  */
 
@@ -1361,7 +1361,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.listViewResultSet.items = queryResult.items;
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
                         scope.listViewResultSet.totalPages = queryResult.totalPages;
-
 
                         scope.pagination = [];
 

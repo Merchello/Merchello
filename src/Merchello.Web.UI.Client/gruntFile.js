@@ -43,6 +43,7 @@
         // file locations
         src: {
             js: ['src/**/*.js', 'src/*.js'],
+            lib: ['lib/charts/*.js', 'lib/**/*.js'],
             common: ['src/common/**/*.js'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
@@ -81,6 +82,10 @@
                 files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: true, cwd: 'src/' }]
             },
 
+            lib: {
+                files: [{ dest: '<%= distdir %>/lib/', src: '../lib/charts/*.*', expand: true, cwd: 'lib/' }]
+            },
+
             config: {
               files: [{ dest: '<%= distdir %>/config', src: 'merchello.config', expand: true, cwd: 'src/config/'}]
             },
@@ -110,6 +115,7 @@
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/config', src: '**', expand: true, cwd: '<%= distdir %>/config' },
                     { dest: '<%= vsdir %>/lang', src: '**', expand: true, cwd: '<%= distdir %>/lang' },
+                    { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/sales' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/catalog' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/customers' },

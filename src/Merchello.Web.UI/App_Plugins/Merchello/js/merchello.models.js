@@ -1,6 +1,6 @@
 /*! merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2015 Merchello;
+ * Copyright (c) 2016 Merchello;
  * Licensed MIT
  */
 
@@ -2714,6 +2714,24 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
     }());
 
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
+/**
+ * @ngdoc model
+ * @name SalesOverTimeResult
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's SalesOverTimeResult object
+ */
+var SalesOverTimeResult = function() {
+
+    var self = this;
+
+    self.month = '';
+    self.year = '';
+    self.salesCount = 0;
+};
+
+angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTimeResult);
     /**
      * @ngdoc model
      * @name InvoiceDisplay
@@ -2742,6 +2760,7 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
+        self.currencyCode = '';
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
@@ -2801,6 +2820,11 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
+
+            if(this.currencyCode !== '') {
+                return this.currencyCode;
+            }
+
             if (this.currency.currencyCode === '') {
                 var first = this.items[0];
                 var currencyCode = first.extendedData.getValue('merchCurrencyCode');
@@ -4651,8 +4675,6 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             }
 
 
-
-
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
@@ -5251,6 +5273,21 @@ angular.module('merchello.models').factory('productVariantDetachedContentDisplay
                 }
             };
         }]);
+angular.module('merchello.models').factory('salesOverTimeResultBuilder',
+    ['genericModelBuilder', 'SalesOverTimeResult',
+        function(genericModelBuilder, SalesOverTimeResult) {
+
+            var Constructor = SalesOverTimeResult;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+}]);
     /**
      * @ngdoc service
      * @name merchello.models.invoiceDisplayBuilder

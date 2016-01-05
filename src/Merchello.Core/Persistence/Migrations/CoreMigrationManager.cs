@@ -1,7 +1,10 @@
 ﻿namespace Merchello.Core.Persistence.Migrations
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
 
     using Merchello.Core.Configuration;
     using Merchello.Core.Events;
@@ -14,6 +17,7 @@
     using umbraco.BusinessLogic;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
@@ -131,6 +135,7 @@
             }
         }
 
+
         /// <summary>
         /// Ensures the Merchello database has been installed.
         /// </summary>
@@ -188,13 +193,13 @@
 
                     var migrations = resolver.OrderedUpgradeMigrations(
                         MerchelloConfiguration.ConfigurationStatusVersion,
-                        MerchelloVersion.Current);
+                        MerchelloVersion.Current).ToList();
+
+                    var context = InitializeMigrations(migrations, _database, _database.GetDatabaseProvider());
+
                     try
                     {
-                        foreach (var m in migrations)
-                        {
-                            m.Up();
-                        }
+                        ExecuteMigrations(context, _database);
 
                         upgraded = true;
                     }
@@ -240,6 +245,125 @@
             MerchelloConfiguration.ConfigurationStatus = MerchelloVersion.Current.ToString();
 
             return true;
+        }
+
+        /// <summary>
+        /// Initializes the Merchell Migrations.
+        /// </summary>
+        /// <param name="migrations">
+        /// The migrations.
+        /// </param>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        /// <param name="databaseProvider">
+        /// The database provider.
+        /// </param>
+        /// <param name="isUpgrade">
+        /// The is upgrade.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MerchelloMigrationContext"/>.
+        /// </returns>
+        internal MerchelloMigrationContext InitializeMigrations(List<IMigration> migrations, Database database, DatabaseProviders databaseProvider, bool isUpgrade = true)
+        {
+            //Loop through migrations to generate sql
+            var context = new MerchelloMigrationContext(databaseProvider, database, _logger);
+
+            foreach (var migration in migrations)
+            {
+                var baseMigration = migration as MerchelloMigrationBase;
+                if (baseMigration != null)
+                {
+                    if (isUpgrade)
+                    {
+                        baseMigration.GetUpExpressions(context);
+                        _logger.Info<CoreMigrationManager>(string.Format("Added UPGRADE migration '{0}' to context", baseMigration.GetType().Name));
+                    }
+                    else
+                    {
+                        baseMigration.GetDownExpressions(context);
+                        _logger.Info<CoreMigrationManager>(string.Format("Added DOWNGRADE migration '{0}' to context", baseMigration.GetType().Name));
+                    }
+                }
+                else
+                {
+                    //this is just a normal migration so we can only call Up/Down
+                    if (isUpgrade)
+                    {
+                        migration.Up();
+                        _logger.Info<MigrationRunner>(string.Format("Added UPGRADE migration '{0}' to context", migration.GetType().Name));
+                    }
+                    else
+                    {
+                        migration.Down();
+                        _logger.Info<MigrationRunner>(string.Format("Added DOWNGRADE migration '{0}' to context", migration.GetType().Name));
+                    }
+                }
+            }
+
+            return context;
+        }
+
+
+        private void ExecuteMigrations(IMigrationContext context, Database database)
+        {
+            //Transactional execution of the sql that was generated from the found migrations
+            using (var transaction = database.GetTransaction())
+            {
+                int i = 1;
+                foreach (var expression in context.Expressions)
+                {
+                    var sql = expression.Process(database);
+                    if (string.IsNullOrEmpty(sql))
+                    {
+                        i++;
+                        continue;
+                    }
+
+                    //TODO: We should output all of these SQL calls to files in a migration folder in App_Data/TEMP
+                    // so if people want to executed them manually on another environment, they can.
+
+                    //The following ensures the multiple statement sare executed one at a time, this is a requirement
+                    // of SQLCE, it's unfortunate but necessary.
+                    // http://stackoverflow.com/questions/13665491/sql-ce-inconsistent-with-multiple-statements
+                    var sb = new StringBuilder();
+                    using (var reader = new StringReader(sql))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            line = line.Trim();
+                            if (line.Equals("GO", StringComparison.OrdinalIgnoreCase))
+                            {
+                                //Execute the SQL up to the point of a GO statement
+                                var exeSql = sb.ToString();
+                                _logger.Info<MigrationRunner>("Executing sql statement " + i + ": " + exeSql);
+                                database.Execute(exeSql);
+
+                                //restart the string builder
+                                sb.Remove(0, sb.Length);
+                            }
+                            else
+                            {
+                                sb.AppendLine(line);
+                            }
+                        }
+                        //execute anything remaining
+                        if (sb.Length > 0)
+                        {
+                            var exeSql = sb.ToString();
+                            _logger.Info<MigrationRunner>("Executing sql statement " + i + ": " + exeSql);
+                            database.Execute(exeSql);
+                        }
+                    }
+
+                    i++;
+                }
+
+                transaction.Complete();
+
+            }
         }
 
         /// <summary>
