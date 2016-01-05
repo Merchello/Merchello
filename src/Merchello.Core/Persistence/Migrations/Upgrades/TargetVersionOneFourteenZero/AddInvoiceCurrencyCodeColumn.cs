@@ -22,7 +22,7 @@
         private readonly Database _database;
 
         /// <summary>
-        /// The sql syntax provider.
+        /// The SQL syntax provider.
         /// </summary>
         private readonly ISqlSyntaxProvider _sqlSyntax;
 
@@ -51,8 +51,11 @@
                     x => x.TableName.InvariantEquals("merchInvoice") && x.ColumnName.InvariantEquals("currencySymbol"))
                 == false)
             {
+
+                //// Add the new currency code column
                 Create.Column("currencyCode").OnTable("merchInvoice").AsString(3).Nullable();
 
+                //// Populate the values from the line items
                 var sql = @"SELECT T1.pk,
                     currencyCode = SUBSTRING(
                     (SELECT TOP 1 extendedData FROM merchInvoiceItem WHERE invoiceKey = T1.pk), 
@@ -68,6 +71,9 @@
                         .Set(new { currencyCode = dto.CurrencyCode })
                         .Where(new { pk = dto.InvoiceKey });
                 }
+
+                //// Set the column to not null
+                Alter.Table("merchInvoice").AlterColumn("currencyCode").AsString(3).NotNullable();
             }
         }
 
@@ -76,7 +82,7 @@
         /// </summary>
         public override void Down()
         {
-            throw new System.NotImplementedException();
+            throw new DataLossException("Cannot downgrade from a version 1.14.0 database to a prior version, the database schema has already been modified");
         }
 
         /// <summary>

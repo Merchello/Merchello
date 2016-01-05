@@ -101,6 +101,11 @@
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
 
         /// <summary>
+        /// The bill to company selector.
+        /// </summary>
+        private static readonly PropertyInfo CurrencyCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.CurrencyCode);
+
+        /// <summary>
         /// The exported selector.
         /// </summary>
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
@@ -204,6 +209,11 @@
         /// The bill to company.
         /// </summary>
         private string _billToCompany;
+
+        /// <summary>
+        /// The currency code.
+        /// </summary>
+        private string _currencyCode;
 
         /// <summary>
         /// The exported.
@@ -697,6 +707,30 @@
                 }, 
                 _billToCompany, 
                 BillToCompanySelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the currency code
+        /// </summary>
+        [DataMember]
+        public string CurrencyCode
+        {
+            get
+            {
+                return _currencyCode;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _currencyCode = value;
+                        return _currencyCode;
+                    },
+                _currencyCode,
+                CurrencyCodeSelector);
             }
         }
 
