@@ -40,12 +40,12 @@
         /// <summary>
         /// Gets the current database provider.
         /// </summary>
-        public DatabaseProviders CurrentDatabaseProvider { get; }
+        public DatabaseProviders CurrentDatabaseProvider { get; private set; }
 
         /// <summary>
         /// Gets the database.
         /// </summary>
-        public Database Database { get; }
+        public Database Database { get; private set; }
 
         /// <summary>
         /// Gets the logger.
