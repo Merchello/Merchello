@@ -126,7 +126,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
                         scope.listViewResultSet.totalPages = queryResult.totalPages;
 
-
                         scope.pagination = [];
 
                         //list 10 pages as per normal

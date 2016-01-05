@@ -121,6 +121,7 @@
                     BillToCompany = FieldAsString(result, "billToCompany"),
                     BillToPhone = FieldAsString(result, "billToPhone"),
                     BillToEmail = FieldAsString(result, "billToEmail"),
+                    CurrencyCode = FieldAsString(result, "currencyCode"),
                     PoNumber = FieldAsString(result, "poNumber"),
                     Exported = FieldAsBoolean(result.Fields["exported"]),
                     Archived = FieldAsBoolean(result.Fields["archived"]),

@@ -1,6 +1,6 @@
 /*! merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2015 Merchello;
+ * Copyright (c) 2016 Merchello;
  * Licensed MIT
  */
 
@@ -3008,7 +3008,7 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
             }
         }]);
 
-angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashboardController',
     ['$scope', 'settingsResource',
     function($scope, settingsResource) {
 
@@ -3026,6 +3026,40 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardC
         // initialize the controller
         init();
     }]);
+
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
+    ['$scope', '$element', 'assetsService',
+        function($scope, $element, assetsService) {
+
+            $scope.loaded = false;
+
+            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                $scope.annualLabels = ["January", "February", "March", "April", "May", "June", "July"];
+                $scope.series = ['Series A', 'Series B'];
+                $scope.data = [
+                    [65, 59, 80, 81, 56, 55, 40],
+                    [28, 48, 40, 19, 86, 27, 90]
+                ];
+
+                $scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+                $scope.piedata = [300, 500, 100];
+
+                $scope.onClick = function (points, evt) {
+                    console.log(points, evt);
+                };
+                $scope.loaded = true;
+            });
+
+            function init() {
+                loadAnnual();
+
+            }
+
+            function loadAnnual() {
+
+
+            }
+        }]);
 
 /**
  * @ngdoc controller
@@ -7889,6 +7923,55 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
         init();
 
     }]);
+
+
+angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
+    ['$scope', '$q', '$log','settingsResource', 'invoiceHelper', 'merchelloTabsFactory',
+        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory) {
+
+                $scope.loaded = false;
+                $scope.tabs = [];
+
+                function init() {
+                        $scope.tabs = merchelloTabsFactory.createReportsTabs();
+                        $scope.tabs.addTab("salesByItem", "merchelloTree_salesByItem", '#/merchello/merchello/salesOverTime/manage');
+                        $scope.tabs.setActive("salesByItem");
+                        $scope.loaded = true;
+                }
+
+                init();
+        }]);
+
+
+angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTimeController',
+    ['$scope', '$q', '$log', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
+        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
+
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.tabs = [];
+
+            function init() {
+                $scope.tabs = merchelloTabsFactory.createReportsTabs();
+                $scope.tabs.addTab("salesOverTime", "merchelloTree_salesOverTime", '#/merchello/merchello/salesOverTime/manage');
+                $scope.tabs.setActive("salesOverTime");
+
+                loadDefaultData();
+            }
+
+            function loadDefaultData() {
+
+                salesOverTimeResource.getDefaultReportData().then(function(result) {
+                    console.info(result);
+                    $scope.preValuesLoaded = true;
+                    $scope.loaded = true;
+
+                });
+
+            }
+
+            init();
+        }]);
 
 'use strict';
 /**

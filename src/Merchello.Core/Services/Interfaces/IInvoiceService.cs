@@ -127,6 +127,20 @@
         /// </returns>
         int CountInvoices();
 
+        /// <summary>
+        /// Gets the total count of all invoices within a date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> representing the count of invoices.
+        /// </returns>
+        int CountInvoices(DateTime startDate, DateTime endDate);
+
         ///// <summary>
         ///// Gets a <see cref="Page{IInvoice}"/>
         ///// </summary>

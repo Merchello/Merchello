@@ -35,6 +35,18 @@
     <key alias="allDates">All Dates</key>
     <key alias="starting">Starting</key>
     <key alias="ending">Ending</key>
+    <key alias="jan">January</key>
+    <key alias="feb">February</key>
+    <key alias="mar">March</key>
+    <key alias="apr">April</key>
+    <key alias="may">May</key>
+    <key alias="jun">June</key>
+    <key alias="jul">July</key>
+    <key alias="aug">August</key>
+    <key alias="sep">September</key>
+    <key alias="oct">October</key>
+    <key alias="nov">November</key>
+    <key alias="dec">December</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -44,6 +56,8 @@
     <key alias="collections">Collections</key>
     <key alias="reports">Reports</key>
     <key alias="gateways">Gateway Providers</key>
+    <key alias="salesOverTime">Sales Over Time</key>
+    <key alias="salesByItem">Sales By Item</key>
   </area>
   <area alias="merchelloTabs">
     <key alias="productListing">Product Listing</key>
@@ -69,7 +83,7 @@
     <key alias="message">Message</key>
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
-    <key alias="reportListing">Reports</key>
+    <key alias="reports">Reports</key>
     <key alias="render">Render</key>
   </area>
   <area alias="merchelloProviders">
