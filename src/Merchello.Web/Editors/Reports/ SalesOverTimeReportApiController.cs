@@ -119,8 +119,8 @@
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
             var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
 
-            var isDateSearch = !string.IsNullOrEmpty(invoiceDateStart?.Value) && 
-                !string.IsNullOrEmpty(invoiceDateEnd?.Value);
+            var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value) && 
+               invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
 
             if (!isDateSearch) return GetDefaultReportData();
 
