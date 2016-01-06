@@ -50,6 +50,8 @@
     <key alias="offer">Offer</key>
     <key alias="coupon">Coupon</key>
     <key alias="reportListing">Reports</key>
+    <key alias="salesOverTime">Sales Over Time</key>
+    <key alias="salesByItem">Sales By Item</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>

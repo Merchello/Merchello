@@ -499,7 +499,6 @@
         {
             var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
 
-            if (tree.Id == "reports" && hasSubs == false) hasSubs = ReportApiControllerResolver.Current.ResolvedTypes.Any();
             if (_collectiontrees.Contains(tree.Id))
                 hasSubs = this.GetCollectionProviderInfo(tree.Id).ManagedCollections.Any()
                           || tree.SelfManagedEntityCollectionProviderCollections.EntityCollectionProviders().Any();

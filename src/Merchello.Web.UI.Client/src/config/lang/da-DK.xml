@@ -39,6 +39,8 @@
     <key alias="offer">Rabat</key>
     <key alias="coupon">Kupon</key>
     <key alias="reportListing">Rapporter</key>
+    <key alias="salesOverTime">Sales Over Time</key>
+    <key alias="salesByItem">Sales By Item</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Ubetalte fakturaer</key>

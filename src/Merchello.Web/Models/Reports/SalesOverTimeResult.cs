@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Models.Reports
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -7,6 +8,16 @@
     /// </summary>
     public class SalesOverTimeResult
     {
+        /// <summary>
+        /// Gets or sets the start date.
+        /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the end date.
+        /// </summary>
+        public DateTime EndDate { get; set; }
+
         /// <summary>
         /// Gets or sets the month name
         /// </summary>

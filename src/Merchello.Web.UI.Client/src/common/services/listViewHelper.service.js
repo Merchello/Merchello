@@ -70,8 +70,8 @@ angular.module('merchello.services').service('merchelloListViewHelper',
 
         };
 
-        this.getConfig = function(entityType) {
-            var ensure = entityType.toLowerCase();
+        this.getConfig = function(listViewType) {
+            var ensure = listViewType.toLowerCase();
             return configs[ensure];
         };
 

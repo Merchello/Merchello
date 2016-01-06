@@ -86,6 +86,8 @@
     <key alias="coupon">Купон</key>
     <key alias="reportListing">Отчеты</key>
     <key alias="render">Представление</key>
+    <key alias="salesOverTime">Sales Over Time</key>
+    <key alias="salesByItem">Sales By Item</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Неоплаченные счета</key>

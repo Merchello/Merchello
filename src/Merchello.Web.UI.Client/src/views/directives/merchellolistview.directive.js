@@ -241,7 +241,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                 function processDateRange(dialogData) {
                     scope.startDate = dialogData.startDate;
                     scope.endDate = dialogData.endDate;
-                    console.info('got here');
                     search();
                 }
 

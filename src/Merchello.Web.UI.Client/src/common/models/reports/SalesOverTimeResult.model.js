@@ -10,6 +10,8 @@ var SalesOverTimeResult = function() {
 
     var self = this;
 
+    self.startDate = '';
+    self.endDate = '';
     self.month = '';
     self.year = '';
     self.salesCount = 0;
