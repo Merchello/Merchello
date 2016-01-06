@@ -35,6 +35,8 @@
                     dest => dest.EntityType,
                     opt => opt.ResolveUsing<EntityTypeResolver>().ConstructedBy(() => new EntityTypeResolver()));
 
+            AutoMapper.Mapper.CreateMap<ICurrency, CurrencyDisplay>();
+
             // Country and provinces
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
 

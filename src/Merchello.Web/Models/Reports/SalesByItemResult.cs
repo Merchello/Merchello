@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Models.Reports
 {
+    using System.Collections.Generic;
+
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
@@ -18,8 +20,8 @@
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Gets or sets the total.
+        /// Gets or sets the totals.
         /// </summary>
-        public decimal Total { get; set; }
+        public IEnumerable<ResultCurrencyValue> Totals { get; set; } 
     }
 }

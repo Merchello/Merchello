@@ -56,8 +56,6 @@
     <key alias="collections">Collections</key>
     <key alias="reports">Reports</key>
     <key alias="gateways">Gateway Providers</key>
-    <key alias="salesOverTime">Sales Over Time</key>
-    <key alias="salesByItem">Sales By Item</key>
   </area>
   <area alias="merchelloTabs">
     <key alias="productListing">Product Listing</key>
@@ -85,6 +83,8 @@
     <key alias="coupon">Coupon</key>
     <key alias="reports">Reports</key>
     <key alias="render">Render</key>
+    <key alias="salesOverTime">Sales Over Time</key>
+    <key alias="salesByItem">Sales By Item</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>

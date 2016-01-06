@@ -467,6 +467,7 @@
     <Compile Include="Models\DetachedContent\ProductVariantDetachedContent.cs" />
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />

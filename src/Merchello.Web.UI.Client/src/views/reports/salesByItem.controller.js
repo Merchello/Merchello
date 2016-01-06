@@ -4,13 +4,14 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItem
         function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory) {
 
                 $scope.loaded = false;
+                $scope.preValuesLoaded = false;
                 $scope.tabs = [];
 
                 function init() {
                         $scope.tabs = merchelloTabsFactory.createReportsTabs();
-                        $scope.tabs.addTab("salesByItem", "merchelloTree_salesByItem", '#/merchello/merchello/salesOverTime/manage');
                         $scope.tabs.setActive("salesByItem");
                         $scope.loaded = true;
+                        $scope.preValuesLoaded = true;
                 }
 
                 init();

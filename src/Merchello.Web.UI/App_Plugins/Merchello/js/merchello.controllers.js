@@ -3027,40 +3027,6 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashb
         init();
     }]);
 
-angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
-    ['$scope', '$element', 'assetsService',
-        function($scope, $element, assetsService) {
-
-            $scope.loaded = false;
-
-            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
-                $scope.annualLabels = ["January", "February", "March", "April", "May", "June", "July"];
-                $scope.series = ['Series A', 'Series B'];
-                $scope.data = [
-                    [65, 59, 80, 81, 56, 55, 40],
-                    [28, 48, 40, 19, 86, 27, 90]
-                ];
-
-                $scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-                $scope.piedata = [300, 500, 100];
-
-                $scope.onClick = function (points, evt) {
-                    console.log(points, evt);
-                };
-                $scope.loaded = true;
-            });
-
-            function init() {
-                loadAnnual();
-
-            }
-
-            function loadAnnual() {
-
-
-            }
-        }]);
-
 /**
  * @ngdoc controller
  * @name Merchello.Backoffice.SettingsController
@@ -7912,31 +7878,44 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
 
     }]);
 
-    /**
-     * @ngdoc controller
-     * @name Merchello.Backoffice.ReportsListController
-     * @function
-     *
-     * @description
-     * The controller for the invoice payments view
-     */
-    angular.module('merchello').controller('Merchello.Backoffice.ReportsListController',
-    ['$scope', 'merchelloTabsFactory',
-    function($scope, merchelloTabsFactory) {
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
+    ['$scope', '$element', 'assetsService', 'merchelloTabsFactory',
+        function($scope, $element, assetsService, merchelloTabsFactory) {
 
-        $scope.loaded = true;
-        $scope.preValuesLoaded = true;
-        $scope.tabs = [];
+            $scope.loaded = false;
+            $scope.preValuesLoaded = false;
+            $scope.tabs = [];
 
-        function init() {
-            $scope.tabs = merchelloTabsFactory.createReportsTabs();
-            $scope.tabs.setActive('reportslist');
-        }
+            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                init();
+            });
 
-        // initialize the controller
-        init();
+            $scope.onClick = function (points, evt) {
+                console.log(points, evt);
+            };
 
-    }]);
+            function init() {
+                $scope.tabs = merchelloTabsFactory.createReportsTabs();
+                $scope.tabs.setActive("reportsdashboard");
+                loadAnnual();
+            }
+
+            function loadAnnual() {
+                //$scope.annualLabels = ["January", "February", "March", "April", "May", "June", "July"];
+                //$scope.series = ['Series A', 'Series B'];
+                //$scope.data = [
+                //    [65, 59, 80, 81, 56, 55, 40],
+                //    [28, 48, 40, 19, 86, 27, 90]
+                //];
+
+                //$scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+                //$scope.piedata = [300, 500, 100];
+
+                $scope.preValuesLoaded = true;
+                $scope.loaded = true;
+            }
+
+        }]);
 
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
@@ -7944,13 +7923,14 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItem
         function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory) {
 
                 $scope.loaded = false;
+                $scope.preValuesLoaded = false;
                 $scope.tabs = [];
 
                 function init() {
                         $scope.tabs = merchelloTabsFactory.createReportsTabs();
-                        $scope.tabs.addTab("salesByItem", "merchelloTree_salesByItem", '#/merchello/merchello/salesOverTime/manage');
                         $scope.tabs.setActive("salesByItem");
                         $scope.loaded = true;
+                        $scope.preValuesLoaded = true;
                 }
 
                 init();
@@ -7958,33 +7938,181 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItem
 
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTimeController',
-    ['$scope', '$q', '$log', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
-        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
+    ['$scope', '$q', '$log', '$filter', 'assetsService', 'dialogService', 'queryDisplayBuilder',
+        'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'salesOverTimeResource',
+        function($scope, $q, $log, $filter, assetsService, dialogService, queryDisplayBuilder,
+                 settingsResource, invoiceHelper, merchelloTabsFactory, salesOverTimeResource) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
+            $scope.labels = [];
+            $scope.series = [];
+            $scope.chartData = [];
+            $scope.reportData = [];
+            $scope.startDate = '';
+            $scope.endDate = '';
+            $scope.settings = {};
+            $scope.dateBtnText = '';
+
+            $scope.getColumnValue = getColumnValue;
+            $scope.getColumnTotal = getColumnTotal;
+            $scope.openDateRangeDialog = openDateRangeDialog;
+            $scope.clearDates = clearDates;
+            $scope.reverse = reverse;
+
+
+            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                init();
+            });
 
             function init() {
                 $scope.tabs = merchelloTabsFactory.createReportsTabs();
-                $scope.tabs.addTab("salesOverTime", "merchelloTree_salesOverTime", '#/merchello/merchello/salesOverTime/manage');
                 $scope.tabs.setActive("salesOverTime");
 
-                loadDefaultData();
+                loadSettings();
             }
 
-            function loadDefaultData() {
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description - Load the Merchello settings.
+             */
+            function loadSettings() {
+                settingsResource.getAllCombined().then(function(combined) {
+                    $scope.settings = combined.settings;
+                    loadDefaultData();
+                });
+            };
 
+            function loadDefaultData() {
                 salesOverTimeResource.getDefaultReportData().then(function(result) {
-                    console.info(result);
-                    $scope.preValuesLoaded = true;
-                    $scope.loaded = true;
+                    compileChart(result);
+                });
+            }
+
+            function loadCustomData() {
+
+                var query = queryDisplayBuilder.createDefault();
+                query.addInvoiceDateParam($scope.startDate, 'start');
+                query.addInvoiceDateParam($scope.endDate, 'end');
+
+                salesOverTimeResource.getCustomReportData(query).then(function(result) {
+                   compileChart(result);
+                });
+            }
+
+            function compileChart(result) {
+
+                $scope.labels = [];
+                $scope.series = [];
+                $scope.chartData = [];
+                $scope.reportData = [];
+
+                $scope.reportData = result.items;
+
+                if ($scope.reportData.length > 0) {
+                    $scope.startDate = $filter('date')($scope.reportData[0].startDate, $scope.settings.dateFormat);
+                    $scope.endDate = $filter('date')($scope.reportData[$scope.reportData.length - 1].endDate, $scope.settings.dateFormat);
+                }
+
+                setDateButtonText();
+
+                if ($scope.reportData.length > 0) {
+                    _.each($scope.reportData[0].totals, function(t) {
+                        $scope.series.push(t.currency.symbol + ' ' + t.currency.currencyCode);
+                        $scope.chartData.push([]);
+                    })
+                }
+
+                _.each($scope.reportData, function(item) {
+                    var j = 0;
+                    for(var i = 0; i < $scope.series.length; i++) {
+                        $scope.chartData[j].push(item.totals[i].value.toFixed(2));
+                        j++;
+                    }
+
+                    $scope.labels.push(item.getDateLabel());
 
                 });
 
+                $scope.preValuesLoaded = true;
+                $scope.loaded = true;
             }
 
-            init();
+            function reverse(data) {
+                return data.slice().reverse();
+            }
+
+            function getColumnValue(data, series) {
+
+                var total = _.find(data.totals, function(t) {
+                   return series.indexOf(t.currency.currencyCode) > -1;
+                });
+
+                if (total !== null && total !== undefined) {
+                    return $filter('currency')(total.value, total.currency.symbol);
+                } else {
+                    return '-';
+                }
+
+            }
+
+            function openDateRangeDialog() {
+                var dialogData = {
+                    startDate: $scope.startDate,
+                    endDate: $scope.endDate
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                    show: true,
+                    callback: processDateRange,
+                    dialogData: dialogData
+                });
+            }
+
+            function getColumnTotal(series) {
+
+                if ($scope.reportData.length > 0) {
+                    var total = 0;
+                    var symbol = '';
+                    _.each($scope.reportData, function(data) {
+                        var itemTotal = _.find(data.totals, function(t) {
+                            return series.indexOf(t.currency.currencyCode) > -1;
+                        });
+
+                        total += itemTotal.value;
+                        if (symbol === '') {
+                            symbol = itemTotal.currency.symbol;
+                        }
+                    });
+
+                    return $filter('currency')(total, symbol);
+
+                } else {
+                    return '-';
+                }
+            }
+
+            function setDateButtonText() {
+                $scope.dateBtnText = $scope.startDate + ' - ' + $scope.endDate;
+            }
+
+            function processDateRange(dialogData) {
+                $scope.startDate = dialogData.startDate;
+                $scope.endDate = dialogData.endDate;
+                loadCustomData();
+            }
+
+            function clearDates() {
+                $scope.loaded = false;
+                $scope.preValuesLoaded = false;
+                loadDefaultData();
+            }
+
         }]);
 
 'use strict';

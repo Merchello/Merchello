@@ -2,11 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using Merchello.Core;
+    using Merchello.Core.Models;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
 
@@ -21,6 +23,11 @@
     public abstract class ReportController : MerchelloApiController
     {
         /// <summary>
+        /// The Gets a list of active currency codes.
+        /// </summary>
+        private Lazy<IEnumerable<ICurrency>> _activeCurrencies;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ReportController"/> class.
         /// </summary>
         /// <param name="merchelloContext">
@@ -29,6 +36,18 @@
         protected ReportController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
+            Initialize();
+        }
+
+        /// <summary>
+        /// Gets the list of currency codes used in invoices.
+        /// </summary>
+        public virtual IEnumerable<ICurrency> ActiveCurrencies
+        {
+            get
+            {
+                return _activeCurrencies.Value;
+            }
         }
 
         /// <summary>
@@ -73,6 +92,21 @@
             return new KeyValuePair<string, object>(
                 routeName,
                 url.GetUmbracoApiServiceBaseUrl<T>(controller => controller.GetDefaultReportData()));
+        }
+
+        /// <summary>
+        /// The initializes the controller.
+        /// </summary>
+        private void Initialize()
+        {
+            
+            _activeCurrencies =
+                new Lazy<IEnumerable<ICurrency>>(
+                    () =>
+                        {
+                            var currencyCodes = MerchelloContext.Services.InvoiceService.GetDistinctCurrencyCodes();
+                            return currencyCodes.Select(c => this.MerchelloContext.Services.StoreSettingService.GetCurrencyByCode(c)).ToList();
+                        });
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.UI;
 
     using Merchello.Core.Persistence.Querying;
@@ -15,6 +16,31 @@
     /// </summary>
     internal interface IInvoiceRepository : IPagedRepository<IInvoice, InvoiceDto>, IStaticEntityCollectionRepository<IInvoice>, IAssertsMaxDocumentNumber
     {
+        /// <summary>
+        /// Gets distinct currency codes used in invoices.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
+        IEnumerable<string> GetDistinctCurrencyCodes();
+
+        /// <summary>
+        /// Gets the totals of invoices in a date range for a specific currency code.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <returns>
+        /// The sum of the invoice totals.
+        /// </returns>
+        decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode);
+
         #region Filter Queries
 
         /// <summary>
