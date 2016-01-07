@@ -58,17 +58,6 @@
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether raise customer events.
-        /// </summary>
-        public bool RaiseCustomerEvents { get; set; }
-
-
-        /// <summary>
-        /// Gets or sets a prefix to be prepended to an invoice number.
-        /// </summary>
-        public string InvoiceNumberPrefix { get; set; }
-
-        /// <summary>
         /// Purges sales manager information
         /// </summary>
         public abstract void Reset();

@@ -2,13 +2,25 @@
 {
     using System;
 
+    using Merchello.Core.Gateways;
     using Merchello.Core.Models;
+    using Merchello.Core.Services;
 
     /// <summary>
     /// Defines a checkout context.
     /// </summary>
     public interface ICheckoutContext
     {
+        /// <summary>
+        /// Gets the <see cref="IServiceContext"/>.
+        /// </summary>
+        IServiceContext Services { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IGatewayContext"/>.
+        /// </summary>
+        IGatewayContext Gateways { get; }
+
         /// <summary>
         /// Gets the <see cref="IItemCache"/>.
         /// </summary>
