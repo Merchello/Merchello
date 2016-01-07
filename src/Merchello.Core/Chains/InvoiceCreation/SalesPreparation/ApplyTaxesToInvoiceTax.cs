@@ -1,10 +1,11 @@
-﻿namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation.SalesPreparation
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using Models;
-    using Sales;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Sales;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -35,7 +36,7 @@
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (SalePreparation.ApplyTaxesToInvoice)
+            if (this.SalePreparation.ApplyTaxesToInvoice)
             {
                 try
                 {
@@ -57,13 +58,13 @@
                     taxAddress = taxAddress ?? value.GetBillingAddress();
 
                     this.SetTaxableSetting(value);
-                    var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, taxAddress);
+                    var taxes = value.CalculateTaxes(this.SalePreparation.MerchelloContext, taxAddress);
                     this.SetTaxableSetting(value, true);                    
 
                     var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
 
                     var currencyCode =
-                        SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
+                        this.SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
                             Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
 
                     taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
