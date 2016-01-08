@@ -4,6 +4,9 @@
 
     using Merchello.Core.Models;
 
+    /// <summary>
+    /// Defines a checkout customer manager.
+    /// </summary>
     public interface ICheckoutCustomerManager : ICheckoutContextManagerBase
     {
         /// <summary>

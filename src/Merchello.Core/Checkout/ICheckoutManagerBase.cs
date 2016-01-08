@@ -11,6 +11,11 @@
         ICheckoutCustomerManager Customer { get; }
 
         /// <summary>
+        /// Gets the checkout extended manager for custom invoicing.
+        /// </summary>
+        ICheckoutExtendedManager Extended { get; }
+
+        /// <summary>
         /// Gets the checkout manager for marketing offers.
         /// </summary>
         ICheckoutOfferManager Offer { get; }
@@ -26,18 +31,8 @@
         ICheckoutPaymentManager Payment { get; }
 
         /// <summary>
-        /// Gets the preview.
-        /// </summary>
-        ICheckoutCompletionManager Completion { get; }
-
-        /// <summary>
         /// Gets the notification.
         /// </summary>
         ICheckoutNotificationManager Notification { get; }
-
-        /// <summary>
-        /// Purges checkout manager information
-        /// </summary>
-        void Reset();
     }
 }

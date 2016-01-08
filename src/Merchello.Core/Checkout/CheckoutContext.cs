@@ -27,7 +27,7 @@
         /// The item cache.
         /// </param>
         public CheckoutContext(ICustomerBase customer, IItemCache itemCache)
-            : this(customer, itemCache, MerchelloContext.Current)
+            : this(customer, itemCache, Core.MerchelloContext.Current)
         { 
         }
 
@@ -50,8 +50,7 @@
             Mandate.ParameterNotNull(itemCache, "itemCache");
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
 
-            this.Services = merchelloContext.Services;
-            this.Gateways = merchelloContext.Gateways;
+            this.MerchelloContext = merchelloContext;
             this.ItemCache = itemCache;
             this.Customer = customer;
             this.Cache = merchelloContext.Cache.RuntimeCache;
@@ -60,17 +59,34 @@
         /// <summary>
         /// An event that fires when the context needs to be reset.
         /// </summary>
-        public event TypedEventHandler<CheckoutContext, CheckoutContextEventArgs> Reset; 
+        public event TypedEventHandler<CheckoutContext, CheckoutContextEventArgs> Reset;
+
+        /// <summary>
+        /// Gets the merchello context.
+        /// </summary>
+        public IMerchelloContext MerchelloContext { get; }
 
         /// <summary>
         /// Gets the <see cref="IServiceContext"/>.
         /// </summary>
-        public IServiceContext Services { get; private set; }
+        public IServiceContext Services
+        {
+            get
+            {
+                return MerchelloContext.Services;
+            }
+        }
 
         /// <summary>
         /// Gets the <see cref="IGatewayContext"/>.
         /// </summary>
-        public IGatewayContext Gateways { get; private set; }
+        public IGatewayContext Gateways
+        {
+            get
+            {
+                return MerchelloContext.Gateways;
+            }
+        }
 
         /// <summary>
         /// Gets the <see cref="IItemCache"/>.
@@ -118,7 +134,7 @@
         /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>.
         /// </summary>
-        protected IRuntimeCacheProvider Cache { get; private set; }
+        public IRuntimeCacheProvider Cache { get; private set; }
 
         /// <summary>
         /// Gets the checkout <see cref="IItemCache"/> for the <see cref="ICustomerBase"/>

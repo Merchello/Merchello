@@ -1,41 +1,26 @@
-﻿namespace Merchello.Core.Checkout
+﻿namespace Merchello.Web.Workflow.Checkout
 {
     using System;
 
-    using Merchello.Core.Builders;
+    using Merchello.Core.Checkout;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
 
     /// <summary>
-    /// Defines a manager that is responsible for the payment aspects of the checkout process.
+    /// The basket checkout payment manager.
     /// </summary>
-    public interface ICheckoutPaymentManager
+    public class BasketCheckoutPaymentManager : CheckoutPaymentManagerBase
     {
         /// <summary>
-        /// Gets or sets a prefix to be prepended to an invoice number.
+        /// Initializes a new instance of the <see cref="BasketCheckoutPaymentManager"/> class.
         /// </summary>
-        string InvoiceNumberPrefix { get; set; }
-
-        /// <summary>
-        /// True/false indicating whether or not the <see cref="ICheckoutPaymentManager"/> is ready to prepare an <see cref="IInvoice"/>
-        /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        bool IsReadyToInvoice();
-
-        /// <summary>
-        /// Generates an <see cref="IInvoice"/>
-        /// </summary>
-        /// <returns>An <see cref="IInvoice"/></returns>
-        IInvoice PrepareInvoice();
-
-        /// <summary>
-        /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
-        /// </summary>
-        /// <param name="invoiceBuilder">The invoice builder class</param>
-        /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
-        IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder);
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        public BasketCheckoutPaymentManager(ICheckoutContext context)
+            : base(context)
+        {
+        }
 
         /// <summary>
         /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
@@ -43,7 +28,10 @@
         /// <param name="paymentMethod">
         /// The payment Method.
         /// </param>
-        void SavePaymentMethod(IPaymentMethod paymentMethod);
+        public override void SavePaymentMethod(IPaymentMethod paymentMethod)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data
@@ -51,7 +39,10 @@
         /// <returns>
         /// The previously saved <see cref="IPaymentMethod"/>.
         /// </returns>
-        IPaymentMethod GetPaymentMethod();
+        public override IPaymentMethod GetPaymentMethod()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Attempts to process a payment
@@ -59,14 +50,20 @@
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
+        public override IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod);
+        public override IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Attempts to process a payment
@@ -74,14 +71,20 @@
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+        public override IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(Guid paymentMethodKey);
+        public override IPaymentResult AuthorizePayment(Guid paymentMethodKey)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Authorizes and Captures a Payment
@@ -89,14 +92,20 @@
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
+        public override IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod);
+        public override IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Authorizes and Captures a Payment
@@ -104,13 +113,19 @@
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+        public override IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey);
+        public override IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

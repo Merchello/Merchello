@@ -6,11 +6,18 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
+    using Umbraco.Core.Cache;
+
     /// <summary>
     /// Defines a checkout context.
     /// </summary>
     public interface ICheckoutContext
     {
+        /// <summary>
+        /// Gets the <see cref="IMerchelloContext"/>.
+        /// </summary>
+        IMerchelloContext MerchelloContext { get; }
+
         /// <summary>
         /// Gets the <see cref="IServiceContext"/>.
         /// </summary>
@@ -53,5 +60,10 @@
         /// false would be an API notification on a customer record change to prevent spamming of the notification.
         /// </remarks>
         bool RaiseCustomerEvents { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="IRuntimeCacheProvider"/>.
+        /// </summary>
+        IRuntimeCacheProvider Cache { get; }
     }
 }

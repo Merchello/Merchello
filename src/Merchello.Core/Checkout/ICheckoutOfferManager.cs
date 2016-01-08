@@ -8,6 +8,11 @@
     public interface ICheckoutOfferManager : ICheckoutContextManagerBase
     {
         /// <summary>
+        /// Gets the offer codes.
+        /// </summary>
+        IEnumerable<string> OfferCodes { get; }
+
+        /// <summary>
         /// Handles the instantiation of offer code queue.
         /// </summary>
         /// <returns>

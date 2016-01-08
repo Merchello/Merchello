@@ -17,6 +17,11 @@
     public abstract class CheckoutOfferManagerBase : CheckoutContextManagerBase, ICheckoutOfferManager
     {
         /// <summary>
+        /// The offer code temp data.
+        /// </summary>
+        private Lazy<List<string>> _offerCodeTempData;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutOfferManagerBase"/> class.
         /// </summary>
         /// <param name="context">
@@ -25,6 +30,18 @@
         protected CheckoutOfferManagerBase(ICheckoutContext context)
           : base(context)
         {
+            this.Initialize();
+        }
+
+        /// <summary>
+        /// Gets the offer codes.
+        /// </summary>
+        public IEnumerable<string> OfferCodes
+        {
+            get
+            {
+                return this._offerCodeTempData.Value;
+            }
         }
 
         /// <summary>
@@ -109,6 +126,14 @@
             /// Gets or sets the offer codes.
             /// </summary>
             public IEnumerable<string> OfferCodes { get; set; }
+        }
+
+        /// <summary>
+        /// Initializes the manager.
+        /// </summary>
+        private void Initialize()
+        {
+            this._offerCodeTempData = new Lazy<List<string>>(this.BuildOfferCodeList);
         }
     }
 }

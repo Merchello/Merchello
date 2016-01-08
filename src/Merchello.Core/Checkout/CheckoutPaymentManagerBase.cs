@@ -3,39 +3,73 @@
     using System;
 
     using Merchello.Core.Builders;
+    using Merchello.Core.Events;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
+    using Merchello.Core.Sales;
+
+    using Umbraco.Core.Events;
 
     /// <summary>
-    /// Defines a manager that is responsible for the payment aspects of the checkout process.
+    /// A base class for CheckoutPaymentManagers.
     /// </summary>
-    public interface ICheckoutPaymentManager
+    public abstract class CheckoutPaymentManagerBase : CheckoutCustomerDataManagerBase, ICheckoutPaymentManager
     {
         /// <summary>
-        /// Gets or sets a prefix to be prepended to an invoice number.
+        /// Initializes a new instance of the <see cref="CheckoutPaymentManagerBase"/> class.
         /// </summary>
-        string InvoiceNumberPrefix { get; set; }
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        protected CheckoutPaymentManagerBase(ICheckoutContext context)
+            : base(context)
+        {
+        }
 
         /// <summary>
-        /// True/false indicating whether or not the <see cref="ICheckoutPaymentManager"/> is ready to prepare an <see cref="IInvoice"/>
+        /// Occurs after an invoice has been prepared.
+        /// </summary>
+        public static event TypedEventHandler<CheckoutPaymentManagerBase, SalesPreparationEventArgs<IInvoice>> InvoicePrepared;
+
+        /// <summary>
+        /// Occurs after a sale has been finalized.
+        /// </summary>
+        public static event TypedEventHandler<CheckoutPaymentManagerBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
+
+        /// <summary>
+        /// Gets or sets the invoice number prefix.
+        /// </summary>
+        public string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the <see cref="ICheckoutPaymentManager"/> is ready to prepare an <see cref="IInvoice"/>
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        /// True or false
         /// </returns>
-        bool IsReadyToInvoice();
+        public virtual bool IsReadyToInvoice()
+        {
+            return Context.Customer.ExtendedData.GetAddress(AddressType.Billing) != null;
+        }
 
         /// <summary>
         /// Generates an <see cref="IInvoice"/>
         /// </summary>
         /// <returns>An <see cref="IInvoice"/></returns>
-        IInvoice PrepareInvoice();
+        public virtual IInvoice PrepareInvoice()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Generates an <see cref="IInvoice"/> representing the bill for the current "checkout order"
         /// </summary>
         /// <param name="invoiceBuilder">The invoice builder class</param>
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
-        IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder);
+        public virtual IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
@@ -43,7 +77,7 @@
         /// <param name="paymentMethod">
         /// The payment Method.
         /// </param>
-        void SavePaymentMethod(IPaymentMethod paymentMethod);
+        public abstract void SavePaymentMethod(IPaymentMethod paymentMethod);
 
         /// <summary>
         /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data
@@ -51,7 +85,7 @@
         /// <returns>
         /// The previously saved <see cref="IPaymentMethod"/>.
         /// </returns>
-        IPaymentMethod GetPaymentMethod();
+        public abstract IPaymentMethod GetPaymentMethod();
 
         /// <summary>
         /// Attempts to process a payment
@@ -59,14 +93,14 @@
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
+        public abstract IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentGatewayMethod"/> to use in processing the payment</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod);
+        public abstract IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod);
 
         /// <summary>
         /// Attempts to process a payment
@@ -74,14 +108,14 @@
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+        public abstract IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Attempts to process a payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizePayment(Guid paymentMethodKey);
+        public abstract IPaymentResult AuthorizePayment(Guid paymentMethodKey);
 
         /// <summary>
         /// Authorizes and Captures a Payment
@@ -89,14 +123,14 @@
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
+        public abstract IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentGatewayMethod">The <see cref="IPaymentMethod"/></param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod);
+        public abstract IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod);
 
         /// <summary>
         /// Authorizes and Captures a Payment
@@ -104,13 +138,13 @@
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
+        public abstract IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args);
 
         /// <summary>
         /// Authorizes and Captures a Payment
         /// </summary>
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey);
+        public abstract IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey);
     }
 }
