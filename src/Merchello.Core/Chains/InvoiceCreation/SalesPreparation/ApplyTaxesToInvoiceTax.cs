@@ -11,6 +11,7 @@
     /// <summary>
     /// Responsible for apply taxes to invoice tax.
     /// </summary>
+    [Obsolete("Superseded by CheckoutManger.ApplyTaxesToInvoiceTask")]
     internal class ApplyTaxesToInvoiceTax : InvoiceCreationAttemptChainTaskBase
     {
         /// <summary>

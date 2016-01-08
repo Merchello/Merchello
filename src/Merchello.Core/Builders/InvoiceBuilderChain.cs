@@ -11,6 +11,7 @@
     /// <summary>
     /// Represents an invoice builder
     /// </summary>
+    [Obsolete("Superseded by CheckoutInvoiceBuilderChain")]
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
         /// <summary>
