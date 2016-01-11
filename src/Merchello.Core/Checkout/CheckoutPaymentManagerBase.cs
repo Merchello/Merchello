@@ -29,12 +29,12 @@
         /// <summary>
         /// Occurs after an invoice has been prepared.
         /// </summary>
-        public static event TypedEventHandler<CheckoutPaymentManagerBase, SalesPreparationEventArgs<IInvoice>> InvoicePrepared;
+        public static event TypedEventHandler<CheckoutPaymentManagerBase, CheckoutEventArgs<IInvoice>> InvoicePrepared;
 
         /// <summary>
         /// Occurs after a sale has been finalized.
         /// </summary>
-        public static event TypedEventHandler<CheckoutPaymentManagerBase, SalesPreparationEventArgs<IPaymentResult>> Finalizing;
+        public static event TypedEventHandler<CheckoutPaymentManagerBase, CheckoutEventArgs<IPaymentResult>> Finalizing;
 
         /// <summary>
         /// Gets or sets the invoice number prefix.

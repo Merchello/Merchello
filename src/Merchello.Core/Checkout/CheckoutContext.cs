@@ -59,7 +59,7 @@
         /// <summary>
         /// An event that fires when the context needs to be reset.
         /// </summary>
-        public event TypedEventHandler<CheckoutContext, CheckoutContextEventArgs> Reset;
+        public event TypedEventHandler<CheckoutContext, CheckoutEventArgs<IItemCache>> Reset;
 
         /// <summary>
         /// Gets the merchello context.
@@ -155,7 +155,7 @@
             {
                 var oldCacheKey = MakeCacheKey();
                 Cache.ClearCacheItem(oldCacheKey);
-                Reset.RaiseEvent(new CheckoutContextEventArgs(Customer, itemCache), this);
+                Reset.RaiseEvent(new CheckoutEventArgs<IItemCache>(Customer, itemCache), this);
 
                 // delete the old version
                 Services.ItemCacheService.Delete(itemCache);

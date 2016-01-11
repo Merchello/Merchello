@@ -333,6 +333,7 @@
     <Compile Include="Checkout\CheckoutCustomerManagerBase.cs" />
     <Compile Include="Checkout\CheckoutExtendedManagerBase.cs" />
     <Compile Include="Checkout\CheckoutManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutManagerExtensions.cs" />
     <Compile Include="Checkout\CheckoutOfferManagerBase.cs" />
     <Compile Include="Checkout\CheckoutPaymentManagerBase.cs" />
     <Compile Include="Checkout\CheckoutShippingManagerBase.cs" />
