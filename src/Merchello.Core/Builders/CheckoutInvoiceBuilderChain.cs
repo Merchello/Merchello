@@ -4,20 +4,24 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using Models;
-    using Sales;
+
+    using Merchello.Core.Checkout;
+    using Merchello.Core.Models;
+
     using Umbraco.Core;
 
     /// <summary>
-    /// Represents an invoice builder
+    /// A builder chain used by the checkout manager to create invoices.
     /// </summary>
-    [Obsolete("Superseded by CheckoutInvoiceBuilderChain")]
-    internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
+    /// <remarks>
+    /// Supersedes the <see cref="InvoiceBuilderChain"/>
+    /// </remarks>
+    internal sealed class CheckoutInvoiceBuilderChain : BuildChainBase<IInvoice>
     {
         /// <summary>
-        /// The sale preparation.
+        /// Gets the <see cref="CheckoutManagerBase"/>.
         /// </summary>
-        private readonly SalePreparationBase _salePreparation;
+        private readonly ICheckoutManagerBase _checkoutManager;
 
         /// <summary>
         /// Constructor parameters for the base class activator
@@ -25,17 +29,18 @@
         private IEnumerable<object> _constructorParameters;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvoiceBuilderChain"/> class.
+        /// Initializes a new instance of the <see cref="CheckoutInvoiceBuilderChain"/> class.
         /// </summary>
-        /// <param name="salePreparation">
-        /// The sale preparation.
+        /// <param name="checkoutManager">
+        /// The checkout manager.
         /// </param>
-        internal InvoiceBuilderChain(SalePreparationBase salePreparation)
+        internal CheckoutInvoiceBuilderChain(ICheckoutManagerBase checkoutManager)
         {
-            Mandate.ParameterNotNull(salePreparation, "salesPreparation");
-            _salePreparation = salePreparation;
+            Mandate.ParameterNotNull(checkoutManager, "checkoutManager");
 
-            ResolveChain(Core.Constants.TaskChainAlias.SalesPreparationInvoiceCreate);
+            _checkoutManager = checkoutManager;
+
+            ResolveChain(Core.Constants.TaskChainAlias.CheckoutManagerInvoiceCreate);
         }
 
         /// <summary>
@@ -54,7 +59,7 @@
             get
             {
                 return _constructorParameters ??
-                    (_constructorParameters = new List<object>(new object[] { _salePreparation }));
+                    (_constructorParameters = new List<object>(new object[] { _checkoutManager }));
             }
         }
 
@@ -65,15 +70,15 @@
         public override Attempt<IInvoice> Build()
         {
             var unpaid =
-                _salePreparation.MerchelloContext.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+                _checkoutManager.Context.Services.InvoiceService.GetInvoiceStatusByKey(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
 
             if (unpaid == null)
                 return Attempt<IInvoice>.Fail(new NullReferenceException("Unpaid invoice status query returned null"));
 
-            var invoice = new Invoice(unpaid) { VersionKey = _salePreparation.ItemCache.VersionKey };
+            var invoice = new Invoice(unpaid) { VersionKey = _checkoutManager.Context.VersionKey };
 
             // Associate a customer with the invoice if it is a known customer.
-            if (!_salePreparation.Customer.IsAnonymous) invoice.CustomerKey = _salePreparation.Customer.Key;
+            if (!_checkoutManager.Context.Customer.IsAnonymous) invoice.CustomerKey = _checkoutManager.Context.Customer.Key;
 
             var attempt = TaskHandlers.Any()
                        ? TaskHandlers.First().Execute(invoice)
@@ -88,7 +93,7 @@
             // total the invoice
             decimal converted;
             attempt.Result.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
-               
+
             return attempt;
         }
     }

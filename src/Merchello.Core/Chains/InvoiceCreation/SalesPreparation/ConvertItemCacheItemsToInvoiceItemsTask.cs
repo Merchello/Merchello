@@ -1,18 +1,28 @@
-﻿using System;
-using Merchello.Core.Models;
-using Merchello.Core.Sales;
-using Umbraco.Core;
-
-namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation.SalesPreparation
 {
+    using System;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Sales;
+
+    using Umbraco.Core;
+
     /// <summary>
     /// Converts ItemCacheLineItem(s) to InvoiceLineItems
     /// </summary>
+    [Obsolete("Superseded by CheckoutManger.ConvertItemCacheItemsToInvoiceItemsTask")]
     internal class ConvertItemCacheItemsToInvoiceItemsTask : InvoiceCreationAttemptChainTaskBase
     {
-        public ConvertItemCacheItemsToInvoiceItemsTask(SalePreparationBase salePreparation) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConvertItemCacheItemsToInvoiceItemsTask"/> class.
+        /// </summary>
+        /// <param name="salePreparation">
+        /// The sale preparation.
+        /// </param>
+        public ConvertItemCacheItemsToInvoiceItemsTask(SalePreparationBase salePreparation)
             : base(salePreparation)
-        {}
+        {
+        }
 
         /// <summary>
         /// Task converts ItemCacheLineItems to InvoiceLineItems and adds them to the invoice
@@ -21,7 +31,7 @@ namespace Merchello.Core.Chains.InvoiceCreation
         /// <returns>The <see cref="Attempt"/></returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            foreach (var lineItem in SalePreparation.ItemCache.Items)
+            foreach (var lineItem in this.SalePreparation.ItemCache.Items)
             {
                 try
                 {                       

@@ -1,13 +1,16 @@
-﻿namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation.SalesPreparation
 {
-    using Models;
-    using Sales;
+    using System;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Sales;
 
     using Umbraco.Core;
 
     /// <summary>
     /// The invoice creation attempt chain task base.
     /// </summary>
+    [Obsolete("Superseded by CheckoutManger.InvoiceCreationAttemptChainTaskBase")]
     public abstract class InvoiceCreationAttemptChainTaskBase : AttemptChainTaskBase<IInvoice>
     {
         /// <summary>
@@ -25,7 +28,7 @@
         {
             Mandate.ParameterNotNull(salePreparation, "salePreparation");
 
-            _salePreparation = salePreparation;
+            this._salePreparation = salePreparation;
         }
 
         /// <summary>
@@ -33,7 +36,7 @@
         /// </summary>
         protected SalePreparationBase SalePreparation
         {
-            get { return _salePreparation; }
+            get { return this._salePreparation; }
         }
     }
 }
