@@ -15,11 +15,6 @@
     public interface ICheckoutContext
     {
         /// <summary>
-        /// Resets the context.
-        /// </summary>
-        event TypedEventHandler<ICheckoutContext, CheckoutEventArgs<IItemCache>> Reset;
-
-        /// <summary>
         /// Gets the <see cref="IMerchelloContext"/>.
         /// </summary>
         IMerchelloContext MerchelloContext { get; }

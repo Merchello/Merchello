@@ -57,11 +57,6 @@
         }
 
         /// <summary>
-        /// An event that fires when the context needs to be reset.
-        /// </summary>
-        public event TypedEventHandler<ICheckoutContext, CheckoutEventArgs<IItemCache>> Reset;
-
-        /// <summary>
         /// Gets the merchello context.
         /// </summary>
         public IMerchelloContext MerchelloContext { get; private set; }
@@ -185,6 +180,12 @@
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="SalePreparationBase"/>
         /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version Key.
+        /// </param>
         /// <returns>
         /// The a string used as a runtime cache key.
         /// </returns>
