@@ -50,6 +50,18 @@
         #endregion
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Note"/> class.
+        /// </summary>
+        public Note()
+        {
+            Message = null;
+            CreateDate = DateTime.Now;
+            UpdateDate = DateTime.Now;
+            EntityKey = null;
+            EntityTfKey = null;
+        }
+
+        /// <summary>
         /// Gets or sets the entity key.
         /// </summary>
         [DataMember]
@@ -120,15 +132,5 @@
                     MessageSelector);
             }
         }
-
-        public Note()
-        {
-            Message = null;
-            CreateDate = DateTime.Now;
-            UpdateDate = DateTime.Now;
-            EntityKey = null;
-            EntityTfKey = null;
-        }
-
     }
 }

@@ -1,26 +1,27 @@
-﻿namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation.CheckoutManager
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using Models;
-    using Sales;
+
+    using Merchello.Core.Checkout;
+    using Merchello.Core.Models;
+
     using Umbraco.Core;
 
     /// <summary>
     /// Responsible for apply taxes to invoice tax.
     /// </summary>
-    internal class ApplyTaxesToInvoiceTax : InvoiceCreationAttemptChainTaskBase
+    internal class ApplyTaxesToInvoiceTask : CheckoutManagerInvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplyTaxesToInvoiceTax"/> class.
+        /// Initializes a new instance of the <see cref="ApplyTaxesToInvoiceTask"/> class.
         /// </summary>
-        /// <param name="salePreparation">
-        /// The sale preparation.
+        /// <param name="checkoutManager">
+        /// The checkout manager.
         /// </param>
-        public ApplyTaxesToInvoiceTax(SalePreparationBase salePreparation)
-            : base(salePreparation)
-        {            
+        public ApplyTaxesToInvoiceTask(ICheckoutManagerBase checkoutManager)
+            : base(checkoutManager)
+        {
         }
 
         /// <summary>
@@ -35,7 +36,7 @@
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (SalePreparation.ApplyTaxesToInvoice)
+            if (this.CheckoutManager.Context.ApplyTaxesToInvoice)
             {
                 try
                 {
@@ -57,13 +58,13 @@
                     taxAddress = taxAddress ?? value.GetBillingAddress();
 
                     this.SetTaxableSetting(value);
-                    var taxes = value.CalculateTaxes(SalePreparation.MerchelloContext, taxAddress);
-                    this.SetTaxableSetting(value, true);                    
+                    var taxes = value.CalculateTaxes(CheckoutManager.Context.MerchelloContext, taxAddress);
+                    this.SetTaxableSetting(value, true);
 
                     var taxLineItem = taxes.AsLineItemOf<InvoiceLineItem>();
 
                     var currencyCode =
-                        SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
+                        this.CheckoutManager.Context.Services.StoreSettingService.GetByKey(
                             Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
 
                     taxLineItem.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.CurrencyCode, currencyCode);
@@ -97,11 +98,11 @@
         /// </remarks>
         private void SetTaxableSetting(IInvoice invoice, bool taxable = false)
         {
-            if (!this.SalePreparation.MerchelloContext.Gateways.Taxation.ProductPricingEnabled) return;
+            if (!this.CheckoutManager.Context.Gateways.Taxation.ProductPricingEnabled) return;
 
             foreach (var item in invoice.Items.Where(x => x.ExtendedData.TaxIncludedInProductPrice()))
             {
-                item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, taxable.ToString());  
+                item.ExtendedData.SetValue(Core.Constants.ExtendedDataKeys.Taxable, taxable.ToString());
             }
         }
     }

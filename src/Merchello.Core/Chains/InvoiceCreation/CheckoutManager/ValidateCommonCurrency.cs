@@ -1,31 +1,33 @@
-﻿namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation.CheckoutManager
 {
     using System.IO;
     using System.Linq;
-    using Models;
-    using Sales;
+
+    using Merchello.Core.Checkout;
+    using Merchello.Core.Models;
+
     using Umbraco.Core;
+
     using Constants = Merchello.Core.Constants;
 
     /// <summary>
-    /// Validates that all line items are priced in the same currency.  If a currency has not been set
-    /// the line item is tagged with the default currency from Store Settings
+    /// The validate common currency.
     /// </summary>
-    internal class ValidateCommonCurrency : InvoiceCreationAttemptChainTaskBase
+    internal class ValidateCommonCurrency : CheckoutManagerInvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidateCommonCurrency"/> class.
         /// </summary>
-        /// <param name="salePreparation">
-        /// The sale preparation.
+        /// <param name="checkoutManager">
+        /// The <see cref="ICheckoutManagerBase"/>.
         /// </param>
-        public ValidateCommonCurrency(SalePreparationBase salePreparation)
-            : base(salePreparation)
-        {            
+        public ValidateCommonCurrency(ICheckoutManagerBase checkoutManager)
+            : base(checkoutManager)
+        {
         }
 
         /// <summary>
-        /// The perform task.
+        /// Performs the task of asserting everything is billed in a common currency.
         /// </summary>
         /// <param name="value">
         /// The value.
@@ -40,7 +42,7 @@
             if (unTagged.Any())
             {
                 var defaultCurrency =
-                    SalePreparation.MerchelloContext.Services.StoreSettingService.GetByKey(
+                    this.CheckoutManager.Context.Services.StoreSettingService.GetByKey(
                         Constants.StoreSettingKeys.CurrencyCodeKey);
 
                 foreach (var item in unTagged)

@@ -1,9 +1,10 @@
-﻿namespace Merchello.Web.Workflow.InvoiceCreation
+﻿namespace Merchello.Web.Workflow.InvoiceCreation.SalesPreparation
 {
+    using System;
     using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.Chains.InvoiceCreation;
+    using Merchello.Core.Chains.InvoiceCreation.SalesPreparation;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Sales;
@@ -15,6 +16,7 @@
     /// Represents a task responsible for adding a note collected during a checkout process to the
     /// invoice.
     /// </summary>
+    [Obsolete("Superseded by CheckoutManager.AddNotesToInvoiceTask")]
     internal class AddNotesToInvoiceTask : InvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
@@ -39,7 +41,7 @@
         /// </returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            var noteDisplay = SalePreparation.Customer.ExtendedData.GetNote();
+            var noteDisplay = this.SalePreparation.Customer.ExtendedData.GetNote();
 
             if (noteDisplay == null) return Attempt<IInvoice>.Succeed(value);
 

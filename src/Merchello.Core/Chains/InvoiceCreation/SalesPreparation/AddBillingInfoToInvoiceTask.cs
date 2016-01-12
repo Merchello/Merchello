@@ -1,14 +1,18 @@
-﻿namespace Merchello.Core.Chains.InvoiceCreation
+﻿namespace Merchello.Core.Chains.InvoiceCreation.SalesPreparation
 {
+    using System;
     using System.IO;
-    using Models;
-    using Sales;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Sales;
+
     using Umbraco.Core;
 
     /// <summary>
     /// Represents a task responsible for adding billing information collected a checkout process to the
     /// invoice.
     /// </summary>
+    [Obsolete("Superseded by CheckoutManger.AddBillingInfoToInvoiceTask")]
     internal class AddBillingInfoToInvoiceTask : InvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
@@ -33,7 +37,7 @@
         /// </returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            var address = SalePreparation.Customer.ExtendedData.GetAddress(Core.Constants.ExtendedDataKeys.BillingAddress);
+            var address = this.SalePreparation.Customer.ExtendedData.GetAddress(Core.Constants.ExtendedDataKeys.BillingAddress);
             if (address == null) return Attempt<IInvoice>.Fail(new InvalidDataException("Billing information could not be retrieved from the Checkout"));
 
             value.SetBillingAddress(address);

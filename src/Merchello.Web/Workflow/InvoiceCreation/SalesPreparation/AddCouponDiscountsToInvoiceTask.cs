@@ -1,10 +1,10 @@
-﻿namespace Merchello.Web.Workflow.InvoiceCreation
+﻿namespace Merchello.Web.Workflow.InvoiceCreation.SalesPreparation
 {
     using System;
     using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.Chains.InvoiceCreation;
+    using Merchello.Core.Chains.InvoiceCreation.SalesPreparation;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
     using Merchello.Web.Discounts.Coupons;
@@ -14,6 +14,7 @@
     /// <summary>
     /// Adds any coupon discounts to the invoice.
     /// </summary>
+    [Obsolete("Superseded by CheckoutManager.AddCouponDiscountsToInvoiceTask")]
     internal class AddCouponDiscountsToInvoiceTask : InvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
@@ -45,7 +46,7 @@
         {
             get
             {
-                return _couponManager.Value;
+                return this._couponManager.Value;
             }
         }
 
@@ -61,15 +62,15 @@
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // check if there are any coupon offers
-            if (!SalePreparation.OfferCodes.Any()) return Attempt<IInvoice>.Succeed(value);
+            if (!this.SalePreparation.OfferCodes.Any()) return Attempt<IInvoice>.Succeed(value);
 
-            if (!(SalePreparation is IBasketSalePreparation)) 
+            if (!(this.SalePreparation is IBasketSalePreparation)) 
                 return Attempt<IInvoice>.Fail(value, new InvalidCastException("SalePreparation object is not IBasketSalePreparation"));
-            _basketSalePreparation = SalePreparation as IBasketSalePreparation;
+            this._basketSalePreparation = this.SalePreparation as IBasketSalePreparation;
 
-            foreach (var code in SalePreparation.OfferCodes)
+            foreach (var code in this.SalePreparation.OfferCodes)
             {
-                var foundCoupon = CouponOfferManager.GetByOfferCode(code, SalePreparation.Customer);
+                var foundCoupon = this.CouponOfferManager.GetByOfferCode(code, this.SalePreparation.Customer);
                 if (!foundCoupon.Success)
                 {
                     continue;
