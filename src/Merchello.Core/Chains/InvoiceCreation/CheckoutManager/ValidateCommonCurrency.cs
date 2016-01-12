@@ -13,7 +13,7 @@
     /// <summary>
     /// The validate common currency.
     /// </summary>
-    public class ValidateCommonCurrency : CheckoutManagerInvoiceCreationAttemptChainTaskBase
+    internal class ValidateCommonCurrency : CheckoutManagerInvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidateCommonCurrency"/> class.

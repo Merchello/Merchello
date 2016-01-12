@@ -33,7 +33,7 @@
         protected CheckoutExtendedManagerBase(ICheckoutContext context)
             : base(context)
         {
-            
+            this.Initialize();
         }
 
         /// <summary>
@@ -144,7 +144,10 @@
         private void Initialize()
         {            
             this._messages = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.Note));
-            if (Context.IsNewVersion) this.ClearNotes();
+            if (Context.IsNewVersion && Context.ChangeSettings.ResetExtendedManagerDataOnVersionChange)
+            {
+                this.ClearNotes();
+            }
         } 
     }
 }

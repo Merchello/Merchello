@@ -71,5 +71,10 @@
         /// Gets the <see cref="IRuntimeCacheProvider"/>.
         /// </summary>
         IRuntimeCacheProvider Cache { get; }
+
+        /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        ICheckoutContextChangeSettings ChangeSettings { get; }
     }
 }

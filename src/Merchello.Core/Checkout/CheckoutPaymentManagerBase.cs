@@ -21,7 +21,7 @@
         /// <summary>
         /// A function to instantiate an invoice BuilderChain.
         /// </summary>
-        private Lazy<IBuilderChain<IInvoice>> _invoiceBuilder; 
+        private IBuilderChain<IInvoice> _invoiceBuilder; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutPaymentManagerBase"/> class.
@@ -32,11 +32,13 @@
         /// <param name="invoiceBuilder">
         /// A lazy instantiate to get an invoice BuilderChain.
         /// </param>
-        protected CheckoutPaymentManagerBase(ICheckoutContext context, Lazy<IBuilderChain<IInvoice>> invoiceBuilder)
+        protected CheckoutPaymentManagerBase(ICheckoutContext context, IBuilderChain<IInvoice> invoiceBuilder)
             : base(context)
         {
             Mandate.ParameterNotNull(invoiceBuilder, "invoiceBuilder");
             this._invoiceBuilder = invoiceBuilder;
+
+            this.Initialize();
         }
 
         /// <summary>
@@ -61,7 +63,7 @@
         {
             get
             {
-                return this._invoiceBuilder.Value;
+                return this._invoiceBuilder;
             }
         } 
 
@@ -82,7 +84,7 @@
         /// <returns>An <see cref="IInvoice"/></returns>
         public virtual IInvoice PrepareInvoice()
         {
-            return !IsReadyToInvoice() ? null : PrepareInvoice(this._invoiceBuilder.Value);
+            return !IsReadyToInvoice() ? null : PrepareInvoice(InvoiceBuilder);
         }
 
         /// <summary>
@@ -110,6 +112,11 @@
 
             throw attempt.Exception;
         }
+
+        /// <summary>
+        /// Removes a previously saved payment method..
+        /// </summary>
+        public abstract void ClearPaymentMethod();
 
         /// <summary>
         /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
@@ -207,6 +214,17 @@
             if (Finalizing != null)
             {
                 Finalizing.RaiseEvent(new CheckoutEventArgs<IPaymentResult>(Context.Customer, result), this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes the manager.
+        /// </summary>
+        private void Initialize()
+        {
+            if (Context.IsNewVersion && Context.ChangeSettings.ResetPaymentManagerDataOnVersionChange)
+            {
+                this.ClearPaymentMethod();
             }
         }
     }

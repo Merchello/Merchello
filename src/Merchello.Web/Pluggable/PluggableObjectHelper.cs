@@ -88,7 +88,7 @@
                 return attempt.Result;
             }
 
-            LogHelper.Error(typeof(PluggableObjectHelper), "Failed to created configured CustomerContext", attempt.Exception);
+            LogHelper.Error(typeof(PluggableObjectHelper), "Failed to instantiate configured type", attempt.Exception);
             throw attempt.Exception;
         }
     }

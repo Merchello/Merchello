@@ -4,6 +4,9 @@
 
     using Merchello.Core.Gateways.Shipping;
 
+    /// <summary>
+    /// Defines a CheckoutShippingManager
+    /// </summary>
     public interface ICheckoutShippingManager
     {
         /// <summary>

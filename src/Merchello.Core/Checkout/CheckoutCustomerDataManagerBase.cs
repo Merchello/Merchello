@@ -56,7 +56,7 @@
         {
             var json =
                 JsonConvert.SerializeObject(
-                    new CustomerTempData() { Data = data, VersionKey = Context.VersionKey });
+                    new CheckoutCustomerTempData() { Data = data, VersionKey = Context.VersionKey });
 
             Context.Customer.ExtendedData.SetValue(key, json);
 
@@ -80,7 +80,7 @@
 
             try
             {
-                var savedData = JsonConvert.DeserializeObject<CustomerTempData>(queueDataJson);
+                var savedData = JsonConvert.DeserializeObject<CheckoutCustomerTempData>(queueDataJson);
 
                 // verify that the offer codes are for this version of the checkout
                 if (savedData.VersionKey != Context.VersionKey) return data;
@@ -90,26 +90,11 @@
             catch (Exception ex)
             {
                 // don't throw an exception here as the customer is in the middle of a checkout.
-                LogHelper.Error<SalePreparationBase>("Failed to deserialize CustomerTempData.  Returned empty offer code list instead.", ex);
+                LogHelper.Error<SalePreparationBase>("Failed to deserialize CheckoutCustomerTempData.  Returned empty offer code list instead.", ex);
             }
 
             return data;
         } 
 
-        /// <summary>
-        /// Class that gets serialized to customer's ExtendedDataCollection to save notes associated with an invoice.
-        /// </summary>
-        protected struct CustomerTempData
-        {
-            /// <summary>
-            /// Gets or sets the version key to validate offer codes are validate with this preparation
-            /// </summary>
-            public Guid VersionKey { get; set; }
-
-            /// <summary>
-            /// Gets or sets the enumerable string of data.
-            /// </summary>
-            public IEnumerable<string> Data { get; set; }
-        }
     }
 }

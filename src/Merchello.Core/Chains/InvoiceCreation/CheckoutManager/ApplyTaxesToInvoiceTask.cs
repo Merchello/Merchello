@@ -11,7 +11,7 @@
     /// <summary>
     /// Responsible for apply taxes to invoice tax.
     /// </summary>
-    public class ApplyTaxesToInvoiceTask : CheckoutManagerInvoiceCreationAttemptChainTaskBase
+    internal class ApplyTaxesToInvoiceTask : CheckoutManagerInvoiceCreationAttemptChainTaskBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplyTaxesToInvoiceTask"/> class.

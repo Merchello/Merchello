@@ -10,6 +10,8 @@
 
     using Umbraco.Core;
 
+    using Constants = Merchello.Core.Constants;
+
     /// <summary>
     /// The basket checkout payment manager.
     /// </summary>
@@ -24,9 +26,18 @@
         /// <param name="invoiceBuilder">
         ///  A lazy BuilderChain.
         /// </param>
-        public BasketCheckoutPaymentManager(ICheckoutContext context, Lazy<IBuilderChain<IInvoice>> invoiceBuilder)
+        public BasketCheckoutPaymentManager(ICheckoutContext context, IBuilderChain<IInvoice> invoiceBuilder)
             : base(context, invoiceBuilder)
         {
+        }
+
+        /// <summary>
+        /// Removes a previously saved payment method..
+        /// </summary>
+        public override void ClearPaymentMethod()
+        {
+            Context.Customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.PaymentMethod);
+            this.SaveCustomer();
         }
 
         /// <summary>
@@ -72,7 +83,9 @@
             Context.Services.InvoiceService.Save(invoice);
 
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
-            
+
+            if (result.Payment.Success && Context.ChangeSettings.EmptyBasketOnPaymentSuccess) Context.Customer.Basket().Empty();
+
             OnFinalizing(result);
 
             return result;
@@ -129,6 +142,8 @@
             Context.Services.InvoiceService.Save(invoice);
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
+
+            if (result.Payment.Success && Context.ChangeSettings.EmptyBasketOnPaymentSuccess) Context.Customer.Basket().Empty();
 
             OnFinalizing(result);
 

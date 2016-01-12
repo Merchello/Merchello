@@ -82,7 +82,7 @@
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
-        /// The sql syntax.
+        /// The SQL syntax.
         /// </param>
         internal InvoiceService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : this(new Persistence.RepositoryFactory(logger, sqlSyntax), logger, new AppliedPaymentService(logger, sqlSyntax), new OrderService(logger, sqlSyntax), new StoreSettingService(logger, sqlSyntax))
@@ -274,11 +274,14 @@
 
             var status = GetInvoiceStatusByKey(invoiceStatusKey);
 
+            var defaultCurrencyCode = this.GetDefaultCurrencyCode();
+
             var invoice = new Invoice(status)
             {
                 VersionKey = Guid.NewGuid(),
                 InvoiceNumber = invoiceNumber,
-                InvoiceDate = DateTime.Now
+                InvoiceDate = DateTime.Now,
+                CurrencyCode = defaultCurrencyCode
             };
 
             if (raiseEvents)
@@ -1687,6 +1690,17 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the default currency code.
+        /// </summary>
+        /// <returns>
+        /// The currency code saved in the store settings.
+        /// </returns>
+        private string GetDefaultCurrencyCode()
+        {
+            return this._storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
+        }
 
         /// <summary>
         /// Deletes orders associated with the invoice

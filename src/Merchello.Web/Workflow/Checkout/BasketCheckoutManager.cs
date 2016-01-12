@@ -116,10 +116,10 @@
         private void Initialize()
         {
             _customerManager = new Lazy<ICheckoutCustomerManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutCustomerManager>("BasketCheckoutCustomerManager", Context));
-            //_extendedManager = new Lazy<ICheckoutExtendedManager>(() => PluggableObjectHelper.GetInstance<BasketE>());
-            _offerManager = new Lazy<ICheckoutOfferManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutOfferManager>("BasketCheckoutOfferManager", Context));
-            _shippingManager = new Lazy<ICheckoutShippingManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutShippingManager>("BasketCheckoutShippingManager", Context));
             _paymentManager = new Lazy<ICheckoutPaymentManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutPaymentManager>("BasketCheckoutPaymentManager", Context, InvoiceBuilder));
+            _extendedManager = new Lazy<ICheckoutExtendedManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutExtendedManager>("BasketCheckoutExtendedManager", Context));
+            _offerManager = new Lazy<ICheckoutOfferManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutOfferManager>("BasketCheckoutOfferManager", Context, this._paymentManager.Value));
+            _shippingManager = new Lazy<ICheckoutShippingManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutShippingManager>("BasketCheckoutShippingManager", Context));            
         }
     }
 }

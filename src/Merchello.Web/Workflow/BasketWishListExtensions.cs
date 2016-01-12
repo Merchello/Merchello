@@ -28,7 +28,24 @@
         /// </returns>
         public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket)
         {
-            return new BasketCheckoutManager(basket.CreateCheckoutContext(MerchelloContext.Current));
+            return basket.GetCheckoutManager(MerchelloContext.Current, new CheckoutContextChangeSettings());
+        }
+
+        /// <summary>
+        /// The get checkout manager.
+        /// </summary>
+        /// <param name="basket">
+        /// The basket.
+        /// </param>
+        /// <param name="settings">
+        /// The checkout context version change settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICheckoutManagerBase"/>.
+        /// </returns>
+        public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, ICheckoutContextChangeSettings settings)
+        {
+            return new BasketCheckoutManager(basket.CreateCheckoutContext(MerchelloContext.Current, settings));
         }
 
         /// <summary>
@@ -40,12 +57,15 @@
         /// <param name="merchelloContext">
         /// The merchello Context.
         /// </param>
+        /// <param name="settings">
+        /// The checkout context version change settings.
+        /// </param>
         /// <returns>
         /// The <see cref="ICheckoutManagerBase"/>.
         /// </returns>
-        internal static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, IMerchelloContext merchelloContext)
+        internal static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
         {
-            return new BasketCheckoutManager(basket.CreateCheckoutContext(merchelloContext));
+            return new BasketCheckoutManager(basket.CreateCheckoutContext(merchelloContext, settings));
         }
 
         /// <summary>
@@ -57,12 +77,15 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
         /// <returns>
         /// The <see cref="ICheckoutContext"/>.
         /// </returns>
-        internal static ICheckoutContext CreateCheckoutContext(this IBasket basket, IMerchelloContext merchelloContext)
+        internal static ICheckoutContext CreateCheckoutContext(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
         {
-            var context = CheckoutContext.CreateCheckoutContext(merchelloContext, basket.Customer, basket.VersionKey);
+            var context = CheckoutContext.CreateCheckoutContext(merchelloContext, basket.Customer, basket.VersionKey, settings);
 
             if (context.IsNewVersion && basket.Validate())
             {

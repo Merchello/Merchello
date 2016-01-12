@@ -284,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataMakers\AddressMock.cs" />
+    <Compile Include="DataMakers\MockAddressMaker.cs" />
     <Compile Include="DataMakers\MockCouponDataMaker.cs" />
     <Compile Include="DataMakers\MockInvoiceDataMaker.cs" />
     <Compile Include="DataMakers\MockOrderStatusMaker.cs" />

@@ -527,7 +527,6 @@
     <Compile Include="Workflow\Checkout\BasketCheckoutExtendedManager.cs" />
     <Compile Include="Workflow\Checkout\BasketCheckoutManager.cs" />
     <Compile Include="Workflow\Checkout\BasketCheckoutOfferManager.cs" />
-    <Compile Include="Workflow\Checkout\BasketCheckoutOfferManagerBase.cs" />
     <Compile Include="Workflow\Checkout\BasketCheckoutPaymentManager.cs" />
     <Compile Include="Workflow\Checkout\BasketCheckoutShippingManager.cs" />
     <Compile Include="Workflow\CustomerItemCache\CustomerItemCacheBase.cs" />

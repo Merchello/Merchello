@@ -1,12 +1,9 @@
 ﻿namespace Merchello.Core.Checkout
 {
     using System;
-    using System.Collections.Generic;
 
     using Merchello.Core.Builders;
     using Merchello.Core.Models;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The checkout manager base.
@@ -61,11 +58,11 @@
         /// <returns>
         /// The <see cref="BuildChainBase{IInvoice}"/>.
         /// </returns>
-        protected virtual Lazy<BuildChainBase<IInvoice>> InvoiceBuilder
+        protected virtual BuildChainBase<IInvoice> InvoiceBuilder
         {
             get
             {
-                return this._invoiceBuilder;
+                return this._invoiceBuilder.Value;
             }
         }
 

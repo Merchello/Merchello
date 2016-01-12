@@ -27,8 +27,25 @@
         /// The item cache.
         /// </param>
         public CheckoutContext(ICustomerBase customer, IItemCache itemCache)
-            : this(customer, itemCache, Core.MerchelloContext.Current)
+            : this(customer, itemCache, new CheckoutContextChangeSettings())
         { 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckoutContext"/> class.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, ICheckoutContextChangeSettings settings)
+            : this(customer, itemCache, Core.MerchelloContext.Current, settings)
+        {            
         }
 
         /// <summary>
@@ -44,16 +61,22 @@
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
         /// </param>
-        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext)
+        /// <param name="settings">
+        /// The version change settings.
+        /// </param>
+        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
         {
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(itemCache, "itemCache");
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Mandate.ParameterNotNull(settings, "settings");
 
             this.MerchelloContext = merchelloContext;
             this.ItemCache = itemCache;
             this.Customer = customer;
             this.Cache = merchelloContext.Cache.RuntimeCache;
+            this.ApplyTaxesToInvoice = true;
+            this.ChangeSettings = settings;
         }
 
         /// <summary>
@@ -137,6 +160,11 @@
         public IRuntimeCacheProvider Cache { get; private set; }
 
         /// <summary>
+        /// Gets the version change settings.
+        /// </summary>
+        public ICheckoutContextChangeSettings ChangeSettings { get; private set; }
+
+        /// <summary>
         /// Gets the <see cref="ICheckoutContext"/> for the customer
         /// </summary>
         /// <param name="merchelloContext">
@@ -148,15 +176,18 @@
         /// <param name="versionKey">
         /// The version Key.
         /// </param>
+        /// <param name="settings">
+        /// The checkout context version change settings.
+        /// </param>
         /// <returns>
         /// The <see cref="ICheckoutContext"/> associated with the customer checkout
         /// </returns>
-        public static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey)
+        public static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey, ICheckoutContextChangeSettings settings)
         {
             var cache = merchelloContext.Cache.RuntimeCache;
             var cacheKey = MakeCacheKey(customer, versionKey);
             var itemCache = cache.GetCacheItem(cacheKey) as IItemCache;
-            if (itemCache != null) return new CheckoutContext(customer, itemCache, merchelloContext);
+            if (itemCache != null) return new CheckoutContext(customer, itemCache, merchelloContext, settings);
 
             itemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Checkout, versionKey);
 
@@ -168,12 +199,12 @@
 
                 // delete the old version
                 merchelloContext.Services.ItemCacheService.Delete(itemCache);
-                return CreateCheckoutContext(merchelloContext, customer, versionKey);
+                return CreateCheckoutContext(merchelloContext, customer, versionKey, settings);
             }
 
             cache.InsertCacheItem(cacheKey, () => itemCache);
 
-            return new CheckoutContext(customer, itemCache, merchelloContext) { IsNewVersion = true };
+            return new CheckoutContext(customer, itemCache, merchelloContext, settings) { IsNewVersion = true };
         }
 
 

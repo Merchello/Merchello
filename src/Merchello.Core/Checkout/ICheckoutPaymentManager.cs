@@ -39,6 +39,11 @@
         IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder);
 
         /// <summary>
+        /// Removes a previously saved payment method.
+        /// </summary>
+        void ClearPaymentMethod();
+
+        /// <summary>
         /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
         /// </summary>
         /// <param name="paymentMethod">

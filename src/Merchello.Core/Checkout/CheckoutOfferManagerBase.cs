@@ -71,6 +71,17 @@
         }
 
         /// <summary>
+        /// Attempts to redeem an offer to the sale.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferRedemptionResult{ILineItem}"/>.
+        /// </returns>
+        public abstract IOfferRedemptionResult<ILineItem> RedeemCouponOffer(string offerCode);
+
+        /// <summary>
         /// Attempts to apply an offer to the the checkout.
         /// </summary>
         /// <param name="validateAgainst">
@@ -123,6 +134,8 @@
         private void Initialize()
         {
             this._offerCodeTempData = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData));
+
+            if (Context.IsNewVersion && Context.ChangeSettings.ResetOfferManagerDataOnVersionChange) this.ClearOfferCodes();
         }
     }
 }

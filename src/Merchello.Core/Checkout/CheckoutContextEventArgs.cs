@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Core.Checkout
 {
     using System;
+    using System.ComponentModel;
 
     using Merchello.Core.Models;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// The <see cref="ICheckoutContext"/> event args.
@@ -12,7 +14,7 @@
     /// <typeparam name="T">
     /// The type of the second argument
     /// </typeparam>
-    public class CheckoutEventArgs<T> : EventArgs 
+    public class CheckoutEventArgs<T> : CancellableObjectEventArgs<T>
         where T : class
     {
         /// <summary>
@@ -25,12 +27,12 @@
         /// The item.
         /// </param>
         public CheckoutEventArgs(ICustomerBase customer, T item)
+            : base(item, true)
         {
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(item, "item");
 
             this.Customer = customer;
-            this.Item = item;
         }
 
         /// <summary>
@@ -41,6 +43,12 @@
         /// <summary>
         /// Gets the item.
         /// </summary>
-        public T Item { get; private set; }
+        public T Item
+        {
+            get
+            {
+                return EventObject;
+            }
+        }
     }
 }

@@ -301,6 +301,8 @@
     <Compile Include="Builders\InvoiceBuilderTests.cs" />
     <Compile Include="Builders\OrderBuilderTests.cs" />
     <Compile Include="Builders\ShipmentBuilderTests.cs" />
+    <Compile Include="Checkout\CheckoutManagerTests.cs" />
+    <Compile Include="Checkout\CheckoutManagersTestBase.cs" />
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferComponentDefinitionDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferProviderTests.cs" />
