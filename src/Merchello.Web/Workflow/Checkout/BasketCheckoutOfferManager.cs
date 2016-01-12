@@ -13,7 +13,7 @@
     /// <summary>
     /// Gets the basket offer manager.
     /// </summary>
-    public class BasketCheckoutOfferManager : CheckoutOfferManagerBase
+    internal class BasketCheckoutOfferManager : CheckoutOfferManagerBase
     {
         /// <summary>
         /// The <see cref="CouponManager"/>.

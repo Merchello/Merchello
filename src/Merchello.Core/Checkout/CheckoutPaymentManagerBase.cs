@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Checkout
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Builders;
     using Merchello.Core.Events;
@@ -8,7 +9,9 @@
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
 
+    using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// A base class for CheckoutPaymentManagers.
@@ -16,14 +19,24 @@
     public abstract class CheckoutPaymentManagerBase : CheckoutCustomerDataManagerBase, ICheckoutPaymentManager
     {
         /// <summary>
+        /// A function to instantiate an invoice BuilderChain.
+        /// </summary>
+        private Lazy<IBuilderChain<IInvoice>> _invoiceBuilder; 
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutPaymentManagerBase"/> class.
         /// </summary>
         /// <param name="context">
         /// The context.
         /// </param>
-        protected CheckoutPaymentManagerBase(ICheckoutContext context)
+        /// <param name="invoiceBuilder">
+        /// A lazy instantiate to get an invoice BuilderChain.
+        /// </param>
+        protected CheckoutPaymentManagerBase(ICheckoutContext context, Lazy<IBuilderChain<IInvoice>> invoiceBuilder)
             : base(context)
         {
+            Mandate.ParameterNotNull(invoiceBuilder, "invoiceBuilder");
+            this._invoiceBuilder = invoiceBuilder;
         }
 
         /// <summary>
@@ -42,6 +55,17 @@
         public string InvoiceNumberPrefix { get; set; }
 
         /// <summary>
+        /// Gets the <see cref="IBuilderChain{IInoice}"/>.
+        /// </summary>
+        protected IBuilderChain<IInvoice> InvoiceBuilder
+        {
+            get
+            {
+                return this._invoiceBuilder.Value;
+            }
+        } 
+
+        /// <summary>
         /// Gets a value indicating whether or not the <see cref="ICheckoutPaymentManager"/> is ready to prepare an <see cref="IInvoice"/>
         /// </summary>
         /// <returns>
@@ -58,7 +82,7 @@
         /// <returns>An <see cref="IInvoice"/></returns>
         public virtual IInvoice PrepareInvoice()
         {
-            throw new NotImplementedException();
+            return !IsReadyToInvoice() ? null : PrepareInvoice(this._invoiceBuilder.Value);
         }
 
         /// <summary>
@@ -68,7 +92,23 @@
         /// <returns>An <see cref="IInvoice"/> that is not persisted to the database.</returns>
         public virtual IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder)
         {
-            throw new NotImplementedException();
+            if (!IsReadyToInvoice()) return null;
+
+            ////var requestCache = _merchelloContext.Cache.RequestCache;
+            ////var cacheKey = string.Format("merchello.salespreparationbase.prepareinvoice.{0}", ItemCache.VersionKey);
+            var attempt = invoiceBuilder.Build();
+
+            if (attempt.Success)
+            {
+                attempt.Result.InvoiceNumberPrefix = InvoiceNumberPrefix;
+                InvoicePrepared.RaiseEvent(new CheckoutEventArgs<IInvoice>(Context.Customer, attempt.Result), this);
+
+                return attempt.Result;
+            }
+
+            LogHelper.Error<SalePreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
+
+            throw attempt.Exception;
         }
 
         /// <summary>
@@ -78,6 +118,15 @@
         /// The payment Method.
         /// </param>
         public abstract void SavePaymentMethod(IPaymentMethod paymentMethod);
+
+        /// <summary>
+        /// Gets a list of all possible Payment Methods
+        /// </summary>
+        /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
+        public virtual IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods()
+        {
+            return Context.Gateways.Payment.GetPaymentGatewayMethods();
+        }
 
         /// <summary>
         /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data
@@ -146,5 +195,19 @@
         /// <param name="paymentMethodKey">The <see cref="IPaymentMethod"/> key</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public abstract IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey);
+
+        /// <summary>
+        /// Raises the Finalizing event.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        protected void OnFinalizing(IPaymentResult result)
+        {
+            if (Finalizing != null)
+            {
+                Finalizing.RaiseEvent(new CheckoutEventArgs<IPaymentResult>(Context.Customer, result), this);
+            }
+        }
     }
 }

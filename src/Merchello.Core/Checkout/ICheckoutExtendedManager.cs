@@ -30,6 +30,19 @@
         void RemoveItem(ILineItem lineItem);
 
         /// <summary>
+        /// Clears all notes.
+        /// </summary>
+        void ClearNotes();
+
+        /// <summary>
+        /// Saves a list of messages as notes.
+        /// </summary>
+        /// <param name="messages">
+        /// The messages.
+        /// </param>
+        void SaveNotes(IEnumerable<string> messages);
+
+        /// <summary>
         /// Adds to get associated with the invoice as a note on invoice creation.
         /// </summary>
         /// <param name="message">

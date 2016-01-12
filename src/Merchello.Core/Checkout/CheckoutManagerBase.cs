@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Builders;
     using Merchello.Core.Models;
 
     using Umbraco.Core;
@@ -12,6 +13,10 @@
     /// </summary>
     public abstract class CheckoutManagerBase : CheckoutContextManagerBase, ICheckoutManagerBase
     {
+        /// <summary>
+        /// The invoice builder.
+        /// </summary>
+        private Lazy<BuildChainBase<IInvoice>> _invoiceBuilder; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutManagerBase"/> class.
@@ -22,6 +27,7 @@
         protected CheckoutManagerBase(ICheckoutContext checkoutContext)
             : base(checkoutContext)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -50,17 +56,25 @@
         public abstract ICheckoutPaymentManager Payment { get; }
 
         /// <summary>
-        /// Gets the notification.
+        /// Gets the invoice builder.
         /// </summary>
-        public abstract ICheckoutNotificationManager Notification { get; }
-
+        /// <returns>
+        /// The <see cref="BuildChainBase{IInvoice}"/>.
+        /// </returns>
+        protected virtual Lazy<BuildChainBase<IInvoice>> InvoiceBuilder
+        {
+            get
+            {
+                return this._invoiceBuilder;
+            }
+        }
 
         /// <summary>
-        /// Gets the <see cref="IItemCache"/>
+        /// Initializes the manager.
         /// </summary>
-        public IItemCache ItemCache
+        private void Initialize()
         {
-            get { return Context.ItemCache; }
+            this._invoiceBuilder = new Lazy<BuildChainBase<IInvoice>>(() => new CheckoutInvoiceBuilderChain(this));
         }
     }
 }

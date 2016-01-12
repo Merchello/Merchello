@@ -7,12 +7,18 @@
     using Merchello.Core.Services;
 
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// Defines a checkout context.
     /// </summary>
     public interface ICheckoutContext
     {
+        /// <summary>
+        /// Resets the context.
+        /// </summary>
+        event TypedEventHandler<ICheckoutContext, CheckoutEventArgs<IItemCache>> Reset;
+
         /// <summary>
         /// Gets the <see cref="IMerchelloContext"/>.
         /// </summary>
@@ -46,6 +52,11 @@
         /// Gets the checkout version key.
         /// </summary>
         Guid VersionKey { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this context is a new checkout version.
+        /// </summary>
+        bool IsNewVersion { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether or not to apply taxes to generated invoice.

@@ -7,7 +7,7 @@
     /// <summary>
     /// The basket checkout customer manager.
     /// </summary>
-    public class BasketCheckoutCustomerManager : CheckoutCustomerManagerBase, ICheckoutCustomerManager 
+    internal class BasketCheckoutCustomerManager : CheckoutCustomerManagerBase, ICheckoutCustomerManager 
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketCheckoutCustomerManager"/> class.

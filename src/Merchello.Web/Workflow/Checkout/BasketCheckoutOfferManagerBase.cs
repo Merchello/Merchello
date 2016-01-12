@@ -11,7 +11,7 @@
     /// <summary>
     /// A base class for basket checkout offer manager.
     /// </summary>
-    public abstract class BasketCheckoutOfferManagerBase : CheckoutOfferManagerBase
+    internal abstract class BasketCheckoutOfferManagerBase : CheckoutOfferManagerBase
     {
         /// <summary>
         /// The <see cref="CouponManager"/>.

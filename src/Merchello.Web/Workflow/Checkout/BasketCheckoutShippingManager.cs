@@ -13,7 +13,7 @@
     /// <summary>
     /// Represents a CheckoutShippingManager for basket checkouts.
     /// </summary>
-    public class BasketCheckoutShippingManager : CheckoutShippingManagerBase, ICheckoutShippingManager
+    internal class BasketCheckoutShippingManager : CheckoutShippingManagerBase, ICheckoutShippingManager
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketCheckoutShippingManager"/> class.

@@ -1,7 +1,15 @@
 ﻿namespace Merchello.Core.Checkout
 {
+    using System;
+    using System.Collections.Generic;
+
     using Merchello.Core.Models;
+    using Merchello.Core.Sales;
     using Merchello.Core.Services;
+
+    using Newtonsoft.Json;
+
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// A checkout manager base class for saving customer data.
@@ -19,6 +27,7 @@
         {
         }
 
+
         /// <summary>
         /// Saves the customer.
         /// </summary>
@@ -32,6 +41,75 @@
             {
                 ((CustomerService)Context.Services.CustomerService).Save(Context.Customer as Customer, Context.RaiseCustomerEvents);
             }
+        }
+
+        /// <summary>
+        /// Saves the offer codes.
+        /// </summary>
+        /// <param name="key">
+        /// The key or alias.
+        /// </param>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        protected virtual void SaveCustomerTempData(string key, IEnumerable<string> data)
+        {
+            var json =
+                JsonConvert.SerializeObject(
+                    new CustomerTempData() { Data = data, VersionKey = Context.VersionKey });
+
+            Context.Customer.ExtendedData.SetValue(key, json);
+
+            SaveCustomer();
+        }
+
+        /// <summary>
+        /// Gets a safe list of customer temp data (asserts the version key).
+        /// </summary>
+        /// <param name="key">
+        /// The key or alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{String}"/>.
+        /// </returns>
+        protected virtual List<string> BuildVersionedCustomerTempData(string key)
+        {
+            var data = new List<string>();
+            var queueDataJson = Context.Customer.ExtendedData.GetValue(key);
+            if (string.IsNullOrEmpty(queueDataJson)) return data;
+
+            try
+            {
+                var savedData = JsonConvert.DeserializeObject<CustomerTempData>(queueDataJson);
+
+                // verify that the offer codes are for this version of the checkout
+                if (savedData.VersionKey != Context.VersionKey) return data;
+
+                data.AddRange(savedData.Data);
+            }
+            catch (Exception ex)
+            {
+                // don't throw an exception here as the customer is in the middle of a checkout.
+                LogHelper.Error<SalePreparationBase>("Failed to deserialize CustomerTempData.  Returned empty offer code list instead.", ex);
+            }
+
+            return data;
+        } 
+
+        /// <summary>
+        /// Class that gets serialized to customer's ExtendedDataCollection to save notes associated with an invoice.
+        /// </summary>
+        protected struct CustomerTempData
+        {
+            /// <summary>
+            /// Gets or sets the version key to validate offer codes are validate with this preparation
+            /// </summary>
+            public Guid VersionKey { get; set; }
+
+            /// <summary>
+            /// Gets or sets the enumerable string of data.
+            /// </summary>
+            public IEnumerable<string> Data { get; set; }
         }
     }
 }
