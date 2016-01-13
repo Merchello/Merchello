@@ -60,7 +60,7 @@
     <Compile Include="Controllers\Api\PropertyEditorsController.cs" />
     <Compile Include="Factories\BasketLineItemFactory.cs" />
     <Compile Include="Factories\IViewModelFactory.cs" />
-    <Compile Include="Factories\SalePreparationSummaryFactory.cs" />
+    <Compile Include="Factories\CheckoutManagerSummaryFactory.cs" />
     <Compile Include="Factories\ViewModelFactory.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="Install\BazaarDataInstaller.cs" />
