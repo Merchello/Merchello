@@ -22,7 +22,7 @@
         void AddItem(ILineItem lineItem);
 
         /// <summary>
-        /// Removes a line item for the collection of items
+        /// Removes a line item from the collection of items
         /// </summary>
         /// <param name="lineItem">
         /// The line item to be removed
