@@ -11,7 +11,7 @@
     /// <summary>
     /// Represents a product model.
     /// </summary>
-    public class ProductModel : MasterModel
+    public partial class ProductModel : MasterModel
     {
         /// <summary>
         /// The image.

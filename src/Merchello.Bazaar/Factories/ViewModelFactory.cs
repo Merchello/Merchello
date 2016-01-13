@@ -27,7 +27,7 @@
     /// <summary>
     /// Represents a view model factory.
     /// </summary>
-    public class ViewModelFactory : IViewModelFactory
+    public partial class ViewModelFactory : IViewModelFactory
     {
         /// <summary>
         /// The <see cref="ICustomerBase"/>.

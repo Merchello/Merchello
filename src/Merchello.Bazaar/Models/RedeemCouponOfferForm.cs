@@ -5,7 +5,7 @@
     /// <summary>
     /// The model for the RedeemCouponOffer partial view.
     /// </summary>
-    public class RedeemCouponOfferForm
+    public partial class RedeemCouponOfferForm
     {
         /// <summary>
         /// Gets or sets the Bazaar theme name.

@@ -6,7 +6,7 @@
     /// <summary>
     /// Represents the store model.
     /// </summary>
-    public class StoreModel : MasterModel
+    public partial class StoreModel : MasterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StoreModel"/> class.

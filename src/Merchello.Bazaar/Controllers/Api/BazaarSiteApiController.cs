@@ -23,7 +23,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [JsonCamelCaseFormatter]
-    public class BazaarSiteApiController : UmbracoApiController
+    public partial class BazaarSiteApiController : UmbracoApiController
     {
         /// <summary>
         /// The <see cref="IMerchelloContext"/>

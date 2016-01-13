@@ -9,7 +9,7 @@
     /// Controller responsible for displaying Merchello Product.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarProductController : BazaarControllerBase
+    public partial class BazaarProductController : BazaarControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

@@ -15,7 +15,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [GatewayMethodUi("CashPaymentMethod")]
-    public class CashPaymentMethodController : BazaarPaymentMethodFormControllerBase
+    public partial class CashPaymentMethodController : BazaarPaymentMethodFormControllerBase
     {
         /// <summary>
         /// Responsible for rendering the Cash Payment Method Form.

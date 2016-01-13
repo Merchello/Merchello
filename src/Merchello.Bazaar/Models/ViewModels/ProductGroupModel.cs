@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents a ProductGroup view model.
     /// </summary>
-    public class ProductGroupModel : MasterModel
+    public partial class ProductGroupModel : MasterModel
     {
         /// <summary>
         /// The image.

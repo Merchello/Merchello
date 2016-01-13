@@ -9,7 +9,7 @@
     /// Surface controller responsible for rendering the root shop page.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarStoreController : BazaarControllerBase
+    public partial class BazaarStoreController : BazaarControllerBase
     {
         /// <summary>
         /// The index.

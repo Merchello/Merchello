@@ -13,7 +13,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [RequireSsl("Bazaar:RequireSsl")]
-    public class BazaarCheckoutController : CheckoutControllerBase
+    public partial class BazaarCheckoutController : CheckoutControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

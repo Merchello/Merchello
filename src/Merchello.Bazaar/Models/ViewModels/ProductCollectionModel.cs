@@ -14,7 +14,7 @@
     /// <summary>
     /// The product collection model.
     /// </summary>
-    public class ProductCollectionModel : MasterModel
+    public partial class ProductCollectionModel : MasterModel
     {
         /// <summary>
         /// The _products.

@@ -11,7 +11,7 @@
     /// The bazaar product content controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarProductContentController : BazaarControllerBase
+    public partial class BazaarProductContentController : BazaarControllerBase
     {
         /// <summary>
         /// The index.

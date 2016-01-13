@@ -15,7 +15,7 @@
     /// The merchello starter kit property editors controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class PropertyEditorsController : UmbracoAuthorizedJsonController
+    public partial class PropertyEditorsController : UmbracoAuthorizedJsonController
     {
         /// <summary>
         /// Gets a list of the theme folders.

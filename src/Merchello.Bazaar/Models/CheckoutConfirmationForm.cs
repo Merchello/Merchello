@@ -8,7 +8,7 @@
     /// <summary>
     /// The checkout confirmation form.
     /// </summary>
-    public class CheckoutConfirmationForm
+    public partial class CheckoutConfirmationForm
     {
         /// <summary>
         /// Gets or sets the theme name.
