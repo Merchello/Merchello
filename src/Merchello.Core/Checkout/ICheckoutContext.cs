@@ -7,6 +7,7 @@
     using Merchello.Core.Services;
 
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// Defines a checkout context.
@@ -48,6 +49,11 @@
         Guid VersionKey { get; }
 
         /// <summary>
+        /// Gets a value indicating whether this context is a new checkout version.
+        /// </summary>
+        bool IsNewVersion { get; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not to apply taxes to generated invoice.
         /// </summary>
         bool ApplyTaxesToInvoice { get; set; }
@@ -65,5 +71,10 @@
         /// Gets the <see cref="IRuntimeCacheProvider"/>.
         /// </summary>
         IRuntimeCacheProvider Cache { get; }
+
+        /// <summary>
+        /// Gets the settings.
+        /// </summary>
+        ICheckoutContextChangeSettings ChangeSettings { get; }
     }
 }

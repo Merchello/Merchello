@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Checkout
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Builders;
     using Merchello.Core.Gateways.Payment;
@@ -38,12 +39,23 @@
         IInvoice PrepareInvoice(IBuilderChain<IInvoice> invoiceBuilder);
 
         /// <summary>
+        /// Removes a previously saved payment method.
+        /// </summary>
+        void ClearPaymentMethod();
+
+        /// <summary>
         /// Saves a <see cref="IPaymentMethod"/> to <see cref="ICustomerBase"/> extended data
         /// </summary>
         /// <param name="paymentMethod">
         /// The payment Method.
         /// </param>
         void SavePaymentMethod(IPaymentMethod paymentMethod);
+
+        /// <summary>
+        /// Gets a list of all possible Payment Methods
+        /// </summary>
+        /// <returns>A collection of <see cref="IPaymentGatewayMethod"/>s</returns>
+        IEnumerable<IPaymentGatewayMethod> GetPaymentGatewayMethods();
 
         /// <summary>
         /// Gets a <see cref="IPaymentMethod"/> from <see cref="ICustomerBase"/> extended data

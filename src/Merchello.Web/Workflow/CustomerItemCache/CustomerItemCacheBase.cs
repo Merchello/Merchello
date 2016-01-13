@@ -546,10 +546,8 @@
         /// </param>
         public void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
         {
-            if (quantity <= 0) quantity = 1;
-            if (price < 0) price = 0;
             var lineItem = new ItemCacheLineItem(LineItemType.Product, name, sku, quantity, price, extendedData);                        
-            _itemCache.AddItem(lineItem);
+            AddItem(lineItem);
         }
 
         /// <summary>

@@ -27,8 +27,25 @@
         /// The item cache.
         /// </param>
         public CheckoutContext(ICustomerBase customer, IItemCache itemCache)
-            : this(customer, itemCache, Core.MerchelloContext.Current)
+            : this(customer, itemCache, new CheckoutContextChangeSettings())
         { 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckoutContext"/> class.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCache">
+        /// The item cache.
+        /// </param>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, ICheckoutContextChangeSettings settings)
+            : this(customer, itemCache, Core.MerchelloContext.Current, settings)
+        {            
         }
 
         /// <summary>
@@ -44,27 +61,28 @@
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
         /// </param>
-        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext)
+        /// <param name="settings">
+        /// The version change settings.
+        /// </param>
+        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
         {
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(itemCache, "itemCache");
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
+            Mandate.ParameterNotNull(settings, "settings");
 
             this.MerchelloContext = merchelloContext;
             this.ItemCache = itemCache;
             this.Customer = customer;
             this.Cache = merchelloContext.Cache.RuntimeCache;
+            this.ApplyTaxesToInvoice = true;
+            this.ChangeSettings = settings;
         }
-
-        /// <summary>
-        /// An event that fires when the context needs to be reset.
-        /// </summary>
-        public event TypedEventHandler<CheckoutContext, CheckoutContextEventArgs> Reset;
 
         /// <summary>
         /// Gets the merchello context.
         /// </summary>
-        public IMerchelloContext MerchelloContext { get; }
+        public IMerchelloContext MerchelloContext { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IServiceContext"/>.
@@ -114,6 +132,11 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether is new version.
+        /// </summary>
+        public bool IsNewVersion { get; private set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not to apply taxes to invoice.
         /// </summary>
         /// <remarks>
@@ -137,39 +160,63 @@
         public IRuntimeCacheProvider Cache { get; private set; }
 
         /// <summary>
-        /// Gets the checkout <see cref="IItemCache"/> for the <see cref="ICustomerBase"/>
+        /// Gets the version change settings.
         /// </summary>
-        /// <returns>
-        /// The <see cref="IItemCache"/> associated with the customer checkout
-        /// </returns>
-        protected virtual IItemCache GetItemCache()
-        {
-            var cacheKey = MakeCacheKey();
-            var itemCache = Cache.GetCacheItem(cacheKey) as IItemCache;
-            if (itemCache != null) return itemCache;
+        public ICheckoutContextChangeSettings ChangeSettings { get; private set; }
 
-            itemCache = Services.ItemCacheService.GetItemCacheWithKey(Customer, ItemCacheType.Checkout, VersionKey);
+        /// <summary>
+        /// Gets the <see cref="ICheckoutContext"/> for the customer
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version Key.
+        /// </param>
+        /// <param name="settings">
+        /// The checkout context version change settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICheckoutContext"/> associated with the customer checkout
+        /// </returns>
+        public static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey, ICheckoutContextChangeSettings settings)
+        {
+            var cache = merchelloContext.Cache.RuntimeCache;
+            var cacheKey = MakeCacheKey(customer, versionKey);
+            var itemCache = cache.GetCacheItem(cacheKey) as IItemCache;
+            if (itemCache != null) return new CheckoutContext(customer, itemCache, merchelloContext, settings);
+
+            itemCache = merchelloContext.Services.ItemCacheService.GetItemCacheWithKey(customer, ItemCacheType.Checkout, versionKey);
 
             // this is probably an invalid version of the checkout
-            if (!itemCache.VersionKey.Equals(VersionKey))
+            if (!itemCache.VersionKey.Equals(versionKey))
             {
-                var oldCacheKey = MakeCacheKey();
-                Cache.ClearCacheItem(oldCacheKey);
-                Reset.RaiseEvent(new CheckoutContextEventArgs(Customer, itemCache), this);
+                var oldCacheKey = MakeCacheKey(customer, versionKey);
+                cache.ClearCacheItem(oldCacheKey);
 
                 // delete the old version
-                Services.ItemCacheService.Delete(itemCache);
-                return GetItemCache();
+                merchelloContext.Services.ItemCacheService.Delete(itemCache);
+                return CreateCheckoutContext(merchelloContext, customer, versionKey, settings);
             }
 
-            Cache.InsertCacheItem(cacheKey, () => itemCache);
+            cache.InsertCacheItem(cacheKey, () => itemCache);
 
-            return itemCache;
+            return new CheckoutContext(customer, itemCache, merchelloContext, settings) { IsNewVersion = true };
         }
+
 
         /// <summary>
         /// Generates a unique cache key for runtime caching of the <see cref="SalePreparationBase"/>
         /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version Key.
+        /// </param>
         /// <returns>
         /// The a string used as a runtime cache key.
         /// </returns>
@@ -179,10 +226,10 @@
         /// to different checkouts are happening for the same customer at the same time - we consider that an extreme edge case.
         /// 
         /// </remarks>
-        private string MakeCacheKey()
+        private static string MakeCacheKey(ICustomerBase customer, Guid versionKey)
         {
             var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.Checkout.TypeKey;
-            return Core.Cache.CacheKeys.ItemCacheCacheKey(Customer.Key, itemCacheTfKey, VersionKey);
+            return Core.Cache.CacheKeys.ItemCacheCacheKey(customer.Key, itemCacheTfKey, versionKey);
         }
     }
 }

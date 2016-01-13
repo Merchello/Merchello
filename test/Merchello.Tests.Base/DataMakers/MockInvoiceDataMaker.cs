@@ -26,7 +26,7 @@ namespace Merchello.Tests.Base.DataMakers
                     Name = "Unpaid",
                     SortOrder = 0
                 };
-            var invoice = new Invoice(status);
+            var invoice = new Invoice(status) { CurrencyCode = "USD" };
             invoice.SetBillingAddress(billTo);
             invoice.Total = total;
 

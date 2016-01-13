@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Core.Models;
     using Merchello.Core.Sales;
 
     using Newtonsoft.Json;
@@ -14,7 +16,7 @@
     /// <summary>
     /// Represents a checkout offer manager.
     /// </summary>
-    public abstract class CheckoutOfferManagerBase : CheckoutContextManagerBase, ICheckoutOfferManager
+    public abstract class CheckoutOfferManagerBase : CheckoutCustomerDataManagerBase, ICheckoutOfferManager
     {
         /// <summary>
         /// The offer code temp data.
@@ -42,49 +44,42 @@
             {
                 return this._offerCodeTempData.Value;
             }
+        }       
+
+        /// <summary>
+        /// Removes an offer code from the OfferCodes collection.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        public virtual void RemoveOfferCode(string offerCode)
+        {
+            if (OfferCodes.Contains(offerCode))
+            {
+                _offerCodeTempData.Value.Remove(offerCode);
+                this.SaveCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData, this._offerCodeTempData.Value);
+            }
         }
 
         /// <summary>
-        /// The build offer code list.
+        /// Clears the offer codes collection.
         /// </summary>
-        /// <returns>
-        /// The <see cref="List{String}"/>.
-        /// </returns>
-        public virtual List<string> BuildOfferCodeList()
-        {
-
-            var codes = new List<string>();
-            var queueDataJson = Context.Customer.ExtendedData.GetValue(Core.Constants.ExtendedDataKeys.OfferCodeTempData);
-            if (string.IsNullOrEmpty(queueDataJson)) return codes;
-
-            try
-            {
-                var savedData = JsonConvert.DeserializeObject<OfferCodeTempData>(queueDataJson);
-
-                // verify that the offer codes are for this version of the checkout
-                if (savedData.VersionKey != Context.VersionKey) return codes;
-
-                codes.AddRange(savedData.OfferCodes);
-            }
-            catch (Exception ex)
-            {
-                // don't throw an exception here as the customer is in the middle of a checkout.
-                LogHelper.Error<SalePreparationBase>("Failed to deserialize OfferCodeTempData.  Returned empty offer code list instead.", ex);
-            }
-
-            return codes;
-        }
-
-        public virtual void RemoveOfferCode(string offerCode)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void ClearOfferCodes()
         {
-            throw new System.NotImplementedException();
+            _offerCodeTempData.Value.Clear();
+            this.SaveCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData, this._offerCodeTempData.Value);
         }
 
+        /// <summary>
+        /// Attempts to redeem an offer to the sale.
+        /// </summary>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IOfferRedemptionResult{ILineItem}"/>.
+        /// </returns>
+        public abstract IOfferRedemptionResult<ILineItem> RedeemCouponOffer(string offerCode);
 
         /// <summary>
         /// Attempts to apply an offer to the the checkout.
@@ -106,26 +101,31 @@
         /// </returns>
         /// <remarks>
         /// Custom offer types
+        /// TODO RSS internal abstract will make it impossible for people to write their own CheckoutOfferManagers
         /// </remarks>
         internal abstract Attempt<IOfferResult<TConstraint, TAward>> TryApplyOffer<TConstraint, TAward>(TConstraint validateAgainst, string offerCode)
             where TConstraint : class
             where TAward : class;
 
-
         /// <summary>
-        /// Class that gets serialized to customer's ExtendedDataCollection to save offer code queue data.
+        /// Saves offer code.
         /// </summary>
-        protected struct OfferCodeTempData
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        protected bool SaveOfferCode(string offerCode)
         {
-            /// <summary>
-            /// Gets or sets the version key to validate offer codes are validate with this preparation
-            /// </summary>
-            public Guid VersionKey { get; set; }
+            if (!OfferCodes.Contains(offerCode))
+            {
+                _offerCodeTempData.Value.Add(offerCode);
+                this.SaveCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData, this._offerCodeTempData.Value);
+                return true;
+            }
 
-            /// <summary>
-            /// Gets or sets the offer codes.
-            /// </summary>
-            public IEnumerable<string> OfferCodes { get; set; }
+            return false;
         }
 
         /// <summary>
@@ -133,7 +133,9 @@
         /// </summary>
         private void Initialize()
         {
-            this._offerCodeTempData = new Lazy<List<string>>(this.BuildOfferCodeList);
+            this._offerCodeTempData = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData));
+
+            if (Context.IsNewVersion && Context.ChangeSettings.ResetOfferManagerDataOnVersionChange) this.ClearOfferCodes();
         }
     }
 }

@@ -29,10 +29,5 @@
         /// Gets the payment.
         /// </summary>
         ICheckoutPaymentManager Payment { get; }
-
-        /// <summary>
-        /// Gets the notification.
-        /// </summary>
-        ICheckoutNotificationManager Notification { get; }
     }
 }

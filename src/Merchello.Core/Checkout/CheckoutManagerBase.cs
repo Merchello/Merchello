@@ -1,17 +1,19 @@
 ﻿namespace Merchello.Core.Checkout
 {
     using System;
-    using System.Collections.Generic;
 
+    using Merchello.Core.Builders;
     using Merchello.Core.Models;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The checkout manager base.
     /// </summary>
     public abstract class CheckoutManagerBase : CheckoutContextManagerBase, ICheckoutManagerBase
     {
+        /// <summary>
+        /// The invoice builder.
+        /// </summary>
+        private Lazy<BuildChainBase<IInvoice>> _invoiceBuilder; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutManagerBase"/> class.
@@ -22,6 +24,7 @@
         protected CheckoutManagerBase(ICheckoutContext checkoutContext)
             : base(checkoutContext)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -50,63 +53,25 @@
         public abstract ICheckoutPaymentManager Payment { get; }
 
         /// <summary>
-        /// Gets the notification.
-        /// </summary>
-        public abstract ICheckoutNotificationManager Notification { get; }
-
-
-        /// <summary>
-        /// Gets the <see cref="IItemCache"/>
-        /// </summary>
-        public IItemCache ItemCache
-        {
-            get { return Context.ItemCache; }
-        }
-
-        /// <summary>
-        /// Gets a clone of the ItemCache
+        /// Gets the invoice builder.
         /// </summary>
         /// <returns>
-        /// The <see cref="IItemCache"/>.
+        /// The <see cref="BuildChainBase{IInvoice}"/>.
         /// </returns>
-        internal IItemCache CloneItemCache()
+        protected virtual BuildChainBase<IInvoice> InvoiceBuilder
         {
-            // The ItemCache needs to be cloned as line items may be altered while applying constraints
-            return this.CloneItemCache(ItemCache);
-        }
-
-        /// <summary>
-        /// Clones a <see cref="ILineItemContainer"/> as <see cref="IItemCache"/>
-        /// </summary>
-        /// <param name="container">
-        /// The container.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IItemCache"/>.
-        /// </returns>
-        internal IItemCache CloneItemCache(ILineItemContainer container)
-        {
-            var clone = new ItemCache(Guid.NewGuid(), ItemCacheType.Backoffice);
-            foreach (var item in container.Items)
+            get
             {
-                clone.Items.Add(item.AsLineItemOf<ItemCacheLineItem>());
+                return this._invoiceBuilder.Value;
             }
-
-            return clone;
         }
 
         /// <summary>
-        /// Creates a new <see cref="ILineItemContainer"/> with filtered items.
+        /// Initializes the manager.
         /// </summary>
-        /// <param name="filteredItems">
-        /// The line items.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ILineItemContainer"/>.
-        /// </returns>
-        internal ILineItemContainer CreateNewLineContainer(IEnumerable<ILineItem> filteredItems)
+        private void Initialize()
         {
-            return LineItemExtensions.CreateNewItemCacheLineItemContainer(filteredItems);
+            this._invoiceBuilder = new Lazy<BuildChainBase<IInvoice>>(() => new CheckoutInvoiceBuilderChain(this));
         }
     }
 }

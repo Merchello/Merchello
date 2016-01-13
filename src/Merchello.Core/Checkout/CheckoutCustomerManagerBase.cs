@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Checkout
 {
+    using System;
+
     using Merchello.Core.Models;
     using Merchello.Core.Services;
 
@@ -17,6 +19,7 @@
         protected CheckoutCustomerManagerBase(ICheckoutContext context)
             : base(context)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -50,5 +53,23 @@
         /// The <see cref="IAddress"/>.
         /// </returns>
         public abstract IAddress GetShipToAddress();
+
+        /// <summary>
+        /// Clears the customer data on context reset.
+        /// </summary>
+        protected virtual void Reset()
+        {
+            Context.Customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.ShippingDestinationAddress);
+            Context.Customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.BillingAddress);
+            SaveCustomer();
+        }
+
+        /// <summary>
+        /// Initializes the manager.
+        /// </summary>
+        private void Initialize()
+        {
+            if (Context.IsNewVersion && Context.ChangeSettings.ResetCustomerManagerDataOnVersionChange) this.Reset();
+        }
     }
 }

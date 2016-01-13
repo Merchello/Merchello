@@ -1,32 +1,38 @@
 ﻿namespace Merchello.Core.Checkout
 {
     using System;
+    using System.ComponentModel;
 
     using Merchello.Core.Models;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// The <see cref="ICheckoutContext"/> event args.
     /// </summary>
-    public class CheckoutContextEventArgs : EventArgs
+    /// <typeparam name="T">
+    /// The type of the second argument
+    /// </typeparam>
+    public class CheckoutEventArgs<T> : CancellableObjectEventArgs<T>
+        where T : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckoutContextEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="CheckoutEventArgs{T}"/> class.
         /// </summary>
         /// <param name="customer">
         /// The customer.
         /// </param>
-        /// <param name="itemCache">
-        /// The item cache.
+        /// <param name="item">
+        /// The item.
         /// </param>
-        public CheckoutContextEventArgs(ICustomerBase customer, IItemCache itemCache)
+        public CheckoutEventArgs(ICustomerBase customer, T item)
+            : base(item, true)
         {
             Mandate.ParameterNotNull(customer, "customer");
-            Mandate.ParameterNotNull(itemCache, "itemCache");
+            Mandate.ParameterNotNull(item, "item");
 
             this.Customer = customer;
-            this.ItemCache = ItemCache;
         }
 
         /// <summary>
@@ -35,18 +41,13 @@
         public ICustomerBase Customer { get; private set; }
 
         /// <summary>
-        /// Gets the item cache.
+        /// Gets the item.
         /// </summary>
-        public IItemCache ItemCache { get; private set; }
-
-        /// <summary>
-        /// Gets the version key.
-        /// </summary>
-        public virtual Guid VersionKey
+        public T Item
         {
             get
             {
-                return ItemCache.VersionKey;
+                return EventObject;
             }
         }
     }
