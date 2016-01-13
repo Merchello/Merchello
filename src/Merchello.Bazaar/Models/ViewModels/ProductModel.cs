@@ -73,7 +73,11 @@
         {
             get
             {
-                return this._brief ?? this.Content.GetPropertyValue<string>("brief");
+                if (string.IsNullOrEmpty(this._brief))
+                {
+                    this._brief = this.Content.GetPropertyValue<string>("brief");
+                }
+                return this._brief;
             }
         }
 
@@ -84,7 +88,11 @@
         {
             get
             {
-                return this._description ?? this.Content.GetPropertyValue<IHtmlString>("description");
+                if (this._description == null && this.Content.HasValue("description"))
+                {
+                    this._description = this.Content.GetPropertyValue<IHtmlString>("description");
+                }
+                return this._description;
             }
         }
     }

@@ -61,7 +61,11 @@
         {
             get
             {
-                return this._brief ?? this.Content.GetPropertyValue<string>("brief");
+                if (string.IsNullOrEmpty(this._brief))
+                {
+                    this._brief = this.Content.GetPropertyValue<string>("brief");
+                }
+                return this._brief;
             }
         }
 
