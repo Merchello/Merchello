@@ -31,12 +31,16 @@
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
+
+            //TODO - Basket.Checkout... 
+            //TODO - Checkout.Extended...
             var preparation = Basket.SalePreparation();
             preparation.RaiseCustomerEvents = false;
            
+            
 
             preparation.ClearShipmentRateQuotes();
-            var shippingAddress = Basket.SalePreparation().GetShipToAddress();
+            var shippingAddress = preparation.GetShipToAddress();
 
             // Get the shipment again
             var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
@@ -45,7 +49,7 @@
             var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
 
             // save the quote
-            Basket.SalePreparation().SaveShipmentRateQuote(quote);
+            preparation.SaveShipmentRateQuote(quote);
 
             var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
             preparation.SavePaymentMethod(paymentMethod);

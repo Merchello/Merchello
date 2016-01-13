@@ -20,7 +20,7 @@
         @foreach (var product in Model.GetPropertyValue<IEnumerable<IProductContent>>("featuredProducts"))
         {
             // if you want to specify the culture you can do it like
-            product.SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
+            //product.SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
             
             <div class="col-md-6">
                 <a href="@product.Url">
