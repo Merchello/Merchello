@@ -6,6 +6,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
+    using Merchello.Core.Checkout;
 
     using Umbraco.Core;
 
@@ -48,16 +49,15 @@
         /// <param name="preparation">
         /// The preparation.
         /// </param>
-        /// <param name="theme">The Bazaar them</param>
         /// <returns>
         /// The <see cref="SalePreparationSummary"/>.
         /// </returns>
-        public SalePreparationSummary Build(SalePreparationBase preparation)
+        public SalePreparationSummary Build(ICheckoutManagerBase preparation)
         {
 
-            if (preparation.IsReadyToInvoice())
+            if (preparation.Payment.IsReadyToInvoice())
             {
-                var invoice = preparation.PrepareInvoice();
+                var invoice = preparation.Payment.PrepareInvoice();
                 return new SalePreparationSummary()
                            {
                                TotalLabel = "Total",
@@ -75,12 +75,12 @@
                 {
                     TotalLabel = "Sub Total",
                     Currency = _currency,
-                    Items = preparation.ItemCache.Items.Select(x => _basketLineItemFactory.Build(x)),
-                    ItemTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice), _currency),
-                    ShippingTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice), _currency),
-                    TaxTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice), _currency),
-                    DiscountsTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency),
-                    InvoiceTotal = ModelExtensions.FormatPrice(preparation.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice) - preparation.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency),
+                    Items = preparation.Context.ItemCache.Items.Select(x => _basketLineItemFactory.Build(x)),
+                    ItemTotal = ModelExtensions.FormatPrice(preparation.Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice), _currency),
+                    ShippingTotal = ModelExtensions.FormatPrice(preparation.Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice), _currency),
+                    TaxTotal = ModelExtensions.FormatPrice(preparation.Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice), _currency),
+                    DiscountsTotal = ModelExtensions.FormatPrice(preparation.Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency),
+                    InvoiceTotal = ModelExtensions.FormatPrice(preparation.Context.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice) - preparation.Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice), _currency),
                 };
         }
     }

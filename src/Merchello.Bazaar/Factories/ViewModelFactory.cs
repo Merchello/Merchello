@@ -230,7 +230,9 @@
                 }
             }
 
-            viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation());
+            var checkoutManager = basket.GetCheckoutManager();
+
+            viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(checkoutManager);
             viewModel.CheckoutAddressForm = new CheckoutAddressForm()
                 {
                     IsAnonymous = viewModel.CurrentCustomer.IsAnonymous,
