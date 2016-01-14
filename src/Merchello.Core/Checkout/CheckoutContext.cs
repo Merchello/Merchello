@@ -165,6 +165,43 @@
         public ICheckoutContextChangeSettings ChangeSettings { get; private set; }
 
         /// <summary>
+        /// Gets the <see cref="ICheckoutContext"/> for the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICheckoutContext"/>.
+        /// </returns>
+        public static ICheckoutContext CreateCheckoutContext(ICustomerBase customer, Guid versionKey)
+        {
+            return CreateCheckoutContext(customer, versionKey, new CheckoutContextChangeSettings());
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ICheckoutContext"/> for the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key.
+        /// </param>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICheckoutContext"/>.
+        /// </returns>
+        public static ICheckoutContext CreateCheckoutContext(ICustomerBase customer, Guid versionKey, ICheckoutContextChangeSettings settings)
+        {
+            return CreateCheckoutContext(Core.MerchelloContext.Current, customer, versionKey, settings);
+        }
+
+        /// <summary>
         /// Gets the <see cref="ICheckoutContext"/> for the customer
         /// </summary>
         /// <param name="merchelloContext">
