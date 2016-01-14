@@ -1,11 +1,44 @@
 ﻿// Global Styles
 
 // Bootstrap Overides
-.navbar {border-radius:0;}
+.navbar {
+    border-radius: 0;
+}
 
 // Custom Styles
+
+// Product Thumbnail
 .thumbnail {
-    .price {font-size:17px;}
+}
+
+// Generic Price
+
+.price {
+    font-size: 17px;
+
+    .price-sale {
+        color: #ed4949;
+
+        .glyphicon {
+            font-size: 19px;
+        }
+    }
+}
+
+// Category/Collection Listing
+.productcategorylist {
+    a.media, a.media:visited {
+        display: inline-block;
+        margin: 0 0 30px 0;
+        padding: 12px;
+        color: #333;
+
+        &:hover, &:focus {
+            color: #333;
+            text-decoration: none;
+            background-color: #fbfbfb;
+        }
+    }
 }
 
 // -------------- OLD STYLES BELOW

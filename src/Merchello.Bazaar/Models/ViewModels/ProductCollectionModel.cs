@@ -22,6 +22,11 @@
         private IProductContent[] _products;
 
         /// <summary>
+        /// Category Description
+        /// </summary>
+        private string _description;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductCollectionModel"/> class.
         /// </summary>
         /// <param name="content">
@@ -41,6 +46,18 @@
             get
             {
                 return _products;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_description))
+                {
+                    _description = this.Content.GetPropertyValue<string>("description");
+                }
+                return _description;
             }
         }
 

@@ -1,4 +1,7 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿using Merchello.Bazaar.Models;
+using Merchello.Core.Models;
+
+namespace Merchello.Bazaar.Controllers
 {
     using System.Web.Mvc;
 
@@ -29,10 +32,17 @@
 
         #region Child Actions
 
+        /// <summary>
+        /// Renders recently viewed items.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [ChildActionOnly]
         public ActionResult RecentlyViewed()
         {
-            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "RecentlyViewed"));
+            var boxes = this.CustomerContext.GetRecentlyViewedProducts();
+            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "RecentlyViewed"), boxes);
         }
 
         #endregion

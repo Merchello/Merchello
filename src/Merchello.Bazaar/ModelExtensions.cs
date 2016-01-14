@@ -1,4 +1,7 @@
-﻿namespace Merchello.Bazaar
+﻿using Merchello.Core.Models.Interfaces;
+using Merchello.Web.Models.VirtualContent;
+
+namespace Merchello.Bazaar
 {
     using System;
     using System.Linq;
@@ -15,6 +18,51 @@
     /// </summary>
     public static class ModelExtensions
     {
+        private static readonly Lazy<IStoreSettingService> StoreSettingService = new Lazy<IStoreSettingService>(() => MerchelloContext.Current.Services.StoreSettingService);
+
+        /// <summary>
+        /// The store currency.
+        /// </summary>
+        // ReSharper disable once InconsistentNaming
+        private static ICurrency _storeCurrency;
+
+        /// <summary>
+        /// The currency format.
+        /// </summary>
+        // ReSharper disable InconsistentNaming
+        private static ICurrencyFormat _currencyFormat;
+
+
+        /// <summary>
+        /// Gets the store currency.
+        /// </summary>
+        /// <remarks>
+        /// This assumes that all stores will use the same currency
+        /// </remarks>
+        public static ICurrency StoreCurrency
+        {
+            get
+            {
+                if (_storeCurrency != null) return _storeCurrency;
+                var storeSetting = StoreSettingService.Value.GetByKey(Constants.StoreSettingKeys.CurrencyCodeKey);
+                _storeCurrency = StoreSettingService.Value.GetCurrencyByCode(storeSetting.Value);
+                return _storeCurrency;
+            }
+        }
+
+        /// <summary>
+        /// Gets the store currency format.
+        /// </summary>
+        private static ICurrencyFormat StoreCurrencyFormat
+        {
+            get
+            {
+                if (_currencyFormat != null) return _currencyFormat;
+                _currencyFormat = StoreSettingService.Value.GetCurrencyFormat(StoreCurrency);
+                return _currencyFormat;
+            }
+        }
+
         /// <summary>
         /// The theme partial view path.
         /// </summary>
@@ -87,6 +135,19 @@
             return FormattedPrice(model.ProductData, model.Currency);
         }
 
+        /// <summary>
+        /// Formats the product price with store configured pricing format.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The formatted price.
+        /// </returns>
+        public static string FormattedPrice(this IProductContent product)
+        {
+            return string.Format(StoreCurrencyFormat.Format, _storeCurrency.Symbol, product.Price);
+        }
 
         /// <summary>
         /// The formatted price.
@@ -138,6 +199,20 @@
         public static string FormattedSalePrice(this ProductModel model)
         {
             return FormatPrice(model.ProductData.SalePrice, model.Currency);
+        }
+
+        /// <summary>
+        /// Formats the product on sale price with store configured pricing format.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The formatted sale price.
+        /// </returns>
+        public static string FormattedSalePrice(this IProductContent product)
+        {
+            return string.Format(StoreCurrencyFormat.Format, _storeCurrency.Symbol, product.SalePrice);
         }
 
         /// <summary>

@@ -14,7 +14,7 @@
         <div class="col-md-9">
             @if (Model.HasValue("image"))
             {
-                <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height: 300)" alt="@Model.Name">
+                <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height: 300, cacheBuster: false)&rnd=@DateTime.Now.Ticks" alt="@Model.Name">
             }            
             <h4>
                 <a href="#">@Model.Name</a>

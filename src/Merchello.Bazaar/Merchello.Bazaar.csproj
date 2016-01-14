@@ -70,7 +70,9 @@
     </Compile>
     <Compile Include="Install\PackageActions\AddSslAppConfigKey.cs" />
     <Compile Include="ModelExtensions.cs" />
+    <Compile Include="Models\ProductBoxModel.cs" />
     <Compile Include="Models\PublishedContentExtensions.cs" />
+    <Compile Include="Models\RecentlyViewed.cs" />
     <Compile Include="Models\RedeemCouponOfferForm.cs" />
     <Compile Include="Models\CheckoutAddressForm.cs" />
     <Compile Include="Models\CheckoutConfirmationForm.cs" />

@@ -7,38 +7,73 @@
 @{
     Layout = "Master.cshtml";
 }
-<div class="row-fluid">
-    <h1>@Model.Name</h1>
-</div>
+<div class="productcategory">
+    
+    <div class="page-header">
+        <h1>@Model.Name</h1>
+    </div>
 
-<div class="row-fluid" id="products">
+    <div class="productcategorylist">
 
-    @{
-
-        if (Model.Products.Any())
+        @if (Model.Products.Any())
         {
-            <ul id="featured" class="product-list">
-
-                @foreach (var p in Model.Products)
+            <div class="row">
+                @foreach (var product in Model.Products)
                 {
-                    <li class="row">
-                        @if (p.HasValue("image"))
-                        {                           
-                            <a href="@p.Url"><img src="@p.GetCropUrl(300, propertyAlias: "image", cacheBuster: false)&rnd=@DateTime.Now.Ticks" class="col-md-3"></a>
-                        }
-
-                        <div class="pull-right col-md-3">
-                            @Html.Action("RenderAddItem", "BazaarBasket", new { area = "Bazaar", model = p.BuildAddItemModel(Model.Currency, Model.ShowWishList) })
-                        </div>
-                        <div class="info col-md-5">
-                            <h2><a href="@p.Url">@p.Name</a></h2>
-                            <p>@p.GetPropertyValue("brief")</p>
-                        </div>
-                    </li>
+                    <div class="col-md-6">
+                        <a href="@product.Url" class="media">
+                            <div class="media-left media-middle">
+                                @if (product.HasValue("image"))
+                                {
+                                    <img class="media-object" src="@product.GetCropUrl(propertyAlias: "image", height: 150, cacheBuster: false)&rnd=@DateTime.Now.Ticks" data-holder-rendered="true" alt="@product.Name"/>
+                                }
+                                else
+                                {
+                                    <p>No Image</p>
+                                }
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">@product.Name</h4>
+                                @Html.Raw(product.GetPropertyValue<string>("overview"))
+                                <p class="price">
+                                    @if (product.SalePrice > 0)
+                                    {
+                                        <span class="price-sale">
+                                            @product.FormattedSalePrice() <span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @product.FormattedPrice()
+                                    }
+                                </p>
+                                @*
+                                    // Example of adding the Add to cart on the product category list page
+                                    @Html.Action("RenderAddItem", "BazaarBasket", new { area = "Bazaar", model = p.BuildAddItemModel(Model.Currency, Model.ShowWishList) })
+                                *@
+                            </div>
+                        </a>
+                    </div>
                 }
-            </ul>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                No products to show
+            </div>
         }
 
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Description))
+    {
+        <hr/>
+        <div class="row">
+            <div class="col-md-8 col-md-push-2">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
     }
 
 </div>

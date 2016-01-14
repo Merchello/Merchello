@@ -1,4 +1,8 @@
-﻿namespace Merchello.Bazaar
+﻿using Merchello.Bazaar.Models;
+using Merchello.Web.Models.VirtualContent;
+using Umbraco.Web.Models;
+
+namespace Merchello.Bazaar
 {
     using System;
     using System.Collections.Generic;
@@ -255,6 +259,27 @@
 
             return new List<IPublishedContent>();
         }
+
+        public static List<ProductBoxModel> GetProductBoxModels(IEnumerable<IProductContent> products)
+        {
+
+            var productBoxModelList = new List<ProductBoxModel>();
+            foreach (var product in products)
+            {
+                productBoxModelList.Add(new ProductBoxModel
+                {
+                    ProductKey = product.Key,
+                    Url = product.Url,
+                    Name = product.Name,
+                    Image = product.GetCropUrl(propertyAlias: "image", height: 350, cacheBuster: false),
+                    FormattedPrice = product.FormattedPrice(),
+                    FormattedSalePrice = product.FormattedSalePrice(),
+                    SalePrice = product.SalePrice,
+                    Price = product.Price
+                });
+            }
+            return productBoxModelList;
+        } 
 
         /// <summary>
         /// The reset.
