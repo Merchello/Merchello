@@ -1,4 +1,6 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿using Merchello.Bazaar.Models;
+
+namespace Merchello.Bazaar.Controllers
 {
     using System.Web.Mvc;
 
@@ -11,7 +13,7 @@
     /// The bazaar product content controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarProductContentController : BazaarControllerBase
+    public partial class BazaarProductContentController : BazaarControllerBase
     {
         /// <summary>
         /// The index.
@@ -26,7 +28,14 @@
         {
             var theme = BazaarContentHelper.GetStoreTheme();
 
-            ((IProductContent)model.Content).SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
+            // Get the product as IProductContent
+            var product = model.Content as IProductContent;
+
+            // Specify Culture
+            product.SpecifyCulture(UmbracoContext.PublishedContentRequest.Culture);
+
+            // Add a recently viewed key
+            this.CustomerContext.AddRecentKey(product);
 
             return this.View(PathHelper.GetThemeViewPath(theme, "ProductContent"), model.Content);
         }

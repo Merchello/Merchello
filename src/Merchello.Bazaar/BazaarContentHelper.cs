@@ -1,4 +1,8 @@
-﻿namespace Merchello.Bazaar
+﻿using Merchello.Bazaar.Models;
+using Merchello.Web.Models.VirtualContent;
+using Umbraco.Web.Models;
+
+namespace Merchello.Bazaar
 {
     using System;
     using System.Collections.Generic;
@@ -18,25 +22,44 @@
     /// </summary>
     public static class BazaarContentHelper
     {
+        #region Content Type Aliases
+
+        public const string ContentTypeAliasBazaarAccount = "BazaarAccount";
+        public const string ContentTypeAliasBazaarAccountHistory = "BazaarAccountHistory";
+        public const string ContentTypeAliasBazaarBasket = "BazaarBasket";
+        public const string ContentTypeAliasBazaarCheckout = "BazaarCheckout";
+        public const string ContentTypeAliasBazaarCheckoutConfirm = "BazaarCheckoutConfirm";
+        public const string ContentTypeAliasBazaarCheckoutShipping = "BazaarCheckoutShipping";
+        public const string ContentTypeAliasBazaarProduct = "BazaarProduct";
+        public const string ContentTypeAliasBazaarProductCollection = "BazaarProductCollection";
+        public const string ContentTypeAliasBazaarProductContent = "BazaarProductContent";
+        public const string ContentTypeAliasBazaarProductGroup = "BazaarProductGroup";
+        public const string ContentTypeAliasBazaarReciept = "BazaarReciept";
+        public const string ContentTypeAliasBazaarRegistration = "BazaarRegistration";
+        public const string ContentTypeAliasBazaarStore = "BazaarStore";
+        public const string ContentTypeAliasBazaarWishList = "BazaarWishList";
+
+        #endregion
+
         /// <summary>
         /// The content helper cached content type alias.
         /// </summary>
         private static readonly string[] ContentHelperCachedContentTypeAlias =
             {
-                "BazaarAccount",
-                "BazaarAccountHistory",
-                "BazaarBasket",
-                "BazaarCheckout",
-                "BazaarCheckoutConfirm",
-                "BazaarCheckoutShipping",                
-                "BazaarProduct",
-                "BazaarProductCollection",
-                "BazaarProductContent",
-                "BazaarProductGroup",
-                "BazaarReciept",
-                "BazaarRegistration",
-                "BazaarStore",
-                "BazaarWishList"
+                ContentTypeAliasBazaarAccount,
+                ContentTypeAliasBazaarAccountHistory,
+                ContentTypeAliasBazaarBasket,
+                ContentTypeAliasBazaarCheckout,
+                ContentTypeAliasBazaarCheckoutConfirm,
+                ContentTypeAliasBazaarCheckoutShipping,
+                ContentTypeAliasBazaarProduct,
+                ContentTypeAliasBazaarProductCollection,
+                ContentTypeAliasBazaarProductContent,
+                ContentTypeAliasBazaarProductGroup,
+                ContentTypeAliasBazaarReciept,
+                ContentTypeAliasBazaarRegistration,
+                ContentTypeAliasBazaarStore,
+                ContentTypeAliasBazaarWishList
             };
 
         /// <summary>
@@ -216,8 +239,47 @@
         /// </returns>
         public static IEnumerable<IPublishedContent> GetProductCollectionContent()
         {
-            return GetStoreRoot().Children.Where(x => x.DocumentTypeAlias == "BazaarProductCollection" && x.IsVisible());
+            return GetStoreRoot().Children.Where(x => x.DocumentTypeAlias == ContentTypeAliasBazaarProductCollection && x.IsVisible());
         }
+
+        public static IEnumerable<IPublishedContent> GetProductCollectionContent(bool includeRootCategory)
+        {
+            // Get all
+            if (includeRootCategory)
+            {
+                return GetStoreRoot().Descendants(ContentTypeAliasBazaarProductCollection).Where(x => x.IsVisible());
+            }
+
+            // Show only the categories under the root node
+            var rootCategoryNode = GetStoreRoot().Children.FirstOrDefault(x => x.DocumentTypeAlias == ContentTypeAliasBazaarProductCollection);
+            if (rootCategoryNode != null)
+            {
+                return rootCategoryNode.Children;
+            }
+
+            return new List<IPublishedContent>();
+        }
+
+        public static List<ProductBoxModel> GetProductBoxModels(IEnumerable<IProductContent> products)
+        {
+
+            var productBoxModelList = new List<ProductBoxModel>();
+            foreach (var product in products)
+            {
+                productBoxModelList.Add(new ProductBoxModel
+                {
+                    ProductKey = product.Key,
+                    Url = product.Url,
+                    Name = product.Name,
+                    Image = product.GetCropUrl(propertyAlias: "image", height: 350, cacheBuster: false),
+                    FormattedPrice = product.FormattedPrice(),
+                    FormattedSalePrice = product.FormattedSalePrice(),
+                    SalePrice = product.SalePrice,
+                    Price = product.Price
+                });
+            }
+            return productBoxModelList;
+        } 
 
         /// <summary>
         /// The reset.

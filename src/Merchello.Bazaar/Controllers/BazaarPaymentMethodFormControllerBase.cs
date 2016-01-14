@@ -2,14 +2,14 @@
 {
     using System.Linq;
     using System.Web.Mvc;
-
-    using Merchello.Bazaar.Models;
-    using Merchello.Core;
-    using Merchello.Core.Gateways.Payment;
-    using Merchello.Core.Models;
-    using Merchello.Core.Sales;
-    using Merchello.Web;
-    using Merchello.Web.Mvc;
+    using Models;
+    using Core;
+    using Core.Gateways.Payment;
+    using Core.Models;
+    using Web;
+    using Web.Mvc;
+    using Core.Checkout;
+    using Web.Workflow;
 
     /// <summary>
     /// The bazaar payment method form controller base.
@@ -31,12 +31,20 @@
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            var preparation = Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
-           
+            // Get all the objects we need
+            var checkoutManager = Basket.GetCheckoutManager();
+            var customerManager = checkoutManager.Customer;
+            var shippingManager = checkoutManager.Shipping;
+            var paymentManager = checkoutManager.Payment;
+        
+            // Don't raise Customer events
+            checkoutManager.Context.RaiseCustomerEvents = false;
 
-            preparation.ClearShipmentRateQuotes();
-            var shippingAddress = Basket.SalePreparation().GetShipToAddress();
+            // Clear Shipment Rate Quotes
+            shippingManager.ClearShipmentRateQuotes();
+
+            // Get the shipping address
+            var shippingAddress = customerManager.GetShipToAddress();
 
             // Get the shipment again
             var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
@@ -45,13 +53,13 @@
             var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
 
             // save the quote
-            Basket.SalePreparation().SaveShipmentRateQuote(quote);
+            shippingManager.SaveShipmentRateQuote(quote);
 
             var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
-            preparation.SavePaymentMethod(paymentMethod);
+            paymentManager.SavePaymentMethod(paymentMethod);
 
             // AuthorizePayment will save the invoice with an Invoice Number.
-            var attempt = this.PerformProcessPayment(preparation, paymentMethod);
+            var attempt = this.PerformProcessPayment(checkoutManager, paymentMethod);
 
             if (!attempt.Payment.Success)
             {
@@ -93,6 +101,6 @@
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected abstract IPaymentResult PerformProcessPayment(SalePreparationBase preparation, IPaymentMethod paymentMethod);
+        protected abstract IPaymentResult PerformProcessPayment(ICheckoutManagerBase preparation, IPaymentMethod paymentMethod);
     }
 }

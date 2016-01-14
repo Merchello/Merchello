@@ -5,7 +5,7 @@
     /// <summary>
     /// Represents the Basket page model.
     /// </summary>
-    public class BasketModel : MasterModel
+    public partial class BasketModel : MasterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketModel"/> class.

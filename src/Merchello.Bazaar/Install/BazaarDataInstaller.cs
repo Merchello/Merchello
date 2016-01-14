@@ -102,10 +102,18 @@
             var purchaseHistory = _services.ContentService.CreateContent("Purchase History", account.Id, "BazaarAccountHistory");
             _services.ContentService.SaveAndPublishWithStatus(purchaseHistory);
 
-            // TODO look for a V6 method
-            // This uses the old API
-            Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
-            Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
+            // Protect the page
+            // OLD > Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
+            var registrationPage = _services.ContentService.GetById(registration.Id);
+            var entry = new PublicAccessEntry(account, registrationPage, registrationPage, new List<PublicAccessRule>());
+            ApplicationContext.Current.Services.PublicAccessService.Save(entry);
+
+            // Add the role to the document
+            //Old > Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
+            ApplicationContext.Current.Services.PublicAccessService.AddRule(account,
+                Umbraco.Core.Constants.Conventions.PublicAccess.MemberRoleRuleType,
+                "MerchelloCustomers");
+
 
             //// TODO figure out why the index does not build on load
             LogHelper.Info<BazaarDataInstaller>("Rebuilding Product Index");

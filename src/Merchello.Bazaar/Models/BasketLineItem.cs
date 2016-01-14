@@ -8,7 +8,7 @@
     /// <summary>
     /// The basket line item.
     /// </summary>
-    public class BasketLineItem
+    public partial class BasketLineItem
     {
         /// <summary>
         /// Gets or sets the key.

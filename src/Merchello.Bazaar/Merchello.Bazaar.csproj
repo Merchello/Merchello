@@ -42,6 +42,7 @@
     <Compile Include="Controllers\BazaarStoreController.cs" />
     <Compile Include="Controllers\BazaarPaymentMethodFormControllerBase.cs" />
     <Compile Include="Controllers\CashPaymentMethodController.cs" />
+    <Compile Include="GenericExtensionMethods.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
     <Compile Include="Install\PackageActions\AddXpathToStoreConfigKey.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="Controllers\Api\PropertyEditorsController.cs" />
     <Compile Include="Factories\BasketLineItemFactory.cs" />
     <Compile Include="Factories\IViewModelFactory.cs" />
-    <Compile Include="Factories\SalePreparationSummaryFactory.cs" />
+    <Compile Include="Factories\CheckoutManagerSummaryFactory.cs" />
     <Compile Include="Factories\ViewModelFactory.cs" />
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="Install\BazaarDataInstaller.cs" />
@@ -69,7 +70,9 @@
     </Compile>
     <Compile Include="Install\PackageActions\AddSslAppConfigKey.cs" />
     <Compile Include="ModelExtensions.cs" />
+    <Compile Include="Models\ProductBoxModel.cs" />
     <Compile Include="Models\PublishedContentExtensions.cs" />
+    <Compile Include="Models\RecentlyViewed.cs" />
     <Compile Include="Models\RedeemCouponOfferForm.cs" />
     <Compile Include="Models\CheckoutAddressForm.cs" />
     <Compile Include="Models\CheckoutConfirmationForm.cs" />
@@ -176,16 +179,16 @@
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.13.5841.16911, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.13.3\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.14.5857.24320, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000090\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.13.5841.16915, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.13.3\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.14.5857.24322, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000090\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.13.5841.16917, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.13.3\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.14.5857.24323, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000090\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">

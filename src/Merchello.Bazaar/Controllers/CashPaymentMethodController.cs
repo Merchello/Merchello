@@ -1,13 +1,12 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System.Web.Mvc;
-
+    using Merchello.Core.Checkout;
     using Merchello.Bazaar.Models;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
-
     using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
@@ -16,7 +15,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [GatewayMethodUi("CashPaymentMethod")]
-    public class CashPaymentMethodController : BazaarPaymentMethodFormControllerBase
+    public partial class CashPaymentMethodController : BazaarPaymentMethodFormControllerBase
     {
         /// <summary>
         /// Responsible for rendering the Cash Payment Method Form.
@@ -44,9 +43,9 @@
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected override IPaymentResult PerformProcessPayment(SalePreparationBase preparation, IPaymentMethod paymentMethod)
+        protected override IPaymentResult PerformProcessPayment(ICheckoutManagerBase preparation, IPaymentMethod paymentMethod)
         {
-            return preparation.AuthorizePayment(paymentMethod.Key);
+            return preparation.Payment.AuthorizePayment(paymentMethod.Key);
         }
     }
 }

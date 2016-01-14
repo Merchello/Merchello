@@ -5,7 +5,7 @@
     /// <summary>
     /// The wish list table model.
     /// </summary>
-    public class WishListTableModel : ItemCollectionTable
+    public partial class WishListTableModel : ItemCollectionTable
     {
         /// <summary>
         /// Gets or sets the currency.

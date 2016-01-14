@@ -12,7 +12,7 @@
     /// <summary>
     /// The customer address model.
     /// </summary>
-    public class CustomerAddressModel
+    public partial class CustomerAddressModel
     {
         /// <summary>
         /// Gets or sets the theme.
