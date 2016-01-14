@@ -1,4 +1,6 @@
-﻿namespace Merchello.Bazaar.Models.ViewModels
+﻿using System;
+
+namespace Merchello.Bazaar.Models.ViewModels
 {
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -19,9 +21,18 @@
         {
         }
 
+        public string Overview
+        {
+            get
+            {
+                return this.Content.GetPropertyValue<string>("overview");
+            }
+        }
+
         /// <summary>
         /// Gets the tag line.
         /// </summary>
+        [Obsolete("This is no longer used")]
         public string TagLine 
         { 
             get

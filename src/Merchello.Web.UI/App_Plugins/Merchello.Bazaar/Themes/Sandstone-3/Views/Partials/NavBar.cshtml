@@ -5,73 +5,71 @@
 @using Merchello.Web
 @using Umbraco.Core.Models
 @using Umbraco.Web
+@{
+    var collections = BazaarContentHelper.GetProductCollectionContent(true).ToList();
+}
 
 
-<div class="navbar navbar-default">
+<div class="navbar navbar-inverse">
     <div class="container">
-		<a class="navbar-brand" href="@BazaarContentHelper.GetStoreRoot().Url">@BazaarContentHelper.StoreTitle()</a>
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-		</div>
+        <a class="navbar-brand navbar-right" href="@BazaarContentHelper.GetStoreRoot().Url">@BazaarContentHelper.StoreTitle()</a>
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                @{
-                    var collections = BazaarContentHelper.GetProductCollectionContent().ToArray();
-                    @collections.Count()
-                }
+                <li><a href="@Url.Content("~/")">Home</a></li>
                 @if (collections.Any())
                 {
-                    <li role="presentation" class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            Categories <span class="caret"></span>
-                        </a>
+                    var rootCategory = collections.FirstOrDefault();
+                    <li class="dropdown">
+                        <a href="@rootCategory.Url" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@rootCategory.Name <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            @foreach (var collection in collections)
+                            @foreach (var collection in rootCategory.Children)
                             {
                                 <li><a href="@collection.Url">@collection.Name</a></li>
                             }
                         </ul>
                     </li>
                 }
-            </ul>
-            <ul class="nav pull-right navbar-nav">
                 @if (BazaarContentHelper.ShowAccount())
                 {
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">@GetAccountDropDownName(CurrentCustomer) <b class="caret"></b></a>
-                        <ul class="dropdown-menu" id="swatch-menu">
-                            @if (CurrentCustomer.IsAnonymous)
-                            {
-                                <li><a href="@BazaarContentHelper.GetRegistrationContent().Url">Sign Up / Login</a></li>
-                            }
-                            else
-                            {
+                    if (CurrentCustomer.IsAnonymous)
+                    {
+                        <li><a href="@BazaarContentHelper.GetRegistrationContent().Url">Sign Up / Login</a></li>
+                    }
+                    else
+                    {
+                        var purchaseHistory = BazaarContentHelper.GetAccountContent().Descendant("BazaarAccountHistory");
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@GetAccountDropDownName(CurrentCustomer) <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
                                 <li><a href="@BazaarContentHelper.GetAccountContent().Url">Account</a></li>
-                                var purchaseHistory = BazaarContentHelper.GetAccountContent().Descendant("BazaarAccountHistory");
-                                if (purchaseHistory != null)
-                                    {
-                                    <li><a href="@purchaseHistory.Url">Purchase History</a></li>     
-                                    }
-                                <li>@Html.ActionLink("Logout", "HandleSignOut", "MembershipOperations", new { area = "Bazaar" }, null)</li>
-                            }
-                        </ul>
-                    </li>
+                                @if (purchaseHistory != null)
+                                {
+                                    <li><a href="@purchaseHistory.Url">Purchase History</a></li>
+                                }
+                                <li>@Html.ActionLink("Logout", "HandleSignOut", "MembershipOperations", new {area = "Bazaar"}, null)</li>
+                            </ul>
+                        </li>
+                    }
+
                 }
                 @if (!CurrentCustomer.IsAnonymous && BazaarContentHelper.ShowWishList())
                 {
-                    <li><a href="@BazaarContentHelper.GetWishListContent().Url">Wish List (@(((ICustomer)CurrentCustomer).WishList().TotalItemCount))</a></li>
+                    <li><a href="@BazaarContentHelper.GetWishListContent().Url">Wish List (@(((ICustomer) CurrentCustomer).WishList().TotalItemCount))</a></li>
                 }
-                <li><a href="@BazaarContentHelper.GetBasketContent().Url">Basket (@CurrentCustomer.Basket().TotalItemCount)</a></li>
+                <li class="active"><a href="@BazaarContentHelper.GetBasketContent().Url">Basket (@CurrentCustomer.Basket().TotalItemCount)</a></li>
             </ul>
-
-        </div><!-- /.nav-collapse -->
-    </div><!-- /navbar-inner -->
+        </div>
+    </div>
 </div>
 
 @functions

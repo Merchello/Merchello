@@ -26,5 +26,15 @@
 
             return this.View(viewModel.ThemeViewPath("Store"), viewModel);
         }
+
+        #region Child Actions
+
+        [ChildActionOnly]
+        public ActionResult RecentlyViewed()
+        {
+            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "RecentlyViewed"));
+        }
+
+        #endregion
     }
 }

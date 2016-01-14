@@ -24,7 +24,7 @@
                     <li class="row">
                         @if (p.HasValue("image"))
                         {                           
-                            <a href="@p.Url"><img src="@p.GetCropUrl(300, propertyAlias: "image")" class="col-md-3"></a>
+                            <a href="@p.Url"><img src="@p.GetCropUrl(300, propertyAlias: "image", cacheBuster: false)&rnd=@DateTime.Now.Ticks" class="col-md-3"></a>
                         }
 
                         <div class="pull-right col-md-3">
