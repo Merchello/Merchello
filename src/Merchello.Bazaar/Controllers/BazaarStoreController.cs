@@ -1,4 +1,7 @@
-﻿namespace Merchello.Bazaar.Controllers
+﻿using Merchello.Bazaar.Models;
+using Merchello.Core.Models;
+
+namespace Merchello.Bazaar.Controllers
 {
     using System.Web.Mvc;
 
@@ -9,7 +12,7 @@
     /// Surface controller responsible for rendering the root shop page.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarStoreController : BazaarControllerBase
+    public partial class BazaarStoreController : BazaarControllerBase
     {
         /// <summary>
         /// The index.
@@ -26,5 +29,22 @@
 
             return this.View(viewModel.ThemeViewPath("Store"), viewModel);
         }
+
+        #region Child Actions
+
+        /// <summary>
+        /// Renders recently viewed items.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public ActionResult RecentlyViewed()
+        {
+            var boxes = this.CustomerContext.GetRecentlyViewedProducts();
+            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "RecentlyViewed"), boxes);
+        }
+
+        #endregion
     }
 }

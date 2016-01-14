@@ -5,7 +5,7 @@
     /// <summary>
     /// The customer profile model.
     /// </summary>
-    public class CustomerProfileModel
+    public partial class CustomerProfileModel
     {
         /// <summary>
         /// Gets or sets the first name.

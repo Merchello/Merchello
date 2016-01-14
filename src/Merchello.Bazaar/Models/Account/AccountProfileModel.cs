@@ -5,7 +5,7 @@
     /// <summary>
     /// The account profile model.
     /// </summary>
-    public class AccountProfileModel
+    public partial class AccountProfileModel
     {
         /// <summary>
         /// Gets or sets the theme.

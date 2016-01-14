@@ -20,7 +20,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [Authorize]
-    public class BazaarAccountController : CheckoutControllerBase
+    public partial class BazaarAccountController : CheckoutControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

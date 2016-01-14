@@ -14,7 +14,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [Authorize]
-    public class BazaarAccountHistoryController : BazaarControllerBase
+    public partial class BazaarAccountHistoryController : BazaarControllerBase
     {
         /// <summary>
         /// The _merchello.

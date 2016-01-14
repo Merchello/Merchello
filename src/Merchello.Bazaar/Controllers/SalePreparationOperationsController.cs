@@ -15,7 +15,7 @@
     /// A <see cref="SurfaceController"/> responsible for checkout operations.
     /// </summary>
     [PluginController("Bazaar")]
-    public class SalePreparationOperationsController : MerchelloSurfaceController
+    public partial class SalePreparationOperationsController : MerchelloSurfaceController
     {
         /// <summary>
         /// Tries to redeem a coupon offer.

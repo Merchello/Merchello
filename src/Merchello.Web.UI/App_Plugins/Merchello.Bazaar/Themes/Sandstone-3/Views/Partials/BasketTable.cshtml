@@ -35,7 +35,7 @@
                                 {
                                     if (Model.Items[i].Product.HasValue("image"))
                                     {
-                                        <a href="@Model.Items[i].Product.Url"><img src="@Model.Items[i].Product.GetCropUrl(propertyAlias: "image", width: 20)" alt="@Model.Items[i].Product.Name" width="20" /></a>
+                                        <a href="@Model.Items[i].Product.Url"><img src="@Model.Items[i].Product.GetCropUrl(propertyAlias: "image", width: 20, cacheBuster: false)&rnd=@DateTime.Now.Ticks" alt="@Model.Items[i].Product.Name" width="20" /></a>
                                     }
                                     <a href="@Model.Items[i].Product.Url"><span>@Model.Items[i].Name</span></a>
                                 }

@@ -7,7 +7,7 @@
     /// <summary>
     /// Represents a customer account.
     /// </summary>
-    public class AccountModel : MasterModel
+    public partial class AccountModel : MasterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountModel"/> class.

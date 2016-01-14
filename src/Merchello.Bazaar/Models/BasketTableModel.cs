@@ -7,7 +7,7 @@
     /// <summary>
     /// The basket table model.
     /// </summary>
-    public class BasketTableModel : ItemCollectionTable
+    public partial class BasketTableModel : ItemCollectionTable
     {
         /// <summary>
         /// Gets or sets the checkout page.

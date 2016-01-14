@@ -3,7 +3,7 @@
     /// <summary>
     /// The combined register login model.
     /// </summary>
-    public class CombinedRegisterLoginModel
+    public partial class CombinedRegisterLoginModel
     {
         /// <summary>
         /// Gets or sets the login.
