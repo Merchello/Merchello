@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
 
     using Merchello.Core;
     using Merchello.Core.Services;
@@ -16,6 +17,11 @@
     [PluginController("Merchello")]
     public class SalesByItemReportApiController : ReportController
     {
+        /// <summary>
+        /// The <see cref="CultureInfo"/>.
+        /// </summary>
+        private readonly CultureInfo _culture;
+
         /// <summary>
         /// The store setting service.
         /// </summary>
@@ -46,7 +52,7 @@
         {
             get
             {
-                return GetBaseUrl<SalesByItemReportApiController>("merchelloByItemApiBaseUrl");
+                return GetBaseUrl<SalesByItemReportApiController>("merchelloSalesByItemApiBaseUrl");
             }
         }
 
