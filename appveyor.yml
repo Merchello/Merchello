@@ -57,7 +57,8 @@ deploy:
       secure: 34B4mXhAYW6XOw8H9ZVh+KhbKKjXnb8QIp8bpoIKrkx5Uivcg0D4cRbu/pvdI65o
     artifact: /.*\.nupkg/
     on:
-      branch: merchello-dev
+      - branch: merchello-dev
+	  - branch: checkoutworkflow
 
   # GitHub Deployment for releases
   - provider: GitHub
