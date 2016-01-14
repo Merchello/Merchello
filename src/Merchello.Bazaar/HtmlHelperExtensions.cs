@@ -20,8 +20,8 @@
     /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
     public static class HtmlHelperExtensions
-    {
-
+    {       
+        #region CSS & JS
         /// <summary>
         /// Adds Starter Kit Asset CSS file.
         /// </summary>
@@ -60,7 +60,9 @@
         public static HtmlHelper RequiresPackageJs(this HtmlHelper html, string theme, string fileName)
         {
             return html.RequiresJs(string.Format("{0}Assets/js/{1}", PathHelper.GetThemePath(theme), fileName));
-        }
+        } 
+
+        #endregion
 
         #region Partial Views
 

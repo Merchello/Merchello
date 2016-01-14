@@ -1,25 +1,15 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<StoreModel>
-@using Merchello.Bazaar
-@using Merchello.Bazaar.Models.ViewModels
-@using Merchello.Web.Models.VirtualContent
-@using Umbraco.Web
-@{
-    Layout = "Master.cshtml";
-}
+﻿@using Merchello.Bazaar
+@using Merchello.Bazaar.Models
+@inherits UmbracoViewPage<List<ProductBoxModel>>
 
-<div class="jumbotron">
-    <h1>@Model.StoreTitle</h1>
-    @Html.Raw(Model.Overview)
-</div>
-
-<section id="categories">
+<section class="recentlyviewedsection">
     <div class="page-header">
-        <h1>Featured Products</h1>
+        <h1>Recently Viewed</h1>
     </div>
-    @if (Model.FeaturedProducts.Any())
+    @if (Model.Any())
     {
         <div class="row">
-            @foreach (var product in Model.FeaturedProducts)
+            @foreach (var product in Model)
             {
                 <div class="col-md-4">
                     <a href="@product.Url" class="thumbnail">
@@ -50,10 +40,7 @@
     else
     {
         <div class="alert alert-info" role="alert">
-            No featured products selected
+            No recently viewed products
         </div>
     }
-
 </section>
-
-@Html.Action("RecentlyViewed", "BazaarStore", new { area = "Bazaar", currency = Model.Currency })

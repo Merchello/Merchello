@@ -3,6 +3,7 @@
     using System.Web;
 
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Examine.DataServices;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -28,6 +29,12 @@
         /// </summary>
         private IHtmlString _description;
 
+
+        /// <summary>
+        /// Product Data
+        /// </summary>
+        private ProductDisplay _productDisplay;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductModel"/> class.
         /// </summary>
@@ -46,7 +53,19 @@
         {
             get
             {
-                return this.Content.GetPropertyValue<ProductDisplay>("merchelloProduct");
+                if (_productDisplay == null)
+                {
+                    var fromProduct = this.Content.GetPropertyValue<ProductDisplay>("merchelloProduct");
+                    if (fromProduct != null)
+                    {
+                        _productDisplay = fromProduct;
+                    }
+                    else
+                    {
+                        _productDisplay = new ProductDisplay();
+                    }
+                }
+                return _productDisplay;
             }
         }
 
@@ -59,7 +78,7 @@
             {
                 if (this._image == null && this.Content.HasValue("image"))
                 {
-                    this._image = this.Content.GetCropUrl(propertyAlias: "image", imageCropMode: ImageCropMode.Max);
+                    this._image = this.Content.GetCropUrl(propertyAlias: "image", imageCropMode: ImageCropMode.Max, cacheBuster: false);
                 }
 
                 return this._image;

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Web.Mvc;
-
+    using Core.Services;
     using Merchello.Bazaar.Factories;
     using Merchello.Core.Models;
     using Merchello.Web.Mvc;
