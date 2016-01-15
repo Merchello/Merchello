@@ -135,7 +135,7 @@
         {
             this._offerCodeTempData = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData));
 
-            if (Context.IsNewVersion && Context.ChangeSettings.ResetOfferManagerDataOnVersionChange) this.ClearOfferCodes();
+            if (Context.IsNewVersion && Context.Settings.ResetOfferManagerDataOnVersionChange) this.ClearOfferCodes();
         }
     }
 }

@@ -32,9 +32,9 @@
         /// </returns>
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
-            if (!string.IsNullOrWhiteSpace(CheckoutManager.Context.InvoiceNumberPrefix))
+            if (!string.IsNullOrWhiteSpace(CheckoutManager.Context.Settings.InvoiceNumberPrefix))
             {
-                value.InvoiceNumberPrefix = CheckoutManager.Context.InvoiceNumberPrefix;
+                value.InvoiceNumberPrefix = CheckoutManager.Context.Settings.InvoiceNumberPrefix;
             }
 
             return Attempt<IInvoice>.Succeed(value);

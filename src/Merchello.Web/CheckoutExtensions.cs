@@ -32,7 +32,7 @@
         /// </returns>
         public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket)
         {
-            return basket.GetCheckoutManager(MerchelloContext.Current, new CheckoutContextChangeSettings());
+            return basket.GetCheckoutManager(MerchelloContext.Current, new CheckoutContextSettings());
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         /// <returns>
         /// The <see cref="ICheckoutManagerBase"/>.
         /// </returns>
-        public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, ICheckoutContextChangeSettings settings)
+        public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, ICheckoutContextSettings settings)
         {
             return new BasketCheckoutManager(basket.CreateCheckoutContext(MerchelloContext.Current, settings));
         }
@@ -67,7 +67,7 @@
         /// <returns>
         /// The <see cref="ICheckoutManagerBase"/>.
         /// </returns>
-        internal static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
+        internal static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextSettings settings)
         {
             return new BasketCheckoutManager(basket.CreateCheckoutContext(merchelloContext, settings));
         }
@@ -87,7 +87,7 @@
         /// <returns>
         /// The <see cref="ICheckoutContext"/>.
         /// </returns>
-        internal static ICheckoutContext CreateCheckoutContext(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
+        internal static ICheckoutContext CreateCheckoutContext(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextSettings settings)
         {
             var context = CheckoutContext.CreateCheckoutContext(merchelloContext, basket.Customer, basket.VersionKey, settings);
 

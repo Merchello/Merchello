@@ -81,7 +81,7 @@
         {
             _shippingTaxable = new Lazy<bool>(() => Convert.ToBoolean(Context.Services.StoreSettingService.GetByKey(Constants.StoreSettingKeys.GlobalShippingIsTaxableKey).Value));
 
-            if (Context.IsNewVersion && Context.ChangeSettings.ResetShippingManagerDataOnVersionChange)
+            if (Context.IsNewVersion && Context.Settings.ResetShippingManagerDataOnVersionChange)
             {
                 this.ClearShipmentRateQuotes();
             }

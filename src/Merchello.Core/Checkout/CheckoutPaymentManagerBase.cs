@@ -216,7 +216,7 @@
         /// </summary>
         private void Initialize()
         {
-            if (Context.IsNewVersion && Context.ChangeSettings.ResetPaymentManagerDataOnVersionChange)
+            if (Context.IsNewVersion && Context.Settings.ResetPaymentManagerDataOnVersionChange)
             {
                 this.ClearPaymentMethod();
             }
