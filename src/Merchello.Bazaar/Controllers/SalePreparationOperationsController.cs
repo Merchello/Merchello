@@ -15,6 +15,7 @@
     /// A <see cref="SurfaceController"/> responsible for checkout operations.
     /// </summary>
     [PluginController("Bazaar")]
+    [Obsolete("Superseded by CheckoutManagerOperationsController")]
     public partial class SalePreparationOperationsController : MerchelloSurfaceController
     {
         /// <summary>
