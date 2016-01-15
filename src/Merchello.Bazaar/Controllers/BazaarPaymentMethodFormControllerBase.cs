@@ -32,14 +32,12 @@
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
             // Get all the objects we need
-            var settings = new CheckoutManagerSettings() { InvoiceNumberPrefix = "BZR" };
-            var checkoutManager = Basket.GetCheckoutManager();
+            var settings = new CheckoutContextSettings() { InvoiceNumberPrefix = "BZR" };
+            var checkoutManager = Basket.GetCheckoutManager(settings);
             var customerManager = checkoutManager.Customer;
             var shippingManager = checkoutManager.Shipping;
             var paymentManager = checkoutManager.Payment;
         
-            // Don't raise Customer events
-            checkoutManager.Context.RaiseCustomerEvents = false;
 
             // Clear Shipment Rate Quotes
             shippingManager.ClearShipmentRateQuotes();
