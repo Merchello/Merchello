@@ -29,6 +29,7 @@
         /// </summary>
         public string FormattedSalePrice { get; set; }
         public decimal SalePrice { get; set; }
+        public bool OnSale { get; set; }
 
         /// <summary>
         /// Gets or sets the formatted price.

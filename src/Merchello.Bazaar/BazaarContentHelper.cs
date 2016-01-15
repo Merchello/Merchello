@@ -275,6 +275,7 @@ namespace Merchello.Bazaar
                     FormattedPrice = product.FormattedPrice(),
                     FormattedSalePrice = product.FormattedSalePrice(),
                     SalePrice = product.SalePrice,
+                    OnSale = product.OnSale,
                     Price = product.Price
                 });
             }

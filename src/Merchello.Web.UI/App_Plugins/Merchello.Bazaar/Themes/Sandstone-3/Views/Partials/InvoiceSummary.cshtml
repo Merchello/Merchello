@@ -76,7 +76,7 @@
 {
     if (!isReceipt)
     {
-        @Html.ActionLink("(Remove)", "RemoveCoupon", "SalePreparationOperations", new { area = "Bazaar", offerCode = offerCode, redirectId = Model.CurrentPageId }, null)
+        @Html.ActionLink("(Remove)", "RemoveCoupon", "CheckoutManagerOperations", new { area = "Bazaar", offerCode = offerCode, redirectId = Model.CurrentPageId }, null)
     } 
     
 }
