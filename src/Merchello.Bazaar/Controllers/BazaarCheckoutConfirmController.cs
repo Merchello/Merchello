@@ -36,11 +36,11 @@
         public override ActionResult Index(RenderModel model)
         {
             // Don't display the checkout form if there are no products (either due to timeout or manual URL entered)
-            //if (!Basket.Items.Any())
-            //{
-            //    var basketModel = ViewModelFactory.CreateBasket(model, Basket);
-            //    return View(basketModel.ThemeViewPath("Basket"), basketModel);
-            //}
+            if (!Basket.Items.Any())
+            {
+                var basketModel = ViewModelFactory.CreateBasket(model, Basket);
+                return View(basketModel.ThemeViewPath("Basket"), basketModel);
+            }
 
             //// get the basket sale preparation
             // var preparation = Basket.SalePreparation();
