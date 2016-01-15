@@ -248,20 +248,24 @@
             var customerKey = new Guid(tokenKey);
             var customerBase = _merchelloContext.Services.CustomerService.GetAnyByKey(customerKey);
 
-            var preparation = customerBase.Basket().SalePreparation();
-            preparation.RaiseCustomerEvents = false;
+            var checkoutManager = customerBase.Basket().GetCheckoutManager();
+            var shippingManager = checkoutManager.Shipping;
+            var customerManager = checkoutManager.Customer;
+            var paymentManager = checkoutManager.Payment;
 
-            var shipment = customerBase.Basket().PackageBasket(preparation.GetShipToAddress()).FirstOrDefault();
+            checkoutManager.Context.RaiseCustomerEvents = false;
+
+            var shipment = customerBase.Basket().PackageBasket(customerManager.GetShipToAddress()).FirstOrDefault();
             var quote = shipment.ShipmentRateQuoteByShipMethod(methodKey);
             if (quote != null)
             {
-                preparation.ClearShipmentRateQuotes();
-                preparation.SaveShipmentRateQuote(quote);
+                shippingManager.ClearShipmentRateQuotes();
+                shippingManager.SaveShipmentRateQuote(quote);
             }
 
-            var invoice = preparation.PrepareInvoice();
+            var invoice = paymentManager.PrepareInvoice();
 
-            var summary = new UpdatedSaleSummary()
+            var summary = new UpdatedSaleSummary
                               {
                                   TotalLabel = "Total",
                                   InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency),

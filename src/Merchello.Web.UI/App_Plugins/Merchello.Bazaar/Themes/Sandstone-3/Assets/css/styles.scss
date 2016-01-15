@@ -16,7 +16,7 @@
 .price {
     font-size: 17px;
 
-    .price-sale {
+    .price-sale, &.price-onsale {
         color: #ed4949;
 
         .glyphicon {

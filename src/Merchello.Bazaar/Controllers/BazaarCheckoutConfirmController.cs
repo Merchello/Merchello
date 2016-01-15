@@ -42,12 +42,9 @@
                 return View(basketModel.ThemeViewPath("Basket"), basketModel);
             }
 
-            //// get the basket sale preparation
-            // var preparation = Basket.SalePreparation();
-            // preparation.RaiseCustomerEvents = false;
-
+            // Get the checkout manager
             var checkoutManager = Basket.GetCheckoutManager();
-
+            checkoutManager.Payment.InvoiceNumberPrefix = "BZR";
             var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
             
             // The default basket packaging strategy only creates a single shipment
