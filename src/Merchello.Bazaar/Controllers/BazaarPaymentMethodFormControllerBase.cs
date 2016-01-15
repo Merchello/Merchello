@@ -1,15 +1,18 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System.Linq;
+    using System.Web.Configuration;
     using System.Web.Mvc;
-    using Models;
+
     using Core;
+    using Core.Checkout;
     using Core.Gateways.Payment;
     using Core.Models;
+
+    using Models;
+
     using Web;
     using Web.Mvc;
-    using Core.Checkout;
-    using Web.Workflow;
 
     /// <summary>
     /// The bazaar payment method form controller base.
@@ -31,8 +34,11 @@
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
+            // Get the invoice number prefix from the App_Settings and modify the settings if the setting is not 
+            // null or whitespace
+            
             // Get all the objects we need
-            var settings = new CheckoutContextSettings() { InvoiceNumberPrefix = "BZR" };
+            var settings = new CheckoutContextSettings() { InvoiceNumberPrefix = WebConfigurationManager.AppSettings["Bazaar:InvoiceNumberPrefix"] };
             var checkoutManager = Basket.GetCheckoutManager(settings);
             var customerManager = checkoutManager.Customer;
             var shippingManager = checkoutManager.Shipping;
