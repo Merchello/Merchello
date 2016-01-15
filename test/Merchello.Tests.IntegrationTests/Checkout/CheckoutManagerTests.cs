@@ -227,7 +227,7 @@
             checkoutManager.Shipping.SaveShipmentRateQuote(quotes.First());
 
             //// Act
-            checkoutManager.Payment.InvoiceNumberPrefix = "rss";
+            checkoutManager.Context.InvoiceNumberPrefix = "rss";
             var invoice = checkoutManager.Payment.PrepareInvoice();
 
             //// Assert
