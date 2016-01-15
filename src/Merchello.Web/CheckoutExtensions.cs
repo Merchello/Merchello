@@ -9,7 +9,7 @@
     using Core.Strategies.Packaging;
 
     using Merchello.Core.Checkout;
-    using Merchello.Web.Workflow.Checkout;
+    using Merchello.Web.CheckoutManagers;
 
     using Umbraco.Core.Logging;
     using Workflow;

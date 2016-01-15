@@ -7,7 +7,6 @@
     using Merchello.Core;
     using Merchello.Core.Checkout;
     using Merchello.Core.Models;
-    using Merchello.Web.Workflow.Checkout;
 
     using Umbraco.Core.Logging;
 
