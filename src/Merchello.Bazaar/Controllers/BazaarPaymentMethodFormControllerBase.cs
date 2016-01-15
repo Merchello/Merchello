@@ -38,7 +38,11 @@
             // null or whitespace
             
             // Get all the objects we need
-            var settings = new CheckoutContextSettings() { InvoiceNumberPrefix = WebConfigurationManager.AppSettings["Bazaar:InvoiceNumberPrefix"] };
+            var settings = new CheckoutContextSettings()
+            {
+                InvoiceNumberPrefix = WebConfigurationManager.AppSettings["Bazaar:InvoiceNumberPrefix"]
+            };
+
             var checkoutManager = Basket.GetCheckoutManager(settings);
             var customerManager = checkoutManager.Customer;
             var shippingManager = checkoutManager.Shipping;

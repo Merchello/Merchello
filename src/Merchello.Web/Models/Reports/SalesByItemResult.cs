@@ -17,7 +17,7 @@
         /// <summary>
         /// Gets or sets the quantity.
         /// </summary>
-        public int Quantity { get; set; }
+        public long Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the totals.
