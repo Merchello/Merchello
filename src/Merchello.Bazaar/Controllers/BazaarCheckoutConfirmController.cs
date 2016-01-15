@@ -42,10 +42,7 @@
                 return View(basketModel.ThemeViewPath("Basket"), basketModel);
             }
 
-            //// get the basket sale preparation
-            // var preparation = Basket.SalePreparation();
-            // preparation.RaiseCustomerEvents = false;
-
+            // Get the checkout manager
             var checkoutManager = Basket.GetCheckoutManager();
 
             var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
