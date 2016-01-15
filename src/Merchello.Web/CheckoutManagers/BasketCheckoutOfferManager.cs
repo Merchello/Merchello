@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Workflow.Checkout
+﻿namespace Merchello.Web.CheckoutManagers
 {
     using System;
     using System.Linq;
@@ -61,7 +61,7 @@
             var coupon = couponAttempt.Result;
 
             var validationItems = this._paymentManager.PrepareInvoice();
-            var result = TryApplyOffer<ILineItemContainer, ILineItem>(LineItemExtensions.CreateNewItemCacheLineItemContainer(validationItems.Items.Where(x => x.LineItemType != LineItemType.Tax)), offerCode).AsCouponRedemptionResult(coupon);
+            var result = this.TryApplyOffer<ILineItemContainer, ILineItem>(LineItemExtensions.CreateNewItemCacheLineItemContainer(validationItems.Items.Where(x => x.LineItemType != LineItemType.Tax)), offerCode).AsCouponRedemptionResult(coupon);
 
             if (!result.Success) return result;
 
@@ -69,17 +69,17 @@
             // Use case:  First coupon added has the "not usable with other coupons constraint" and then a second coupon is added.
             // In this case the first coupon needs to be revalidated.  If the attempt to apply the coupon again fails, the one currently 
             // being added needs to fail.
-            if (OfferCodes.Any())
+            if (this.OfferCodes.Any())
             {
                 // Now we have to revalidate any existing coupon offers to make sure the newly approved ones will still be valid.
-                var clone = CheckoutManagerExtensions.CreateNewLineContainer(Context.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount));
+                var clone = CheckoutManagerExtensions.CreateNewLineContainer(this.Context.ItemCache.Items.Where(x => x.LineItemType != LineItemType.Discount));
 
-                _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result);
+                this._couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result);
                 ICouponRedemptionResult redemption = new CouponRedemptionResult(result.Award, result.Messages);
 
-                foreach (var oc in OfferCodes)
+                foreach (var oc in this.OfferCodes)
                 {
-                    redemption = DoTryApplyOffer<ILineItemContainer, ILineItem>(clone, oc).AsCouponRedemptionResult(coupon);
+                    redemption = this.DoTryApplyOffer<ILineItemContainer, ILineItem>(clone, oc).AsCouponRedemptionResult(coupon);
                     if (!redemption.Success)
                     {
                         if (redemption.Messages.Any()) result.AddMessage(redemption.Messages);
@@ -89,7 +89,7 @@
                         break;
                     }
 
-                    _couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result);
+                    this._couponManager.Value.SafeAddCouponAttemptContainer<ItemCacheLineItem>(clone, result);
                 }
 
                 if (!redemption.Success) return redemption;
@@ -150,12 +150,12 @@
             where TConstraint : class
             where TAward : class
         {
-            var foundOffer = GetCouponAttempt(offerCode);
+            var foundOffer = this.GetCouponAttempt(offerCode);
             if (!foundOffer.Success) return Attempt<IOfferResult<TConstraint, TAward>>.Fail(foundOffer.Exception);
 
             var coupon = foundOffer.Result;
 
-            return coupon.TryApply<TConstraint, TAward>(validateAgainst, Context.Customer);
+            return coupon.TryApply<TConstraint, TAward>(validateAgainst, this.Context.Customer);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@
         {
             //// TODO RSS cache keys should not be hard coded within a class
             var cacheKey = string.Format("merchello.basksalepreparation.offercode.{0}", offerCode);
-            return (Attempt<Coupon>)Context.Cache.GetCacheItem(cacheKey, () => _couponManager.Value.GetByOfferCode(offerCode, Context.Customer));
+            return (Attempt<Coupon>)this.Context.Cache.GetCacheItem(cacheKey, () => this._couponManager.Value.GetByOfferCode(offerCode, this.Context.Customer));
         }
     }
 }

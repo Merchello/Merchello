@@ -7,7 +7,6 @@
     using Merchello.Core;
     using Merchello.Core.Checkout;
     using Merchello.Core.Models;
-    using Merchello.Web.Workflow.Checkout;
 
     using Umbraco.Core.Logging;
 
@@ -17,91 +16,6 @@
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class BasketWishListExtensions
     {
-        /// <summary>
-        /// Gets a <see cref="ICheckoutManagerBase"/> for the basket.
-        /// </summary>
-        /// <param name="basket">
-        /// The basket.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICheckoutManagerBase"/>.
-        /// </returns>
-        public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket)
-        {
-            return basket.GetCheckoutManager(MerchelloContext.Current, new CheckoutContextChangeSettings());
-        }
-
-        /// <summary>
-        /// The get checkout manager.
-        /// </summary>
-        /// <param name="basket">
-        /// The basket.
-        /// </param>
-        /// <param name="settings">
-        /// The checkout context version change settings.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICheckoutManagerBase"/>.
-        /// </returns>
-        public static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, ICheckoutContextChangeSettings settings)
-        {
-            return new BasketCheckoutManager(basket.CreateCheckoutContext(MerchelloContext.Current, settings));
-        }
-
-        /// <summary>
-        /// Gets a <see cref="ICheckoutManagerBase"/> for the basket.
-        /// </summary>
-        /// <param name="basket">
-        /// The basket.
-        /// </param>
-        /// <param name="merchelloContext">
-        /// The merchello Context.
-        /// </param>
-        /// <param name="settings">
-        /// The checkout context version change settings.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICheckoutManagerBase"/>.
-        /// </returns>
-        internal static ICheckoutManagerBase GetCheckoutManager(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
-        {
-            return new BasketCheckoutManager(basket.CreateCheckoutContext(merchelloContext, settings));
-        }
-
-        /// <summary>
-        /// The get checkout context.
-        /// </summary>
-        /// <param name="basket">
-        /// The basket.
-        /// </param>
-        /// <param name="merchelloContext">
-        /// The merchello context.
-        /// </param>
-        /// <param name="settings">
-        /// The settings.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ICheckoutContext"/>.
-        /// </returns>
-        internal static ICheckoutContext CreateCheckoutContext(this IBasket basket, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
-        {
-            var context = CheckoutContext.CreateCheckoutContext(merchelloContext, basket.Customer, basket.VersionKey, settings);
-
-            if (context.IsNewVersion && basket.Validate())
-            {
-                if (!context.ItemCache.Items.Any() && basket.Validate())
-                {
-                    // this is either a new preparation or a reset due to version
-                    foreach (var item in basket.Items)
-                    {
-                        // convert to a LineItem of the same type for use in the CheckoutPrepartion collection
-                        context.ItemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
-                    }
-                }
-            }
-
-            return context;
-        }
 
         /// <summary>
         /// Saves the entire basket to the wish list and then clears the basket.

@@ -14,6 +14,20 @@
             <!-- Tabular Order List -->
             <div class="merchello-pane">
 
+                <h2><localize key="merchelloTabs_salesByItem" /></h2>
+                <div class="span4">
+                    <h3>Top Selling</h3>
+                    <canvas id="pie" class="chart chart-pie"
+                            chart-data="itemTotalData" chart-labels="itemTotalLabels">
+                    </canvas>
+                </div>
+                <div class="span8">
+                    <h3>Item History</h3>
+                    <canvas id="line" class="chart chart-line" chart-data="historyData"
+                            chart-labels="historyLabels" chart-legend="true" chart-series="variantNames">
+                    </canvas>
+                </div>
+
             </div>
         </merchello-panel>
     </umb-panel>

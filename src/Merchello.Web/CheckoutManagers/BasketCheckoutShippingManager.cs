@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Workflow.Checkout
+﻿namespace Merchello.Web.CheckoutManagers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -35,10 +35,10 @@
         public override void SaveShipmentRateQuote(IShipmentRateQuote approvedShipmentRateQuote)
         {
             this.AddShipmentRateQuoteLineItem(approvedShipmentRateQuote);
-            Context.Services.ItemCacheService.Save(Context.ItemCache);
+            this.Context.Services.ItemCacheService.Save(this.Context.ItemCache);
 
-            Context.Customer.ExtendedData.AddAddress(approvedShipmentRateQuote.Shipment.GetDestinationAddress(), AddressType.Shipping);
-            SaveCustomer();
+            this.Context.Customer.ExtendedData.AddAddress(approvedShipmentRateQuote.Shipment.GetDestinationAddress(), AddressType.Shipping);
+            this.SaveCustomer();
         }
 
         /// <summary>
@@ -53,11 +53,11 @@
 
             if (!shipmentRateQuotes.Any()) return;
 
-            shipmentRateQuotes.ForEach(AddShipmentRateQuoteLineItem);
-            Context.Services.ItemCacheService.Save(Context.ItemCache);
+            shipmentRateQuotes.ForEach(this.AddShipmentRateQuoteLineItem);
+            this.Context.Services.ItemCacheService.Save(this.Context.ItemCache);
 
-            Context.Customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);
-            SaveCustomer();
+            this.Context.Customer.ExtendedData.AddAddress(shipmentRateQuotes.First().Shipment.GetDestinationAddress(), AddressType.Shipping);
+            this.SaveCustomer();
         }
 
         /// <summary>
@@ -65,14 +65,14 @@
         /// </summary>
         public override void ClearShipmentRateQuotes()
         {
-            var items = Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).ToArray();
+            var items = this.Context.ItemCache.Items.Where(x => x.LineItemType == LineItemType.Shipping).ToArray();
 
             foreach (var item in items)
             {
-                Context.ItemCache.Items.RemoveItem(item.Sku);
+                this.Context.ItemCache.Items.RemoveItem(item.Sku);
             }
 
-            Context.Services.ItemCacheService.Save(Context.ItemCache);
+            this.Context.Services.ItemCacheService.Save(this.Context.ItemCache);
         }
     }
 }
