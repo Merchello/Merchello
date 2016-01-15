@@ -146,6 +146,11 @@
         public bool ApplyTaxesToInvoice { get; set; }
 
         /// <summary>
+        /// Gets or sets a prefix to be prepended to an invoice number.
+        /// </summary>
+        public string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether raise customer events.
         /// </summary>
         /// <remarks>

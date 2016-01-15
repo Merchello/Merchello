@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Core;
     using Core.Configuration;
@@ -17,9 +18,9 @@
     /// <summary>
     /// Extension methods for the <see cref="IBasket"/>
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class CheckoutExtensions
     {
-
         /// <summary>
         /// Gets a <see cref="ICheckoutManagerBase"/> for the basket.
         /// </summary>
@@ -155,6 +156,7 @@
         /// <remarks>
         /// TODO change this to return IBasketSalePreparation
         /// </remarks>
+        [Obsolete("Use GetCheckoutManager()")]
         public static BasketSalePreparation SalePreparation(this IBasket basket)
         {
             return basket.SalePreparation(MerchelloContext.Current);
@@ -230,6 +232,7 @@
         /// <returns>
         /// A <see cref="IBasketSalePreparation"/>
         /// </returns>
+        [Obsolete("Use GetCheckoutManager()")]
         internal static BasketSalePreparation SalePreparation(this IBasket basket, IMerchelloContext merchelloContext)
         {
             return BasketSalePreparation.GetBasketCheckoutPreparation(merchelloContext, basket);
