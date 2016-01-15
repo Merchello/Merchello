@@ -34,7 +34,7 @@
         /// <summary>
         /// Responsible for actually processing the payment with the PaymentProvider
         /// </summary>
-        /// <param name="preparation">
+        /// <param name="checkoutManager">
         /// The preparation.
         /// </param>
         /// <param name="paymentMethod">
@@ -43,9 +43,9 @@
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected override IPaymentResult PerformProcessPayment(ICheckoutManagerBase preparation, IPaymentMethod paymentMethod)
+        protected override IPaymentResult PerformProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod)
         {
-            return preparation.Payment.AuthorizePayment(paymentMethod.Key);
+            return checkoutManager.Payment.AuthorizePayment(paymentMethod.Key);
         }
     }
 }

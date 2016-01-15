@@ -5,12 +5,12 @@
     /// <summary>
     /// The checkout context version change settings.
     /// </summary>
-    public class CheckoutContextChangeSettings : ICheckoutContextChangeSettings
+    public class CheckoutContextSettings : ICheckoutContextSettings
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CheckoutContextChangeSettings"/> class.
+        /// Initializes a new instance of the <see cref="CheckoutContextSettings"/> class.
         /// </summary>
-        public CheckoutContextChangeSettings()
+        public CheckoutContextSettings()
         {
             this.ResetCustomerManagerDataOnVersionChange = true;
             this.ResetPaymentManagerDataOnVersionChange = true;
@@ -18,7 +18,28 @@
             this.ResetShippingManagerDataOnVersionChange = true;
             this.ResetOfferManagerDataOnVersionChange = true;
             this.EmptyBasketOnPaymentSuccess = true;
+            this.ApplyTaxesToInvoice = true;
+            this.RaiseCustomerEvents = true;
         }
+
+        /// <summary>
+        /// Gets or sets the invoice number prefix to be added to the generated invoice in the invoice builder.
+        /// </summary>
+        public string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not to apply taxes to generated invoice.
+        /// </summary>
+        public bool ApplyTaxesToInvoice { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether raise customer events.
+        /// </summary>
+        /// <remarks>
+        /// In some implementations, there may be quite a few saves to the customer record.  Use case for setting this to 
+        /// false would be an API notification on a customer record change to prevent spamming of the notification.
+        /// </remarks>
+        public bool RaiseCustomerEvents { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether reset the customer manager data on version change.

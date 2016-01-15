@@ -2,6 +2,9 @@
 {
     using System;
     using Gateways.Shipping;
+
+    using Merchello.Core.Checkout;
+
     using Models;
 
     /// <summary>

@@ -32,6 +32,7 @@
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
             // Get all the objects we need
+            var settings = new CheckoutManagerSettings() { InvoiceNumberPrefix = "BZR" };
             var checkoutManager = Basket.GetCheckoutManager();
             var customerManager = checkoutManager.Customer;
             var shippingManager = checkoutManager.Shipping;
@@ -92,7 +93,7 @@
         /// <summary>
         /// Responsible for actually processing the payment with the PaymentProvider
         /// </summary>
-        /// <param name="preparation">
+        /// <param name="checkoutManager">
         /// The preparation.
         /// </param>
         /// <param name="paymentMethod">
@@ -101,6 +102,6 @@
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected abstract IPaymentResult PerformProcessPayment(ICheckoutManagerBase preparation, IPaymentMethod paymentMethod);
+        protected abstract IPaymentResult PerformProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod);
     }
 }

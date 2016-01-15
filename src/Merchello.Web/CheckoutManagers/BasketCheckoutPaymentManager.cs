@@ -84,7 +84,7 @@
 
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
-            if (result.Payment.Success && this.Context.ChangeSettings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
+            if (result.Payment.Success && this.Context.Settings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
 
             this.OnFinalizing(result);
 
@@ -143,7 +143,7 @@
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            if (result.Payment.Success && this.Context.ChangeSettings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
+            if (result.Payment.Success && this.Context.Settings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
 
             this.OnFinalizing(result);
 
