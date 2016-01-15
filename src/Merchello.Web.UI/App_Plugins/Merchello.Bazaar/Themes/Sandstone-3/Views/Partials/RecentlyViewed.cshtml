@@ -20,7 +20,7 @@
                         <div class="caption">
                             <h3>@product.Name</h3>
                             <p class="price">
-                                @if (product.SalePrice > 0)
+                                @if (product.OnSale)
                                 {
                                     <span class="price-sale">
                                         @product.FormattedSalePrice <span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>

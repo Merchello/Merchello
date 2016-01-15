@@ -36,7 +36,7 @@
                                 <h4 class="media-heading">@product.Name</h4>
                                 @Html.Raw(product.GetPropertyValue<string>("overview"))
                                 <p class="price">
-                                    @if (product.SalePrice > 0)
+                                    @if (product.OnSale)
                                     {
                                         <span class="price-sale">
                                             @product.FormattedSalePrice() <span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
