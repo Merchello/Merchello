@@ -95,7 +95,7 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                         $scope.chartData[j].push(item.totals[i].value.toFixed(2));
                         j++;
                     }
-
+                    
                     $scope.labels.push(item.getDateLabel());
 
                 });
