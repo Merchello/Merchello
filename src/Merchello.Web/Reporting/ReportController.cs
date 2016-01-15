@@ -9,6 +9,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
 
@@ -94,6 +95,8 @@
                 url.GetUmbracoApiServiceBaseUrl<T>(controller => controller.GetDefaultReportData()));
         }
 
+
+
         /// <summary>
         /// The initializes the controller.
         /// </summary>
@@ -104,7 +107,13 @@
                 new Lazy<IEnumerable<ICurrency>>(
                     () =>
                         {
-                            var currencyCodes = MerchelloContext.Services.InvoiceService.GetDistinctCurrencyCodes();
+                            var currencyCodes = MerchelloContext.Services.InvoiceService.GetDistinctCurrencyCodes().ToList();
+                            if (!currencyCodes.Any())
+                            {
+                                var code =
+                                    ((InvoiceService)MerchelloContext.Services.InvoiceService).GetDefaultCurrencyCode();
+                                currencyCodes.Add(code);
+                            }
                             return currencyCodes.Select(c => this.MerchelloContext.Services.StoreSettingService.GetCurrencyByCode(c)).ToList();
                         });
         }

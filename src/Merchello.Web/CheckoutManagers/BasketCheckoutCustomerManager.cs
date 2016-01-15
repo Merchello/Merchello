@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Workflow.Checkout
+﻿namespace Merchello.Web.CheckoutManagers
 {
     using Merchello.Core;
     using Merchello.Core.Checkout;
@@ -28,8 +28,8 @@
         /// </param>
         public override void SaveBillToAddress(IAddress billToAddress)
         {
-            Context.Customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
-            SaveCustomer();
+            this.Context.Customer.ExtendedData.AddAddress(billToAddress, AddressType.Billing);
+            this.SaveCustomer();
         }
 
         /// <summary>
@@ -40,8 +40,8 @@
         /// </param>
         public override void SaveShipToAddress(IAddress shipToAddress)
         {
-            Context.Customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
-            SaveCustomer();
+            this.Context.Customer.ExtendedData.AddAddress(shipToAddress, AddressType.Shipping);
+            this.SaveCustomer();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@
         /// </returns>
         public override IAddress GetBillToAddress()
         {
-            return Context.Customer.ExtendedData.GetAddress(AddressType.Billing);
+            return this.Context.Customer.ExtendedData.GetAddress(AddressType.Billing);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@
         /// </returns>
         public override IAddress GetShipToAddress()
         {
-            return Context.Customer.ExtendedData.GetAddress(AddressType.Shipping);
+            return this.Context.Customer.ExtendedData.GetAddress(AddressType.Shipping);
         }
     }
 }

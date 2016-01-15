@@ -1,21 +1,6 @@
-﻿namespace Merchello.Web.Workflow.Checkout
+﻿namespace Merchello.Web.CheckoutManagers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Merchello.Core;
     using Merchello.Core.Checkout;
-    using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
-    using Merchello.Core.Sales;
-
-    using Newtonsoft.Json;
-
-    using Umbraco.Core;
-    using Umbraco.Core.Logging;
-
-    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// Represents an extended checkout manager for basket checkouts.

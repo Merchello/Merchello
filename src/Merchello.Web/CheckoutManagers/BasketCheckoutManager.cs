@@ -1,11 +1,8 @@
-﻿namespace Merchello.Web.Workflow.Checkout
+﻿namespace Merchello.Web.CheckoutManagers
 {
     using System;
 
-    using Merchello.Core;
-    using Merchello.Core.Builders;
     using Merchello.Core.Checkout;
-    using Merchello.Core.Models;
     using Merchello.Web.Pluggable;
 
     /// <summary>
@@ -62,7 +59,7 @@
         {
             get
             {
-                return _customerManager.Value;
+                return this._customerManager.Value;
             }
         }
 
@@ -73,7 +70,7 @@
         {
             get
             {
-                return _extendedManager.Value;
+                return this._extendedManager.Value;
             }
         }
 
@@ -84,7 +81,7 @@
         {
             get
             {
-                return _offerManager.Value;
+                return this._offerManager.Value;
             }
         }
 
@@ -95,7 +92,7 @@
         {
             get
             {
-                return _shippingManager.Value;
+                return this._shippingManager.Value;
             }
         }
 
@@ -106,7 +103,7 @@
         {
             get
             {
-                return _paymentManager.Value;
+                return this._paymentManager.Value;
             }
         }
 
@@ -115,11 +112,11 @@
         /// </summary>
         private void Initialize()
         {
-            _customerManager = new Lazy<ICheckoutCustomerManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutCustomerManager>("BasketCheckoutCustomerManager", Context));
-            _paymentManager = new Lazy<ICheckoutPaymentManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutPaymentManager>("BasketCheckoutPaymentManager", Context, InvoiceBuilder));
-            _extendedManager = new Lazy<ICheckoutExtendedManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutExtendedManager>("BasketCheckoutExtendedManager", Context));
-            _offerManager = new Lazy<ICheckoutOfferManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutOfferManager>("BasketCheckoutOfferManager", Context, this._paymentManager.Value));
-            _shippingManager = new Lazy<ICheckoutShippingManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutShippingManager>("BasketCheckoutShippingManager", Context));            
+            this._customerManager = new Lazy<ICheckoutCustomerManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutCustomerManager>("BasketCheckoutCustomerManager", this.Context));
+            this._paymentManager = new Lazy<ICheckoutPaymentManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutPaymentManager>("BasketCheckoutPaymentManager", this.Context, this.InvoiceBuilder));
+            this._extendedManager = new Lazy<ICheckoutExtendedManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutExtendedManager>("BasketCheckoutExtendedManager", this.Context));
+            this._offerManager = new Lazy<ICheckoutOfferManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutOfferManager>("BasketCheckoutOfferManager", this.Context, this._paymentManager.Value));
+            this._shippingManager = new Lazy<ICheckoutShippingManager>(() => PluggableObjectHelper.GetInstance<BasketCheckoutShippingManager>("BasketCheckoutShippingManager", this.Context));            
         }
     }
 }

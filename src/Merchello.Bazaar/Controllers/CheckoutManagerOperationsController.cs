@@ -1,10 +1,11 @@
-﻿namespace Merchello.Bazaar.Controllers.Surface
+﻿namespace Merchello.Bazaar.Controllers
 {
     using System;
     using System.Web.Mvc;
 
     using Merchello.Bazaar.Models;
     using Merchello.Core;
+    using Merchello.Core.Checkout;
     using Merchello.Core.Models;
     using Merchello.Web;
     using Merchello.Web.Mvc;
@@ -15,9 +16,30 @@
     /// A <see cref="SurfaceController"/> responsible for checkout operations.
     /// </summary>
     [PluginController("Bazaar")]
-    [Obsolete("Superseded by CheckoutManagerOperationsController")]
-    public partial class SalePreparationOperationsController : MerchelloSurfaceController
+    public partial class CheckoutManagerOperationsController : MerchelloSurfaceController
     {
+        /// <summary>
+        /// The checkout manager.
+        /// </summary>
+        private ICheckoutManagerBase _checkoutManager;
+
+        /// <summary>
+        /// Gets the checkout manager.
+        /// </summary>
+        private ICheckoutManagerBase CheckoutManager
+        {
+            get
+            {
+                if (this._checkoutManager == null)
+                {                    
+                    this._checkoutManager = Basket.GetCheckoutManager();
+                    this.CheckoutManager.Context.RaiseCustomerEvents = false;
+                }
+
+                return this._checkoutManager;
+            }
+        }
+
         /// <summary>
         /// Tries to redeem a coupon offer.
         /// </summary>
@@ -33,7 +55,7 @@
         {
             if (string.IsNullOrEmpty(model.OfferCode)) return this.CurrentUmbracoPage();
 
-            var result = Basket.SalePreparation().RedeemCouponOffer(model.OfferCode);
+            var result = CheckoutManager.Offer.RedeemCouponOffer(model.OfferCode);
             ViewBag.CouponRedemptionResult = result;
             return this.CurrentUmbracoPage();
         }
@@ -53,7 +75,7 @@
         [HttpGet]
         public ActionResult RemoveCoupon(string offerCode, int redirectId)
         {
-            Basket.SalePreparation().RemoveOfferCode(offerCode);
+            CheckoutManager.Offer.RemoveOfferCode(offerCode);
             return this.RedirectToUmbracoPage(redirectId);
         }
 
@@ -89,9 +111,6 @@
 
             if (!isValid) return this.CurrentUmbracoPage();
 
-            var preparation = Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
-
             var saveBilling = false;
             var saveShipping = false;
 
@@ -121,13 +140,13 @@
 
             if (model.SaveCustomerAddress)
             {
-                var redirect = (saveBilling && !this.ModelState.IsValidField("BillingAddressLabel")) || 
+                var redirect = (saveBilling && !this.ModelState.IsValidField("BillingAddressLabel")) ||
                     (saveShipping && (!this.ModelState.IsValidField("ShippingAddressLabel") && !model.BillingIsShipping));
                 if (redirect) return this.CurrentUmbracoPage();
-                
+
                 //// at this point we know the customer is an ICustomer 
                 var customer = (ICustomer)CurrentCustomer;
-                
+
                 if (saveBilling)
                 {
                     customer.CreateCustomerAddress(billingAddress, model.BillingAddressLabel, AddressType.Billing);
@@ -140,9 +159,9 @@
                 }
             }
 
-            preparation.SaveBillToAddress(billingAddress);
-            preparation.SaveShipToAddress(shippingAddress);
-            
+            CheckoutManager.Customer.SaveBillToAddress(billingAddress);
+            CheckoutManager.Customer.SaveShipToAddress(shippingAddress);
+
             return RedirectToUmbracoPage(model.ConfirmSalePageId);
         }
     }

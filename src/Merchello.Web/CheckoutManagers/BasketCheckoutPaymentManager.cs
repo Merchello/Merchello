@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Workflow.Checkout
+﻿namespace Merchello.Web.CheckoutManagers
 {
     using System;
     using System.Linq;
@@ -36,7 +36,7 @@
         /// </summary>
         public override void ClearPaymentMethod()
         {
-            Context.Customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.PaymentMethod);
+            this.Context.Customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.PaymentMethod);
             this.SaveCustomer();
         }
 
@@ -48,8 +48,8 @@
         /// </param>
         public override void SavePaymentMethod(IPaymentMethod paymentMethod)
         {
-            Context.Customer.ExtendedData.AddPaymentMethod(paymentMethod);
-            SaveCustomer();
+            this.Context.Customer.ExtendedData.AddPaymentMethod(paymentMethod);
+            this.SaveCustomer();
         }
 
         /// <summary>
@@ -60,8 +60,8 @@
         /// </returns>
         public override IPaymentMethod GetPaymentMethod()
         {
-            var paymentMethodKey = Context.Customer.ExtendedData.GetPaymentMethodKey();
-            var paymentMethod = Context.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
+            var paymentMethodKey = this.Context.Customer.ExtendedData.GetPaymentMethodKey();
+            var paymentMethod = this.Context.Gateways.Payment.GetPaymentGatewayMethodByKey(paymentMethodKey);
             return paymentMethodKey.Equals(Guid.Empty) || paymentMethod == null ? null : paymentMethod.PaymentMethod;
         }
 
@@ -75,18 +75,18 @@
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
-            if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
+            if (!this.IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
             // invoice
-            var invoice = PrepareInvoice(InvoiceBuilder);
+            var invoice = this.PrepareInvoice(this.InvoiceBuilder);
 
-            Context.Services.InvoiceService.Save(invoice);
+            this.Context.Services.InvoiceService.Save(invoice);
 
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
-            if (result.Payment.Success && Context.ChangeSettings.EmptyBasketOnPaymentSuccess) Context.Customer.Basket().Empty();
+            if (result.Payment.Success && this.Context.ChangeSettings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
 
-            OnFinalizing(result);
+            this.OnFinalizing(result);
 
             return result;
         }
@@ -98,7 +98,7 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizePayment(IPaymentGatewayMethod paymentGatewayMethod)
         {
-            return AuthorizePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
+            return this.AuthorizePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
         }
 
         /// <summary>
@@ -109,9 +109,9 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
-            var paymentMethod = Context.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
+            var paymentMethod = this.Context.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
-            return AuthorizePayment(paymentMethod, args);
+            return this.AuthorizePayment(paymentMethod, args);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@
         /// <returns>The <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizePayment(Guid paymentMethodKey)
         {
-            return AuthorizePayment(paymentMethodKey, new ProcessorArgumentCollection());
+            return this.AuthorizePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
 
         /// <summary>
@@ -134,18 +134,18 @@
         {
             Mandate.ParameterNotNull(paymentGatewayMethod, "paymentGatewayMethod");
 
-            if (!IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
+            if (!this.IsReadyToInvoice()) return new PaymentResult(Attempt<IPayment>.Fail(new InvalidOperationException("SalesPreparation is not ready to invoice")), null, false);
 
             // invoice
-            var invoice = PrepareInvoice(InvoiceBuilder);
+            var invoice = this.PrepareInvoice(this.InvoiceBuilder);
 
-            Context.Services.InvoiceService.Save(invoice);
+            this.Context.Services.InvoiceService.Save(invoice);
 
             var result = invoice.AuthorizeCapturePayment(paymentGatewayMethod, args);
 
-            if (result.Payment.Success && Context.ChangeSettings.EmptyBasketOnPaymentSuccess) Context.Customer.Basket().Empty();
+            if (result.Payment.Success && this.Context.ChangeSettings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
 
-            OnFinalizing(result);
+            this.OnFinalizing(result);
 
             return result;
         }
@@ -157,7 +157,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizeCapturePayment(IPaymentGatewayMethod paymentGatewayMethod)
         {
-            return AuthorizeCapturePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
+            return this.AuthorizeCapturePayment(paymentGatewayMethod, new ProcessorArgumentCollection());
         }
 
         /// <summary>
@@ -168,9 +168,9 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey, ProcessorArgumentCollection args)
         {
-            var paymentMethod = Context.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
+            var paymentMethod = this.Context.Gateways.Payment.GetPaymentGatewayMethods().FirstOrDefault(x => x.PaymentMethod.Key.Equals(paymentMethodKey));
 
-            return AuthorizeCapturePayment(paymentMethod, args);
+            return this.AuthorizeCapturePayment(paymentMethod, args);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         public override IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
         {
-            return AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
+            return this.AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
         }
     }
 }
