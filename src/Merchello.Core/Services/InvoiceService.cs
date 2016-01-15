@@ -1520,6 +1520,16 @@
             }
         }
 
+        /// <summary>
+        /// Gets the default currency code.
+        /// </summary>
+        /// <returns>
+        /// The currency code saved in the store settings.
+        /// </returns>
+        internal string GetDefaultCurrencyCode()
+        {
+            return this._storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
+        }
 
         #region Key Queries
 
@@ -1691,16 +1701,6 @@
 
         #endregion
 
-        /// <summary>
-        /// Gets the default currency code.
-        /// </summary>
-        /// <returns>
-        /// The currency code saved in the store settings.
-        /// </returns>
-        private string GetDefaultCurrencyCode()
-        {
-            return this._storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
-        }
 
         /// <summary>
         /// Deletes orders associated with the invoice
