@@ -3,11 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Security;
 
-    using Merchello.Bazaar.Controllers.Surface;
     using Merchello.Bazaar.Models.Account;
     using Merchello.Core.Models;
 

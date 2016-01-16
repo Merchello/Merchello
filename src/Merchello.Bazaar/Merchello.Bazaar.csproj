@@ -44,6 +44,8 @@
     <Compile Include="Controllers\CashPaymentMethodController.cs" />
     <Compile Include="Controllers\CheckoutManagerOperationsController.cs" />
     <Compile Include="GenericExtensionMethods.cs" />
+    <Compile Include="Install\PackageActions\AddAppSettingBase.cs" />
+    <Compile Include="Install\PackageActions\AddInvoiceNumberPrefixKey.cs" />
     <Compile Include="Install\PackageActions\AddMembershipTypeAndGroup.cs" />
     <Compile Include="Install\PackageActions\AddXpathToStoreConfigKey.cs" />
     <Compile Include="Models\Account\AccountProfileModel.cs" />
@@ -180,16 +182,16 @@
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.14.5858.28521, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000104\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.14.5858.31185, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000106\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.14.5858.28523, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000104\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.14.5858.31186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000106\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.14.5858.28523, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000104\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.14.5858.31187, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000106\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">

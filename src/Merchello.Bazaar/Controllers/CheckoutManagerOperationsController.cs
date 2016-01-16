@@ -33,7 +33,6 @@
                 if (this._checkoutManager == null)
                 {                    
                     this._checkoutManager = Basket.GetCheckoutManager();
-                    this.CheckoutManager.Context.RaiseCustomerEvents = false;
                 }
 
                 return this._checkoutManager;

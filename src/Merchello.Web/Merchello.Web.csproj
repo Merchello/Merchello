@@ -313,6 +313,8 @@
     <Compile Include="Editors\NoteApiController.cs" />
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
+    <Compile Include="Editors\Reports\MonthlyReportApiControllerBase.cs" />
+    <Compile Include="Editors\Reports\ReportSqlHelper.cs" />
     <Compile Include="Editors\Reports\SalesOverTimeReportApiController.cs" />
     <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
     <Compile Include="LocalizationHelper.cs" />
@@ -347,6 +349,7 @@
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
+    <Compile Include="Models\Reports\MonthlyReportResult.cs" />
     <Compile Include="Models\Reports\ResultCurrencyValue.cs" />
     <Compile Include="Models\Reports\SalesByItemResult.cs" />
     <Compile Include="Models\Reports\SalesOverTimeResult.cs" />

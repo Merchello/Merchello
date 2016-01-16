@@ -41,6 +41,26 @@
         /// </returns>
         decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode);
 
+        /// <summary>
+        /// Gets the total of line items for a give SKU invoiced in a specific currency across the date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The total of line items for a give SKU invoiced in a specific currency across the date range.
+        /// </returns>
+        decimal SumLineItemTotalsBySku(DateTime startDate, DateTime endDate, string currencyCode, string sku);
+
         #region Filter Queries
 
         /// <summary>

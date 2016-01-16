@@ -11,10 +11,7 @@
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Models.Reports;
-    using Merchello.Web.Reporting;
-    using Merchello.Web.Trees;
 
-    using Umbraco.Core;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -23,7 +20,7 @@
     /// A controller for rendering the sales over time report.
     /// </summary>
     [PluginController("Merchello")]
-    public class SalesOverTimeReportApiController : ReportController
+    public class SalesOverTimeReportApiController : MonthlyReportApiControllerBase<SalesOverTimeResult>
     {
         /// <summary>
         /// The <see cref="CultureInfo"/>.
@@ -109,74 +106,6 @@
 
 
         /// <summary>
-        /// Builds the report data for a custom date range
-        /// </summary>
-        /// <param name="query">A <see cref="QueryResultDisplay"/> containing the date range</param>
-        /// <returns>The <see cref="QueryResultDisplay"/></returns>
-        [HttpPost]
-        public QueryResultDisplay GetCustomDateRange(QueryDisplay query)
-        {
-            var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
-            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
-
-            var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value) && 
-               invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
-
-            if (!isDateSearch) return GetDefaultReportData();
-
-            DateTime startDate;
-            //// Assert the start date
-            if (DateTime.TryParse(invoiceDateStart.Value, out startDate))
-            {
-                DateTime endDate;
-                //// Assert the end date
-                if (DateTime.TryParse(invoiceDateEnd.Value, out endDate))
-                {
-                    //// Return the default report if startDate >= endDate
-                    if (startDate >= endDate) return GetDefaultReportData();
-
-                    var endOfMonth = GetEndOfMonth(endDate);
-                    var startOfYear = GetFirstOfMonth(startDate);
-
-                    return BuildResult(startOfYear, endOfMonth);
-
-                }
-
-                return GetDefaultReportData();
-            }
-
-            return GetDefaultReportData();
-        }
-
-        /// <summary>
-        /// Gets the first day a month month.
-        /// </summary>
-        /// <param name="current">
-        /// The reference date.
-        /// </param>
-        /// <returns>
-        /// The <see cref="DateTime"/>.
-        /// </returns>
-        private static DateTime GetFirstOfMonth(DateTime current)
-        {
-            return new DateTime(current.Year, current.Month, 1);
-        }
-
-        /// <summary>
-        /// Gets the last day of a month.
-        /// </summary>
-        /// <param name="current">
-        /// The reference date.
-        /// </param>
-        /// <returns>
-        /// The <see cref="DateTime"/>.
-        /// </returns>
-        private static DateTime GetEndOfMonth(DateTime current)
-        {
-            return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
-        }
-
-        /// <summary>
         /// Builds the result set for the report.
         /// </summary>
         /// <param name="startDate">
@@ -188,7 +117,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        private QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate)
+        protected override QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate)
         {
             var count = 0;
 
@@ -199,7 +128,7 @@
             {
                 currentDate = startDate.AddMonths(1);
                 count++;
-                results.Add(GetResult(startDate, currentDate));
+                results.Add(this.GetResults(startDate, currentDate));
                 startDate = currentDate;
             }
 
@@ -214,7 +143,7 @@
         }
 
         /// <summary>
-        /// Gets the sales result.
+        /// Performs the actual work of querying for the results.
         /// </summary>
         /// <param name="startDate">
         /// The start date.
@@ -225,7 +154,7 @@
         /// <returns>
         /// The <see cref="SalesOverTimeResult"/>.
         /// </returns>
-        private SalesOverTimeResult GetResult(DateTime startDate, DateTime endDate)
+        protected override SalesOverTimeResult GetResults(DateTime startDate, DateTime endDate)
         {
             var monthName = _textService.GetLocalizedMonthName(_culture, startDate.Month);
 

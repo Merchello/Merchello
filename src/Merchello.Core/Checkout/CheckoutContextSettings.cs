@@ -19,7 +19,7 @@
             this.ResetOfferManagerDataOnVersionChange = true;
             this.EmptyBasketOnPaymentSuccess = true;
             this.ApplyTaxesToInvoice = true;
-            this.RaiseCustomerEvents = true;
+            this.RaiseCustomerEvents = false;
         }
 
         /// <summary>
