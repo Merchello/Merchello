@@ -329,7 +329,7 @@
     <Compile Include="Checkout\CheckoutContext.cs" />
     <Compile Include="Checkout\CheckoutContextEventArgs.cs" />
     <Compile Include="Checkout\CheckoutContextManagerBase.cs" />
-    <Compile Include="Checkout\CheckoutContextChangeSettings.cs" />
+    <Compile Include="Checkout\CheckoutContextSettings.cs" />
     <Compile Include="Checkout\CheckoutCustomerDataManagerBase.cs" />
     <Compile Include="Checkout\CheckoutCustomerManagerBase.cs" />
     <Compile Include="Checkout\CheckoutCustomerTempData.cs" />
@@ -341,7 +341,7 @@
     <Compile Include="Checkout\CheckoutShippingManagerBase.cs" />
     <Compile Include="Checkout\ICheckoutContext.cs" />
     <Compile Include="Checkout\ICheckoutContextManagerBase.cs" />
-    <Compile Include="Checkout\ICheckoutContextChangeSettings.cs" />
+    <Compile Include="Checkout\ICheckoutContextSettings.cs" />
     <Compile Include="Checkout\ICheckoutCustomerManager.cs" />
     <Compile Include="Checkout\ICheckoutExtendedManager.cs" />
     <Compile Include="Checkout\ICheckoutNotificationManager.cs" />

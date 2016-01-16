@@ -1,24 +1,21 @@
 ﻿namespace Merchello.Bazaar.Install.PackageActions
 {
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
     using System.Xml;
 
     using umbraco.cms.businesslogic.packager.standardPackageActions;
     using umbraco.interfaces;
 
     /// <summary>
-    /// The add xpath to store config key.
+    /// A package action to add the InvoiceNumberPrefix app setting.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-    public class AddXpathToStoreConfigKey : AddAppSettingBase, IPackageAction
+    public class AddInvoiceNumberPrefixKey : AddAppSettingBase, IPackageAction
     {
         #region IPackageAction Members
 
         /// <summary>
         /// The key.
         /// </summary>
-        private const string Key = "Bazaar:XpathToStore";
+        private const string Key = "Bazaar:InvoiceNumberPrefix";
 
         /// <summary>
         /// The alias.
@@ -28,7 +25,7 @@
         /// </returns>
         public string Alias()
         {
-            return "MerchelloBazaar_AddXpathToStoreConfigKey";
+            return "MerchelloBazaar_AddInvoiceNumberPrefixKey";
         }
 
         /// <summary>
@@ -47,7 +44,7 @@
         {
             try
             {
-                CreateAppSettingsKey(Key, "//root/BazaarStore");
+                CreateAppSettingsKey(Key, "BZR");
 
                 return true;
             }
@@ -65,7 +62,7 @@
         /// </returns>
         public XmlNode SampleXml()
         {
-            const string Sample = "<Action runat=\"install\" undo=\"true/false\" alias=\"MerchelloBazaar_AddXpathToStoreConfigKey\"></Action>";
+            const string Sample = "<Action runat=\"install\" undo=\"true/false\" alias=\"MerchelloBazaar_AddInvoiceNumberPrefixKey\"></Action>";
 
             return helper.parseStringToXmlNode(Sample);
         }
@@ -96,6 +93,6 @@
             }
         }
 
-        #endregion
+        #endregion 
     }
 }

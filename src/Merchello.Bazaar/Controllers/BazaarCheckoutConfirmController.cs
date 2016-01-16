@@ -44,7 +44,7 @@
 
             // Get the checkout manager
             var checkoutManager = Basket.GetCheckoutManager();
-            checkoutManager.Payment.InvoiceNumberPrefix = "BZR";
+     
             var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
             
             // The default basket packaging strategy only creates a single shipment

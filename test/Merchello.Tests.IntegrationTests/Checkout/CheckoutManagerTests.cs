@@ -36,13 +36,13 @@
             this.WriteBasketInfoToConsole();
 
             //// Act
-            var context = this.CurrentCustomer.Basket().CreateCheckoutContext(MerchelloContext.Current, new CheckoutContextChangeSettings());
+            var context = this.CurrentCustomer.Basket().CreateCheckoutContext(MerchelloContext.Current, new CheckoutContextSettings());
 
             //// Assert
             Assert.NotNull(context);
             Assert.NotNull(context.Services);
             Assert.NotNull(context.Gateways);
-            Assert.IsTrue(context.ApplyTaxesToInvoice);
+            Assert.IsTrue(context.Settings.ApplyTaxesToInvoice);
             Assert.AreEqual(1, context.ItemCache.Items.Count);
         }
 
@@ -154,7 +154,7 @@
             //// Arrange
             var shipping = MockAddressMaker.GetAddress();
             var billing = MockAddressMaker.GetAddress();
-            var settings = new CheckoutContextChangeSettings() { ResetCustomerManagerDataOnVersionChange = false };
+            var settings = new CheckoutContextSettings() { ResetCustomerManagerDataOnVersionChange = false };
 
             var checkoutManager = this.CurrentCustomer.Basket().GetCheckoutManager();
             checkoutManager.Customer.SaveShipToAddress(shipping);
@@ -227,7 +227,7 @@
             checkoutManager.Shipping.SaveShipmentRateQuote(quotes.First());
 
             //// Act
-            checkoutManager.Payment.InvoiceNumberPrefix = "rss";
+            checkoutManager.Context.Settings.InvoiceNumberPrefix = "rss";
             var invoice = checkoutManager.Payment.PrepareInvoice();
 
             //// Assert

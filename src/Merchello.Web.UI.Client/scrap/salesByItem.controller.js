@@ -1,7 +1,7 @@
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
-    ['$scope', '$q', '$log','settingsResource', 'invoiceHelper', 'merchelloTabsFactory',
-        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory) {
+    ['$scope', '$q', '$log', 'assetsService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory',
+        function($scope, $q, $log, assetsService, settingsResource, invoiceHelper, merchelloTabsFactory) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;

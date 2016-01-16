@@ -52,11 +52,6 @@
         public static event TypedEventHandler<CheckoutPaymentManagerBase, CheckoutEventArgs<IPaymentResult>> Finalizing;
 
         /// <summary>
-        /// Gets or sets the invoice number prefix.
-        /// </summary>
-        public string InvoiceNumberPrefix { get; set; }
-
-        /// <summary>
         /// Gets the <see cref="IBuilderChain{IInoice}"/>.
         /// </summary>
         protected IBuilderChain<IInvoice> InvoiceBuilder
@@ -102,7 +97,6 @@
 
             if (attempt.Success)
             {
-                attempt.Result.InvoiceNumberPrefix = InvoiceNumberPrefix;
                 InvoicePrepared.RaiseEvent(new CheckoutEventArgs<IInvoice>(Context.Customer, attempt.Result), this);
 
                 return attempt.Result;
@@ -222,7 +216,7 @@
         /// </summary>
         private void Initialize()
         {
-            if (Context.IsNewVersion && Context.ChangeSettings.ResetPaymentManagerDataOnVersionChange)
+            if (Context.IsNewVersion && Context.Settings.ResetPaymentManagerDataOnVersionChange)
             {
                 this.ClearPaymentMethod();
             }

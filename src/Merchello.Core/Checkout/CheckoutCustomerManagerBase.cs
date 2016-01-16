@@ -69,7 +69,7 @@
         /// </summary>
         private void Initialize()
         {
-            if (Context.IsNewVersion && Context.ChangeSettings.ResetCustomerManagerDataOnVersionChange) this.Reset();
+            if (Context.IsNewVersion && Context.Settings.ResetCustomerManagerDataOnVersionChange) this.Reset();
         }
     }
 }

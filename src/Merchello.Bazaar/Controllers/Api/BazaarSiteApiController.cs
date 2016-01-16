@@ -7,6 +7,7 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Core;
+    using Merchello.Core.Checkout;
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -247,13 +248,12 @@
             var tokenKey = customerToken.DecryptWithMachineKey();
             var customerKey = new Guid(tokenKey);
             var customerBase = _merchelloContext.Services.CustomerService.GetAnyByKey(customerKey);
-
+            
             var checkoutManager = customerBase.Basket().GetCheckoutManager();
             var shippingManager = checkoutManager.Shipping;
             var customerManager = checkoutManager.Customer;
             var paymentManager = checkoutManager.Payment;
 
-            checkoutManager.Context.RaiseCustomerEvents = false;
 
             var shipment = customerBase.Basket().PackageBasket(customerManager.GetShipToAddress()).FirstOrDefault();
             var quote = shipment.ShipmentRateQuoteByShipMethod(methodKey);

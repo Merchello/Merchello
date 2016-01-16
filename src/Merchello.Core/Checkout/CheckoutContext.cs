@@ -27,7 +27,7 @@
         /// The item cache.
         /// </param>
         public CheckoutContext(ICustomerBase customer, IItemCache itemCache)
-            : this(customer, itemCache, new CheckoutContextChangeSettings())
+            : this(customer, itemCache, new CheckoutContextSettings())
         { 
         }
 
@@ -43,7 +43,7 @@
         /// <param name="settings">
         /// The settings.
         /// </param>
-        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, ICheckoutContextChangeSettings settings)
+        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, ICheckoutContextSettings settings)
             : this(customer, itemCache, Core.MerchelloContext.Current, settings)
         {            
         }
@@ -64,7 +64,7 @@
         /// <param name="settings">
         /// The version change settings.
         /// </param>
-        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext, ICheckoutContextChangeSettings settings)
+        public CheckoutContext(ICustomerBase customer, IItemCache itemCache, IMerchelloContext merchelloContext, ICheckoutContextSettings settings)
         {
             Mandate.ParameterNotNull(customer, "customer");
             Mandate.ParameterNotNull(itemCache, "itemCache");
@@ -76,7 +76,8 @@
             this.Customer = customer;
             this.Cache = merchelloContext.Cache.RuntimeCache;
             this.ApplyTaxesToInvoice = true;
-            this.ChangeSettings = settings;
+            this.Settings = settings;
+            this.RaiseCustomerEvents = false;
         }
 
         /// <summary>
@@ -146,6 +147,11 @@
         public bool ApplyTaxesToInvoice { get; set; }
 
         /// <summary>
+        /// Gets or sets a prefix to be prepended to an invoice number.
+        /// </summary>
+        public string InvoiceNumberPrefix { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether raise customer events.
         /// </summary>
         /// <remarks>
@@ -162,7 +168,7 @@
         /// <summary>
         /// Gets the version change settings.
         /// </summary>
-        public ICheckoutContextChangeSettings ChangeSettings { get; private set; }
+        public ICheckoutContextSettings Settings { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ICheckoutContext"/> for the customer.
@@ -178,7 +184,7 @@
         /// </returns>
         public static ICheckoutContext CreateCheckoutContext(ICustomerBase customer, Guid versionKey)
         {
-            return CreateCheckoutContext(customer, versionKey, new CheckoutContextChangeSettings());
+            return CreateCheckoutContext(customer, versionKey, new CheckoutContextSettings());
         }
 
         /// <summary>
@@ -196,7 +202,7 @@
         /// <returns>
         /// The <see cref="ICheckoutContext"/>.
         /// </returns>
-        public static ICheckoutContext CreateCheckoutContext(ICustomerBase customer, Guid versionKey, ICheckoutContextChangeSettings settings)
+        public static ICheckoutContext CreateCheckoutContext(ICustomerBase customer, Guid versionKey, ICheckoutContextSettings settings)
         {
             return CreateCheckoutContext(Core.MerchelloContext.Current, customer, versionKey, settings);
         }
@@ -219,7 +225,7 @@
         /// <returns>
         /// The <see cref="ICheckoutContext"/> associated with the customer checkout
         /// </returns>
-        public static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey, ICheckoutContextChangeSettings settings)
+        public static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey, ICheckoutContextSettings settings)
         {
             var cache = merchelloContext.Cache.RuntimeCache;
             var cacheKey = MakeCacheKey(customer, versionKey);
@@ -246,7 +252,7 @@
 
 
         /// <summary>
-        /// Generates a unique cache key for runtime caching of the <see cref="SalePreparationBase"/>
+        /// Generates a unique cache key for runtime caching of the <see cref="IItemCache"/>
         /// </summary>
         /// <param name="customer">
         /// The customer.

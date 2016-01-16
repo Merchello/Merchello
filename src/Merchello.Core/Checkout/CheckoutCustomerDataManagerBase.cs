@@ -35,11 +35,11 @@
         {
             if (Context.Customer.IsAnonymous)
             {
-                Context.Services.CustomerService.Save(Context.Customer as AnonymousCustomer, Context.RaiseCustomerEvents);
+                Context.Services.CustomerService.Save(Context.Customer as AnonymousCustomer, Context.Settings.RaiseCustomerEvents);
             }
             else
             {
-                ((CustomerService)Context.Services.CustomerService).Save(Context.Customer as Customer, Context.RaiseCustomerEvents);
+                ((CustomerService)Context.Services.CustomerService).Save(Context.Customer as Customer, Context.Settings.RaiseCustomerEvents);
             }
         }
 

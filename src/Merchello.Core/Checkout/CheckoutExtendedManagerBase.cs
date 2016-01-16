@@ -144,7 +144,7 @@
         private void Initialize()
         {            
             this._messages = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.Note));
-            if (Context.IsNewVersion && Context.ChangeSettings.ResetExtendedManagerDataOnVersionChange)
+            if (Context.IsNewVersion && Context.Settings.ResetExtendedManagerDataOnVersionChange)
             {
                 this.ClearNotes();
             }
