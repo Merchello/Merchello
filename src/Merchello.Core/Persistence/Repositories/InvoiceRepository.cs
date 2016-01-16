@@ -522,7 +522,7 @@
                         INNER JOIN [merchInvoiceItem] T2 ON T1.[pk] = T2.[invoiceKey]
                         WHERE T2.sku = @sku
                         AND T1.currencyCode = @cc
-                        AND T1.invoiceDate BETWEEN @starts AND ends";
+                        AND T1.invoiceDate BETWEEN @starts AND @ends";
 
             return Database.ExecuteScalar<decimal>(
                 SQL,

@@ -79,7 +79,7 @@
         /// </returns>
         protected static DateTime GetFirstOfMonth(DateTime current)
         {
-            return new DateTime(current.Year, current.Month, 1);
+            return current.FirstOfMonth();
         }
 
         /// <summary>
@@ -93,7 +93,7 @@
         /// </returns>
         protected static DateTime GetEndOfMonth(DateTime current)
         {
-            return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
+            return current.EndOfMonth();
         }
 
         /// <summary>

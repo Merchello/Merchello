@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Http;
 
@@ -13,6 +14,8 @@
     using Merchello.Web.Models.Reports;
 
     using Umbraco.Core.Persistence;
+    using Umbraco.Core.Services;
+    using Umbraco.Web;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -21,6 +24,11 @@
     [PluginController("Merchello")]
     public class SalesByItemReportApiController : MonthlyReportApiControllerBase<IEnumerable<SalesByItemResult>>
     {
+        /// <summary>
+        /// The <see cref="CultureInfo"/>.
+        /// </summary>
+        private readonly CultureInfo _culture;
+
         /// <summary>
         /// The <see cref="IInvoiceService"/>.
         /// </summary>
@@ -32,9 +40,22 @@
         private readonly MerchelloHelper _merchello;
 
         /// <summary>
+        /// The text service.
+        /// </summary>
+        private readonly ILocalizedTextService _textService;
+
+        /// <summary>
         /// The product line item type field key.
         /// </summary>
         private readonly Guid _productLineItemTfKey = EnumTypeFieldConverter.LineItemType.Product.TypeKey;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SalesByItemReportApiController"/> class.
+        /// </summary>
+        public SalesByItemReportApiController()
+            : this(Core.MerchelloContext.Current)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SalesByItemReportApiController"/> class.
@@ -43,11 +64,29 @@
         /// The merchello context.
         /// </param>
         public SalesByItemReportApiController(IMerchelloContext merchelloContext)
+            : this(merchelloContext, UmbracoContext.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SalesByItemReportApiController"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="umbracoContext">
+        /// The umbraco Context.
+        /// </param>
+        public SalesByItemReportApiController(IMerchelloContext merchelloContext, UmbracoContext umbracoContext)
             : base(merchelloContext)
         {
-            _merchello = new MerchelloHelper(merchelloContext.Services);
+            _culture = LocalizationHelper.GetCultureFromUser(umbracoContext.Security.CurrentUser);
 
             _invoiceService = merchelloContext.Services.InvoiceService;
+
+            _merchello = new MerchelloHelper(merchelloContext.Services);
+
+            _textService = umbracoContext.Application.Services.TextService;
         }
 
         /// <summary>
@@ -73,10 +112,9 @@
         {
             var today = DateTime.Today;
             var endOfMonth = GetEndOfMonth(today);
-            var startMonth = endOfMonth.AddMonths(-11);
-            var startOfYear = GetFirstOfMonth(startMonth);
+            var startMonth = GetFirstOfMonth(today);
 
-            return BuildResult(startOfYear, endOfMonth);
+            return BuildResult(startMonth, endOfMonth);
         }
 
         /// <summary>
@@ -93,8 +131,7 @@
         /// </returns>
         protected override QueryResultDisplay BuildResult(DateTime startDate, DateTime endDate)
         {
-            var currentDate = startDate;
-            var results = this.GetResults(startDate, currentDate).ToArray();
+            var results = this.GetResults(startDate, endDate).ToArray();
 
             return new QueryResultDisplay()
             {
@@ -134,6 +171,9 @@
 
             var results = new List<SalesByItemResult>();
 
+            var monthName = _textService.GetLocalizedMonthName(_culture, startDate.Month);
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var dto in dtos)
             {
                 var variant = GetProductVariant(dto.Sku);
@@ -142,8 +182,13 @@
                 {
                     var result = new SalesByItemResult()
                         {
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            Month = monthName,
+                            Year = startDate.Year.ToString(),
                             ProductVariant = variant,
-                            Quantity = dto.SaleCount,
+                            InvoiceCount = dto.InvoiceCount,
+                            QuantitySold = dto.QuantitySold,
                             Totals = this.ActiveCurrencies.Select(c => new ResultCurrencyValue()
                             {
                                 Currency = c.ToCurrencyDisplay(),
@@ -181,6 +226,7 @@
         /// <summary>
         /// Small POCO for the internal query.
         /// </summary>
+        // ReSharper disable once ClassNeverInstantiated.Local
         private class SkuSaleCountDto
         {
             /// <summary>
@@ -190,10 +236,16 @@
             public string Sku { get; set; }
 
             /// <summary>
-            /// Gets or sets the sale count.
+            /// Gets or sets the total number of invoices specific SKU was found.
             /// </summary>
-            [Column("saleCount")]
-            public long SaleCount { get; set; }
+            [Column("invoiceCount")]
+            public long InvoiceCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the total quantity.
+            /// </summary>
+            [Column("quantitySold")]
+            public long QuantitySold { get; set; }
         }
     }
 }

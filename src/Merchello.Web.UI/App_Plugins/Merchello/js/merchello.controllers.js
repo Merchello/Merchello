@@ -7879,87 +7879,52 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
-    ['$scope', '$element', 'assetsService', 'merchelloTabsFactory',
-        function($scope, $element, assetsService, merchelloTabsFactory) {
+    ['$scope', '$element', '$filter', 'assetsService', 'settingsResource', 'merchelloTabsFactory',
+        function($scope, $element, $filter, assetsService, settingsResource, merchelloTabsFactory) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
+            $scope.settings = {};
+            $scope.startDate = '';
+            $scope.endDate = '';
 
             assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                 init();
             });
 
-            $scope.onClick = function (points, evt) {
-                console.log(points, evt);
-            };
 
             function init() {
                 $scope.tabs = merchelloTabsFactory.createReportsTabs();
                 $scope.tabs.setActive("reportsdashboard");
-                loadAnnual();
+                loadSettings();
             }
 
-            function loadAnnual() {
-                //$scope.annualLabels = ["January", "February", "March", "April", "May", "June", "July"];
-                //$scope.series = ['Series A', 'Series B'];
-                //$scope.data = [
-                //    [65, 59, 80, 81, 56, 55, 40],
-                //    [28, 48, 40, 19, 86, 27, 90]
-                //];
 
-                //$scope.pielabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-                //$scope.piedata = [300, 500, 100];
+            /**
+             * @ngdoc method
+             * @name loadSettings
+             * @function
+             *
+             * @description - Load the Merchello settings.
+             */
+            function loadSettings() {
+                settingsResource.getAllCombined().then(function(combined) {
+                    $scope.settings = combined.settings;
+                    setDefaultDates();
+                });
+            };
 
-                $scope.preValuesLoaded = true;
-                $scope.loaded = true;
-            }
-
-        }]);
-
-
-angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
-    ['$scope', '$q', '$log', 'assetsService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory',
-        function($scope, $q, $log, assetsService, settingsResource, invoiceHelper, merchelloTabsFactory) {
-
-            $scope.loaded = false;
-            $scope.preValuesLoaded = false;
-            $scope.tabs = [];
-
-            $scope.itemTotalLabels = [];
-            $scope.itemTotalData = [];
-
-            $scope.historyLables = [];
-            $scope.historyData = [];
-            $scope.variantNames = [];
-
-
-            assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
-                init();
-            });
-
-            function init() {
-                $scope.tabs = merchelloTabsFactory.createReportsTabs();
-                $scope.tabs.setActive("salesByItem");
-                compileReports();
-            }
-
-            function compileReports() {
-
-                $scope.itemTotalLabels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-                $scope.itemTotalData = [300, 500, 100];
-
-                $scope.historyLabels = ["January", "February", "March", "April", "May", "June", "July"];
-                $scope.variantNames = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
-                $scope.historyData = [
-                    [65, 59, 80, 81, 56, 55, 40],
-                    [28, 48, 40, 19, 86, 27, 90],
-                    [20, 38, 59, 72, 61, 12, 43]
-                ];
-
+            function setDefaultDates() {
+                var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+                var firstOfMonth = new Date(y, m, 1);
+                var endOfMonth = new Date(y, m + 1, 0);
+                $scope.startDate = $filter('date')(firstOfMonth, $scope.settings.dateFormat);
+                $scope.endDate = $filter('date')(endOfMonth, $scope.settings.dateFormat);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
             }
+
 
         }]);
 

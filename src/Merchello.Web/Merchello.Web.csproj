@@ -349,6 +349,7 @@
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
+    <Compile Include="Models\Reports\MonthlyReportResult.cs" />
     <Compile Include="Models\Reports\ResultCurrencyValue.cs" />
     <Compile Include="Models\Reports\SalesByItemResult.cs" />
     <Compile Include="Models\Reports\SalesOverTimeResult.cs" />

@@ -2733,6 +2733,26 @@ angular.module('merchello.models').constant('ResultCurrencyValue', ResultCurrenc
 
 /**
  * @ngdoc model
+ * @name SalesByItemResult
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's SalesByItemResult object
+ */
+var SalesByItemResult = function() {
+    var self = this;
+
+    self.productVariant = {};
+    self.quantitySold = 0;
+    self.invoiceCount = 0;
+    self.totals = [];
+
+};
+
+angular.module('merchello.models').constant('SalesByItemResult', SalesByItemResult);
+
+/**
+ * @ngdoc model
  * @name SalesOverTimeResult
  * @function
  *
@@ -4704,7 +4724,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('reportsdashboard', 'merchelloTabs_reports', '#/merchello/merchello/reportsdashboard/manage');
                 tabs.addTab('salesOverTime', 'merchelloTabs_salesOverTime', '#/merchello/merchello/salesOverTime/manage');
-                tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
+                //tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
                 return tabs;
             }
 
@@ -5343,6 +5363,35 @@ angular.module('merchello.models').factory('resultCurrencyValueBuilder',
         };
 
 }]);
+
+angular.module('merchello.models').factory('salesByItemResultBuilder',
+    ['genericModelBuilder', 'resultCurrencyValueBuilder', 'productVariantDisplayBuilder', 'SalesByItemResult',
+    function(genericModelBuilder, resultCurrencyValueBuilder, productVariantDisplayBuilder, SalesByItemResult) {
+
+        var Constructor = SalesByItemResult;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var models = [];
+                if(angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var model = genericModelBuilder.transform(jsonResult[i], Constructor);
+                        model.productVariant = productVariantDisplayBuilder.transform(jsonResult[i].productVariant);
+                        model.totals = resultCurrencyValueBuilder.transform(jsonResult[i].totals);
+                        models.push(model);
+                    }
+                } else {
+                    models = genericModelBuilder.transform(jsonResult, Constructor);
+                    models.productVariant = productVariantDisplayBuilder.transform(jsonResult[i].productVariant);
+                    models.totals = resultCurrencyValueBuilder.transform(jsonResult.totals);
+                }
+                return models;
+            }
+        };
+}])
 
 angular.module('merchello.models').factory('salesOverTimeResultBuilder',
     ['genericModelBuilder', 'resultCurrencyValueBuilder', 'SalesOverTimeResult',
