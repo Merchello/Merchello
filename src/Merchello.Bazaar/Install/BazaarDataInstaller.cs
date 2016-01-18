@@ -160,8 +160,7 @@
 
             // Protect the page
             // OLD > Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
-            var registrationPage = _services.ContentService.GetById(registration.Id);
-            var entry = new PublicAccessEntry(account, registrationPage, registrationPage, new List<PublicAccessRule>());
+            var entry = new PublicAccessEntry(account, registration, registration, new List<PublicAccessRule>());
             ApplicationContext.Current.Services.PublicAccessService.Save(entry);
 
             // Add the role to the document

@@ -36,19 +36,17 @@
 
             // Get the invoice number prefix from the App_Settings and modify the settings if the setting is not 
             // null or whitespace
-            
-            // Get all the objects we need
             var settings = new CheckoutContextSettings()
             {
                 InvoiceNumberPrefix = WebConfigurationManager.AppSettings["Bazaar:InvoiceNumberPrefix"]
             };
 
+            // Get all the managers we need on this page
             var checkoutManager = Basket.GetCheckoutManager(settings);
             var customerManager = checkoutManager.Customer;
             var shippingManager = checkoutManager.Shipping;
             var paymentManager = checkoutManager.Payment;
         
-
             // Clear Shipment Rate Quotes
             shippingManager.ClearShipmentRateQuotes();
 
