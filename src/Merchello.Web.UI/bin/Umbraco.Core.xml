@@ -519,22 +519,14 @@
             </summary>
             <param name="cache"></param>
         </member>
-        <member name="M:Umbraco.Core.CacheHelper.#ctor(Umbraco.Core.Cache.IRuntimeCacheProvider,Umbraco.Core.Cache.ICacheProvider,Umbraco.Core.Cache.ICacheProvider)">
+        <member name="M:Umbraco.Core.CacheHelper.#ctor(Umbraco.Core.Cache.IRuntimeCacheProvider,Umbraco.Core.Cache.ICacheProvider,Umbraco.Core.Cache.ICacheProvider,Umbraco.Core.Cache.IsolatedRuntimeCache)">
             <summary>
             Initializes a new instance based on the provided providers
             </summary>
             <param name="httpCacheProvider"></param>
             <param name="staticCacheProvider"></param>
             <param name="requestCacheProvider"></param>
-        </member>
-        <member name="M:Umbraco.Core.CacheHelper.#ctor(Umbraco.Core.Cache.IRuntimeCacheProvider,Umbraco.Core.Cache.ICacheProvider,Umbraco.Core.Cache.ICacheProvider,System.Boolean)">
-            <summary>
-            Private ctor used for creating a disabled cache helper
-            </summary>
-            <param name="httpCacheProvider"></param>
-            <param name="staticCacheProvider"></param>
-            <param name="requestCacheProvider"></param>
-            <param name="enableCache"></param>
+            <param name="isolatedCacheManager"></param>
         </member>
         <member name="M:Umbraco.Core.CacheHelper.ClearAllCache">
             <summary>
@@ -702,6 +694,11 @@
             Returns the current Runtime cache
             </summary>
         </member>
+        <member name="P:Umbraco.Core.CacheHelper.IsolatedRuntimeCache">
+            <summary>
+            Returns the current Isolated Runtime cache manager
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Cache.CacheKeys">
             <summary>
             Constants storing cache keys used in caching
@@ -711,6 +708,99 @@
             <summary>
             Extensions for strongly typed access
             </summary>
+        </member>
+        <member name="T:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2">
+            <summary>
+            The default cache policy for retrieving a single entity
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="T:Umbraco.Core.DisposableObject">
+            <summary>
+            Abstract implementation of IDisposable.
+            </summary>
+            <remarks>
+            Can also be used as a pattern for when inheriting is not possible.
+            
+            See also: https://msdn.microsoft.com/en-us/library/b1yfkh5e%28v=vs.110%29.aspx
+            See also: https://lostechies.com/chrispatterson/2012/11/29/idisposable-done-right/
+            
+            Note: if an object's ctor throws, it will never be disposed, and so if that ctor
+            has allocated disposable objects, it should take care of disposing them.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.GetAllFromCache">
+            <summary>
+            Performs the lookup for all entities of this type from the cache
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.DisposeResources">
+            <summary>
+            The disposal performs the caching
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.SetCacheAction(System.String,`0)">
+            <summary>
+            Sets the action to execute on disposal for a single entity
+            </summary>
+            <param name="cacheKey"></param>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.SetCacheAction(`1[],`0[])">
+            <summary>
+            Sets the action to execute on disposal for an entity collection
+            </summary>
+            <param name="ids"></param>
+            <param name="entityCollection"></param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.SetCacheAction(System.Action)">
+            <summary>
+            Sets the action to execute on disposal
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="T:Umbraco.Core.Cache.DefaultRepositoryCachePolicyFactory`2">
+            <summary>
+            Creates cache policies
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="T:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2">
+            <summary>
+            A caching policy that caches an entire dataset as a single collection
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.SetCacheAction(System.String,`0)">
+            <summary>
+            For this type of caching policy, we don't cache individual items
+            </summary>
+            <param name="cacheKey"></param>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.SetCacheAction(`1[],`0[])">
+            <summary>
+            Sets the action to execute on disposal for an entity collection
+            </summary>
+            <param name="ids"></param>
+            <param name="entityCollection"></param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.GetAllFromCache">
+            <summary>
+            This policy will cache the full data set as a single collection
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicyFactory`2">
+            <summary>
+            Creates cache policies
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TId"></typeparam>
         </member>
         <member name="T:Umbraco.Core.Cache.ICacheProvider">
             <summary>
@@ -780,6 +870,12 @@
             <param name="sender"></param>
             <param name="args"></param>
         </member>
+        <member name="M:Umbraco.Core.Cache.CacheRefresherBase`1.ClearAllIsolatedCacheByEntityType``1">
+            <summary>
+            Clears the cache for all repository entities of this type
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
         <member name="E:Umbraco.Core.Cache.CacheRefresherBase`1.CacheUpdated">
             <summary>
             An event that is raised when cache is updated on an individual server
@@ -825,6 +921,53 @@
             Refreshes, clears, etc... any cache based on the information provided in the payload
             </summary>
             <param name="payload"></param>
+        </member>
+        <member name="T:Umbraco.Core.Cache.IsolatedRuntimeCache">
+            <summary>
+            Used to get/create/manipulate isolated runtime cache
+            </summary>
+            <remarks>
+            This is useful for repository level caches to ensure that cache lookups by key are fast so 
+            that the repository doesn't need to search through all keys on a global scale.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Cache.IsolatedRuntimeCache.#ctor(System.Func{System.Type,Umbraco.Core.Cache.IRuntimeCacheProvider})">
+            <summary>
+            Constructor that allows specifying a factory for the type of runtime isolated cache to create
+            </summary>
+            <param name="cacheFactory"></param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.IsolatedRuntimeCache.GetOrCreateCache``1">
+            <summary>
+            Returns an isolated runtime cache for a given type
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>        
+        </member>
+        <member name="M:Umbraco.Core.Cache.IsolatedRuntimeCache.GetOrCreateCache(System.Type)">
+            <summary>
+            Returns an isolated runtime cache for a given type
+            </summary>
+            <returns></returns>        
+        </member>
+        <member name="M:Umbraco.Core.Cache.IsolatedRuntimeCache.GetCache``1">
+            <summary>
+            Tries to get a cache by the type specified
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Cache.IsolatedRuntimeCache.ClearCache``1">
+            <summary>
+            Clears all values inside this isolated runtime cache
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Cache.IsolatedRuntimeCache.ClearAllCaches">
+            <summary>
+            Clears all of the isolated caches
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Cache.ObjectCacheRuntimeCacheProvider">
             <summary>
@@ -893,12 +1036,57 @@
             <typeparam name="TInstance">The actual cache refresher type.</typeparam>
             <remarks>Ensures that the correct events are raised when cache refreshing occurs.</remarks>
         </member>
+        <member name="T:Umbraco.Core.Cache.SingleItemsOnlyRepositoryCachePolicy`2">
+            <summary>
+            A caching policy that ignores all caches for GetAll - it will only cache calls for individual items
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
+        <member name="T:Umbraco.Core.Cache.OnlySingleItemsRepositoryCachePolicyFactory`2">
+            <summary>
+            Creates cache policies
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TId"></typeparam>
+        </member>
         <member name="T:Umbraco.Core.Cache.PayloadCacheRefresherBase`1">
             <summary>
             Provides a base class for "payload" cache refreshers.
             </summary>
             <typeparam name="TInstance">The actual cache refresher type.</typeparam>
             <remarks>Ensures that the correct events are raised when cache refreshing occurs.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Cache.RepositoryCachePolicyOptions.#ctor(System.Func{System.Int32})">
+            <summary>
+            Ctor - sets GetAllCacheValidateCount = true
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Cache.RepositoryCachePolicyOptions.#ctor">
+            <summary>
+            Ctor - sets GetAllCacheValidateCount = false
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Cache.RepositoryCachePolicyOptions.PerformCount">
+            <summary>
+            Callback required to get count for GetAllCacheValidateCount
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Cache.RepositoryCachePolicyOptions.GetAllCacheValidateCount">
+            <summary>
+            True/false as to validate the total item count when all items are returned from cache, the default is true but this
+            means that a db lookup will occur - though that lookup will probably be significantly less expensive than the normal 
+            GetAll method. 
+            </summary>
+            <remarks>
+            setting this to return false will improve performance of GetAll cache with no params but should only be used
+            for specific circumstances
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Cache.RepositoryCachePolicyOptions.GetAllCacheAllowZeroCount">
+            <summary>
+            True if the GetAll method will cache that there are zero results so that the db is not hit when there are no results found
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Cache.StaticCacheProvider">
             <summary>
@@ -1019,6 +1207,54 @@
             </summary>
             <param name="trackerUrl">The url of a tracker issue containing more details, discussion, and planning.</param>
             <param name="description">The text string that describes what is intended.</param>
+        </member>
+        <member name="T:Umbraco.Core.Collections.DeepCloneableList`1">
+            <summary>
+            A List that can be deep cloned with deep cloned elements and can reset the collection's items dirty flags
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Umbraco.Core.Models.EntityBase.IRememberBeingDirty">
+            <summary>
+            An interface that defines if the object is tracking property changes and that is is also
+            remembering what property changes had been made after the changes were committed.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.EntityBase.ICanBeDirty">
+            <summary>
+            An interface that defines the object is tracking property changes and if it is Dirty
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1"/> class that is empty and has the default initial capacity.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1"/> class that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.
+            </summary>
+            <param name="collection">The collection whose elements are copied to the new list.</param><exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is null.</exception>
+        </member>
+        <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.DeepClone">
+            <summary>
+            Creates a new list and adds each element as a deep cloned element if it is of type IDeepCloneable
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.IsPropertyDirty(System.String)">
+            <summary>
+            Always returns false, the list has no properties we need to report
+            </summary>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.WasPropertyDirty(System.String)">
+            <summary>
+            Always returns false, the list has no properties we need to report
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.ConcurrentHashSet`1">
             <summary>
@@ -3041,20 +3277,6 @@
             Event messages collection
             </summary>
         </member>
-        <member name="T:Umbraco.Core.DisposableObject">
-            <summary>
-            Abstract implementation of IDisposable.
-            </summary>
-            <remarks>
-            Can also be used as a pattern for when inheriting is not possible.
-            
-            See also: https://msdn.microsoft.com/en-us/library/b1yfkh5e%28v=vs.110%29.aspx
-            See also: https://lostechies.com/chrispatterson/2012/11/29/idisposable-done-right/
-            
-            Note: if an object's ctor throws, it will never be disposed, and so if that ctor
-            has allocated disposable objects, it should take care of disposing them.
-            </remarks>
-        </member>
         <member name="M:Umbraco.Core.Events.ExportEventArgs`1.#ctor(`0,System.Xml.Linq.XElement,System.Boolean)">
             <summary>
             Constructor accepting a single entity instance
@@ -3551,17 +3773,6 @@
         <member name="T:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase">
             <summary>
             A base class for use to implement IRememberBeingDirty/ICanBeDirty
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.EntityBase.IRememberBeingDirty">
-            <summary>
-            An interface that defines if the object is tracking property changes and that is is also
-            remembering what property changes had been made after the changes were committed.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.EntityBase.ICanBeDirty">
-            <summary>
-            An interface that defines the object is tracking property changes and if it is Dirty
             </summary>
         </member>
         <member name="F:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase._propertyChangedInfo">
@@ -6493,7 +6704,7 @@
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.RepositoryBase`2.Get(`0)">
             <summary>
-            Gets an entity by the passed in Id utilizing the repository's runtime cache
+            Gets an entity by the passed in Id utilizing the repository's cache policy
             </summary>
             <param name="id"></param>
             <returns></returns>
@@ -6552,26 +6763,29 @@
             Ensure the unit of work is disposed
             </remarks>
         </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.RepositoryBase`2.RepositoryCacheOptions">
+        <member name="P:Umbraco.Core.Persistence.Repositories.RepositoryBase`2.RuntimeCache">
             <summary>
-            Returns the repository cache options
+            The runtime cache used for this repo by default is the isolated cache for this type
             </summary>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Repositories.RepositoryBase`2.CachePolicyFactory">
+            <summary>
+            Returns the Cache Policy for the repository
+            </summary>
+            <remarks>
+            The Cache Policy determines how each entity or entity collection is cached
+            </remarks>
         </member>
         <member name="P:Umbraco.Core.Persistence.Repositories.PetaPocoRepositoryBase`2.UnitOfWork">
             <summary>
             Returns the database Unit of Work added to the repository
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Persistence.Repositories.DeepCloneRuntimeCacheProvider">
+        <member name="T:Umbraco.Core.Cache.DeepCloneRuntimeCacheProvider">
             <summary>
             A wrapper for any IRuntimeCacheProvider that ensures that all inserts and returns 
             are a deep cloned copy of the item when the item is IDeepCloneable and that tracks changes are
             reset if the object is TracksChangesEntityBase
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.DomainRepository.RepositoryCacheOptions">
-            <summary>
-            Returns the repository cache options
             </summary>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IDeleteMediaFilesRepository.DeleteMediaFiles(System.Collections.Generic.IEnumerable{System.String})">
@@ -6580,37 +6794,6 @@
             </summary>
             <param name="files"></param>
             <returns></returns>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.PublicAccessRepository.RepositoryCacheOptions">
-            <summary>
-            Returns the repository cache options
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.RepositoryCacheOptions.#ctor">
-            <summary>
-            Constructor sets defaults
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.RepositoryCacheOptions.GetAllCacheValidateCount">
-            <summary>
-            True/false as to validate the total item count when all items are returned from cache, the default is true but this
-            means that a db lookup will occur - though that lookup will probably be significantly less expensive than the normal 
-            GetAll method. 
-            </summary>
-            <remarks>
-            setting this to return false will improve performance of GetAll cache with no params but should only be used
-            for specific circumstances
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.RepositoryCacheOptions.GetAllCacheAllowZeroCount">
-            <summary>
-            True if the GetAll method will cache that there are zero results so that the db is not hit when there are no results found
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.RepositoryCacheOptions.GetAllCacheThresholdLimit">
-            <summary>
-            The threshold entity count for which the GetAll method will cache entities
-            </summary>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.JsonValueConverter">
             <summary>
@@ -10939,6 +11122,13 @@
             <summary>
             Gets or sets the <see cref="P:Umbraco.Core.Models.DictionaryTranslation.Language"/> for the translation
             </summary>
+            <remarks>
+            Marked as DoNotClone - TODO: this member shouldn't really exist here in the first place, the DictionaryItem
+            class will have a deep hierarchy of objects which all get deep cloned which we don't want. This should have simply
+            just referenced a language ID not the actual language object. In v8 we need to fix this.
+            We're going to have to do the same hacky stuff we had to do with the Template/File contents so that this is returned 
+            on a callback.
+            </remarks>
         </member>
         <member name="P:Umbraco.Core.Models.DictionaryTranslation.Value">
             <summary>
@@ -15070,14 +15260,6 @@
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.DictionaryItem"/>
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.DictionaryRepository.DisposeResources">
-            <summary>
-            Dispose disposable properties
-            </summary>
-            <remarks>
-            Ensure the unit of work is disposed
-            </remarks>
-        </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.EntityRepository">
             <summary>
             Represents the EntityRepository used to query <see cref="T:Umbraco.Core.Models.EntityBase.IUmbracoEntity"/> objects.
@@ -15300,11 +15482,6 @@
         <member name="T:Umbraco.Core.Persistence.Repositories.LanguageRepository">
             <summary>
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.Language"/>
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.LanguageRepository.RepositoryCacheOptions">
-            <summary>
-            Returns the repository cache options
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.MediaRepository">
@@ -15638,11 +15815,6 @@
             Ensures that there are not duplicate aliases and if so, changes it to be a numbered version and also verifies the length
             </summary>
             <param name="template"></param>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.Repositories.TemplateRepository.RepositoryCacheOptions">
-            <summary>
-            Returns the repository cache options
-            </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.UserRepository">
             <summary>
@@ -24949,6 +25121,14 @@
             <param name="language"><see cref="T:Umbraco.Core.Models.ILanguage"/> to delete</param>
             <param name="userId">Optional id of the user deleting the language</param>
         </member>
+        <member name="M:Umbraco.Core.Services.LocalizationService.EnsureDictionaryItemLanguageCallback(Umbraco.Core.Models.IDictionaryItem)">
+            <summary>
+            This is here to take care of a hack - the DictionaryTranslation model contains an ILanguage reference which we don't want but 
+            we cannot remove it because it would be a large breaking change, so we need to make sure it's resolved lazily. This is because
+            if developers have a lot of dictionary items and translations, the caching and cloning size gets much much larger because of 
+            the large object graphs. So now we don't cache or clone the attached ILanguage
+            </summary>
+        </member>
         <member name="E:Umbraco.Core.Services.LocalizationService.DeletingLanguage">
             <summary>
             Occurs before Delete
@@ -25027,6 +25207,17 @@
             Convert an array of strings to a dictionary of indicies -> values
             </summary>
             <param name="variables"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.LocalizedTextServiceExtensions.UmbracoDictionaryTranslate(Umbraco.Core.Services.ILocalizedTextService,System.String)">
+            <summary>
+            TODO: We need to refactor how we work with ICultureDictionary - this is supposed to be the 'fast' way to
+            do readonly access to the Dictionary without using the ILocalizationService. See TODO Notes in `DefaultCultureDictionary`
+            Also NOTE that the ICultureDictionary is based on the ILocalizationService not the ILocalizedTextService (which is used
+            only for the localization files - not the dictionary)
+            </summary>
+            <param name="manager"></param>
+            <param name="text"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Services.LocalizedTextServiceFileSources">
@@ -27992,8 +28183,13 @@
         </member>
         <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.PruneOldInstructions">
             <summary>
-            Remove old instructions from the database.
+            Remove old instructions from the database
             </summary>
+            <remarks>
+            Always leave the last (most recent) record in the db table, this is so that not all instructions are removed which would cause 
+            the site to cold boot if there's been no instruction activity for more than DaysToRetainInstructions.
+            See: http://issues.umbraco.org/issue/U4-7643#comment=67-25085
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.EnsureInstructions">
             <summary>
