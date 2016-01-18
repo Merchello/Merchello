@@ -1,4 +1,4 @@
-angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashboardController',
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',
     ['$scope', 'settingsResource',
     function($scope, settingsResource) {
 
@@ -8,6 +8,7 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashb
         function init() {
             var promise = settingsResource.getMerchelloVersion();
             promise.then(function(version) {
+                console.info(version);
               $scope.merchelloVersion = version.replace(/['"]+/g, '');
                 $scope.loaded = true;
             });

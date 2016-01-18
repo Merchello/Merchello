@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2015 Umbraco HQ;
+ * Copyright (c) 2016 Umbraco HQ;
  * Licensed MIT
  */
 
