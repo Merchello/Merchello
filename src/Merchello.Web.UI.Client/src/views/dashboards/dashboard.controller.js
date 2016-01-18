@@ -1,4 +1,4 @@
-angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashboardController',
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',
     ['$scope', 'settingsResource',
     function($scope, settingsResource) {
 

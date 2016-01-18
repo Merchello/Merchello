@@ -3008,7 +3008,7 @@ angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerNewCu
             }
         }]);
 
-angular.module('merchello').controller('Merchello.Backoffice.MerchelloAboutDashboardController',
+angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardController',
     ['$scope', 'settingsResource',
     function($scope, settingsResource) {
 
