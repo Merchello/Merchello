@@ -104,6 +104,45 @@
             return BuildResult(startOfYear, endOfMonth);
         }
 
+        /// <summary>
+        /// Builds the report data for a custom date range
+        /// </summary>
+        /// <param name="query">A <see cref="QueryResultDisplay"/> containing the date range</param>
+        /// <returns>The <see cref="QueryResultDisplay"/></returns>
+        [HttpPost]
+        public override QueryResultDisplay GetCustomDateRange(QueryDisplay query)
+        {
+            var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
+            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+
+            var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value) &&
+               invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
+
+            if (!isDateSearch) return GetDefaultReportData();
+
+            DateTime startDate;
+
+            //// Assert the start date
+            if (DateTime.TryParse(invoiceDateStart.Value, out startDate))
+            {
+                DateTime endDate;
+                //// Assert the end date
+                if (DateTime.TryParse(invoiceDateEnd.Value, out endDate))
+                {
+                    //// Return the default report if startDate >= endDate
+                    if (startDate >= endDate) return GetDefaultReportData();
+
+                    var endOfMonth = GetEndOfMonth(endDate);
+                    var startOfYear = GetFirstOfMonth(startDate);
+
+                    return BuildResult(startOfYear, endOfMonth);
+                }
+
+                return GetDefaultReportData();
+            }
+
+            return GetDefaultReportData();
+        }
 
         /// <summary>
         /// Builds the result set for the report.

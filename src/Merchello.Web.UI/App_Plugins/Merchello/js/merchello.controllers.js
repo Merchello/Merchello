@@ -7880,8 +7880,8 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
-    ['$scope', '$element', '$filter', 'assetsService', 'dialogService', 'settingsResource', 'merchelloTabsFactory',
-        function($scope, $element, $filter, assetsService, dialogService, settingsResource, merchelloTabsFactory) {
+    ['$scope', '$element', '$filter', 'assetsService', 'dialogService', 'eventsService', 'settingsResource', 'merchelloTabsFactory',
+        function($scope, $element, $filter, assetsService, dialogService, eventsService, settingsResource, merchelloTabsFactory) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -7892,6 +7892,8 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
             $scope.dateBtnText = '';
             $scope.openDateRangeDialog = openDateRangeDialog;
             $scope.clearDates = clearDates;
+
+            var datesChangeEventName = 'merchello.reportsdashboard.datechange';
 
             assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                 init();
@@ -7938,6 +7940,7 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
             function clearDates() {
                 $scope.preValuesLoaded = false;
                 setDefaultDates();
+                eventsService.emit(datesChangeEventName, { startDate : $scope.startDate, endDate : $scope.endDate });
             }
 
             function openDateRangeDialog() {
@@ -7958,6 +7961,7 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
                 $scope.preValuesLoaded = false;
                 $scope.startDate = dialogData.startDate;
                 $scope.endDate = dialogData.endDate;
+                eventsService.emit(datesChangeEventName, { startDate : $scope.startDate, endDate : $scope.endDate });
                 setDateBtnText();
             }
         }]);
@@ -8063,8 +8067,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
                     $scope.labels.push(item.getDateLabel());
 
                 });
-
-                console.info($scope.chartData);
 
                 $scope.preValuesLoaded = true;
                 $scope.loaded = true;

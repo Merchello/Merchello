@@ -55,10 +55,7 @@
                     //// Return the default report if startDate >= endDate
                     if (startDate >= endDate) return GetDefaultReportData();
 
-                    var endOfMonth = GetEndOfMonth(endDate);
-                    var startOfYear = GetFirstOfMonth(startDate);
-
-                    return BuildResult(startOfYear, endOfMonth);
+                    return BuildResult(startDate, endDate);
 
                 }
 
