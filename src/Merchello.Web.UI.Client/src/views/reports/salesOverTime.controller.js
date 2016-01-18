@@ -100,8 +100,6 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
 
                 });
 
-                console.info($scope.chartData);
-
                 $scope.preValuesLoaded = true;
                 $scope.loaded = true;
             }
