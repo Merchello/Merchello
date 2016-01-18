@@ -12,7 +12,10 @@
         <merchello-panel>
             <!-- Tabular Order List -->
             <div class="merchello-pane">
-
+                <div class="btn-group pull-right">
+                    <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
+                    <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
+                </div>
                 <report-widget-top-five-selling ready="preValuesLoaded" start-date="startDate" end-date="endDate" />
             </div>
         </merchello-panel>

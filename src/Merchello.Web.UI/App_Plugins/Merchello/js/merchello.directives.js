@@ -1946,6 +1946,7 @@ angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
 
             scope.loaded = false;
             scope.settings = {};
+            scope.results = [];
             scope.chartData = [];
             scope.labels = [];
 
@@ -1990,10 +1991,13 @@ angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
                 query.addInvoiceDateParam(scope.endDate, 'end');
 
                 salesByItemResource.getCustomReportData(query).then(function(results) {
+                    
                     angular.forEach(results.items, function(item) {
                         scope.labels.push(item.productVariant.name);
                         scope.chartData.push(item.quantitySold);
                     });
+                    scope.results = results.items;
+                    console.info(scope.results);
                     scope.loaded = true;
                 });
             }

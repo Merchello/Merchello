@@ -3018,6 +3018,7 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardC
         function init() {
             var promise = settingsResource.getMerchelloVersion();
             promise.then(function(version) {
+                console.info(version);
               $scope.merchelloVersion = version.replace(/['"]+/g, '');
                 $scope.loaded = true;
             });
@@ -7879,8 +7880,8 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDashboardController',
-    ['$scope', '$element', '$filter', 'assetsService', 'settingsResource', 'merchelloTabsFactory',
-        function($scope, $element, $filter, assetsService, settingsResource, merchelloTabsFactory) {
+    ['$scope', '$element', '$filter', 'assetsService', 'dialogService', 'settingsResource', 'merchelloTabsFactory',
+        function($scope, $element, $filter, assetsService, dialogService, settingsResource, merchelloTabsFactory) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -7888,6 +7889,9 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
             $scope.settings = {};
             $scope.startDate = '';
             $scope.endDate = '';
+            $scope.dateBtnText = '';
+            $scope.openDateRangeDialog = openDateRangeDialog;
+            $scope.clearDates = clearDates;
 
             assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                 init();
@@ -7912,6 +7916,7 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
                 settingsResource.getAllCombined().then(function(combined) {
                     $scope.settings = combined.settings;
                     setDefaultDates();
+                    $scope.loaded = true;
                 });
             };
 
@@ -7921,11 +7926,40 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
                 var endOfMonth = new Date(y, m + 1, 0);
                 $scope.startDate = $filter('date')(firstOfMonth, $scope.settings.dateFormat);
                 $scope.endDate = $filter('date')(endOfMonth, $scope.settings.dateFormat);
-                $scope.loaded = true;
+                setDateBtnText();
+
+            }
+
+            function setDateBtnText() {
+                $scope.dateBtnText = $scope.startDate + ' - ' + $scope.endDate;
                 $scope.preValuesLoaded = true;
             }
 
+            function clearDates() {
+                $scope.preValuesLoaded = false;
+                setDefaultDates();
+            }
 
+            function openDateRangeDialog() {
+                var dialogData = {
+                    startDate: $scope.startDate,
+                    endDate: $scope.endDate
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                    show: true,
+                    callback: processDateRange,
+                    dialogData: dialogData
+                });
+            }
+
+            function processDateRange(dialogData) {
+                $scope.preValuesLoaded = false;
+                $scope.startDate = dialogData.startDate;
+                $scope.endDate = dialogData.endDate;
+                setDateBtnText();
+            }
         }]);
 
 

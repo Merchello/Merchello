@@ -8,6 +8,7 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardC
         function init() {
             var promise = settingsResource.getMerchelloVersion();
             promise.then(function(version) {
+                console.info(version);
               $scope.merchelloVersion = version.replace(/['"]+/g, '');
                 $scope.loaded = true;
             });
