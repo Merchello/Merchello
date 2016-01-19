@@ -517,7 +517,7 @@
         {
             var ends = endDate.AddDays(1);
 
-            const string SQL = @"SELECT	SUM(T2.[price]) AS Total
+            const string SQL = @"SELECT	SUM(T2.[quantity] * T2.[price]) AS Total
                         FROM	[merchInvoice] T1
                         INNER JOIN [merchInvoiceItem] T2 ON T1.[pk] = T2.[invoiceKey]
                         WHERE T2.sku = @sku
