@@ -1581,10 +1581,19 @@
                 }
             }
 
+            // We need to save now the correct ordering so the display on the UI will be correct.
+            // The attributes in "all" options are assigned sort orders that are off.
+            // For example the Color Red is given an order of 10 and the Size 2 is given an order of 5.
+            // If Color is ordered first than the Size then we should have "Red" first then "2".
+            // But since the ordering is taken from the attribute order then we have a wrong display.
+            // Let's use the options sortOrder as an offset to have a correct attributes ordering.      
+            var attributeSortOrderOffset = productOption.SortOrder * 100;
             foreach (var att in productOption.Choices.OrderBy(x => x.SortOrder))
             {
                 // ensure the id is set
                 att.OptionKey = productOption.Key;
+                // adjust the ordering of attributes
+                att.SortOrder = attributeSortOrderOffset + att.SortOrder;
                 SaveProductAttribute(att);
             }
 
