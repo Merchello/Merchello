@@ -169,7 +169,10 @@
                 if (!DateTime.TryParse(invoiceDateEnd.Value, out weekEnding)) weekEnding = DateTime.Today;
             }
 
-            var weekStarting = weekEnding.AddDays(-6);
+            var weekStarting = weekEnding.AddDays(-(int)DateTime.Today.DayOfWeek);
+            weekEnding = weekStarting.AddDays(6);
+
+            //var weekStarting = weekEnding.AddDays(-6);
 
             var count = 0;
             var results = new List<SalesOverTimeResult>();
