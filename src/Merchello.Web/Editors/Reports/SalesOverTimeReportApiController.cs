@@ -145,6 +145,56 @@
         }
 
         /// <summary>
+        /// Gets the weekly results.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public QueryResultDisplay GetWeeklyResult(QueryDisplay query)
+        {
+            var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
+            var isDateSearch = invoiceDateEnd != null && !string.IsNullOrEmpty(invoiceDateEnd.Value);
+
+            DateTime weekEnding;
+            if (!isDateSearch)
+            {
+                weekEnding = DateTime.Today;
+            }
+            else
+            {
+                if (!DateTime.TryParse(invoiceDateEnd.Value, out weekEnding)) weekEnding = DateTime.Today;
+            }
+
+            var weekStarting = weekEnding.AddDays(-(int)DateTime.Today.DayOfWeek);
+            weekEnding = weekStarting.AddDays(6);
+
+            //var weekStarting = weekEnding.AddDays(-6);
+
+            var count = 0;
+            var results = new List<SalesOverTimeResult>();
+            var currentDate = weekStarting;
+            while (currentDate <= weekEnding)
+            {
+                count++;
+                results.Add(GetResults(currentDate, currentDate.AddDays(1)));
+                currentDate = currentDate.AddDays(1);
+            }
+
+            return new QueryResultDisplay()
+            {
+                Items = results,
+                CurrentPage = 1,
+                ItemsPerPage = count,
+                TotalItems = count,
+                TotalPages = 1
+            };
+        }
+
+        /// <summary>
         /// Builds the result set for the report.
         /// </summary>
         /// <param name="startDate">

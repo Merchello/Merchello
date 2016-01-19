@@ -73,4 +73,4 @@ angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
             }
         }
     };
-}])
+}]);

@@ -47,6 +47,13 @@
     <key alias="oct">October</key>
     <key alias="nov">November</key>
     <key alias="dec">December</key>
+    <key alias="monday">Monday</key>
+    <key alias="tuesday">Tuesday</key>
+    <key alias="wednesday">Wednesday</key>
+    <key alias="thursday">Thursday</key>
+    <key alias="friday">Friday</key>
+    <key alias="saturday">Saturday</key>
+    <key alias="sunday">Sunday</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
