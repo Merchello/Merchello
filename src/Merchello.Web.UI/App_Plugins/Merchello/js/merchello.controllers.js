@@ -369,8 +369,8 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.NewOfferProv
  * The controller to configure the collection price component
  */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController',
-    ['$scope', 'settingsResource', 'invoiceHelper',
-        function($scope, settingsResource, invoiceHelper) {
+    ['$scope', 'notificationsService', 'settingsResource', 'invoiceHelper',
+        function($scope, notificationsService, settingsResource, invoiceHelper) {
 
             $scope.loaded = false;
             $scope.operator = 'gt';
@@ -382,7 +382,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
             function init() {
                 loadSettings();
-                loadExistingConfigurations()
+                loadExistingConfigurations();
             }
 
             function loadExistingConfigurations() {
@@ -6424,10 +6424,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
      * The controller for product edit view
      */
     angular.module('merchello').controller('Merchello.Backoffice.ProductEditController',
-        ['$scope', '$routeParams', '$location', '$timeout', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$routeParams', '$window', '$location', '$timeout', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory',
             'serverValidationManager', 'productResource', 'warehouseResource', 'settingsResource',
             'productDisplayBuilder', 'productVariantDisplayBuilder', 'warehouseDisplayBuilder', 'settingDisplayBuilder', 'catalogInventoryDisplayBuilder',
-        function($scope, $routeParams, $location, $timeout, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $routeParams, $window, $location, $timeout, assetsService, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory,
             serverValidationManager, productResource, warehouseResource, settingsResource,
             productDisplayBuilder, productVariantDisplayBuilder, warehouseDisplayBuilder, settingDisplayBuilder, catalogInventoryDisplayBuilder) {
 
@@ -6652,12 +6652,14 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     $scope.product = productDisplayBuilder.transform(product);
                     $scope.productVariant = $scope.product.getMasterVariant();
 
-                 /* if ($scope.product.hasVariants()) {
-                        // short pause to make sure examine index has a chance to update
-                        $timeout(function() {
-                            $location.url("/merchello/merchello/producteditwithoptions/" + $scope.product.key, true);
-                        }, 400);
-                    } */
+                     //if ($scope.product.hasVariants()) {
+                    // short pause to make sure examine index has a chance to update
+                    //$timeout(function() {
+                        //$location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
+                        loadProduct($scope.product.key);
+                        //$route.reload();
+                    //}, 400);
+                     //}
 
                     $scope.preValuesLoaded = true;
                 }, function (reason) {

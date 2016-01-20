@@ -14,7 +14,7 @@
     /// <summary>
     /// Alters the merchInvoice table to add a currency code column.
     /// </summary>
-    [Migration("1.13.0", "1.13.4", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.13.0", "1.14.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
     internal class AddInvoiceCurrencyCodeColumn : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>

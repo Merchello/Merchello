@@ -13,7 +13,7 @@
     /// <summary>
     /// Insert the new merchello settings GlobalTaxationApplication setting.
     /// </summary>
-    [Migration("1.7.0", "1.10.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.9.0", "1.10.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class InsertNewMerchelloSettingsGlobalTaxationApplicationKey : IMerchelloMigration
     {
         /// <summary>
@@ -45,7 +45,7 @@
         /// </summary>
         public void Up()
         {
-            this._database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = TaxationApplication.Invoice.ToString(), TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            this._database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = TaxationApplication.Invoice.ToString(), TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
 
         /// <summary>
