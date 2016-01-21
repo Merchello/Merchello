@@ -1,6 +1,7 @@
 <div data-ng-show="loaded">
     <h2>Top 10 Selling Items</h2>
     <div class="row">
+        <merchello-date-range-button reload="reload" start-date="startDate" end-date="endDate"></merchello-date-range-button>
         <div>
             <canvas id="pie" class="chart chart-pie"
                     chart-data="chartData" chart-labels="labels">

@@ -2598,7 +2598,11 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             function getColumnValue(result, col) {
                 switch(col.name) {
                     case 'invoiceNumber':
-                        return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumber + '</a>';
+                        if (result.invoiceNumberPrefix !== '') {
+                            return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumberPrefix + '-' + result.invoiceNumber + '</a>';
+                        } else {
+                            return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumber + '</a>';
+                        }
                     case 'invoiceDate':
                         return $filter('date')(result.invoiceDate, $scope.settings.dateFormat);
                     case 'paymentStatus':
@@ -7968,6 +7972,33 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloReportsDas
             }
         }]);
 
+angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
+    ['$scope', '$filter', 'assetsService', 'dialogService', 'eventsService', 'settingsResource', 'merchelloTabsFactory',
+    function($scope, $filter, assetsService, dialogService, eventsService, settingsResource, merchelloTabsFactory) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.tabs = [];
+        $scope.settings = {};
+
+        $scope.startDate = '';
+        $scope.endDate = '';
+
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createReportsTabs();
+            $scope.tabs.setActive("salesByItem");
+            $scope.loaded = true;
+
+        };
+
+        $scope.setPreValuesLoaded = function(value) {
+            $scope.preValuesLoaded = value;
+        }
+
+        init();
+
+    }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTimeController',
     ['$scope', '$q', '$log', '$filter', 'assetsService', 'dialogService', 'queryDisplayBuilder',

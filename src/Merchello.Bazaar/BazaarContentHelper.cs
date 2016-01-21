@@ -1,17 +1,14 @@
-﻿using Merchello.Bazaar.Models;
-using Merchello.Web.Models.VirtualContent;
-using Umbraco.Web.Models;
-
-namespace Merchello.Bazaar
+﻿namespace Merchello.Bazaar
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Configuration;
 
-    using Merchello.Bazaar.Models.ViewModels;
+    using Merchello.Bazaar.Models;
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
