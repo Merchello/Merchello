@@ -113,6 +113,43 @@
         #endregion
 
 
+        #region Event Handlers
+
+
+        /// <summary>
+        /// Occurs before Create
+        /// </summary>
+        public static event TypedEventHandler<IItemCacheService, Events.NewEventArgs<IItemCache>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IItemCacheService, Events.NewEventArgs<IItemCache>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IItemCacheService, SaveEventArgs<IItemCache>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IItemCacheService, SaveEventArgs<IItemCache>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IItemCacheService, DeleteEventArgs<IItemCache>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IItemCacheService, DeleteEventArgs<IItemCache>> Deleted;
+
+
+
+        #endregion
+
         /// <summary>
         /// Creates a basket for a consumer with a given type
         /// </summary>
@@ -280,9 +317,9 @@
         }
 
         /// <summary>
-        /// Gets a Basket by its unique id - pk
+        /// Gets a Basket by its unique id - primary key
         /// </summary>
-        /// <param name="key">int Id for the Basket</param>
+        /// <param name="key">Id for the Basket</param>
         /// <returns><see cref="IItemCache"/></returns>
         public IItemCache GetByKey(Guid key)
         {
@@ -296,7 +333,7 @@
         /// Gets a list of Basket give a list of unique keys
         /// </summary>
         /// <param name="keys">List of unique keys</param>
-        /// <returns></returns>
+        /// <returns>The collection of <see cref="IItemCache"/></returns>
         public IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys)
         {
             using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
@@ -306,8 +343,64 @@
         }
 
         /// <summary>
+        /// The count.
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        public int Count(ItemCacheType itemCacheType, CustomerType customerType)
+        {
+            var dtMin = DateTime.MinValue.SqlDateTimeMinValueAsDateTimeMinValue();
+            var dtMax = DateTime.MaxValue.SqlDateTimeMaxValueAsSqlDateTimeMaxValue();
+            return Count(itemCacheType, customerType, dtMin, dtMax);
+        }
+
+        /// <summary>
+        /// Gets the count of of item caches for a customer type for a given date range.
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        public int Count(ItemCacheType itemCacheType, CustomerType customerType, DateTime startDate, DateTime endDate)
+        {
+            var tfkey = EnumTypeFieldConverter.ItemItemCache.GetTypeField(itemCacheType).TypeKey;
+
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(tfkey, customerType, startDate, endDate);
+            }
+        }
+
+        /// <summary>
         /// Returns the customer item cache of a given type.  This method will not create an item cache if the cache does not exist.
         /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCacheType">
+        /// The item Cache Type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
         public IItemCache GetItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType)
         {
             var typeKey = EnumTypeFieldConverter.ItemItemCache.GetTypeField(itemCacheType).TypeKey;
@@ -317,8 +410,12 @@
         /// <summary>
         /// Returns a collection of item caches for the consumer
         /// </summary>
-        /// <param name="customer"></param>
-        /// <returns></returns>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCache}"/>.
+        /// </returns>
         public IEnumerable<IItemCache> GetItemCacheByCustomer(ICustomerBase customer)
         {
             using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
@@ -331,6 +428,15 @@
         /// <summary>
         /// Returns the customer item cache of a given type. This method will not create an item cache if the cache does not exist.
         /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="itemCacheTfKey">
+        /// The item Cache type field Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IItemCache"/>.
+        /// </returns>
         public IItemCache GetItemCacheByCustomer(ICustomerBase customer, Guid itemCacheTfKey)
         {
             using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
@@ -340,54 +446,18 @@
             }
         }
 
+        /// <summary>
+        /// Gets a collection of all item caches.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IItemCache}"/>.
+        /// </returns>
         public IEnumerable<IItemCache> GetAll()
         {
             using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
-        }      
-
-
-        #region Event Handlers
-
-
-        /// <summary>
-        /// Occurs before Create
-        /// </summary>
-        public static event TypedEventHandler<IItemCacheService, Events.NewEventArgs<IItemCache>> Creating; 
-
-        /// <summary>
-        /// Occurs after Create
-        /// </summary>
-        public static event TypedEventHandler<IItemCacheService, Events.NewEventArgs<IItemCache>> Created;
-
-        /// <summary>
-        /// Occurs before Save
-        /// </summary>
-        public static event TypedEventHandler<IItemCacheService, SaveEventArgs<IItemCache>> Saving;
-
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IItemCacheService, SaveEventArgs<IItemCache>> Saved;
-
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IItemCacheService, DeleteEventArgs<IItemCache>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IItemCacheService, DeleteEventArgs<IItemCache>> Deleted;
-
-
-
-        #endregion
-
-
-
-
+        }     
     }
 }

@@ -92,6 +92,15 @@
     <key alias="render">Render</key>
     <key alias="salesOverTime">Sales Over Time</key>
     <key alias="salesByItem">Sales By Item</key>
+    <key alias="abandonedBasket">Abandoned Basket</key>
+  </area>
+  <area alias="merchelloReports">
+    <key alias="anonymousBaskets">Anonymous Baskets</key>
+    <key alias="anonymousCheckouts">Anonymous Checkouts</key>
+    <key alias="anonymousCheckoutPercent">Anonymous Checkout Percent</key>
+    <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="customerCheckouts">Customer Checkouts</key>
+    <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>

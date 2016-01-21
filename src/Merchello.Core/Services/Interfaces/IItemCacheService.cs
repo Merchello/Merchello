@@ -106,9 +106,42 @@
         /// <summary>
         /// Gets list of <see cref="IItemCache"/> objects given a list of Keys
         /// </summary>
-        /// <param name="keys">List of guid 'key' for customer registries to retrieve</param>
+        /// <param name="keys">List of GUID 'key' for customer registries to retrieve</param>
         /// <returns>List of <see cref="IItemCache"/></returns>
         IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys);
 
+        /// <summary>
+        /// Gets the count of of item caches for a customer type.
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        int Count(ItemCacheType itemCacheType, CustomerType customerType);
+
+        /// <summary>
+        /// Gets the count of of item caches for a customer type for a given date range.
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        int Count(ItemCacheType itemCacheType, CustomerType customerType, DateTime startDate, DateTime endDate);
     }
 }

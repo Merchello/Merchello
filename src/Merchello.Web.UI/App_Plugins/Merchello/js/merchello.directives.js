@@ -2029,6 +2029,85 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
 
     });
 
+angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRadar',
+    ['$q', '$filter', 'assetsService', 'localizationService', 'settingsResource', 'invoiceHelper', 'abandonedBasketResource',
+    function($q, $filter, assetsService, localizationService, settingsResource, invoiceHelper, abandonedBasketResource) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+              setLoaded: '&'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.abandonedbasketradar.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.labels = [];
+                scope.data = [];
+                scope.settings = {};
+                scope.result = {};
+                scope.anonymousBaskets = '';
+                scope.anonymousCheckouts = '';
+                scope.customerBaskets = '';
+                scope.customerCheckouts = '';
+                scope.anonymousPercentLabel = '';
+                scope.customerPercentLabel = '';
+
+                scope.anonymousCheckoutPercent = 0;
+                scope.customerCheckoutPercent = 0;
+
+
+                assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                    init();
+                });
+
+                function init() {
+                    scope.setLoaded()(false);
+
+                    $q.all([
+                        localizationService.localize('merchelloReports_anonymousBaskets'),
+                        localizationService.localize('merchelloReports_anonymousCheckouts'),
+                        localizationService.localize('merchelloReports_customerBaskets'),
+                        localizationService.localize('merchelloReports_customerCheckouts'),
+                        localizationService.localize('merchelloReports_anonymousCheckoutPercent'),
+                        localizationService.localize('merchelloReports_customerCheckoutPercent'),
+                        abandonedBasketResource.getDefaultReportData(),
+                        settingsResource.getAllCombined()
+
+                    ]).then(function(data) {
+
+                        scope.anonymousBaskets = data[0];
+                        scope.anonymousCheckouts = data[1];
+                        scope.customerBaskets = data[2];
+                        scope.customerCheckouts = data[3];
+                        scope.anonymousPercentLabel = data[4];
+                        scope.customerPercentLabel = data[5];
+                        scope.result = data[6].items[0];
+                        scope.settings = data[7];
+
+                        scope.anonymousCheckoutPercent = invoiceHelper.round(scope.result.anonymousCheckoutPercent, 2);
+                        scope.customerCheckoutPercent = invoiceHelper.round(scope.result.customerCheckoutPercent, 2);
+
+                        scope.labels.push(data[0], data[1], data[2], data[3]);
+                        scope.data.push(
+                            scope.result.anonymousBasketCount,
+                            scope.result.anonymousCheckoutCount,
+                            scope.result.customerBasketCount,
+                            scope.result.customerCheckoutCount);
+                        console.info(scope.labels);
+                        console.info(scope.data);
+
+                        scope.setLoaded()(true);
+
+                        scope.loaded = true;
+                    });
+
+                }
+
+            }
+        }
+    }]);
+
 angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
     ['$q', '$log', '$filter', 'assetsService', 'localizationService', 'dateHelper',  'settingsResource', 'salesOverTimeResource', 'queryDisplayBuilder',
         function($q, $log, $filter, assetsService, localizationService, dateHelper, settingsResource, salesOverTimeResource, queryDisplayBuilder) {
@@ -2051,6 +2130,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     scope.labels = [];
                     scope.series = [];
                     scope.weekdays = [];
+
+                    scope.getTotalsColumn = getTotalsColumn;
 
                     assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                         init();
@@ -2085,6 +2166,7 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                         $q.all([
                             salesOverTimeResource.getWeeklyResult(currentQuery),
                             salesOverTimeResource.getWeeklyResult(lastQuery)
+
                         ]).then(function(data) {
                             scope.resultData = [ data[0].items, data[1].items];
                             compileChart();
@@ -2116,6 +2198,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                             buildSeries(seriesTemplate, 'This Week');
                             buildSeries(seriesTemplate, 'Last Week');
 
+
+
                             var seriesIndex = 0;
                             _.each(scope.resultData, function(dataSet) {
                                 for(var j = 0; j < seriesTemplate.length; j++) {
@@ -2124,7 +2208,6 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                                 }
                             });
 
-                            console.info(scope.chartData);
                         }
 
                         scope.preValuesLoaded = true;
@@ -2139,7 +2222,6 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     }
 
                     function addChartData(dataSeries, currencyCode, chartDataIndex) {
-                        console.info({index: chartDataIndex, cc: currencyCode });
 
                         _.each(dataSeries, function(item) {
                            var total = _.find(item.totals, function(tot) {
@@ -2147,6 +2229,18 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                            });
                             scope.chartData[chartDataIndex].push(total.value);
                         });
+                    }
+
+                    function getTotalsColumn(resultIndex, valueIndex) {
+                        var result = scope.resultData[resultIndex][valueIndex];
+
+                        var ret = '';
+                        _.each(result.totals, function(total) {
+                            if (ret !== '') ret += '<br />';
+                            ret += total.currency.currencyCode + ': ' + $filter('currency')(total.value, total.currency.symbol);
+                        });
+
+                        return ret;
                     }
                 }
 

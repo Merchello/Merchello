@@ -51,6 +51,50 @@
             _itemCacheLineItemRepository = itemCacheLineItemRepository;
         }
 
+        /// <summary>
+        /// Gets the count of of item caches for a customer type for a given date range.
+        /// </summary>
+        /// <param name="itemCacheTfKey">
+        /// The item cache type field key.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        public int Count(Guid itemCacheTfKey, CustomerType customerType, DateTime startDate, DateTime endDate)
+        {
+            var table = customerType == CustomerType.Anonymous ? "[merchAnonymousCustomer]" : "[merchCustomer]";
+
+            var querySql = @"SELECT  COUNT(*) AS cacheCount  
+                FROM	[dbo].[merchItemCache] T1
+                INNER JOIN (
+	                SELECT	pk
+	                FROM " + table + @"
+	                WHERE	lastActivityDate BETWEEN @start AND @end
+                ) Q1 ON T1.entityKey = Q1.pk
+                INNER JOIN (
+	                SELECT	COUNT(*) AS itemCount,
+			                itemCacheKey
+	                FROM	merchItemCacheItem
+	                GROUP BY itemCacheKey
+                ) Q2 ON T1.pk = Q2.itemCacheKey
+                WHERE Q2.itemCount > 0 AND
+                T1.itemCacheTfKey = @tfKey";
+
+            var sql = new Sql(
+                querySql,
+                new { @table = table, @start = startDate, @end = endDate, @tfKey = itemCacheTfKey });
+
+            return Database.ExecuteScalar<int>(sql);
+        }
 
         #region Overrides of RepositoryBase<IItemCache>
 
