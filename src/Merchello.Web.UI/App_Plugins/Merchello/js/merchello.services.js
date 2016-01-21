@@ -10,7 +10,7 @@ angular.module('merchello.services').service('dateHelper', [
     '$q', 'localizationService',
     function($q, localizationService) {
 
-        this.convertToIsoDate = function(dateString, dateFormat) {
+        this.convertToJsDate = function(dateString, dateFormat) {
             // date formats in merchello start with MM, dd, or yyyy
             if(dateString.indexOf('/') === -1) {
                 dateString = dateString.replace(/-/g, '/');
@@ -31,7 +31,13 @@ angular.module('merchello.services').service('dateHelper', [
                     date = new Date(splitDate[0], splitDate[1], splitDate[2], 0, 0, 0);
                     break;
             }
-            console.info(date);
+
+            return date;
+        },
+
+        this.convertToIsoDate = function(dateString, dateFormat) {
+
+            var date = this.convertToJsDate(dateString, dateFormat);
             return date.toISOString();
         };
 

@@ -1064,6 +1064,106 @@ angular.module('merchello.directives').directive('merchelloTabs', [function() {
     };
 }]);
 
+angular.module('merchello.directives').directive('merchelloDateRangeButton',
+    function($filter, settingsResource, dialogService, dateHelper) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                reload: '&?',
+                startDate: '=',
+                endDate: '='
+            },
+            template: '<div class="btn-group pull-right" data-ng-show="loaded">' +
+            '<a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>' +
+            '<a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()">X</a>' +
+            '</div>',
+            link: function(scope, elm, attr) {
+
+                scope.loaded = false;
+                scope.settings = {};
+
+                scope.openDateRangeDialog = openDateRangeDialog;
+                scope.clearDates = clearDates;
+
+                function init() {
+                    loadSettings();
+                }
+
+                /**
+                 * @ngdoc method
+                 * @name loadSettings
+                 * @function
+                 *
+                 * @description - Load the Merchello settings.
+                 */
+                function loadSettings() {
+                    settingsResource.getAllCombined().then(function(combined) {
+                        scope.settings = combined.settings;
+                        setDefaultDates();
+                        scope.loaded = true;
+                    });
+                };
+
+                function setDefaultDates() {
+                    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+                    var firstOfMonth = new Date(y, m, 1);
+                    var endOfMonth = new Date(y, m + 1, 0);
+                    scope.startDate = $filter('date')(firstOfMonth, scope.settings.dateFormat);
+                    scope.endDate = $filter('date')(endOfMonth, scope.settings.dateFormat);
+                    setDateBtnText();
+                    reload();
+                }
+
+                function setDateBtnText() {
+                    scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
+                    scope.preValuesLoaded = true;
+                }
+
+                function clearDates() {
+                    setDefaultDates();
+                }
+
+                function openDateRangeDialog() {
+                    var dialogData = {
+                        startDate: scope.startDate,
+                        endDate: scope.endDate
+                    };
+
+                    console.info(dialogData);
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                        show: true,
+                        callback: processDateRange,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processDateRange(dialogData) {
+                    scope.preValuesLoaded = false;
+
+                    scope.startDate = dialogData.startDate;
+                    scope.endDate =  dialogData.endDate;
+                    //eventsService.emit(datesChangeEventName, { startDate : $scope.startDate, endDate : $scope.endDate });
+                    setDateBtnText();
+                    reload();
+                }
+
+                function reload() {
+
+                    scope.reload()(
+                        dateHelper.convertToJsDate(scope.startDate, scope.settings.dateFormat),
+                        dateHelper.convertToJsDate(scope.endDate, scope.settings.dateFormat));
+                }
+
+                init();
+            }
+        }
+
+});
+
 /**
  * @ngdoc directive
  * @name address directive
@@ -2053,7 +2153,7 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
 
             };
         }]);
-angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
+angular.module('merchello.directives').directive('reportWidgetTopSelling',
     ['$log', '$filter', 'assetsService', 'localizationService', 'eventsService', 'salesByItemResource', 'settingsResource', 'queryDisplayBuilder',
     function($log, $filter, assetsService, localizationService, eventsService, salesByItemResource, settingsResource, queryDisplayBuilder) {
 
@@ -2061,44 +2161,41 @@ angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
         restrict: 'E',
         replace: true,
         scope: {
-            ready: '=?',
-            startDate: '=',
-            endDate: '='
+            setloaded: '&'
         },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.topfiveselling.tpl.html',
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.topselling.tpl.html',
         link: function(scope, elm, attr) {
 
             var datesChangeEventName = 'merchello.reportsdashboard.datechange';
 
             scope.loaded = false;
-            scope.busy = false;
             scope.settings = {};
             scope.results = [];
             scope.chartData = [];
             scope.labels = [];
 
+            scope.startDate = '';
+            scope.endDate = '';
+
+            scope.reload = reload;
 
             assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                 init();
             });
 
             function init() {
-                eventsService.on(datesChangeEventName, onOnDatesChanged);
-                if (!scope.loaded && !scope.busy) {
-                    loadReportData();
-                }
+
             }
 
             function loadReportData() {
-                scope.busy = true;
-
+                dataLoaded(false);
                 scope.results = [];
                 scope.chartData = [];
                 scope.labels = [];
 
                 var query = queryDisplayBuilder.createDefault();
-                query.addInvoiceDateParam(scope.startDate, 'start');
-                query.addInvoiceDateParam(scope.endDate, 'end');
+                query.addInvoiceDateParam($filter('date')(scope.startDate, 'yyyy-MM-dd'), 'start');
+                query.addInvoiceDateParam($filter('date')(scope.endDate, 'yyyy-MM-dd'), 'end');
 
                 salesByItemResource.getCustomReportData(query).then(function(results) {
 
@@ -2108,24 +2205,27 @@ angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
                     });
 
                     if (scope.chartData.length === 0) {
-                        scope.chartData.push(0);
+                        scope.chartData.push(1);
                         scope.labels.push('No results');
                     }
 
                     scope.results = results.items;
-                    scope.busy = false;
+                    dataLoaded(true);
                     scope.loaded = true;
                 });
             }
 
-
-            function onOnDatesChanged(e, args) {
-
-                scope.startDate = args.startDate;
-                scope.endDate = args.endDate;
-
+            function reload(startDate, endDate) {
+                scope.startDate = startDate;
+                scope.endDate = endDate;
                 loadReportData();
             }
+
+            function dataLoaded(value) {
+                scope.loaded = value;
+                scope.setloaded()(value);
+            }
+
         }
     };
 }]);

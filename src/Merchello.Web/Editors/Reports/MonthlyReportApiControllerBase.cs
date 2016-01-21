@@ -55,6 +55,8 @@
                     //// Return the default report if startDate >= endDate
                     if (startDate >= endDate) return GetDefaultReportData();
 
+                    var day = endDate.Day;
+
                     return BuildResult(startDate, endDate);
 
                 }
