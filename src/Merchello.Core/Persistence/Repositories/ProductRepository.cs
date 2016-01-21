@@ -1416,7 +1416,12 @@
             var resetSorts = false;
             foreach (var ex in existing)
             {
-                if (!product.ProductOptions.Contains(ex.Name))
+                // Von: Options with duplicate names are allowed and because of that this check will not work.
+                //      If there are more than one options with the same name and one of those is removed on the back-end,
+                //      it will not be deleted from the database because there are still existing options with the same name.
+                //      So let's test by PK since the PKs are (and "should" be) passed from the DB (or cache) to the back-end UI.
+                //if (!product.ProductOptions.Contains(ex.Name))
+                if (!product.ProductOptions.Contains(ex.Key))
                 {
                     DeleteProductOption(ex);
                     resetSorts = true;
@@ -1565,7 +1570,14 @@
             var resetSorts = false;
             foreach (var ex in existing)
             {
-                if (productOption.Choices.Contains(ex.Sku)) continue;
+                // Von: Duplicate SKU is not allowed in the system. However, 
+                //      there could be custom implementation where SKUs are generated based on some logic.
+                //      That could lead into a timing issue where the name of the attribute is not the same as with its SKU.
+                //      "Ideally" the logic should be put in correct event but it's easy to miss that.
+                //      So this change will ensure that even if that timing is off,
+                //      we will still not remove attributes unnecessarily.
+                //if (productOption.Choices.Contains(ex.Sku)) continue;
+                if (productOption.Choices.Contains(ex.Key)) continue;
                 DeleteProductAttribute(ex);
                 resetSorts = true;
             }
