@@ -51,6 +51,16 @@
                     dest => dest.Invoices,
                     opt => opt.ResolveUsing<CustomerInvoicesResolver>().ConstructedBy(() => new CustomerInvoicesResolver()));
 
+            // Customer Basket
+            AutoMapper.Mapper.CreateMap<IItemCacheLineItem, ItemCacheLineItemDisplay>()
+               .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+               .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
+
+            AutoMapper.Mapper.CreateMap<IItemCache, BasketDisplay>()
+                .ForMember(
+                dest => dest.Customer,
+                opt => opt.ResolveUsing<ItemCacheCustomerResolver>().ConstructedBy(() => new ItemCacheCustomerResolver()));
+
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
             // Gateway Provider    

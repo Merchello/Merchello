@@ -5,15 +5,28 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.AbandonedBa
         $scope.loaded = false;
         $scope.tabs = [];
 
+        var graphLoaded = false;
+        var basketsLoaded = false;
+
         function init() {
             $scope.tabs = merchelloTabsFactory.createReportsTabs();
             $scope.tabs.setActive('abandonedBasket');
             $scope.loaded = true;
+
         }
 
+        $scope.setGraphLoaded = function(value) {
+            graphLoaded = value;
+            setPreValuesLoaded();
+        }
 
-        $scope.setPreValuesLoaded = function(value) {
-            $scope.preValuesLoaded = value;
+        $scope.setBasketsLoaded = function(value) {
+            basketsLoaded = value;
+            setPreValuesLoaded();
+        }
+
+        function setPreValuesLoaded() {
+            $scope.preValuesLoaded = graphLoaded && basketsLoaded;
         }
 
         init();

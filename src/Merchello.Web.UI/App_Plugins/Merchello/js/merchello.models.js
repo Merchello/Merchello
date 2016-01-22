@@ -468,6 +468,22 @@ var EntityCollectionProviderDisplay = function() {
 
 
 angular.module('merchello.models').constant('EntityCollectionProviderDisplay', EntityCollectionProviderDisplay);
+/**
+ * @ngdoc model
+ * @name BasketDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's BasketDisplay object
+ */
+var BasketDisplay = function() {
+    var self = this;
+    self.customer = {};
+    self.items = [];
+};
+
+angular.module('merchello.models').constant('BasketDisplay', BasketDisplay);
+
     /**
      * @ngdoc model
      * @name CustomerAddressDisplay
@@ -4059,6 +4075,36 @@ angular.module('merchello.models').factory('entityCollectionProviderDisplayBuild
                     }
                 };
             }]);
+
+angular.module('merchello.models').factory('basketDisplayBuilder',
+    ['genericModelBuilder', 'customerDisplayBuilder', 'invoiceLineItemDisplayBuilder', 'BasketDisplay',
+    function(genericModelBuilder, customerDisplayBuilder, invoiceLineItemDisplayBuilder, BasketDisplay) {
+
+        var Constructor = BasketDisplay;
+        return {
+            createDefault: function() {
+                var basket = new Constructor();
+                return basket;
+            },
+            transform: function(jsonResult) {
+                var baskets = [];
+                if(angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var basket = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        basket.customer = customerDisplayBuilder.transform(jsonResult[ i ].customer);
+                        basket.items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                        baskets.push(basket);
+                    }
+                } else {
+                    baskets = genericModelBuilder.transform(jsonResult, Constructor);
+                    baskets.customer = customerDisplayBuilder.transform(jsonResult.customer);
+                    baskets.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
+                }
+                return baskets;
+            }
+        };
+
+}]);
 
 /**
  * @ngdoc service

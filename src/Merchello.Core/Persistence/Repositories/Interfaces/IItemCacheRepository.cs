@@ -3,7 +3,9 @@
     using System;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Persistence.Querying;
 
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Repositories;
 
     /// <summary>
@@ -11,6 +13,43 @@
     /// </summary>
     internal interface IItemCacheRepository : IRepositoryQueryable<Guid, IItemCache>
     {
+        /// <summary>
+        /// Gets a page of <see cref="IItemCache"/>
+        /// </summary>
+        /// <param name="itemCacheTfKey">
+        /// The item cache type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The sort by field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IItemCache}"/>.
+        /// </returns>
+        Page<IItemCache> GetCustomerItemCachePage(
+            Guid itemCacheTfKey,
+            DateTime startDate,
+            DateTime endDate, 
+            long page, 
+            long itemsPerPage, 
+            string orderExpression, 
+            SortDirection sortDirection = SortDirection.Descending);
+
+
         /// <summary>
         /// Gets the count of of item caches for a customer type for a given date range.
         /// </summary>

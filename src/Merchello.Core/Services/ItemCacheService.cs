@@ -9,13 +9,16 @@
 
     using Models;
     using Models.TypeFields;
-    using Persistence;
+
     using Persistence.Querying;
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
+
+    using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Represents the Customer Registry Service 
@@ -326,6 +329,54 @@
             using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets a page of <see cref="IItemCache"/>
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IItemCache}"/>.
+        /// </returns>
+        public Page<IItemCache> GetCustomerItemCachePage(
+            ItemCacheType itemCacheType,
+            DateTime startDate,
+            DateTime endDate,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            // this is the only valid sort field
+            if (sortBy != "lastActivityDate") sortBy = string.Empty;
+
+            var itemCacheTfKey = EnumTypeFieldConverter.ItemItemCache.GetTypeField(itemCacheType).TypeKey;
+
+            using (var repository = RepositoryFactory.CreateItemCacheRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetCustomerItemCachePage(itemCacheTfKey, startDate, endDate, page, itemsPerPage, sortBy, sortDirection);
             }
         }
 

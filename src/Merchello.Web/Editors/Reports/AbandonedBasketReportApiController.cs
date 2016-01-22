@@ -2,11 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Http;
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Models.Reports;
     using Merchello.Web.Reporting;
@@ -16,6 +19,13 @@
     /// </summary>
     public class AbandonedBasketReportApiController : ReportController
     {
+        #region Fields
+
+        /// <summary>
+        /// The item cache type.
+        /// </summary>
+        private readonly ItemCacheType _itemCacheType = ItemCacheType.Basket;
+
         /// <summary>
         /// The item cache service.
         /// </summary>
@@ -25,6 +35,23 @@
         /// The invoice service.
         /// </summary>
         private readonly IInvoiceService _invoiceService;
+
+        /// <summary>
+        /// The start date.
+        /// </summary>
+        private readonly DateTime _startDate;
+
+        /// <summary>
+        /// The end date.
+        /// </summary>
+        private readonly DateTime _endDate;
+
+        /// <summary>
+        /// The max days.
+        /// </summary>
+        private readonly int _maxDays;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbandonedBasketReportApiController"/> class.
@@ -46,6 +73,10 @@
             _itemCacheService = merchelloContext.Services.ItemCacheService;
 
             _invoiceService = merchelloContext.Services.InvoiceService;
+
+            _maxDays = MerchelloConfiguration.Current.AnonymousCustomersMaxDays;
+            _startDate = DateTime.Today.AddDays(-_maxDays);
+            _endDate = DateTime.Today;
         }
 
         /// <summary>
@@ -68,16 +99,10 @@
         [HttpGet]
         public override QueryResultDisplay GetDefaultReportData()
         {
-            const ItemCacheType ItemCacheType = ItemCacheType.Basket;
-
-            var maxDays = MerchelloConfiguration.Current.AnonymousCustomersMaxDays;
-            var startDate = DateTime.Today.AddDays(-maxDays);
-            var endDate = DateTime.Today;
-
-            var anonymousBasketCount = _itemCacheService.Count(ItemCacheType, CustomerType.Anonymous, startDate, endDate);
-            var anonymousCheckoutCount = _invoiceService.CountInvoices(startDate, endDate, CustomerType.Anonymous);
-            var customerBasketCount = _itemCacheService.Count(ItemCacheType, CustomerType.Customer, startDate, endDate);
-            var customerCheckoutCount = _invoiceService.CountInvoices(startDate, endDate, CustomerType.Customer);
+            var anonymousBasketCount = _itemCacheService.Count(this._itemCacheType, CustomerType.Anonymous, _startDate, _endDate);
+            var anonymousCheckoutCount = _invoiceService.CountInvoices(_startDate, _endDate, CustomerType.Anonymous);
+            var customerBasketCount = _itemCacheService.Count(this._itemCacheType, CustomerType.Customer, _startDate, _endDate);
+            var customerCheckoutCount = _invoiceService.CountInvoices(_startDate, _endDate, CustomerType.Customer);
 
 
             var result = new QueryResultDisplay()
@@ -90,9 +115,9 @@
                                     {
                                         new AbandonedBasketResult()
                                             {
-                                                ConfiguredDays = maxDays,
-                                                StartDate = startDate,
-                                                EndDate = endDate,
+                                                ConfiguredDays = _maxDays,
+                                                StartDate = _startDate,
+                                                EndDate = _endDate,
                                                 AnonymousBasketCount = anonymousBasketCount,
                                                 AnonymousCheckoutCount = anonymousCheckoutCount,
                                                 AnonymousCheckoutPercent = GetCheckoutPercent(anonymousBasketCount, anonymousCheckoutCount),
@@ -104,6 +129,37 @@
                              };
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the customers saved baskets.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public QueryResultDisplay GetCustomerSavedBaskets(QueryDisplay query)
+        {
+            var page = _itemCacheService.GetCustomerItemCachePage(
+                _itemCacheType,
+                _startDate,
+                _endDate.AddDays(1),
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
+
+            return new QueryResultDisplay()
+            {
+                Items = page.Items.Select(x => x.ToBasketDisplay()),
+                CurrentPage = page.CurrentPage - 1,
+                ItemsPerPage = page.ItemsPerPage,
+                TotalPages = page.TotalPages,
+                TotalItems = page.TotalItems
+            };
         }
 
         /// <summary>

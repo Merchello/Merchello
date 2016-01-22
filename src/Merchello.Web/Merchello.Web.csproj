@@ -321,6 +321,7 @@
     <Compile Include="LocalizationHelper.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\BasketDisplay.cs" />
     <Compile Include="Models\ContentEditing\Collections\Entity2CollectionModel.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionByEntityQuery.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionDisplay.cs" />
@@ -349,8 +350,11 @@
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
+    <Compile Include="Models\ContentEditing\ItemCacheLineItemDisplay.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\ItemCacheCustomerResolver.cs" />
     <Compile Include="Models\Reports\AbandonedBasketResult.cs" />
+    <Compile Include="Models\Reports\CustomerBasketsResult.cs" />
     <Compile Include="Models\Reports\MonthlyReportResult.cs" />
     <Compile Include="Models\Reports\ResultCurrencyValue.cs" />
     <Compile Include="Models\Reports\SalesByItemResult.cs" />
