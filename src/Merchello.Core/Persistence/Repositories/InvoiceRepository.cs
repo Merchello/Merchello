@@ -490,9 +490,43 @@
         {
             var ends = endDate.AddDays(1);
 
-            const string sql = @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
+            const string SQL = @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
 
-            return Database.ExecuteScalar<decimal>(sql, new { @starts = startDate, @ends = ends, @cc = currencyCode });
+            return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate, @ends = ends, @cc = currencyCode });
+        }
+
+        /// <summary>
+        /// Gets the total of line items for a give SKU invoiced in a specific currency across the date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The total of line items for a give SKU invoiced in a specific currency across the date range.
+        /// </returns>
+        public decimal SumLineItemTotalsBySku(DateTime startDate, DateTime endDate, string currencyCode, string sku)
+        {
+            var ends = endDate.AddDays(1);
+
+            const string SQL = @"SELECT	SUM(T2.[quantity] * T2.[price]) AS Total
+                        FROM	[merchInvoice] T1
+                        INNER JOIN [merchInvoiceItem] T2 ON T1.[pk] = T2.[invoiceKey]
+                        WHERE T2.sku = @sku
+                        AND T1.currencyCode = @cc
+                        AND T1.invoiceDate BETWEEN @starts AND @ends";
+
+            return Database.ExecuteScalar<decimal>(
+                SQL,
+                new { @starts = startDate, @ends = ends, @cc = currencyCode, @sku = sku });
         }
 
         #region Filter Queries

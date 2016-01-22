@@ -5,7 +5,7 @@
     /// <summary>
     /// The discount line item.
     /// </summary>
-    public class DiscountLineItem
+    public partial class DiscountLineItem
     {
         /// <summary>
         /// Gets or sets the key.

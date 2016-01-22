@@ -1,18 +1,27 @@
-
 angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesByItemController',
-    ['$scope', '$q', '$log','settingsResource', 'invoiceHelper', 'merchelloTabsFactory',
-        function($scope, $q, $log, settingsResource, invoiceHelper, merchelloTabsFactory) {
+    ['$scope', '$filter', 'assetsService', 'dialogService', 'eventsService', 'settingsResource', 'merchelloTabsFactory',
+    function($scope, $filter, assetsService, dialogService, eventsService, settingsResource, merchelloTabsFactory) {
 
-                $scope.loaded = false;
-                $scope.preValuesLoaded = false;
-                $scope.tabs = [];
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+        $scope.tabs = [];
+        $scope.settings = {};
 
-                function init() {
-                        $scope.tabs = merchelloTabsFactory.createReportsTabs();
-                        $scope.tabs.setActive("salesByItem");
-                        $scope.loaded = true;
-                        $scope.preValuesLoaded = true;
-                }
+        $scope.startDate = '';
+        $scope.endDate = '';
 
-                init();
-        }]);
+
+        function init() {
+            $scope.tabs = merchelloTabsFactory.createReportsTabs();
+            $scope.tabs.setActive("salesByItem");
+            $scope.loaded = true;
+
+        };
+
+        $scope.setPreValuesLoaded = function(value) {
+            $scope.preValuesLoaded = value;
+        }
+
+        init();
+
+    }]);

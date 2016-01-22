@@ -36,7 +36,7 @@
         public override Attempt<IInvoice> PerformTask(IInvoice value)
         {
             // if taxes are not to be applied, skip this step
-            if (this.CheckoutManager.Context.ApplyTaxesToInvoice)
+            if (this.CheckoutManager.Context.Settings.ApplyTaxesToInvoice)
             {
                 try
                 {

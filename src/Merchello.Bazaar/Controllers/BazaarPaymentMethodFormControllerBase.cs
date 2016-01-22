@@ -1,15 +1,18 @@
 ﻿namespace Merchello.Bazaar.Controllers
 {
     using System.Linq;
+    using System.Web.Configuration;
     using System.Web.Mvc;
 
-    using Merchello.Bazaar.Models;
-    using Merchello.Core;
-    using Merchello.Core.Gateways.Payment;
-    using Merchello.Core.Models;
-    using Merchello.Core.Sales;
-    using Merchello.Web;
-    using Merchello.Web.Mvc;
+    using Core;
+    using Core.Checkout;
+    using Core.Gateways.Payment;
+    using Core.Models;
+
+    using Models;
+
+    using Web;
+    using Web.Mvc;
 
     /// <summary>
     /// The bazaar payment method form controller base.
@@ -31,12 +34,24 @@
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            var preparation = Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
-           
+            // Get the invoice number prefix from the App_Settings and modify the settings if the setting is not 
+            // null or whitespace
+            var settings = new CheckoutContextSettings()
+            {
+                InvoiceNumberPrefix = WebConfigurationManager.AppSettings["Bazaar:InvoiceNumberPrefix"]
+            };
 
-            preparation.ClearShipmentRateQuotes();
-            var shippingAddress = Basket.SalePreparation().GetShipToAddress();
+            // Get all the managers we need on this page
+            var checkoutManager = Basket.GetCheckoutManager(settings);
+            var customerManager = checkoutManager.Customer;
+            var shippingManager = checkoutManager.Shipping;
+            var paymentManager = checkoutManager.Payment;
+        
+            // Clear Shipment Rate Quotes
+            shippingManager.ClearShipmentRateQuotes();
+
+            // Get the shipping address
+            var shippingAddress = customerManager.GetShipToAddress();
 
             // Get the shipment again
             var shipment = Basket.PackageBasket(shippingAddress).FirstOrDefault();
@@ -45,13 +60,13 @@
             var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey);
 
             // save the quote
-            Basket.SalePreparation().SaveShipmentRateQuote(quote);
+            shippingManager.SaveShipmentRateQuote(quote);
 
             var paymentMethod = GatewayContext.Payment.GetPaymentGatewayMethodByKey(model.PaymentMethodKey).PaymentMethod;
-            preparation.SavePaymentMethod(paymentMethod);
+            paymentManager.SavePaymentMethod(paymentMethod);
 
             // AuthorizePayment will save the invoice with an Invoice Number.
-            var attempt = this.PerformProcessPayment(preparation, paymentMethod);
+            var attempt = this.PerformProcessPayment(checkoutManager, paymentMethod);
 
             if (!attempt.Payment.Success)
             {
@@ -84,7 +99,7 @@
         /// <summary>
         /// Responsible for actually processing the payment with the PaymentProvider
         /// </summary>
-        /// <param name="preparation">
+        /// <param name="checkoutManager">
         /// The preparation.
         /// </param>
         /// <param name="paymentMethod">
@@ -93,6 +108,6 @@
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        protected abstract IPaymentResult PerformProcessPayment(SalePreparationBase preparation, IPaymentMethod paymentMethod);
+        protected abstract IPaymentResult PerformProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod);
     }
 }

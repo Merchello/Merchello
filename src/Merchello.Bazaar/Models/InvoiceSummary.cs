@@ -5,7 +5,7 @@
     /// <summary>
     /// A model for the InvoiceSummary partial view.
     /// </summary>
-    public class InvoiceSummary
+    public partial class InvoiceSummary
     {
         /// <summary>
         /// Gets or sets the invoice.

@@ -8,7 +8,7 @@ namespace Merchello.Bazaar.Models
     /// <summary>
     /// The confirmation pre sale summary.
     /// </summary>
-    public class SalePreparationSummary
+    public partial class SalePreparationSummary
     {
         /// <summary>
         /// Gets or sets the total label.

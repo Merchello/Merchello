@@ -13,11 +13,6 @@
     public interface ICheckoutPaymentManager
     {
         /// <summary>
-        /// Gets or sets a prefix to be prepended to an invoice number.
-        /// </summary>
-        string InvoiceNumberPrefix { get; set; }
-
-        /// <summary>
         /// True/false indicating whether or not the <see cref="ICheckoutPaymentManager"/> is ready to prepare an <see cref="IInvoice"/>
         /// </summary>
         /// <returns>

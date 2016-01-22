@@ -12,7 +12,7 @@
     /// <summary>
     /// The account history model.
     /// </summary>
-    public class AccountHistoryModel : MasterModel
+    public partial class AccountHistoryModel : MasterModel
     {
         /// <summary>
         /// The receipt page.

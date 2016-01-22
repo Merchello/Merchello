@@ -54,20 +54,6 @@
         bool IsNewVersion { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not to apply taxes to generated invoice.
-        /// </summary>
-        bool ApplyTaxesToInvoice { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether raise customer events.
-        /// </summary>
-        /// <remarks>
-        /// In some implementations, there may be quite a few saves to the customer record.  Use case for setting this to 
-        /// false would be an API notification on a customer record change to prevent spamming of the notification.
-        /// </remarks>
-        bool RaiseCustomerEvents { get; set; }
-
-        /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>.
         /// </summary>
         IRuntimeCacheProvider Cache { get; }
@@ -75,6 +61,6 @@
         /// <summary>
         /// Gets the settings.
         /// </summary>
-        ICheckoutContextChangeSettings ChangeSettings { get; }
+        ICheckoutContextSettings Settings { get; }
     }
 }

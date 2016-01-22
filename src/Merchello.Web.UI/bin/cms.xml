@@ -1720,6 +1720,11 @@
             </summary>
             <returns>Returns true if the Content has a version</returns>
         </member>
+        <member name="P:umbraco.cms.businesslogic.Content.ParentId">
+            <summary>
+            Get the newParent id of the node
+            </summary>
+        </member>
         <member name="P:umbraco.cms.businesslogic.Content.ContentType">
             <summary>
             The current Content objects ContentType, which defines the Properties of the Content (data)

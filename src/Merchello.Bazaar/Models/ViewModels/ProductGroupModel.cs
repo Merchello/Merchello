@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents a ProductGroup view model.
     /// </summary>
-    public class ProductGroupModel : MasterModel
+    public partial class ProductGroupModel : MasterModel
     {
         /// <summary>
         /// The image.
@@ -61,7 +61,11 @@
         {
             get
             {
-                return this._brief ?? this.Content.GetPropertyValue<string>("brief");
+                if (string.IsNullOrEmpty(this._brief))
+                {
+                    this._brief = this.Content.GetPropertyValue<string>("brief");
+                }
+                return this._brief;
             }
         }
 

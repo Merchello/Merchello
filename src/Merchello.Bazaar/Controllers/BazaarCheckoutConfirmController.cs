@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Web;
     using Merchello.Web.Ui;
+    using Merchello.Web.Workflow;
 
     using Umbraco.Core;
     using Umbraco.Web.Models;
@@ -21,7 +22,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [RequireSsl("Bazaar:RequireSsl")]
-    public class BazaarCheckoutConfirmController : CheckoutControllerBase
+    public partial class BazaarCheckoutConfirmController : CheckoutControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.
@@ -41,18 +42,17 @@
                 return View(basketModel.ThemeViewPath("Basket"), basketModel);
             }
 
-            // get the basket sale preparation
-            var preparation = Basket.SalePreparation();
-            preparation.RaiseCustomerEvents = false;
-            
+            // Get the checkout manager
+            var checkoutManager = Basket.GetCheckoutManager();
+     
             var shipmentRateQuotes = Enumerable.Empty<IShipmentRateQuote>().ToArray();
             
             // The default basket packaging strategy only creates a single shipment
-            var shipment = Basket.PackageBasket(preparation.GetShipToAddress()).FirstOrDefault();
+            var shipment = Basket.PackageBasket(checkoutManager.Customer.GetShipToAddress()).FirstOrDefault();
             
             if (shipment != null)
             {
-                var invoice = preparation.PrepareInvoice();
+                var invoice = checkoutManager.Payment.PrepareInvoice();
 
                 // Quote the shipment
                 shipmentRateQuotes = shipment.ShipmentRateQuotes().ToArray();
@@ -61,7 +61,7 @@
                     //// Assume the first selection.  Customer will be able to update this later
                     //// but this allows for a taxation calculation as well in the event shipping charges
                     //// are taxable.
-                    preparation.SaveShipmentRateQuote(shipmentRateQuotes.First());
+                    checkoutManager.Shipping.SaveShipmentRateQuote(shipmentRateQuotes.First());
                 }
             }            
 

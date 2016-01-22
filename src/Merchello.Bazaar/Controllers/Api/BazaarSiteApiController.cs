@@ -7,6 +7,7 @@
 
     using Merchello.Bazaar.Models;
     using Merchello.Core;
+    using Merchello.Core.Checkout;
     using Merchello.Core.Gateways;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -23,7 +24,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [JsonCamelCaseFormatter]
-    public class BazaarSiteApiController : UmbracoApiController
+    public partial class BazaarSiteApiController : UmbracoApiController
     {
         /// <summary>
         /// The <see cref="IMerchelloContext"/>
@@ -247,21 +248,24 @@
             var tokenKey = customerToken.DecryptWithMachineKey();
             var customerKey = new Guid(tokenKey);
             var customerBase = _merchelloContext.Services.CustomerService.GetAnyByKey(customerKey);
+            
+            var checkoutManager = customerBase.Basket().GetCheckoutManager();
+            var shippingManager = checkoutManager.Shipping;
+            var customerManager = checkoutManager.Customer;
+            var paymentManager = checkoutManager.Payment;
 
-            var preparation = customerBase.Basket().SalePreparation();
-            preparation.RaiseCustomerEvents = false;
 
-            var shipment = customerBase.Basket().PackageBasket(preparation.GetShipToAddress()).FirstOrDefault();
+            var shipment = customerBase.Basket().PackageBasket(customerManager.GetShipToAddress()).FirstOrDefault();
             var quote = shipment.ShipmentRateQuoteByShipMethod(methodKey);
             if (quote != null)
             {
-                preparation.ClearShipmentRateQuotes();
-                preparation.SaveShipmentRateQuote(quote);
+                shippingManager.ClearShipmentRateQuotes();
+                shippingManager.SaveShipmentRateQuote(quote);
             }
 
-            var invoice = preparation.PrepareInvoice();
+            var invoice = paymentManager.PrepareInvoice();
 
-            var summary = new UpdatedSaleSummary()
+            var summary = new UpdatedSaleSummary
                               {
                                   TotalLabel = "Total",
                                   InvoiceTotal = ModelExtensions.FormatPrice(invoice.Total, _currency),

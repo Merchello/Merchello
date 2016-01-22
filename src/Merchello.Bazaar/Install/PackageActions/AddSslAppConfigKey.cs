@@ -17,7 +17,7 @@
     /// Original contribution from Paul Sterling
     /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-    public class AddSslAppConfigKey : IPackageAction
+    public class AddSslAppConfigKey : AddAppSettingBase, IPackageAction
     {
         #region IPackageAction Members
 
@@ -104,27 +104,5 @@
 
         #endregion
 
-        #region helpers
-
-        private static void CreateAppSettingsKey(string key, string value)
-        {
-            var config = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-            var appSettings = (AppSettingsSection)config.GetSection("appSettings");
-
-            appSettings.Settings.Add(key, value);
-
-            config.Save(ConfigurationSaveMode.Modified);
-        }
-
-        private static void RemoveAppSettingsKey(string key)
-        {
-            var config = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-            var appSettings = (AppSettingsSection)config.GetSection("appSettings");
-
-            appSettings.Settings.Remove(key);
-
-            config.Save(ConfigurationSaveMode.Modified);
-        }
-        #endregion
     }
 }

@@ -5,7 +5,7 @@
     /// <summary>
     /// The customer login model.
     /// </summary>
-    public class CustomerLoginModel
+    public partial class CustomerLoginModel
     {
         /// <summary>
         /// Gets or sets the username.

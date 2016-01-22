@@ -1,13 +1,49 @@
-﻿img {
-	max-width:100%;
+﻿// Global Styles
+
+// Bootstrap Overides
+.navbar {
+    border-radius: 0;
 }
 
-ol, ul {
-    list-style: none;
-	padding:0px;
+// Custom Styles
+
+// Product Thumbnail
+.thumbnail {
 }
 
-.second-form {
+// Generic Price
+
+.price {
+    font-size: 17px;
+
+    .price-sale, &.price-onsale {
+        color: #ed4949;
+
+        .glyphicon {
+            font-size: 19px;
+        }
+    }
+}
+
+// Category/Collection Listing
+.productcategorylist {
+    a.media, a.media:visited {
+        display: inline-block;
+        margin: 0 0 30px 0;
+        padding: 12px;
+        color: #333;
+
+        &:hover, &:focus {
+            color: #333;
+            text-decoration: none;
+            background-color: #fbfbfb;
+        }
+    }
+}
+
+// -------------- OLD STYLES BELOW
+
+/*.second-form {
     border: 1px solid #ccc;
 }
 
@@ -23,32 +59,30 @@ ol, ul {
     margin-bottom: 1em;
 }
 
-.price {
-    font-size: 2em;
-    .on-sale {
-        text-decoration: line-through
-    }
-    .sale-price {
-        color: red;
-    }
-    .original-price {
-        margin-left: .5em;
-        text-decoration: line-through;
-    }
+// Price
+
+.on-sale {
+    text-decoration: line-through
+}
+.sale-price {
+    color: red;
+}
+.original-price {
+    margin-left: .5em;
+    text-decoration: line-through;
 }
 
-div.price {
-    padding: 1em;
-}
 
-td.align-right {
-    text-align: right;
-}
+
+// Validation
 
 span.field-validation-error {
         margin-left: 1em;
         color: red;
 }
+
+// V Card
+
 .vcard {
     h5 { font-size: 1.5em; }
     .fn { display: block; }
@@ -59,6 +93,7 @@ span.field-validation-error {
 
 
 // checkout addresses form
+
 #addresses-form {
     h2 { font-size: 1.25em; }
     .vcard { display: none; }
@@ -81,27 +116,29 @@ span.field-validation-error {
 	}
 } 
 
+// Inventory
+
 .inventoryWrap {
-	margin:10px 0px;
+	margin:10px 0;
 	border-top:1px solid #dcd4c6;
 	border-bottom:1px solid #dcd4c6;
-	padding:10px 0px;
-}
+	padding:10px 0;
+}*/
 
 
 
 /* Small devices (tablets, 768px and up) */
-@media (min-width: 768px) { 
- }
+/*@media (min-width: 768px) { 
+ }*/
 
 /* Medium devices (desktops, 992px and up) */
-@media (min-width: 992px) {
+/*@media (min-width: 992px) {
 	.useBillingLabel {
 		position:absolute;
 		top:-10px;
 	} 
- }
+ }*/
 
 /* Large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) { 
- }
+/*@media (min-width: 1200px) { 
+ }*/

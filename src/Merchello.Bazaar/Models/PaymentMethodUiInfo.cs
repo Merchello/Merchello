@@ -7,7 +7,7 @@
     /// <summary>
     /// The payment method UI info.
     /// </summary>
-    public class PaymentMethodUiInfo
+    public partial class PaymentMethodUiInfo
     {
         /// <summary>
         /// Gets or sets the alias.

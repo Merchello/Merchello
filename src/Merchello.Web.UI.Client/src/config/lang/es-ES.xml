@@ -52,6 +52,15 @@
     <key alias="reportListing">Reports</key>
     <key alias="salesOverTime">Sales Over Time</key>
     <key alias="salesByItem">Sales By Item</key>
+    <key alias="abandonedBasket">Abandoned Basket</key>
+  </area>
+  <area alias="merchelloReports">
+    <key alias="anonymousBaskets">Anonymous Baskets</key>
+    <key alias="anonymousCheckouts">Anonymous Checkouts</key>
+    <key alias="anonymousCheckoutPercent">Anonymous Checkout Percent</key>
+    <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="customerCheckouts">Customer Checkouts</key>
+    <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
@@ -109,6 +118,18 @@
       Customer Notes
       <small>Notes about the customer (not sale specific)</small>
       ]]></key>
+    <key alias="customerBasket">
+      <![CDATA[
+      Customer Basket
+      <small>Items currently in the customer basket</small>
+      ]]>
+    </key>
+    <key alias="customerWishlist">
+      <![CDATA[
+      Customer Wish List
+      <small>Items currently in the customer wish list</small>
+      ]]>
+    </key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -251,6 +272,13 @@
     <key alias="oct">October</key>
     <key alias="nov">November</key>
     <key alias="dec">December</key>
+    <key alias="monday">Monday</key>
+    <key alias="tuesday">Tuesday</key>
+    <key alias="wednesday">Wednesday</key>
+    <key alias="thursday">Thursday</key>
+    <key alias="friday">Friday</key>
+    <key alias="saturday">Saturday</key>
+    <key alias="sunday">Sunday</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Configuración de la tienda</key>
