@@ -2129,7 +2129,7 @@ angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRad
                         localizationService.localize('merchelloReports_anonymousCheckoutPercent'),
                         localizationService.localize('merchelloReports_customerCheckoutPercent'),
                         abandonedBasketResource.getDefaultReportData(),
-                        settingsResource.getAllCombined()
+                        settingsResource.getAllSettings()
 
                     ]).then(function(data) {
 
@@ -2141,7 +2141,7 @@ angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRad
                         scope.customerPercentLabel = data[5];
                         scope.result = data[6].items[0];
                         scope.settings = data[7];
-
+       
                         scope.anonymousCheckoutPercent = invoiceHelper.round(scope.result.anonymousCheckoutPercent, 2);
                         scope.customerCheckoutPercent = invoiceHelper.round(scope.result.customerCheckoutPercent, 2);
 
@@ -2151,8 +2151,6 @@ angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRad
                             scope.result.anonymousCheckoutCount,
                             scope.result.customerBasketCount,
                             scope.result.customerCheckoutCount);
-                        console.info(scope.labels);
-                        console.info(scope.data);
 
                         scope.setLoaded()(true);
 
@@ -2191,7 +2189,6 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
                         query.sortBy = 'lastActivityDate';
                         query.sortDirection = 'Descending';
                         abandonedBasketResource.getCustomerSavedBaskets(query).then(function(results) {
-                            console.info(results);
                             scope.setLoaded()(true);
                         });
                     }

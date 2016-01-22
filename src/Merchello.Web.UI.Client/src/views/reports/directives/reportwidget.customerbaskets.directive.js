@@ -24,7 +24,6 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
                         query.sortBy = 'lastActivityDate';
                         query.sortDirection = 'Descending';
                         abandonedBasketResource.getCustomerSavedBaskets(query).then(function(results) {
-                            console.info(results);
                             scope.setLoaded()(true);
                         });
                     }

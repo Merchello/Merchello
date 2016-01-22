@@ -1,5 +1,5 @@
 <div data-ng-show="loaded">
-    <h2>Top 10 Selling Items</h2>
+    <h2><localize key="merchelloReports_topSellingItems" /></h2>
     <div class="row">
         <merchello-date-range-button reload="reload" start-date="startDate" end-date="endDate"></merchello-date-range-button>
         <div>
@@ -12,11 +12,11 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th nowrap="nowrap">Item</th>
-                        <th nowrap="nowrap">SKU</th>
-                        <th>Quantity Sold</th>
-                        <th>Number of invoices</th>
-                        <th>Totals</th>
+                        <th nowrap="nowrap"><localize key="merchelloGeneral_item" /></th>
+                        <th nowrap="nowrap"><localize key="merchelloVariant_sku" /></th>
+                        <th><localize key="merchelloReports_quantitySold" /></th>
+                        <th><localize key="merchelloReports_numberOfInvoices" /></th>
+                        <th><localize key="merchelloGeneral_totals" /></th>
                     </tr>
                 </thead>
                 <tbody>
