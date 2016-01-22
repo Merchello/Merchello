@@ -3028,6 +3028,14 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             return this.total - amountPaid;
         }
 
+        function prefixedInvoiceNumber() {
+            if (this.invoiceNumberPrefix === '') {
+                return this.invoiceNumber;
+            } else {
+                return this.invoiceNumberPrefix + '-' + this.invoiceNumber;
+            }
+        }
+
         function isAnonymous() {
             return this.customerKey === '00000000-0000-0000-0000-000000000000';
         }
@@ -3048,7 +3056,8 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
             shippingTotal: shippingTotal,
-            isAnonymous:  isAnonymous
+            isAnonymous:  isAnonymous,
+            prefixedInvoiceNumber: prefixedInvoiceNumber
         };
     }());
 

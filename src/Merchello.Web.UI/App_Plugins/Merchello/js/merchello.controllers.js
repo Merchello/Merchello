@@ -8844,6 +8844,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.preValuesLoaded = false;
             $scope.paymentMethodsLoaded = false;
             $scope.invoice = {};
+            $scope.invoiceNumber = '';
             $scope.tabs = [];
             $scope.historyLoaded = false;
             $scope.notesLoaded = false;
@@ -8988,6 +8989,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     var taxLineItem = $scope.invoice.getTaxLineItem();
                     $scope.taxTotal = taxLineItem !== undefined ? taxLineItem.price : 0;
                     $scope.shippingTotal = $scope.invoice.shippingTotal();
+                    $scope.invoiceNumber = $scope.invoice.prefixedInvoiceNumber();
                     loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
