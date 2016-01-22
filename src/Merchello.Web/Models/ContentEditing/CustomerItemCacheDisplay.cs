@@ -6,10 +6,10 @@
     using Merchello.Core.Models;
 
     /// <summary>
-    /// The basket display.
+    /// Represents a customer item cache.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here.")]
-    public class BasketDisplay : LineItemDisplayCollectionBase<ItemCacheLineItemDisplay>
+    public class CustomerItemCacheDisplay : LineItemDisplayCollectionBase<ItemCacheLineItemDisplay>
     {
         /// <summary>
         /// Gets or sets the customer.
@@ -26,20 +26,20 @@
     /// The basket display extension.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
-    internal static class BasketDisplayExtension
+    internal static class CustomerItemCacheDisplayExtension
     {
         /// <summary>
-        /// Maps a customer item cache (basket) to <see cref="BasketDisplay"/>
+        /// Maps a customer item cache (basket) to <see cref="CustomerItemCacheDisplay"/>
         /// </summary>
         /// <param name="itemCache">
         /// The item cache.
         /// </param>
         /// <returns>
-        /// The <see cref="BasketDisplay"/>.
+        /// The <see cref="CustomerItemCacheDisplay"/>.
         /// </returns>
-        public static BasketDisplay ToBasketDisplay(this IItemCache itemCache)
+        public static CustomerItemCacheDisplay ToCustomerItemCacheDisplay(this IItemCache itemCache)
         {
-            return AutoMapper.Mapper.Map<BasketDisplay>(itemCache);
+            return AutoMapper.Mapper.Map<CustomerItemCacheDisplay>(itemCache);
         }
     }
 }

@@ -1,12 +1,12 @@
     /**
      * @ngdoc model
-     * @name InvoiceLineItemDisplay
+     * @name ItemCacheLineItemDisplay
      * @function
      *
      * @description
-     * Represents a JS version of Merchello's InvoiceLIneItemDisplay object
+     * Represents a JS version of Merchello's ItemCacheLineItemDisplay object
      */
-    var InvoiceLineItemDisplay = function() {
+    var ItemCacheLineItemDisplay = function() {
         var self = this;
 
         self.key = '';
@@ -22,4 +22,4 @@
         self.extendedData = {};
     };
 
-    angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);
+    angular.module('merchello.models').constant('ItemCacheLineItemDisplay', ItemCacheLineItemDisplay);

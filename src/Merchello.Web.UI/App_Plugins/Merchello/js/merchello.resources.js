@@ -7,8 +7,8 @@
 (function() { 
 
 angular.module('merchello.resources').factory('abandonedBasketResource',
-    ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'abandonedBasketResultBuilder', 'basketDisplayBuilder',
-    function($http, $q, umbRequestHelper, queryResultDisplayBuilder, abandonedBasketResultBuilder, basketDisplayBuilder) {
+    ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'abandonedBasketResultBuilder', 'customerItemCacheDisplayBuilder',
+    function($http, $q, umbRequestHelper, queryResultDisplayBuilder, abandonedBasketResultBuilder, customerItemCacheDisplayBuilder) {
 
         var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloAbandonedBasketApiBaseUrl'];
 
@@ -44,7 +44,7 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
                             $http.post(url, query),
                             'Failed to retreive customer basket data')])
                     .then(function(data) {
-                        var results = queryResultDisplayBuilder.transform(data[0], basketDisplayBuilder);
+                        var results = queryResultDisplayBuilder.transform(data[0], customerItemCacheDisplayBuilder);
                         deferred.resolve(results);
                     });
 
@@ -102,8 +102,8 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
      * @description Deals with customers api.
      **/
     angular.module('merchello.resources').factory('customerResource',
-        ['$http', 'umbRequestHelper',
-        function($http, umbRequestHelper) {
+        ['$q', '$http', 'umbRequestHelper', 'customerItemCacheDisplayBuilder',
+        function($q, $http, umbRequestHelper, customerItemCacheDisplayBuilder) {
 
             return {
 
@@ -183,6 +183,29 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
                         }),
                         'Failed to load customer');
                 },
+
+                getCustomerItemCache: function(customerKey, itemCacheType) {
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetCustomerItemCache';
+
+                    var deferred = $q.defer();
+                    $q.all([
+                            umbRequestHelper.resourcePromise(
+                                $http({
+                                    url: url,
+                                    method: "GET",
+                                    params: { customerKey: customerKey, itemCacheType: itemCacheType }
+                                }),
+                                'Failed to retreive the customer item cache')])
+                        .then(function(data) {
+
+                            var results = customerItemCacheDisplayBuilder.transform(data[0]);
+                            deferred.resolve(results);
+                        });
+
+                    return deferred.promise;
+                },
+
 
                 /**
                  * @ngdoc method

@@ -56,7 +56,7 @@
                .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
                .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
 
-            AutoMapper.Mapper.CreateMap<IItemCache, BasketDisplay>()
+            AutoMapper.Mapper.CreateMap<IItemCache, CustomerItemCacheDisplay>()
                 .ForMember(
                 dest => dest.Customer,
                 opt => opt.ResolveUsing<ItemCacheCustomerResolver>().ConstructedBy(() => new ItemCacheCustomerResolver()));
