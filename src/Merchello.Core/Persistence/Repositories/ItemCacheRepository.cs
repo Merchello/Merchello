@@ -52,6 +52,99 @@
         }
 
 
+        /// <summary>
+        /// Gets a page of <see cref="IItemCache"/>
+        /// </summary>
+        /// <param name="itemCacheTfKey">
+        /// The item cache type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The sort by field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IItemCache}"/>.
+        /// </returns>
+        public Page<IItemCache> GetCustomerItemCachePage(
+            Guid itemCacheTfKey,
+            DateTime startDate,
+            DateTime endDate,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = GetPageKeys(itemCacheTfKey, startDate, endDate, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IItemCache>()
+                {
+                    Items = p.Items.Select(x => this.Get(x.ItemCacheKey)).ToList(),
+                    ItemsPerPage = p.ItemsPerPage,
+                    TotalItems = p.TotalItems,
+                    TotalPages = p.TotalPages,
+                    CurrentPage = p.CurrentPage,
+                };
+        }
+
+        /// <summary>
+        /// Gets the count of of item caches for a customer type for a given date range.
+        /// </summary>
+        /// <param name="itemCacheTfKey">
+        /// The item cache type field key.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        public int Count(Guid itemCacheTfKey, CustomerType customerType, DateTime startDate, DateTime endDate)
+        {
+            var table = customerType == CustomerType.Anonymous ? "[merchAnonymousCustomer]" : "[merchCustomer]";
+
+            var querySql = @"SELECT  COUNT(*) AS cacheCount  
+                FROM	[dbo].[merchItemCache] T1
+                INNER JOIN (
+	                SELECT	pk
+	                FROM " + table + @"
+	                WHERE	lastActivityDate BETWEEN @start AND @end
+                ) Q1 ON T1.entityKey = Q1.pk
+                INNER JOIN (
+	                SELECT	COUNT(*) AS itemCount,
+			                itemCacheKey
+	                FROM	merchItemCacheItem
+	                GROUP BY itemCacheKey
+                ) Q2 ON T1.pk = Q2.itemCacheKey
+                WHERE Q2.itemCount > 0 AND
+                T1.itemCacheTfKey = @tfKey";
+
+            var sql = new Sql(
+                querySql,
+                new { @table = table, @start = startDate, @end = endDate, @tfKey = itemCacheTfKey });
+
+            return Database.ExecuteScalar<int>(sql);
+        }
+
         #region Overrides of RepositoryBase<IItemCache>
 
         /// <summary>
@@ -236,9 +329,69 @@
             var dtos = Database.Fetch<ItemCacheDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
-        }        
+        }
 
         #endregion
+
+        /// <summary>
+        /// Gets a page of <see cref="IItemCache"/>
+        /// </summary>
+        /// <param name="itemCacheTfKey">
+        /// The item cache type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The sort by field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IItemCache}"/>.
+        /// </returns>
+        private Page<ItemCacheKeyDto> GetPageKeys(
+            Guid itemCacheTfKey,
+            DateTime startDate,
+            DateTime endDate,
+            long page,
+            long itemsPerPage,
+            string orderExpression = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT T1.pk AS itemCacheKey");
+            sql.Append("FROM [merchItemCache] T1");
+            sql.Append("INNER JOIN [merchCustomer] T2 ON T1.entityKey = T2.pk");
+            sql.Append("INNER JOIN (");
+            sql.Append("SELECT	itemCacheKey,");
+            sql.Append("COUNT(*) AS itemCount");
+            sql.Append("FROM [merchItemCacheItem]");
+            sql.Append("GROUP BY itemCacheKey");
+            sql.Append(") Q1 ON T1.pk = Q1.itemCacheKey");
+            sql.Append("WHERE T1.itemCacheTfKey = @tfkey", new { @tfkey = itemCacheTfKey });
+            sql.Append("AND	T2.lastActivityDate BETWEEN @start AND @end", new { @start = startDate, @end = endDate });
+            sql.Append("AND Q1.itemCount > 0");
+
+            if (!string.IsNullOrEmpty(orderExpression))
+            {
+                sql.Append(sortDirection == SortDirection.Ascending
+                    ? string.Format("ORDER BY {0} ASC", orderExpression)
+                    : string.Format("ORDER BY {0} DESC", orderExpression));
+            }
+
+            return Database.Page<ItemCacheKeyDto>(page, itemsPerPage, sql);
+        }
 
         /// <summary>
         /// Gets a <see cref="LineItemCollection"/> by an item cache key.
@@ -268,6 +421,12 @@
             }
 
             return collection;
+        }
+
+        private class ItemCacheKeyDto
+        {
+            [Column("itemCacheKey")]
+            public Guid ItemCacheKey { get; set; }
         }
     }
 }

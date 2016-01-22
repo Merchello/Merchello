@@ -468,6 +468,22 @@ var EntityCollectionProviderDisplay = function() {
 
 
 angular.module('merchello.models').constant('EntityCollectionProviderDisplay', EntityCollectionProviderDisplay);
+/**
+ * @ngdoc model
+ * @name BasketDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's BasketDisplay object
+ */
+var BasketDisplay = function() {
+    var self = this;
+    self.customer = {};
+    self.items = [];
+};
+
+angular.module('merchello.models').constant('BasketDisplay', BasketDisplay);
+
     /**
      * @ngdoc model
      * @name CustomerAddressDisplay
@@ -2716,6 +2732,29 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
 /**
  * @ngdoc model
+ * @name AbandonedBasketResult
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's AbandonedBasketResult object
+ */
+var AbandonedBasketResult = function() {
+    var self = this;
+    self.configuredDays = 0;
+    self.startDate = '';
+    self.endDate = '';
+    self.anonymousBasketCount = 0;
+    self.anonymousCheckoutCount = 0;
+    self.anonymousCheckoutPercent = 0;
+    self.customerBasketCount = 0;
+    self.customerCheckoutCount = 0;
+    self.customerCheckoutPercent = 0;
+};
+
+angular.module('merchello.models').constant('AbandonedBasketResult', AbandonedBasketResult);
+
+/**
+ * @ngdoc model
  * @name ResultCurrencyValue
  * @function
  *
@@ -4037,6 +4076,36 @@ angular.module('merchello.models').factory('entityCollectionProviderDisplayBuild
                 };
             }]);
 
+angular.module('merchello.models').factory('basketDisplayBuilder',
+    ['genericModelBuilder', 'customerDisplayBuilder', 'invoiceLineItemDisplayBuilder', 'BasketDisplay',
+    function(genericModelBuilder, customerDisplayBuilder, invoiceLineItemDisplayBuilder, BasketDisplay) {
+
+        var Constructor = BasketDisplay;
+        return {
+            createDefault: function() {
+                var basket = new Constructor();
+                return basket;
+            },
+            transform: function(jsonResult) {
+                var baskets = [];
+                if(angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var basket = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        basket.customer = customerDisplayBuilder.transform(jsonResult[ i ].customer);
+                        basket.items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                        baskets.push(basket);
+                    }
+                } else {
+                    baskets = genericModelBuilder.transform(jsonResult, Constructor);
+                    baskets.customer = customerDisplayBuilder.transform(jsonResult.customer);
+                    baskets.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
+                }
+                return baskets;
+            }
+        };
+
+}]);
+
 /**
  * @ngdoc service
  * @name customerAddressDisplayBuilder
@@ -4725,6 +4794,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('reportsdashboard', 'merchelloTabs_reports', '#/merchello/merchello/reportsdashboard/manage');
                 tabs.addTab('salesOverTime', 'merchelloTabs_salesOverTime', '#/merchello/merchello/salesOverTime/manage');
                 tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
+                tabs.addTab("abandonedBasket", "merchelloTabs_abandonedBasket", '#/merchello/merchello/abandonedBasket/manage');
                 return tabs;
             }
 
@@ -5327,6 +5397,23 @@ angular.module('merchello.models').factory('productVariantDetachedContentDisplay
                 }
             };
         }]);
+angular.module('merchello.models').factory('abandonedBasketResultBuilder',
+    ['genericModelBuilder', 'AbandonedBasketResult',
+    function(genericModelBuilder, AbandonedBasketResult) {
+
+        var Constructor = AbandonedBasketResult;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+
+}]);
+
 /**
  * @ngdoc factory
  * @name resultCurrencyValueBuilder

@@ -5,6 +5,16 @@
 #pragma warning disable 1591
 
     /// <summary>
+    /// The customer type.
+    /// </summary>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
+    public enum CustomerType
+    {
+        Anonymous,
+        Customer
+    }
+
+    /// <summary>
     /// The address type type field enumeration
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1602:EnumerationItemsMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]

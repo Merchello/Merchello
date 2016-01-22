@@ -142,6 +142,23 @@
         int CountInvoices(DateTime startDate, DateTime endDate);
 
         /// <summary>
+        /// The count invoices by customer type
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int CountInvoices(DateTime startDate, DateTime endDate, CustomerType customerType);
+
+        /// <summary>
         /// Gets the totals of invoices in a date range for a specific currency code.
         /// </summary>
         /// <param name="startDate">

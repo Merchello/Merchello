@@ -21,6 +21,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     scope.series = [];
                     scope.weekdays = [];
 
+                    scope.getTotalsColumn = getTotalsColumn;
+
                     assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                         init();
                     });
@@ -54,6 +56,7 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                         $q.all([
                             salesOverTimeResource.getWeeklyResult(currentQuery),
                             salesOverTimeResource.getWeeklyResult(lastQuery)
+
                         ]).then(function(data) {
                             scope.resultData = [ data[0].items, data[1].items];
                             compileChart();
@@ -85,6 +88,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                             buildSeries(seriesTemplate, 'This Week');
                             buildSeries(seriesTemplate, 'Last Week');
 
+
+
                             var seriesIndex = 0;
                             _.each(scope.resultData, function(dataSet) {
                                 for(var j = 0; j < seriesTemplate.length; j++) {
@@ -93,7 +98,6 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                                 }
                             });
 
-                            console.info(scope.chartData);
                         }
 
                         scope.preValuesLoaded = true;
@@ -108,7 +112,6 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     }
 
                     function addChartData(dataSeries, currencyCode, chartDataIndex) {
-                        console.info({index: chartDataIndex, cc: currencyCode });
 
                         _.each(dataSeries, function(item) {
                            var total = _.find(item.totals, function(tot) {
@@ -116,6 +119,18 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                            });
                             scope.chartData[chartDataIndex].push(total.value);
                         });
+                    }
+
+                    function getTotalsColumn(resultIndex, valueIndex) {
+                        var result = scope.resultData[resultIndex][valueIndex];
+
+                        var ret = '';
+                        _.each(result.totals, function(total) {
+                            if (ret !== '') ret += '<br />';
+                            ret += total.currency.currencyCode + ': ' + $filter('currency')(total.value, total.currency.symbol);
+                        });
+
+                        return ret;
                     }
                 }
 
