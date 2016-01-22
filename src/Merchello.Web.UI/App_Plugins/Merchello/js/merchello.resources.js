@@ -32,6 +32,19 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
                 return deferred.promise;
             },
 
+            getCustomerSavedBasketsLegacy : function(query) {
+
+                if (query === undefined) {
+                    query = queryDisplayBuilder.createDefault();
+                    query.applyInvoiceQueryDefaults();
+                }
+                var url = baseUrl + 'GetCustomerSavedBaskets';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url, query),
+                    'Failed to retreive customer basket data');
+
+            },
+
             getCustomerSavedBaskets : function(query) {
                 if (query === undefined) {
                     query = queryDisplayBuilder.createDefault();

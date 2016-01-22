@@ -146,7 +146,7 @@
             var page = _itemCacheService.GetCustomerItemCachePage(
                 _itemCacheType,
                 _startDate,
-                _endDate,
+                _endDate.AddDays(2),
                 query.CurrentPage + 1,
                 query.ItemsPerPage,
                 query.SortBy,
