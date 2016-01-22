@@ -50,6 +50,14 @@
     <key alias="customerBaskets">Customer Baskets</key>
     <key alias="customerCheckouts">Customer Checkouts</key>
     <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
+      <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
+      <key alias="monthlyTotalSales">Monthly Total Sales</key>
+      <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
+      <key alias="thisWeek">This Week</key>
+      <key alias="lastWeek">Last Week</key>
+      <key alias="quantitySold">Quantity Sold</key>
+      <key alias="numberOfInvoices">Number of invoices</key>
+      <key alias="abandonedBaskets">Abandoned Baskets and Completed Checkouts</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Ubetalte fakturaer</key>
@@ -98,10 +106,13 @@
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">Ny kunde</key>
+      <key alias="customerBaskets">Customer Baskets</key>
+      <key alias="basket">Basket</key>
     <key alias="noCustomers"><![CDATA[
         <h5>Du har ingen kunder endnu</h5>
         <p>Men det vil du snart have!</p>
       ]]></key>
+      <key alias="lastActivityDate">Last Activity Date</key>
     <key alias="emptyCustomerCollection">Der er ingen kunder i denne samling</key>
     <key alias="customerNotes"><![CDATA[
       Kunde noter
@@ -119,6 +130,7 @@
       <small>Items currently in the customer wish list</small>
       ]]>
     </key>
+    <key alias="itemCacheEmpty">Contains no items</key>
   </area>
   <area alias="merchelloButtons">
     <key alias="void">Annuller</key>
@@ -343,6 +355,12 @@
     <key alias="friday">Friday</key>
     <key alias="saturday">Saturday</key>
     <key alias="sunday">Sunday</key>
+      <key alias="day">Day</key>
+      <key alias="item">Item</key>
+      <key alias="items">Items</key>
+      <key alias="totals">Totals</key>
+      <key alias="quantity">Quantity</key>
+      <key alias="subTotal">Sub Total</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Standard indstillinger for butik</key>

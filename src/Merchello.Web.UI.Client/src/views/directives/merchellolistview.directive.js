@@ -116,7 +116,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         var end = $filter('date')(scope.endDate, 'yyyy-MM-dd');
                         query.addInvoiceDateParam(start, 'start');
                         query.addInvoiceDateParam(end, 'end');
-                        console.info('hello');
+
                         scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
                     }
 

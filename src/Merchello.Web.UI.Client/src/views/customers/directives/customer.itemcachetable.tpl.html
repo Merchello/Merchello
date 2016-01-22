@@ -4,16 +4,16 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Item</th>
-            <th>Sku</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Sub Total</th>
+            <th><localize key="merchelloGeneral_item" /></th>
+            <th><localize key="merchelloVariant_sku" /></th>
+            <th><localize key="merchelloGeneral_quantity" /></th>
+            <th><localize key="merchelloGeneral_price"/></th>
+            <th><localize key="merchelloGeneral_subTotal"/></th>
         </tr>
         </thead>
         <tbody data-ng-show="items.length === 0">
             <tr>
-                <td colspan="5">Contains no items</td>
+                <td colspan="5"><localize key="merchelloCustomers_itemCacheEmpty" /></td>
             </tr>
         </tbody>
         <tbody data-ng-show="items.length > 0">

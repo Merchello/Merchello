@@ -41,7 +41,7 @@ angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRad
                         localizationService.localize('merchelloReports_anonymousCheckoutPercent'),
                         localizationService.localize('merchelloReports_customerCheckoutPercent'),
                         abandonedBasketResource.getDefaultReportData(),
-                        settingsResource.getAllCombined()
+                        settingsResource.getAllSettings()
 
                     ]).then(function(data) {
 
@@ -63,8 +63,6 @@ angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRad
                             scope.result.anonymousCheckoutCount,
                             scope.result.customerBasketCount,
                             scope.result.customerCheckoutCount);
-                        console.info(scope.labels);
-                        console.info(scope.data);
 
                         scope.setLoaded()(true);
 
