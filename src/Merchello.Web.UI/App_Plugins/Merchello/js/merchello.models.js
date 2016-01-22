@@ -468,22 +468,6 @@ var EntityCollectionProviderDisplay = function() {
 
 
 angular.module('merchello.models').constant('EntityCollectionProviderDisplay', EntityCollectionProviderDisplay);
-/**
- * @ngdoc model
- * @name BasketDisplay
- * @function
- *
- * @description
- * Represents a JS version of Merchello's BasketDisplay object
- */
-var BasketDisplay = function() {
-    var self = this;
-    self.customer = {};
-    self.items = [];
-};
-
-angular.module('merchello.models').constant('BasketDisplay', BasketDisplay);
-
     /**
      * @ngdoc model
      * @name CustomerAddressDisplay
@@ -657,6 +641,22 @@ angular.module('merchello.models').constant('BasketDisplay', BasketDisplay);
     }());
 
     angular.module('merchello.models').constant('CustomerDisplay', CustomerDisplay);
+
+/**
+ * @ngdoc model
+ * @name CustomerItemCacheDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's CustomerItemCacheDisplay object
+ */
+var CustomerItemCacheDisplay = function() {
+    var self = this;
+    self.customer = {};
+    self.items = [];
+};
+
+angular.module('merchello.models').constant('CustomerItemCacheDisplay', CustomerItemCacheDisplay);
 
 /**
  * @ngdoc model
@@ -1469,7 +1469,7 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
         self.containerKey = '';
         self.lineItemTfKey = '';
         self.lineItemType = '';
-        self.lineItemTypeField = {};  // TODO why is this here
+        self.lineItemTypeField = {};
         self.sku = '';
         self.name = '';
         self.quantity = '';
@@ -1479,6 +1479,31 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
     };
 
     angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);
+    /**
+     * @ngdoc model
+     * @name ItemCacheLineItemDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ItemCacheLineItemDisplay object
+     */
+    var ItemCacheLineItemDisplay = function() {
+        var self = this;
+
+        self.key = '';
+        self.containerKey = '';
+        self.lineItemTfKey = '';
+        self.lineItemType = '';
+        self.lineItemTypeField = {};
+        self.sku = '';
+        self.name = '';
+        self.quantity = '';
+        self.price = '';
+        self.exported = false;
+        self.extendedData = {};
+    };
+
+    angular.module('merchello.models').constant('ItemCacheLineItemDisplay', ItemCacheLineItemDisplay);
     /**
      * @ngdoc model
      * @name OrderLineItemDisplay
@@ -4076,36 +4101,6 @@ angular.module('merchello.models').factory('entityCollectionProviderDisplayBuild
                 };
             }]);
 
-angular.module('merchello.models').factory('basketDisplayBuilder',
-    ['genericModelBuilder', 'customerDisplayBuilder', 'invoiceLineItemDisplayBuilder', 'BasketDisplay',
-    function(genericModelBuilder, customerDisplayBuilder, invoiceLineItemDisplayBuilder, BasketDisplay) {
-
-        var Constructor = BasketDisplay;
-        return {
-            createDefault: function() {
-                var basket = new Constructor();
-                return basket;
-            },
-            transform: function(jsonResult) {
-                var baskets = [];
-                if(angular.isArray(jsonResult)) {
-                    for(var i = 0; i < jsonResult.length; i++) {
-                        var basket = genericModelBuilder.transform(jsonResult[ i ], Constructor);
-                        basket.customer = customerDisplayBuilder.transform(jsonResult[ i ].customer);
-                        basket.items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
-                        baskets.push(basket);
-                    }
-                } else {
-                    baskets = genericModelBuilder.transform(jsonResult, Constructor);
-                    baskets.customer = customerDisplayBuilder.transform(jsonResult.customer);
-                    baskets.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
-                }
-                return baskets;
-            }
-        };
-
-}]);
-
 /**
  * @ngdoc service
  * @name customerAddressDisplayBuilder
@@ -4169,6 +4164,71 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
             };
 
     }]);
+
+angular.module('merchello.models').factory('customerItemCacheDisplayBuilder',
+    ['genericModelBuilder', 'customerDisplayBuilder', 'itemCacheLineItemDisplayBuilder', 'CustomerItemCacheDisplay',
+    function(genericModelBuilder, customerDisplayBuilder, itemCacheLineItemDisplayBuilder, CustomerItemCacheDisplay) {
+
+        var Constructor = CustomerItemCacheDisplay;
+        return {
+            createDefault: function() {
+                var itemCache = new Constructor();
+                return itemCache;
+            },
+            transform: function(jsonResult) {
+                var itemCaches = [];
+                if(angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var itemCache = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        itemCache.customer = customerDisplayBuilder.transform(jsonResult[ i ].customer);
+                        itemCache.items = itemCacheLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                        itemCaches.push(itemCache);
+                    }
+                } else {
+                    itemCaches = genericModelBuilder.transform(jsonResult, Constructor);
+                    itemCaches.customer = customerDisplayBuilder.transform(jsonResult.customer);
+                    itemCaches.items = itemCacheLineItemDisplayBuilder.transform(jsonResult.items);
+                }
+                return itemCaches;
+            }
+        };
+
+}]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.itemCacheLineItemDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ItemCacheLineItemDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('itemCacheLineItemDisplayBuilder',
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'typeFieldDisplayBuilder', 'ItemCacheLineItemDisplay',
+            function(genericModelBuilder, extendedDataDisplayBuilder, typeFieldDisplayBuilder, ItemCacheLineItemDisplay) {
+                var Constructor = ItemCacheLineItemDisplay;
+                return {
+                    createDefault: function() {
+                        var lineItem = new Constructor();
+                        lineItem.lineItemTypeField = typeFieldDisplayBuilder.createDefault();
+                        lineItem.extendedData = extendedDataDisplayBuilder.createDefault();
+                        return lineItem;
+                    },
+                    transform: function(jsonResult) {
+                        var lineItems = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(angular.isArray(lineItems)) {
+                            for(var i = 0; i < lineItems.length; i++) {
+                                lineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                lineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                            }
+                        } else {
+                            lineItems.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                            lineItems.lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult.lineItemTypeField);
+                        }
+                        return lineItems;
+                    }
+                };
+            }]);
 
 /**
  * @ngdoc service

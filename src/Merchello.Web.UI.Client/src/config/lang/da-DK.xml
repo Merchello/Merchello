@@ -107,6 +107,18 @@
       Kunde noter
       <small>Noter om kunder (ikke salgs specifik)</small>
       ]]></key>
+    <key alias="customerBasket">
+      <![CDATA[
+      Customer Basket
+      <small>Items currently in the customer basket</small>
+      ]]>
+    </key>
+    <key alias="customerWishlist">
+      <![CDATA[
+      Customer Wish List
+      <small>Items currently in the customer wish list</small>
+      ]]>
+    </key>
   </area>
   <area alias="merchelloButtons">
     <key alias="void">Annuller</key>

@@ -1,6 +1,6 @@
 angular.module('merchello.resources').factory('abandonedBasketResource',
-    ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'abandonedBasketResultBuilder', 'basketDisplayBuilder',
-    function($http, $q, umbRequestHelper, queryResultDisplayBuilder, abandonedBasketResultBuilder, basketDisplayBuilder) {
+    ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'abandonedBasketResultBuilder', 'customerItemCacheDisplayBuilder',
+    function($http, $q, umbRequestHelper, queryResultDisplayBuilder, abandonedBasketResultBuilder, customerItemCacheDisplayBuilder) {
 
         var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloAbandonedBasketApiBaseUrl'];
 
@@ -36,7 +36,7 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
                             $http.post(url, query),
                             'Failed to retreive customer basket data')])
                     .then(function(data) {
-                        var results = queryResultDisplayBuilder.transform(data[0], basketDisplayBuilder);
+                        var results = queryResultDisplayBuilder.transform(data[0], customerItemCacheDisplayBuilder);
                         deferred.resolve(results);
                     });
 

@@ -154,7 +154,7 @@
 
             return new QueryResultDisplay()
             {
-                Items = page.Items.Select(x => x.ToBasketDisplay()),
+                Items = page.Items.Select(x => x.ToCustomerItemCacheDisplay()),
                 CurrentPage = page.CurrentPage - 1,
                 ItemsPerPage = page.ItemsPerPage,
                 TotalPages = page.TotalPages,
