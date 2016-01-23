@@ -554,19 +554,7 @@
                 CreateDate = DateTime.Now
             }))
             {
-                try
-                {
-                    Database.Insert(association);
-                }
-                catch (System.Data.SqlClient.SqlException sqlex)
-                {
-                    if (sqlex.ErrorCode == -2146232060 // what is the likelihood that MS will RE-use this code for another kind of error?
-                        || (sqlex.Message.Contains("INSERT") && sqlex.Message.Contains("FOREIGN KEY") && sqlex.Message.Contains("constraint") && sqlex.Message.Contains("conflicted")))
-                    {
-                        continue;
-                    }
-                    else throw sqlex;
-                }          
+                Database.Insert(association);
             }
 
             SaveCatalogInventory(entity);
