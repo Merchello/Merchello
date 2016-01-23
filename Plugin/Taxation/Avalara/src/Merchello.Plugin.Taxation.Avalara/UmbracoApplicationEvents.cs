@@ -73,6 +73,8 @@
         /// </param>
         private void SalePreparationBaseOnFinalizing(SalePreparationBase sender, SalesPreparationEventArgs<IPaymentResult> args)
         {
+            if (!sender.ApplyTaxesToInvoice) return;
+
             var result = args.Entity;
             var invoice = result.Invoice;
 
