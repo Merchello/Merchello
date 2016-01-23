@@ -1578,13 +1578,18 @@
             var resetSorts = false;
             foreach (var ex in existing)
             {
-                // Von: Duplicate SKU is not allowed in the system. However, 
-                //      there could be custom implementation where SKUs are generated based on some logic.
-                //      That could lead into a timing issue where the name of the attribute is not the same as with its SKU.
-                //      "Ideally" the logic should be put in correct event but it's easy to miss that.
-                //      So this change will ensure that even if that timing is off,
-                //      we will still not remove attributes unnecessarily.
-                //if (productOption.Choices.Contains(ex.Sku)) continue;
+                //// Von: Duplicate SKU is not allowed in the system. However, 
+                ////      there could be custom implementation where SKUs are generated based on some logic.
+                ////      That could lead into a timing issue where the name of the attribute is not the same as with its SKU.
+                ////      "Ideally" the logic should be put in correct event but it's easy to miss that.
+                ////      So this change will ensure that even if that timing is off,
+                ////      we will still not remove attributes unnecessarily.
+                ////if (productOption.Choices.Contains(ex.Sku)) continue;
+
+                //// TODO RSS:  We still need to validate SKU integrity so that we do not create an issue when generating the product variants.
+                ////            We need to add the ability to change the attribute SKU via the back office with a UI change anyway so we'll look at this
+                ////            again at that time.
+
                 if (productOption.Choices.Contains(ex.Key)) continue;
                 DeleteProductAttribute(ex);
                 resetSorts = true;
