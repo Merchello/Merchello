@@ -123,7 +123,7 @@
             var table = customerType == CustomerType.Anonymous ? "[merchAnonymousCustomer]" : "[merchCustomer]";
 
             var querySql = @"SELECT  COUNT(*) AS cacheCount  
-                FROM	[dbo].[merchItemCache] T1
+                FROM	merchItemCache T1
                 INNER JOIN (
 	                SELECT	pk
 	                FROM " + table + @"

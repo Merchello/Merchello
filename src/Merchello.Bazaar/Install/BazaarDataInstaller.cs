@@ -88,7 +88,7 @@
             storeRoot.SetValue("overview", @"<p>The Merchello Bazaar is a simple, example store which has been developed to help get you up and running quickly with Merchello. 
                                             It's designed to show you how to implement common features, and <a href=""https://github.com/Merchello/Merchello"" target=""_blank"">
                                             you can grab the source code from here</a>, just fork/clone/download and open up Merchello.Bazaar.sln</p>");
-            storeRoot.SetValue("featuredProducts", _collections["featuredProducts"].ToString());
+            storeRoot.SetValue("featuredProducts", _collections["collectionFeaturedProducts"].ToString());
 
             _services.ContentService.SaveAndPublishWithStatus(storeRoot);
 
@@ -171,10 +171,9 @@
 
             #endregion
 
-
             //// TODO figure out why the index does not build on load
-            LogHelper.Info<BazaarDataInstaller>("Rebuilding Product Index");
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
+            //LogHelper.Info<BazaarDataInstaller>("Rebuilding Product Index");
+            //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
 
             return storeRoot;
         }
@@ -378,7 +377,7 @@
                     CanBeRendered = true
                 });
 
-            merchelloServices.ProductService.Save(despiteShirt);
+            merchelloServices.ProductService.Save(despiteShirt, false);
 
             #endregion
 
@@ -416,7 +415,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(elementMehShirt);
+            merchelloServices.ProductService.Save(elementMehShirt, false);
 
             #endregion
 
@@ -456,7 +455,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(evolutionShirt);
+            merchelloServices.ProductService.Save(evolutionShirt, false);
 
             #endregion
 
@@ -494,7 +493,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(fleaShirt);
+            merchelloServices.ProductService.Save(fleaShirt, false);
 
             #endregion
 
@@ -532,7 +531,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(paranormalShirt);
+            merchelloServices.ProductService.Save(paranormalShirt, false);
 
             #endregion
 
@@ -569,7 +568,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(planAheadShirt);
+            merchelloServices.ProductService.Save(planAheadShirt, false);
 
             #endregion 
 
