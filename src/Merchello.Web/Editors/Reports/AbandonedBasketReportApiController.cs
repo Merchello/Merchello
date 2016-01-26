@@ -80,7 +80,7 @@
         }
 
         /// <summary>
-        /// Gets the base url definition for Server Variables Parsing.
+        /// Gets the base url definition for Server Variables Parsing.e
         /// </summary>
         public override KeyValuePair<string, object> BaseUrl
         {
