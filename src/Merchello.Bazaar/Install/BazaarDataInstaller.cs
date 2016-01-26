@@ -23,6 +23,38 @@
     /// </summary>
     internal class BazaarDataInstaller
     {
+        // Collection dictionary names
+
+        /// <summary>
+        /// The collection featured products.
+        /// </summary>
+        private const string CollectionFeaturedProducts = "collectionFeaturedProducts";
+
+        /// <summary>
+        /// The collection home page.
+        /// </summary>
+        private const string CollectionHomePage = "collectionHomePage";
+
+        /// <summary>
+        /// The collection main categories.
+        /// </summary>
+        private const string CollectionMainCategories = "collectionMainCategories";
+
+        /// <summary>
+        /// The collection funny.
+        /// </summary>
+        private const string CollectionFunny = "collectionFunny";
+
+        /// <summary>
+        /// The collection geeky.
+        /// </summary>
+        private const string CollectionGeeky = "collectionGeeky";
+
+        /// <summary>
+        /// The collection sad.
+        /// </summary>
+        private const string CollectionSad = "collectionSad";
+
         /// <summary>
         /// The service context.
         /// </summary>
@@ -35,14 +67,6 @@
         /// Introduced in 1.12.0
         /// </remarks>
         private readonly IDictionary<string, Guid> _collections = new Dictionary<string, Guid>();
-
-        // Collection dictionary names
-        private const string CollectionFeaturedProducts = "collectionFeaturedProducts";
-        private const string CollectionHomePage = "collectionHomePage";
-        private const string CollectionMainCategories = "collectionMainCategories";
-        private const string CollectionFunny = "collectionFunny";
-        private const string CollectionGeeky = "collectionGeeky";
-        private const string CollectionSad = "collectionSad";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BazaarDataInstaller"/> class.
@@ -70,7 +94,12 @@
             return this.AddUmbracoData();
         }
 
-
+        /// <summary>
+        /// Adds the Umbraco content.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IContent"/>.
+        /// </returns>
         private IContent AddUmbracoData()
         {
             #region Store Root
@@ -101,6 +130,7 @@
 
             // Create the root T-Shirt category
             var tShirtCategory = _services.ContentService.CreateContent("All T-Shirts", storeRoot.Id, "BazaarProductCollection");
+
             tShirtCategory.SetValue("products", string.Empty);
             _services.ContentService.SaveAndPublishWithStatus(tShirtCategory);
                 
@@ -322,6 +352,7 @@
                 EntityType.Product,
                 contentType.Key,
                 "Bazaar Product");
+
             // Detached Content
             detachedContentType.Description = "Default Bazaar Product Content";
             detachedContentTypeService.Save(detachedContentType);
@@ -355,7 +386,7 @@
             despiteShirt.Available = true;
             despiteShirt.Weight = 1M;
             despiteShirt.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(despiteShirt);
+            merchelloServices.ProductService.Save(despiteShirt, false);
 
             // add to collections
             despiteShirt.AddToCollection(funny);
@@ -386,6 +417,7 @@
             LogHelper.Info<BazaarDataInstaller>("Adding an example product  - Element Meh Shirt");
             var elementMehShirt = merchelloServices.ProductService.CreateProduct("Element Meh Shirt", "tshrt-meh", 12.99M);
             elementMehShirt.OnSale = false;
+            elementMehShirt.Shippable = true;
             elementMehShirt.SalePrice = 10M;
             elementMehShirt.CostOfGoods = 8.50M;
             elementMehShirt.Taxable = true;
@@ -393,7 +425,10 @@
             elementMehShirt.Available = true;
             elementMehShirt.Weight = 1M;
             elementMehShirt.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(elementMehShirt);
+            merchelloServices.ProductService.Save(elementMehShirt, false);
+
+            AddOptionsToProduct(elementMehShirt);
+            merchelloServices.ProductService.Save(elementMehShirt, false);
 
             // add to collections
             elementMehShirt.AddToCollection(featuredProducts);
@@ -424,6 +459,7 @@
             LogHelper.Info<BazaarDataInstaller>("Adding an example product  - Evolution Shirt");
             var evolutionShirt = merchelloServices.ProductService.CreateProduct("Evolution Shirt", "shrt-evo", 13.99M);
             evolutionShirt.OnSale = true;
+            evolutionShirt.Shippable = true;
             evolutionShirt.SalePrice = 11M;
             evolutionShirt.CostOfGoods = 10M;
             evolutionShirt.Taxable = true;
@@ -431,7 +467,10 @@
             evolutionShirt.Available = true;
             evolutionShirt.Weight = 1M;
             evolutionShirt.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(evolutionShirt);
+            merchelloServices.ProductService.Save(evolutionShirt, false);
+
+            AddOptionsToProduct(evolutionShirt);
+            merchelloServices.ProductService.Save(evolutionShirt, false);
 
             // add to collections
             evolutionShirt.AddToCollection(funny);
@@ -464,6 +503,7 @@
             LogHelper.Info<BazaarDataInstaller>("Adding an example product  - Flea Shirt");
             var fleaShirt = merchelloServices.ProductService.CreateProduct("Flea Shirt", "shrt-flea", 11.99M);
             fleaShirt.OnSale = false;
+            fleaShirt.Shippable = true;
             fleaShirt.SalePrice = 10M;
             fleaShirt.CostOfGoods = 8.75M;
             fleaShirt.Taxable = true;
@@ -471,7 +511,7 @@
             fleaShirt.Available = true;
             fleaShirt.Weight = 1M;
             fleaShirt.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(fleaShirt);
+            merchelloServices.ProductService.Save(fleaShirt, false);
 
             // add to collections
             fleaShirt.AddToCollection(funny);
@@ -502,6 +542,7 @@
             LogHelper.Info<BazaarDataInstaller>("Adding an example product  - Paranormal Shirt");
             var paranormalShirt = merchelloServices.ProductService.CreateProduct("Paranormal Shirt", "shrt-para", 14.99M);
             paranormalShirt.OnSale = false;
+            paranormalShirt.Shippable = true;
             paranormalShirt.SalePrice = 12M;
             paranormalShirt.CostOfGoods = 9.75M;
             paranormalShirt.Taxable = true;
@@ -509,7 +550,7 @@
             paranormalShirt.Available = true;
             paranormalShirt.Weight = 1M;
             paranormalShirt.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(paranormalShirt);
+            merchelloServices.ProductService.Save(paranormalShirt, false);
 
             // add to collections
             paranormalShirt.AddToCollection(geeky);
@@ -540,6 +581,7 @@
             LogHelper.Info<BazaarDataInstaller>("Adding an example product  - Plan Ahead Shirt");
             var planAheadShirt = merchelloServices.ProductService.CreateProduct("Plan Ahead Shirt", "shrt-plan", 8.99M);
             planAheadShirt.OnSale = true;
+            planAheadShirt.Shippable = true;
             planAheadShirt.SalePrice = 7.99M;
             planAheadShirt.CostOfGoods = 4M;
             planAheadShirt.Taxable = true;
@@ -547,7 +589,7 @@
             planAheadShirt.Available = true;
             planAheadShirt.Weight = 1M;
             planAheadShirt.AddToCatalogInventory(catalog);
-            merchelloServices.ProductService.Save(planAheadShirt);
+            merchelloServices.ProductService.Save(planAheadShirt, false);
 
             // add to collections
             planAheadShirt.AddToCollection(geeky);
@@ -574,6 +616,24 @@
 
             #endregion
 
+        }
+
+        /// <summary>
+        /// Adds example options to product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        private void AddOptionsToProduct(IProduct product)
+        {
+            product.ProductOptions.Add(new ProductOption("Color"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
+            product.ProductOptions.Add(new ProductOption("Size"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Small"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Medium"));
+            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Large"));
         }
     }
 }
