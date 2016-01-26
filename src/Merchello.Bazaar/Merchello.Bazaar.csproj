@@ -186,16 +186,16 @@
       <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=1.14.5868.38886, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000140\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=1.14.5869.984, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000142\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=1.14.5868.38891, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000140\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=1.14.5869.989, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000142\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=1.14.5868.38894, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000140\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=1.14.5869.992, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.1.14.0-alpha-000142\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
