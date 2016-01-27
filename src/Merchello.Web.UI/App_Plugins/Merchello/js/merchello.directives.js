@@ -702,6 +702,63 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
         };
     }]);
 
+angular.module('merchello.directives').directive('customerItemCacheTable',
+    ['$q', 'localizationService', 'settingsResource', 'customerResource',
+    function($q, localizationService, settingsResource, customerResource) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                customer: '=',
+                itemCacheType: '@'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/customer.itemcachetable.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.loaded = true;
+                scope.title = '';
+                scope.settings = {};
+                scope.items = [];
+
+                scope.getTotal = getTotal;
+
+                function init() {
+
+                    scope.$watch('customer', function(newVal, oldVal) {
+                        if (newVal.key !== null && newVal.key !== undefined) {
+                            getItemCacheData();
+                        }
+                    });
+                }
+
+                function getItemCacheData() {
+                    $q.all([
+                            localizationService.localize('merchelloCustomers_customer' + scope.itemCacheType),
+                            settingsResource.getAllCombined(),
+                            customerResource.getCustomerItemCache(scope.customer.key, scope.itemCacheType)
+                        ]).then(function(data) {
+                        scope.title = data[0];
+                        scope.settings = data[1];
+                        scope.items = data[2].items;
+                    });
+                }
+
+                function getTotal() {
+                    var total = 0;
+                    angular.forEach(scope.items, function(item) {
+                       total += item.quantity * item.price;
+                    });
+                    return total;
+                }
+
+                init();
+            }
+
+        }
+
+    }]);
+
 angular.module('merchello.directives').directive('detachedContentType', function() {
 
     return {
@@ -1064,6 +1121,106 @@ angular.module('merchello.directives').directive('merchelloTabs', [function() {
     };
 }]);
 
+angular.module('merchello.directives').directive('merchelloDateRangeButton',
+    function($filter, settingsResource, dialogService, dateHelper) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                reload: '&?',
+                startDate: '=',
+                endDate: '='
+            },
+            template: '<div class="btn-group pull-right" data-ng-show="loaded">' +
+            '<a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>' +
+            '<a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()">X</a>' +
+            '</div>',
+            link: function(scope, elm, attr) {
+
+                scope.loaded = false;
+                scope.settings = {};
+
+                scope.openDateRangeDialog = openDateRangeDialog;
+                scope.clearDates = clearDates;
+
+                function init() {
+                    loadSettings();
+                }
+
+                /**
+                 * @ngdoc method
+                 * @name loadSettings
+                 * @function
+                 *
+                 * @description - Load the Merchello settings.
+                 */
+                function loadSettings() {
+                    settingsResource.getAllCombined().then(function(combined) {
+                        scope.settings = combined.settings;
+                        setDefaultDates();
+                        scope.loaded = true;
+                    });
+                };
+
+                function setDefaultDates() {
+                    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+                    var firstOfMonth = new Date(y, m, 1);
+                    var endOfMonth = new Date(y, m + 1, 0);
+                    scope.startDate = $filter('date')(firstOfMonth, scope.settings.dateFormat);
+                    scope.endDate = $filter('date')(endOfMonth, scope.settings.dateFormat);
+                    setDateBtnText();
+                    reload();
+                }
+
+                function setDateBtnText() {
+                    scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
+                    scope.preValuesLoaded = true;
+                }
+
+                function clearDates() {
+                    setDefaultDates();
+                }
+
+                function openDateRangeDialog() {
+                    var dialogData = {
+                        startDate: scope.startDate,
+                        endDate: scope.endDate
+                    };
+
+                    console.info(dialogData);
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/daterange.selection.html',
+                        show: true,
+                        callback: processDateRange,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processDateRange(dialogData) {
+                    scope.preValuesLoaded = false;
+
+                    scope.startDate = dialogData.startDate;
+                    scope.endDate =  dialogData.endDate;
+                    //eventsService.emit(datesChangeEventName, { startDate : $scope.startDate, endDate : $scope.endDate });
+                    setDateBtnText();
+                    reload();
+                }
+
+                function reload() {
+
+                    scope.reload()(
+                        dateHelper.convertToJsDate(scope.startDate, scope.settings.dateFormat),
+                        dateHelper.convertToJsDate(scope.endDate, scope.settings.dateFormat));
+                }
+
+                init();
+            }
+        }
+
+});
+
 /**
  * @ngdoc directive
  * @name address directive
@@ -1362,7 +1519,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         var end = $filter('date')(scope.endDate, 'yyyy-MM-dd');
                         query.addInvoiceDateParam(start, 'start');
                         query.addInvoiceDateParam(end, 'end');
-                        console.info('hello');
+
                         scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
                     }
 
@@ -1929,77 +2086,408 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
 
     });
 
-angular.module('merchello.directives').directive('reportWidgetTopFiveSelling',
-    ['$log', '$filter', 'assetsService', 'localizationService', 'salesByItemResource', 'settingsResource', 'queryDisplayBuilder',
-    function($log, $filter, assetsService, localizationService, salesByItemResource, settingsResource, queryDisplayBuilder) {
+angular.module('merchello.directives').directive('reportWidgetAbandonedBasketRadar',
+    ['$q', '$filter', 'assetsService', 'localizationService', 'settingsResource', 'invoiceHelper', 'abandonedBasketResource',
+    function($q, $filter, assetsService, localizationService, settingsResource, invoiceHelper, abandonedBasketResource) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+              setLoaded: '&'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.abandonedbasketradar.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.labels = [];
+                scope.data = [];
+                scope.settings = {};
+                scope.result = {};
+                scope.anonymousBaskets = '';
+                scope.anonymousCheckouts = '';
+                scope.customerBaskets = '';
+                scope.customerCheckouts = '';
+                scope.anonymousPercentLabel = '';
+                scope.customerPercentLabel = '';
+
+                scope.anonymousCheckoutPercent = 0;
+                scope.customerCheckoutPercent = 0;
+
+
+                assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                    init();
+                });
+
+                function init() {
+                    scope.setLoaded()(false);
+
+                    $q.all([
+                        localizationService.localize('merchelloReports_anonymousBaskets'),
+                        localizationService.localize('merchelloReports_anonymousCheckouts'),
+                        localizationService.localize('merchelloReports_customerBaskets'),
+                        localizationService.localize('merchelloReports_customerCheckouts'),
+                        localizationService.localize('merchelloReports_anonymousCheckoutPercent'),
+                        localizationService.localize('merchelloReports_customerCheckoutPercent'),
+                        abandonedBasketResource.getDefaultReportData(),
+                        settingsResource.getAllSettings()
+
+                    ]).then(function(data) {
+
+                        scope.anonymousBaskets = data[0];
+                        scope.anonymousCheckouts = data[1];
+                        scope.customerBaskets = data[2];
+                        scope.customerCheckouts = data[3];
+                        scope.anonymousPercentLabel = data[4];
+                        scope.customerPercentLabel = data[5];
+                        scope.result = data[6].items[0];
+                        scope.settings = data[7];
+
+                        scope.anonymousCheckoutPercent = invoiceHelper.round(scope.result.anonymousCheckoutPercent, 2);
+                        scope.customerCheckoutPercent = invoiceHelper.round(scope.result.customerCheckoutPercent, 2);
+
+                        scope.labels.push(data[0], data[1], data[2], data[3]);
+                        scope.data.push(
+                            scope.result.anonymousBasketCount,
+                            scope.result.anonymousCheckoutCount,
+                            scope.result.customerBasketCount,
+                            scope.result.customerCheckoutCount);
+
+                        scope.setLoaded()(true);
+
+                        scope.loaded = true;
+                    });
+
+                }
+
+            }
+        }
+    }]);
+
+angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
+    ['$q', '$compile', '$filter', 'assetsService', 'localizationService', 'settingsResource', 'queryDisplayBuilder', 'invoiceHelper', 'abandonedBasketResource',
+        function($q, $compile, $filter, assetsService, localizationService, settingsResource, queryDisplayBuilder, invoiceHelper, abandonedBasketResource) {
+
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    setLoaded: '&'
+                },
+                templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.customerbaskets.tpl.html',
+                link: function (scope, elm, attr) {
+
+                    const baseUrl = '#/merchello/merchello/customeroverview/';
+
+                    scope.loaded = true;
+                    scope.entityType = 'customerBaskets';
+                    scope.settings = {};
+                    scope.load = load;
+                    scope.getColumnValue = getColumnValue;
+                    scope.preValuesLoaded = false;
+                    scope.pageSize = 10;
+
+                    scope.itemLabel = '';
+                    scope.skuLabel = '';
+                    scope.quantityLabel = '';
+                    scope.priceLabel = '';
+                    scope.subTotalLabel = '';
+
+
+                    function init() {
+                        $q.all([
+                            settingsResource.getAllSettings(),
+                            localizationService.localize('merchelloGeneral_item'),
+                            localizationService.localize('merchelloVariant_sku'),
+                            localizationService.localize('merchelloGeneral_quantity'),
+                            localizationService.localize('merchelloGeneral_price'),
+                            localizationService.localize('merchelloGeneral_subTotal')
+                        ]).then(function(data) {
+                            scope.settings = data[0];
+                            scope.itemLabel = data[1];
+                            scope.skuLabel = data[2];
+                            scope.quantityLabel = data[3];
+                            scope.priceLabel = data[4];
+                            scope.subTotalLabel = data[5];
+                            scope.preValuesLoaded = true;
+                        });
+
+                    }
+
+                      function getColumnValue(result, col) {
+                        switch(col.name) {
+                            case 'loginName':
+                                return '<a href="' + getEditUrl(result.customer) + '">' + result.customer.loginName + '</a>';
+                            case 'firstName':
+                                return  '<a href="' + getEditUrl(result) + '">' + result.customer.firstName + ' ' + result.customer.lastName + '</a>';
+                            case 'lastActivityDate':
+                                return $filter('date')(result.customer.lastActivityDate, scope.settings.dateFormat);
+                            case 'items':
+                                return buildItemsTable(result.items);
+                            default:
+                                return result[col.name];
+                        }
+                    }
+
+
+                    function getEditUrl(customer) {
+                        return baseUrl + customer.key;
+                    }
+
+                    function load(query) {
+                        scope.setLoaded()(false);
+                        var deferred = $q.defer();
+
+                        abandonedBasketResource.getCustomerSavedBasketsLegacy(query).then(function(results) {
+                            deferred.resolve(results);
+                        });
+                        scope.setLoaded()(true);
+                        return deferred.promise;
+                    }
+
+                    function buildItemsTable(items) {
+                        var html = '<table class=\'table table-striped\'>';
+                        html += '<thead><tr>';
+                        html += '<th>' + scope.itemLabel + '</th>';
+                        html += '<th>' + scope.skuLabel + '</th>';
+                        html += '<th>' + scope.quantityLabel + '</th>';
+                        html += '<th>' + scope.priceLabel + '</th>';
+                        html += '<th>' + scope.subTotalLabel + '</th>';
+                        html += '</tr></thead>'
+                        html += '<tbody>';
+                        angular.forEach(items, function(item) {
+                            html += '<tr>';
+                            html += '<th>' + item.name + '</th>';
+                            html += '<th>' + item.sku + '</th>';
+                            html += '<th>' + item.quantity + '</th>';
+                            html += '<th>' + $filter('currency')(item.price, scope.settings.currencySymbol ) + '</th>';
+                            html += '<th>' + $filter('currency')(item.price * item.quantity, scope.settings.currencySymbol ) + '</th>';
+                            html += '</tr>';
+                        });
+                        html += '</tbody></table>';
+
+                        return html;
+                    }
+
+                    init();
+                }
+
+            }
+        }]);
+angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
+    ['$q', '$log', '$filter', 'assetsService', 'localizationService', 'dateHelper',  'settingsResource', 'salesOverTimeResource', 'queryDisplayBuilder',
+        function($q, $log, $filter, assetsService, localizationService, dateHelper, settingsResource, salesOverTimeResource, queryDisplayBuilder) {
+
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    ready: '=?'
+                },
+                templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.thisweekvslast.tpl.html',
+                link: function(scope, elm, attr) {
+
+
+                    scope.loaded = false;
+                    scope.busy = false;
+                    scope.settings = {};
+                    scope.resultData = [];
+                    scope.chartData = [];
+                    scope.labels = [];
+                    scope.series = [];
+                    scope.weekdays = [];
+
+                    scope.getTotalsColumn = getTotalsColumn;
+
+                    assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
+                        init();
+                    });
+
+                    function init() {
+
+                        var deferred = $q.defer();
+
+                        $q.all([
+                            dateHelper.getLocalizedDaysOfWeek(),
+                            settingsResource.getAllCombined()
+                        ]).then(function(data) {
+                            scope.weekdays = data[0];
+                            scope.settings = data[1];
+                            loadReportData();
+                        });
+
+                    }
+
+                    function loadReportData() {
+                        var today = new Date();
+                        var last = new Date();
+                        var thisWeekEnd = $filter('date')(today, scope.settings.dateFormat);
+                        var lastWeekEnd = $filter('date')(last.setDate(last.getDate() - 7), scope.settings.dateFormat);
+                        var lastQuery = queryDisplayBuilder.createDefault();
+                        var currentQuery = queryDisplayBuilder.createDefault();
+                        currentQuery.addInvoiceDateParam(thisWeekEnd, 'end');
+                        lastQuery.addInvoiceDateParam(lastWeekEnd, 'end');
+
+                        var deferred = $q.defer();
+                        $q.all([
+                            salesOverTimeResource.getWeeklyResult(currentQuery),
+                            salesOverTimeResource.getWeeklyResult(lastQuery)
+
+                        ]).then(function(data) {
+                            scope.resultData = [ data[0].items, data[1].items];
+                            compileChart();
+                        });
+
+                    }
+
+                    function compileChart() {
+
+                        scope.labels = [];
+                        scope.series = [];
+                        scope.chartData = [];
+
+                        if (scope.resultData.length > 0) {
+
+                            _.each(scope.resultData[0], function(days) {
+                                scope.labels.push(scope.weekdays[new Date(days.startDate).getDay()]);
+                            });
+
+                            // list the series
+                            // we'll have 'This Week' and 'Last Week' for every currency code
+                            var seriesTemplate = [];
+                            _.each(scope.resultData[0][0].totals, function(t) {
+                                seriesTemplate.push({label: t.currency.symbol + ' ' + t.currency.currencyCode, currencyCode: t.currency.currencyCode});
+                            });
+
+                            var dataSeriesLength = seriesTemplate.length * 2;
+
+                            buildSeries(seriesTemplate, 'This Week');
+                            buildSeries(seriesTemplate, 'Last Week');
+
+
+
+                            var seriesIndex = 0;
+                            _.each(scope.resultData, function(dataSet) {
+                                for(var j = 0; j < seriesTemplate.length; j++) {
+                                    addChartData(dataSet, seriesTemplate[j].currencyCode, seriesIndex);
+                                    seriesIndex++;
+                                }
+                            });
+
+                        }
+
+                        scope.preValuesLoaded = true;
+                        scope.loaded = true;
+                    }
+
+                    function buildSeries(template, prefix) {
+                        _.each(template, function(item) {
+                            scope.series.push(prefix + ': ' + item.label);
+                            scope.chartData.push([]);
+                        });
+                    }
+
+                    function addChartData(dataSeries, currencyCode, chartDataIndex) {
+
+                        _.each(dataSeries, function(item) {
+                           var total = _.find(item.totals, function(tot) {
+                               return tot.currency.currencyCode === currencyCode;
+                           });
+                            scope.chartData[chartDataIndex].push(total.value);
+                        });
+                    }
+
+                    function getTotalsColumn(resultIndex, valueIndex) {
+                        var result = scope.resultData[resultIndex][valueIndex];
+
+                        var ret = '';
+                        _.each(result.totals, function(total) {
+                            if (ret !== '') ret += '<br />';
+                            ret += total.currency.currencyCode + ': ' + $filter('currency')(total.value, total.currency.symbol);
+                        });
+
+                        return ret;
+                    }
+                }
+
+
+            };
+        }]);
+angular.module('merchello.directives').directive('reportWidgetTopSelling',
+    ['$log', '$filter', 'assetsService', 'localizationService', 'eventsService', 'salesByItemResource', 'settingsResource', 'queryDisplayBuilder',
+    function($log, $filter, assetsService, localizationService, eventsService, salesByItemResource, settingsResource, queryDisplayBuilder) {
 
     return {
         restrict: 'E',
         replace: true,
         scope: {
-            ready: '=?',
-            startDate: '=',
-            endDate: '='
+            setloaded: '&'
         },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.topfiveselling.tpl.html',
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/reportwidget.topselling.tpl.html',
         link: function(scope, elm, attr) {
+
+            var datesChangeEventName = 'merchello.reportsdashboard.datechange';
 
             scope.loaded = false;
             scope.settings = {};
+            scope.results = [];
             scope.chartData = [];
             scope.labels = [];
+
+            scope.startDate = '';
+            scope.endDate = '';
+
+            scope.reload = reload;
 
             assetsService.loadCss('/App_Plugins/Merchello/lib/charts/angular-chart.min.css').then(function() {
                 init();
             });
 
             function init() {
-                if (!('ready' in attr)) {
-                    scope.isReady = true;
-                }
 
-                scope.$watch('ready', function(newVal, oldVal) {
-                    if (newVal === true) {
-                        scope.isReady = newVal;
-                    }
-                    if(scope.isReady) {
-                        loadSettings();
-                    }
-                });
             }
 
-
-            /**
-             * @ngdoc method
-             * @name loadSettings
-             * @function
-             *
-             * @description - Load the Merchello settings.
-             */
-            function loadSettings() {
-                settingsResource.getAllCombined().then(function(combined) {
-                    scope.settings = combined.settings;
-                    loadReportData();
-                });
-            };
-
             function loadReportData() {
+                dataLoaded(false);
+                scope.results = [];
+                scope.chartData = [];
+                scope.labels = [];
 
                 var query = queryDisplayBuilder.createDefault();
-                query.addInvoiceDateParam(scope.startDate, 'start');
-                query.addInvoiceDateParam(scope.endDate, 'end');
+                query.addInvoiceDateParam($filter('date')(scope.startDate, 'yyyy-MM-dd'), 'start');
+                query.addInvoiceDateParam($filter('date')(scope.endDate, 'yyyy-MM-dd'), 'end');
 
                 salesByItemResource.getCustomReportData(query).then(function(results) {
+
                     angular.forEach(results.items, function(item) {
                         scope.labels.push(item.productVariant.name);
                         scope.chartData.push(item.quantitySold);
                     });
+
+                    if (scope.chartData.length === 0) {
+                        scope.chartData.push(1);
+                        scope.labels.push('No results');
+                    }
+
+                    scope.results = results.items;
+                    dataLoaded(true);
                     scope.loaded = true;
                 });
             }
+
+            function reload(startDate, endDate) {
+                scope.startDate = startDate;
+                scope.endDate = endDate;
+                loadReportData();
+            }
+
+            function dataLoaded(value) {
+                scope.loaded = value;
+                scope.setloaded()(value);
+            }
+
         }
     };
-}])
+}]);
 /**
  * @ngdoc directive
  * @name merchello-slide-open-panel

@@ -623,6 +623,33 @@
             return Count(query);
         }
 
+
+        /// <summary>
+        /// Gets the total count of all invoices within a date range and customer type
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer Type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> representing the count of invoices.
+        /// </returns>
+        public int CountInvoices(DateTime startDate, DateTime endDate, CustomerType customerType)
+        {
+            var query = customerType == CustomerType.Anonymous ?
+                Persistence.Querying.Query<IInvoice>.Builder.Where(
+                    x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate && x.CustomerKey == null) :
+                Persistence.Querying.Query<IInvoice>.Builder.Where(
+                    x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate && x.CustomerKey != null);
+
+            return Count(query);
+        }
+
         /// <summary>
         /// Gets the totals of invoices in a date range for a specific currency code.
         /// </summary>

@@ -47,6 +47,19 @@
     <key alias="oct">October</key>
     <key alias="nov">November</key>
     <key alias="dec">December</key>
+    <key alias="monday">Monday</key>
+    <key alias="tuesday">Tuesday</key>
+    <key alias="wednesday">Wednesday</key>
+    <key alias="thursday">Thursday</key>
+    <key alias="friday">Friday</key>
+    <key alias="saturday">Saturday</key>
+    <key alias="sunday">Sunday</key>
+    <key alias="day">Day</key>
+    <key alias="item">Item</key>
+    <key alias="items">Items</key>
+    <key alias="totals">Totals</key>
+    <key alias="quantity">Quantity</key>
+    <key alias="subTotal">Sub Total</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -85,6 +98,23 @@
     <key alias="render">Render</key>
     <key alias="salesOverTime">Sales Over Time</key>
     <key alias="salesByItem">Sales By Item</key>
+    <key alias="abandonedBasket">Abandoned Basket</key>
+  </area>
+  <area alias="merchelloReports">
+    <key alias="anonymousBaskets">Anonymous Baskets</key>
+    <key alias="anonymousCheckouts">Anonymous Checkouts</key>
+    <key alias="anonymousCheckoutPercent">Anonymous Checkout Percent</key>
+    <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="customerCheckouts">Customer Checkouts</key>
+    <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
+    <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
+    <key alias="monthlyTotalSales">Monthly Total Sales</key>
+    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
+    <key alias="thisWeek">This Week</key>
+    <key alias="lastWeek">Last Week</key>
+    <key alias="quantitySold">Quantity Sold</key>
+    <key alias="numberOfInvoices">Number of invoices</key>
+    <key alias="abandonedBaskets">Abandoned Baskets and Completed Checkouts</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
@@ -221,6 +251,9 @@
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>
     <key alias="newCustomer">New Customer</key>
+    <key alias="basket">Basket</key>
+    <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="lastActivityDate">Last Activity Date</key>
     <key alias="lastInvoiceTotal">Last Invoice Total</key>
     <key alias="location">Location</key>
     <key alias="noCustomers">
@@ -242,6 +275,19 @@
       <small>Notes about the customer (not sale specific)</small>
       ]]>
     </key>
+    <key alias="customerBasket">
+      <![CDATA[
+      Customer Basket
+      <small>Items currently in the customer basket</small>
+      ]]>
+    </key>
+    <key alias="customerWishlist">
+      <![CDATA[
+      Customer Wish List
+      <small>Items currently in the customer wish list</small>
+      ]]>
+    </key>
+    <key alias="itemCacheEmpty">Contains no items</key>
     <key alias="totalSpent">Total Spent</key>
   </area>
   <area alias="merchelloMarketing">

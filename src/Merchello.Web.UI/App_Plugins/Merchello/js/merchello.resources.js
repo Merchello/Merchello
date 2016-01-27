@@ -6,6 +6,67 @@
 
 (function() { 
 
+angular.module('merchello.resources').factory('abandonedBasketResource',
+    ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'abandonedBasketResultBuilder', 'customerItemCacheDisplayBuilder',
+    function($http, $q, umbRequestHelper, queryResultDisplayBuilder, abandonedBasketResultBuilder, customerItemCacheDisplayBuilder) {
+
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloAbandonedBasketApiBaseUrl'];
+
+        return {
+            getDefaultReportData : function() {
+
+                var deferred = $q.defer();
+                $q.all([
+                        umbRequestHelper.resourcePromise(
+                            $http({
+                                url: baseUrl + 'GetDefaultReportData',
+                                method: "GET"
+                            }),
+                            'Failed to retreive default report data')])
+                    .then(function(data) {
+
+                        var results = queryResultDisplayBuilder.transform(data[0], abandonedBasketResultBuilder);
+                        deferred.resolve(results);
+                    });
+
+                return deferred.promise;
+            },
+
+            getCustomerSavedBasketsLegacy : function(query) {
+
+                if (query === undefined) {
+                    query = queryDisplayBuilder.createDefault();
+                    query.applyInvoiceQueryDefaults();
+                }
+                var url = baseUrl + 'GetCustomerSavedBaskets';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url, query),
+                    'Failed to retreive customer basket data');
+
+            },
+
+            getCustomerSavedBaskets : function(query) {
+                if (query === undefined) {
+                    query = queryDisplayBuilder.createDefault();
+                }
+
+                var url = baseUrl + 'GetCustomerSavedBaskets';
+                var deferred = $q.defer();
+                $q.all([
+                        umbRequestHelper.resourcePromise(
+                            $http.post(url, query),
+                            'Failed to retreive customer basket data')])
+                    .then(function(data) {
+                        var results = queryResultDisplayBuilder.transform(data[0], customerItemCacheDisplayBuilder);
+                        deferred.resolve(results);
+                    });
+
+                return deferred.promise;
+            }
+        };
+
+}]);
+
     /**
      * @ngdoc resource
      * @name auditLogResource
@@ -54,8 +115,8 @@
      * @description Deals with customers api.
      **/
     angular.module('merchello.resources').factory('customerResource',
-        ['$http', 'umbRequestHelper',
-        function($http, umbRequestHelper) {
+        ['$q', '$http', 'umbRequestHelper', 'customerItemCacheDisplayBuilder',
+        function($q, $http, umbRequestHelper, customerItemCacheDisplayBuilder) {
 
             return {
 
@@ -135,6 +196,29 @@
                         }),
                         'Failed to load customer');
                 },
+
+                getCustomerItemCache: function(customerKey, itemCacheType) {
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetCustomerItemCache';
+
+                    var deferred = $q.defer();
+                    $q.all([
+                            umbRequestHelper.resourcePromise(
+                                $http({
+                                    url: url,
+                                    method: "GET",
+                                    params: { customerKey: customerKey, itemCacheType: itemCacheType }
+                                }),
+                                'Failed to retreive the customer item cache')])
+                        .then(function(data) {
+
+                            var results = customerItemCacheDisplayBuilder.transform(data[0]);
+                            deferred.resolve(results);
+                        });
+
+                    return deferred.promise;
+                },
+
 
                 /**
                  * @ngdoc method
@@ -1488,7 +1572,29 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
                     });
 
                 return deferred.promise;
+            },
+
+            getWeeklyResult : function(query) {
+
+                if (query === undefined) {
+                    query = queryDisplayBuilder.createDefault();
+                }
+
+                var url = baseUrl + 'GetWeeklyResult';
+
+                var deferred = $q.defer();
+                $q.all([
+                        umbRequestHelper.resourcePromise(
+                            $http.post(url, query),
+                            'Failed to retreive weekly report data')])
+                    .then(function(data) {
+                        var results = queryResultDisplayBuilder.transform(data[0], salesOverTimeResultBuilder);
+                        deferred.resolve(results);
+                    });
+
+                return deferred.promise;
             }
+
 
         };
 

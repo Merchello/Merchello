@@ -13,6 +13,7 @@
     using Merchello.Web.Models.Querying;
     using Merchello.Web.Models.Reports;
 
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
     using Umbraco.Web;
@@ -164,7 +165,7 @@
             // in case we want to refactor to some sort of service at a later date.
             var sql = ReportSqlHelper.SalesByItem.GetSkuSaleCountSql(startDate, endDate, _productLineItemTfKey);
 
-            var dtos = database.Fetch<SkuSaleCountDto>(sql);
+            var dtos = database.Query<SkuSaleCountDto>(sql).ToArray();
 
             // there have not been any item sales in this period
             if (!dtos.Any()) return Enumerable.Empty<SalesByItemResult>();

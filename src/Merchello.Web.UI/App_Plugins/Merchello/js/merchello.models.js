@@ -644,6 +644,22 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
 
 /**
  * @ngdoc model
+ * @name CustomerItemCacheDisplay
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's CustomerItemCacheDisplay object
+ */
+var CustomerItemCacheDisplay = function() {
+    var self = this;
+    self.customer = {};
+    self.items = [];
+};
+
+angular.module('merchello.models').constant('CustomerItemCacheDisplay', CustomerItemCacheDisplay);
+
+/**
+ * @ngdoc model
  * @name DetachedContentTypeDisplay
  * @function
  *
@@ -1453,7 +1469,7 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
         self.containerKey = '';
         self.lineItemTfKey = '';
         self.lineItemType = '';
-        self.lineItemTypeField = {};  // TODO why is this here
+        self.lineItemTypeField = {};
         self.sku = '';
         self.name = '';
         self.quantity = '';
@@ -1463,6 +1479,31 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
     };
 
     angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);
+    /**
+     * @ngdoc model
+     * @name ItemCacheLineItemDisplay
+     * @function
+     *
+     * @description
+     * Represents a JS version of Merchello's ItemCacheLineItemDisplay object
+     */
+    var ItemCacheLineItemDisplay = function() {
+        var self = this;
+
+        self.key = '';
+        self.containerKey = '';
+        self.lineItemTfKey = '';
+        self.lineItemType = '';
+        self.lineItemTypeField = {};
+        self.sku = '';
+        self.name = '';
+        self.quantity = '';
+        self.price = '';
+        self.exported = false;
+        self.extendedData = {};
+    };
+
+    angular.module('merchello.models').constant('ItemCacheLineItemDisplay', ItemCacheLineItemDisplay);
     /**
      * @ngdoc model
      * @name OrderLineItemDisplay
@@ -2716,6 +2757,29 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
     angular.module('merchello.models').constant('QueryResultDisplay', QueryResultDisplay);
 /**
  * @ngdoc model
+ * @name AbandonedBasketResult
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's AbandonedBasketResult object
+ */
+var AbandonedBasketResult = function() {
+    var self = this;
+    self.configuredDays = 0;
+    self.startDate = '';
+    self.endDate = '';
+    self.anonymousBasketCount = 0;
+    self.anonymousCheckoutCount = 0;
+    self.anonymousCheckoutPercent = 0;
+    self.customerBasketCount = 0;
+    self.customerCheckoutCount = 0;
+    self.customerCheckoutPercent = 0;
+};
+
+angular.module('merchello.models').constant('AbandonedBasketResult', AbandonedBasketResult);
+
+/**
+ * @ngdoc model
  * @name ResultCurrencyValue
  * @function
  *
@@ -2964,6 +3028,14 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             return this.total - amountPaid;
         }
 
+        function prefixedInvoiceNumber() {
+            if (this.invoiceNumberPrefix === '') {
+                return this.invoiceNumber;
+            } else {
+                return this.invoiceNumberPrefix + '-' + this.invoiceNumber;
+            }
+        }
+
         function isAnonymous() {
             return this.customerKey === '00000000-0000-0000-0000-000000000000';
         }
@@ -2984,7 +3056,8 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
             shippingTotal: shippingTotal,
-            isAnonymous:  isAnonymous
+            isAnonymous:  isAnonymous,
+            prefixedInvoiceNumber: prefixedInvoiceNumber
         };
     }());
 
@@ -4101,6 +4174,71 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
 
     }]);
 
+angular.module('merchello.models').factory('customerItemCacheDisplayBuilder',
+    ['genericModelBuilder', 'customerDisplayBuilder', 'itemCacheLineItemDisplayBuilder', 'CustomerItemCacheDisplay',
+    function(genericModelBuilder, customerDisplayBuilder, itemCacheLineItemDisplayBuilder, CustomerItemCacheDisplay) {
+
+        var Constructor = CustomerItemCacheDisplay;
+        return {
+            createDefault: function() {
+                var itemCache = new Constructor();
+                return itemCache;
+            },
+            transform: function(jsonResult) {
+                var itemCaches = [];
+                if(angular.isArray(jsonResult)) {
+                    for(var i = 0; i < jsonResult.length; i++) {
+                        var itemCache = genericModelBuilder.transform(jsonResult[ i ], Constructor);
+                        itemCache.customer = customerDisplayBuilder.transform(jsonResult[ i ].customer);
+                        itemCache.items = itemCacheLineItemDisplayBuilder.transform(jsonResult[ i ].items);
+                        itemCaches.push(itemCache);
+                    }
+                } else {
+                    itemCaches = genericModelBuilder.transform(jsonResult, Constructor);
+                    itemCaches.customer = customerDisplayBuilder.transform(jsonResult.customer);
+                    itemCaches.items = itemCacheLineItemDisplayBuilder.transform(jsonResult.items);
+                }
+                return itemCaches;
+            }
+        };
+
+}]);
+
+    /**
+     * @ngdoc service
+     * @name merchello.models.itemCacheLineItemDisplayBuilder
+     *
+     * @description
+     * A utility service that builds ItemCacheLineItemDisplay models
+     */
+    angular.module('merchello.models')
+        .factory('itemCacheLineItemDisplayBuilder',
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'typeFieldDisplayBuilder', 'ItemCacheLineItemDisplay',
+            function(genericModelBuilder, extendedDataDisplayBuilder, typeFieldDisplayBuilder, ItemCacheLineItemDisplay) {
+                var Constructor = ItemCacheLineItemDisplay;
+                return {
+                    createDefault: function() {
+                        var lineItem = new Constructor();
+                        lineItem.lineItemTypeField = typeFieldDisplayBuilder.createDefault();
+                        lineItem.extendedData = extendedDataDisplayBuilder.createDefault();
+                        return lineItem;
+                    },
+                    transform: function(jsonResult) {
+                        var lineItems = genericModelBuilder.transform(jsonResult, Constructor);
+                        if(angular.isArray(lineItems)) {
+                            for(var i = 0; i < lineItems.length; i++) {
+                                lineItems[ i ].extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
+                                lineItems[ i ].lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].lineItemTypeField);
+                            }
+                        } else {
+                            lineItems.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                            lineItems.lineItemTypeField = typeFieldDisplayBuilder.transform(jsonResult.lineItemTypeField);
+                        }
+                        return lineItems;
+                    }
+                };
+            }]);
+
 /**
  * @ngdoc service
  * @name detachedContentTypeDisplayBuilder
@@ -4724,7 +4862,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('reportsdashboard', 'merchelloTabs_reports', '#/merchello/merchello/reportsdashboard/manage');
                 tabs.addTab('salesOverTime', 'merchelloTabs_salesOverTime', '#/merchello/merchello/salesOverTime/manage');
-                //tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
+                tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
+                tabs.addTab("abandonedBasket", "merchelloTabs_abandonedBasket", '#/merchello/merchello/abandonedBasket/manage');
                 return tabs;
             }
 
@@ -5327,6 +5466,23 @@ angular.module('merchello.models').factory('productVariantDetachedContentDisplay
                 }
             };
         }]);
+angular.module('merchello.models').factory('abandonedBasketResultBuilder',
+    ['genericModelBuilder', 'AbandonedBasketResult',
+    function(genericModelBuilder, AbandonedBasketResult) {
+
+        var Constructor = AbandonedBasketResult;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+
+}]);
+
 /**
  * @ngdoc factory
  * @name resultCurrencyValueBuilder

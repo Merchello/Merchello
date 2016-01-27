@@ -16,7 +16,7 @@
     /// <summary>
     /// The create product collection table.
     /// </summary>
-    [Migration("1.10.0", "1.11.0", 3, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.10.0", "1.11.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
     public class CreateEntityCollectionTable : IMerchelloMigration
     {
         /// <summary>

@@ -2,8 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+
+    using Merchello.Core.Persistence.Querying;
+
     using Models;
     using Models.TypeFields;
+
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
 
     /// <summary>
@@ -102,13 +107,75 @@
         /// <param name="itemCacheType">The type of the <see cref="IItemCache"/></param>
         /// <returns><see cref="IItemCache"/></returns>
         IItemCache GetItemCacheByCustomer(ICustomerBase customer, ItemCacheType itemCacheType);
-            
+
+        /// <summary>
+        /// Gets a page of <see cref="IItemCache"/>
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IItemCache}"/>.
+        /// </returns>
+        Page<IItemCache> GetCustomerItemCachePage(ItemCacheType itemCacheType, DateTime startDate, DateTime endDate, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);  
+
         /// <summary>
         /// Gets list of <see cref="IItemCache"/> objects given a list of Keys
         /// </summary>
-        /// <param name="keys">List of guid 'key' for customer registries to retrieve</param>
+        /// <param name="keys">List of GUID 'key' for customer registries to retrieve</param>
         /// <returns>List of <see cref="IItemCache"/></returns>
         IEnumerable<IItemCache> GetByKeys(IEnumerable<Guid> keys);
 
+        /// <summary>
+        /// Gets the count of of item caches for a customer type.
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        int Count(ItemCacheType itemCacheType, CustomerType customerType);
+
+        /// <summary>
+        /// Gets the count of of item caches for a customer type for a given date range.
+        /// </summary>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer type.
+        /// </param>
+        /// <param name="startDate">
+        /// The start Date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end Date.
+        /// </param>
+        /// <returns>
+        /// The count of item caches.
+        /// </returns>
+        int Count(ItemCacheType itemCacheType, CustomerType customerType, DateTime startDate, DateTime endDate);
     }
 }
