@@ -1,0 +1,52 @@
+<div class="umb-panel merchello-context-panel constraint-product-selector" ng-controller="Merchello.PropertyEditors.MerchelloMultiProductPickerDialogController" data-ng-show="loaded">
+
+    <h4><localize key="merchelloProductEdit_selectMerchelloProduct" /></h4>
+
+
+    <form id="productSelectionForom" name="productSelectionForom" class="form-horizontal">
+
+        <table class="table table-hover merchello-selectable-table entity-collection-table sortable" data-ng-show="products.length > 0">
+            <thead>
+            <tr>
+                <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloVariant_product"/>
+                </th>
+                <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
+                </th>
+                <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
+                    <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
+                </th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="product in products"
+                data-ng-class="{active: product.selected}">
+                <td>{{product.name}}</td>
+                <td>{{product.sku}}</td>
+                <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
+                <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+                <td>
+                    <a class="btn btn-default btn-xs btn-mini" href data-ng-click="handleEntity(product)">
+                        <span data-ng-show="addToCollection"><i class="icon-add" /></span>
+                        <span data-ng-hide="addToCollection"><i class="icon-trash" /></span>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div class="umb-panel-footer" >
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                    <a href data-ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
