@@ -36,5 +36,19 @@
                     Currency = currency
                 };
         }
+
+        /// <summary>
+        /// Gets a <see cref="ProductBoxModel"/> from <see cref="IProductContent"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductBoxModel"/>.
+        /// </returns>
+        public static ProductBoxModel AsProductBoxModel(this IProductContent product)
+        {
+            return BazaarContentHelper.GetProductBoxModel(product);
+        }
     }
 }

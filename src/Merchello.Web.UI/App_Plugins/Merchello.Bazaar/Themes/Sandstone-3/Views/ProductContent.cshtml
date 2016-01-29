@@ -31,15 +31,9 @@
         <hr/>
         @Html.Raw(Model.GetPropertyValue<string>("description"))
     </div>
-
-
-    @*@{
-        if (Model.HasValue("relatedProducts"))
-        {
-            foreach (var p in Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts"))
-            {
-                <p>@p.Name</p>
-            }
-        }
-    }*@
+    @if (Model.HasProperty("relatedProducts") && Model.HasValue("relatedProducts"))
+    {
+        @Html.ThemedPartial(BazaarContentHelper.GetStoreTheme(), "RelatedProducts", BazaarContentHelper.GetProductBoxModels(Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts")))
+    }
+    
 </div>

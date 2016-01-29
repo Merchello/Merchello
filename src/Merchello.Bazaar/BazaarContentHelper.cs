@@ -257,27 +257,49 @@
             return new List<IPublishedContent>();
         }
 
+        /// <summary>
+        /// The get product box models.
+        /// </summary>
+        /// <param name="products">
+        /// The products.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{ProductBoxModel}"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO LM - this should return an IEnumerable so it is immutable ~ RSS 
+        /// </remarks>
         public static List<ProductBoxModel> GetProductBoxModels(IEnumerable<IProductContent> products)
         {
+            return products.Select(GetProductBoxModel).ToList();
+        }
 
-            var productBoxModelList = new List<ProductBoxModel>();
-            foreach (var product in products)
-            {
-                productBoxModelList.Add(new ProductBoxModel
-                {
-                    ProductKey = product.Key,
-                    Url = product.Url,
-                    Name = product.Name,
-                    Image = product.GetCropUrl(propertyAlias: "image", height: 350, cacheBuster: false),
-                    FormattedPrice = product.FormattedPrice(),
-                    FormattedSalePrice = product.FormattedSalePrice(),
-                    SalePrice = product.SalePrice,
-                    OnSale = product.OnSale,
-                    Price = product.Price
-                });
-            }
-            return productBoxModelList;
-        } 
+        /// <summary>
+        /// Gets a <see cref="ProductBoxModel"/> from <see cref="IProductContent"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductBoxModel"/>.
+        /// </returns>
+        public static ProductBoxModel GetProductBoxModel(IProductContent product)
+        {
+            return new ProductBoxModel
+                       {
+                           ProductKey = product.Key,
+                           Url = product.Url,
+                           Name = product.Name,
+                           Image =
+                               product.GetCropUrl(propertyAlias: "image", height: 350, cacheBuster: false),
+                           FormattedPrice = product.FormattedPrice(),
+                           FormattedSalePrice = product.FormattedSalePrice(),
+                           SalePrice = product.SalePrice,
+                           OnSale = product.OnSale,
+                           Price = product.Price
+                       };
+        }
+
 
         /// <summary>
         /// The reset.
