@@ -2,8 +2,19 @@
 
     <h4><localize key="merchelloProductEdit_selectMerchelloProduct" /></h4>
 
+    <form class="form-horizontal entity-selection-form">
+        <div class="merchello-pane">
+            <div class="form-group control-group row-fluid">
+                <div class="col-xs-7 span7 controls">
+                    <label for="productFilter"><localize key="merchelloGeneral_filterBy"/></label>
+                    <input id="productFilter" class="form-control span8" name="entityFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@placeholders_filter" />
+                    <button id="entityFilterGo" class="btn" data-ng-click="getFilteredProducts(filtertext)"><localize key="merchelloGeneral_filter" /></button>
+                </div>
+            </div>
+        </div>
+    </form>
 
-    <form id="productSelectionForom" name="productSelectionForom" class="form-horizontal">
+    <form id="productSelectionTable" name="productSelectionTable" class="form-horizontal">
 
         <table class="table table-hover merchello-selectable-table entity-collection-table sortable" data-ng-show="products.length > 0">
             <thead>
@@ -28,15 +39,27 @@
                 <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
                 <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
                 <td>
-                    <a class="btn btn-default btn-xs btn-mini" href data-ng-click="handleEntity(product)">
-                        <span data-ng-show="addToCollection"><i class="icon-add" /></span>
-                        <span data-ng-hide="addToCollection"><i class="icon-trash" /></span>
+                    <a class="btn btn-default btn-xs btn-mini" href data-ng-click="handleProduct(product)">
+                        <span data-ng-hide="product.selected"><i class="icon-add" /></span>
+                        <span data-ng-show="product.selected"><i class="icon-trash" /></span>
                     </a>
                 </td>
             </tr>
             </tbody>
         </table>
 
+
+        <div data-ng-show="dialogData.products.length > 0">
+        <h4>Already Selected</h4>
+
+        <ul class="unstyled">
+            <li ng-repeat="product in dialogData.products">
+                <a href="#" prevent-default>
+                    {{product.name}}
+                </a>
+            </li>
+        </ul>
+        </div>
 
         <div class="umb-panel-footer" >
             <div class="umb-el-wrap umb-panel-buttons">
@@ -45,6 +68,11 @@
                     <a href data-ng-click="close()" class="btn btn-link">
                         <localize key="general_cancel">Cancel</localize>
                     </a>
+
+                    <button class="btn btn-primary"
+                            data-ng-click="submit(dialogData)">
+                        <localize key="buttons_save">Save</localize>
+                    </button>
                 </div>
             </div>
         </div>

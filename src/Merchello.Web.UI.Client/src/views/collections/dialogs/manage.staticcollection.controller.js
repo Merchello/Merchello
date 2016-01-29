@@ -62,7 +62,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             var settingsPromise = settingsResource.getAllSettings();
             settingsPromise.then(function(allSettings) {
                 $scope.settings = settingDisplayBuilder.transform(allSettings);
-                console.info($scope.settings);
                 var currencySymbolPromise = settingsResource.getCurrencySymbol();
                 currencySymbolPromise.then(function (currencySymbol) {
                     $scope.currencySymbol = currencySymbol;
