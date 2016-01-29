@@ -1,53 +1,26 @@
-﻿// Global Styles
-
-// Bootstrap Overides
-.navbar {
-    border-radius: 0;
-}
-
-// Custom Styles
-
-// Product Thumbnail
-.thumbnail {
-}
-
-// Generic Price
+﻿.navbar {
+  border-radius: 0; }
 
 .price {
-    font-size: 17px;
+  font-size: 17px; }
+  .price .price-sale, .price.price-onsale {
+    color: #ed4949; }
+    .price .price-sale .glyphicon, .price.price-onsale .glyphicon {
+      font-size: 19px; }
+  .price .original-price {
+    color: #333;
+    text-decoration: line-through;
+    margin-left: .5rem; }
 
-    .price-sale, &.price-onsale {
-        color: #ed4949;
-
-        .glyphicon {
-            font-size: 19px;
-        }
-    }
-
-    .original-price {
-        color: #333;
-        text-decoration: line-through;
-        margin-left: .5rem;
-    }
-}
-
-// Category/Collection Listing
-.productcategorylist {
-    a.media, a.media:visited {
-        display: inline-block;
-        margin: 0 0 30px 0;
-        padding: 12px;
-        color: #333;
-
-        &:hover, &:focus {
-            color: #333;
-            text-decoration: none;
-            background-color: #fbfbfb;
-        }
-    }
-}
-
-// -------------- OLD STYLES BELOW
+.productcategorylist a.media, .productcategorylist a.media:visited {
+  display: inline-block;
+  margin: 0 0 30px 0;
+  padding: 12px;
+  color: #333; }
+  .productcategorylist a.media:hover, .productcategorylist a.media:focus, .productcategorylist a.media:visited:hover, .productcategorylist a.media:visited:focus {
+    color: #333;
+    text-decoration: none;
+    background-color: #fbfbfb; }
 
 /*.second-form {
     border: 1px solid #ccc;
@@ -130,13 +103,9 @@ span.field-validation-error {
 	border-bottom:1px solid #dcd4c6;
 	padding:10px 0;
 }*/
-
-
-
 /* Small devices (tablets, 768px and up) */
 /*@media (min-width: 768px) { 
  }*/
-
 /* Medium devices (desktops, 992px and up) */
 /*@media (min-width: 992px) {
 	.useBillingLabel {
@@ -144,7 +113,7 @@ span.field-validation-error {
 		top:-10px;
 	} 
  }*/
-
 /* Large devices (large desktops, 1200px and up) */
 /*@media (min-width: 1200px) { 
  }*/
+

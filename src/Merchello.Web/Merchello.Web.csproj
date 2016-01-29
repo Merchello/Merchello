@@ -444,6 +444,7 @@
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="PropertyConverters\MultiProductPickerValueConverter.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="PropertyConverters\ProductListViewValueConverter.cs" />
     <Compile Include="Providers\DynamicCollection\UnpaidInvoiceCollectionProvider.cs" />

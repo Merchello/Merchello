@@ -20,7 +20,7 @@
             @if (Model.HasValue("image"))
             {
                 <div class="col-xs-8">
-                    <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height:450, cacheBuster: false)&rnd=@DateTime.Now.Ticks" alt="@Model.Name">
+                    <img class="img-responsive" src="@Model.GetCropUrl(propertyAlias: "image", height: 450, cacheBuster: false)&rnd=@DateTime.Now.Ticks" alt="@Model.Name">
                 </div>
             }
             <div class="col-xs-4">
@@ -28,12 +28,18 @@
             </div>
 
         </div>
-        <hr />
+        <hr/>
         @Html.Raw(Model.GetPropertyValue<string>("description"))
-        <div class="page-header">
-            <h4>Related Products</h4>
-        </div>
-
-        TODO
     </div>
+
+
+    @*@{
+        if (Model.HasValue("relatedProducts"))
+        {
+            foreach (var p in Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts"))
+            {
+                <p>@p.Name</p>
+            }
+        }
+    }*@
 </div>

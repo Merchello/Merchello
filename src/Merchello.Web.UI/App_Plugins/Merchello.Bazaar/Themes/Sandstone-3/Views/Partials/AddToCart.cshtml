@@ -15,8 +15,10 @@
 
 <div class="well add-to-cart@(hasVariants ? " has-variants" : string.Empty)">
     @if (hasVariants)
-    {        
-            <div class="price @(Model.Product.OnSale ? "price-onsale" : "") text-center variant-pricing" id="@Model.Product.Key"></div>
+    {
+        <div class="price @(Model.Product.OnSale ? "price-onsale" : "") text-center variant-pricing" id="@Model.Product.Key">
+            
+        </div>
     }
     else
     {
