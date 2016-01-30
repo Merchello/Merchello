@@ -3379,7 +3379,6 @@ angular.module('merchello')
     .controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodVoidPaymentController',
     ['$scope', function($scope) {
 
-        console.info($scope.dialogData);
 
     }]);
 
@@ -5537,6 +5536,43 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
         }
 
         // Initialize the controller
+        init();
+}]);
+
+angular.module('merchello').controller('Merchello.Notes.Dialog.NoteAddEditController',
+    ['$scope',
+    function($scope) {
+        $scope.wasFormSubmitted = false;
+        $scope.rteProperties = {
+            label: 'bodyText',
+            view: 'rte',
+            config: {
+                editor: {
+                    toolbar: ["bold", "italic", "bullist", "numlist", "link"],
+                    stylesheets: [],
+                    dimensions: { height: 350 }
+                }
+            },
+            value: ""
+        };
+
+        function init() {
+            if ($scope.dialogData.note.message !== '') {
+                $scope.rteProperties.value = $scope.dialogData.note.message;
+            }
+        }
+
+        $scope.save = function() {
+            $scope.wasFormSubmitted = true;
+
+            if ($scope.rteProperties.value !== '') {
+                $scope.dialogData.note.message = $scope.rteProperties.value;
+                $scope.submit($scope.dialogData);
+            } else {
+                $scope.addEditNoteForm.$valid = false;
+            }
+        }
+
         init();
 }]);
 
@@ -9098,10 +9134,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService', 'invoiceHelper',
             'auditLogResource', 'noteResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
             'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder', 'noteDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder', 'noteDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService, invoiceHelper,
                  auditLogResource, noteResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, noteDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, noteDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder, noteDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
@@ -9111,14 +9147,13 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.invoiceNumber = '';
             $scope.tabs = [];
             $scope.historyLoaded = false;
-            $scope.notesLoaded = false;
             $scope.remainingBalance = 0.0;
             $scope.shippingTotal = 0.0;
             $scope.taxTotal = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
-            $scope.invoiceNotes = {};
+
             $scope.paymentMethods = [];
             $scope.allPayments = [];
             $scope.payments = [];
@@ -9131,6 +9166,10 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'invoice';
+
+            $scope.editNote = editNote;
+            $scope.deleteNote = deleteNote;
+            $scope.addNote = addNote;
 
             // exposed methods
             //  dialogs
@@ -9209,29 +9248,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             }
 
 
-            /**
-             * @ngdoc method
-             * @name loadNotes
-             * @function
-             *
-             * @description
-             * Load the Notes for the invoice via API.
-             */
-            function loadNotes(key) {
-                if (key !== undefined) {
-                    var promise = noteResource.getByEntityKey(key);
-                    promise.then(function (response) {
-                        var notes = noteDisplayBuilder.transform(response);
-                        // TODO this is a patch for a problem in the API
-                        if (notes.length > 0) {
-                            $scope.invoiceNotes = notes;
-                        }
-                        $scope.notesLoaded = notes.length > 0;
-                    }, function (reason) {
-                        notificationsService.error('Failed to load notes', reason.message);
-                    });
-                }
-            }
 
             /**
              * @ngdoc method
@@ -9257,7 +9273,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                     loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
-                    loadNotes(id);
+
                     loadShippingAddress(id);
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
@@ -9674,6 +9690,81 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
             }
 
+            function editNote(note) {
+                localizationService.localize('merchelloNotes_editNote').then(function(title) {
+                    var dialogData = {};
+                    dialogData.title = title;
+                    dialogData.note = angular.extend(noteDisplayBuilder.createDefault(), note);
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                        show: true,
+                        callback: processEditNoteDialog,
+                        dialogData: dialogData
+                    });
+                });
+            }
+
+
+            function addNote() {
+                localizationService.localize('merchelloNotes_addNote').then(function(title) {
+                    var dialogData = {};
+                    dialogData.title = title;
+                    dialogData.note = noteDisplayBuilder.createDefault();
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                        show: true,
+                        callback: processAddNoteDialog,
+                        dialogData: dialogData
+                    });
+                });
+            }
+
+
+            function deleteNote(note) {
+                var dialogData = {};
+                dialogData.name = note.message;
+                dialogData.note = note;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteNoteDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function processEditNoteDialog(dialogData) {
+                var note = _.find($scope.invoice.notes, function(n) {
+                    return n.key === dialogData.note.key;
+                });
+                if (note !== null && note !== undefined) {
+                    note.message = dialogData.note.message;
+                }
+                saveInvoice();
+            }
+
+            function processAddNoteDialog(dialogData) {
+
+               $scope.invoice.notes.push(dialogData.note);
+
+                saveInvoice();
+            }
+
+            function processDeleteNoteDialog(dialogData) {
+                var notes = _.reject($scope.invoice.notes, function(n) {
+                   return n.key === dialogData.note.key;
+                });
+                $scope.invoice.notes = notes;
+                saveInvoice();
+            }
+
+            function saveInvoice() {
+                invoiceResource.saveInvoice($scope.invoice).then(function(data) {
+                    $timeout(function () {
+                        loadInvoice($scope.invoice.key);
+                    }, 400);
+                });
+            }
+
             // initialize the controller
             init();
     }]);
@@ -9726,19 +9817,18 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.tabs.setActive('saleslist');
 
                 // localize
-                var deferred = $q.defer();
+
                 var promises = [
                     localizationService.localize('merchelloSales_paid'),
                     localizationService.localize('merchelloSales_unpaid'),
                     localizationService.localize('merchelloSales_partial'),
                     localizationService.localize('merchelloOrder_fulfilled'),
                     localizationService.localize('merchelloOrder_unfulfilled'),
-                    localizationService.localize('merchelloOrder_open')
+                    localizationService.localize('merchelloOrder_open'),
+                    settingsResource.getAllCombined()
                 ];
-                $q.all(promises).then(function(r) {
-                    deferred.resolve(r);
-                });
-                deferred.promise.then(function(local) {
+
+                $q.all(promises).then(function(local) {
                     paid = local[0];
                     unpaid = local[1];
                     partial = local[2];
@@ -9746,26 +9836,14 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     unfulfilled = local[4];
                     open = local[5];
 
-                    loadSettings();
-                });
-            }
-
-            /**
-             * @ngdoc method
-             * @name loadSettings
-             * @function
-             *
-             * @description - Load the Merchello settings.
-             */
-            function loadSettings() {
-                settingsResource.getAllCombined().then(function(combined) {
-                    $scope.settings = combined.settings;
-                    allCurrencies = combined.currencies;
-                    globalCurrency = combined.currencySymbol;
+                    $scope.settings = local[6].settings;
+                    allCurrencies = local[6].currencies;
+                    globalCurrency = local[6].currencySymbol;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 });
-            };
+            }
+
 
             function load(query) {
                 if (query.hasCollectionKeyParam()) {

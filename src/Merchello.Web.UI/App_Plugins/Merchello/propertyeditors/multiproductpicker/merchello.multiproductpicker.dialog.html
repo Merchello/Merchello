@@ -1,6 +1,9 @@
-<div class="umb-panel merchello-context-panel constraint-product-selector" ng-controller="Merchello.PropertyEditors.MerchelloMultiProductPickerDialogController" data-ng-show="loaded">
-
+<div class="umb-panel merchello-side-panel constraint-product-selector" ng-controller="Merchello.PropertyEditors.MerchelloMultiProductPickerDialogController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
     <h4><localize key="merchelloProductEdit_selectMerchelloProduct" /></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
 
     <form class="form-horizontal entity-selection-form">
         <div class="merchello-pane">
@@ -61,20 +64,21 @@
         </ul>
         </div>
 
-        <div class="umb-panel-footer" >
-            <div class="umb-el-wrap umb-panel-buttons">
-                <div class="btn-toolbar umb-btn-toolbar pull-right">
+    </form>
+    </div>
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
 
-                    <a href data-ng-click="close()" class="btn btn-link">
-                        <localize key="general_cancel">Cancel</localize>
-                    </a>
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
 
-                    <button class="btn btn-primary"
-                            data-ng-click="submit(dialogData)">
-                        <localize key="buttons_save">Save</localize>
-                    </button>
-                </div>
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
             </div>
         </div>
-    </form>
+    </div>
 </div>

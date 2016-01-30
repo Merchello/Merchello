@@ -10,10 +10,10 @@
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService', 'invoiceHelper',
             'auditLogResource', 'noteResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
             'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder', 'noteDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder', 'noteDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService, invoiceHelper,
                  auditLogResource, noteResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, noteDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, noteDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder, noteDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
@@ -23,14 +23,13 @@
             $scope.invoiceNumber = '';
             $scope.tabs = [];
             $scope.historyLoaded = false;
-            $scope.notesLoaded = false;
             $scope.remainingBalance = 0.0;
             $scope.shippingTotal = 0.0;
             $scope.taxTotal = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
-            $scope.invoiceNotes = {};
+
             $scope.paymentMethods = [];
             $scope.allPayments = [];
             $scope.payments = [];
@@ -43,6 +42,10 @@
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
             $scope.entityType = 'invoice';
+
+            $scope.editNote = editNote;
+            $scope.deleteNote = deleteNote;
+            $scope.addNote = addNote;
 
             // exposed methods
             //  dialogs
@@ -121,29 +124,6 @@
             }
 
 
-            /**
-             * @ngdoc method
-             * @name loadNotes
-             * @function
-             *
-             * @description
-             * Load the Notes for the invoice via API.
-             */
-            function loadNotes(key) {
-                if (key !== undefined) {
-                    var promise = noteResource.getByEntityKey(key);
-                    promise.then(function (response) {
-                        var notes = noteDisplayBuilder.transform(response);
-                        // TODO this is a patch for a problem in the API
-                        if (notes.length > 0) {
-                            $scope.invoiceNotes = notes;
-                        }
-                        $scope.notesLoaded = notes.length > 0;
-                    }, function (reason) {
-                        notificationsService.error('Failed to load notes', reason.message);
-                    });
-                }
-            }
 
             /**
              * @ngdoc method
@@ -169,7 +149,7 @@
                     loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
-                    loadNotes(id);
+
                     loadShippingAddress(id);
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
@@ -584,6 +564,81 @@
                         notificationsService.error("Failed to update shippingaddress", reason.message);
                     });
                 }
+            }
+
+            function editNote(note) {
+                localizationService.localize('merchelloNotes_editNote').then(function(title) {
+                    var dialogData = {};
+                    dialogData.title = title;
+                    dialogData.note = angular.extend(noteDisplayBuilder.createDefault(), note);
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                        show: true,
+                        callback: processEditNoteDialog,
+                        dialogData: dialogData
+                    });
+                });
+            }
+
+
+            function addNote() {
+                localizationService.localize('merchelloNotes_addNote').then(function(title) {
+                    var dialogData = {};
+                    dialogData.title = title;
+                    dialogData.note = noteDisplayBuilder.createDefault();
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                        show: true,
+                        callback: processAddNoteDialog,
+                        dialogData: dialogData
+                    });
+                });
+            }
+
+
+            function deleteNote(note) {
+                var dialogData = {};
+                dialogData.name = note.message;
+                dialogData.note = note;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteNoteDialog,
+                    dialogData: dialogData
+                });
+            }
+
+            function processEditNoteDialog(dialogData) {
+                var note = _.find($scope.invoice.notes, function(n) {
+                    return n.key === dialogData.note.key;
+                });
+                if (note !== null && note !== undefined) {
+                    note.message = dialogData.note.message;
+                }
+                saveInvoice();
+            }
+
+            function processAddNoteDialog(dialogData) {
+
+               $scope.invoice.notes.push(dialogData.note);
+
+                saveInvoice();
+            }
+
+            function processDeleteNoteDialog(dialogData) {
+                var notes = _.reject($scope.invoice.notes, function(n) {
+                   return n.key === dialogData.note.key;
+                });
+                $scope.invoice.notes = notes;
+                saveInvoice();
+            }
+
+            function saveInvoice() {
+                invoiceResource.saveInvoice($scope.invoice).then(function(data) {
+                    $timeout(function () {
+                        loadInvoice($scope.invoice.key);
+                    }, 400);
+                });
             }
 
             // initialize the controller

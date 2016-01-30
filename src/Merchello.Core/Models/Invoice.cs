@@ -1,14 +1,15 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
 
     using Umbraco.Core;
-    using System.Collections.Generic;
 
     /// <summary>
     /// The invoice.
@@ -128,7 +129,7 @@
         /// <summary>
         /// The notes selector.
         /// </summary>
-        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, List<Note>>(x => x.Notes);
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, IEnumerable<INote>>(x => x.Notes);
 
         /// <summary>
         /// The customer key.
@@ -248,7 +249,7 @@
         /// <summary>
         /// The notes.
         /// </summary>
-        private List<Note> _notes;
+        private IEnumerable<INote> _notes;
 
         #endregion
 
@@ -273,7 +274,7 @@
         /// The bill to address.
         /// </param>
         internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress)
-            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection())
+            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection(), Enumerable.Empty<INote>().ToArray())
         {
         }
 
@@ -292,12 +293,16 @@
         /// <param name="orders">
         /// The orders.
         /// </param>
-        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders)
+        /// <param name="notes">
+        /// The notes collection
+        /// </param>
+        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders, INote[] notes)
         {
             Mandate.ParameterNotNull(invoiceStatus, "invoiceStatus");
             Mandate.ParameterNotNull(billToAddress, "billToAddress");
             Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
             Mandate.ParameterNotNull(orders, "orders");
+            Mandate.ParameterNotNull(notes, "notes");
 
             _invoiceStatus = invoiceStatus;
 
@@ -309,7 +314,7 @@
             _billToPostalCode = billToAddress.PostalCode;
             _billToCountryCode = billToAddress.CountryCode;
             _billToPhone = billToAddress.Phone;
-
+            _notes = notes;
             _items = lineItemCollection;
             _orders = orders;
             _invoiceDate = DateTime.Now;
@@ -829,7 +834,7 @@
         /// Gets or sets the collection of notes associated with the invoice
         /// </summary>
         [DataMember]
-        public List<Note> Notes
+        public IEnumerable<INote> Notes
         {
             get
             {

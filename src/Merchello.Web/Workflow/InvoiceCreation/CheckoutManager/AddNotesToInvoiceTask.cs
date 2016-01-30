@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Workflow.InvoiceCreation.CheckoutManager
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
@@ -40,10 +41,9 @@
 
             if (!notes.Any()) return Attempt<IInvoice>.Succeed(value);
 
-            foreach (var msg in notes)
-            {
-                CheckoutManager.Context.Services.NoteService.CreateNoteWithKey(value.Key, EntityType.Invoice, msg);
-            }
+            var notesList = notes.Select(msg => this.CheckoutManager.Context.Services.NoteService.CreateNote(value.Key, EntityType.Invoice, msg)).ToList();
+
+            value.Notes = notesList;
 
             return Attempt<IInvoice>.Succeed(value);
         }

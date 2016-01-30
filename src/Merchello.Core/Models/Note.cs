@@ -1,12 +1,12 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
-    using System.Collections.Specialized;
     using System.Reflection;
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Models.Interfaces;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The note.
@@ -35,12 +35,12 @@
         /// <summary>
         /// The entity key.
         /// </summary>
-        private Guid? _entityKey;
+        private Guid _entityKey;
 
         /// <summary>
         /// The reference type.
         /// </summary>
-        private Guid? _entityTfKey;
+        private Guid _entityTfKey;
 
         /// <summary>
         /// The message.
@@ -52,20 +52,27 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Note"/> class.
         /// </summary>
-        public Note()
+        /// <param name="entityKey">
+        /// The entity Key.
+        /// </param>
+        /// <param name="entityTfKey">
+        /// The entity type field Key.
+        /// </param>
+        public Note(Guid entityKey, Guid entityTfKey)
         {
-            Message = null;
+            Mandate.ParameterCondition(entityTfKey != Guid.Empty, "entityTfKey");
+            Message = string.Empty;
             CreateDate = DateTime.Now;
             UpdateDate = DateTime.Now;
-            EntityKey = null;
-            EntityTfKey = null;
+            EntityKey = entityKey;
+            EntityTfKey = entityTfKey;
         }
 
         /// <summary>
         /// Gets or sets the entity key.
         /// </summary>
         [DataMember]
-        public Guid? EntityKey 
+        public Guid EntityKey 
         { 
             get
             {
@@ -89,7 +96,7 @@
         /// Gets or sets the reference type.
         /// </summary>
         [DataMember]
-        public Guid? EntityTfKey
+        public Guid EntityTfKey
         {
             get
             {

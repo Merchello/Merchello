@@ -70,6 +70,14 @@
 
             AutoMapper.Mapper.CreateMap<IGatewayResource, GatewayResourceDisplay>();
            
+            // Note
+            AutoMapper.Mapper.CreateMap<INote, NoteDisplay>()
+                .ForMember(
+                    dest => dest.EntityType,
+                    opt => opt.ResolveUsing<NoteEntityTypeResolver>().ConstructedBy(() => new NoteEntityTypeResolver()))
+                .ForMember(
+                    dest => dest.NoteTypeField,
+                    opt => opt.ResolveUsing<NoteTypeFieldResolver>().ConstructedBy(() => new NoteTypeFieldResolver()));
 
             // Invoice
             AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();

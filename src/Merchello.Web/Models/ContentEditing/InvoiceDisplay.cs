@@ -144,6 +144,11 @@
         public override IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
 
         /// <summary>
+        /// Gets or sets the notes.
+        /// </summary>
+        public IEnumerable<NoteDisplay> Notes { get; set; }
+
+        /// <summary>
         /// Gets or sets the currency.
         /// </summary>
         public CurrencyDisplay Currency { get; set; }

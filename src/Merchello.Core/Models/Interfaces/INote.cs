@@ -14,13 +14,13 @@
         /// Gets or sets the entity key related to the note
         /// </summary>
         [DataMember]
-        Guid? EntityKey { get; set; }
+        Guid EntityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type field key.
         /// </summary>
         [DataMember]
-        Guid? EntityTfKey { get; set; }
+        Guid EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets or sets the message.

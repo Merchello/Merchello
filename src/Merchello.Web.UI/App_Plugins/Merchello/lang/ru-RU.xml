@@ -166,6 +166,7 @@
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">Наименование является обязательным</key>
     <key alias="contentTypeRequired">Тип документа является обязательным</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Наименование</key>
@@ -242,6 +243,10 @@
     <key alias="paid">Оплачен</key>
     <key alias="unpaid">Не оплачен</key>
     <key alias="partial">Частично</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="addNote">Add a new note</key>
+    <key alias="editNote">Edit note</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>

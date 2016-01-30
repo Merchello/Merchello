@@ -101,6 +101,7 @@
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
@@ -114,6 +115,10 @@
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="addNote">Add a new note</key>
+    <key alias="editNote">Edit note</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">New Customer</key>

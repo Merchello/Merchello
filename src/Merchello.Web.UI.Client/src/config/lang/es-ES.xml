@@ -101,6 +101,7 @@
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
@@ -135,6 +136,10 @@
       <small>Items currently in the customer basket</small>
       ]]>
     </key>
+    <area alias="merchelloNotes">
+      <key alias="addNote">Add a new note</key>
+      <key alias="editNote">Edit note</key>
+    </area>
     <key alias="customerWishlist">
       <![CDATA[
       Customer Wish List

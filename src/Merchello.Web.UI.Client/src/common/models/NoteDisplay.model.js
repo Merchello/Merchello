@@ -1,19 +1,11 @@
-﻿/**
-    * @ngdoc model
-    * @name NoteDisplay
-    * @function
-    *
-    * @description
-    * Represents a JS version of Merchello's NoteDisplay object
-    */
-var NoteDisplay = function () {
+var NoteDisplay = function() {
     var self = this;
-
+    self.key = '';
+    self.message = '';
     self.entityKey = '';
     self.entityTfKey = '';
     self.entityType = '';
-    self.key = '';
-    self.message = {};
+    self.noteTypeField = {};
     self.recordDate = '';
 };
 
@@ -36,4 +28,3 @@ NoteDisplay.prototype = (function () {
 }());
 
 angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
-

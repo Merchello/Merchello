@@ -128,7 +128,8 @@
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
                     Currency = JsonFieldAs<CurrencyDisplay>(result, "currency"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
+                    Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
+                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems")                  
                 };
 
 
