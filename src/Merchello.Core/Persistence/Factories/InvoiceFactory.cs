@@ -19,6 +19,11 @@
         private readonly OrderCollection _orderCollection;
 
         /// <summary>
+        /// The note collection.
+        /// </summary>
+        private readonly NotesCollection _notesCollection;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceFactory"/> class.
         /// </summary>
         /// <param name="lineItemCollection">
@@ -27,10 +32,14 @@
         /// <param name="orderCollection">
         /// The order collection.
         /// </param>
-        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection)
+        /// <param name="notesesCollection">
+        /// The notes Collection.
+        /// </param>
+        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection, NotesCollection notesesCollection)
         {
             _lineItemCollection = lineItemCollection;
             _orderCollection = orderCollection;
+            this._notesCollection = notesesCollection;
         }
 
         /// <summary>
@@ -72,7 +81,8 @@
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate,
                     Items = _lineItemCollection,
-                    Orders = _orderCollection
+                    Orders = _orderCollection,
+                    Notes = _notesCollection
                 };
 
             invoice.ResetDirtyProperties();

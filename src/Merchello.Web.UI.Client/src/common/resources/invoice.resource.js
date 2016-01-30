@@ -95,6 +95,7 @@
                      * @description
                      **/
                     saveInvoice: function (invoice) {
+                        console.info(invoice);
                         var url = baseUrl + 'PutInvoice';
                         return umbRequestHelper.resourcePromise(
                             $http.post(url,

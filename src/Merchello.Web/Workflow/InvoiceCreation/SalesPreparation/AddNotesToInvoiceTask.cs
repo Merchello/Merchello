@@ -45,25 +45,7 @@
 
             if (noteDisplay == null) return Attempt<IInvoice>.Succeed(value);
 
-            var note = new Note
-                           {
-                               EntityKey = value.Key,
-                               EntityTfKey =
-                                   EnumTypeFieldConverter.EntityType.GetTypeField(EntityType.Invoice).TypeKey,
-                               Message = noteDisplay.Message
-                           };
-
-            if (value.Notes != null)
-            {
-                if (value.Notes.All(x => x.Message != note.Message))
-                {
-                    value.Notes.Add(note);
-                }
-            }
-            else
-            {
-                value.Notes = new System.Collections.Generic.List<Note> { note };
-            }
+            value.Notes.Add(noteDisplay.ToNote());
 
             return Attempt<IInvoice>.Succeed(value);            
         }

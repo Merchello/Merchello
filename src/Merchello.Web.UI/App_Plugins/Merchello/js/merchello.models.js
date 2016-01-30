@@ -367,6 +367,37 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
     }());
 
     angular.module('merchello.models').constant('MerchelloTabCollection', MerchelloTabCollection);
+var NoteDisplay = function() {
+    var self = this;
+    self.key = '';
+    self.message = '';
+    self.entityKey = '';
+    self.entityTfKey = '';
+    self.entityType = '';
+    self.noteTypeField = {};
+    self.recordDate = '';
+};
+
+NoteDisplay.prototype = (function () {
+
+    function toDateString() {
+        return this.recordDate.split('T')[0];
+    }
+
+    function toTimeString() {
+        var time = this.recordDate.split('T')[1];
+        return time.split(':')[0] + ':' + time.split(':')[1];
+    }
+
+    return {
+        toDateString: toDateString,
+        toTimeString: toTimeString
+    };
+
+}());
+
+angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
+
     /**
      * @ngdoc model
      * @name ProvinceDisplay
@@ -2883,6 +2914,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
         self.currency = {};
         self.items = [];
         self.orders = [];
+        self.notes = [];
     };
 
     InvoiceDisplay.prototype = (function() {
@@ -3082,46 +3114,6 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
     };
 
     angular.module('merchello.models').constant('InvoiceStatusDisplay', InvoiceStatusDisplay);
-/**
-    * @ngdoc model
-    * @name NoteDisplay
-    * @function
-    *
-    * @description
-    * Represents a JS version of Merchello's NoteDisplay object
-    */
-var NoteDisplay = function () {
-    var self = this;
-
-    self.entityKey = '';
-    self.entityTfKey = '';
-    self.entityType = '';
-    self.key = '';
-    self.message = {};
-    self.recordDate = '';
-};
-
-NoteDisplay.prototype = (function () {
-
-    function toDateString() {
-        return this.recordDate.split('T')[0];
-    }
-
-    function toTimeString() {
-        var time = this.recordDate.split('T')[1];
-        return time.split(':')[0] + ':' + time.split(':')[1];
-    }
-
-    return {
-        toDateString: toDateString,
-        toTimeString: toTimeString
-    };
-
-}());
-
-angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
-
-
     /**
      * @ngdoc model
      * @name OrderDisplay
@@ -4885,6 +4877,31 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 }]);
 
+angular.module('merchello.models').factory('noteDisplayBuilder',
+    ['genericModelBuilder', 'typeFieldDisplayBuilder', 'NoteDisplay',
+    function(genericModelBuilder, typeFieldDisplayBuilder, NoteDisplay) {
+
+        var Constructor = NoteDisplay;
+        return {
+            createDefault: function() {
+                var note = new Constructor();
+                note.noteTypeField = typeFieldDisplayBuilder.createDefault();
+                return note;
+            },
+            transform: function(jsonResult) {
+                var notes = genericModelBuilder.transform(jsonResult, Constructor);
+                if(angular.isArray(notes)) {
+                    for(var i = 0; i < notes.length; i++) {
+                        notes[ i ].noteTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].noteTypeField);
+                    }
+                } else {
+                    notes.noteTypeField = typeFieldDisplayBuilder.transform(jsonResult.noteTypeField);
+                }
+                return notes;
+            }
+        };
+}]);
+
 /**
  * @ngdoc service
  * @name notificationGatewayProviderDisplayBuilder
@@ -5585,9 +5602,9 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
     angular.module('merchello.models')
         .factory('invoiceDisplayBuilder',
         ['genericModelBuilder', 'invoiceStatusDisplayBuilder', 'invoiceLineItemDisplayBuilder',
-            'orderDisplayBuilder', 'currencyDisplayBuilder', 'InvoiceDisplay',
+            'orderDisplayBuilder', 'currencyDisplayBuilder', 'noteDisplayBuilder', 'InvoiceDisplay',
             function(genericModelBuilder, invoiceStatusDisplayBuilder, invoiceLineItemDisplayBuilder,
-                     orderDisplayBuilder, currencyDisplayBuilder, InvoiceDisplay) {
+                     orderDisplayBuilder, currencyDisplayBuilder, noteDisplayBuilder, InvoiceDisplay) {
                 var Constructor = InvoiceDisplay;
 
                 return {
@@ -5605,6 +5622,7 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
                                 invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
                                 invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
                                 invoices[ i ].currency = currencyDisplayBuilder.transform(jsonResult[ i ].currency);
+                                invoices[ i ].notes = noteDisplayBuilder.transform(jsonResult[i].notes);
                             }
                         } else {
                             //jsonResult = JSON.stringify(jsonResult);
@@ -5612,6 +5630,7 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
                             invoices.currency = currencyDisplayBuilder.transform(jsonResult.currency);
+                            invoices.notes = noteDisplayBuilder.transform(jsonResult.notes);
                         }
                         return invoices;
                     }
@@ -5674,33 +5693,6 @@ angular.module('merchello.models').factory('salesOverTimeResultBuilder',
                 };
             }]);
 
-/**
- * @ngdoc service
- * @name merchello.models.noteDisplayBuilder
- *
- * @description
- * A utility service that builds noteDisplayBuilder models
- */
-angular.module('merchello.models')
-    .factory('noteDisplayBuilder',
-        ['genericModelBuilder', 'NoteDisplay',
-            function (genericModelBuilder, NoteDisplay) {
-
-                var Constructor = NoteDisplay;
-
-                return {
-                    createDefault: function () {
-                        return new Constructor();
-                    },
-                    transform: function (jsonResult) {
-                        var noteDisplay = genericModelBuilder.transform(jsonResult, Constructor);
-
-                        noteDisplay.message = jsonResult.message;
-
-                        return noteDisplay;
-                    }
-                };
-            }]);
     /**
      * @ngdoc service
      * @name merchello.models.gatewayResourceDisplayBuilder

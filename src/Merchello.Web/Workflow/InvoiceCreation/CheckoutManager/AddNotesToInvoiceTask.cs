@@ -40,9 +40,9 @@
 
             if (!notes.Any()) return Attempt<IInvoice>.Succeed(value);
 
-            foreach (var msg in notes)
+            foreach (var note in notes.Select(msg => this.CheckoutManager.Context.Services.NoteService.CreateNote(value.Key, EntityType.Invoice, msg)))
             {
-                CheckoutManager.Context.Services.NoteService.CreateNoteWithKey(value.Key, EntityType.Invoice, msg);
+                value.Notes.Add(note);
             }
 
             return Attempt<IInvoice>.Succeed(value);

@@ -353,6 +353,8 @@
     <Compile Include="Models\ContentEditing\ItemCacheLineItemDisplay.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
     <Compile Include="Models\MapperResolvers\ItemCacheCustomerResolver.cs" />
+    <Compile Include="Models\MapperResolvers\NoteEntityTypeResolver.cs" />
+    <Compile Include="Models\MapperResolvers\NoteTypeFieldResolver.cs" />
     <Compile Include="Models\Reports\AbandonedBasketResult.cs" />
     <Compile Include="Models\Reports\CustomerBasketsResult.cs" />
     <Compile Include="Models\Reports\MonthlyReportResult.cs" />

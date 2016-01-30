@@ -163,6 +163,7 @@
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
     <key alias="contentTypeRequired">Content type is required</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
@@ -171,6 +172,10 @@
     <key alias="endDate">End Date</key>
     <key alias="active">Active</key>
     <key alias="sortOrder">Sort Order</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="addNote">Add a new note</key>
+    <key alias="editNote">Edit note</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>

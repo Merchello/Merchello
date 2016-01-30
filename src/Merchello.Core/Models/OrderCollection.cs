@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Threading;
-using Umbraco.Core;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Threading;
+
+    using Umbraco.Core;
+
+    /// <summary>
+    /// The order collection.
+    /// </summary>
     public class OrderCollection : NotifiyCollectionBase<Guid, IOrder>
     {
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();

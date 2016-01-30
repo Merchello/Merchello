@@ -13,10 +13,8 @@
     /// <summary>
     /// The note.
     /// </summary>
-    [Serializable]
     public class NoteDisplay
     {
-
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
@@ -25,12 +23,12 @@
         /// <summary>
         /// Gets or sets the entity key.
         /// </summary>
-        public Guid? EntityKey { get; set; }
+        public Guid EntityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type field key.
         /// </summary>
-        public Guid? EntityTfKey { get; set; }
+        public Guid EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type.
@@ -43,12 +41,16 @@
         /// </summary>
         public string Message { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the note type field.
+        /// </summary>
+        public TypeField NoteTypeField { get; set; }
+
         /// <summary>
         /// Gets or sets the record date.
         /// </summary>
         public DateTime RecordDate { get; set; }
-
-
     }
 
 
@@ -69,15 +71,39 @@
         /// </returns>
         public static NoteDisplay ToNoteDisplay(this INote note)
         {
-            return new NoteDisplay()
+            return AutoMapper.Mapper.Map<INote, NoteDisplay>(note);
+        }
+
+        /// <summary>
+        /// Maps <see cref="NoteDisplay"/> to <see cref="INote"/>.
+        /// </summary>
+        /// <param name="noteDisplay">
+        /// The note display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="INote"/>.
+        /// </returns>
+        public static INote ToNote(this NoteDisplay noteDisplay)
+        {
+            var hasIdentity = true;
+
+            var key = noteDisplay.Key;
+            if (noteDisplay.Key.Equals(Guid.Empty))
             {
-                Message = note.Message,
-                Key = note.Key,
-                EntityKey = note.EntityKey,
-                EntityTfKey = note.EntityTfKey,
-                EntityType = EnumTypeFieldConverter.EntityType.GetTypeField(note.EntityTfKey ?? new Guid()),
-                RecordDate = note.CreateDate
+                key = Guid.NewGuid();
+                hasIdentity = false;
+            }
+
+            var note = new Note(noteDisplay.EntityKey, noteDisplay.EntityTfKey)
+            {
+                Key = key,
+                Message = noteDisplay.Message,
+                CreateDate = noteDisplay.RecordDate == DateTime.MinValue ? DateTime.Now : noteDisplay.RecordDate
             };
+
+            if (!hasIdentity) note.ResetHasIdentity();
+
+            return note;
         }
     }
 }

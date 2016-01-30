@@ -163,6 +163,7 @@
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">The name field is required</key>
     <key alias="contentTypeRequired">Content type is required</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloTableCaptions">
     <key alias="name">Name</key>
@@ -268,6 +269,10 @@
       <small>A list of the customer's sales and their status</small>
       ]]>
     </key>
+    <area alias="merchelloNotes">
+      <key alias="addNote">Add a new note</key>
+      <key alias="editNote">Edit note</key>
+    </area>
     <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
     <key alias="customerNotes">
       <![CDATA[

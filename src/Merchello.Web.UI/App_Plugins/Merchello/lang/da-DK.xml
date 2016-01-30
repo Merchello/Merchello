@@ -90,6 +90,7 @@
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">Navn er krævet</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">Der er ingen produkter i denne samling</key>
@@ -203,6 +204,10 @@
     <key alias="isOnSale">Denne variant er på tilbud</key>
     <key alias="isAvailable">Denne variant er tilgængelig til køb</key>
     <key alias="costOfGoods">Kostpris af varer</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="addNote">Add a new note</key>
+    <key alias="editNote">Edit note</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->

@@ -222,7 +222,17 @@
 			destination.BillToCompany = invoiceDisplay.BillToCompany;
 			destination.Exported = invoiceDisplay.Exported;
 			destination.Archived = invoiceDisplay.Archived;
-			return destination;
+
+            // remove any notes that were previously saved an removed through the back office
+
+		    destination.Notes.Clear();
+		    foreach (var note in invoiceDisplay.Notes)
+		    {
+		        destination.Notes.Add(note.ToNote());
+		    }
+
+
+            return destination;
 		}
 
 		internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)

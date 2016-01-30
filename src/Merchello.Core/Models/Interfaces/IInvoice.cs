@@ -158,6 +158,6 @@
         /// Gets or sets the notes associated with the Invoice
         /// </summary>
         [DataMember]
-        List<Note> Notes { get; set; }
+        NotesCollection Notes { get; set; }
     }
 }

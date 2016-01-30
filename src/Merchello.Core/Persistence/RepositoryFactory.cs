@@ -288,7 +288,8 @@
                 uow,
                 _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
                 CreateInvoiceLineItemRepository(uow),
-                CreateOrderRepository(uow), 
+                CreateOrderRepository(uow),
+                CreateNoteRepository(uow), 
                 _logger, 
                 _sqlSyntax);
         }

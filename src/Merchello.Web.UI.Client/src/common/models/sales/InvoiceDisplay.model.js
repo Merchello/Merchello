@@ -33,6 +33,7 @@
         self.currency = {};
         self.items = [];
         self.orders = [];
+        self.notes = [];
     };
 
     InvoiceDisplay.prototype = (function() {

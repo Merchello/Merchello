@@ -25,15 +25,13 @@
         /// Gets or sets the entity key.
         /// </summary>
         [Column("entityKey")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? EntityKey { get; set; }
+        public Guid EntityKey { get; set; }
 
         /// <summary>
         /// Gets or sets the reference type.
         /// </summary>
         [Column("entityTfKey")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid? EntityTfKey { get; set; }
+        public Guid EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets or sets the message.

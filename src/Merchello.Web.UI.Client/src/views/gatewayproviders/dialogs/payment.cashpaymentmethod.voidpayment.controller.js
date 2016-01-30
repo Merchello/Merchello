@@ -11,6 +11,5 @@ angular.module('merchello')
     .controller('Merchello.GatewayProviders.Dialogs.CashPaymentMethodVoidPaymentController',
     ['$scope', function($scope) {
 
-        console.info($scope.dialogData);
 
     }]);
