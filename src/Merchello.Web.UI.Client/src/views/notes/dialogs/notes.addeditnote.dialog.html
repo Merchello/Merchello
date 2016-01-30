@@ -6,9 +6,10 @@
     <form id="addEditNoteForm" name="addEditNoteForm">
     <div class="umb-panel-body with-header with-footer">
         <div class="control-group">
-            <label for="message"><localize key="merchelloNotificationsMethod_message" /></label>
-            <div class="error" data-ng-show="addEditNoteForm.message.$invalid && wasFormSubmitted"><localize key="merchelloValidation_noteMessageRequired" /></div>
-            <textarea name="message" type="text" class="span6" data-ng-model="dialogData.message" rows="3" required></textarea>
+            <label><localize key="merchelloNotificationsMethod_message" /></label>
+            <div class="error" data-ng-show="addEditNoteForm.$invalid && wasFormSubmitted"><localize key="merchelloValidation_noteMessageRequired" /></div>
+            <umb-editor model="rteProperties"></umb-editor>
+
         </div>
     </div>
 

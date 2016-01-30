@@ -120,13 +120,11 @@
                                 <tbody>
                                 <thead>
                                 <tr>
-                                    <th>Date</th>
                                     <th colspan="2">Note</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <td></td>
                                         <td></td>
                                         <td>
                                             <span class="pull-right">
@@ -136,9 +134,11 @@
                                     </tr>
                                 </tfoot>
                                 <tr  data-ng-repeat="item in invoice.notes">
-                                    <td>{{item.recordDate | date : settings.dateFormat }}</td>
-                                    <td>{{ item.message }}</td>
-                                    <td class="pull-right"><merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNote(item)" do-delete="deleteNote(item)"></merchello-icon-bar></td>
+                                    <td>
+                                        <p><strong>{{item.recordDate | date : settings.dateFormat }}</strong></p>
+                                        <div data-ng-bind-html="item.message"></div>
+                                    </td>
+                                    <td class="pull-right" nowrap="nowrap"><merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNote(item)" do-delete="deleteNote(item)"></merchello-icon-bar></td>
                                 </tr>
                                 </tbody>
                             </table>

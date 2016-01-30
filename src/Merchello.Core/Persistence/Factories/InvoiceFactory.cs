@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System.Collections.Generic;
+
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
 
@@ -21,7 +23,7 @@
         /// <summary>
         /// The note collection.
         /// </summary>
-        private readonly NotesCollection _notesCollection;
+        private readonly IEnumerable<INote> _notes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceFactory"/> class.
@@ -32,14 +34,14 @@
         /// <param name="orderCollection">
         /// The order collection.
         /// </param>
-        /// <param name="notesesCollection">
+        /// <param name="notes">
         /// The notes Collection.
         /// </param>
-        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection, NotesCollection notesesCollection)
+        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection, IEnumerable<INote> notes)
         {
             _lineItemCollection = lineItemCollection;
             _orderCollection = orderCollection;
-            this._notesCollection = notesesCollection;
+            this._notes = notes;
         }
 
         /// <summary>
@@ -82,7 +84,7 @@
                     UpdateDate = dto.UpdateDate,
                     Items = _lineItemCollection,
                     Orders = _orderCollection,
-                    Notes = _notesCollection
+                    Notes = this._notes
                 };
 
             invoice.ResetDirtyProperties();

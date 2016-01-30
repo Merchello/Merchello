@@ -1088,7 +1088,7 @@
 
             var lineItems = GetLineItemCollection(key);
             var orders = GetOrderCollection(key);
-            var notes = GetNoteCollection(key);
+            var notes = this.GetNotes(key);
             var factory = new InvoiceFactory(lineItems, orders, notes);
             return factory.BuildEntity(dto);
         }
@@ -1267,14 +1267,18 @@
             {
                 u.EntityKey = entity.Key;
 
-                var dto = factory.BuildDto(u);
                 if (u.HasIdentity)
                 {
+                    ((Note)u).UpdatingEntity();
+                    var dto = factory.BuildDto(u);
                     Database.Update(dto);
                 }
                 else
                 {
+                    ((Note)u).AddingEntity();
+                    var dto = factory.BuildDto(u);
                     Database.Insert(dto);
+                    u.Key = dto.Key;
                 }
 
                 var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
@@ -1403,14 +1407,14 @@
         /// The invoice key.
         /// </param>
         /// <returns>
-        /// The <see cref="NotesCollection"/>.
+        /// The <see cref="IEnumerable{INote}"/>.
         /// </returns>
-        private NotesCollection GetNoteCollection(Guid invoiceKey)
+        private IEnumerable<INote> GetNotes(Guid invoiceKey)
         {
             var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == invoiceKey);
             var notes = _noteRepository.GetByQuery(query);
 
-            var collection = new NotesCollection();
+            var collection = new List<INote>();
 
             foreach (var note in notes.OrderByDescending(x => x.CreateDate))
             {

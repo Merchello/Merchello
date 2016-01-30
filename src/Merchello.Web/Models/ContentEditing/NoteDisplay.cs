@@ -85,23 +85,14 @@
         /// </returns>
         public static INote ToNote(this NoteDisplay noteDisplay)
         {
-            var hasIdentity = true;
-
-            var key = noteDisplay.Key;
-            if (noteDisplay.Key.Equals(Guid.Empty))
-            {
-                key = Guid.NewGuid();
-                hasIdentity = false;
-            }
 
             var note = new Note(noteDisplay.EntityKey, noteDisplay.EntityTfKey)
             {
-                Key = key,
                 Message = noteDisplay.Message,
                 CreateDate = noteDisplay.RecordDate == DateTime.MinValue ? DateTime.Now : noteDisplay.RecordDate
             };
 
-            if (!hasIdentity) note.ResetHasIdentity();
+            if (!noteDisplay.Key.Equals(Guid.Empty)) note.Key = noteDisplay.Key;
 
             return note;
         }

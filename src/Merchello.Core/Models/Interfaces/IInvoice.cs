@@ -146,18 +146,16 @@
         [DataMember]
         OrderCollection Orders { get; set; }
 
-       
+        /// <summary>
+        /// Gets or sets the notes associated with the Invoice
+        /// </summary>
+        [DataMember]
+        IEnumerable<INote> Notes { get; set; }
+
         /// <summary>
         /// Accepts visitor class to visit invoice line items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
         void Accept(ILineItemVisitor visitor);  
-
-        
-        /// <summary>
-        /// Gets or sets the notes associated with the Invoice
-        /// </summary>
-        [DataMember]
-        NotesCollection Notes { get; set; }
     }
 }

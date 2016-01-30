@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
 
@@ -128,7 +129,7 @@
         /// <summary>
         /// The notes selector.
         /// </summary>
-        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, NotesCollection>(x => x.Notes);
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, IEnumerable<INote>>(x => x.Notes);
 
         /// <summary>
         /// The customer key.
@@ -248,7 +249,7 @@
         /// <summary>
         /// The notes.
         /// </summary>
-        private NotesCollection _notes;
+        private IEnumerable<INote> _notes;
 
         #endregion
 
@@ -273,7 +274,7 @@
         /// The bill to address.
         /// </param>
         internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress)
-            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection(), new NotesCollection())
+            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection(), Enumerable.Empty<INote>().ToArray())
         {
         }
 
@@ -295,7 +296,7 @@
         /// <param name="notes">
         /// The notes collection
         /// </param>
-        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders, NotesCollection notes)
+        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders, INote[] notes)
         {
             Mandate.ParameterNotNull(invoiceStatus, "invoiceStatus");
             Mandate.ParameterNotNull(billToAddress, "billToAddress");
@@ -833,7 +834,7 @@
         /// Gets or sets the collection of notes associated with the invoice
         /// </summary>
         [DataMember]
-        public NotesCollection Notes
+        public IEnumerable<INote> Notes
         {
             get
             {
@@ -842,8 +843,14 @@
 
             set
             {
-                _notes = value;
-                _notes.CollectionChanged += NotesChanged;
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _notes = value;
+                        return _notes;
+                    },
+                _notes,
+                NotesSelector);
             }
         }
 
@@ -896,20 +903,6 @@
         private void OrdersChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(OrdersChangedSelector);
-        }
-
-        /// <summary>
-        /// The notes changed.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void NotesChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged(NotesSelector);
         }
     }
 }

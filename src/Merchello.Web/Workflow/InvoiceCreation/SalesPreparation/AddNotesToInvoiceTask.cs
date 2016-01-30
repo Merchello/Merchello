@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Workflow.InvoiceCreation.SalesPreparation
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
@@ -45,7 +46,10 @@
 
             if (noteDisplay == null) return Attempt<IInvoice>.Succeed(value);
 
-            value.Notes.Add(noteDisplay.ToNote());
+            value.Notes = new List<INote>()
+                              {
+                                 noteDisplay.ToNote()
+                              };
 
             return Attempt<IInvoice>.Succeed(value);            
         }

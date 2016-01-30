@@ -150,8 +150,6 @@
                     loadPayments(id);
                     loadAuditLog(id);
 
-                    console.info($scope.invoice);
-
                     loadShippingAddress(id);
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
@@ -569,24 +567,25 @@
             }
 
             function editNote(note) {
-
+                localizationService.localize('merchelloNotes_editNote').then(function(title) {
+                    var dialogData = {};
+                    dialogData.title = title;
+                    dialogData.note = angular.extend(noteDisplayBuilder.createDefault(), note);
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                        show: true,
+                        callback: processEditNoteDialog,
+                        dialogData: dialogData
+                    });
+                });
             }
 
 
             function addNote() {
                 localizationService.localize('merchelloNotes_addNote').then(function(title) {
-
                     var dialogData = {};
                     dialogData.title = title;
                     dialogData.note = noteDisplayBuilder.createDefault();
-                    dialogData.message = '';
-                    dialogData.note.entityKey = $scope.invoice.key;
-                    dialogData.note.entityType = 'Invoice';
-                    dialogData.note.noteTypeField.alias = 'Invoice';
-                    dialogData.note.noteTypeField.name = 'Invoice';
-                    dialogData.note.noteTypeField.typeKey = '454539b9-d753-4c16-8ed5-5eb659e56665';
-                    // TODO don't hard code this
-                    dialogData.note.entityTfKey = '454539B9-D753-4C16-8ED5-5EB659E56665';
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
                         show: true,
@@ -596,9 +595,10 @@
                 });
             }
 
+
             function deleteNote(note) {
                 var dialogData = {};
-                dialogData.name = 'Message ' + note.message;
+                dialogData.name = note.message;
                 dialogData.note = note;
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
@@ -606,6 +606,16 @@
                     callback: processDeleteNoteDialog,
                     dialogData: dialogData
                 });
+            }
+
+            function processEditNoteDialog(dialogData) {
+                var note = _.find($scope.invoice.notes, function(n) {
+                    return n.key === dialogData.note.key;
+                });
+                if (note !== null && note !== undefined) {
+                    note.message = dialogData.note.message;
+                }
+                saveInvoice();
             }
 
             function processAddNoteDialog(dialogData) {
