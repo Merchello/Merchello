@@ -715,6 +715,10 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TId"></typeparam>
+            <remarks>
+            This cache policy uses sliding expiration and caches instances for 5 minutes. However if allow zero count is true, then we use the
+            default policy with no expiry.
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.DisposableObject">
             <summary>
@@ -729,6 +733,12 @@
             Note: if an object's ctor throws, it will never be disposed, and so if that ctor
             has allocated disposable objects, it should take care of disposing them.
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.HasZeroCountCache">
+            <summary>
+            Looks up the zero count cache, must return null if it doesn't exist
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.GetAllFromCache">
             <summary>
@@ -774,6 +784,10 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TId"></typeparam>
+            <remarks>
+            This caching policy has no sliding expiration but uses the default ObjectCache.InfiniteAbsoluteExpiration as it's timeout, so it
+            should not leave the cache unless the cache memory is exceeded and it gets thrown out.
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.SetCacheAction(System.String,`0)">
             <summary>
@@ -788,6 +802,12 @@
             </summary>
             <param name="ids"></param>
             <param name="entityCollection"></param>
+        </member>
+        <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.HasZeroCountCache">
+            <summary>
+            Looks up the zero count cache, must return null if it doesn't exist
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.GetAllFromCache">
             <summary>
@@ -15153,6 +15173,13 @@
             </summary>
             <param name="propertyType"></param>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1.Get(System.String)">
+            <summary>
+            Gets an Entity by alias
+            </summary>
+            <param name="alias"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1.Get(System.Guid)">
             <summary>
             Gets an Entity by Id
@@ -15160,12 +15187,15 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1.GetAll(System.Guid[])">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1.Umbraco#Core#Persistence#Repositories#IReadRepository{System#Guid@TEntity}#GetAll(System.Guid[])">
             <summary>
             Gets all entities of the spefified type
             </summary>
             <param name="ids"></param>
             <returns></returns>
+            <remarks>
+            Ensure explicit implementation, we don't want to have any accidental calls to this since it is essentially the same signature as the main GetAll when there are no parameters
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1.Exists(System.Guid)">
             <summary>
@@ -15173,11 +15203,6 @@
             </summary>
             <param name="id"></param>
             <returns></returns>
-        </member>
-        <member name="T:Umbraco.Core.Persistence.Repositories.ContentTypeBaseRepository`1.GuidReadOnlyContentTypeBaseRepository">
-            <summary>
-            Inner repository to support the GUID lookups and keep the caching consistent
-            </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Repositories.ContentTypeRepository">
             <summary>
@@ -17645,6 +17670,9 @@
         <member name="P:Umbraco.Core.Models.ContentType.DefaultTemplate">
             <summary>
             Gets or sets the alias of the default Template.
+            TODO: This should be ignored from cloning!!!!!!!!!!!!!!
+             - but to do that we have to implement callback hacks, this needs to be fixed in v8, 
+                we should not store direct entity
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.ContentType.DefaultTemplateId">
@@ -17655,6 +17683,9 @@
         <member name="P:Umbraco.Core.Models.ContentType.AllowedTemplates">
             <summary>
             Gets or Sets a list of Templates which are allowed for the ContentType
+            TODO: This should be ignored from cloning!!!!!!!!!!!!!!
+             - but to do that we have to implement callback hacks, this needs to be fixed in v8, 
+                we should not store direct entity
             </summary>
         </member>
         <member name="T:Umbraco.Core.Models.DataTypeDatabaseType">
@@ -28186,7 +28217,7 @@
             Remove old instructions from the database
             </summary>
             <remarks>
-            Always leave the last (most recent) record in the db table, this is so that not all instructions are removed which would cause 
+            Always leave the last (most recent) record in the db table, this is so that not all instructions are removed which would cause
             the site to cold boot if there's been no instruction activity for more than DaysToRetainInstructions.
             See: http://issues.umbraco.org/issue/U4-7643#comment=67-25085
             </remarks>
@@ -28244,6 +28275,11 @@
             Initializes a new instance of the <see cref="T:Umbraco.Core.Sync.DatabaseServerMessengerOptions"/> with default values.
             </summary>
         </member>
+        <member name="P:Umbraco.Core.Sync.DatabaseServerMessengerOptions.MaxProcessingInstructionCount">
+            <summary>
+            The maximum number of instructions that can be processed at startup; otherwise the server cold-boots (rebuilds its caches).
+            </summary>
+        </member>
         <member name="P:Umbraco.Core.Sync.DatabaseServerMessengerOptions.InitializingCallbacks">
             <summary>
             A list of callbacks that will be invoked if the lastsynced.txt file does not exist.
@@ -28273,9 +28309,9 @@
             Initializes a new instance of the <see cref="T:Umbraco.Core.Sync.DatabaseServerRegistrarOptions"/> class with default values.
             </summary>
         </member>
-        <member name="P:Umbraco.Core.Sync.DatabaseServerRegistrarOptions.ThrottleSeconds">
+        <member name="P:Umbraco.Core.Sync.DatabaseServerRegistrarOptions.RecurringSeconds">
             <summary>
-            The number of seconds to wait between each updates to the database.
+            The amount of seconds to wait between calls to the database on the background thread
             </summary>
         </member>
         <member name="P:Umbraco.Core.Sync.DatabaseServerRegistrarOptions.StaleServerTimeout">

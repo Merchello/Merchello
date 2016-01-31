@@ -594,6 +594,8 @@
             // add to collections
             planAheadShirt.AddToCollection(geeky);
 
+            //// {"Key":"relatedProducts","Value":"[\r\n  \"a2d7c2c0-ebfa-4b8b-b7cb-eb398a24c83d\",\r\n  \"86e3c576-3f6f-45b8-88eb-e7b90c7c7074\"\r\n]"}
+
             planAheadShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
                    planAheadShirt.ProductVariantKey,
@@ -604,7 +606,8 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1069/planahead.jpg\" }")
+                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1069/planahead.jpg\" }"),
+                                new KeyValuePair<string, string>("relatedProucts", string.Format("[ \"{0}\", \"{1}\"]", paranormalShirt.Key, elementMehShirt.Key))
                             }))
                {
                    CanBeRendered = true
