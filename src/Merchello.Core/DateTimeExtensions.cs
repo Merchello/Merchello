@@ -160,6 +160,30 @@
         }
 
         /// <summary>
+        /// Gets the start of week.
+        /// </summary>
+        /// <param name="dt">
+        /// The date time.
+        /// </param>
+        /// <param name="startOfWeek">
+        /// The start of week.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek = DayOfWeek.Sunday)
+        {
+            int diff = dt.DayOfWeek - startOfWeek;
+            if (diff < 0)
+            {
+                diff += 7;
+            }
+
+            return dt.AddDays(-1 * diff).Date;
+        }
+
+
+        /// <summary>
         /// Parses the SQL DateTime min value string
         /// </summary>
         /// <returns>

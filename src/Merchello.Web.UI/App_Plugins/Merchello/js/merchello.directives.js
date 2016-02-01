@@ -2347,8 +2347,13 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
 
                         if (scope.resultData.length > 0) {
 
+                            console.info(scope.resultData[0]);
                             _.each(scope.resultData[0], function(days) {
-                                scope.labels.push(scope.weekdays[new Date(days.startDate).getDay()]);
+
+                                var dt = new Date(days.startDate);
+                                var dd = new Date(dt.getTime() + (dt.getTimezoneOffset() * 60000)).getDay();
+                                
+                                scope.labels.push(scope.weekdays[dd]);
                             });
 
                             // list the series
