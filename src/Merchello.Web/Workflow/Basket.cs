@@ -92,7 +92,6 @@
             Save(MerchelloContext.Current, this);
         }
 
-
         /// <summary>
         /// Instantiates a basket
         /// </summary>
