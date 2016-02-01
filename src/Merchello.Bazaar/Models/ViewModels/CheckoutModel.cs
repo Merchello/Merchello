@@ -6,7 +6,7 @@
     /// <summary>
     /// The checkout model.
     /// </summary>
-    public class CheckoutModel : CheckoutModelBase
+    public partial class CheckoutModel : CheckoutModelBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutModel"/> class.

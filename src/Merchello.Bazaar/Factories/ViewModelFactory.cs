@@ -27,7 +27,7 @@
     /// <summary>
     /// Represents a view model factory.
     /// </summary>
-    public class ViewModelFactory : IViewModelFactory
+    public partial class ViewModelFactory : IViewModelFactory
     {
         /// <summary>
         /// The <see cref="ICustomerBase"/>.
@@ -45,9 +45,9 @@
         private Lazy<BasketLineItemFactory> _basketLineItemFactory;
 
         /// <summary>
-        /// The <see cref="SalePreparationSummaryFactory"/>.
+        /// The <see cref="CheckoutManagerSummaryFactory"/>.
         /// </summary>
-        private Lazy<SalePreparationSummaryFactory> _salePreparationSummaryFactory; 
+        private Lazy<CheckoutManagerSummaryFactory> _salePreparationSummaryFactory; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelFactory"/> class.
@@ -230,7 +230,9 @@
                 }
             }
 
-            viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(basket.SalePreparation());
+            var checkoutManager = basket.GetCheckoutManager();
+
+            viewModel.SaleSummary = _salePreparationSummaryFactory.Value.Build(checkoutManager);
             viewModel.CheckoutAddressForm = new CheckoutAddressForm()
                 {
                     IsAnonymous = viewModel.CurrentCustomer.IsAnonymous,
@@ -318,11 +320,13 @@
                 allowedMethods.AddRange(paymentMethodsArray);
             }
 
-            var salesPreparation = basket.SalePreparation();
+            // old var salesPreparation = basket.SalePreparation();
+            var checkoutManager = basket.GetCheckoutManager();
 
             // prepare the invoice
-            var invoice = salesPreparation.PrepareInvoice();
-            
+            // var invoice = salesPreparation.PrepareInvoice();
+            var invoice = checkoutManager.Payment.PrepareInvoice();
+
             // get the existing shipMethodKey if any
             var shipmentLineItem = invoice.ShippingLineItems().FirstOrDefault();
             var shipMethodKey = shipmentLineItem != null ? shipmentLineItem.ExtendedData.GetShipMethodKey() : Guid.Empty;
@@ -551,7 +555,7 @@
         private void Initialize(UmbracoHelper umbraco)
         {
             _basketLineItemFactory = new Lazy<BasketLineItemFactory>(() => new BasketLineItemFactory(umbraco, _currentCustomer, _currency));
-            _salePreparationSummaryFactory = new Lazy<SalePreparationSummaryFactory>(() => new SalePreparationSummaryFactory(_currency, _basketLineItemFactory.Value));
+            _salePreparationSummaryFactory = new Lazy<CheckoutManagerSummaryFactory>(() => new CheckoutManagerSummaryFactory(_currency, _basketLineItemFactory.Value));
         }
     }
 }

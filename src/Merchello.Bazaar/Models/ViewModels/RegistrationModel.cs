@@ -5,7 +5,7 @@
     /// <summary>
     /// The registration model.
     /// </summary>
-    public class RegistrationModel : MasterModel
+    public partial class RegistrationModel : MasterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RegistrationModel"/> class.

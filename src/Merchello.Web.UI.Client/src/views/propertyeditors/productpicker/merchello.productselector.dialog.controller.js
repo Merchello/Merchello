@@ -220,6 +220,9 @@
                 $scope.submit($scope.dialogData);
             }
 
+
+
+
             // Initialize the controller
             init();
 

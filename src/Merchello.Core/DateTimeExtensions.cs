@@ -132,6 +132,34 @@
         }
 
         /// <summary>
+        /// Gets the first day a month month.
+        /// </summary>
+        /// <param name="current">
+        /// The reference date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime FirstOfMonth(this DateTime current)
+        {
+            return new DateTime(current.Year, current.Month, 1);
+        }
+
+        /// <summary>
+        /// Gets the last day of a month.
+        /// </summary>
+        /// <param name="current">
+        /// The reference date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime EndOfMonth(this DateTime current)
+        {
+            return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
+        }
+
+        /// <summary>
         /// Parses the SQL DateTime min value string
         /// </summary>
         /// <returns>

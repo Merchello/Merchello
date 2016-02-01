@@ -4,7 +4,7 @@
     </div>
     <div class="umb-panel-body with-header with-footer">
         <form name="deleteManualPaymentMethodForm">
-            <h4><localize key="merchelloDelete_deleteConfirmMessage" /> '{{dialogData.name}}'? </h4>
+            <h4><localize key="merchelloDelete_deleteConfirmMessage" /> '<span data-ng-bind-html="dialogData.name"></span>'? </h4>
             <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
                 <p class="text-warning">{{ dialogData.warning }}</p>
             </div>

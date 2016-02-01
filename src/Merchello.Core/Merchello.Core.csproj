@@ -61,8 +61,8 @@
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="businesslogic, Version=1.0.5820.25374, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\businesslogic.dll</HintPath>
+    <Reference Include="businesslogic, Version=1.0.5871.32304, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\businesslogic.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ClientDependency.Core">
@@ -73,12 +73,12 @@
       <HintPath>..\packages\ClientDependency-Mvc5.1.8.0.0\lib\net45\ClientDependency.Core.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="cms, Version=1.0.5820.25376, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\cms.dll</HintPath>
+    <Reference Include="cms, Version=1.0.5871.32305, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\cms.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="controls, Version=1.0.5820.25378, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\controls.dll</HintPath>
+    <Reference Include="controls, Version=1.0.5871.32306, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\controls.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="CookComputing.XmlRpcV2">
@@ -97,20 +97,20 @@
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ImageProcessor">
-      <HintPath>..\packages\ImageProcessor.2.3.0.0\lib\net45\ImageProcessor.dll</HintPath>
+    <Reference Include="ImageProcessor, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.3.2.0\lib\net45\ImageProcessor.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ImageProcessor.Web">
-      <HintPath>..\packages\ImageProcessor.Web.4.4.0.0\lib\net45\ImageProcessor.Web.dll</HintPath>
+    <Reference Include="ImageProcessor.Web, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.Web.4.5.1.0\lib\net45\ImageProcessor.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="interfaces, Version=1.0.5820.25369, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\interfaces.dll</HintPath>
+    <Reference Include="interfaces, Version=1.0.5871.32301, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\log4net.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Lucene.Net">
@@ -118,7 +118,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
@@ -177,19 +177,19 @@
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SQLCE4Umbraco, Version=1.0.5820.25377, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\SQLCE4Umbraco.dll</HintPath>
+    <Reference Include="SQLCE4Umbraco, Version=1.0.5871.32305, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\SQLCE4Umbraco.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\System.Data.SqlServerCe.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\System.Data.SqlServerCe.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http" />
@@ -246,43 +246,43 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\TidyNet.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\TidyNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="umbraco, Version=1.0.5820.25379, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\umbraco.dll</HintPath>
+    <Reference Include="umbraco, Version=1.0.5871.32307, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\umbraco.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Umbraco.Core, Version=1.0.5820.25371, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\Umbraco.Core.dll</HintPath>
+    <Reference Include="Umbraco.Core, Version=1.0.5871.32302, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\Umbraco.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="umbraco.DataLayer, Version=1.0.5820.25373, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\umbraco.DataLayer.dll</HintPath>
+    <Reference Include="umbraco.DataLayer, Version=1.0.5871.32304, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\umbraco.DataLayer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="umbraco.editorControls, Version=1.0.5820.25381, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\umbraco.editorControls.dll</HintPath>
+    <Reference Include="umbraco.editorControls, Version=1.0.5871.32308, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\umbraco.editorControls.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="umbraco.MacroEngines, Version=1.0.5820.25381, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\umbraco.MacroEngines.dll</HintPath>
+    <Reference Include="umbraco.MacroEngines, Version=1.0.5871.32309, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\umbraco.MacroEngines.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="umbraco.providers, Version=1.0.5820.25378, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\umbraco.providers.dll</HintPath>
+    <Reference Include="umbraco.providers, Version=1.0.5871.32306, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\umbraco.providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Umbraco.Web.UI, Version=1.0.5820.25382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\Umbraco.Web.UI.dll</HintPath>
+    <Reference Include="Umbraco.Web.UI, Version=1.0.5871.32309, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\Umbraco.Web.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="UmbracoExamine, Version=0.7.0.25377, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\UmbracoExamine.dll</HintPath>
+    <Reference Include="UmbracoExamine, Version=0.7.0.32305, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.3.6\lib\UmbracoExamine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="UrlRewritingNet.UrlRewriter, Version=2.0.60829.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UmbracoCms.Core.7.3.4\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+    <Reference Include="UrlRewritingNet.UrlRewriter, Version=2.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UrlRewritingNet.2.0.7\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebMatrix.Data">
@@ -297,6 +297,7 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="AutoMapperMappings.cs" />
+    <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
     <Compile Include="Chains\ConfigurationChainBase.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityAttemptChainBase{T}.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityTaskBase{T}.cs" />
@@ -310,7 +311,12 @@
     <Compile Include="Chains\CopyEntity\Product\MapProductVariantDataTask.cs" />
     <Compile Include="Chains\CopyEntity\Product\SaveProductCopyTask.cs" />
     <Compile Include="Chains\IDataModifierChain{T}.cs" />
-    <Compile Include="Chains\InvoiceCreation\AddCouponDiscountsToInvoiceTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutManager\AddBillingInfoToInvoiceTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutManager\AddInvoiceNumberPrefixTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutManager\ApplyTaxesToInvoiceTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutManager\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutManager\CheckoutManagerInvoiceCreationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\InvoiceCreation\CheckoutManager\ValidateCommonCurrency.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessor.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\IOfferConstraintChainTask.cs" />
@@ -320,6 +326,29 @@
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainForAttribute.cs" />
     <Compile Include="Chains\OfferConstraints\OfferProcessorFactory.cs" />
     <Compile Include="Chains\OfferConstraints\OfferConstraintChainTask.cs" />
+    <Compile Include="Checkout\CheckoutContext.cs" />
+    <Compile Include="Checkout\CheckoutContextEventArgs.cs" />
+    <Compile Include="Checkout\CheckoutContextManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutContextSettings.cs" />
+    <Compile Include="Checkout\CheckoutCustomerDataManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutCustomerManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutCustomerTempData.cs" />
+    <Compile Include="Checkout\CheckoutExtendedManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutManagerExtensions.cs" />
+    <Compile Include="Checkout\CheckoutOfferManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutPaymentManagerBase.cs" />
+    <Compile Include="Checkout\CheckoutShippingManagerBase.cs" />
+    <Compile Include="Checkout\ICheckoutContext.cs" />
+    <Compile Include="Checkout\ICheckoutContextManagerBase.cs" />
+    <Compile Include="Checkout\ICheckoutContextSettings.cs" />
+    <Compile Include="Checkout\ICheckoutCustomerManager.cs" />
+    <Compile Include="Checkout\ICheckoutExtendedManager.cs" />
+    <Compile Include="Checkout\ICheckoutNotificationManager.cs" />
+    <Compile Include="Checkout\ICheckoutOfferManager.cs" />
+    <Compile Include="Checkout\ICheckoutPaymentManager.cs" />
+    <Compile Include="Checkout\ICheckoutShippingManager.cs" />
+    <Compile Include="Checkout\ICheckoutManagerBase.cs" />
     <Compile Include="Configuration\Outline\ContentFinderCultureCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />
@@ -511,11 +540,11 @@
     <Compile Include="Builders\ShipmentBuilderChain.cs" />
     <Compile Include="Chains\AttemptChainTaskBase.cs" />
     <Compile Include="Chains\ChainTaskResolver.cs" />
-    <Compile Include="Chains\InvoiceCreation\ApplyTaxesToInvoiceTax.cs" />
-    <Compile Include="Chains\InvoiceCreation\AddBillingInfoToInvoiceTask.cs" />
-    <Compile Include="Chains\InvoiceCreation\InvoiceCreationAttemptChainTaskBase.cs" />
-    <Compile Include="Chains\InvoiceCreation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
-    <Compile Include="Chains\InvoiceCreation\ValidateCommonCurrency.cs" />
+    <Compile Include="Chains\InvoiceCreation\SalesPreparation\ApplyTaxesToInvoiceTax.cs" />
+    <Compile Include="Chains\InvoiceCreation\SalesPreparation\AddBillingInfoToInvoiceTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\SalesPreparation\InvoiceCreationAttemptChainTaskBase.cs" />
+    <Compile Include="Chains\InvoiceCreation\SalesPreparation\ConvertItemCacheItemsToInvoiceItemsTask.cs" />
+    <Compile Include="Chains\InvoiceCreation\SalesPreparation\ValidateCommonCurrency.cs" />
     <Compile Include="Chains\OrderCreation\ConvertInvoiceItemsToOrderItemsTask.cs" />
     <Compile Include="Chains\OrderCreation\OrderCreationAttemptChainTaskBase.cs" />
     <Compile Include="Chains\ShipmentCreation\OrderAttemptChainTaskBase.cs" />

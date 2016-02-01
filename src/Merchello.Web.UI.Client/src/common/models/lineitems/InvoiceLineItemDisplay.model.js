@@ -13,7 +13,7 @@
         self.containerKey = '';
         self.lineItemTfKey = '';
         self.lineItemType = '';
-        self.lineItemTypeField = {};  // TODO why is this here
+        self.lineItemTypeField = {};
         self.sku = '';
         self.name = '';
         self.quantity = '';

@@ -16,7 +16,9 @@
 <div class="well add-to-cart@(hasVariants ? " has-variants" : string.Empty)">
     @if (hasVariants)
     {
-        <div class="price text-center variant-pricing" id="@Model.Product.Key"></div>
+        <div class="price @(Model.Product.OnSale ? "price-onsale" : "") text-center variant-pricing" id="@Model.Product.Key">
+            
+        </div>
     }
     else
     {
@@ -34,7 +36,7 @@
                     foreach (var option in Model.Product.ProductOptions)
                     {
 
-                        var choices = option.Choices.OrderBy(x => x.SortOrder).Select(choice => new System.Web.Mvc.SelectListItem() { Value = choice.Key.ToString(), Text = choice.Name }).ToList();
+                        var choices = option.Choices.OrderBy(x => x.SortOrder).Select(choice => new SelectListItem { Value = choice.Key.ToString(), Text = choice.Name }).ToList();
                         choices.First().Selected = true;
 
                         @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })

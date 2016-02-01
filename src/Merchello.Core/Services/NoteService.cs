@@ -17,6 +17,8 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using RepositoryFactory = Persistence.RepositoryFactory;
 
     /// <summary>
@@ -54,8 +56,22 @@
         /// The logger.
         /// </param>
         public NoteService(ILogger logger)
-            : this(new PetaPocoUnitOfWorkProvider(logger), new RepositoryFactory(), logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NoteService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public NoteService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new PetaPocoUnitOfWorkProvider(logger), new RepositoryFactory(logger, sqlSyntax), logger)
+        {
         }
 
         /// <summary>
@@ -150,24 +166,70 @@
             {
                 return repository.Get(key);
             }
-        }        
+        }
 
         /// <summary>
-        /// Creates a note and saves it to the database
+        /// Creates a note without saving it to the database.
         /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
         /// <param name="message">
         /// The message.
         /// </param>
         /// <param name="raiseEvents">
-        /// Optional boolean indicating whether or not to raise events
+        /// The raise events.
         /// </param>
         /// <returns>
         /// The <see cref="INote"/>.
         /// </returns>
-        public INote CreateNoteWithKey(string message, bool raiseEvents = true)
+        public INote CreateNote(Guid entityKey, EntityType entityType, string message, bool raiseEvents = true)
         {
-            return CreateNoteWithKey(null, null, message, raiseEvents);
+            var entityTfKey = EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey;
+
+            return CreateNote(entityKey, entityTfKey, message, raiseEvents);
         }
+
+        /// <summary>
+        /// Creates a note without saving it to the database.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity Key.
+        /// </param>
+        /// <param name="entityTfKey">
+        /// The entity Type field Key.
+        /// </param>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="INote"/>.
+        /// </returns>
+        public INote CreateNote(Guid entityKey, Guid entityTfKey, string message, bool raiseEvents = true)
+        {
+            var note = new Note(entityKey, entityTfKey)
+            {
+                Message = message
+            };
+
+            if (raiseEvents)
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<INote>(note), this))
+            {
+                    note.WasCancelled = true;
+                    return note;  
+            }
+
+            Created.RaiseEvent(new Events.NewEventArgs<INote>(note), this);
+
+            return note;
+        }
+
 
 
         /// <summary>
@@ -188,7 +250,7 @@
         /// <returns>
         /// The <see cref="INote"/>.
         /// </returns>
-        public INote CreateNoteWithKey(Guid? entityKey, EntityType entityType, string message, bool raiseEvents = true)
+        public INote CreateNoteWithKey(Guid entityKey, EntityType entityType, string message, bool raiseEvents = true)
         {
             return CreateNoteWithKey(entityKey, EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey, message, raiseEvents);
         }
@@ -211,19 +273,14 @@
         /// <returns>
         /// The <see cref="INote"/>.
         /// </returns>
-        public INote CreateNoteWithKey(Guid? entityKey, Guid? entityTfKey, string message, bool raiseEvents = true)
+        public INote CreateNoteWithKey(Guid entityKey, Guid entityTfKey, string message, bool raiseEvents = true)
         {
-            var note = new Note()
-            {
-                EntityKey = entityKey,
-                EntityTfKey = entityTfKey,
-                Message = message
-            };
+            var note = CreateNote(entityKey, entityTfKey, message, raiseEvents);
 
             if (raiseEvents)
                 if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<INote>(note), this))
             {
-                note.WasCancelled = true;
+                ((Note)note).WasCancelled = true;
                 return note;
             }
 

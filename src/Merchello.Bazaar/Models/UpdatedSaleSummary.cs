@@ -3,7 +3,7 @@
     /// <summary>
     /// The updated sale summary.
     /// </summary>
-    public class UpdatedSaleSummary
+    public partial class UpdatedSaleSummary
     {
         /// <summary>
         /// Gets or sets the total label.

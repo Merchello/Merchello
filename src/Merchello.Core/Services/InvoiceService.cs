@@ -82,7 +82,7 @@
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
-        /// The sql syntax.
+        /// The SQL syntax.
         /// </param>
         internal InvoiceService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : this(new Persistence.RepositoryFactory(logger, sqlSyntax), logger, new AppliedPaymentService(logger, sqlSyntax), new OrderService(logger, sqlSyntax), new StoreSettingService(logger, sqlSyntax))
@@ -274,11 +274,14 @@
 
             var status = GetInvoiceStatusByKey(invoiceStatusKey);
 
+            var defaultCurrencyCode = this.GetDefaultCurrencyCode();
+
             var invoice = new Invoice(status)
             {
                 VersionKey = Guid.NewGuid(),
                 InvoiceNumber = invoiceNumber,
-                InvoiceDate = DateTime.Now
+                InvoiceDate = DateTime.Now,
+                CurrencyCode = defaultCurrencyCode
             };
 
             if (raiseEvents)
@@ -329,18 +332,6 @@
                     uow.Commit();
                 }
             }
-
-            if (invoice.Notes != null)
-            {
-                // Add invoice key to notes
-                foreach (var note in invoice.Notes)
-                {
-                    note.EntityKey = invoice.Key;
-                }
-                NoteService noteService = new NoteService();
-                noteService.Save(invoice.Notes);
-            }
-            
 
             if (!raiseEvents) return;
 
@@ -620,6 +611,33 @@
             return Count(query);
         }
 
+
+        /// <summary>
+        /// Gets the total count of all invoices within a date range and customer type
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="customerType">
+        /// The customer Type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/> representing the count of invoices.
+        /// </returns>
+        public int CountInvoices(DateTime startDate, DateTime endDate, CustomerType customerType)
+        {
+            var query = customerType == CustomerType.Anonymous ?
+                Persistence.Querying.Query<IInvoice>.Builder.Where(
+                    x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate && x.CustomerKey == null) :
+                Persistence.Querying.Query<IInvoice>.Builder.Where(
+                    x => x.InvoiceDate >= startDate && x.InvoiceDate <= endDate && x.CustomerKey != null);
+
+            return Count(query);
+        }
+
         /// <summary>
         /// Gets the totals of invoices in a date range for a specific currency code.
         /// </summary>
@@ -640,6 +658,32 @@
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.SumInvoiceTotals(startDate, endDate, currencyCode);
+            }
+        }
+
+        /// <summary>
+        /// Gets the total of line items for a give SKU invoiced in a specific currency across the date range.
+        /// </summary>
+        /// <param name="startDate">
+        /// The start date.
+        /// </param>
+        /// <param name="endDate">
+        /// The end date.
+        /// </param>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The total of line items for a give SKU invoiced in a specific currency across the date range.
+        /// </returns>
+        public decimal SumLineItemTotalsBySku(DateTime startDate, DateTime endDate, string currencyCode, string sku)
+        {
+            using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.SumLineItemTotalsBySku(startDate, endDate, currencyCode, sku);
             }
         }
 
@@ -1517,6 +1561,16 @@
             }
         }
 
+        /// <summary>
+        /// Gets the default currency code.
+        /// </summary>
+        /// <returns>
+        /// The currency code saved in the store settings.
+        /// </returns>
+        internal string GetDefaultCurrencyCode()
+        {
+            return this._storeSettingService.GetByKey(Core.Constants.StoreSettingKeys.CurrencyCodeKey).Value;
+        }
 
         #region Key Queries
 
@@ -1687,6 +1741,7 @@
         }
 
         #endregion
+
 
         /// <summary>
         /// Deletes orders associated with the invoice

@@ -508,10 +508,7 @@
         <member name="T:Umbraco.Web.IUmbracoContextAccessor">
             <summary>
             Used to retrieve the Umbraco context
-            </summary>
-            <remarks>
-            TODO: We could expose this to make working with UmbracoContext easier if we were to use it throughout the codebase
-            </remarks>
+            </summary>    
         </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.Relation.ParentId">
             <summary>
@@ -3233,18 +3230,19 @@
             Declares model mappings for members.
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.MapGenericCustomProperties(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
+        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.MapGenericCustomProperties(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay,Umbraco.Core.Services.ILocalizedTextService)">
             <summary>
             Maps the generic tab with custom properties for content
             </summary>
             <param name="memberService"></param>
             <param name="member"></param>
             <param name="display"></param>
+            <param name="localizedText"></param>
             <remarks>
             If this is a new entity and there is an approved field then we'll set it to true by default.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.GetLoginProperty(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay)">
+        <member name="M:Umbraco.Web.Models.Mapping.MemberModelMapper.GetLoginProperty(Umbraco.Core.Services.IMemberService,Umbraco.Core.Models.IMember,Umbraco.Web.Models.ContentEditing.MemberDisplay,Umbraco.Core.Services.ILocalizedTextService)">
             <summary>
             Returns the login property display field
             </summary>
@@ -3281,12 +3279,13 @@
             Creates the tabs collection with properties assigned for display models
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.MapGenericProperties``1(``0,Umbraco.Web.Models.ContentEditing.ContentItemDisplayBase{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},System.Collections.Generic.IEnumerable{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay},System.Action{System.Collections.Generic.List{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay}})">
+        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.MapGenericProperties``1(``0,Umbraco.Web.Models.ContentEditing.ContentItemDisplayBase{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},Umbraco.Core.Services.ILocalizedTextService,System.Collections.Generic.IEnumerable{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay},System.Action{System.Collections.Generic.List{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay}})">
             <summary>
             Maps properties on to the generic properties tab
             </summary>
             <param name="content"></param>
             <param name="display"></param>
+            <param name="localizedTextService"></param>
             <param name="customProperties">
             Any additional custom properties to assign to the generic properties tab. 
             </param>
@@ -3296,7 +3295,7 @@
             setting up the properties such as Created date, updated date, template selected, etc...
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.AddListView``1(Umbraco.Web.Models.ContentEditing.TabbedContentItem{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},System.String,Umbraco.Core.Services.IDataTypeService)">
+        <member name="M:Umbraco.Web.Models.Mapping.TabsAndPropertiesResolver.AddListView``1(Umbraco.Web.Models.ContentEditing.TabbedContentItem{Umbraco.Web.Models.ContentEditing.ContentPropertyDisplay,``0},System.String,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.ILocalizedTextService)">
             <summary>
             Adds the container (listview) tab to the document
             </summary>
@@ -4609,6 +4608,14 @@
             <summary>
             Umbraco auth cookie options
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.UmbracoBackOfficeCookieAuthOptions.CreateRequestCookieOptions(Microsoft.Owin.IOwinContext,Microsoft.Owin.Security.AuthenticationTicket)">
+            <summary>
+            Creates the cookie options for saving the auth cookie
+            </summary>
+            <param name="ctx"></param>
+            <param name="ticket"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.ClearCsrfCookiesAfterUpgrade">
             <summary>
@@ -9847,6 +9854,11 @@
             <summary>
             A culture dictionary that uses the Umbraco ILocalizationService
             </summary>
+            <remarks>
+            TODO: The ICultureDictionary needs to represent the 'fast' way to do dictionary item retrieval - for front-end and back office.
+            The ILocalizationService is the service used for interacting with this data from the database which isn't all that fast 
+            (even though there is caching involved, if there's lots of dictionary items the caching is not great)
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Dictionary.DefaultCultureDictionary.GetChildren(System.String)">
             <summary>
@@ -9854,6 +9866,11 @@
             </summary>
             <param name="key"></param>
             <returns></returns>
+            <remarks>
+            NOTE: The result of this is not cached anywhere - the underlying repository does not cache 
+            the child lookups because that is done by a query lookup. This method isn't used in our codebase
+            so I don't think this is a performance issue but if devs are using this it could be optimized here.
+            </remarks>
         </member>
         <member name="P:Umbraco.Web.Dictionary.DefaultCultureDictionary.Item(System.String)">
             <summary>
@@ -12338,6 +12355,155 @@
             Extension methods for UrlHelper for use in templates
             </summary>
         </member>
+        <member name="M:Umbraco.Web.UrlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.UrlHelper,Umbraco.Core.Models.IPublishedContent,System.String,System.Boolean)">
+            <summary>
+            Gets the ImageProcessor Url of a media item by the crop alias (using default media item property alias of "umbracoFile")
+            </summary>
+            <param name="urlHelper"></param>
+            <param name="mediaItem">
+            The IPublishedContent item.
+            </param>
+            <param name="cropAlias">
+            The crop alias e.g. thumbnail
+            </param>
+            <param name="htmlEncode">
+            Whether to HTML encode this URL - default is true - w3c standards require html attributes to be html encoded but this can be 
+            set to false if using the result of this method for CSS.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UrlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.UrlHelper,Umbraco.Core.Models.IPublishedContent,System.String,System.String,System.Boolean)">
+            <summary>
+            Gets the ImageProcessor Url by the crop alias using the specified property containing the image cropper Json data on the IPublishedContent item.
+            </summary>
+            <param name="urlHelper"></param>
+            <param name="mediaItem">
+            The IPublishedContent item.
+            </param>
+            <param name="propertyAlias">
+            The property alias of the property containing the Json data e.g. umbracoFile
+            </param>
+            <param name="cropAlias">
+            The crop alias e.g. thumbnail
+            </param>
+            <param name="htmlEncode">
+            Whether to HTML encode this URL - default is true - w3c standards require html attributes to be html encoded but this can be 
+            set to false if using the result of this method for CSS.
+            </param>
+            <returns>
+            The ImageProcessor.Web Url.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Web.UrlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.UrlHelper,Umbraco.Core.Models.IPublishedContent,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{Umbraco.Web.Models.ImageCropMode},System.Nullable{Umbraco.Web.Models.ImageCropAnchor},System.Boolean,System.Boolean,System.Boolean,System.String,System.Nullable{Umbraco.Web.Models.ImageCropRatioMode},System.Boolean,System.Boolean)">
+            <summary>
+            Gets the ImageProcessor Url from the image path.
+            </summary>
+            <param name="mediaItem">
+            The IPublishedContent item.
+            </param>
+            <param name="width">
+            The width of the output image.
+            </param>
+            <param name="height">
+            The height of the output image.
+            </param>
+            <param name="propertyAlias">
+            Property alias of the property containing the Json data.
+            </param>
+            <param name="cropAlias">
+            The crop alias.
+            </param>
+            <param name="quality">
+            Quality percentage of the output image.
+            </param>
+            <param name="imageCropMode">
+            The image crop mode.
+            </param>
+            <param name="imageCropAnchor">
+            The image crop anchor.
+            </param>
+            <param name="preferFocalPoint">
+            Use focal point to generate an output image using the focal point instead of the predefined crop if there is one
+            </param>
+            <param name="useCropDimensions">
+            Use crop dimensions to have the output image sized according to the predefined crop sizes, this will override the width and height parameters
+            </param>
+            <param name="cacheBuster">
+            Add a serialised date of the last edit of the item to ensure client cache refresh when updated
+            </param>
+            <param name="furtherOptions">
+            The further options.
+            </param>
+            <param name="ratioMode">
+            Use a dimension as a ratio
+            </param>
+            <param name="upScale">
+            If the image should be upscaled to requested dimensions
+            </param>
+            <param name="urlHelper"></param>
+            <param name="htmlEncode">
+            Whether to HTML encode this URL - default is true - w3c standards require html attributes to be html encoded but this can be 
+            set to false if using the result of this method for CSS.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
+        <member name="M:Umbraco.Web.UrlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.UrlHelper,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{Umbraco.Web.Models.ImageCropMode},System.Nullable{Umbraco.Web.Models.ImageCropAnchor},System.Boolean,System.Boolean,System.String,System.String,System.Nullable{Umbraco.Web.Models.ImageCropRatioMode},System.Boolean,System.Boolean)">
+            <summary>
+            Gets the ImageProcessor Url from the image path.
+            </summary>
+            <param name="imageUrl">
+            The image url.
+            </param>
+            <param name="width">
+            The width of the output image.
+            </param>
+            <param name="height">
+            The height of the output image.
+            </param>
+            <param name="imageCropperValue">
+            The Json data from the Umbraco Core Image Cropper property editor
+            </param>
+            <param name="cropAlias">
+            The crop alias.
+            </param>
+            <param name="quality">
+            Quality percentage of the output image.
+            </param>
+            <param name="imageCropMode">
+            The image crop mode.
+            </param>
+            <param name="imageCropAnchor">
+            The image crop anchor.
+            </param>
+            <param name="preferFocalPoint">
+            Use focal point to generate an output image using the focal point instead of the predefined crop if there is one
+            </param>
+            <param name="useCropDimensions">
+            Use crop dimensions to have the output image sized according to the predefined crop sizes, this will override the width and height parameters
+            </param>
+            <param name="cacheBusterValue">
+            Add a serialised date of the last edit of the item to ensure client cache refresh when updated
+            </param>
+            <param name="furtherOptions">
+            The further options.
+            </param>
+            <param name="ratioMode">
+            Use a dimension as a ratio
+            </param>
+            <param name="upScale">
+            If the image should be upscaled to requested dimensions
+            </param>
+            <param name="urlHelper"></param>
+            <param name="htmlEncode">
+            Whether to HTML encode this URL - default is true - w3c standards require html attributes to be html encoded but this can be 
+            set to false if using the result of this method for CSS.
+            </param>
+            <returns>
+            The <see cref="T:System.String"/>.
+            </returns>
+        </member>
         <member name="M:Umbraco.Web.UrlHelperRenderExtensions.SurfaceAction(System.Web.Mvc.UrlHelper,System.String,System.String)">
             <summary>
             Generates a URL based on the current Umbraco URL with a custom query string that will route to the specified SurfaceController
@@ -13425,67 +13591,6 @@
             <param name="htmlHelper"></param>
             <param name="actionName"></param>
             <param name="surfaceType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,Umbraco.Core.Models.IPublishedContent,System.String)">
-            <summary>
-            Gets the ImageProcessor Url of a media item by the crop alias (using default media item property alias of "umbracoFile")
-            </summary>
-            <param name="htmlHelper"></param>
-            <param name="mediaItem"></param>
-            <param name="cropAlias"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,Umbraco.Core.Models.IPublishedContent,System.String,System.String)">
-            <summary>
-            Gets the ImageProcessor Url of a media item by the property alias and crop alias.
-            </summary>
-            <param name="htmlHelper"></param>
-            <param name="mediaItem"></param>
-            <param name="propertyAlias"></param>
-            <param name="cropAlias"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,Umbraco.Core.Models.IPublishedContent,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{Umbraco.Web.Models.ImageCropMode},System.Nullable{Umbraco.Web.Models.ImageCropAnchor},System.Boolean,System.Boolean,System.Boolean,System.String,System.Nullable{Umbraco.Web.Models.ImageCropRatioMode},System.Boolean)">
-            <summary>
-            Gets the ImageProcessor Url of a media item
-            </summary>
-            <param name="htmlHelper"></param>
-            <param name="mediaItem"></param>
-            <param name="width"></param>
-            <param name="height"></param>
-            <param name="propertyAlias"></param>
-            <param name="cropAlias"></param>
-            <param name="quality"></param>
-            <param name="imageCropMode"></param>
-            <param name="imageCropAnchor"></param>
-            <param name="preferFocalPoint"></param>
-            <param name="useCropDimensions"></param>
-            <param name="cacheBuster"></param>
-            <param name="furtherOptions"></param>
-            <param name="ratioMode"></param>
-            <param name="upScale"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.GetCropUrl(System.Web.Mvc.HtmlHelper,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.Nullable{Umbraco.Web.Models.ImageCropMode},System.Nullable{Umbraco.Web.Models.ImageCropAnchor},System.Boolean,System.Boolean,System.String,System.String,System.Nullable{Umbraco.Web.Models.ImageCropRatioMode},System.Boolean)">
-            <summary>
-            Gets the ImageProcessor Url from the media path
-            </summary>
-            <param name="htmlHelper"></param>
-            <param name="imageUrl"></param>
-            <param name="width"></param>
-            <param name="height"></param>
-            <param name="imageCropperValue"></param>
-            <param name="cropAlias"></param>
-            <param name="quality"></param>
-            <param name="imageCropMode"></param>
-            <param name="imageCropAnchor"></param>
-            <param name="preferFocalPoint"></param>
-            <param name="useCropDimensions"></param>
-            <param name="cacheBusterValue"></param>
-            <param name="furtherOptions"></param>
-            <param name="ratioMode"></param>
-            <param name="upScale"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.HtmlHelperRenderExtensions.BeginUmbracoForm(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Web.Mvc.FormMethod)">
@@ -14965,6 +15070,37 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Umbraco.Web.Strategies.ServerRegistrationEventHandler" -->
+        <member name="M:Umbraco.Web.Strategies.ServerRegistrationEventHandler.UmbracoModuleRouteAttempt(System.Object,Umbraco.Web.Routing.RoutableAttemptEventArgs)">
+            <summary>
+            Handle when a request is made
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+            <remarks>
+            We require this because:
+            - ApplicationContext.UmbracoApplicationUrl is initialized by UmbracoModule in BeginRequest
+            - RegisterServer is called on UmbracoModule.RouteAttempt which is triggered in ProcessRequest
+                 we are safe, UmbracoApplicationUrl has been initialized
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Strategies.ServerRegistrationEventHandler.TouchServerTask.#ctor(Umbraco.Web.Scheduling.IBackgroundTaskRunner{Umbraco.Web.Scheduling.RecurringTaskBase},System.Int32,System.Int32,Umbraco.Core.Services.IServerRegistrationService,Umbraco.Core.Sync.DatabaseServerRegistrar,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Web.Scheduling.RecurringTaskBase"/> class.
+            </summary>
+            <param name="runner">The task runner.</param>
+            <param name="delayMilliseconds">The delay.</param>
+            <param name="periodMilliseconds">The period.</param>
+            <param name="svc"></param>
+            <param name="registrar"></param>
+            <param name="serverAddress"></param>
+            <remarks>The task will repeat itself periodically. Use this constructor to create a new task.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Strategies.ServerRegistrationEventHandler.TouchServerTask.PerformRun">
+            <summary>
+            Runs the background task.
+            </summary>
+            <returns>A value indicating whether to repeat the task.</returns>
+        </member>
         <member name="T:Umbraco.Web.Templates.TemplateRenderer">
             <summary>
             This is used purely for the RenderTemplate functionality in Umbraco
@@ -18712,7 +18848,7 @@
         </member>
         <member name="T:Umbraco.Web.WebBootManager">
             <summary>
-            A bootstrapper for the Umbraco application which initializes all objects including the Web portion of the application 
+            A bootstrapper for the Umbraco application which initializes all objects including the Web portion of the application
             </summary>
         </member>
         <member name="M:Umbraco.Web.WebBootManager.#ctor(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.Logging.ProfilingLogger,System.Boolean)">
@@ -18739,7 +18875,7 @@
         </member>
         <member name="M:Umbraco.Web.WebBootManager.FreezeResolution">
             <summary>
-            Override this method in order to ensure that the UmbracoContext is also created, this can only be 
+            Override this method in order to ensure that the UmbracoContext is also created, this can only be
             created after resolution is frozen!
             </summary>
         </member>
@@ -18767,8 +18903,17 @@
         </member>
         <member name="M:Umbraco.Web.WebBootManager.InitializeResolvers">
             <summary>
-            Initializes all web based and core resolves 
+            Initializes all web based and core resolves
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.WebBootManager.GetIndexesForColdBoot">
+            <summary>
+            The method used to create indexes on a cold boot
+            </summary>
+            <remarks>
+            A cold boot is when the server determines it will not (or cannot) process instructions in the cache table and
+            will rebuild it's own caches itself.
+            </remarks>
         </member>
         <member name="T:Umbraco.Web.Routing.LegacyRequestInitializer">
             <summary>
@@ -29505,6 +29650,20 @@
             during the startup process as well.
             See: http://issues.umbraco.org/issue/U4-1890, http://issues.umbraco.org/issue/U4-1717
             </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoContext.CreateContext(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.Security.WebSecurity,Umbraco.Core.Configuration.UmbracoSettings.IUmbracoSettingsSection,System.Collections.Generic.IEnumerable{Umbraco.Web.Routing.IUrlProvider},System.Boolean)">
+            <summary>
+            Creates a standalone UmbracoContext instance
+            </summary>
+            <param name="httpContext"></param>
+            <param name="applicationContext"></param>
+            <param name="webSecurity"></param>
+            <param name="umbracoSettings"></param>
+            <param name="urlProviders"></param>        
+            <param name="preview"></param>
+            <returns>
+            A new instance of UmbracoContext
+            </returns>        
         </member>
         <member name="M:Umbraco.Web.UmbracoContext.#ctor(System.Web.HttpContextBase,Umbraco.Core.ApplicationContext,Umbraco.Web.PublishedCache.IPublishedCaches,Umbraco.Web.Security.WebSecurity,System.Nullable{System.Boolean})">
             <summary>

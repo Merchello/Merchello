@@ -7,7 +7,7 @@
     /// <summary>
     /// The receipt model.
     /// </summary>
-    public class ReceiptModel : MasterModel
+    public partial class ReceiptModel : MasterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ReceiptModel"/> class.

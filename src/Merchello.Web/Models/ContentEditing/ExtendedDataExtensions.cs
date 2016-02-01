@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
     using System.Globalization;
 
     using Merchello.Core;
@@ -43,7 +44,7 @@
         #region INote
 
         /// <summary>
-        /// Adds an <see cref="INoteDisplay"/> to extended data.  This is intended for a note against the sale (delivery instructions, etc)
+        /// Adds an <see cref="NoteDisplay"/> to extended data.  This is intended for a note against the sale (delivery instructions, etc)
         /// </summary>
         /// <param name="extendedData">
         /// The extended Data.
@@ -58,6 +59,16 @@
             extendedData.SetValue(Constants.ExtendedDataKeys.Note, noteXml);
         }
 
+        /// <summary>
+        /// The get note.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="NoteDisplay"/>.
+        /// </returns>
+        [Obsolete("Use ICheckoutManager.Extended.GetNotes - returns IEnumerable<string>")]
         public static NoteDisplay GetNote(this ExtendedDataCollection extendedData)
         {
             if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.Note)) return null;

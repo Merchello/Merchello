@@ -1,0 +1,25 @@
+<div>
+    <h2><localize key="merchelloReports_thisWeekVsLast" /></h2>
+    <canvas id="line" class="chart chart-bar" chart-data="chartData"
+            chart-labels="labels" chart-legend="true" chart-series="series">
+    </canvas>
+
+    <div class="merchello-list-view umb-listview">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><localize key="merchelloGeneral_day" /></td>
+                    <td><localize key="merchelloReports_thisWeek" /></td>
+                    <td><localize key="merchelloReports_lastWeek" /></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="label in labels track by $index">
+                    <td>{{ label }}</td>
+                    <td>{{ getTotalsColumn(0, $index) }}</td>
+                    <td>{{ getTotalsColumn(1, $index) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

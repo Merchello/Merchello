@@ -38,6 +38,11 @@
         private readonly IInvoiceService _invoiceService;
 
         /// <summary>
+        /// The note service.
+        /// </summary>
+        private readonly INoteService _noteService;
+
+        /// <summary>
         /// The <see cref="MerchelloHelper"/>
         /// </summary>
         private readonly MerchelloHelper _merchello;
@@ -61,7 +66,7 @@
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
             _invoiceService = merchelloContext.Services.InvoiceService;
-
+            _noteService = merchelloContext.Services.NoteService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -283,12 +288,14 @@
             try
             {
                 var merchInvoice = _invoiceService.GetByKey(invoice.Key);
+
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
                 _invoiceService.Save(merchInvoice);
             }
             catch (Exception ex)
             {
+                LogHelper.Error<InvoiceApiController>("Failed to save invoice", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 
@@ -322,6 +329,7 @@
             }
             catch (Exception ex)
             {
+                LogHelper.Error<InvoiceApiController>("Failed to save shipping address", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 

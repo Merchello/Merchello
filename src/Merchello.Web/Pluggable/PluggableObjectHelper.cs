@@ -78,7 +78,7 @@
             if (string.IsNullOrEmpty(contextType))
             {
                 var nullReference = new NullReferenceException("Reference to the pluggable/object with key '" + configurationAlias + "' was not found in the merchello.config file.");
-                LogHelper.Error(typeof(CustomerContextBase), "Configuration missing", nullReference);
+                LogHelper.Error(typeof(PluggableObjectHelper), "Configuration missing", nullReference);
                 throw nullReference;
             }
             var attempt = ActivatorHelper.CreateInstance<T>(contextType, ctrArgValues);
@@ -88,7 +88,7 @@
                 return attempt.Result;
             }
 
-            LogHelper.Error(typeof(CustomerContextBase), "Failed to created configured CustomerContext", attempt.Exception);
+            LogHelper.Error(typeof(PluggableObjectHelper), "Failed to instantiate configured type", attempt.Exception);
             throw attempt.Exception;
         }
     }

@@ -1,5 +1,4 @@
-<div ng-controller="Merchello.Backoffice.Reports.SalesByItemController">
-
+<div data-ng-controller="Merchello.Backoffice.Reports.SalesByItemController" data-ng-show="loaded">
     <umb-panel>
         <umb-header>
             <div class="span7">
@@ -14,8 +13,8 @@
             <!-- Tabular Order List -->
             <div class="merchello-pane">
 
+                <report-widget-top-selling setloaded="setPreValuesLoaded"></report-widget-top-selling>
             </div>
         </merchello-panel>
     </umb-panel>
-
 </div>

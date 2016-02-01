@@ -39,6 +39,7 @@
                 new StaticField("billtoCompany", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("currencyCode", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("poNumber", FieldIndexTypes.ANALYZED, true, string.Empty),
+                new StaticField("notes", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("exported", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("archived", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("total", FieldIndexTypes.ANALYZED, true, "DOUBLE"),

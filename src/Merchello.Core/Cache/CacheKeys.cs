@@ -2,6 +2,9 @@
 {
     using System;
     using Gateways.Shipping;
+
+    using Merchello.Core.Checkout;
+
     using Models;
 
     /// <summary>
@@ -167,6 +170,23 @@
         internal static string GetLocalizationCacheKey(string lang)
         {
             return string.Format("merch-localize-{0}", string.IsNullOrEmpty(lang) ? "en" : lang);
+        }
+
+        /// <summary>
+        /// Returns the offer cache key.
+        /// </summary>
+        /// <param name="versionKey">
+        /// The version key.
+        /// </param>
+        /// <param name="offerCode">
+        /// The offer code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string GetCheckoutOfferKey(Guid versionKey, string offerCode)
+        {
+            return string.Format("merchello.checkoutoffercode.{0}.{1}", versionKey, offerCode);
         }
     }
 }

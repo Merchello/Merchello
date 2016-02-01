@@ -21,7 +21,7 @@ namespace Merchello.Tests.IntegrationTests.Builders
         {
             //// Arrange
             //// Confirm Test change OK - this changes to 5 in 1.9.0 with the addition of coupon task
-            const int taskCount = 5;
+            const int taskCount = 6;
 
             //// Act
             var invoiceBuild = new InvoiceBuilderChain(SalePreparationMock);

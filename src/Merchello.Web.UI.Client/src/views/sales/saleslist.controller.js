@@ -46,19 +46,18 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                 $scope.tabs.setActive('saleslist');
 
                 // localize
-                var deferred = $q.defer();
+
                 var promises = [
                     localizationService.localize('merchelloSales_paid'),
                     localizationService.localize('merchelloSales_unpaid'),
                     localizationService.localize('merchelloSales_partial'),
                     localizationService.localize('merchelloOrder_fulfilled'),
                     localizationService.localize('merchelloOrder_unfulfilled'),
-                    localizationService.localize('merchelloOrder_open')
+                    localizationService.localize('merchelloOrder_open'),
+                    settingsResource.getAllCombined()
                 ];
-                $q.all(promises).then(function(r) {
-                    deferred.resolve(r);
-                });
-                deferred.promise.then(function(local) {
+
+                $q.all(promises).then(function(local) {
                     paid = local[0];
                     unpaid = local[1];
                     partial = local[2];
@@ -66,26 +65,14 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
                     unfulfilled = local[4];
                     open = local[5];
 
-                    loadSettings();
-                });
-            }
-
-            /**
-             * @ngdoc method
-             * @name loadSettings
-             * @function
-             *
-             * @description - Load the Merchello settings.
-             */
-            function loadSettings() {
-                settingsResource.getAllCombined().then(function(combined) {
-                    $scope.settings = combined.settings;
-                    allCurrencies = combined.currencies;
-                    globalCurrency = combined.currencySymbol;
+                    $scope.settings = local[6].settings;
+                    allCurrencies = local[6].currencies;
+                    globalCurrency = local[6].currencySymbol;
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 });
-            };
+            }
+
 
             function load(query) {
                 if (query.hasCollectionKeyParam()) {
@@ -98,7 +85,11 @@ angular.module('merchello').controller('Merchello.Backoffice.SalesListController
             function getColumnValue(result, col) {
                 switch(col.name) {
                     case 'invoiceNumber':
-                        return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumber + '</a>';
+                        if (result.invoiceNumberPrefix !== '') {
+                            return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumberPrefix + '-' + result.invoiceNumber + '</a>';
+                        } else {
+                            return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumber + '</a>';
+                        }
                     case 'invoiceDate':
                         return $filter('date')(result.invoiceDate, $scope.settings.dateFormat);
                     case 'paymentStatus':

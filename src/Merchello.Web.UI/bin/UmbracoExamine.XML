@@ -250,6 +250,25 @@
             via reflection because of the circular reference we have between Umbraco.Web and UmbracoExamine. 
             </summary>
         </member>
+        <member name="T:UmbracoExamine.LocalStorage.AzureLocalStorageDirectory">
+            <summary>
+            When running on Azure websites, we can use the local user's storage space
+            </summary>
+        </member>
+        <member name="T:UmbracoExamine.LocalStorage.ILocalStorageDirectory">
+            <summary>
+            Used to resolve the local storage folder
+            </summary>
+        </member>
+        <member name="T:UmbracoExamine.LocalStorage.CodeGenLocalStorageDirectory">
+            <summary>
+            Use the ASP.Net CodeGen folder to store the index files
+            </summary>
+            <remarks>
+            This is the default implementation - but it comes with it's own limitations - the CodeGen folder is cleared whenever new
+            DLLs are changed in the /bin folder (among other circumstances) which means the index would be re-synced (or rebuilt) there.
+            </remarks>
+        </member>
         <member name="T:UmbracoExamine.LocalStorage.LocalTempStorageDirectory">
             <summary>
             Used to read data from local temp storage and write to both local storage and main storage
