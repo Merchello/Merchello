@@ -169,7 +169,7 @@
                 if (!DateTime.TryParse(invoiceDateEnd.Value, out weekEnding)) weekEnding = DateTime.Today;
             }
 
-            var weekStarting = weekEnding.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var weekStarting = weekEnding.StartOfWeek();
             weekEnding = weekStarting.AddDays(6);
 
             //var weekStarting = weekEnding.AddDays(-6);

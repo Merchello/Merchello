@@ -523,12 +523,12 @@
         /// </returns>
         public decimal SumInvoiceTotals(DateTime startDate, DateTime endDate, string currencyCode)
         {
-            var ends = endDate.AddDays(1);
+            //var ends = endDate.AddDays(1);
 
             const string SQL =
                 @"SELECT SUM([merchInvoice].total) FROM merchInvoice WHERE [merchInvoice].invoiceDate BETWEEN @starts and @ends AND [merchInvoice].currencyCode = @cc";
 
-            return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate, @ends = ends, @cc = currencyCode });
+            return Database.ExecuteScalar<decimal>(SQL, new { @starts = startDate, @ends = endDate, @cc = currencyCode });
         }
 
         /// <summary>
@@ -551,7 +551,7 @@
         /// </returns>
         public decimal SumLineItemTotalsBySku(DateTime startDate, DateTime endDate, string currencyCode, string sku)
         {
-            var ends = endDate.AddDays(1);
+            //var ends = endDate.AddDays(1);
 
             const string SQL = @"SELECT	SUM(T2.[quantity] * T2.[price]) AS Total
                         FROM	[merchInvoice] T1
@@ -562,7 +562,7 @@
 
             return Database.ExecuteScalar<decimal>(
                 SQL,
-                new { @starts = startDate, @ends = ends, @cc = currencyCode, @sku = sku });
+                new { @starts = startDate, @ends = endDate, @cc = currencyCode, @sku = sku });
         }
 
         #region Filter Queries
