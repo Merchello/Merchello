@@ -2318,8 +2318,8 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                     }
 
                     function loadReportData() {
-                        var today = new Date();
-                        var last = new Date();
+                        var today = dateHelper.getGmt0EquivalentDate(new Date());
+                        var last = today;
                         var thisWeekEnd = $filter('date')(today, scope.settings.dateFormat);
                         var lastWeekEnd = $filter('date')(last.setDate(last.getDate() - 7), scope.settings.dateFormat);
                         var lastQuery = queryDisplayBuilder.createDefault();
@@ -2346,13 +2346,12 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                         scope.chartData = [];
 
                         if (scope.resultData.length > 0) {
-
-                            console.info(scope.resultData[0]);
+                            
                             _.each(scope.resultData[0], function(days) {
 
-                                var dt = new Date(days.startDate);
-                                var dd = new Date(dt.getTime() + (dt.getTimezoneOffset() * 60000)).getDay();
-                                
+                                var dt = dateHelper.getGmt0EquivalentDate(new Date(days.startDate));
+                                var dd = dt.getDay();
+
                                 scope.labels.push(scope.weekdays[dd]);
                             });
 
