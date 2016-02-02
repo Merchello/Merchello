@@ -1,19 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Examine;
-using Examine.LuceneEngine.Config;
-using Merchello.Examine.DataServices;
-
-namespace Merchello.Examine
+﻿namespace Merchello.Examine
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using global::Examine;
+    using global::Examine.LuceneEngine.Config;
+
     /// <summary>
     /// Extension methods for IndexSet
     /// </summary>
     public static class IndexSetExtensions
     {
+        /// <summary>
+        /// The thread locker.
+        /// </summary>
         private static readonly object Locker = new object();
 
+        /// <summary>
+        /// Creates an <see cref="IIndexCriteria"/>.
+        /// </summary>
+        /// <param name="set">
+        /// The set.
+        /// </param>
+        /// <param name="indexFieldNames">
+        /// The index field names.
+        /// </param>
+        /// <param name="indexFieldPolicies">
+        /// The index field policies.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IIndexCriteria"/>.
+        /// </returns>
         internal static IIndexCriteria ToIndexCriteria(this IndexSet set, IEnumerable<string> indexFieldNames, IEnumerable<StaticField> indexFieldPolicies)
         {
             if (set.IndexAttributeFields.Count == 0)
@@ -36,8 +53,7 @@ namespace Merchello.Examine
                 set.IndexUserFields.Cast<IIndexField>().ToArray(),
                 set.IncludeNodeTypes.ToList().Select(x => x.Name).ToArray(),
                 set.ExcludeNodeTypes.ToList().Select(x => x.Name).ToArray(),
-                set.IndexParentId
-                );
+                set.IndexParentId);
         }
 
     }

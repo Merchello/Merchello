@@ -112,10 +112,10 @@
         public override QueryResultDisplay GetDefaultReportData()
         {
             var today = DateTime.Today;
-            var endOfMonth = GetEndOfMonth(today);
-            var startMonth = GetFirstOfMonth(today);
+            var endDate = today;
+            var startDate = today.AddMonths(-1);
 
-            return BuildResult(startMonth, endOfMonth);
+            return BuildResult(startDate, endDate);
         }
 
         /// <summary>

@@ -1165,8 +1165,10 @@ angular.module('merchello.directives').directive('merchelloDateRangeButton',
 
                 function setDefaultDates() {
                     var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-                    var firstOfMonth = new Date(y, m, 1);
-                    var endOfMonth = new Date(y, m + 1, 0);
+                    var firstOfMonth = new Date(date.setMonth(date.getMonth() - 1));
+                    var endOfMonth = new Date();
+                    console.info(endOfMonth);
+                    console.info(firstOfMonth);
                     scope.startDate = $filter('date')(firstOfMonth, scope.settings.dateFormat);
                     scope.endDate = $filter('date')(endOfMonth, scope.settings.dateFormat);
                     setDateBtnText();
