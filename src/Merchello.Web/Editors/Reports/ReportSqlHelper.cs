@@ -53,7 +53,9 @@
                     INNER JOIN (
 	                    SELECT	Sku,
                             SUM(quantity) as quantitySold
-		                    FROM	merchInvoiceItem 
+		                    FROM	merchInvoiceItem MII
+                            INNER JOIN merchInvoice MI ON MII.invoiceKey = MI.pk
+				            AND	MI.invoiceDate BETWEEN @start AND @end
 		                    GROUP BY sku
                     ) Q2 ON Q1.sku = Q2.sku
                     WHERE Q2.quantitySold > 0
