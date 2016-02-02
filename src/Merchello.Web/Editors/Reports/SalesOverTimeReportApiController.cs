@@ -172,15 +172,18 @@
             var weekStarting = weekEnding.StartOfWeek();
             weekEnding = weekStarting.AddDays(6);
 
-            //var weekStarting = weekEnding.AddDays(-6);
 
             var count = 0;
             var results = new List<SalesOverTimeResult>();
             var currentDate = weekStarting;
             while (currentDate <= weekEnding)
             {
+                // special case where the end date is today - so add a day to make sure that the BETWEEN query reflects
+                // the intended report result.
+                var endDate = currentDate < DateTime.Today ? currentDate : currentDate.AddDays(1);
+
                 count++;
-                results.Add(GetResults(currentDate, currentDate.AddDays(1)));
+                results.Add(GetResults(currentDate, endDate));
                 currentDate = currentDate.AddDays(1);
             }
 
@@ -252,13 +255,13 @@
             var totals = this.ActiveCurrencies.Select(c => new ResultCurrencyValue()
                             {
                                 Currency = c.ToCurrencyDisplay(),
-                                Value = this._invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
+                                Value = startDate > DateTime.Today ? 0M : this._invoiceService.SumInvoiceTotals(startDate, endDate, c.CurrencyCode)
                             }).ToList();
 
             return new SalesOverTimeResult()
                        {
                             StartDate = startDate,
-                            EndDate = endDate.AddDays(-1),
+                            EndDate = endDate,
                             Month = monthName,
                             Year = startDate.Year.ToString(),
                             SalesCount = count,
