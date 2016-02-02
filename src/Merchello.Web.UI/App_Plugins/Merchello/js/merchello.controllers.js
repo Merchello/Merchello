@@ -2451,9 +2451,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
         ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
-            'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder',
+            'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder', 'customerAddressDisplayBuilder',
         function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
-                 customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder) {
+                 customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder, customerAddressDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -2545,7 +2545,6 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                     $scope.tabs.setActive('overview');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-                    console.info($scope.customer);
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
@@ -2706,7 +2705,7 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                     dialogData.customerAddress = customerAddressDisplayBuilder.createDefault();
                     dialogData.selectedCountry = countries[0];
                 } else {
-                    dialogData.customerAddress = address;
+                    dialogData.customerAddress = angular.extend(customerAddressDisplayBuilder.createDefault(), address);
                     dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
                         _.find(countries, function(country) {
                         return country.countryCode === address.countryCode;
