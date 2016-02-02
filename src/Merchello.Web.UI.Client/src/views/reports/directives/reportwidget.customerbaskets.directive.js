@@ -16,6 +16,7 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
                     scope.loaded = true;
                     scope.entityType = 'customerBaskets';
                     scope.settings = {};
+                    scope.currencySymbol = '';
                     scope.load = load;
                     scope.getColumnValue = getColumnValue;
                     scope.preValuesLoaded = false;
@@ -30,14 +31,15 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
 
                     function init() {
                         $q.all([
-                            settingsResource.getAllSettings(),
+                            settingsResource.getAllCombined(),
                             localizationService.localize('merchelloGeneral_item'),
                             localizationService.localize('merchelloVariant_sku'),
                             localizationService.localize('merchelloGeneral_quantity'),
                             localizationService.localize('merchelloGeneral_price'),
                             localizationService.localize('merchelloGeneral_subTotal')
                         ]).then(function(data) {
-                            scope.settings = data[0];
+                            scope.settings = data[0].settings;
+                            scope.currencySymbol = data[0].currencySymbol;
                             scope.itemLabel = data[1];
                             scope.skuLabel = data[2];
                             scope.quantityLabel = data[3];
@@ -73,6 +75,7 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
                         var deferred = $q.defer();
 
                         abandonedBasketResource.getCustomerSavedBasketsLegacy(query).then(function(results) {
+                            console.info(results);
                             deferred.resolve(results);
                         });
                         scope.setLoaded()(true);
@@ -94,8 +97,8 @@ angular.module('merchello.directives').directive('reportWidgetCustomerBaskets',
                             html += '<th>' + item.name + '</th>';
                             html += '<th>' + item.sku + '</th>';
                             html += '<th>' + item.quantity + '</th>';
-                            html += '<th>' + $filter('currency')(item.price, scope.settings.currencySymbol ) + '</th>';
-                            html += '<th>' + $filter('currency')(item.price * item.quantity, scope.settings.currencySymbol ) + '</th>';
+                            html += '<th>' + $filter('currency')(item.price, scope.currencySymbol ) + '</th>';
+                            html += '<th>' + $filter('currency')(item.price * item.quantity, scope.currencySymbol ) + '</th>';
                             html += '</tr>';
                         });
                         html += '</tbody></table>';
