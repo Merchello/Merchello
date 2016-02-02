@@ -71,7 +71,7 @@ angular.module('merchello.directives').directive('reportWidgeThisWeekVsLast',
                         scope.chartData = [];
 
                         if (scope.resultData.length > 0) {
-                            
+
                             _.each(scope.resultData[0], function(days) {
 
                                 var dt = dateHelper.getGmt0EquivalentDate(new Date(days.startDate));

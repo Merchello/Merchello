@@ -532,6 +532,7 @@
     <Compile Include="Workflow\BasketConversionBase.cs" />
     <Compile Include="Workflow\BasketConversionByCombiningAnonymousBasket.cs" />
     <Compile Include="Workflow\BasketConversionByDiscardingPreviousCustomerBasket.cs" />
+    <Compile Include="Workflow\BasketConversionPair.cs" />
     <Compile Include="Workflow\BasketWishListExtensions.cs" />
     <Compile Include="Discounts\Coupons\Coupon.cs" />
     <Compile Include="Discounts\Coupons\ICoupon.cs" />

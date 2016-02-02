@@ -129,6 +129,7 @@ namespace Merchello.Web.Models.ContentEditing
         {            
             destination.FullName = address.FullName;
             destination.Label = address.Label;
+            destination.Company = address.Company;
             destination.Address1 = address.Address1;
             destination.Address2 = address.Address2;
             destination.AddressTypeFieldKey = address.AddressTypeFieldKey;
