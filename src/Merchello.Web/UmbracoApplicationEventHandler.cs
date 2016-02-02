@@ -20,6 +20,7 @@
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Web.Routing;
+    using Merchello.Web.Workflow;
 
     using Models.SaleHistory;
 
@@ -127,10 +128,32 @@
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
+            // Basket conversion
+            BasketConversionBase.Converted += OnBasketConverted;
+
             // Detached Content
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// Updates the customer's last activity date after the basket has been converted
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void OnBasketConverted(BasketConversionBase sender, ConvertEventArgs<BasketConversionPair> e)
+        {
+            foreach (var pair in e.CovertedEntities.ToArray())
+            {
+                var customer = (ICustomer)pair.CustomerBasket.Customer;
+                customer.LastActivityDate = DateTime.Now;
+                MerchelloContext.Current.Services.CustomerService.Save(customer);
+            }
         }
 
         /// <summary>

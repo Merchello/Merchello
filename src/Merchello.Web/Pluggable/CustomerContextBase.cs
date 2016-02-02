@@ -275,7 +275,8 @@ namespace Merchello.Web.Pluggable
                 {
                     // User may have logged out and logged in with a different customer
                     // Addresses issue http://issues.merchello.com/youtrack/issue/M-454
-                    this.EnsureIsLoggedInCustomer(customer, this.GetMembershipProviderKey());                    
+                    this.EnsureIsLoggedInCustomer(customer, this.GetMembershipProviderKey());
+
                     return;
                 }
 
@@ -420,6 +421,7 @@ namespace Merchello.Web.Pluggable
             }
 
             attempt.Result.Merge();
+
         }
 
 

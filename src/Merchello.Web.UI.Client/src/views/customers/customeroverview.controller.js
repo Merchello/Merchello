@@ -102,6 +102,7 @@
                     $scope.tabs.setActive('overview');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
+                    console.info($scope.customer);
                 }, function(reason) {
                     notificationsService.error("Failed to load customer", reason.message);
                 });
