@@ -668,6 +668,7 @@ Vennlig hilsen Umbraco roboten
     <key alias="help" version="7.0">Hjelp</key>
     <key alias="forms">Skjemaer</key>
     <key alias="analytics">Analytics</key>
+    <key alias="merchello">Merchello</key>
   </area>
   <area alias="help">
     <key alias="goTo">gå til</key>
