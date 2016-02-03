@@ -8,7 +8,6 @@
  */
 var ItemCacheProductInstruction = function() {
     var self = this;
-    var self = this;
     self.customer = {};
     self.productVariant = {};
     self.itemCacheType = '';

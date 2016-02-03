@@ -140,9 +140,7 @@ angular.module('merchello.resources').factory('backOfficeCheckoutResource',
 
                 var url = baseUrl + 'UpdateLineItemQuantity';
                 return umbRequestHelper.resourcePromise(
-                    $http.post(url,
-                        instruction
-                    ),
+                    $http.post(url, instruction),
                     'Failed to update item quantity');
             },
 

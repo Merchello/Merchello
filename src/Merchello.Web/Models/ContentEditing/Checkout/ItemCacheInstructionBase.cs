@@ -16,10 +16,15 @@
         public CustomerDisplay Customer { get; set; }
 
         /// <summary>
-        /// Gets or sets the item cache type.
+        /// Gets or sets the reference.
         /// </summary>
+        public string Reference { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is wish list.
+        /// </summary>
+        [JsonProperty("itemCacheType")]
         [JsonConverter(typeof(StringEnumConverter))]
         public ItemCacheType ItemCacheType { get; set; }
-
     }
 }

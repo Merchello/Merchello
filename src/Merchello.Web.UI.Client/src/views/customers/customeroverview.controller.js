@@ -149,6 +149,7 @@
             }
 
             function removeFromItemCache(lineItem, itemCacheType) {
+                console.info(itemCacheType);
                 var dialogData = {};
                 dialogData.name = lineItem.name;
                 dialogData.lineItem = lineItem;
@@ -166,7 +167,7 @@
                 var instruction = itemCacheLineItemInstructionBuilder.createDefault();
                 instruction.customer = $scope.customer;
                 instruction.lineItem = dialogData.lineItem;
-                instruction.itemCacheType = dialogData.lineCacheType;
+                instruction.itemCacheType = dialogData.itemCacheType;
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
@@ -191,12 +192,13 @@
                 instruction.customer = $scope.customer;
                 instruction.lineItem = dialogData.lineItem;
                 instruction.itemCacheType = dialogData.itemCacheType;
+                instruction.reference = 'Wishlist';
 
-                console.info(instruction.itemCacheType);
-
+                console.info(instruction);
                 backOfficeCheckoutResource.updateLineItemQuantity(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
+
             }
 
             function moveToWishList(lineItem) {

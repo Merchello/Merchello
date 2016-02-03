@@ -2592,6 +2592,7 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             }
 
             function removeFromItemCache(lineItem, itemCacheType) {
+                console.info(itemCacheType);
                 var dialogData = {};
                 dialogData.name = lineItem.name;
                 dialogData.lineItem = lineItem;
@@ -2609,7 +2610,7 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 var instruction = itemCacheLineItemInstructionBuilder.createDefault();
                 instruction.customer = $scope.customer;
                 instruction.lineItem = dialogData.lineItem;
-                instruction.itemCacheType = dialogData.lineCacheType;
+                instruction.itemCacheType = dialogData.itemCacheType;
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
@@ -2634,12 +2635,13 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 instruction.customer = $scope.customer;
                 instruction.lineItem = dialogData.lineItem;
                 instruction.itemCacheType = dialogData.itemCacheType;
+                instruction.reference = 'Wishlist';
 
-                console.info(instruction.itemCacheType);
-
+                console.info(instruction);
                 backOfficeCheckoutResource.updateLineItemQuantity(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
+
             }
 
             function moveToWishList(lineItem) {

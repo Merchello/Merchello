@@ -239,9 +239,9 @@
                 return null;
             }
 
-            return instruction.ItemCacheType == ItemCacheType.Basket ?
-                (CustomerItemCacheBase)customer.Basket() :
-                (CustomerItemCacheBase)customer.WishList();
+            return instruction.ItemCacheType == ItemCacheType.Wishlist
+                       ? (CustomerItemCacheBase)customer.WishList()
+                       : (CustomerItemCacheBase)customer.Basket();
         }
 
         /// <summary>
