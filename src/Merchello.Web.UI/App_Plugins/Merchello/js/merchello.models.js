@@ -458,6 +458,42 @@ angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
 
 /**
  * @ngdoc model
+ * @name ItemCacheLineItemInstruction
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's ItemCacheLineItemInstruction object
+ */
+var ItemCacheLineItemInstruction = function() {
+    var self = this;
+    self.customer = {};
+    self.lineItem = {};
+    self.itemCacheType = '';
+};
+
+
+angular.module('merchello.models').constant('ItemCacheLineItemInstruction', ItemCacheLineItemInstruction);
+
+/**
+ * @ngdoc model
+ * @name ItemCacheProductInstruction
+ * @function
+ *
+ * @description
+ * Represents a JS version of Merchello's ItemCacheProductInstruction object
+ */
+var ItemCacheProductInstruction = function() {
+    var self = this;
+    var self = this;
+    self.customer = {};
+    self.productVariant = {};
+    self.itemCacheType = '';
+};
+
+angular.module('merchello.models').constant('ItemCacheProductInstruction', ItemCacheProductInstruction);
+
+/**
+ * @ngdoc model
  * @name EntityCollectionDisplay
  * @function
  *
@@ -3982,6 +4018,23 @@ angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
             }
         };
     }]);
+
+angular.module('merchello.models').factory('itemCacheLineItemInstructionBuilder',
+    ['genericModelBuilder', 'ItemCacheLineItemInstruction',
+    function(genericModelBuilder, ItemCacheLineItemInstruction) {
+
+
+            var Constructor = ItemCacheLineItemInstruction;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+}]);
 
 /**
  * @ngdoc service

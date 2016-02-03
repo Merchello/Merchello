@@ -2,6 +2,11 @@
   a {
     color: #000;
   }
+
+  tbody tr:hover {
+    i.icon{display: inline-block; }
+  }
+
   select {
     width: 75px;
     background: 0;

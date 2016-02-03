@@ -7,6 +7,9 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
             replace: true,
             scope: {
                 customer: '=',
+                doMove: '&',
+                doEdit: '&',
+                doDelete: '&',
                 itemCacheType: '@'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/customer.itemcachetable.tpl.html',
