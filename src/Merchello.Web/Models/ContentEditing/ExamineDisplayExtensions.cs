@@ -121,13 +121,15 @@
                     BillToCompany = FieldAsString(result, "billToCompany"),
                     BillToPhone = FieldAsString(result, "billToPhone"),
                     BillToEmail = FieldAsString(result, "billToEmail"),
+                    CurrencyCode = FieldAsString(result, "currencyCode"),
                     PoNumber = FieldAsString(result, "poNumber"),
                     Exported = FieldAsBoolean(result.Fields["exported"]),
                     Archived = FieldAsBoolean(result.Fields["archived"]),
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
                     Currency = JsonFieldAs<CurrencyDisplay>(result, "currency"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
+                    Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
+                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems")                  
                 };
 
 

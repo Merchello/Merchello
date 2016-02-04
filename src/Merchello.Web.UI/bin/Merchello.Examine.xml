@@ -1001,6 +1001,28 @@
             Extension methods for IndexSet
             </summary>
         </member>
+        <member name="F:Merchello.Examine.IndexSetExtensions.Locker">
+            <summary>
+            The thread locker.
+            </summary>
+        </member>
+        <member name="M:Merchello.Examine.IndexSetExtensions.ToIndexCriteria(Examine.LuceneEngine.Config.IndexSet,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{Merchello.Examine.StaticField})">
+            <summary>
+            Creates an <see cref="T:Examine.IIndexCriteria"/>.
+            </summary>
+            <param name="set">
+            The set.
+            </param>
+            <param name="indexFieldNames">
+            The index field names.
+            </param>
+            <param name="indexFieldPolicies">
+            The index field policies.
+            </param>
+            <returns>
+            The <see cref="T:Examine.IIndexCriteria"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Examine.IndexTypes">
             <summary>
             The index types stored in the Lucene Index

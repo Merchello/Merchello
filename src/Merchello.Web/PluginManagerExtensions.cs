@@ -55,7 +55,7 @@ namespace Merchello.Web
         /// </returns>
         internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
-            return pluginManger.ResolveTypesWithAttribute<ReportController, BackOfficeTreeAttribute>();
+            return pluginManger.ResolveTypes<ReportController>();
         }
 
 

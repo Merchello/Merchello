@@ -340,6 +340,15 @@
                    lineItem.ExtendedData.ContainsWarehouseCatalogKey();
         }
 
+        /// <summary>
+        /// The get type field.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITypeField"/>.
+        /// </returns>
         public static ITypeField GetTypeField(this ILineItem lineItem)
         {
             var type = EnumTypeFieldConverter.LineItemType.GetTypeField(lineItem.LineItemTfKey);

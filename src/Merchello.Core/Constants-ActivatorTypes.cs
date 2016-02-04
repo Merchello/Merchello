@@ -49,6 +49,17 @@
             }
 
             /// <summary>
+            /// Gets the configuration key for the checkout manager invoice creation.
+            /// </summary>
+            public static string CheckoutManagerInvoiceCreate
+            {
+                get
+                {
+                    return "CheckoutManagerInvoiceCreate";
+                }
+            }
+
+            /// <summary>
             /// Gets the item cache validation.
             /// </summary>
             public static string ItemCacheValidation

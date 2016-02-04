@@ -289,6 +289,19 @@ namespace Merchello.Tests.Base.TestHelpers
             InvoiceService.Delete(all);
         }
 
+        public IEnumerable<IInvoice> MakeExistingInvoices(int count = 1)
+        {
+            var list = new List<IInvoice>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(MockInvoiceDataMaker.GetMockInvoiceForTaxation());
+            }
+
+            InvoiceService.Save(list);
+
+            return list;
+        }
+
         /// <summary>
         /// The invoice service
         /// </summary>

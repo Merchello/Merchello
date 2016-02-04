@@ -116,7 +116,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         var end = $filter('date')(scope.endDate, 'yyyy-MM-dd');
                         query.addInvoiceDateParam(start, 'start');
                         query.addInvoiceDateParam(end, 'end');
-                        console.info('hello');
+
                         scope.dateBtnText = scope.startDate + ' - ' + scope.endDate;
                     }
 
@@ -125,7 +125,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.listViewResultSet.items = queryResult.items;
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
                         scope.listViewResultSet.totalPages = queryResult.totalPages;
-
 
                         scope.pagination = [];
 
@@ -242,7 +241,6 @@ angular.module('merchello.directives').directive('merchelloListView',
                 function processDateRange(dialogData) {
                     scope.startDate = dialogData.startDate;
                     scope.endDate = dialogData.endDate;
-                    console.info('got here');
                     search();
                 }
 

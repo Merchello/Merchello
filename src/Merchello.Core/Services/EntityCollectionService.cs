@@ -523,6 +523,23 @@
         }
 
         /// <summary>
+        /// Determines if a collection exists.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Exists(Guid key)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.Exists(key);
+            }
+        }
+
+        /// <summary>
         /// Deletes a collection of entity collections.
         /// </summary>
         /// <param name="entityCollections">

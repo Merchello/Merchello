@@ -57,7 +57,7 @@
         {
             int maxDays = MerchelloConfiguration.Current.AnonymousCustomersMaxDays;
 
-            var anonymousCustomers = _anonymousCustomerService.GetAnonymousCustomersCreatedBefore(DateTime.Now.AddDays(-maxDays)).ToArray();
+            var anonymousCustomers = _anonymousCustomerService.GetAnonymousCustomersCreatedBefore(DateTime.Today.AddDays(-maxDays)).ToArray();
 
             _anonymousCustomerService.Delete(anonymousCustomers);
 

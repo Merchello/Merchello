@@ -18,7 +18,7 @@
     /// </summary>
     [PluginController("Bazaar")]
     [Authorize]
-    public class BazaarWishListController : BazaarControllerBase
+    public partial class BazaarWishListController : BazaarControllerBase
     {
         /// <summary>
         /// The <see cref="IWishList"/>.

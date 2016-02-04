@@ -67,30 +67,6 @@
 
         }
 
-        [Test]
-        public void Can_Create_An_Entity_Collection_Defining_A_Key()
-        {
-            //// Arrage
-
-
-            //// Act
-            var collection = _entityCollectionService.CreateEntityCollection(
-                EntityType.Product,
-                _providerKey,
-                "Test Collection");
-
-
-            //// Assert
-            Assert.NotNull(collection);
-            Assert.IsTrue(collection.HasIdentity);
-            Assert.AreEqual("Test Collection", collection.Name);
-
-            var provider = collection.ResolveProvider();
-
-            Assert.NotNull(provider);
-            Assert.IsTrue(provider.GetManagedCollections().Any());
-
-        }
 
         [Test]
         public void Can_Add_Products_To_Collections()

@@ -13,18 +13,58 @@
     public interface INoteService : IPageCachedService<INote>
     {
         /// <summary>
-        /// Creates a note and saves it to the database
+        /// Creates a note.
         /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
         /// <param name="message">
         /// The message.
         /// </param>
         /// <param name="raiseEvents">
-        /// Optional boolean indicating whether or not to raise events
+        /// The raise events.
         /// </param>
         /// <returns>
         /// The <see cref="INote"/>.
         /// </returns>
-        INote CreateNoteWithKey(string message, bool raiseEvents = true);
+        INote CreateNote(Guid entityKey, EntityType entityType, string message, bool raiseEvents = true);
+
+        /// <summary>
+        /// Creates a note without saving it to the database.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity Key.
+        /// </param>
+        /// <param name="entityTfKey">
+        /// The entity Type field Key.
+        /// </param>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="raiseEvents">
+        /// The raise events.
+        /// </param>
+        /// <returns>
+        /// The <see cref="INote"/>.
+        /// </returns>
+        INote CreateNote(Guid entityKey, Guid entityTfKey, string message, bool raiseEvents = true);
+
+        ///// <summary>
+        ///// Creates a note and saves it to the database
+        ///// </summary>
+        ///// <param name="message">
+        ///// The message.
+        ///// </param>
+        ///// <param name="raiseEvents">
+        ///// Optional boolean indicating whether or not to raise events
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="INote"/>.
+        ///// </returns>
+        //INote CreateNoteWithKey(string message, bool raiseEvents = true);
 
 
         /// <summary>
@@ -45,7 +85,7 @@
         /// <returns>
         /// The <see cref="INote"/>.
         /// </returns>
-        INote CreateNoteWithKey(Guid? entityKey, EntityType entityType, string message, bool raiseEvents = true);
+        INote CreateNoteWithKey(Guid entityKey, EntityType entityType, string message, bool raiseEvents = true);
 
         /// <summary>
         /// Creates an note and saves it to the database
@@ -65,7 +105,7 @@
         /// <returns>
         /// The <see cref="INote"/>.
         /// </returns>
-        INote CreateNoteWithKey(Guid? entityKey, Guid? entityTfKey, string message, bool raiseEvents = true);
+        INote CreateNoteWithKey(Guid entityKey, Guid entityTfKey, string message, bool raiseEvents = true);
 
         /// <summary>
         /// Saves an <see cref="INote"/>

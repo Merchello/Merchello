@@ -35,6 +35,8 @@
                     dest => dest.EntityType,
                     opt => opt.ResolveUsing<EntityTypeResolver>().ConstructedBy(() => new EntityTypeResolver()));
 
+            AutoMapper.Mapper.CreateMap<ICurrency, CurrencyDisplay>();
+
             // Country and provinces
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
 
@@ -49,6 +51,16 @@
                     dest => dest.Invoices,
                     opt => opt.ResolveUsing<CustomerInvoicesResolver>().ConstructedBy(() => new CustomerInvoicesResolver()));
 
+            // Customer Basket
+            AutoMapper.Mapper.CreateMap<IItemCacheLineItem, ItemCacheLineItemDisplay>()
+               .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+               .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
+
+            AutoMapper.Mapper.CreateMap<IItemCache, CustomerItemCacheDisplay>()
+                .ForMember(
+                dest => dest.Customer,
+                opt => opt.ResolveUsing<ItemCacheCustomerResolver>().ConstructedBy(() => new ItemCacheCustomerResolver()));
+
             AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
             // Gateway Provider    
@@ -58,6 +70,14 @@
 
             AutoMapper.Mapper.CreateMap<IGatewayResource, GatewayResourceDisplay>();
            
+            // Note
+            AutoMapper.Mapper.CreateMap<INote, NoteDisplay>()
+                .ForMember(
+                    dest => dest.EntityType,
+                    opt => opt.ResolveUsing<NoteEntityTypeResolver>().ConstructedBy(() => new NoteEntityTypeResolver()))
+                .ForMember(
+                    dest => dest.NoteTypeField,
+                    opt => opt.ResolveUsing<NoteTypeFieldResolver>().ConstructedBy(() => new NoteTypeFieldResolver()));
 
             // Invoice
             AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();

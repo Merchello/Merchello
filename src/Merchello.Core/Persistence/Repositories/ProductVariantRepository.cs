@@ -108,8 +108,13 @@
         /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
         public bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
         {
-            var variants = GetByProductKey(product.Key);
-            return variants.Any(x => x.Attributes.Equals(attributes));
+            var variants = GetByProductKey(product.Key).ToArray();
+
+            //// http://issues.merchello.com/youtrack/issue/M-941
+            var keys = attributes.Select(x => x.Key);
+            return variants.Any(x => x.Attributes.All(z => keys.Contains(z.Key)));
+
+           //// return variants.Any(x => x.Attributes.Equals(attributes));
         }
 
         /// <summary>

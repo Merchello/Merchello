@@ -9,7 +9,7 @@
     /// <summary>
     /// Simple Model for the Add To Cart form.
     /// </summary>
-    public class AddItemModel
+    public partial class AddItemModel
     {
         /// <summary>
         /// Gets or sets the Content Id of the ProductDetail page

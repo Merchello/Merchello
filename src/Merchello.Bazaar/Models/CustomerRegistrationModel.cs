@@ -10,7 +10,7 @@
     /// <remarks>
     /// Membership information gets copied to the Merchello Customer by a series of events
     /// </remarks>
-    public class CustomerRegistrationModel
+    public partial class CustomerRegistrationModel
     {
         /// <summary>
         /// Gets or sets the first name.

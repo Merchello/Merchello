@@ -21,6 +21,7 @@
     /// <summary>
     /// Represents the basket sale preparation.
     /// </summary>
+    [Obsolete("Use the BasketCheckoutManager.  Also important to note this should NEVER be used in combination with BasketCheckoutManager")]
     public class BasketSalePreparation : SalePreparationBase, IBasketSalePreparation
     {
         /// <summary>

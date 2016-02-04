@@ -9,7 +9,7 @@
     /// <summary>
     /// The checkout confirmation model.
     /// </summary>
-    public class CheckoutConfirmationModel : CheckoutModelBase
+    public partial class CheckoutConfirmationModel : CheckoutModelBase
     {
         /// <summary>
         /// The receipt page.

@@ -114,6 +114,15 @@
         string BillToCompany { get; set; }
 
         /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        /// <remarks>
+        /// Introduced in 1.14.0
+        /// </remarks>
+        [DataMember]
+        string CurrencyCode { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not this invoice has been exported to an external system
         /// </summary>
         [DataMember]
@@ -137,18 +146,16 @@
         [DataMember]
         OrderCollection Orders { get; set; }
 
-       
+        /// <summary>
+        /// Gets or sets the notes associated with the Invoice
+        /// </summary>
+        [DataMember]
+        IEnumerable<INote> Notes { get; set; }
+
         /// <summary>
         /// Accepts visitor class to visit invoice line items
         /// </summary>
         /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
         void Accept(ILineItemVisitor visitor);  
-
-        
-        /// <summary>
-        /// Gets or sets the notes associated with the Invoice
-        /// </summary>
-        [DataMember]
-        List<Note> Notes { get; set; }
     }
 }

@@ -1,0 +1,38 @@
+<div data-ng-show="loaded">
+    <h2><localize key="merchelloReports_abandonedBaskets" /></h2>
+    <small>
+        Configuration: {{result.configuredDays}}<br >
+        {{ result.startDate | date : settings.dateFormat }} - {{ result.endDate | date : settings.dateFormat }}
+    </small>
+    <div class="row">
+        <div>
+            <canvas id="polar-area" class="chart chart-polar-area"
+                    chart-data="data" chart-labels="labels">
+            </canvas>
+        </div>
+    </div>
+    <div class="merchello-list-view umb-listview">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{anonymousBaskets}}</th>
+                <th>{{anonymousCheckouts}}</th>
+                <th>{{anonymousPercentLabel}}</th>
+                <th>{{customerBaskets}}</th>
+                <th>{{customerCheckouts}}</th>
+                <th>{{customerPercentLabel}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{result.anonymousBasketCount}}</td>
+                <td>{{result.anonymousCheckoutCount}}</td>
+                <td>{{anonymousCheckoutPercent}}%</td>
+                <td>{{result.customerBasketCount}}</td>
+                <td>{{result.customerCheckoutCount}}</td>
+                <td>{{customerCheckoutPercent}}%</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>

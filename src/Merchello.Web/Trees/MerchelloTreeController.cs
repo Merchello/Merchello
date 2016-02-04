@@ -111,10 +111,7 @@
 
             collection.AddRange(
                 currentTree != null
-                    ? currentTree.Id == "reports" ? 
-                        GetAttributeDefinedTrees(queryStrings) :  
-    
-                        _collectiontrees.Contains(splitId.CollectionId) ?
+                    ? _collectiontrees.Contains(splitId.CollectionId) ?
 
                         this.GetTreeNodesForCollections(splitId.CollectionId, MakeCollectionRoutePathId(splitId.CollectionId, splitId.CollectionKey), queryStrings) 
 
@@ -502,7 +499,6 @@
         {
             var hasSubs = tree.SubTree != null && tree.SubTree.GetTrees().Any();
 
-            if (tree.Id == "reports" && hasSubs == false) hasSubs = ReportApiControllerResolver.Current.ResolvedTypes.Any();
             if (_collectiontrees.Contains(tree.Id))
                 hasSubs = this.GetCollectionProviderInfo(tree.Id).ManagedCollections.Any()
                           || tree.SelfManagedEntityCollectionProviderCollections.EntityCollectionProviders().Any();
@@ -550,7 +546,8 @@
             if (!types.Any()) return new TreeNode[] { };
 
             var atts = types.Select(x => x.GetCustomAttribute<BackOfficeTreeAttribute>(true)).OrderBy(x => x.SortOrder);
-
+            
+            // TODO RSS refactor
             return
                 atts.Select(
                     att =>
@@ -561,7 +558,10 @@
                         att.Title,
                         att.Icon,
                         false,
-                        string.Format("{0}{1}", "/merchello/merchello/reports.viewreport/", att.RoutePath)));
+                        att.RoutePath.StartsWith("~/App_Plugins/", StringComparison.InvariantCultureIgnoreCase) ||
+                        att.RoutePath.StartsWith("#")
+                        ? att.RoutePath 
+                        : string.Format("{0}{1}", "/merchello/merchello/reports.viewreport/", att.RoutePath)));
         }
 
         /// <summary>

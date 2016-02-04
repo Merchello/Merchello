@@ -66,12 +66,24 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'offerEndDate', localizeKey: 'merchelloTableCaptions_endDate' },
                     { name: 'active', localizeKey: 'merchelloTableCaptions_active' }
                 ]
+            },
+
+            customerbaskets: {
+                columns: [
+                    { name: 'loginName', localizeKey: 'merchelloCustomers_loginName' },
+                    { name: 'firstName', localizeKey: 'general_name' },
+                    { name: 'lastActivityDate', localizeKey: 'merchelloCustomers_lastActivityDate' },
+                    { name: 'items', localizeKey: 'merchelloCustomers_basket' }
+                ],
+                pageSize: 10,
+                orderBy: 'lastActivityDate',
+                orderDirection: 'desc'
             }
 
         };
 
-        this.getConfig = function(entityType) {
-            var ensure = entityType.toLowerCase();
+        this.getConfig = function(listViewType) {
+            var ensure = listViewType.toLowerCase();
             return configs[ensure];
         };
 

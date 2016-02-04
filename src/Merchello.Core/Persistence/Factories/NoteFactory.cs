@@ -20,11 +20,9 @@
         /// </returns>
         public INote BuildEntity(NoteDto dto)
         {
-            var entity = new Note()
+            var entity = new Note(dto.EntityKey, dto.EntityTfKey)
                 {
                     Key = dto.Key,
-                    EntityKey = dto.EntityKey,
-                    EntityTfKey = dto.EntityTfKey,
                     Message = dto.Message,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate

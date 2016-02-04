@@ -11,6 +11,7 @@
       <Value>Smtp</Value>
       <Value>Umbraco</Value>
       <Value>Umbraco's</Value>
+      <Value>YouTrack</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

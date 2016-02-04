@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
+    using System.Collections.Generic;
+
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
 
@@ -19,6 +21,11 @@
         private readonly OrderCollection _orderCollection;
 
         /// <summary>
+        /// The note collection.
+        /// </summary>
+        private readonly IEnumerable<INote> _notes;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InvoiceFactory"/> class.
         /// </summary>
         /// <param name="lineItemCollection">
@@ -27,10 +34,14 @@
         /// <param name="orderCollection">
         /// The order collection.
         /// </param>
-        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection)
+        /// <param name="notes">
+        /// The notes Collection.
+        /// </param>
+        public InvoiceFactory(LineItemCollection lineItemCollection, OrderCollection orderCollection, IEnumerable<INote> notes)
         {
             _lineItemCollection = lineItemCollection;
             _orderCollection = orderCollection;
+            this._notes = notes;
         }
 
         /// <summary>
@@ -64,6 +75,7 @@
                     BillToEmail = dto.BillToEmail,
                     BillToPhone = dto.BillToPhone,
                     BillToCompany = dto.BillToCompany,
+                    CurrencyCode = dto.CurrencyCode,
                     ExamineId = dto.InvoiceIndexDto.Id,
                     Exported = dto.Exported,
                     Archived = dto.Archived,
@@ -71,7 +83,8 @@
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate,
                     Items = _lineItemCollection,
-                    Orders = _orderCollection
+                    Orders = _orderCollection,
+                    Notes = this._notes
                 };
 
             invoice.ResetDirtyProperties();
@@ -110,6 +123,7 @@
                     BillToEmail = entity.BillToEmail,
                     BillToPhone = entity.BillToPhone,
                     BillToCompany = entity.BillToCompany,
+                    CurrencyCode = entity.CurrencyCode,
                     Exported = entity.Exported,
                     Archived = entity.Archived,
                     Total = entity.Total,

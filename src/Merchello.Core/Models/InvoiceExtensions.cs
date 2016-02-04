@@ -947,9 +947,11 @@
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
                     writer.WriteAttributeString("total", invoice.Total.ToString(CultureInfo.InvariantCulture));
+                    writer.WriteAttributeString("currencyCode", invoice.CurrencyCode);
                     writer.WriteAttributeString("currency", GetCurrencyJson(invoice.Currency()));
                     writer.WriteAttributeString("invoiceStatus", GetInvoiceStatusJson(invoice.InvoiceStatus));
                     writer.WriteAttributeString("invoiceItems", GetGenericItemsCollection(invoice.Items));
+                    writer.WriteAttributeString("notes", GetNotesCollection(invoice.Notes));
                     writer.WriteAttributeString("createDate", invoice.CreateDate.ToString("s"));
                     writer.WriteAttributeString("updateDate", invoice.UpdateDate.ToString("s"));
                     writer.WriteAttributeString("allDocs", "1");
@@ -1003,6 +1005,31 @@
             return JsonConvert.SerializeObject(
                 new { currency.Name, currency.CurrencyCode, currency.Symbol },
                 Formatting.None);
+        }
+
+        /// <summary>
+        /// Gets a serialized notes collection.
+        /// </summary>
+        /// <param name="notes">
+        /// The notes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetNotesCollection(IEnumerable<INote> notes)
+        {
+            return JsonConvert.SerializeObject(
+                notes.Select(x => 
+                    new
+                    {
+                        key = x.Key,
+                        message = x.Message,
+                        entityKey = x.EntityKey,
+                        entityTfKey = x.EntityTfKey,
+                        entityType = EntityType.Invoice,
+                        noteTypeField = EnumTypeFieldConverter.EntityType.Invoice,
+                        recordDate = x.CreateDate
+                    }));
         }
 
         /// <summary>

@@ -1,0 +1,87 @@
+<div ng-controller="Merchello.Backoffice.Reports.SalesOverTimeController" data-ng-show="loaded">
+
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloTree_reports" /></h1>
+                </div>
+            </div>
+            <div class="span5"></div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel>
+            <!-- Tabular Order List -->
+            <div class="merchello-pane">
+                <h2><localize key="merchelloTabs_salesOverTime" /></h2>
+                <canvas id="line" class="chart chart-bar" chart-data="chartData"
+                        chart-labels="labels" chart-legend="true" chart-series="series">
+                </canvas>
+
+
+                <h4><localize key="merchelloReports_monthlyTotalSales" /></h4>
+
+                <div class="merchello-list-view umb-listview">
+                    <div data-ng-show="showTitle">
+                        <h2>{{ title }}</h2>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <td>Month</td>
+                            <td>Year</td>
+                            <td data-ng-repeat="col in series">
+                                {{col}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="{{ series.length + 2}}">
+                                <div class="btn-group pull-right">
+                                    <a href="#" class="btn btn-small" data-ng-click="openDateRangeDialog()" prevent-default>{{ dateBtnText }}</a>
+                                    <a href="#" class="btn btn-small" prevent-default data-ng-click="clearDates()" data-ng-show="startDate !== '' && endDate !== ''">X</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </thead>
+
+                        <tbody data-ng-show="!preValuesLoaded">
+                        <tr>
+                            <td colspan="{{ series.length + 2 }}">
+                                <div class="umb-loader-wrapper">
+                                    <div class="umb-loader"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                        <tbody ng-show="reportData.length === 0 && preValuesLoaded">
+                        <tr>
+                            <td colspan="{{ series.length + 2 }}">
+                                <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                            </td>
+                        </tr>
+                        </tbody>
+
+                        <tbody ng-show="reportData.length > 0">
+                        <tr ng-repeat="data in reverse(reportData)">
+                            <td>{{ data.month }}</td>
+                            <td>{{ data.year }}</td>
+                            <td data-ng-repeat="col in series" data-ng-bind-html="getColumnValue(data, col)"></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2"><strong>Totals:</strong></td>
+                                <td data-ng-repeat="col in series"><strong>{{ getColumnTotal(col) }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </merchello-panel>
+    </umb-panel>
+
+</div>

@@ -21,7 +21,7 @@
     /// The controller responsible for rendering the Basket Page.
     /// </summary>
     [PluginController("Bazaar")]
-    public class BazaarBasketController : BazaarControllerBase
+    public partial class BazaarBasketController : BazaarControllerBase
     {
         /// <summary>
         /// The index <see cref="ActionResult"/>.

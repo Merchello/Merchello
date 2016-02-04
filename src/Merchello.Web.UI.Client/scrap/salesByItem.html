@@ -1,0 +1,40 @@
+<div ng-controller="Merchello.Backoffice.Reports.SalesByItemController">
+
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloTree_reports" /></h1>
+                </div>
+            </div>
+            <div class="span5"></div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel>
+            <!-- Tabular Order List -->
+            <div class="merchello-pane">
+
+                <h2><localize key="merchelloTabs_salesByItem" /></h2>
+
+
+                    <h3>Item History</h3>
+                    <canvas id="line" class="chart chart-line" chart-data="historyData"
+                            chart-labels="historyLabels" chart-legend="true" chart-series="variantNames">
+                    </canvas>
+
+                <div class="span8">
+
+                    <p>Some data here</p>
+
+                </div>
+                <div class="span4">
+                    <h3>Top Selling</h3>
+                    <canvas id="pie" class="chart chart-pie"
+                            chart-data="itemTotalData" chart-labels="itemTotalLabels">
+                    </canvas>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+
+</div>

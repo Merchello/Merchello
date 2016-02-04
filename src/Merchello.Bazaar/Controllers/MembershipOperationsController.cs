@@ -14,7 +14,7 @@
     /// The membership controller.
     /// </summary>
     [PluginController("Bazaar")]
-    public class MembershipOperationsController : MerchelloSurfaceController
+    public partial class MembershipOperationsController : MerchelloSurfaceController
     {
         /// <summary>
         /// Responsible for rendering the member registration form.

@@ -3,6 +3,7 @@
     using System.Web;
 
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Examine.DataServices;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -11,7 +12,7 @@
     /// <summary>
     /// Represents a product model.
     /// </summary>
-    public class ProductModel : MasterModel
+    public partial class ProductModel : MasterModel
     {
         /// <summary>
         /// The image.
@@ -27,6 +28,12 @@
         /// The description.
         /// </summary>
         private IHtmlString _description;
+
+
+        /// <summary>
+        /// Product Data
+        /// </summary>
+        private ProductDisplay _productDisplay;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductModel"/> class.
@@ -46,7 +53,19 @@
         {
             get
             {
-                return this.Content.GetPropertyValue<ProductDisplay>("merchelloProduct");
+                if (_productDisplay == null)
+                {
+                    var fromProduct = this.Content.GetPropertyValue<ProductDisplay>("merchelloProduct");
+                    if (fromProduct != null)
+                    {
+                        _productDisplay = fromProduct;
+                    }
+                    else
+                    {
+                        _productDisplay = new ProductDisplay();
+                    }
+                }
+                return _productDisplay;
             }
         }
 
@@ -59,7 +78,7 @@
             {
                 if (this._image == null && this.Content.HasValue("image"))
                 {
-                    this._image = this.Content.GetCropUrl(propertyAlias: "image", imageCropMode: ImageCropMode.Max);
+                    this._image = this.Content.GetCropUrl(propertyAlias: "image", imageCropMode: ImageCropMode.Max, cacheBuster: false);
                 }
 
                 return this._image;
@@ -73,7 +92,11 @@
         {
             get
             {
-                return this._brief ?? this.Content.GetPropertyValue<string>("brief");
+                if (string.IsNullOrEmpty(this._brief))
+                {
+                    this._brief = this.Content.GetPropertyValue<string>("brief");
+                }
+                return this._brief;
             }
         }
 
@@ -84,7 +107,11 @@
         {
             get
             {
-                return this._description ?? this.Content.GetPropertyValue<IHtmlString>("description");
+                if (this._description == null && this.Content.HasValue("description"))
+                {
+                    this._description = this.Content.GetPropertyValue<IHtmlString>("description");
+                }
+                return this._description;
             }
         }
     }

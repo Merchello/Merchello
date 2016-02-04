@@ -13,9 +13,18 @@
 			editor: {
 				view: '~/App_Plugins/Merchello/propertyeditors/productlistview/merchello.productlistview.html'
 			}
+		},
+		{
+		    alias: 'Merchello.MultiProductPicker',
+		    name: 'Merchello Multi-Product Picker',
+		    editor: {
+		        view: '~/App_Plugins/Merchello/propertyeditors/multiproductpicker/merchello.multiproductpicker.html'
+		    }
 		}
 	],
 	javascript: [
+	    '~/App_Plugins/Merchello/lib/charts/Chart.min.js',
+	    '~/App_Plugins/Merchello/lib/charts/angular-chart.min.js',
 		'~/App_Plugins/Merchello/js/merchello.module.js',
 		'~/App_Plugins/Merchello/js/merchello.models.js',
 		'~/App_Plugins/Merchello/js/merchello.filters.js',

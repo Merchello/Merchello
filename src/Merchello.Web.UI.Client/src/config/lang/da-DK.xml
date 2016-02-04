@@ -39,6 +39,25 @@
     <key alias="offer">Rabat</key>
     <key alias="coupon">Kupon</key>
     <key alias="reportListing">Rapporter</key>
+    <key alias="salesOverTime">Sales Over Time</key>
+    <key alias="salesByItem">Sales By Item</key>
+    <key alias="abandonedBasket">Abandoned Basket</key>
+  </area>
+  <area alias="merchelloReports">
+    <key alias="anonymousBaskets">Anonymous Baskets</key>
+    <key alias="anonymousCheckouts">Anonymous Checkouts</key>
+    <key alias="anonymousCheckoutPercent">Anonymous Checkout Percent</key>
+    <key alias="customerBaskets">Customer Baskets</key>
+    <key alias="customerCheckouts">Customer Checkouts</key>
+    <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
+      <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
+      <key alias="monthlyTotalSales">Monthly Total Sales</key>
+      <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
+      <key alias="thisWeek">This Week</key>
+      <key alias="lastWeek">Last Week</key>
+      <key alias="quantitySold">Quantity Sold</key>
+      <key alias="numberOfInvoices">Number of invoices</key>
+      <key alias="abandonedBaskets">Abandoned Baskets and Completed Checkouts</key>
   </area>
   <area alias="merchelloProviders">
     <key alias="unpaidInvoiceCollection">Ubetalte fakturaer</key>
@@ -71,6 +90,7 @@
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">Navn er krævet</key>
+    <key alias="noteMessageRequired">The note message is required</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">Der er ingen produkter i denne samling</key>
@@ -87,15 +107,31 @@
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">Ny kunde</key>
+      <key alias="customerBaskets">Customer Baskets</key>
+      <key alias="basket">Basket</key>
     <key alias="noCustomers"><![CDATA[
         <h5>Du har ingen kunder endnu</h5>
         <p>Men det vil du snart have!</p>
       ]]></key>
+      <key alias="lastActivityDate">Last Activity Date</key>
     <key alias="emptyCustomerCollection">Der er ingen kunder i denne samling</key>
     <key alias="customerNotes"><![CDATA[
       Kunde noter
       <small>Noter om kunder (ikke salgs specifik)</small>
       ]]></key>
+    <key alias="customerBasket">
+      <![CDATA[
+      Customer Basket
+      <small>Items currently in the customer basket</small>
+      ]]>
+    </key>
+    <key alias="customerWishlist">
+      <![CDATA[
+      Customer Wish List
+      <small>Items currently in the customer wish list</small>
+      ]]>
+    </key>
+    <key alias="itemCacheEmpty">Contains no items</key>
   </area>
   <area alias="merchelloButtons">
     <key alias="void">Annuller</key>
@@ -168,6 +204,10 @@
     <key alias="isOnSale">Denne variant er på tilbud</key>
     <key alias="isAvailable">Denne variant er tilgængelig til køb</key>
     <key alias="costOfGoods">Kostpris af varer</key>
+  </area>
+  <area alias="merchelloNotes">
+    <key alias="addNote">Add a new note</key>
+    <key alias="editNote">Edit note</key>
   </area>
   <area alias="merchelloOrder">
     <!-- things -->
@@ -301,6 +341,31 @@
     <key alias="all">Alle</key>
     <key alias="none">Ingen</key>
     <key alias="expired">Udløbet</key>
+    <key alias="jan">January</key>
+    <key alias="feb">February</key>
+    <key alias="mar">March</key>
+    <key alias="apr">April</key>
+    <key alias="may">May</key>
+    <key alias="jun">June</key>
+    <key alias="jul">July</key>
+    <key alias="aug">August</key>
+    <key alias="sep">September</key>
+    <key alias="oct">October</key>
+    <key alias="nov">November</key>
+    <key alias="dec">December</key>
+    <key alias="monday">Monday</key>
+    <key alias="tuesday">Tuesday</key>
+    <key alias="wednesday">Wednesday</key>
+    <key alias="thursday">Thursday</key>
+    <key alias="friday">Friday</key>
+    <key alias="saturday">Saturday</key>
+    <key alias="sunday">Sunday</key>
+      <key alias="day">Day</key>
+      <key alias="item">Item</key>
+      <key alias="items">Items</key>
+      <key alias="totals">Totals</key>
+      <key alias="quantity">Quantity</key>
+      <key alias="subTotal">Sub Total</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Standard indstillinger for butik</key>

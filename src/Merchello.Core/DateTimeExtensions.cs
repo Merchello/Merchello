@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core
 {
     using System;
+    using System.Globalization;
     using System.Runtime.Remoting.Messaging;
 
     /// <summary>
@@ -129,6 +130,58 @@
         {
             return !value.Equals(DateTime.MinValue) ? value : SqlDateTimeMaxValue();
         }
+
+        /// <summary>
+        /// Gets the first day a month month.
+        /// </summary>
+        /// <param name="current">
+        /// The reference date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime FirstOfMonth(this DateTime current)
+        {
+            return new DateTime(current.Year, current.Month, 1);
+        }
+
+        /// <summary>
+        /// Gets the last day of a month.
+        /// </summary>
+        /// <param name="current">
+        /// The reference date.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime EndOfMonth(this DateTime current)
+        {
+            return new DateTime(current.Year, current.Month, DateTime.DaysInMonth(current.Year, current.Month));
+        }
+
+        /// <summary>
+        /// Gets the start of week.
+        /// </summary>
+        /// <param name="dt">
+        /// The date time.
+        /// </param>
+        /// <param name="startOfWeek">
+        /// The start of week.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DateTime"/>.
+        /// </returns>
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek = DayOfWeek.Sunday)
+        {
+            int diff = dt.DayOfWeek - startOfWeek;
+            if (diff < 0)
+            {
+                diff += 7;
+            }
+
+            return dt.AddDays(-1 * diff).Date;
+        }
+
 
         /// <summary>
         /// Parses the SQL DateTime min value string

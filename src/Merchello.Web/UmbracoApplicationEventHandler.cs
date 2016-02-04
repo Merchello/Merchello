@@ -14,11 +14,13 @@
     using Core.Sales;
     using Core.Services;
 
+    using Merchello.Core.Checkout;
     using Merchello.Core.Gateways.Taxation;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Web.Routing;
+    using Merchello.Web.Workflow;
 
     using Models.SaleHistory;
 
@@ -110,6 +112,7 @@
             MemberService.Saving += this.MemberServiceOnSaving;
 
             SalePreparationBase.Finalizing += SalePreparationBaseOnFinalizing;
+            CheckoutPaymentManagerBase.Finalizing += CheckoutPaymentManagerBaseOnFinalizing;
 
             InvoiceService.Deleted += InvoiceServiceOnDeleted;
             OrderService.Deleted += OrderServiceOnDeleted;
@@ -125,10 +128,32 @@
 
             ShipmentService.StatusChanged += ShipmentServiceOnStatusChanged;
 
+            // Basket conversion
+            BasketConversionBase.Converted += OnBasketConverted;
+
             // Detached Content
             DetachedContentTypeService.Deleting += DetachedContentTypeServiceOnDeleting;
 
             if (merchelloIsStarted) this.VerifyMerchelloVersion();
+        }
+
+        /// <summary>
+        /// Updates the customer's last activity date after the basket has been converted
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void OnBasketConverted(BasketConversionBase sender, ConvertEventArgs<BasketConversionPair> e)
+        {
+            foreach (var pair in e.CovertedEntities.ToArray())
+            {
+                var customer = (ICustomer)pair.CustomerBasket.Customer;
+                customer.LastActivityDate = DateTime.Now;
+                MerchelloContext.Current.Services.CustomerService.Save(customer);
+            }
         }
 
         /// <summary>
@@ -327,9 +352,43 @@
         /// <param name="salesPreparationEventArgs">
         /// The sales preparation event args.
         /// </param>
+        /// TODO RSS remove this when SalePreparation is removed
+        [Obsolete]
         private void SalePreparationBaseOnFinalizing(SalePreparationBase sender, SalesPreparationEventArgs<IPaymentResult> salesPreparationEventArgs)
         {
             var result = salesPreparationEventArgs.Entity;
+
+            result.Invoice.AuditCreated();
+
+            if (result.Payment.Success)
+            {
+                if (result.Invoice.InvoiceStatusKey == Core.Constants.DefaultKeys.InvoiceStatus.Paid)
+                {
+                    result.Payment.Result.AuditPaymentCaptured(result.Payment.Result.Amount);
+                }
+                else
+                {
+                    result.Payment.Result.AuditPaymentAuthorize(result.Invoice);
+                }
+            }
+            else
+            {
+                result.Payment.Result.AuditPaymentDeclined();
+            }
+        }
+
+        /// <summary>
+        /// The checkout payment manager base on finalizing.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void CheckoutPaymentManagerBaseOnFinalizing(CheckoutPaymentManagerBase sender, CheckoutEventArgs<IPaymentResult> e)
+        {
+            var result = e.Item;
 
             result.Invoice.AuditCreated();
 

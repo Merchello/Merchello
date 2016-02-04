@@ -14,7 +14,7 @@
     /// <summary>
     /// The checkout address form.
     /// </summary>
-    public class CheckoutAddressForm
+    public partial class CheckoutAddressForm
     {
         /// <summary>
         /// Gets or sets the theme name.

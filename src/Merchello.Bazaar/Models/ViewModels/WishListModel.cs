@@ -5,7 +5,7 @@
     /// <summary>
     /// The wish list model.
     /// </summary>
-    public class WishListModel : MasterModel
+    public partial class WishListModel : MasterModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WishListModel"/> class.

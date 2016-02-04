@@ -26,12 +26,14 @@
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
+        self.currencyCode = '';
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
         self.currency = {};
         self.items = [];
         self.orders = [];
+        self.notes = [];
     };
 
     InvoiceDisplay.prototype = (function() {
@@ -85,6 +87,11 @@
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
+
+            if(this.currencyCode !== '') {
+                return this.currencyCode;
+            }
+
             if (this.currency.currencyCode === '') {
                 var first = this.items[0];
                 var currencyCode = first.extendedData.getValue('merchCurrencyCode');
@@ -172,6 +179,14 @@
             return this.total - amountPaid;
         }
 
+        function prefixedInvoiceNumber() {
+            if (this.invoiceNumberPrefix === '') {
+                return this.invoiceNumber;
+            } else {
+                return this.invoiceNumberPrefix + '-' + this.invoiceNumber;
+            }
+        }
+
         function isAnonymous() {
             return this.customerKey === '00000000-0000-0000-0000-000000000000';
         }
@@ -192,7 +207,8 @@
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
             shippingTotal: shippingTotal,
-            isAnonymous:  isAnonymous
+            isAnonymous:  isAnonymous,
+            prefixedInvoiceNumber: prefixedInvoiceNumber
         };
     }());
 

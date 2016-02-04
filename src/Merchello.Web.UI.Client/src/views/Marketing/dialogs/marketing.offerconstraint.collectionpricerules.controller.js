@@ -7,8 +7,8 @@
  * The controller to configure the collection price component
  */
 angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstraintCollectionPriceRulesController',
-    ['$scope', 'settingsResource', 'invoiceHelper',
-        function($scope, settingsResource, invoiceHelper) {
+    ['$scope', 'notificationsService', 'settingsResource', 'invoiceHelper',
+        function($scope, notificationsService, settingsResource, invoiceHelper) {
 
             $scope.loaded = false;
             $scope.operator = 'gt';
@@ -20,7 +20,7 @@ angular.module('merchello').controller('Merchello.Marketing.Dialogs.OfferConstra
 
             function init() {
                 loadSettings();
-                loadExistingConfigurations()
+                loadExistingConfigurations();
             }
 
             function loadExistingConfigurations() {
