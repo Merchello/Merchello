@@ -86,8 +86,7 @@
                 return new Version(1, 11, 0);
             }
 
-            if (!this.ValidColumns.Contains("merchInvoice,currencyCode") || 
-                this.DbIndexDefinitions.Any(x => x.IndexName.InvariantEquals("IX_merchProductVariantSku")) == false)
+            if (!this.ValidColumns.Contains("merchInvoice,currencyCode"))
             {
                 return new Version(1, 13, 0);
             }
