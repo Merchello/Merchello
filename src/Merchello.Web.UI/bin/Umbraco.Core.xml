@@ -734,6 +734,17 @@
             has allocated disposable objects, it should take care of disposing them.
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.Cache.RepositoryCachePolicyBase`2.DisposeResources">
+            <summary>
+            The disposal performs the caching
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Cache.RepositoryCachePolicyBase`2.SetCacheAction(System.Action)">
+            <summary>
+            Sets the action to execute on disposal
+            </summary>
+            <param name="action"></param>
+        </member>
         <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.HasZeroCountCache">
             <summary>
             Looks up the zero count cache, must return null if it doesn't exist
@@ -745,11 +756,6 @@
             Performs the lookup for all entities of this type from the cache
             </summary>
             <returns></returns>
-        </member>
-        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.DisposeResources">
-            <summary>
-            The disposal performs the caching
-            </summary>
         </member>
         <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.SetCacheAction(System.String,`0)">
             <summary>
@@ -765,12 +771,6 @@
             <param name="ids"></param>
             <param name="entityCollection"></param>
         </member>
-        <member name="M:Umbraco.Core.Cache.DefaultRepositoryCachePolicy`2.SetCacheAction(System.Action)">
-            <summary>
-            Sets the action to execute on disposal
-            </summary>
-            <param name="action"></param>
-        </member>
         <member name="T:Umbraco.Core.Cache.DefaultRepositoryCachePolicyFactory`2">
             <summary>
             Creates cache policies
@@ -784,10 +784,6 @@
             </summary>
             <typeparam name="TEntity"></typeparam>
             <typeparam name="TId"></typeparam>
-            <remarks>
-            This caching policy has no sliding expiration but uses the default ObjectCache.InfiniteAbsoluteExpiration as it's timeout, so it
-            should not leave the cache unless the cache memory is exceeded and it gets thrown out.
-            </remarks>
         </member>
         <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.SetCacheAction(System.String,`0)">
             <summary>
@@ -796,11 +792,10 @@
             <param name="cacheKey"></param>
             <param name="entity"></param>
         </member>
-        <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.SetCacheAction(`1[],`0[])">
+        <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.SetCacheAction(`0[])">
             <summary>
             Sets the action to execute on disposal for an entity collection
             </summary>
-            <param name="ids"></param>
             <param name="entityCollection"></param>
         </member>
         <member name="M:Umbraco.Core.Cache.FullDataSetRepositoryCachePolicy`2.HasZeroCountCache">
@@ -1245,16 +1240,11 @@
             An interface that defines the object is tracking property changes and if it is Dirty
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1"/> class that is empty and has the default initial capacity.
-            </summary>
-        </member>
         <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-            Initializes a new instance of the <see cref="T:System.Collections.Generic.List`1"/> class that contains elements copied from the specified collection and has sufficient capacity to accommodate the number of elements copied.
+            Default behavior is CloneOnce
             </summary>
-            <param name="collection">The collection whose elements are copied to the new list.</param><exception cref="T:System.ArgumentNullException"><paramref name="collection"/> is null.</exception>
+            <param name="collection"></param>
         </member>
         <member name="M:Umbraco.Core.Collections.DeepCloneableList`1.DeepClone">
             <summary>
@@ -1275,6 +1265,21 @@
             </summary>
             <param name="propertyName"></param>
             <returns></returns>
+        </member>
+        <member name="F:Umbraco.Core.Collections.ListCloneBehavior.CloneOnce">
+            <summary>
+            When set, DeepClone will clone the items one time and the result list behavior will be None
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Collections.ListCloneBehavior.None">
+            <summary>
+            When set, DeepClone will not clone any items
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Collections.ListCloneBehavior.Always">
+            <summary>
+            When set, DeepClone will always clone all items
+            </summary>
         </member>
         <member name="T:Umbraco.Core.ConcurrentHashSet`1">
             <summary>
@@ -10084,6 +10089,11 @@
             <param name="input"></param>
             <param name="output"></param>
             <returns></returns>        
+        </member>
+        <member name="T:Umbraco.Core.Models.DeepCloneHelper.ClonePropertyInfo">
+            <summary>
+            Stores the metadata for the properties for a given type so we know how to create them
+            </summary>
         </member>
         <member name="M:Umbraco.Core.Models.EntityExtensions.IsNewEntity(Umbraco.Core.Models.EntityBase.IEntity)">
             <summary>
@@ -20060,13 +20070,12 @@
             Use this constructor to create/assign new UserData to the ticket
             </summary>
             <param name="sessionId">
-            A unique id that is assigned to this ticket
+            The security stamp for the user
             </param>
         </member>
         <member name="P:Umbraco.Core.Security.UserData.SessionId">
             <summary>
-            This is used to Id the current ticket which we can then use to mitigate csrf attacks
-            and other things that require request validation.
+            This is the 'security stamp' for validation
             </summary>        
         </member>
         <member name="M:Umbraco.Core.Serialization.AbstractSerializationService.FromStream(System.IO.Stream,System.Type,System.String)">

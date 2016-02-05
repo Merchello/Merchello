@@ -8,13 +8,9 @@
     using System.Web.Http;
     using System.Web.Http.ModelBinding;
 
-    using global::Examine;
-
     using Merchello.Core;
     using Merchello.Core.Chains.CopyEntity.Product;
-    using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Examine.Providers;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;

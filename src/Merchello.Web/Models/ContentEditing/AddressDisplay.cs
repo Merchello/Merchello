@@ -76,7 +76,7 @@
     }
 
     /// <summary>
-    /// Mapping extensions for <see cref="AddressDetails"/>
+    /// Mapping extensions for <see cref="AddressDisplay"/>
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
     internal static class AddressDetailsMappingExtensions
