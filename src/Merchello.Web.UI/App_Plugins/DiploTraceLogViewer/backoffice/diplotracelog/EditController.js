@@ -24,6 +24,8 @@ angular.module("umbraco").controller("DiploTraceLogEditController",
         // Ajax request to controller for data-
         $http.get(dataUrl).success(function (data) {
 
+            console.info(data);
+
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
                 count: 100,          // count per page
