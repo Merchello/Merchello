@@ -13,6 +13,7 @@
     /// <remarks>
     /// http://issues.merchello.com/youtrack/issue/M-247
     /// </remarks>
+    /// <seealso cref="http://stackoverflow.com/questions/19956838/force-camalcase-on-asp-net-webapi-per-controller"/>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1630:DocumentationTextMustContainWhitespace", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here."),SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1627:DocumentationTextMustNotBeEmpty", Justification = "Reviewed. Suppression is OK here.")]
     public class JsonCamelCaseFormatter : ActionFilterAttribute 
     {
