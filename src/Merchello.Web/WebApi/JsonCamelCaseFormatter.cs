@@ -27,13 +27,9 @@
         /// <param name="controllerDescriptor">
         /// The controller descriptor.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)
         {
             controllerSettings.Formatters.Clear();
-            //var formatter = controllerSettings.Formatters.OfType<JsonMediaTypeFormatter>().Single();
-            //controllerSettings.Formatters.Remove(formatter);
 
             var formatter = new JsonMediaTypeFormatter
             {

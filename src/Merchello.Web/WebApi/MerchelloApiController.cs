@@ -6,7 +6,7 @@
     using Umbraco.Core;
     using Umbraco.Web;
     using Umbraco.Web.Editors;
-    using Umbraco.Web.WebApi;
+    
 
     /// <summary>
     /// The base Merchello back office API controller.

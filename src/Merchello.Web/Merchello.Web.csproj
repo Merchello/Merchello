@@ -189,6 +189,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -445,6 +446,7 @@
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
     <Compile Include="PluginManagerExtensions.cs" />
+    <Compile Include="ProductContentEditing.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="PropertyConverters\MultiProductPickerValueConverter.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
@@ -504,7 +506,6 @@
     <Compile Include="Models\MapperResolvers\WarehouseCatalogIsDefaultResolver.cs" />
     <Compile Include="PackageActions\AddAppConfigKey.cs" />
     <Compile Include="PackageActions\AddLocalizationAreas.cs" />
-    <Compile Include="ProductContentEditing.cs" />
     <Compile Include="Ui\IPaymentMethodUiControllerResolver.cs" />
     <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
     <Compile Include="UmbracoServiceExtensions.cs" />
@@ -527,6 +528,7 @@
     <Compile Include="WebApi\Binders\ProductContentSaveBinder.cs" />
     <Compile Include="WebApi\Binders\ProductVariantContentSaveBinder.cs" />
     <Compile Include="WebApi\Filters\FileUploadCleanupFilterAttribute.cs" />
+    <Compile Include="WebApi\JsonCamelCaseFormatter.cs" />
     <Compile Include="WebApi\ScheduledTasksController.cs" />
     <Compile Include="WebMigrationManager.cs" />
     <Compile Include="Workflow\BasketConversionBase.cs" />
@@ -601,7 +603,6 @@
     <Compile Include="MerchelloHelper.cs" />
     <Compile Include="CustomerContext.cs" />
     <Compile Include="Search\QueryBase.cs" />
-    <Compile Include="WebApi\JsonCamelCaseFormatter.cs" />
     <Compile Include="Workflow\Basket.cs" />
     <Compile Include="Models\ContentEditing\ExamineDisplayExtensions.cs" />
     <Compile Include="Models\ContentEditing\ProductAttributeDisplay.cs" />
