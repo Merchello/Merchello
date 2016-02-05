@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.Serialization;
     using System.Security.Cryptography;
 
     using Merchello.Core;
@@ -16,47 +17,56 @@
     /// <summary>
     /// Represents and entity collection.
     /// </summary>
+    [DataContract(Name = "entityCollectionDisplay", Namespace = "")]
     public class EntityCollectionDisplay
     {
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
+        [DataMember(Name = "key")]
         public Guid Key { get; set; }
 
         /// <summary>
         /// Gets or sets the parent key.
         /// </summary>
+        [DataMember(Name = "parentKey")]
         public Guid? ParentKey { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type field key.
         /// </summary>
+        [DataMember(Name = "entityTfKey")]
         public Guid EntityTfKey { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type field.
         /// </summary>
+        [DataMember(Name = "entityTypeField")]
         public TypeField EntityTypeField { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type.
         /// </summary>
+        [DataMember(Name = "entityType")]
         [JsonConverter(typeof(StringEnumConverter))]
         public EntityType EntityType { get; set; }
 
         /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
+        [DataMember(Name = "providerKey")]
         public Guid ProviderKey { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
+        [DataMember(Name = "name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the sort order.
         /// </summary>
+        [DataMember(Name = "sortOrder")]
         public int SortOrder { get; set; }
     }
 
