@@ -456,41 +456,15 @@ angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
 
     angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
 
-/**
- * @ngdoc model
- * @name ItemCacheLineItemInstruction
- * @function
- *
- * @description
- * Represents a JS version of Merchello's ItemCacheLineItemInstruction object
- */
-var ItemCacheLineItemInstruction = function() {
+var ItemCacheInstruction = function() {
     var self = this;
-    self.customer = {};
-    self.lineItem = {};
+    self.customerKey = '';
+    self.entityKey = '';
+    self.quantity = 0;
     self.itemCacheType = '';
-};
+}
 
-
-angular.module('merchello.models').constant('ItemCacheLineItemInstruction', ItemCacheLineItemInstruction);
-
-/**
- * @ngdoc model
- * @name ItemCacheProductInstruction
- * @function
- *
- * @description
- * Represents a JS version of Merchello's ItemCacheProductInstruction object
- */
-var ItemCacheProductInstruction = function() {
-    var self = this;
-    self.customer = {};
-    self.productVariant = {};
-    self.itemCacheType = '';
-};
-
-angular.module('merchello.models').constant('ItemCacheProductInstruction', ItemCacheProductInstruction);
-
+angular.module('merchello.models').constant('ItemCacheInstruction', ItemCacheInstruction);
 /**
  * @ngdoc model
  * @name EntityCollectionDisplay
@@ -4018,12 +3992,12 @@ angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
         };
     }]);
 
-angular.module('merchello.models').factory('itemCacheLineItemInstructionBuilder',
-    ['genericModelBuilder', 'ItemCacheLineItemInstruction',
-    function(genericModelBuilder, ItemCacheLineItemInstruction) {
+angular.module('merchello.models').factory('itemCacheInstructionBuilder',
+    ['genericModelBuilder', 'ItemCacheInstruction',
+    function(genericModelBuilder, ItemCacheInstruction) {
 
 
-            var Constructor = ItemCacheLineItemInstruction;
+            var Constructor = ItemCacheInstruction;
 
             return {
                 createDefault: function() {

@@ -2452,10 +2452,10 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
         ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
             'customerResource', 'backOfficeCheckoutResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder', 'customerAddressDisplayBuilder',
-            'itemCacheLineItemInstructionBuilder',
+            'itemCacheInstructionBuilder',
         function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, backOfficeCheckoutResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder, customerAddressDisplayBuilder,
-                 itemCacheLineItemInstructionBuilder) {
+                 itemCacheInstructionBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -2530,6 +2530,7 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                     open = value;
                 });
                 loadCustomer(key);
+
             }
 
             /**
@@ -2592,7 +2593,6 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             }
 
             function removeFromItemCache(lineItem, itemCacheType) {
-                console.info(itemCacheType);
                 var dialogData = {};
                 dialogData.name = lineItem.name;
                 dialogData.lineItem = lineItem;
@@ -2607,10 +2607,11 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             }
 
             function processRemoveFromItemCache(dialogData) {
-                var instruction = itemCacheLineItemInstructionBuilder.createDefault();
-                instruction.customer = $scope.customer;
-                instruction.lineItem = dialogData.lineItem;
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = dialogData.lineItem.key;
                 instruction.itemCacheType = dialogData.itemCacheType;
+                console.info(instruction);
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
@@ -2631,12 +2632,11 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             }
 
             function processEditItemCacheItem(dialogData) {
-                var instruction = itemCacheLineItemInstructionBuilder.createDefault();
-                instruction.customer = $scope.customer;
-                instruction.lineItem = dialogData.lineItem;
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = dialogData.lineItem.key;
+                instruction.quantity = dialogData.lineItem.quantity;
                 instruction.itemCacheType = dialogData.itemCacheType;
-                instruction.reference = 'Wishlist';
-
                 console.info(instruction);
                 backOfficeCheckoutResource.updateLineItemQuantity(instruction).then(function() {
                     loadCustomer($scope.customer.key);
@@ -2645,9 +2645,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             }
 
             function moveToWishList(lineItem) {
-                var instruction = itemCacheLineItemInstructionBuilder.createDefault();
-                instruction.customer = $scope.customer;
-                instruction.lineItem = lineItem;
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = lineItem.key;
                 instruction.itemCacheType = 'Basket';
                 backOfficeCheckoutResource.moveToWishlist(instruction).then(function() {
                     loadCustomer($scope.customer.key);
@@ -2656,9 +2656,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             }
 
             function moveToBasket(lineItem) {
-                var instruction = itemCacheLineItemInstructionBuilder.createDefault();
-                instruction.customer = $scope.customer;
-                instruction.lineItem = lineItem;
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = lineItem.key;
                 instruction.itemCacheType = 'Wishlist';
 
                 backOfficeCheckoutResource.moveToBasket(instruction).then(function() {

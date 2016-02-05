@@ -1,9 +1,9 @@
-angular.module('merchello.models').factory('itemCacheLineItemInstructionBuilder',
-    ['genericModelBuilder', 'ItemCacheLineItemInstruction',
-    function(genericModelBuilder, ItemCacheLineItemInstruction) {
+angular.module('merchello.models').factory('itemCacheInstructionBuilder',
+    ['genericModelBuilder', 'ItemCacheInstruction',
+    function(genericModelBuilder, ItemCacheInstruction) {
 
 
-            var Constructor = ItemCacheLineItemInstruction;
+            var Constructor = ItemCacheInstruction;
 
             return {
                 createDefault: function() {

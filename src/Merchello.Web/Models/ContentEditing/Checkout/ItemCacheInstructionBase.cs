@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Models.ContentEditing.Checkout
 {
+    using System.Runtime.Serialization;
+
     using Merchello.Core;
 
     using Newtonsoft.Json;
@@ -14,17 +16,5 @@
         /// Gets or sets the <see cref="CustomerDisplay"/>.
         /// </summary>
         public CustomerDisplay Customer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the reference.
-        /// </summary>
-        public string Reference { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is wish list.
-        /// </summary>
-        [JsonProperty("itemCacheType")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ItemCacheType ItemCacheType { get; set; }
     }
 }

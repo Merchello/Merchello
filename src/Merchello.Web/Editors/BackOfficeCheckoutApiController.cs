@@ -9,6 +9,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Checkout;
@@ -61,7 +62,6 @@
             _merchello = new MerchelloHelper(merchelloContext.Services);
         }
 
-
         #region Payment Methods
 
         /// <summary>
@@ -92,7 +92,7 @@
         /// The <see cref="IEnumerable{ItemCacheLineItemDisplay}"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage AddItemCacheItem(ItemCacheProductInstruction instruction)
+        public HttpResponseMessage AddItemCacheItem(ItemCacheInstruction instruction)
         {
             var itemCache = GetCustomerItemCache(instruction);
 
@@ -101,7 +101,14 @@
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            itemCache.AddItem(instruction.ProductVariant);
+            var variant = _merchello.Query.Product.GetProductVariantByKey(instruction.EntityKey);
+
+            if (variant == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            itemCache.AddItem(variant);
 
             itemCache.Save();
 
@@ -118,7 +125,7 @@
         /// The <see cref="IEnumerable{ItemCacheLineItemDisplay}"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage RemoveItemCacheItem(ItemCacheLineItemInstruction instruction)
+        public HttpResponseMessage RemoveItemCacheItem(ItemCacheInstruction instruction)
         {
             var itemCache = GetCustomerItemCache(instruction);
 
@@ -127,7 +134,7 @@
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            itemCache.RemoveItem(instruction.LineItem.Key);
+            itemCache.RemoveItem(instruction.EntityKey);
 
             itemCache.Save();
 
@@ -144,7 +151,7 @@
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage MoveToWishlist(ItemCacheLineItemInstruction instruction)
+        public HttpResponseMessage MoveToWishlist(ItemCacheInstruction instruction)
         {
             var customer = GetCustomer(instruction);
 
@@ -155,7 +162,7 @@
 
             var basket = customer.Basket();
 
-            basket.MoveItemToWishList(instruction.LineItem.Key);
+            basket.MoveItemToWishList(instruction.EntityKey);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -170,7 +177,7 @@
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage MoveToBasket(ItemCacheLineItemInstruction instruction)
+        public HttpResponseMessage MoveToBasket(ItemCacheInstruction instruction)
         {
             var customer = GetCustomer(instruction);
 
@@ -181,7 +188,7 @@
 
             var wishlist = customer.WishList();
 
-            wishlist.MoveItemToBasket(instruction.LineItem.Key);
+            wishlist.MoveItemToBasket(instruction.EntityKey);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
@@ -196,18 +203,18 @@
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage UpdateLineItemQuantity(ItemCacheLineItemInstruction instruction)
+        public HttpResponseMessage UpdateLineItemQuantity(ItemCacheInstruction instruction)
         {
             var itemCache = GetCustomerItemCache(instruction);
 
             if (itemCache == null) return Request.CreateResponse(HttpStatusCode.NotFound);
             
 
-            var item = itemCache.Items.FirstOrDefault(x => x.Key == instruction.LineItem.Key);
+            var item = itemCache.Items.FirstOrDefault(x => x.Key == instruction.EntityKey);
 
             if (item == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            itemCache.Items.First(x => x.Key == instruction.LineItem.Key).Quantity = instruction.LineItem.Quantity;
+            itemCache.Items.First(x => x.Key == instruction.EntityKey).Quantity = instruction.Quantity;
 
             itemCache.Save();
 
@@ -228,7 +235,7 @@
         /// <exception cref="NullReferenceException">
         /// Throws a null reference if the customer is not found
         /// </exception>
-        private CustomerItemCacheBase GetCustomerItemCache(ItemCacheInstructionBase instruction)
+        private CustomerItemCacheBase GetCustomerItemCache(ItemCacheInstruction instruction)
         {
             var customer = GetCustomer(instruction);
 
@@ -253,9 +260,9 @@
         /// <returns>
         /// The <see cref="ICustomer"/>.
         /// </returns>
-        private ICustomer GetCustomer(ItemCacheInstructionBase instruction)
+        private ICustomer GetCustomer(ItemCacheInstruction instruction)
         {
-            return _customerService.GetByKey(instruction.Customer.Key);
+            return _customerService.GetByKey(instruction.CustomerKey);
         }
     }
 }
