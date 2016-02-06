@@ -92,7 +92,7 @@
         /// The <see cref="IEnumerable{ItemCacheLineItemDisplay}"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage AddItemCacheItem(ItemCacheInstruction instruction)
+        public HttpResponseMessage AddItemCacheItem(AddToItemCacheInstruction instruction)
         {
             var itemCache = GetCustomerItemCache(instruction);
 
@@ -101,14 +101,22 @@
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            var variant = _merchello.Query.Product.GetProductVariantByKey(instruction.EntityKey);
-
-            if (variant == null)
+            var variants = new List<ProductVariantDisplay>();
+            foreach (var addItem in instruction.Items.ToArray())
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                if (addItem.IsProductVariant)
+                {
+                    var variant = _merchello.Query.Product.GetProductVariantByKey(addItem.Key);
+                    if (variant != null) variants.Add(variant);
+                }
+                else
+                {
+                    var product = _merchello.Query.Product.GetByKey(addItem.Key);
+                    if (product != null && !product.ProductVariants.Any()) variants.Add(product.AsMasterVariantDisplay());
+                }
             }
 
-            itemCache.AddItem(variant);
+            foreach (var v in variants.ToArray()) itemCache.AddItem(v);
 
             itemCache.Save();
 
@@ -235,7 +243,7 @@
         /// <exception cref="NullReferenceException">
         /// Throws a null reference if the customer is not found
         /// </exception>
-        private CustomerItemCacheBase GetCustomerItemCache(ItemCacheInstruction instruction)
+        private CustomerItemCacheBase GetCustomerItemCache(ItemCacheInstructionBase instruction)
         {
             var customer = GetCustomer(instruction);
 
@@ -260,7 +268,7 @@
         /// <returns>
         /// The <see cref="ICustomer"/>.
         /// </returns>
-        private ICustomer GetCustomer(ItemCacheInstruction instruction)
+        private ICustomer GetCustomer(ItemCacheInstructionBase instruction)
         {
             return _customerService.GetByKey(instruction.CustomerKey);
         }

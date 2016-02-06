@@ -4,6 +4,6 @@ var ItemCacheInstruction = function() {
     self.entityKey = '';
     self.quantity = 0;
     self.itemCacheType = '';
-}
+};
 
 angular.module('merchello.models').constant('ItemCacheInstruction', ItemCacheInstruction);

@@ -456,13 +456,22 @@ angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
 
     angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
 
+var AddToItemCacheInstruction = function() {
+    var self = this;
+    self.customerKey = '';
+    self.items = [];
+    self.itemCacheType = '';
+};
+
+angular.module('merchello.models').constant('AddToItemCacheInstruction', AddToItemCacheInstruction);
+
 var ItemCacheInstruction = function() {
     var self = this;
     self.customerKey = '';
     self.entityKey = '';
     self.quantity = 0;
     self.itemCacheType = '';
-}
+};
 
 angular.module('merchello.models').constant('ItemCacheInstruction', ItemCacheInstruction);
 /**
@@ -3991,6 +4000,23 @@ angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
             }
         };
     }]);
+
+angular.module('merchello.models').factory('addToItemCacheInstructionBuilder',
+    ['genericModelBuilder', 'AddToItemCacheInstruction',
+        function(genericModelBuilder, AddToItemCacheInstruction) {
+
+
+            var Constructor = AddToItemCacheInstruction;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
 
 angular.module('merchello.models').factory('itemCacheInstructionBuilder',
     ['genericModelBuilder', 'ItemCacheInstruction',

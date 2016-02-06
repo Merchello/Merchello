@@ -703,14 +703,15 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
     }]);
 
 angular.module('merchello.directives').directive('customerItemCacheTable',
-    ['$q', 'localizationService', 'settingsResource', 'customerResource',
-    function($q, localizationService, settingsResource, customerResource) {
+    ['$q', 'localizationService', 'dialogService', 'settingsResource', 'customerResource',
+    function($q, localizationService, dialogService, settingsResource, customerResource) {
 
         return {
             restrict: 'E',
             replace: true,
             scope: {
                 customer: '=',
+                doAdd: '&',
                 doMove: '&',
                 doEdit: '&',
                 doDelete: '&',
@@ -725,6 +726,8 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                 scope.items = [];
 
                 scope.getTotal = getTotal;
+
+                scope.openProductSelection = openProductSelectionDialog;
 
                 function init() {
 
@@ -753,6 +756,22 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                        total += item.quantity * item.price;
                     });
                     return total;
+                }
+
+                function openProductSelectionDialog() {
+                    var dialogData = {};
+                    dialogData.addItems = [];
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.productselectionfilter.html',
+                        show: true,
+                        callback: processProductSelection,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processProductSelection(dialogData) {
+                    scope.doAdd()(dialogData.addItems, scope.itemCacheType);
                 }
 
                 init();

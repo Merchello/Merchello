@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Web.Models.ContentEditing.Checkout
 {
-    using System.Runtime.Serialization;
+    using System;
 
     using Merchello.Core;
 
@@ -13,8 +13,14 @@
     public abstract class ItemCacheInstructionBase
     {
         /// <summary>
-        /// Gets or sets the <see cref="CustomerDisplay"/>.
+        /// Gets or sets the customer key.
         /// </summary>
-        public CustomerDisplay Customer { get; set; }
+        public Guid CustomerKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the item cache type.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ItemCacheType ItemCacheType { get; set; }
     }
 }

@@ -9,10 +9,10 @@
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
         ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
             'customerResource', 'backOfficeCheckoutResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder', 'customerAddressDisplayBuilder',
-            'itemCacheInstructionBuilder',
+            'itemCacheInstructionBuilder', 'addToItemCacheInstructionBuilder',
         function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, backOfficeCheckoutResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder, customerAddressDisplayBuilder,
-                 itemCacheInstructionBuilder) {
+                 itemCacheInstructionBuilder, addToItemCacheInstructionBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -31,6 +31,7 @@
             $scope.moveToBasket = moveToBasket;
             $scope.removeFromItemCache = removeFromItemCache;
             $scope.editItemCacheItem = editItemCacheItem;
+            $scope.addToItemCache = addToItemCache;
 
             $scope.getCurrency = getCurrency;
             $scope.openEditInfoDialog = openEditInfoDialog;
@@ -146,6 +147,16 @@
                             return c.currencyCode === $scope.settings.currencyCode;
                         });
                     });
+                });
+            }
+
+            function addToItemCache(items, itemCacheType) {
+                var instruction = addToItemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.items = items;
+                instruction.itemCacheType = itemCacheType;
+                backOfficeCheckoutResource.addItemCacheItem(instruction).then(function() {
+                    loadCustomer($scope.customer.key);
                 });
             }
 

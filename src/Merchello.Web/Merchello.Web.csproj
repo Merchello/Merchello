@@ -323,8 +323,9 @@
     <Compile Include="LocalizationHelper.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheInstruction.cs" />
+    <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheItem.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ItemCacheInstructionBase.cs" />
-    <Compile Include="Models\ContentEditing\Checkout\ItemCacheProductInstruction.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ItemCacheLineItemInstruction.cs" />
     <Compile Include="Models\ContentEditing\Collections\Entity2CollectionModel.cs" />
     <Compile Include="Models\ContentEditing\Collections\EntityCollectionByEntityQuery.cs" />
