@@ -451,6 +451,7 @@
     <Compile Include="PropertyConverters\MultiProductPickerValueConverter.cs" />
     <Compile Include="PropertyConverters\ProductDisplayValueConverter.cs" />
     <Compile Include="PropertyConverters\ProductListViewValueConverter.cs" />
+    <Compile Include="PropertyEditors\MultiProductPicker.cs" />
     <Compile Include="Providers\DynamicCollection\UnpaidInvoiceCollectionProvider.cs" />
     <Compile Include="Reporting\IReportApiController.cs" />
     <Compile Include="Reporting\IReportApiControllerResolver.cs" />
