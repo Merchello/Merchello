@@ -23,7 +23,7 @@
     /// The bazaar site API controller.
     /// </summary>
     [PluginController("Bazaar")]
-    [JsonCamelCaseFormatter]
+    [Web.WebApi.JsonCamelCaseFormatter]
     public partial class BazaarSiteApiController : UmbracoApiController
     {
         /// <summary>

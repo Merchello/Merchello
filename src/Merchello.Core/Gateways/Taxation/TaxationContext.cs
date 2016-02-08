@@ -24,6 +24,10 @@
         /// </summary>
         private ITaxationByProductMethod _taxByProductMethod;
 
+        /// <summary>
+        /// The _tax method not set.
+        /// </summary>
+        private bool _taxMethodNotQueried = true;
 
         /// <summary>
         /// The <see cref="TaxationApplication"/>.
@@ -88,7 +92,12 @@
         {
             get
             {
-                return _taxByProductMethod ?? this.GetTaxationByProductMethod();
+                if (_taxByProductMethod == null && this._taxMethodNotQueried)
+                {
+                    _taxByProductMethod = this.GetTaxationByProductMethod();
+                }
+
+                return _taxByProductMethod;
             }
         }
 
@@ -236,6 +245,7 @@
             if (taxMethod == null)
             {
                 LogHelper.Debug<TaxationContext>("Product based pricing is set in settings, but a TaxMethod has not been assigned.");
+                this._taxMethodNotQueried = false;
                 return null;
             }
             var provider = GatewayProviderResolver.GetProviderByKey<TaxationGatewayProviderBase>(taxMethod.ProviderKey);
@@ -276,6 +286,7 @@
                     TaxationApplication.Invoice;
             }
 
+            _taxMethodNotQueried = true;
             TaxApplicationInitialized = true;
         }
     }
