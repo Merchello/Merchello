@@ -9,11 +9,17 @@
             <th><localize key="merchelloGeneral_quantity" /></th>
             <th><localize key="merchelloGeneral_price"/></th>
             <th><localize key="merchelloGeneral_subTotal"/></th>
+            <th></th>
         </tr>
         </thead>
+        <tfoot>
+        <tr>
+            <td colspan="6"><merchello-add-icon do-add="openProductSelection()"></merchello-add-icon></td>
+        </tr>
+        </tfoot>
         <tbody data-ng-show="items.length === 0">
             <tr>
-                <td colspan="5"><localize key="merchelloCustomers_itemCacheEmpty" /></td>
+                <td colspan="6"><localize key="merchelloCustomers_itemCacheEmpty" /></td>
             </tr>
         </tbody>
         <tbody data-ng-show="items.length > 0">
@@ -23,11 +29,16 @@
                 <td>{{item.quantity}}</td>
                 <td>{{item.price  | currency : settings.currencySymbol }}</td>
                 <td>{{item.price * item.quantity  | currency : settings.currencySymbol}}</td>
+                <td>
+                    <merchello-move-icon do-move="doMove()(item)"></merchello-move-icon>
+                    <merchello-icon-bar show-delete="true" do-delete="doDelete()(item, itemCacheType)" show-edit="true" do-edit="doEdit()(item, itemCacheType)"></merchello-icon-bar>
+                </td>
             </tr>
             <tr>
                 <td colspan="3"></td>
                 <td><localize key="merchelloGeneral_total" /></td>
                 <td>{{ getTotal() | currency : settings.currencySymbol }}</td>
+                <td></td>
             </tr>
         </tbody>
     </table>

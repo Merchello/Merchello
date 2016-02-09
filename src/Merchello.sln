@@ -87,6 +87,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Readme", "Readme", "{197C16
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers.Payment", "Merchello.Providers.Payment\Merchello.Providers.Payment.csproj", "{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Providers.Payment.UI.Client", "Merchello.Providers.Payment.UI.Client\", "{86383906-D326-473B-A41E-7E782C601D95}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_3856"
+		Debug.AspNetCompiler.PhysicalPath = "Merchello.Providers.Payment.UI.Client\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_3856\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_3856"
+		Release.AspNetCompiler.PhysicalPath = "Merchello.Providers.Payment.UI.Client\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_3856\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "3856"
+		SlnRelativePath = "Merchello.Providers.Payment.UI.Client\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -193,6 +216,37 @@ Global
 		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|x64.ActiveCfg = Debug|Any CPU
 		{006ABEDC-08B3-4EE4-B6C8-F5B5C68B95F6}.Release|x86.ActiveCfg = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|x64.Build.0 = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Debug|x86.Build.0 = Debug|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|x64.Build.0 = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|x86.ActiveCfg = Release|Any CPU
+		{185B4DE5-F2CF-412B-A1AD-EC5163A5D2BA}.Release|x86.Build.0 = Release|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|x64.Build.0 = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Debug|x86.Build.0 = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|x64.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|x64.Build.0 = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|x86.ActiveCfg = Debug|Any CPU
+		{86383906-D326-473B-A41E-7E782C601D95}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
