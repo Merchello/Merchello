@@ -44,7 +44,7 @@
                 app: ['src/views/**/*.html'],
                 common: ['src/common/**/*.tpl.html']
             },
-            scss: ['src/scss/merchello.scss'], 
+            scss: ['src/scss/merchello.payments.scss'],
             prod: ['<%= distdir %>/js/*.js']
         },
 
