@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2014 Umbraco HQ;
+ * Copyright (c) 2016 Umbraco HQ;
  * Licensed MIT
  */
 
@@ -61,6 +61,24 @@ function authResource($q, $http, umbRequestHelper, angularHelper) {
                 'Login failed for user ' + username);
         },
         
+        unlinkLogin: function (loginProvider, providerKey) {
+            if (!loginProvider || !providerKey) {
+                return angularHelper.rejectedPromise({
+                    errorMsg: 'loginProvider or providerKey cannot be empty'
+                });
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "PostUnLinkLogin"), {
+                            loginProvider: loginProvider,
+                            providerKey: providerKey
+                        }),
+                'Unlinking login provider failed');
+        },
+
         /**
          * @ngdoc method
          * @name umbraco.resources.authResource#performLogout
@@ -113,6 +131,16 @@ function authResource($q, $http, umbRequestHelper, angularHelper) {
                         "authenticationApiBaseUrl",
                         "GetCurrentUser")),
                 'Server call failed for getting current user'); 
+        },
+
+        getCurrentUserLinkedLogins: function () {
+
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "authenticationApiBaseUrl",
+                        "GetCurrentUserLinkedLogins")),
+                'Server call failed for getting current users linked logins');
         },
         
         /**
@@ -688,7 +716,7 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 $http.get(
                     umbRequestHelper.getApiUrl(
                         "contentApiBaseUrl",
-                        "GetHasPermission",
+                        "HasPermission",
                         [{ permissionToCheck: permission },{ nodeId: id }])),
                 'Failed to check permission for item ' + id);
         },
@@ -700,7 +728,7 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves changes made to a content item to its current version, if the content item is new, the isNew paramater must be passed to force creation
-         * if the content item needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the content item needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -733,7 +761,7 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves and publishes changes made to a content item to a new version, if the content item is new, the isNew paramater must be passed to force creation
-         * if the content item needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the content item needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -1206,6 +1234,7 @@ angular.module('umbraco.resources').factory('dataTypeResource', dataTypeResource
     * - User
     * - Language
     * - Domain
+    * - DataType
     **/
 function entityResource($q, $http, umbRequestHelper) {
 
@@ -1315,6 +1344,12 @@ function entityResource($q, $http, umbRequestHelper) {
             _.each(ids, function(item) {
                 query += "ids=" + item + "&";
             });
+
+            // if ids array is empty we need a empty variable in the querystring otherwise the service returns a error
+            if (ids.length === 0) {
+                query += "ids=&";
+            }
+
             query += "type=" + type;
 
             return umbRequestHelper.resourcePromise(
@@ -1440,20 +1475,26 @@ function entityResource($q, $http, umbRequestHelper) {
          * @returns {Promise} resourcePromise object containing the entity array.
          *
          */
-        search: function (query, type, searchFrom) {
+        search: function (query, type, searchFrom, canceler) {
 
             var args = [{ query: query }, { type: type }];
             if (searchFrom) {
                 args.push({ searchFrom: searchFrom });
             }
 
+            var httpConfig = {};
+            if (canceler) {
+                httpConfig["timeout"] = canceler;
+            }
+
             return umbRequestHelper.resourcePromise(
-               $http.get(
-                   umbRequestHelper.getApiUrl(
-                       "entityApiBaseUrl",
-                       "Search",
-                       args)),
-               'Failed to retrieve entity data for query ' + query);
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "entityApiBaseUrl",
+                        "Search",
+                        args),
+                    httpConfig),
+                'Failed to retrieve entity data for query ' + query);
         },
         
 
@@ -1478,15 +1519,21 @@ function entityResource($q, $http, umbRequestHelper) {
          * @returns {Promise} resourcePromise object containing the entity array.
          *
          */
-        searchAll: function (query) {
+        searchAll: function (query, canceler) {
+
+            var httpConfig = {};
+            if (canceler) {
+                httpConfig["timeout"] = canceler;
+            }
 
             return umbRequestHelper.resourcePromise(
-               $http.get(
-                   umbRequestHelper.getApiUrl(
-                       "entityApiBaseUrl",
-                       "SearchAll",
-                       [{ query: query }])),
-               'Failed to retrieve entity data for query ' + query);
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "entityApiBaseUrl",
+                        "SearchAll",
+                        [{ query: query }]),
+                    httpConfig),
+                'Failed to retrieve entity data for query ' + query);
         }
             
     };
@@ -1669,7 +1716,7 @@ function macroResource($q, $http, umbRequestHelper) {
          * @methodOf umbraco.resources.macroResource
          *
          * @description
-         * Gets the result of a macro as html to display in the rich text editor
+         * Gets the result of a macro as html to display in the rich text editor or in the Grid
          *
          * @param {int} macroId The macro id to get parameters for
          * @param {int} pageId The current page id
@@ -1678,39 +1725,17 @@ function macroResource($q, $http, umbRequestHelper) {
          */
         getMacroResultAsHtmlForEditor: function (macroAlias, pageId, macroParamDictionary) {
 
-            //need to format the query string for the custom dictionary
-            var query = "macroAlias=" + macroAlias + "&pageId=" + pageId;
-            if (macroParamDictionary) {
-                var counter = 0;
-                _.each(macroParamDictionary, function (val, key) {
-                    //check for null
-                    val = val ? val : "";
-                    //need to detect if the val is a string or an object
-                    if (!angular.isString(val)) {
-                        //if it's not a string we'll send it through the json serializer
-                        var json = angular.toJson(val);
-                        //then we need to url encode it so that it's safe
-                        val = encodeURIComponent(json);
-                    }
-                    else {
-                        //we still need to encode the string, it could contain line breaks, etc...
-                        val = encodeURIComponent(val);
-                    }
-
-                    query += "&macroParams[" + counter + "].key=" + key + "&macroParams[" + counter + "].value=" + val;
-                    counter++;
-                });
-            }
-
             return umbRequestHelper.resourcePromise(
-               $http.get(
-                   umbRequestHelper.getApiUrl(
-                       "macroApiBaseUrl",
-                       "GetMacroResultAsHtmlForEditor",
-                       query)),
-               'Failed to retrieve macro result for macro with alias  ' + macroAlias);
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "macroApiBaseUrl",
+                        "GetMacroResultAsHtmlForEditor"), {
+                        macroAlias: macroAlias,
+                        pageId: pageId,
+                        macroParams: macroParamDictionary
+                    }),
+                'Failed to retrieve macro result for macro with alias  ' + macroAlias);
         }
-            
     };
 }
 
@@ -2054,7 +2079,7 @@ function mediaResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves changes made to a media item, if the media item is new, the isNew paramater must be passed to force creation
-         * if the media item needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the media item needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -2391,7 +2416,7 @@ function memberResource($q, $http, umbDataFormatter, umbRequestHelper) {
          *
          * @description
          * Saves changes made to a member, if the member is new, the isNew paramater must be passed to force creation
-         * if the member needs to have files attached, they must be provided as the files param and passed seperately 
+         * if the member needs to have files attached, they must be provided as the files param and passed separately 
          * 
          * 
          * ##usage
@@ -2551,6 +2576,71 @@ function packageResource($q, $http, umbDataFormatter, umbRequestHelper) {
 angular.module('umbraco.resources').factory('packageResource', packageResource);
 
 /**
+  * @ngdoc service
+  * @name umbraco.resources.relationResource
+  * @description Handles loading of relation data
+  **/
+function relationResource($q, $http, umbRequestHelper) {
+    return {
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.relationResource#getByChildId
+         * @methodOf umbraco.resources.relationResource
+         *
+         * @description
+         * Retrieves the relation data for a given child ID
+         * 
+         * @param {int} id of the child item
+         * @param {string} alias of the relation type
+         * @returns {Promise} resourcePromise object containing the relations array.
+         *
+         */
+        getByChildId: function (id, alias) {
+          
+            return umbRequestHelper.resourcePromise(
+                $http.get(
+                    umbRequestHelper.getApiUrl(
+                        "relationApiBaseUrl",
+                        "GetByChildId",
+                        [{ childId: id, relationTypeAlias: alias }])),
+                "Failed to get relation by child ID " + id + " and type of " + alias);
+        },
+
+        /**
+         * @ngdoc method
+         * @name umbraco.resources.relationResource#deleteById
+         * @methodOf umbraco.resources.relationResource
+         *
+         * @description
+         * Deletes a relation item with a given id
+         *
+         * ##usage
+         * <pre>
+         * relationResource.deleteById(1234)
+         *    .then(function() {
+         *        alert('its gone!');
+         *    });
+         * </pre> 
+         * 
+         * @param {Int} id id of relation item to delete
+         * @returns {Promise} resourcePromise object.
+         *
+         */
+        deleteById: function (id) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "relationApiBaseUrl",
+                        "DeleteById",
+                        [{ id: id }])),
+                'Failed to delete item ' + id);
+        }
+    };
+}
+
+angular.module('umbraco.resources').factory('relationResource', relationResource);
+/**
     * @ngdoc service
     * @name umbraco.resources.sectionResource
     * @description Loads in data for section
@@ -2618,36 +2708,7 @@ function stylesheetResource($q, $http, umbRequestHelper) {
                        "stylesheetApiBaseUrl",
                        "GetAll")),
                'Failed to retrieve stylesheets ');
-        },
-
-        /**
-         * @ngdoc method
-         * @name umbraco.resources.stylesheetResource#getRules
-         * @methodOf umbraco.resources.stylesheetResource
-         *
-         * @description
-         * Returns all defined child rules for a stylesheet with a given ID
-         *
-         * ##usage
-         * <pre>
-         * stylesheetResource.getRules(2345)
-         *    .then(function(rules) {
-         *        alert('its here!');
-         *    });
-         * </pre> 
-         * 
-         * @returns {Promise} resourcePromise object containing the rules.
-         *
-         */
-        getRules: function (id) {            
-            return umbRequestHelper.resourcePromise(
-               $http.get(
-                   umbRequestHelper.getApiUrl(
-                       "stylesheetApiBaseUrl",
-                       "GetRules",
-                       [{ id: id }])),
-               'Failed to retrieve stylesheets ');
-        },
+        },       
 
         /**
          * @ngdoc method

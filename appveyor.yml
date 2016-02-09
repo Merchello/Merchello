@@ -1,5 +1,5 @@
 # version format
-version: 1.14.1.{build}
+version: 1.15.0.{build}
 
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
@@ -30,6 +30,12 @@ install:
   - ps: cd  src\Merchello.Web.UI.Client
   - npm install
   - npm install -g grunt-cli
+  - ps: grunt build
+  - cmd: ECHO Changing directory back to Merchello
+  - ps: cd  ..\..
+  - cmd: ECHO Changing directory to Merchello.Providers.Payment.UI.Client
+  - ps: cd src\Merchello.Providers.Payment.UI.Client
+  - npm install
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello
   - ps: cd  ..\..

@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2014 Umbraco HQ;
+ * Copyright (c) 2016 Umbraco HQ;
  * Licensed MIT
  */
 
@@ -12,7 +12,7 @@ angular.module('umbraco.security', [
   'umbraco.security.interceptor']);
 angular.module('umbraco.security.interceptor', ['umbraco.security.retryQueue'])
     // This http interceptor listens for authentication successes and failures
-    .factory('securityInterceptor', ['$injector', 'securityRetryQueue', 'notificationsService', function ($injector, queue, notifications) {
+    .factory('securityInterceptor', ['$injector', 'securityRetryQueue', 'notificationsService', 'requestInterceptorFilter', function ($injector, queue, notifications, requestInterceptorFilter) {
         return function(promise) {
 
             return promise.then(
@@ -31,6 +31,19 @@ angular.module('umbraco.security.interceptor', ['umbraco.security.retryQueue'])
                     return promise;
                 }, function(originalResponse) {
                     // Intercept failed requests
+                    
+                    //Here we'll check if we should ignore the error, this will be based on an original header set
+                    var headers = originalResponse.config ? originalResponse.config.headers : {};
+                    if (headers["x-umb-ignore-error"] === "ignore") {
+                        //exit/ignore
+                        return promise;
+                    }
+                    var filtered = _.find(requestInterceptorFilter(), function(val) {
+                        return originalResponse.config.url.indexOf(val) > 0;
+                    });
+                    if (filtered) {
+                        return promise;
+                    }
 
                     //A 401 means that the user is not logged in
                     if (originalResponse.status === 401) {
@@ -83,6 +96,10 @@ angular.module('umbraco.security.interceptor', ['umbraco.security.retryQueue'])
                 });
         };
     }])
+
+    .value('requestInterceptorFilter', function() {
+        return ["www.gravatar.com"];
+    })
 
     // We have to add the interceptor to the queue as a string because the interceptor depends upon service instances that are not available in the config block.
     .config(['$httpProvider', function ($httpProvider) {
