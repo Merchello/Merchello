@@ -362,7 +362,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         /// <summary>
         /// Relates to http://issues.merchello.com/youtrack/issue/M-733
         /// </summary>
-        [Test]
         public void Simulates_IssueM733()
         {
             //// Arrange
