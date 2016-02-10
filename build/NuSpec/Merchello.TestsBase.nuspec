@@ -17,6 +17,7 @@
 		<tags></tags>
 		<dependencies>
 			<dependency id="Umbraco.Core" version="7.3.0" />
+      <dependency id="Braintree" version="2.54.0" />
 		</dependencies>
 	</metadata>
 </package>

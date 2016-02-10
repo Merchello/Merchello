@@ -18,8 +18,8 @@
     // Project configuration.
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
-        distdir: 'build/App_Plugins/Merchello.Payments',
-        vsdir: '../Merchello.Web.UI/App_Plugins/Merchello.Payments',
+        distdir: 'build/App_Plugins/MerchelloPaymentProviders',
+        vsdir: '../Merchello.Web.UI/App_Plugins/MerchelloPaymentProviders',
         appdir: '../Merchello.Web.UI',
         pkg: grunt.file.readJSON('package.json'),
 
@@ -44,7 +44,7 @@
                 app: ['src/views/**/*.html'],
                 common: ['src/common/**/*.tpl.html']
             },
-            scss: ['src/scss/merchello.payments.scss'],
+            scss: ['src/scss/MerchelloPaymentProviders.scss'],
             prod: ['<%= distdir %>/js/*.js']
         },
 
@@ -112,7 +112,7 @@
         concat: {
             models: {
                 src: ['src/common/models/*.js', 'src/**/*.model.js', 'src/common/models/factories/**/*.factory.js'],
-                dest: '<%= distdir %>/js/merchello.payments.models.js',
+                dest: '<%= distdir %>/js/merchello.paymentproviders.models.js',
                 options: {
                     banner: '<%= banner %>\n\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -120,7 +120,7 @@
             },
             controllers: {
                 src: ['src/controllers/**/*.controller.js', 'src/views/**/*.controller.js'],
-                dest: '<%= distdir %>/js/merchello.payments.controllers.js',
+                dest: '<%= distdir %>/js/merchello.paymentproviders.controllers.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -128,7 +128,7 @@
             },
             services: {
                 src: ['src/common/services/*.js'],
-                dest: '<%= distdir %>/js/merchello.payments.services.js',
+                dest: '<%= distdir %>/js/merchello.paymentproviders.services.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -136,7 +136,7 @@
             },
             resources: {
                 src: ['src/common/resources/*.js'],
-                dest: '<%= distdir %>/js/merchello.payments.resources.js',
+                dest: '<%= distdir %>/js/merchello.paymentproviders.resources.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -144,7 +144,7 @@
             },
             directives: {
                 src: ['src/views/**/*.directive.js'],
-                dest: '<%= distdir %>/js/merchello.payments.directives.js',
+                dest: '<%= distdir %>/js/merchello.paymentproviders.directives.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -216,7 +216,7 @@
                 }
             },
 
-            // /App_Plugins/Merchello.Payments
+            // /App_Plugins/MerchelloPaymentProviders
             build: {
                 files: {
                     src: ['<%= src.prod %>']
