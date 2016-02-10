@@ -1,6 +1,6 @@
 {
   "author": "Across the Pond, LLC",
-  "name": "Merchello.Payments",
+  "name": "MerchelloPaymentProviders",
   "homepage": "https://github.com/Merchello/Merchello",
   "version": "1.15.0",
   "repository": {
