@@ -70,7 +70,7 @@
                 if (!new LineItemTypeField().CustomTypeFields.Select(x => x.TypeKey).Contains(lineItem.LineItemTfKey))
                 {
                     var argError = new ArgumentException("The LineItemTfKey was not found in merchello.config custom type fields");
-                    LogHelper.Error<SalePreparationBase>("The LineItemTfKey was not found in merchello.config custom type fields", argError);
+                    LogHelper.Error<CheckoutContextManagerBase>("The LineItemTfKey was not found in merchello.config custom type fields", argError);
 
                     throw argError;
                 }
