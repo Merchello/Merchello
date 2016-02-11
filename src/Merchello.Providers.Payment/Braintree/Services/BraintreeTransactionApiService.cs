@@ -8,6 +8,7 @@
     using Merchello.Providers.Payment.Braintree.Models;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// Represents the <see cref="BraintreeTransactionApiService"/>.
@@ -68,6 +69,7 @@
                 request.Customer = new CustomerRequest() { Email = email };
             }
 
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Transaction attempt ({0}) for Invoice {1}", option.ToString(), invoice.PrefixedInvoiceNumber()));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.Sale(request));
 
             return attempt.Success ? attempt.Result : null;
@@ -130,6 +132,7 @@
             if (billingAddress != null) request.BillingAddress = this.RequestFactory.CreateAddressRequest(billingAddress);
             if (shippingAddress != null) request.ShippingAddress = this.RequestFactory.CreateAddressRequest(shippingAddress);
 
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Transaction attempt ({0}) for Invoice {1}", option.ToString(), invoice.PrefixedInvoiceNumber()));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.Sale(request));
 
             return attempt.Success ? attempt.Result : null;
@@ -160,6 +163,7 @@
         {
             var request = this.RequestFactory.CreateVaultTransactionRequest(invoice, paymentMethodToken, option);
 
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Vault Transaction attempt ({0}) for Invoice {1}", option.ToString(), invoice.PrefixedInvoiceNumber()));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.Sale(request));
 
             return attempt.Success ? attempt.Result : null;
@@ -176,6 +180,7 @@
         /// </returns>
         public Result<Transaction> SubmitForSettlement(string transactionId)
         {
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Transaction {0} submit for settlement attempt", transactionId));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.SubmitForSettlement(transactionId));
             return attempt.Success ? attempt.Result : null;
         }
@@ -194,6 +199,7 @@
         /// </returns>
         public Result<Transaction> SubmitForSettlement(string transactionId, decimal amount)
         {
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Transaction {0} submit for settlement attempt, amount {1}", transactionId, amount));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.SubmitForSettlement(transactionId, amount));
             return attempt.Success ? attempt.Result : null;
         }
@@ -209,6 +215,7 @@
         /// </returns>
         public Result<Transaction> Refund(string transactionId)
         {
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Refund attempt for transaction {0}", transactionId));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.Refund(transactionId));
             return attempt.Success ? attempt.Result : null;
         }
@@ -227,6 +234,7 @@
         /// </returns>
         public Result<Transaction> Refund(string transactionId, decimal amount)
         {
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Refund attempt for transaction {0} for amount {1}", transactionId, amount));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Transaction.Refund(transactionId, amount));
             return attempt.Success ? attempt.Result : null;
         }

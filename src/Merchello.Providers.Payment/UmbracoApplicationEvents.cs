@@ -71,15 +71,19 @@
         {
             if (HttpContext.Current == null) throw new InvalidOperationException("HttpContext is null");
 
-            var urlHelper = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
+            if (e.ContainsKey("merchelloPaymentsUrls")) return;
 
-            // TODO make a new dictionary for these
-            e.Add(
-                "merchelloBraintree", 
-                new Dictionary<string, object>
-            {
-                { "merchelloBraintreeBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<BraintreeApiController>(controller => controller.GetClientRequestToken(Guid.Empty)) }
-            });
+            var merchelloPaymentsUrls = new Dictionary<string, object>();
+
+            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
+
+            merchelloPaymentsUrls.Add(
+                "merchelloBraintreeApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<BraintreeApiController>(
+                    controller => controller.GetClientRequestToken(Guid.Empty)));
+
+
+            e.Add("merchelloPaymentsUrls", merchelloPaymentsUrls);
         }
 
         /// <summary>

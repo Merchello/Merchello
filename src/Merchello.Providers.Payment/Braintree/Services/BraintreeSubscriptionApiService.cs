@@ -148,6 +148,7 @@
             
             Creating.RaiseEvent(new Core.Events.NewEventArgs<SubscriptionRequest>(request), this);
 
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree create subscription attempt PlanID: {0}, Price: {1}", request.PlanId, request.Price));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Subscription.Create(request));
 
             if (!attempt.Success) return Attempt<Subscription>.Fail(attempt.Exception);
@@ -179,6 +180,7 @@
         /// </returns>
         public bool Cancel(string subscriptionId)
         {
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Cancel subscription attempt SubscriptionId: {0}", subscriptionId));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Subscription.Cancel(subscriptionId));
 
             if (!attempt.Success) return false;
@@ -212,6 +214,7 @@
         {
             Updating.RaiseEvent(new SaveEventArgs<SubscriptionRequest>(request), this);
 
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Update subscription attempt PlanId: {0}", request.PlanId));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Subscription.Update(request.Id, request));
 
             if (!attempt.Success) return Attempt<Subscription>.Fail(attempt.Exception);

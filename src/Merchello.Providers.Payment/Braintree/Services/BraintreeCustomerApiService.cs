@@ -95,6 +95,7 @@
             Creating.RaiseEvent(new Core.Events.NewEventArgs<CustomerRequest>(request), this);
 
             // attempt the API call
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Create customer attempt for CustomerKey: {0}, name: {1}", customer.Key, customer.FullName));
             var attempt = this.TryGetApiResult(() => this.BraintreeGateway.Customer.Create(request));
 
             if (!attempt.Success) return Attempt<Customer>.Fail(attempt.Exception);
@@ -130,6 +131,7 @@
         {
             if (!this.Exists(customer)) return Attempt<Customer>.Fail(new NullReferenceException("Could not finde matching Braintree customer."));
 
+            LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Update customer attempt for CustomerKey: {0}, name: {1}", customer.Key, customer.FullName));
             var request = this.RequestFactory.CreateCustomerRequest(customer, paymentMethodNonce, billingAddress, true);
 
             Updating.RaiseEvent(new SaveEventArgs<CustomerRequest>(request), this);
@@ -185,6 +187,7 @@
         {
             try
             {
+                LogHelper.Info<BraintreeTransactionApiService>(string.Format("Braintree Delete customer attempt for CustomerKey: {0}", customerId));
                 this.BraintreeGateway.Customer.Delete(customerId);
                 this.RuntimeCache.ClearCacheItem(this.MakeCustomerCacheKey(customerId));
             }
