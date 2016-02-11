@@ -68,21 +68,6 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.UI.Umbraco.Controls.ContentTypeControlNew.OnLoad(System.EventArgs)">
-            <summary>
-            Raises the <see cref="E:System.Web.UI.Control.Load"/> event.
-            </summary>
-            <param name="e">The <see cref="T:System.EventArgs"/> object that contains the event data. </param>
-        </member>
-        <member name="F:Umbraco.Web.UI.Umbraco.Controls.ContentTypeControlNew.JsInclude">
-            <summary>
-            JsInclude control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
         <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.ResetPlaceHolder">
             <summary>
             ResetPlaceHolder control.
@@ -956,24 +941,6 @@
         <member name="F:Umbraco.Web.UI.Umbraco.Masterpages.UmbracoPage.DocType">
             <summary>
             DocType control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:Umbraco.Web.UI.Umbraco.Settings.EditNodeTypeNew.allowedTemplates">
-            <summary>
-            allowedTemplates control.
-            </summary>
-            <remarks>
-            Auto-generated field.
-            To modify move field declaration from designer file to code-behind file.
-            </remarks>
-        </member>
-        <member name="F:Umbraco.Web.UI.Umbraco.Settings.EditNodeTypeNew.defaultTemplate">
-            <summary>
-            defaultTemplate control.
             </summary>
             <remarks>
             Auto-generated field.
