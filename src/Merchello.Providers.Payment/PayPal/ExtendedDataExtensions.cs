@@ -1,40 +1,40 @@
-﻿using System.Runtime.CompilerServices;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Plugin.Payments.PayPal.Models;
-using Newtonsoft.Json;
-
-namespace Merchello.Plugin.Payments.PayPal
+﻿namespace Merchello.Providers.Payment.PayPal
 {
-	/// <summary>
-	/// Extended data utiltity extensions
+    using Merchello.Core.Models;
+    using Merchello.Providers.Payment.PayPal.Models;
+
+    using Newtonsoft.Json;
+
+
+    /// <summary>
+	/// Extended data utility extensions
 	/// </summary>
-	public static class ExtendedDataExtensions
+	public static class PayPalExtendedDataExtensions
 	{
 		/// <summary>
 		/// Saves the processor settings to an extended data collection
 		/// </summary>
 		/// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
-		/// <param name="processorSettings">The <see cref="PayPalProcessorSettings"/> to be serialized and saved</param>
-		public static void SaveProcessorSettings(this ExtendedDataCollection extendedData, PayPalProcessorSettings processorSettings)
+		/// <param name="providerSettings">The <see cref="PayPalProviderSettings"/> to be serialized and saved</param>
+		public static void SaveProcessorSettings(this ExtendedDataCollection extendedData, PayPalProviderSettings providerSettings)
 		{
-			var settingsJson = JsonConvert.SerializeObject(processorSettings);
+			var settingsJson = JsonConvert.SerializeObject(providerSettings);
 
-			extendedData.SetValue(Constants.ExtendedDataKeys.ProcessorSettings, settingsJson);
+			extendedData.SetValue(Constants.PayPal.ExtendedDataKeys.ProcessorSettings, settingsJson);
 		}
 
 		/// <summary>
-		/// Get teh processor settings from the extended data collection
+		/// Get the processor settings from the extended data collection
 		/// </summary>
 		/// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
-		/// <returns>The deserialized <see cref="PayPalProcessorSettings"/></returns>
-		public static PayPalProcessorSettings GetProcessorSettings(this ExtendedDataCollection extendedData)
+		/// <returns>The deserialized <see cref="PayPalProviderSettings"/></returns>
+		public static PayPalProviderSettings GetProcessorSettings(this ExtendedDataCollection extendedData)
 		{
-			if (!extendedData.ContainsKey(Constants.ExtendedDataKeys.ProcessorSettings)) return new PayPalProcessorSettings();
+			if (!extendedData.ContainsKey(Constants.PayPal.ExtendedDataKeys.ProcessorSettings)) return new PayPalProviderSettings();
 
 			return
-				JsonConvert.DeserializeObject<PayPalProcessorSettings>(
-					extendedData.GetValue(Constants.ExtendedDataKeys.ProcessorSettings));
+				JsonConvert.DeserializeObject<PayPalProviderSettings>(
+					extendedData.GetValue(Constants.PayPal.ExtendedDataKeys.ProcessorSettings));
 		}
 
 	}

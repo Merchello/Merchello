@@ -283,13 +283,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapperMappings.cs" />
+    <Compile Include="AutoMapperMappings-AuthorizeNet.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoMapperMappings-Braintree.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoMapperMappings-PayPal.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Braintree\BraintreeApiHelper.cs" />
     <Compile Include="Braintree\BraintreeCustomerExtensions.cs" />
     <Compile Include="Braintree\Builders\IBuilder.cs" />
     <Compile Include="Braintree\Builders\InvoiceTransactionRequestBuilder.cs" />
     <Compile Include="Braintree\Builders\RequestBuilderBase.cs" />
     <Compile Include="Caching\CacheKeys.cs" />
-    <Compile Include="Braintree\Constants.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Constants-AuthorizeNet.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Braintree.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-PayPal.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Braintree\Controllers\BraintreeApiController.cs" />
     <Compile Include="Braintree\Controllers\BraintreeWebhooksControllerBase.cs" />
     <Compile Include="Braintree\EnvironmentType.cs" />
@@ -323,12 +341,18 @@
     <Compile Include="Braintree\Services\IBraintreeSubscriptionApiService.cs" />
     <Compile Include="Braintree\Services\IBraintreeTransactionApiService.cs" />
     <Compile Include="Braintree\Services\IBraintreeWebhooksApiService.cs" />
+    <Compile Include="PayPal\Controllers\PayPalApiController.cs" />
+    <Compile Include="PayPal\ExtendedDataExtensions.cs" />
+    <Compile Include="PayPal\Models\PayPalProcessorSettings.cs" />
+    <Compile Include="PayPal\PayPalApplicationEventListener.cs" />
+    <Compile Include="PayPal\PayPalPaymentProcessor.cs" />
+    <Compile Include="PayPal\ProcessorArgsExtensions.cs" />
+    <Compile Include="PayPal\Provider\PayPalPaymentGatewayMethod.cs" />
+    <Compile Include="PayPal\Provider\PayPalPaymentGatewayProvider.cs" />
     <Compile Include="UmbracoApplicationEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PayPal\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

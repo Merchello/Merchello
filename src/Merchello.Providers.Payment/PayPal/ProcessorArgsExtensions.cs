@@ -1,7 +1,9 @@
-﻿using Merchello.Core.Gateways.Payment;
-
-namespace Merchello.Plugin.Payments.PayPal
+﻿namespace Merchello.Providers.Payment.PayPal
 {
+    using Merchello.Core.Gateways.Payment;
+
+    using Constants = Merchello.Providers.Payment.Constants;
+
 	/// <summary>
 	/// Extended data utiltity extensions
 	/// </summary>
@@ -16,7 +18,7 @@ namespace Merchello.Plugin.Payments.PayPal
 		/// <param name="elseValue"></param>
 		/// <returns></returns>
 		public static string GetReturnUrl(this ProcessorArgumentCollection args, string elseValue = null) {
-			return GetArgumentValue(args, Constants.ProcessorArgumentsKeys.ReturnUrl, elseValue);
+			return GetArgumentValue(args, Constants.PayPal.ProcessorArgumentsKeys.ReturnUrl, elseValue);
 		}
 		
 		/// <summary>
@@ -26,7 +28,7 @@ namespace Merchello.Plugin.Payments.PayPal
 		/// <param name="elseValue"></param>
 		/// <returns></returns>
 		public static string GetCancelUrl(this ProcessorArgumentCollection args, string elseValue = null) {
-			return GetArgumentValue(args, Constants.ProcessorArgumentsKeys.CancelUrl, elseValue);
+			return GetArgumentValue(args, Constants.PayPal.ProcessorArgumentsKeys.CancelUrl, elseValue);
 		}
 		
 		/// <summary>
@@ -36,7 +38,7 @@ namespace Merchello.Plugin.Payments.PayPal
 		/// <param name="elseValue"></param>
 		/// <returns></returns>
 		public static string GetArticleBySkuPath(this ProcessorArgumentCollection args, string elseValue = null) {
-			return GetArgumentValue(args, Constants.ProcessorArgumentsKeys.ArticleBySkuPath, elseValue);
+			return GetArgumentValue(args, Constants.PayPal.ProcessorArgumentsKeys.ArticleBySkuPath, elseValue);
 		}
 		
 		private static string GetArgumentValue(ProcessorArgumentCollection args, string argumentName, string elseValue = null) {

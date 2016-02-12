@@ -16,7 +16,7 @@
     /// <summary>
     /// The BrainTree Payment Gateway Provider.
     /// </summary>
-    [GatewayProviderActivation("D143E0F6-98BB-4E0A-8B8C-CE9AD91B0969", "BrainTree Payment Provider", "BrainTree Payment Provider")]
+    [GatewayProviderActivation(Constants.Braintree.GatewayProviderKey, "BrainTree Payment Provider", "BrainTree Payment Provider")]
     [GatewayProviderEditor("BrainTree Configuration", "~/App_Plugins/MerchelloPaymentProviders/views/dialogs/braintree.providersettings.html")]
     public class BraintreePaymentGatewayProvider : PaymentGatewayProviderBase, IBraintreePaymentGatewayProvider
     {
@@ -27,9 +27,9 @@
         /// </summary>
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>
         {
-            new GatewayResource(Constants.PaymentCodes.Transaction, "Standard Transaction"),
-            new GatewayResource(Constants.PaymentCodes.VaultTransaction, "Vault Transaction"),
-            new GatewayResource(Constants.PaymentCodes.RecordSubscriptionTransaction, "Record of Subscription Transaction")
+            new GatewayResource(Constants.Braintree.PaymentCodes.Transaction, "Standard Transaction"),
+            new GatewayResource(Constants.Braintree.PaymentCodes.VaultTransaction, "Vault Transaction"),
+            new GatewayResource(Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction, "Record of Subscription Transaction")
         };
 
 
@@ -100,10 +100,10 @@
 
                 switch (available.ServiceCode)
                 {
-                    case Constants.PaymentCodes.VaultTransaction:
+                    case Constants.Braintree.PaymentCodes.VaultTransaction:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
                     
-                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
+                    case Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
 
                     default:
@@ -133,10 +133,10 @@
             {
                 switch (paymentMethod.PaymentCode)
                 {
-                    case Constants.PaymentCodes.VaultTransaction:
+                    case Constants.Braintree.PaymentCodes.VaultTransaction:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
-                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
+                    case Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
                     default:
@@ -162,10 +162,10 @@
             {
                 switch (paymentMethod.PaymentCode)
                 {
-                    case Constants.PaymentCodes.VaultTransaction:
+                    case Constants.Braintree.PaymentCodes.VaultTransaction:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
-                    case Constants.PaymentCodes.RecordSubscriptionTransaction:
+                    case Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
                     default:
@@ -178,6 +178,12 @@
             throw error;  
         }
 
+        /// <summary>
+        /// The get braintree api service.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IBraintreeApiService"/>.
+        /// </returns>
         private IBraintreeApiService GetBraintreeApiService()
         {
             return new BraintreeApiService(this.GatewayProviderSettings.ExtendedData.GetBrainTreeProviderSettings());

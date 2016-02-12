@@ -1,15 +1,19 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Merchello.Plugin.Payments.PayPal.Models;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-using Umbraco.Core.Logging;
-
-namespace Merchello.Plugin.Payments.PayPal
+﻿namespace Merchello.Providers.Payment.PayPal
 {
-	public class PayPalEvents : ApplicationEventHandler
+    using System;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Providers.Payment.PayPal.Models;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+
+    using Constants = Payment.Constants;
+
+    public class PayPalEvents : ApplicationEventHandler
 	{
 		protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication,
 										   ApplicationContext applicationContext)
@@ -21,11 +25,11 @@ namespace Merchello.Plugin.Payments.PayPal
 
 			GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> args)
 			{
-				var key = new Guid(Constants.PayPalPaymentGatewayProviderKey);
+				var key = new Guid(Constants.PayPal.PayPalPaymentGatewayProviderKey);
 				var provider = args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
 				if (provider == null) return;
 
-				provider.ExtendedData.SaveProcessorSettings(new PayPalProcessorSettings());
+				provider.ExtendedData.SaveProcessorSettings(new PayPalProviderSettings());
 
 			};
 		}

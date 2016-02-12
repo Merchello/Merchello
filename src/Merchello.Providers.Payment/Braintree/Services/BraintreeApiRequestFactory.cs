@@ -9,7 +9,7 @@
 
     using Umbraco.Core;
 
-    using Constants = Merchello.Providers.Payment.Braintree.Constants;
+    using Constants = Merchello.Providers.Payment.Constants;
 
     /// <summary>
     /// The <see cref="BraintreeApiRequestFactory"/>.
@@ -514,7 +514,7 @@
                            OrderId = invoice.PrefixedInvoiceNumber(),
                            PaymentMethodNonce = paymentMethodNonce,
                            BillingAddress = this.CreateAddressRequest(invoice.GetBillingAddress()),
-                           Channel = Constants.TransactionChannel
+                           Channel = Constants.Braintree.TransactionChannel
                        };
 
             if (customer != null) request.Customer = this.CreateCustomerRequest(customer);
@@ -550,7 +550,7 @@
                 OrderId = invoice.PrefixedInvoiceNumber(),
                 PaymentMethodToken = paymentMethodToken,
                 BillingAddress = this.CreateAddressRequest(invoice.GetBillingAddress()),
-                Channel = Constants.TransactionChannel
+                Channel = Constants.Braintree.TransactionChannel
             };
 
             if (transactionOption == TransactionOption.SubmitForSettlement)

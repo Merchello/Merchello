@@ -1,59 +1,77 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-
-namespace Merchello.Plugin.Payments.PayPal.Provider
+﻿namespace Merchello.Providers.Payment.PayPal.Provider
 {
-	/// <summary>
+    using System.Linq;
+
+    using Merchello.Core;
+    using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+    using Merchello.Providers.Payment.PayPal;
+
+    using Constants = Payment.Constants;
+
+    /// <summary>
 	/// Represents a PayPal Payment Method
 	/// </summary>
     [GatewayMethodUi("PayPalPayment")]
-	[GatewayMethodEditor("PayPal Method Editor", "~/App_Plugins/Merchello.PayPal/paymentmethod.html")]
+	[GatewayMethodEditor("PayPal Method Editor", "PayPal - Redirects to PayPal for Payment", "~/App_Plugins/Merchello.PayPal/paymentmethod.html")]
     public class PayPalPaymentGatewayMethod : PaymentGatewayMethodBase
 	{
-		private readonly PayPalPaymentProcessor _processor;
+        /// <summary>
+        /// The PayPal payment processor.
+        /// </summary>
+        private readonly PayPalPaymentProcessor _processor;
 
-		public PayPalPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, ExtendedDataCollection providerExtendedData) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalPaymentGatewayMethod"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="paymentMethod">
+        /// The payment method.
+        /// </param>
+        /// <param name="providerExtendedData">
+        /// The provider extended data.
+        /// </param>
+        public PayPalPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, ExtendedDataCollection providerExtendedData) 
             : base(gatewayProviderService, paymentMethod)
         {
-			_processor = new PayPalPaymentProcessor(providerExtendedData.GetProcessorSettings());
+			this._processor = new PayPalPaymentProcessor(providerExtendedData.GetProcessorSettings());
         }
 
 		protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
 		{
-			return InitializePayment(invoice, args, -1);
+			return this.InitializePayment(invoice, args, -1);
 		}
 
         protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
         {
 
-			return InitializePayment(invoice, args, amount);
+			return this.InitializePayment(invoice, args, amount);
         }
 
 		private IPaymentResult InitializePayment(IInvoice invoice, ProcessorArgumentCollection args, decimal captureAmount)
 		{
-			var payment = GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, PaymentMethod.Key);
+			var payment = this.GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, this.PaymentMethod.Key);
 			payment.CustomerKey = invoice.CustomerKey;
 			payment.Authorized = false;
 			payment.Collected = false;
             payment.PaymentMethodName = "PayPal";
-			payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.CaptureAmount, captureAmount.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			GatewayProviderService.Save(payment);
+			payment.ExtendedData.SetValue(Constants.PayPal.ExtendedDataKeys.CaptureAmount, captureAmount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			this.GatewayProviderService.Save(payment);
 
-			var result = _processor.InitializePayment(invoice, payment, args);
+			var result = this._processor.InitializePayment(invoice, payment, args);
 
 			if (!result.Payment.Success)
 			{
-				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request initialization error: " + result.Payment.Exception.Message, 0);
+				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request initialization error: " + result.Payment.Exception.Message, 0);
 			}
 			else
 			{
-				GatewayProviderService.Save(payment);
-				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: initialized", 0);
+				this.GatewayProviderService.Save(payment);
+				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: initialized", 0);
 			}
 
 			return result;
@@ -66,18 +84,18 @@ namespace Merchello.Plugin.Payments.PayPal.Provider
 			var payedTotal = (payedTotalList.Count == 0 ? 0 : payedTotalList.Aggregate((a, b) => a + b));
 			var isPartialPayment = amount + payedTotal < invoice.Total;
 
-			var result = _processor.CapturePayment(invoice, payment, amount, isPartialPayment);
+			var result = this._processor.CapturePayment(invoice, payment, amount, isPartialPayment);
 			//GatewayProviderService.Save(payment);
 			
 			if (!result.Payment.Success)
 			{
 				//payment.VoidPayment(invoice, payment.PaymentMethodKey.Value);
-				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request capture error: " + result.Payment.Exception.Message, 0);
+				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request capture error: " + result.Payment.Exception.Message, 0);
 			}
 			else
 			{
-				GatewayProviderService.Save(payment);
-				GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: captured", amount);
+				this.GatewayProviderService.Save(payment);
+				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: captured", amount);
 				//GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult), amount);
 			}
 			

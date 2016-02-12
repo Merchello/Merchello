@@ -14,12 +14,12 @@
     using Umbraco.Web.Mvc;
     using Umbraco.Web.WebApi;
 
-    using Constants = Merchello.Providers.Payment.Braintree.Constants;
+    using Constants = Merchello.Providers.Payment.Constants;
 
     /// <summary>
     /// The Braintree API controller.
     /// </summary>
-    [PluginController("MerchelloBraintree")]
+    [PluginController("MerchelloPayments")]
     public class BraintreeApiController : UmbracoApiController
     {
         /// <summary>
@@ -49,8 +49,7 @@
         public BraintreeApiController(IMerchelloContext merchelloContext)
         {
             if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
-
-            var provider = (BraintreePaymentGatewayProvider)merchelloContext.Gateways.Payment.GetProviderByKey(Constants.GatewayProviderSettingsKey);
+            var provider = (BraintreePaymentGatewayProvider)merchelloContext.Gateways.Payment.GetProviderByKey(Constants.Braintree.GatewayProviderSettingsKey);
 
             if (provider  == null)
             {
