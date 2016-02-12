@@ -63,7 +63,7 @@
                     //// are taxable.
                     checkoutManager.Shipping.SaveShipmentRateQuote(shipmentRateQuotes.First());
                 }
-            }            
+            }
 
             var paymentMethods = GatewayContext.Payment.GetPaymentGatewayMethods().ToArray();
 

@@ -44,7 +44,7 @@
                 app: ['src/views/**/*.html'],
                 common: ['src/common/**/*.tpl.html']
             },
-            scss: ['src/scss/MerchelloPaymentProviders.scss'],
+            scss: ['src/scss/styles.scss'],
             prod: ['<%= distdir %>/js/*.js']
         },
 
@@ -68,9 +68,9 @@
                 files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: true, cwd: 'src/' }]
             },
 
-            lib: {
-                files: [{ dest: '<%= distdir %>/lib/', src: '../lib/charts/*.*', expand: true, cwd: 'lib/' }]
-            },
+            //lib: {
+            //    files: [{ dest: '<%= distdir %>/lib/', src: '../lib/charts/*.*', expand: true, cwd: 'lib/' }]
+            //},
 
             config: {
               files: [{ dest: '<%= distdir %>/config', src: 'merchello.config', expand: true, cwd: 'src/config/'}]
@@ -101,7 +101,7 @@
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/lang', src: '**', expand: true, cwd: '<%= distdir %>/lang' },
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
-                    //{ dest: '<%= vsdir %>/views', src: '**', expand: true, cwd: '<%= distdir %>/views/sales' },
+                    { dest: '<%= vsdir %>/views', src: '**', expand: true, cwd: '<%= distdir %>/views/braintree' },
 
                     { dest: '<%= vsdir %>/views/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/views/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' }
@@ -112,7 +112,7 @@
         concat: {
             models: {
                 src: ['src/common/models/*.js', 'src/**/*.model.js', 'src/common/models/factories/**/*.factory.js'],
-                dest: '<%= distdir %>/js/merchello.paymentproviders.models.js',
+                dest: '<%= distdir %>/js/merchello.payments.models.js',
                 options: {
                     banner: '<%= banner %>\n\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -120,7 +120,7 @@
             },
             controllers: {
                 src: ['src/controllers/**/*.controller.js', 'src/views/**/*.controller.js'],
-                dest: '<%= distdir %>/js/merchello.paymentproviders.controllers.js',
+                dest: '<%= distdir %>/js/merchello.payments.controllers.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -128,7 +128,7 @@
             },
             services: {
                 src: ['src/common/services/*.js'],
-                dest: '<%= distdir %>/js/merchello.paymentproviders.services.js',
+                dest: '<%= distdir %>/js/merchello.payments.services.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -136,7 +136,7 @@
             },
             resources: {
                 src: ['src/common/resources/*.js'],
-                dest: '<%= distdir %>/js/merchello.paymentproviders.resources.js',
+                dest: '<%= distdir %>/js/merchello.payments.resources.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -144,7 +144,7 @@
             },
             directives: {
                 src: ['src/views/**/*.directive.js'],
-                dest: '<%= distdir %>/js/merchello.paymentproviders.directives.js',
+                dest: '<%= distdir %>/js/merchello.payments.directives.js',
                 options: {
                     banner: '<%= banner %>\n(function() { \n\n',
                     footer: '\n\n})();'
@@ -155,13 +155,13 @@
         sass: {
             dev: {
                 files: {
-                    '<%= distdir %>/assets/css/<%= pkg.name %>.css':
+                    '<%= distdir %>/assets/css/styles.css':
                     '<%= src.scss %>'
                 }
             },
             build: {
                 files: {
-                    '<%= distdir %>/assets/css/<%= pkg.name %>.css':
+                    '<%= distdir %>/assets/css/styles.css':
                     '<%= src.scss %>'
                 },
                 options: {

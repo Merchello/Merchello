@@ -2,12 +2,12 @@
 	propertyEditors: [
 	],
 	javascript: [
-		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.paymentproviders.module.js',
-		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.paymentproviders.models.js',
-		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.paymentproviders.resources.js',
-		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.paymentproviders.services.js',
-		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.paymentproviders.directives.js',
-		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.paymentproviders.controllers.js'
+		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.payments.module.js',
+		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.payments.models.js',
+		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.payments.resources.js',
+		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.payments.services.js',
+		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.payments.directives.js',
+		'~/App_Plugins/MerchelloPaymentProviders/js/merchello.payments.controllers.js'
 	],
 	css: [
 		'~/App_Plugins/MerchelloPaymentProviders/assets/Css/styles.css'

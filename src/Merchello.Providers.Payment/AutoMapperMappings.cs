@@ -1,21 +1,28 @@
 ﻿namespace Merchello.Providers.Payment
 {
-    using global::Braintree;
-
-    using Merchello.Plugin.Payments.Braintree;
-    using Merchello.Providers.Payment.Braintree.Models;
-
     /// <summary>
     /// Creates AutoMapper mappings - used in <see cref="UmbracoApplicationEvents"/>
     /// </summary>
-    internal static class AutoMapperMappings
+    internal static partial class AutoMapperMappings
     {
         /// <summary>
         /// The create mappings.
         /// </summary>
         public static void CreateMappings()
         {
-            AutoMapper.Mapper.CreateMap<MerchantDescriptor, DescriptorRequest>();
+            // Actual mappings are done in nested files
+            // AutoMapperMappings-AuthorizeNet.cs
+            // AutoMapperMappings-Braintree.cs
+            // AutoMapperMappings-PayPal.cs
+
+            // Authorize.NET
+            CreateAuthorizeNetMappings();
+
+            // Braintree
+            CreateBraintreeMappings();
+
+            // PayPal
+            CreatePayPalMappings();
         }
     }
 }

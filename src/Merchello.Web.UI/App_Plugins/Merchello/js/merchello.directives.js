@@ -158,7 +158,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       }
 
       function loadCollection() {
-        if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
+        if(scope.collectionKey === 'manage' || scope.collectionKey === '' || scope.collectionKey === undefined) {
           var key = 'merchelloCollections_all' + scope.entityType;
           localizationService.localize(key).then(function (value) {
             scope.collection.name = value;

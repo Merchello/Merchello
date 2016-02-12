@@ -17,7 +17,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Logging;
 
-    using Constants = Merchello.Providers.Payment.Braintree.Constants;
+    using Constants = Merchello.Providers.Payment.Constants;
 
     /// <summary>
     /// Represents the BraintreePaymentGatewayMethod
@@ -163,7 +163,7 @@
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
         /// <remarks>
-        /// This converts the <see cref="Result{T}"/> into Merchello's <see cref="IPaymentResult"/>
+        /// This converts the <see cref="Result{T}"/> into Merchello <see cref="IPaymentResult"/>
         /// </remarks>
         protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "")
         {
@@ -173,7 +173,7 @@
             payment.Authorized = false;
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Transaction";
-            payment.ExtendedData.SetValue(Constants.ProcessorArguments.PaymentMethodNonce, token);
+            payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
             var result = this.BraintreeApiService.Transaction.Sale(invoice, token, option: option, email: email);
 

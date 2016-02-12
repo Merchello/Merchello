@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Providers.Payment.Braintree
 {
+    using System.Diagnostics.CodeAnalysis;
+
     using AutoMapper;
 
     using global::Braintree;
@@ -14,9 +16,12 @@
 
     using Umbraco.Core.Logging;
 
+    using Constants = Merchello.Providers.Payment.Constants;
+
     /// <summary>
     /// Utility extensions that assist in mapping and serializing/de-serializing models
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class MappingExtensions
     {
 
@@ -64,9 +69,9 @@
         public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
         {
             BraintreeProviderSettings settings;
-            if (extendedData.ContainsKey(Braintree.Constants.ExtendedDataKeys.BraintreeProviderSettings))
+            if (extendedData.ContainsKey(Constants.Braintree.ExtendedDataKeys.BraintreeProviderSettings))
             {
-                var json = extendedData.GetValue(Braintree.Constants.ExtendedDataKeys.BraintreeProviderSettings);
+                var json = extendedData.GetValue(Constants.Braintree.ExtendedDataKeys.BraintreeProviderSettings);
                 settings = JsonConvert.DeserializeObject<BraintreeProviderSettings>(json);
             }
             else
@@ -89,7 +94,7 @@
         {
             var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             var json = JsonConvert.SerializeObject(settings, Formatting.None, jsonSerializerSettings);
-            extendedData.SetValue(Braintree.Constants.ExtendedDataKeys.BraintreeProviderSettings, json);
+            extendedData.SetValue(Constants.Braintree.ExtendedDataKeys.BraintreeProviderSettings, json);
         }
 
         /// <summary>
@@ -212,7 +217,7 @@
         /// </param>
         public static void SetBraintreeTransaction(this ExtendedDataCollection extendedData, Transaction transaction)
         {
-            extendedData.SetValue(Braintree.Constants.ExtendedDataKeys.BraintreeTransaction, JsonConvert.SerializeObject(transaction));
+            extendedData.SetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, JsonConvert.SerializeObject(transaction));
         }
 
         /// <summary>
@@ -226,9 +231,9 @@
         /// </returns>
         public static TransactionReference GetBraintreeTransaction(this ExtendedDataCollection extendedData)
         {
-            return extendedData.ContainsKey(Braintree.Constants.ExtendedDataKeys.BraintreeTransaction)
+            return extendedData.ContainsKey(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction)
                 ? JsonConvert.DeserializeObject<TransactionReference>(
-                    extendedData.GetValue(Braintree.Constants.ExtendedDataKeys.BraintreeTransaction))
+                    extendedData.GetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction))
                 : null;
         }
 
@@ -247,7 +252,7 @@
         /// </param>
         public static void SetPaymentMethodNonce(this ProcessorArgumentCollection args, string paymentMethodNonce)
         {
-            args.Add(Braintree.Constants.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
+            args.Add(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
         }
 
         /// <summary>
@@ -261,7 +266,7 @@
         /// </returns>
         public static string GetPaymentMethodNonce(this ProcessorArgumentCollection args)
         {
-            if (args.ContainsKey(Braintree.Constants.ProcessorArguments.PaymentMethodNonce)) return args[Braintree.Constants.ProcessorArguments.PaymentMethodNonce];
+            if (args.ContainsKey(Constants.Braintree.ProcessorArguments.PaymentMethodNonce)) return args[Constants.Braintree.ProcessorArguments.PaymentMethodNonce];
 
             LogHelper.Debug(typeof(MappingExtensions), "Payment Method Nonce not found in process argument collection");
 
@@ -279,7 +284,7 @@
         /// </param>
         public static void SetPaymentMethodToken(this ProcessorArgumentCollection args, string paymentMethodToken)
         {
-            args.Add(Braintree.Constants.ProcessorArguments.PaymentMethodToken, paymentMethodToken);
+            args.Add(Constants.Braintree.ProcessorArguments.PaymentMethodToken, paymentMethodToken);
         }
 
         /// <summary>
@@ -293,7 +298,7 @@
         /// </returns>
         public static string GetPaymentMethodToken(this ProcessorArgumentCollection args)
         {
-            if (args.ContainsKey(Braintree.Constants.ProcessorArguments.PaymentMethodToken)) return args[Braintree.Constants.ProcessorArguments.PaymentMethodToken];
+            if (args.ContainsKey(Constants.Braintree.ProcessorArguments.PaymentMethodToken)) return args[Constants.Braintree.ProcessorArguments.PaymentMethodToken];
 
             LogHelper.Debug(typeof(MappingExtensions), "Payment Method Token not found in process argument collection");
 
@@ -301,6 +306,5 @@
         }
 
 #endregion
-
     }
 }

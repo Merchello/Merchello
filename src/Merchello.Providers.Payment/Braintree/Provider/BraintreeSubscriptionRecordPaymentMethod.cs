@@ -16,7 +16,7 @@
 
     using Umbraco.Core;
 
-    using Constants = Merchello.Providers.Payment.Braintree.Constants;
+    using Constants = Merchello.Providers.Payment.Constants;
 
     /// <summary>
     /// The braintree subscription record payment method.
@@ -105,9 +105,9 @@
             payment.Authorized = true;
 
             string transaction;
-            if (args.TryGetValue(Constants.ExtendedDataKeys.BraintreeTransaction, out transaction))
+            if (args.TryGetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, out transaction))
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.BraintreeTransaction, transaction);
+                payment.ExtendedData.SetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, transaction);
             }
 
             this.GatewayProviderService.Save(payment);
@@ -141,9 +141,9 @@
             payment.Authorized = true;
 
             string transaction;
-            if (args.TryGetValue(Constants.ExtendedDataKeys.BraintreeTransaction, out transaction))
+            if (args.TryGetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, out transaction))
             {
-                payment.ExtendedData.SetValue(Constants.ExtendedDataKeys.BraintreeTransaction, transaction);
+                payment.ExtendedData.SetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, transaction);
             }
 
             this.GatewayProviderService.Save(payment);
@@ -211,7 +211,7 @@
         protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
         {
             string transactionString;
-            if (args.TryGetValue(Constants.ExtendedDataKeys.BraintreeTransaction, out transactionString))
+            if (args.TryGetValue(Constants.Braintree.ExtendedDataKeys.BraintreeTransaction, out transactionString))
             {
                 var transaction = JsonConvert.DeserializeObject<Transaction>(transactionString);
                 var result = this._braintreeApiService.Transaction.Refund(transaction.Id);

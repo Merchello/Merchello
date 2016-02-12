@@ -16,7 +16,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Logging;
 
-    using Constants = Merchello.Providers.Payment.Braintree.Constants;
+    using Constants = Merchello.Providers.Payment.Constants;
 
     /// <summary>
     /// Represents a BraintreeVaultTransactionPaymentGatewayMethod
@@ -187,7 +187,7 @@
             payment.Authorized = false;
             payment.Collected = false;
             payment.PaymentMethodName = "Braintree Vault Transaction";
-            payment.ExtendedData.SetValue(Constants.ProcessorArguments.PaymentMethodNonce, token);
+            payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
             var result = this.BraintreeApiService.Transaction.VaultSale(invoice, token, option);
 

@@ -6583,7 +6583,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     slugLabelDescription = data[4];
                     selectTemplateLabel = data[5];
                     canBeRenderedLabel = data[6];
+
                     loadProduct(loadArgs);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
                 });
@@ -6610,9 +6612,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         // this is a product variant edit
                         // in this case we need the specific variant
                         $scope.productVariant = product.getProductVariant(args.productVariantKey);
+
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(args.key, args.productVariantKey);
                         $scope.isVariant = true;
                     }
+
 
                     //editorState.set($scope.productVariant);
 
@@ -6625,7 +6629,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             createDetachedContent(detachedContentType, missing);
                         }
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
+
                         $scope.isConfigured = true;
+
                         loadScaffold();
                     } else {
                         $scope.preValuesLoaded = true;
@@ -6640,6 +6646,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 var detachedContentType = $scope.productVariant.detachedContentType();
 
                 contentResource.getScaffold(-20, detachedContentType.umbContentType.alias).then(function(scaffold) {
+
                     filterTabs(scaffold);
                     fillValues();
                     if ($scope.contentTabs.length > 0) {
@@ -6970,6 +6977,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.context = 'varianteditor';
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
                     }
+
                     $scope.preValuesLoaded = true;
                     $scope.tabs.setActive($scope.context);
                 }, function (reason) {
@@ -7665,7 +7673,8 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
 
         function init() {
 
-            if ($scope.model.value !== '' && $scope.model.value.length > 0) {
+
+            if ($scope.model.value !== undefined && $scope.model.value !== '' && $scope.model.value.length > 0) {
                 $scope.keys = $scope.model.value;
             }
 
@@ -9678,6 +9687,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 if($scope.payments.length === 0) {
                     var promise = paymentGatewayProviderResource.getAvailablePaymentMethods();
                     promise.then(function(methods) {
+                        console.info(methods);
                         $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
                         $scope.preValuesLoaded = true;
                         $scope.paymentMethodsLoaded = true;
