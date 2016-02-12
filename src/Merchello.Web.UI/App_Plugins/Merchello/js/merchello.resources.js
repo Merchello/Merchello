@@ -392,7 +392,6 @@ angular.module('merchello.resources').factory('entityCollectionResource',
 
             return {
                 getByKey : function(key) {
-                    console.info("Key is " + key);
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: baseUrl + 'GetByKey',
