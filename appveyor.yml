@@ -1,5 +1,5 @@
 # version format
-version: 1.14.1.{build}
+version: 1.14.3.{build}
 
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
