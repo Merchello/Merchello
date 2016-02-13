@@ -8,6 +8,8 @@
 
     using Umbraco.Core;
 
+    using PaymentMethod = global::Braintree.PaymentMethod;
+
     /// <summary>
     /// Defines the BraintreePaymentMethodApiProvider.
     /// </summary>

@@ -5,7 +5,7 @@
 
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Providers.Payment.PayPal.Models;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -25,11 +25,11 @@
 
 			GatewayProviderService.Saving += delegate(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> args)
 			{
-				var key = new Guid(Constants.PayPal.PayPalPaymentGatewayProviderKey);
+				var key = new Guid(Constants.PayPal.GatewayProviderKey);
 				var provider = args.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
 				if (provider == null) return;
 
-				provider.ExtendedData.SaveProcessorSettings(new PayPalProviderSettings());
+				provider.ExtendedData.SaveProviderSettings(new PayPalProviderSettings());
 
 			};
 		}

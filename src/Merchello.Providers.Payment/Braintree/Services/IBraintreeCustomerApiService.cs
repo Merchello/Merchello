@@ -8,6 +8,8 @@
 
     using Umbraco.Core;
 
+    using Customer = global::Braintree.Customer;
+
     /// <summary>
     /// Defines the BraintreeCustomerApiProvider.
     /// </summary>

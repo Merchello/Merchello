@@ -8,8 +8,8 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Plugin.Payments.Braintree;
     using Merchello.Providers.Payment.Braintree.Services;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core.Logging;
 
@@ -18,6 +18,7 @@
     /// </summary>
     [GatewayProviderActivation(Constants.Braintree.GatewayProviderKey, "BrainTree Payment Provider", "BrainTree Payment Provider")]
     [GatewayProviderEditor("BrainTree Configuration", "~/App_Plugins/MerchelloPaymentProviders/views/dialogs/braintree.providersettings.html")]
+    [ProviderSettingsMapper(Constants.Braintree.ExtendedDataKeys.ProviderSettings, typeof(BraintreeProviderSettings))]
     public class BraintreePaymentGatewayProvider : PaymentGatewayProviderBase, IBraintreePaymentGatewayProvider
     {
         #region AvailableResources

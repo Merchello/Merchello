@@ -7,6 +7,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Payment.PayPal;
 
     using Constants = Payment.Constants;
@@ -38,7 +39,7 @@
         public PayPalPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, ExtendedDataCollection providerExtendedData) 
             : base(gatewayProviderService, paymentMethod)
         {
-			this._processor = new PayPalPaymentProcessor(providerExtendedData.GetProcessorSettings());
+			this._processor = new PayPalPaymentProcessor(providerExtendedData.GetPayPalProviderSettings());
         }
 
 		protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)

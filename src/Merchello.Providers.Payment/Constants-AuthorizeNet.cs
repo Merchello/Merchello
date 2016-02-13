@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Providers.Payment
 {
-    internal static partial class Constants
+    public static partial class Constants
     {
     }
 }

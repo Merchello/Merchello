@@ -4,6 +4,7 @@
 
     using Merchello.Core;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     /// <summary>
     /// Represents the Braintree Web hook ApiService.

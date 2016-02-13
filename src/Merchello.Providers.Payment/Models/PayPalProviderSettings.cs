@@ -1,9 +1,11 @@
-﻿namespace Merchello.Providers.Payment.PayPal.Models
+﻿namespace Merchello.Providers.Payment.Models
 {
+    using Merchello.Providers.Payment.PayPal;
+
     /// <summary>
     /// PayPal Provider settings.
     /// </summary>
-    public class PayPalProviderSettings
+    public class PayPalProviderSettings : IPaymentProviderSettings
 	{
         /// <summary>
         /// Gets or sets the account id.

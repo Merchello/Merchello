@@ -8,6 +8,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Payment.PayPal.Provider;
 
     using Umbraco.Core;
@@ -50,7 +51,7 @@
         {
             if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
 
-	        var providerKey = new Guid(Constants.PayPal.PayPalPaymentGatewayProviderKey);
+	        var providerKey = new Guid(Constants.PayPal.GatewayProviderKey);
             var provider = (PayPalPaymentGatewayProvider)merchelloContext.Gateways.Payment.GetProviderByKey(providerKey);
 
             if (provider  == null)
@@ -61,7 +62,7 @@
             }
 
             this._merchelloContext = merchelloContext;
-            this._processor = new PayPalPaymentProcessor(provider.ExtendedData.GetProcessorSettings());
+            this._processor = new PayPalPaymentProcessor(provider.ExtendedData.GetPayPalProviderSettings());
         }
 
 		
@@ -86,7 +87,7 @@
                 throw ex;
             }
 
-	        var providerKeyGuid = new Guid(Constants.PayPal.PayPalPaymentGatewayProviderKey);
+	        var providerKeyGuid = new Guid(Constants.PayPal.GatewayProviderKey);
 			var paymentGatewayMethod = this._merchelloContext.Gateways.Payment
 				.GetPaymentGatewayMethods()
 				.First(item => item.PaymentMethod.ProviderKey == providerKeyGuid);

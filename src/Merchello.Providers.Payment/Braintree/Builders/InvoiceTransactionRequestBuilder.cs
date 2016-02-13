@@ -7,6 +7,7 @@
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Builders;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     /// <summary>
     /// The invoice <see cref="TransactionRequest"/> builder.
