@@ -189,3 +189,6 @@ artifacts/
 build/_core/
 *.old
 src/Merchello.Web.UI/web.rss.config
+src/Merchello.Providers.Payment.UI.Client/.sass-cache/
+src/Merchello.Providers.Payment.UI.Client/build/
+test/Merchello.Tests.PaymentProviders/Braintree/extendedData.json
