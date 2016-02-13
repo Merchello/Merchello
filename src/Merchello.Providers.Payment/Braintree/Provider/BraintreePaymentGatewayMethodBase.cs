@@ -42,7 +42,7 @@
         /// <summary>
         /// Gets the braintree api service.
         /// </summary>
-        protected IBraintreeApiService BraintreeApiService { get; }
+        protected IBraintreeApiService BraintreeApiService { get; private set; }
 
         /// <summary>
         /// Performs the actual work of capturing the payment.

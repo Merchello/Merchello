@@ -41,7 +41,7 @@
         /// <summary>
         /// Gets the <see cref="BraintreeApiService"/>.
         /// </summary>
-        protected IBraintreeApiService BraintreeApiService { get; }
+        protected IBraintreeApiService BraintreeApiService { get; private set; }
 
         /// <summary>
         /// Accepts a web notification request and handles the verification process.
