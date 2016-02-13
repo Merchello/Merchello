@@ -8,7 +8,7 @@
 
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
-    using Merchello.Providers.Payment.PayPal.Models;
+    using Merchello.Providers.Payment.Models;
 
     using global::PayPal.PayPalAPIInterfaceService;
     using global::PayPal.PayPalAPIInterfaceService.Model;
@@ -125,7 +125,7 @@
 		private PaymentDetailsType CreatePayPalPaymentDetails(IInvoice invoice, ProcessorArgumentCollection args = null)
 		{
 			
-			string articleBySkuPath = args.GetArticleBySkuPath(this._settings.ArticleBySkuPath.IsEmpty() ? null : GetWebsiteUrl() + this._settings.ArticleBySkuPath);
+			string articleBySkuPath = args.GetPayPalProductContentSlug(this._settings.ArticleBySkuPath.IsEmpty() ? null : GetWebsiteUrl() + this._settings.ArticleBySkuPath);
 			var currencyCodeType = PayPalCurrency(invoice.CurrencyCode());
 			var currencyDecimals = CurrencyDecimals(currencyCodeType);
 
@@ -224,13 +224,13 @@
 			// Save ReturnUrl and CancelUrl in ExtendedData.
 			// They will be usefull in PayPalApiController.
 
-			var returnUrl = args.GetReturnUrl();
+			var returnUrl = args.GetPayPalReturnUrl();
 			if (returnUrl.IsEmpty()) returnUrl = this._settings.ReturnUrl;
 			if (returnUrl.IsEmpty()) returnUrl = "/";
 			returnUrl = adjustUrl(returnUrl);
 			payment.ExtendedData.SetValue(Constants.PayPal.ExtendedDataKeys.ReturnUrl, returnUrl);
 
-			var cancelUrl = args.GetCancelUrl();
+			var cancelUrl = args.GetPayPalCancelUrl();
 			if (cancelUrl.IsEmpty()) cancelUrl = this._settings.CancelUrl;
 			if (cancelUrl.IsEmpty()) cancelUrl = "/";
 			cancelUrl = adjustUrl(cancelUrl);

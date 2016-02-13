@@ -4319,9 +4319,9 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
  * The controller for the gateway providers list view controller
  */
 angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersListController",
-    ['$scope', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
+    ['$scope', '$q', 'assetsService', 'notificationsService', 'dialogService', 'merchelloTabsFactory',
         'gatewayProviderResource', 'gatewayProviderDisplayBuilder',
-        function($scope, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
+        function($scope, $q, assetsService, notificationsService, dialogService, merchelloTabsFactory, gatewayProviderResource, gatewayProviderDisplayBuilder)
         {
             // load the css file
             assetsService.loadCss('/App_Plugins/Merchello/assets/css/merchello.css');
@@ -4347,12 +4347,15 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
              * Method called on intial page load.  Loads in data from server and sets up scope.
              */
             function init() {
-                loadAllNotificationGatwayProviders();
-                loadAllPaymentGatewayProviders();
-                loadAllShippingGatewayProviders();
-                loadAllTaxationGatewayProviders();
-                $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
-                $scope.tabs.setActive('providers');
+                $q.all([
+                    loadAllNotificationGatwayProviders(),
+                    loadAllPaymentGatewayProviders(),
+                    loadAllShippingGatewayProviders(),
+                    loadAllTaxationGatewayProviders()
+                ]).then(function() {
+                    $scope.tabs = merchelloTabsFactory.createGatewayProviderTabs();
+                    $scope.tabs.setActive('providers');
+                });
             }
 
             /**
@@ -4366,7 +4369,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
             function loadAllNotificationGatwayProviders() {
                 var promiseAllProviders = gatewayProviderResource.getResolvedNotificationGatewayProviders();
                 promiseAllProviders.then(function(allProviders) {
-                    $scope.notificationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.notificationGatewayProviders = sortProviders(gatewayProviderDisplayBuilder.transform(allProviders));
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function(reason) {
@@ -4385,7 +4388,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
             function loadAllPaymentGatewayProviders() {
                 var promiseAllProviders = gatewayProviderResource.getResolvedPaymentGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
-                    $scope.paymentGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.paymentGatewayProviders = sortProviders(gatewayProviderDisplayBuilder.transform(allProviders));
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -4404,7 +4407,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
             function loadAllShippingGatewayProviders() {
                 var promiseAllProviders = gatewayProviderResource.getResolvedShippingGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
-                    $scope.shippingGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.shippingGatewayProviders = sortProviders(gatewayProviderDisplayBuilder.transform(allProviders));
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -4423,7 +4426,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
             function loadAllTaxationGatewayProviders() {
                 var promiseAllProviders = gatewayProviderResource.getResolvedTaxationGatewayProviders();
                 promiseAllProviders.then(function (allProviders) {
-                    $scope.taxationGatewayProviders = gatewayProviderDisplayBuilder.transform(allProviders);
+                    $scope.taxationGatewayProviders = sortProviders(gatewayProviderDisplayBuilder.transform(allProviders));
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
                 }, function (reason) {
@@ -4545,6 +4548,11 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
                     }
                 );
             }
+
+            function sortProviders(providers) {
+                return _.sortBy(providers, function (gwp) { return gwp.name; });
+            }
+
 
             // Initialize the controller
 

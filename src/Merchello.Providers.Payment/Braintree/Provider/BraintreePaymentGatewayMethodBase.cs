@@ -8,7 +8,6 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Plugin.Payments.Braintree;
     using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Braintree.Services;
     using Merchello.Providers.Payment.Exceptions;
@@ -20,11 +19,6 @@
     /// </summary>
     public abstract class BraintreePaymentGatewayMethodBase : PaymentGatewayMethodBase, IBraintreeVaultTransactionPaymentGatewayMethod
     {
-        /// <summary>
-        /// The <see cref="IBraintreeApiService"/>.
-        /// </summary>
-        private readonly IBraintreeApiService _braintreeApiService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BraintreePaymentGatewayMethodBase"/> class.
         /// </summary>
@@ -42,19 +36,13 @@
         {
             Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
 
-            this._braintreeApiService = braintreeApiService;
+            this.BraintreeApiService = braintreeApiService;
         }
 
         /// <summary>
         /// Gets the braintree api service.
         /// </summary>
-        protected IBraintreeApiService BraintreeApiService
-        {
-            get
-            {
-                return this._braintreeApiService;
-            }
-        }
+        protected IBraintreeApiService BraintreeApiService { get; }
 
         /// <summary>
         /// Performs the actual work of capturing the payment.

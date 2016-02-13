@@ -9,12 +9,13 @@
 
     using global::Braintree;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Providers.Payment.Braintree;
     using Merchello.Providers.Payment.Braintree.Controllers;
-    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Braintree.Services;
+    using Merchello.Providers.Payment.Models;
+    using Merchello.Providers.Payment.Resolvers;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -27,8 +28,9 @@
     /// </summary>
     public class UmbracoApplicationEvents : ApplicationEventHandler
     {
+
         /// <summary>
-        /// The application started.
+        /// Handles the Umbraco Application Started event.
         /// </summary>
         /// <param name="umbracoApplication">
         /// The umbraco application.
@@ -42,7 +44,7 @@
 
             LogHelper.Info<UmbracoApplicationEvents>("Initializing BrainTree Payment provider events");
 
-            GatewayProviderService.Saving += this.GatewayProviderServiceOnSaving;
+            GatewayProviderService.Saving += GatewayProviderServiceOnSaving;
 
             AutoMapperMappings.CreateMappings();
 
@@ -52,10 +54,10 @@
             //// TODO this is sort of punting to blanket clear all cached braintree requests
             //// but in some cases a customer needs to be cleared when the id is not available
             //// likewise a subscription when the payment method changes, etc.
-            BraintreeSubscriptionApiService.Created += this.BraintreeSubscriptionApiServiceOnCreated;
-            BraintreeSubscriptionApiService.Updated += this.BraintreeSubscriptionApiServiceOnUpdated;
-            BraintreePaymentMethodApiService.Created += this.BraintreePaymentMethodApiServiceOnCreated;
-            BraintreePaymentMethodApiService.Updating += this.BraintreePaymentMethodApiServiceOnUpdating;
+            BraintreeSubscriptionApiService.Created += BraintreeSubscriptionApiServiceOnCreated;
+            BraintreeSubscriptionApiService.Updated += BraintreeSubscriptionApiServiceOnUpdated;
+            BraintreePaymentMethodApiService.Created += BraintreePaymentMethodApiServiceOnCreated;
+            BraintreePaymentMethodApiService.Updating += BraintreePaymentMethodApiServiceOnUpdating;
         }
 
         /// <summary>
@@ -103,7 +105,7 @@
         /// <param name="saveEventArgs">
         /// The save event args.
         /// </param>
-        private void BraintreePaymentMethodApiServiceOnUpdating(BraintreePaymentMethodApiService sender, SaveEventArgs<PaymentMethodRequest> saveEventArgs)
+        private static void BraintreePaymentMethodApiServiceOnUpdating(BraintreePaymentMethodApiService sender, SaveEventArgs<PaymentMethodRequest> saveEventArgs)
         {
             ClearBraintreeCache();
         }
@@ -117,7 +119,7 @@
         /// <param name="newEventArgs">
         /// The new event args.
         /// </param>
-        private void BraintreePaymentMethodApiServiceOnCreated(BraintreePaymentMethodApiService sender, Core.Events.NewEventArgs<PaymentMethod> newEventArgs)
+        private static void BraintreePaymentMethodApiServiceOnCreated(BraintreePaymentMethodApiService sender, Core.Events.NewEventArgs<global::Braintree.PaymentMethod> newEventArgs)
         {
             ClearBraintreeCache();
         }
@@ -131,7 +133,7 @@
         /// <param name="saveEventArgs">
         /// The save event args.
         /// </param>
-        private void BraintreeSubscriptionApiServiceOnUpdated(BraintreeSubscriptionApiService sender, SaveEventArgs<Subscription> saveEventArgs)
+        private static void BraintreeSubscriptionApiServiceOnUpdated(BraintreeSubscriptionApiService sender, SaveEventArgs<Subscription> saveEventArgs)
         {
             ClearBraintreeCache();
         }
@@ -145,7 +147,7 @@
         /// <param name="newEventArgs">
         /// The new event args.
         /// </param>
-        private void BraintreeSubscriptionApiServiceOnCreated(BraintreeSubscriptionApiService sender, Core.Events.NewEventArgs<Subscription> newEventArgs)
+        private static void BraintreeSubscriptionApiServiceOnCreated(BraintreeSubscriptionApiService sender, Core.Events.NewEventArgs<Subscription> newEventArgs)
         {
             ClearBraintreeCache();
         }
@@ -156,35 +158,26 @@
         /// <param name="sender">
         /// The sender.
         /// </param>
-        /// <param name="saveEventArgs">
+        /// <param name="e">
         /// The save event args.
         /// </param>
-        private void GatewayProviderServiceOnSaving(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> saveEventArgs)
+        private static void GatewayProviderServiceOnSaving(IGatewayProviderService sender, SaveEventArgs<IGatewayProviderSettings> e)
         {
-            // TODO get from Constants
-            var key = new Guid("D143E0F6-98BB-4E0A-8B8C-CE9AD91B0969");
-            var provider = saveEventArgs.SavedEntities.FirstOrDefault(x => key == x.Key && !x.HasIdentity);
+            foreach (var record in e.SavedEntities.ToArray())
+            {
+                if (record == null || record.HasIdentity) continue;
 
-            if (provider == null) return;
+                // we have to include inactive providers here since this is the process of activating the provider
+                var provider = MerchelloContext.Current.Gateways.Payment.GetProviderByKey(record.Key, false);
+                if (provider == null) continue;
+                
+                var attempt = ProviderSettingsResolver.Current.ResolveByType(provider.GetType());
 
-            var settings = new BraintreeProviderSettings()
-                               {
-                                   PrivateKey = string.Empty,
-                                   PublicKey = string.Empty,
-                                   DefaultTransactionOption = TransactionOption.SubmitForSettlement,
-                                   MerchantDescriptor = new MerchantDescriptor()
-                                                            {
-                                                                Name = string.Empty,
-                                                                Phone = string.Empty,
-                                                                Url = string.Empty
-                                                            },
-                                   MerchantId = string.Empty,
-                                   Environment = EnvironmentType.Sandbox
-                               };
-
-            provider.ExtendedData.SaveProviderSettings(settings);
-
-
+                if (attempt.Success)
+                {
+                    record.SaveProviderSettings(provider, attempt.Result);
+                }
+            }
         }
     }
 }

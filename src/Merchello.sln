@@ -110,6 +110,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Providers.Payment
 		SlnRelativePath = "Merchello.Providers.Payment.UI.Client\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.PaymentProviders", "..\test\Merchello.Tests.PaymentProviders\Merchello.Tests.PaymentProviders.csproj", "{E6DA2138-61CD-4211-8126-7B49BA91E8AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -247,6 +249,22 @@ Global
 		{86383906-D326-473B-A41E-7E782C601D95}.Release|x64.Build.0 = Debug|Any CPU
 		{86383906-D326-473B-A41E-7E782C601D95}.Release|x86.ActiveCfg = Debug|Any CPU
 		{86383906-D326-473B-A41E-7E782C601D95}.Release|x86.Build.0 = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|x64.Build.0 = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Debug|x86.Build.0 = Debug|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|x64.ActiveCfg = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|x64.Build.0 = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,5 +273,6 @@ Global
 		{AC1A12FD-34CD-488A-90A1-528DE5941C33} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 		{4A7FCB29-A39A-4E0B-B0BC-92A7D00FA3AB} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 		{7EFA61BD-198A-4CD9-8176-C266FD1D4E1D} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
+		{E6DA2138-61CD-4211-8126-7B49BA91E8AA} = {A6C6EBCD-38C9-4FAD-975A-97FA97578537}
 	EndGlobalSection
 EndGlobal

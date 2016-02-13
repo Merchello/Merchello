@@ -9,6 +9,7 @@
     using Merchello.Plugin.Payments.Braintree;
     using Merchello.Providers.Payment.Braintree.Provider;
     using Merchello.Providers.Payment.Braintree.Services;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;

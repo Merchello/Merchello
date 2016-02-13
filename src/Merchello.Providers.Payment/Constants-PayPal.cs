@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -9,7 +10,7 @@
     /// <summary>
     /// Constants segment for the PayPal provider.
     /// </summary>
-    internal static partial class Constants
+    public static partial class Constants
     {
         /// <summary>
         /// PayPal constants.
@@ -22,7 +23,19 @@
             /// <remarks>
             /// This has changed from the original plugin to hopefully avoid conflicts
             /// </remarks>
-            public const string PayPalPaymentGatewayProviderKey = "C87B8EF7-566E-4D2D-90F8-84A0023E75A9";
+            public const string GatewayProviderKey = "C87B8EF7-566E-4D2D-90F8-84A0023E75A9";
+
+
+            /// <summary>
+            /// Gets the gateway provider settings key.
+            /// </summary>
+            public static Guid GatewayProviderSettingsKey
+            {
+                get
+                {
+                    return new Guid(GatewayProviderKey);
+                }
+            }
 
             /// <summary>
             /// PayPal ExtendedData keys.
@@ -32,13 +45,8 @@
                 /// <summary>
                 /// Gets the processor settings.
                 /// </summary>
-                public static string ProcessorSettings
-                {
-                    get
-                    {
-                        return "paypalProcessorSettings";
-                    }
-                }
+                public const string ProviderSettings = "paypalProviderSettings";
+
 
                 /// <summary>
                 /// Gets the transaction id.
@@ -289,16 +297,13 @@
                 }
 
                 /// <summary>
-                /// Gets the article by SKU path.
+                /// Gets the product content slug.
                 /// </summary>
-                /// <remarks>
-                /// TODO RSS What is this?
-                /// </remarks>
-                public static string ArticleBySkuPath
+                public static string ProductContentSlug
                 {
                     get
                     {
-                        return "ArticleBySkuPath";
+                        return "productContentSlug";
                     }
                 }
 

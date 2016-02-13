@@ -1,6 +1,7 @@
-﻿namespace Merchello.Providers.Payment.Braintree.Models
+﻿namespace Merchello.Providers.Payment.Models
 {
-    using Merchello.Plugin.Payments.Braintree;
+    using Merchello.Providers.Payment.Braintree;
+    using Merchello.Providers.Payment.Braintree.Models;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -8,13 +9,23 @@
     /// <summary>
     /// The BrainTree provider settings used to access the BrainTree Payment API.
     /// </summary>
-    public class BraintreeProviderSettings
+    public class BraintreeProviderSettings : IPaymentProviderSettings
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BraintreeProviderSettings"/> class.
+        /// </summary>
+        public BraintreeProviderSettings()
+        {
+            this.EnvironmentType = EnvironmentType.Sandbox;
+            this.MerchantDescriptor = new MerchantDescriptor();
+            this.DefaultTransactionOption = TransactionOption.SubmitForSettlement;
+        }
+
         /// <summary>
         /// Gets or sets the environment.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public EnvironmentType Environment { get; set; }
+        public EnvironmentType EnvironmentType { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.

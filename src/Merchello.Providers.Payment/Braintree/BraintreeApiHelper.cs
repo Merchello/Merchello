@@ -1,52 +1,25 @@
 ﻿namespace Merchello.Providers.Payment.Braintree
 {
     using System;
-    using System.Web.Configuration;
 
     using global::Braintree;
 
     using Merchello.Core;
     using Merchello.Core.Models;
-
+    using Merchello.Providers.Payment.Braintree.Controllers;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Braintree.Provider;
+    using Merchello.Providers.Payment.Models;
 
+    using Umbraco.Core.Logging;
 
+    using Constants = Merchello.Providers.Payment.Constants;
 
     /// <summary>
     /// Utility class that assists in Braintree API calls
     /// </summary>
     public class BraintreeApiHelper
     {
-        /// <summary>
-        /// Gets the <see cref="BraintreeProviderSettings"/>.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="BraintreeProviderSettings"/>.
-        /// </returns>
-        /// <remarks>
-        /// TODO : Braintree "Environment" has a DEVELOPMENT setting as well
-        /// </remarks>
-        public static BraintreeProviderSettings GetBraintreeProviderSettings()
-        {
-            return new BraintreeProviderSettings()
-            {
-                Environment = WebConfigurationManager.AppSettings["braintreeEnvironment"].Equals("SANDBOX") ? EnvironmentType.Sandbox : EnvironmentType.Production,
-                PublicKey = WebConfigurationManager.AppSettings["publicKey"],
-                PrivateKey = WebConfigurationManager.AppSettings["privateKey"],
-                MerchantId = WebConfigurationManager.AppSettings["merchantId"],
-                MerchantDescriptor = new MerchantDescriptor()
-                {
-                    Name = WebConfigurationManager.AppSettings["merchantName"],
-                    Url = WebConfigurationManager.AppSettings["merchantUrl"],
-                    Phone = WebConfigurationManager.AppSettings["merchantPhone"]
-                },
-                DefaultTransactionOption = (TransactionOption)Enum.Parse(typeof(TransactionOption), WebConfigurationManager.AppSettings["defaultTransactionOption"])
-            };
-        }
-
-
-
-
         /// <summary>
         /// Gets the Merchello <see cref="ICustomer"/> for a given Braintree <see cref="Transaction"/>.
         /// </summary>
@@ -78,6 +51,26 @@
             var customerService = merchelloContext.Services.CustomerService;
 
             return customerService.GetByKey(new Guid(transaction.Customer.Id));
+        }
+
+        /// <summary>
+        /// Gets the <see cref="BraintreeProviderSettings"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="BraintreeProviderSettings"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is only used by <see cref="BraintreeWebhooksControllerBase"/>
+        /// </remarks>
+        internal static BraintreeProviderSettings GetBraintreeProviderSettings()
+        {
+            var provider = (BraintreePaymentGatewayProvider)MerchelloContext.Current.Gateways.Payment.GetProviderByKey(Constants.Braintree.GatewayProviderSettingsKey);
+
+            if (provider != null) return provider.ExtendedData.GetBrainTreeProviderSettings();
+
+            var ex = new NullReferenceException("The BraintreePaymentGatewayProvider could not be resolved.  The provider must be activiated");
+            LogHelper.Error<BraintreeApiController>("BraintreePaymentGatewayProvider not activated.", ex);
+            throw ex;
         }
     }
 }

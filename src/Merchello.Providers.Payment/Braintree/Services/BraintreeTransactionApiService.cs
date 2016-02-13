@@ -6,6 +6,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;

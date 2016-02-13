@@ -9,10 +9,13 @@
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Exceptions;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
+
+    using Customer = global::Braintree.Customer;
 
     /// <summary>
     /// The braintree customer service.

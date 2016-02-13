@@ -2,11 +2,9 @@
 {
     using System.Linq;
 
-    using global::Braintree;
-
     using Merchello.Core.Models;
-
     using Address = global::Braintree.Address;
+    using Customer = global::Braintree.Customer;
 
     /// <summary>
     /// Utility extensions for the Braintree <see cref="Customer"/>.

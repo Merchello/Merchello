@@ -7,6 +7,7 @@
     using Merchello.Core;
     using Merchello.Plugin.Payments.Braintree;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     /// <summary>
     /// A builder responsible for building a <see cref="TransactionRequest"/>

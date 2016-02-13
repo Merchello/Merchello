@@ -2,10 +2,12 @@
 {
     using System;
 
+    using global::Braintree;
+
     /// <summary>
     /// Constants segment for Braintree constants
     /// </summary>
-    internal static partial class Constants
+    public static partial class Constants
     {
         /// <summary>
         /// The Braintree Constants.
@@ -52,7 +54,17 @@
                 /// <summary>
                 /// Gets the vault transaction.
                 /// </summary>
-                public const string VaultTransaction = "BraintreetVaultTransaction";
+                public const string BraintreeVault = "BraintreetVaultTransaction";
+
+                /// <summary>
+                /// Gets a PayPal one time transaction.
+                /// </summary>
+                public const string PayPalOneTime = "PayPalOneTime";
+
+                /// <summary>
+                /// Get a PayPal vault transaction.
+                /// </summary>
+                public const string PayPalVault = "PalPalVault";
 
                 /// <summary>
                 /// Gets the record subscription transaction.
@@ -68,13 +80,7 @@
                 /// <summary>
                 /// Gets the key for the BraintreeProviderSettings serialization.
                 /// </summary>
-                public static string BraintreeProviderSettings
-                {
-                    get
-                    {
-                        return "braintreeProviderSettings";
-                    }
-                }
+                public const string ProviderSettings = "braintreeProviderSettings";
 
                 /// <summary>
                 /// Gets the key key for the serialized braintree <see cref="Transaction"/>.

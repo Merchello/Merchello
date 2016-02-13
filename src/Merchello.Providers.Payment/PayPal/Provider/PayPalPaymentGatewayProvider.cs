@@ -8,6 +8,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
@@ -17,10 +18,11 @@
     /// <summary>
 	/// Represents a PayPalPaymentGatewayProvider
 	/// </summary>
-	[GatewayProviderActivation(Constants.PayPal.PayPalPaymentGatewayProviderKey, "PayPal Payment Provider", "PayPal Payment Provider")]
+	[GatewayProviderActivation(Constants.PayPal.GatewayProviderKey, "PayPal Payment Provider", "PayPal Payment Provider")]
 	[GatewayProviderEditor("PayPal configuration", "~/App_Plugins/Merchello.PayPal/editor.html")]
-	public class PayPalPaymentGatewayProvider : PaymentGatewayProviderBase
-	{
+    [ProviderSettingsMapper(Constants.PayPal.ExtendedDataKeys.ProviderSettings, typeof(PayPalProviderSettings))]
+    public class PayPalPaymentGatewayProvider : PaymentGatewayProviderBase
+    {
 		#region AvailableResources
 
         /// <summary>
@@ -33,6 +35,18 @@
 
 		#endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalPaymentGatewayProvider"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="gatewayProviderSettings">
+        /// The gateway provider settings.
+        /// </param>
+        /// <param name="runtimeCacheProvider">
+        /// The runtime cache provider.
+        /// </param>
         public PayPalPaymentGatewayProvider(
             IGatewayProviderService gatewayProviderService,
             IGatewayProviderSettings gatewayProviderSettings,
@@ -41,11 +55,11 @@
         {
         }
 
-		/// <summary>
-		/// Returns a list of remaining available resources
-		/// </summary>
-		/// <returns></returns>
-		public override IEnumerable<IGatewayResource> ListResourcesOffered()
+        /// <summary>
+        /// Returns a list of remaining available resources
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<IGatewayResource> ListResourcesOffered()
 		{
 			// PaymentMethods is created in PaymentGatewayProviderBase.  It is a list of all previously saved payment methods
 			return AvailableResources.Where(x => this.PaymentMethods.All(y => y.PaymentCode != x.ServiceCode));
@@ -106,5 +120,5 @@
 
 			return new PayPalPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GatewayProviderSettings.ExtendedData);
 		}
-	}
+    }
 }

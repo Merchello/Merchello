@@ -8,6 +8,7 @@
     using Merchello.Core.Models;
     using Merchello.Plugin.Payments.Braintree;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;

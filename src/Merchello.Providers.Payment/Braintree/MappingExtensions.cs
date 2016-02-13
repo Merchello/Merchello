@@ -10,6 +10,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
@@ -58,46 +59,6 @@
         #region BraintreeProviderSettings and BraintreeGateway
 
         /// <summary>
-        /// Utility extension the deserializes BraintreeProviderSettings from the ExtendedDataCollection
-        /// </summary>
-        /// <param name="extendedData">
-        /// The extended data.
-        /// </param>
-        /// <returns>
-        /// The <see cref="BraintreeProviderSettings"/>.
-        /// </returns>
-        public static BraintreeProviderSettings GetBrainTreeProviderSettings(this ExtendedDataCollection extendedData)
-        {
-            BraintreeProviderSettings settings;
-            if (extendedData.ContainsKey(Constants.Braintree.ExtendedDataKeys.BraintreeProviderSettings))
-            {
-                var json = extendedData.GetValue(Constants.Braintree.ExtendedDataKeys.BraintreeProviderSettings);
-                settings = JsonConvert.DeserializeObject<BraintreeProviderSettings>(json);
-            }
-            else
-            {
-                settings = new BraintreeProviderSettings();
-            }
-            return settings;
-        }
-
-        /// <summary>
-        /// Utility extension to quickly serialize <see cref="BraintreeProviderSettings"/> to an extended data value
-        /// </summary>
-        /// <param name="extendedData">
-        /// The extended data.
-        /// </param>
-        /// <param name="settings">
-        /// The <see cref="BraintreeProviderSettings"/>
-        /// </param>
-        public static void SaveProviderSettings(this ExtendedDataCollection extendedData, BraintreeProviderSettings settings)
-        {
-            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-            var json = JsonConvert.SerializeObject(settings, Formatting.None, jsonSerializerSettings);
-            extendedData.SetValue(Constants.Braintree.ExtendedDataKeys.BraintreeProviderSettings, json);
-        }
-
-        /// <summary>
         /// Maps a <see cref="BraintreeProviderSettings"/> as a <see cref="BraintreeGateway"/>
         /// </summary>
         /// <param name="settings">
@@ -108,7 +69,7 @@
         /// </returns>
         public static BraintreeGateway AsBraintreeGateway(this BraintreeProviderSettings settings)
         {
-            return new BraintreeGateway(settings.Environment.AsEnvironment(), settings.MerchantId, settings.PublicKey, settings.PrivateKey);
+            return new BraintreeGateway(settings.EnvironmentType.AsEnvironment(), settings.MerchantId, settings.PublicKey, settings.PrivateKey);
         }
 
         /// <summary>
@@ -238,73 +199,5 @@
         }
 
         #endregion
-
-        #region ProcessorArguments
-
-        /// <summary>
-        /// Sets the payment method nonce.
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <param name="paymentMethodNonce">
-        /// The payment method nonce.
-        /// </param>
-        public static void SetPaymentMethodNonce(this ProcessorArgumentCollection args, string paymentMethodNonce)
-        {
-            args.Add(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, paymentMethodNonce);
-        }
-
-        /// <summary>
-        /// Gets the payment method nonce from the <see cref="ProcessorArgumentCollection"/>
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The payment method nonce.
-        /// </returns>
-        public static string GetPaymentMethodNonce(this ProcessorArgumentCollection args)
-        {
-            if (args.ContainsKey(Constants.Braintree.ProcessorArguments.PaymentMethodNonce)) return args[Constants.Braintree.ProcessorArguments.PaymentMethodNonce];
-
-            LogHelper.Debug(typeof(MappingExtensions), "Payment Method Nonce not found in process argument collection");
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// The set payment method token.
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <param name="paymentMethodToken">
-        /// The payment method token.
-        /// </param>
-        public static void SetPaymentMethodToken(this ProcessorArgumentCollection args, string paymentMethodToken)
-        {
-            args.Add(Constants.Braintree.ProcessorArguments.PaymentMethodToken, paymentMethodToken);
-        }
-
-        /// <summary>
-        /// The get payment method token.
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string GetPaymentMethodToken(this ProcessorArgumentCollection args)
-        {
-            if (args.ContainsKey(Constants.Braintree.ProcessorArguments.PaymentMethodToken)) return args[Constants.Braintree.ProcessorArguments.PaymentMethodToken];
-
-            LogHelper.Debug(typeof(MappingExtensions), "Payment Method Token not found in process argument collection");
-
-            return string.Empty;
-        }
-
-#endregion
     }
 }
