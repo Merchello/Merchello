@@ -42,13 +42,23 @@
         [ChildActionOnly]
         public ActionResult RenderBraintreeSetupJs()
         {
+            return this.PartialView(this.BraintreePartial("BraintreeSetupJs"), GetToken());
+        }
+
+        [ChildActionOnly]
+        public ActionResult RenderPayPalSetupJs()
+        {
+            return this.PartialView(this.BraintreePartial("BraintreePayPalSetupJs"), GetToken());
+        }
+
+        public BraintreeToken GetToken()
+        {
             var token = CurrentCustomer.IsAnonymous ?
             _service.Customer.GenerateClientRequestToken() :
             _service.Customer.GenerateClientRequestToken((ICustomer)CurrentCustomer);
 
-            return this.PartialView(this.BraintreePartial("BraintreeSetupJs"), new BraintreeToken { Token = token });
+            return new BraintreeToken { Token = token };
         }
-
 
         /// <summary>
         /// Helper method to construct the path to the MVC Partial view for this plugin.

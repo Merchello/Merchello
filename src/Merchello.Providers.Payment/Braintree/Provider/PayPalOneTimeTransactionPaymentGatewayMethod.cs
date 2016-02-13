@@ -12,7 +12,7 @@
     /// </summary>
     [GatewayMethodUi("Braintree.PayPal.OneTime")]
     [GatewayMethodEditor("BrainTree PayPal OneTime Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
-    public class PayPalOneTimeTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase
+    public class PayPalOneTimeTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase, IPayPalOneTimeTransactionPaymentGatewayMethod
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PayPalOneTimeTransactionPaymentGatewayMethod"/> class.

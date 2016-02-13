@@ -28,8 +28,10 @@
         /// </summary>
         internal static readonly IEnumerable<IGatewayResource> AvailableResources = new List<IGatewayResource>
         {
-            new GatewayResource(Constants.Braintree.PaymentCodes.Transaction, "Standard Transaction"),
-            new GatewayResource(Constants.Braintree.PaymentCodes.VaultTransaction, "Vault Transaction"),
+            new GatewayResource(Constants.Braintree.PaymentCodes.Transaction, "Braintree Transaction"),
+            new GatewayResource(Constants.Braintree.PaymentCodes.BraintreeVault, "Braintree Vault Transaction"),
+            new GatewayResource(Constants.Braintree.PaymentCodes.PayPalOneTime, "PayPal One Time Transaction"),
+            // new GatewayResource(Constants.Braintree.PaymentCodes.PayPalVault, "PayPal Vault Transaction"),
             new GatewayResource(Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction, "Record of Subscription Transaction")
         };
 
@@ -99,17 +101,7 @@
             {
                 this.PaymentMethods = null;
 
-                switch (available.ServiceCode)
-                {
-                    case Constants.Braintree.PaymentCodes.VaultTransaction:
-                        return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
-                    
-                    case Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction:
-                        return new BraintreeSubscriptionRecordPaymentMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
-
-                    default:
-                        return new BraintreeStandardTransactionPaymentGatewayMethod(this.GatewayProviderService, attempt.Result, this.GetBraintreeApiService());
-                }   
+                return GetPaymentGatewayMethodByPaymentCode(available.ServiceCode); 
             }
 
             LogHelper.Error<BraintreePaymentGatewayProvider>(string.Format("Failed to create a payment method name: {0}, description {1}, paymentCode {2}", name, description, available.ServiceCode), attempt.Exception);
@@ -132,17 +124,7 @@
 
             if (paymentMethod != null)
             {
-                switch (paymentMethod.PaymentCode)
-                {
-                    case Constants.Braintree.PaymentCodes.VaultTransaction:
-                        return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
-
-                    case Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction:
-                        return new BraintreeSubscriptionRecordPaymentMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
-
-                    default:
-                        return new BraintreeStandardTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
-                }
+                return GetPaymentGatewayMethodByPaymentCode(paymentMethod.PaymentCode);
             }
 
             var error = new NullReferenceException("Failed to find BraintreePaymentGatewayMethod with key specified");
@@ -163,11 +145,14 @@
             {
                 switch (paymentMethod.PaymentCode)
                 {
-                    case Constants.Braintree.PaymentCodes.VaultTransaction:
+                    case Constants.Braintree.PaymentCodes.BraintreeVault:
                         return new BraintreeVaultTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
                     case Constants.Braintree.PaymentCodes.RecordSubscriptionTransaction:
                         return new BraintreeSubscriptionRecordPaymentMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
+
+                    case Constants.Braintree.PaymentCodes.PayPalOneTime:
+                        return new PayPalOneTimeTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());
 
                     default:
                         return new BraintreeStandardTransactionPaymentGatewayMethod(this.GatewayProviderService, paymentMethod, this.GetBraintreeApiService());

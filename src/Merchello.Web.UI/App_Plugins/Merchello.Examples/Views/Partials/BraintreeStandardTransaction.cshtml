@@ -8,6 +8,7 @@
 
 @using (Html.BeginUmbracoForm<BraintreeStandardTransactionController>("ConfirmSale", null, new { area = "BraintreeBazaar", @id = "braintreeCreditCard" }))
 {
+    @Html.AntiForgeryToken()
     <div class="control-group">
         <label class="control-label">Credit Card Number</label>
         <div class="controls">

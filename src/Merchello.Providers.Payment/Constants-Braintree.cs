@@ -54,7 +54,17 @@
                 /// <summary>
                 /// Gets the vault transaction.
                 /// </summary>
-                public const string VaultTransaction = "BraintreetVaultTransaction";
+                public const string BraintreeVault = "BraintreetVaultTransaction";
+
+                /// <summary>
+                /// Gets a PayPal one time transaction.
+                /// </summary>
+                public const string PayPalOneTime = "PayPalOneTime";
+
+                /// <summary>
+                /// Get a PayPal vault transaction.
+                /// </summary>
+                public const string PayPalVault = "PalPalVault";
 
                 /// <summary>
                 /// Gets the record subscription transaction.
