@@ -474,7 +474,7 @@
     <key alias="notificationShipping">Enviado email de confirmación de envío a %0%</key>
     <key alias="notificationSalesConfirmation">Enviado email de confirmación de venta a %0%</key>
     <key alias="paymentCaptured">Hemos cobrado con éxito %0% %1%</key>
-    <key alias="paymentAuthorize">Hemos autorizado con existo cobrar %0% %1%</key>
+    <key alias="paymentAuthorize">Hemos autorizado con exito cobrar %0% %1%</key>
     <key alias="paymentVoided">El pago ha sido anulado</key>
     <key alias="paymentDeclined">El pago ha sido denegado</key>
     <key alias="paymentRefunded">Hemos hecho una devolución de %0% %1% del pago</key>
