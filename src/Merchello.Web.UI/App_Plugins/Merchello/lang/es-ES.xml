@@ -267,7 +267,7 @@
     <key alias="shipment">Envío</key>
     <key alias="sku">SKU</key>
     <key alias="quantity">Cant</key>
-    <key alias="fulfill"> Rellenar</key>
+    <key alias="fulfill"> Enviar pedido</key>
     <key alias="status"> Estado</key>
     <key alias="type"> Tipo</key>
     <key alias="amount"> Cantidad</key>
