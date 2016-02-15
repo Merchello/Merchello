@@ -33,7 +33,7 @@
         {
             //// D143E0F6-98BB-4E0A-8B8C-CE9AD91B0969 is the Guid from the BraintreeProvider Activation Attribute
             //// [GatewayProviderActivation("D143E0F6-98BB-4E0A-8B8C-CE9AD91B0969", "BrainTree Payment Provider", "BrainTree Payment Provider")]
-            var provider = (BraintreePaymentGatewayProvider)MerchelloContext.Current.Gateways.Payment.GetProviderByKey(Providers.Payment.Constants.Braintree.GatewayProviderSettingsKey);
+            var provider = (BraintreePaymentGatewayProvider)MerchelloContext.Current.Gateways.Payment.GetProviderByKey(Providers.Constants.Braintree.GatewayProviderSettingsKey);
 
             // GetBraintreeProviderSettings() is an extension method with the provider
             _service = new BraintreeApiService(provider.ExtendedData.GetBrainTreeProviderSettings());

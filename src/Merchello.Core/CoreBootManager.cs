@@ -149,9 +149,7 @@
 
             //_timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
  
-            // create the service context for the MerchelloAppContext   
-
-            AutoMapperMappings.CreateMappings();            
+            // create the service context for the MerchelloAppContext          
             
             var serviceContext = new ServiceContext(new RepositoryFactory(_logger, _sqlSyntaxProvider), _unitOfWorkProvider, _logger, new TransientMessageFactory());
 

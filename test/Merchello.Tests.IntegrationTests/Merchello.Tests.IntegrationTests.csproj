@@ -437,10 +437,6 @@
       <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
       <Name>Merchello.Examine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Merchello.Providers.Payment\Merchello.Providers.Payment.csproj">
-      <Project>{185b4de5-f2cf-412b-a1ad-ec5163a5d2ba}</Project>
-      <Name>Merchello.Providers.Payment</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
       <Name>Merchello.Web</Name>
