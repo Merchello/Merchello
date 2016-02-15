@@ -1,152 +1,152 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language>
   <area alias="merchelloButtons">
-    <key alias="void">Void</key>
-    <key alias="refund">Refund</key>
-    <key alias="delete">Delete</key>
-    <key alias="save">Save</key>
-    <key alias="select">Select</key>
-    <key alias="remove">Remove</key>
+    <key alias="void">Cancelar</key>
+    <key alias="refund">Devolver</key>
+    <key alias="delete">Borrar</key>
+    <key alias="save">Guardar</key>
+    <key alias="select">Seleccionar</key>
+    <key alias="remove">Quitar</key>
   </area>
   <area alias="merchelloHeadline">
     <key alias="catalog">Catálogo</key>
   </area>
   <area alias="merchelloTableCaptions">
-    <key alias="name">Name</key>
-    <key alias="startDate">Starting</key>
-    <key alias="endDate">Ending</key>
+    <key alias="name">Nombre</key>
+    <key alias="startDate">Comienzo</key>
+    <key alias="endDate">Finaliza</key>
     <key alias="alias">Alias</key>
-    <key alias="active">Active</key>
-    <key alias="sortOrder">Sort Order</key>
+    <key alias="active">Activo</key>
+    <key alias="sortOrder">Ordenación</key>
   </area>
   <area alias="merchelloTree">
-    <key alias="products">Products</key>
-    <key alias="sales">Sales</key>
-    <key alias="customers">Customers</key>
+    <key alias="products">Productos</key>
+    <key alias="sales">Ventas</key>
+    <key alias="customers">Clientes</key>
     <key alias="marketing">Marketing</key>
-    <key alias="collections">Collections</key>
-    <key alias="reports">Reports</key>
+    <key alias="collections">Colecciones</key>
+    <key alias="reports">Reportes</key>
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
-    <key alias="productListing">Product Listing</key>
-    <key alias="product">Product</key>
-    <key alias="productVariants">Product Variants</key>
-    <key alias="productOptions">Product Options</key>
-    <key alias="productVariantEditor">Product Variant Editor</key>
-    <key alias="salesListing">Sales Listing</key>
-    <key alias="sales">Sale</key>
-    <key alias="payments">Payments</key>
-    <key alias="payment">Payment</key>
-    <key alias="shipments">Shipments</key>
-    <key alias="shipping">Shipping</key>
-    <key alias="customerListing">Customer Listing</key>
-    <key alias="customer">Customer</key>
-    <key alias="customerAddresses">Addresses</key>
+    <key alias="productListing">Listado de Productos</key>
+    <key alias="product">Producto</key>
+    <key alias="productVariants">Variantes de Producto</key>
+    <key alias="productOptions">Opciones de Producto</key>
+    <key alias="productVariantEditor">Editor de variante de producto</key>
+    <key alias="salesListing">Listado de ventas</key>
+    <key alias="sales">Venta</key>
+    <key alias="payments">Pagos</key>
+    <key alias="payment">Pago</key>
+    <key alias="shipments">Envíos</key>
+    <key alias="shipping">Envío</key>
+    <key alias="customerListing">Listado de clientes</key>
+    <key alias="customer">Cliente</key>
+    <key alias="customerAddresses">Direcciones</key>
     <key alias="gatewayProviders">Gateway Providers</key>
-    <key alias="notification">Notification</key>
-    <key alias="taxation">Taxation</key>
-    <key alias="offerListing">Offer Listing</key>
-    <key alias="offer">Offer</key>
-    <key alias="coupon">Coupon</key>
-    <key alias="reportListing">Reports</key>
-    <key alias="salesOverTime">Sales Over Time</key>
-    <key alias="salesByItem">Sales By Item</key>
-    <key alias="abandonedBasket">Abandoned Basket</key>
+    <key alias="notification">Notificaciones</key>
+    <key alias="taxation">Impuestos</key>
+    <key alias="offerListing">Listado de ofertas</key>
+    <key alias="offer">Oferta</key>
+    <key alias="coupon">Cupón</key>
+    <key alias="reportListing">Reportes</key>
+    <key alias="salesOverTime">Ventas en el tiempo</key>
+    <key alias="salesByItem">Ventas por artículo</key>
+    <key alias="abandonedBasket">Carritos abandonados</key>
   </area>
   <area alias="merchelloReports">
-    <key alias="anonymousBaskets">Anonymous Baskets</key>
-    <key alias="anonymousCheckouts">Anonymous Checkouts</key>
-    <key alias="anonymousCheckoutPercent">Anonymous Checkout Percent</key>
-    <key alias="customerBaskets">Customer Baskets</key>
-    <key alias="customerCheckouts">Customer Checkouts</key>
-    <key alias="customerCheckoutPercent">Customer Checkout Percent</key>
-    <key alias="thisWeekVsLast">This Week Vs. Last Week</key>
-    <key alias="monthlyTotalSales">Monthly Total Sales</key>
-    <key alias="topSellingItems"><![CDATA[ Top Selling Items <small>Top 10</small> ]]></key>
-    <key alias="thisWeek">This Week</key>
-    <key alias="lastWeek">Last Week</key>
-    <key alias="quantitySold">Quantity Sold</key>
-    <key alias="numberOfInvoices">Number of invoices</key>
-    <key alias="abandonedBaskets">Abandoned Baskets and Completed Checkouts</key>
+    <key alias="anonymousBaskets">Carritos anónimos</key>
+    <key alias="anonymousCheckouts">Compras anónimas</key>
+    <key alias="anonymousCheckoutPercent">Porcentaje de compras anónimas</key>
+    <key alias="customerBaskets">Carritos de clientes</key>
+    <key alias="customerCheckouts">Compras de clientes</key>
+    <key alias="customerCheckoutPercent">Porcentaje de compras de clientes</key>
+    <key alias="thisWeekVsLast">Comparativa: esta semana vs anterior</key>
+    <key alias="monthlyTotalSales">Ventas mensuales</key>
+    <key alias="topSellingItems"><![CDATA[ Los artículos más vendidos <small>Top 10</small> ]]></key>
+    <key alias="thisWeek">Esta semana</key>
+    <key alias="lastWeek">Anterior semana</key>
+    <key alias="quantitySold">Cantidad vendida</key>
+    <key alias="numberOfInvoices">Número de pedidos</key>
+    <key alias="abandonedBaskets">Carritos abandonados y compras completadas</key>
   </area>
   <area alias="merchelloProviders">
-    <key alias="unpaidInvoiceCollection">Unpaid invoices</key>
-    <key alias="partialPaidInvoiceCollection">Partially paid invoices</key>
-    <key alias="paidInvoiceCollection">Paid invoices</key>
-    <key alias="notFulfilledOrderCollection">Unfulfilled orders</key>
-    <key alias="openOrderCollection">Open orders</key>
-    <key alias="fulfilledOrderCollection">Fulfilled orders</key>
+    <key alias="unpaidInvoiceCollection">Pedidos impagados</key>
+    <key alias="partialPaidInvoiceCollection">Pedidos pagados parcialmente</key>
+    <key alias="paidInvoiceCollection">Pedidos pagados</key>
+    <key alias="notFulfilledOrderCollection">Pedidos pendientes de envío</key>
+    <key alias="openOrderCollection">Pedidos sin terminar</key>
+    <key alias="fulfilledOrderCollection">Pedidos enviados</key>
   </area>
   <area alias="merchelloCollections">
-    <key alias="providers">Collection Providers</key>
-    <key alias="newCollection">New Collection</key>
-    <key alias="manageCollection">Manage Collection</key>
-    <key alias="addEntities">Add new collection items</key>
-    <key alias="removeEntities">Remove collection items</key>
-    <key alias="sortCollections">Sort Collections</key>
-    <key alias="staticProviders">Static Collections</key>
-    <key alias="staticProvidersInfo">Allow users to create named collections to which items can be added.</key>
-    <key alias="product">Product Collections</key>
-    <key alias="customer">Customer Collections</key>
-    <key alias="invoice">Invoice Collections</key>
-    <key alias="emptyCollection">The collection is empty.</key>
-    <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
-    <key alias="collectionPickerTitle">Collections</key>
-    <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
-    <key alias="allItems">All items</key>
-    <key alias="productCollections">Product Collections</key>
-    <key alias="invoiceCollections">Invoice Collections</key>
-    <key alias="customerCollections">Customer Collections</key>
+    <key alias="providers">Proveedores de colecciones</key>
+    <key alias="newCollection">Nueva colección</key>
+    <key alias="manageCollection">Administrar colección</key>
+    <key alias="addEntities">Añadir nuevas colecciones</key>
+    <key alias="removeEntities">Quitar colecciones</key>
+    <key alias="sortCollections">Ordenar colecciones</key>
+    <key alias="staticProviders">Colecciones estáticas</key>
+    <key alias="staticProvidersInfo">Permitir a los usuarios crear colecciones para añadir items.</key>
+    <key alias="product">Colecciones de productos</key>
+    <key alias="customer">Colecciones de clientes</key>
+    <key alias="invoice">Colecciones de pedidos</key>
+    <key alias="emptyCollection">Esta colección está vacía.</key>
+    <key alias="noQualifyingEntities">No hay otros items que puedan añadirse a la colección.</key>
+    <key alias="collectionPickerTitle">Colecciones</key>
+    <key alias="collectionPickerInfo">Añadir a una o más colecciones.</key>
+    <key alias="allItems">Todos los items</key>
+    <key alias="productCollections">Colecciones de productos</key>
+    <key alias="invoiceCollections">Colecciones de pedidos</key>
+    <key alias="customerCollections">Colecciones de clientes</key>
   </area>
   <area alias="merchelloValidation">
-    <key alias="nameFieldRequired">The name field is required</key>
-    <key alias="noteMessageRequired">The note message is required</key>
+    <key alias="nameFieldRequired">El campo nombre es obligatorio</key>
+    <key alias="noteMessageRequired">El mensaje de la nota es obligatorio</key>
   </area>
   <area alias="merchelloProducts">
-    <key alias="emptyProductCollection">There are currently no products in this collection</key>
+    <key alias="emptyProductCollection">No hay productos en esta colección</key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales"><![CDATA[
         <h5>You Have No Sales Yet</h5>
         <p>But you will soon!</p>
       ]]></key>
-    <key alias="emptySalesCollection">There are currently no sales in this collection</key>
-    <key alias="invoiceNumber">Invoice #</key>
-    <key alias="paymentStatus">Payment status</key>
-    <key alias="fulfillmentStatus">Fulfillment status</key>
+    <key alias="emptySalesCollection">No hay ventas en esta colección</key>
+    <key alias="invoiceNumber">Pedido #</key>
+    <key alias="paymentStatus">Estado del pago</key>
+    <key alias="fulfillmentStatus">Estado del envío</key>
   </area>
   <area alias="merchelloCustomers">
-    <key alias="newCustomer">New Customer</key>
-    <key alias="customerBaskets">Customer Baskets</key>
-    <key alias="basket">Basket</key>
+    <key alias="newCustomer">Nuevo cliente</key>
+    <key alias="customerBaskets">Carritos de clientes</key>
+    <key alias="basket">Carrito</key>
     <key alias="noCustomers"><![CDATA[
-        <h5>You Have No Customers</h5>
-        <p>But you will soon!</p>
+        <h5>No tienes clientes</h5>
+        <p>¡Pero los tendrás pronto!</p>
       ]]></key>
-    <key alias="lastActivityDate">Last Activity Date</key>
-    <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
+    <key alias="lastActivityDate">Fecha de última actividad</key>
+    <key alias="emptyCustomerCollection">No hay clientes en esta colección</key>
     <key alias="customerNotes"><![CDATA[
-      Customer Notes
-      <small>Notes about the customer (not sale specific)</small>
+      Notas del cliente
+      <small>Notas sobre el cliente (no específicas de la venta)</small>
       ]]></key>
     <key alias="customerBasket">
       <![CDATA[
-      Customer Basket
-      <small>Items currently in the customer basket</small>
+      Carrito del cliente
+      <small>Artículos que están actualmente en el carrito del cliente</small>
       ]]>
     </key>
     <area alias="merchelloNotes">
-      <key alias="addNote">Add a new note</key>
-      <key alias="editNote">Edit note</key>
+      <key alias="addNote">Añadir nueva nota</key>
+      <key alias="editNote">Editar nota</key>
     </area>
     <key alias="customerWishlist">
       <![CDATA[
-      Customer Wish List
-      <small>Items currently in the customer wish list</small>
+      Lista de deseos del cliente
+      <small>Artículos que están en la lista de deseos del cliente</small>
       ]]>
     </key>
-    <key alias="itemCacheEmpty">Contains no items</key>
+    <key alias="itemCacheEmpty">No hay elementos para mostrar</key>
   </area>
   <area alias="merchelloVariant">
     <!-- things -->
@@ -170,31 +170,31 @@
     <key alias="capturePayment">Gestiona el pago</key>
     <key alias="processPayment">Procesa el pago</key>
     <!-- phrases -->
-    <key alias="invoicesPerPage">Facturas / Página</key>
+    <key alias="invoicesPerPage">Pedidos / Página</key>
     <key alias="noOrders">No tienes pedidos.</key>
     <key alias="attentionRequired">Tienes pedidos que gestionar</key>
     <key alias="paymentExpirationWarning">Puede que no recibas el pago si la autorización caduca.</key>
     <key alias="processedBy">Procesado por</key>
-    <key alias="resetFilters">Reset Filters</key>
-    <key alias="invoice">Invoice</key>
-    <key alias="invoiceNumber">Invoice #</key>
-    <key alias="createOrder">Create Order</key>
-    <key alias="sales">Sales</key>
-    <key alias="saleInformation">Sale Information</key>
-    <key alias="addDateFilters">Add date filters</key>
-    <key alias="removeDateFilters">Remove date filters</key>
-    <key alias="voidPayment">Void Payment</key>
-    <key alias="refundPayment">Refund Payment</key>
-    <key alias="voidPaymentConfirmMessage">Are you sure you would like to void this payment?</key>
-    <key alias="refundMethod">Refund method</key>
-    <key alias="archiveSales">Archive Sales</key>
-    <key alias="unarchiveSales">Unarchive Sales</key>
-    <key alias="noSalesYet">You have no sales yet</key>
-    <key alias="butSoonYouWill">but soon you will!</key>
+    <key alias="resetFilters">Resetear filtros</key>
+    <key alias="invoice">Pedido</key>
+    <key alias="invoiceNumber">Pedido #</key>
+    <key alias="createOrder">Crear Pedido</key>
+    <key alias="sales">Ventas</key>
+    <key alias="saleInformation">Información de la venta</key>
+    <key alias="addDateFilters">Añadir filtros de fecha</key>
+    <key alias="removeDateFilters">Quitar filtros de fecha</key>
+    <key alias="voidPayment">Anular pago</key>
+    <key alias="refundPayment">Devolver pago</key>
+    <key alias="voidPaymentConfirmMessage">Estás seguro de que quieres anular este pago?</key>
+    <key alias="refundMethod">Método de devolución</key>
+    <key alias="archiveSales">Archivo de ventas</key>
+    <key alias="unarchiveSales">Desarchivar ventas</key>
+    <key alias="noSalesYet">Todavía no tienes ventas</key>
+    <key alias="butSoonYouWill">¡Pero pronto las tendrás!</key>
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
-    <key alias="invoiceNumber">Factura #</key>
+    <key alias="invoiceNumber">Pedido #</key>
     <key alias="customerInformation">Información del cliente</key>
     <key alias="shippingAddress">Dirección de envío</key>
     <key alias="billingAddress">Dirección de facturación</key>
@@ -203,15 +203,15 @@
     <!-- phrases -->
     <key alias="billingAndShippingAddressHelper">Direcciones de facturación y envío</key>
     <key alias="orderInformationHelper">Líneas de pedido y costes</key>
-    <key alias="captureUpTo">Capture Up To</key>
+    <key alias="captureUpTo">Cobrar hasta</key>
     <key alias="salesTax">Impuesto de venta</key>
     <key alias="authorized"> Autorizado</key>
-    <key alias="captured">Captured</key>
+    <key alias="captured">Cobrado</key>
     <key alias="paymentHistory"> Histórico de pagos</key>
     <key alias="paymentHistoryHelper">Registros de estado para uno o más pagos</key>
-    <key alias="saleHistory">Sale History</key>
-    <key alias="paymentProcessedBy">Payment processed by:</key>
-    <key alias="resetFilters">Reset Filters</key>
+    <key alias="saleHistory">Histórico de ventas</key>
+    <key alias="paymentProcessedBy">Pago procesado por:</key>
+    <key alias="resetFilters">Resetear filtros</key>
   </area>
   <area alias="merchelloWarehouse">
     <!-- things -->
@@ -221,7 +221,7 @@
     <key alias="lowCount">Bajo stock</key>
     <!-- actions -->
     <!-- phrases -->
-    <key alias="location">Location</key>
+    <key alias="location">Localización</key>
   </area>
   <area alias="merchelloShipping">
     <!-- things -->
@@ -276,32 +276,32 @@
     <key alias="select">Seleccionar</key>
     <key alias="all">Todo</key>
     <key alias="none">Ninguno</key>
-    <key alias="expired">Expired</key>
-    <key alias="jan">January</key>
-    <key alias="feb">February</key>
-    <key alias="mar">March</key>
-    <key alias="apr">April</key>
-    <key alias="may">May</key>
-    <key alias="jun">June</key>
-    <key alias="jul">July</key>
-    <key alias="aug">August</key>
-    <key alias="sep">September</key>
-    <key alias="oct">October</key>
-    <key alias="nov">November</key>
-    <key alias="dec">December</key>
-    <key alias="monday">Monday</key>
-    <key alias="tuesday">Tuesday</key>
-    <key alias="wednesday">Wednesday</key>
-    <key alias="thursday">Thursday</key>
-    <key alias="friday">Friday</key>
-    <key alias="saturday">Saturday</key>
-    <key alias="sunday">Sunday</key>
-    <key alias="day">Day</key>
-    <key alias="item">Item</key>
-    <key alias="items">Items</key>
-    <key alias="totals">Totals</key>
-    <key alias="quantity">Quantity</key>
-    <key alias="subTotal">Sub Total</key>
+    <key alias="expired">Expirado</key>
+    <key alias="jan">Enero</key>
+    <key alias="feb">Febrero</key>
+    <key alias="mar">Marzo</key>
+    <key alias="apr">Abril</key>
+    <key alias="may">Mayo</key>
+    <key alias="jun">Junio</key>
+    <key alias="jul">Julio</key>
+    <key alias="aug">Agosto</key>
+    <key alias="sep">Septiembre</key>
+    <key alias="oct">Octubre</key>
+    <key alias="nov">Noviembre</key>
+    <key alias="dec">Diciembre</key>
+    <key alias="monday">Lunes</key>
+    <key alias="tuesday">Martes</key>
+    <key alias="wednesday">Miércoles</key>
+    <key alias="thursday">Jueves</key>
+    <key alias="friday">Viernes</key>
+    <key alias="saturday">Sábado</key>
+    <key alias="sunday">Domingo</key>
+    <key alias="day">Día</key>
+    <key alias="item">Artículo</key>
+    <key alias="items">Artículos</key>
+    <key alias="totals">Totales</key>
+    <key alias="quantity">Cantidad</key>
+    <key alias="subTotal">Subtotal</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Configuración de la tienda</key>
@@ -310,16 +310,16 @@
     <key alias="dateFormat">Formato de la fecha</key>
     <key alias="startingOrderNumber">Número de pedido desde</key>
     <key alias="timeFormat">Formato horario</key>
-    <key alias="startingInvoiceNumber">Número de factura desde</key>
-    <key alias="startingShipmentNumber">Starting Shipment No.</key>
+    <key alias="startingInvoiceNumber">Número de pedido desde</key>
+    <key alias="startingShipmentNumber">Comienzo de número de envío:</key>
     <key alias="catalogDefaults">Configuración del catálogo</key>
     <key alias="catalogDefaultsHelper">Configura las opciones por defecto del producto. Puedes cambiarlo después en cada producto.</key>
     <key alias="globalTaxable">Todos los productos están sujetos a impuestos</key>
     <key alias="globalShippable">Todos los productos son enviados</key>
     <key alias="globalTrackInventory">Gestionar inventario para todos los productos y variantes</key>
     <key alias="globalShippingIsTaxable">Los gastos de envío están sujetos a impuestos</key>
-    <key alias="unitSystem">Unit System</key>
-    <key alias="globalTaxationApplication">Set how taxes are applied</key>
+    <key alias="unitSystem">Sistema métrico</key>
+    <key alias="globalTaxationApplication">Configura como aplicar los impuestos</key>
   </area>
   <area alias="merchelloShippingCountry">
     <key alias="addCountry">Añade un País</key>
@@ -347,8 +347,8 @@
     <key alias="setRange">Configurar rango</key>
     <key alias="addNewRange">Añadir un nuevo rango</key>
     <key alias="adjustIndividualRegions">Ajustar para cada región</key>
-    <key alias="region">Region</key>
-    <key alias="adjustRate">Ajustar ratio</key>
+    <key alias="region">Región</key>
+    <key alias="adjustRate">Ajustar porcentaje</key>
     <key alias="adjustBy">Ajustar en</key>
   </area>
   <area alias="merchelloShippingProvider">
@@ -360,14 +360,14 @@
   <area alias="merchelloShippingHistory">
     <key alias="shipmentHistory">Histórico de envíos</key>
     <key alias="shipmentHistoryHelper">Registros de estado para uno o más envíos</key>
-    <key alias="shipment">Shipment</key>
+    <key alias="shipment">Envío</key>
     <key alias="trackingNumber">Tracking #</key>
   </area>
   <area alias="merchelloTaxation">
     <key alias="taxation">Impuestos</key>
     <key alias="taxMethods">Métodos de gestión de impuestos</key>
     <key alias="taxMethodsHelper">Configura un impuesto para cada región</key>
-    <key alias="taxIncludeInProductPrice">Include in product pricing</key>
+    <key alias="taxIncludeInProductPrice">Incluir en precio del producto</key>
   </area>
   <area alias="merchelloNotifications">
     <key alias="notifications">Notificaciones</key>
@@ -396,7 +396,7 @@
     <key alias="merchelloNotificationsDelete_deleteNotification">Borrar un método de notificación</key>
   </area>
   <area alias="merchelloNotificationsMessage">
-    <add alias="replyTo">Reply to</add>
+    <add alias="replyTo">Contestar a</add>
     <key alias="addEditMessage">Añadir/Editar un mensaje de notificación</key>
     <key alias="attachedEvent">Evento asociado</key>
     <key alias="fromEmail"><![CDATA[Desde la dirección<small>(ej. confirmacion@tudominio.com)</small>]]></key>
@@ -413,13 +413,13 @@
   <area alias="merchelloGatewayProvider">
     <key alias="gatewayProvider">Conexión proveedores</key>
     <key alias="notificationProvider">Proveedores de notificaciones</key>
-    <key alias="notificationProviderHelper">Activate/Deactivate your Notification Providers</key>
+    <key alias="notificationProviderHelper">Activar/Desactivar tus proveedores de notificaciones</key>
     <key alias="paymentProvider">Proveedores de pagos</key>
-    <key alias="paymentProviderHelper">Activate/Deactivate your Payment Providers</key>
+    <key alias="paymentProviderHelper">Activar/Desactivar tus proveedores de pagos</key>
     <key alias="shippingProvider">Proveedores de envíos</key>
-    <key alias="shippingProviderHelper">Activate/Deactivate your Shipping Providers</key>
+    <key alias="shippingProviderHelper">Activar/Desactivar tus proveedores de envíos</key>
     <key alias="taxationProvider">Proveedores de impuestos</key>
-    <key alias="taxationProviderHelper">Activate/Deactivate your Taxation Providers</key>
+    <key alias="taxationProviderHelper">Activar/Desactivar tus proveedores de impuestos</key>
     <key alias="host">Servidor</key>
     <key alias="username">Usuario</key>
     <key alias="password">Contraseña</key>
@@ -465,61 +465,61 @@
     <key alias="selectProduct">Selecciona un producto...</key>
     <key alias="selectMerchelloProduct">Selecciona un producto de Merchello</key>
     <key alias="selectYourProduct">Selecciona tu producto</key>
-    <key alias="toggleAvailable">Toggle Available</key>
-    <key alias="toggleOnSale">Toggle On Sale</key>
-    <key alias="removeProduct">Disconnect This Product</key>
-    <key alias="itemLocation">Item Location</key>
+    <key alias="toggleAvailable">Cambia la disponibilidad</key>
+    <key alias="toggleOnSale">Cambia si está en venta</key>
+    <key alias="removeProduct">Desconectar este producto</key>
+    <key alias="itemLocation">Localización del artículo</key>
   </area>
   <area alias="merchelloAuditLogs">
-    <key alias="notificationShipping">Shipping confirmation email sent to %0%</key>
-    <key alias="notificationSalesConfirmation">Sales confirmation email sent to %0%</key>
-    <key alias="paymentCaptured">We successfully captured %0% %1%</key>
-    <key alias="paymentAuthorize">We were authorized to capture %0% %1%</key>
-    <key alias="paymentVoided">Payment was voided</key>
-    <key alias="paymentDeclined">Payment was declined</key>
-    <key alias="paymentRefunded">We refunded %0% %1% of a payment</key>
-    <key alias="invoiceDeleted">Invoice %0% was deleted</key>
-    <key alias="paymentDeleted">Payment was deleted</key>
-    <key alias="invoiceCreated">Sale was made. Invoice %0%</key>
-    <key alias="invoiceStatusChanged">Invoice was marked %0%</key>
-    <key alias="orderCreated">Order %0% was created</key>
-    <key alias="shipmentCreated">Shipment was created with %0% line items</key>
-    <key alias="shipmentStatusChanged">Shipment status was changed to %0%</key>
+    <key alias="notificationShipping">Enviado email de confirmación de envío a %0%</key>
+    <key alias="notificationSalesConfirmation">Enviado email de confirmación de venta a %0%</key>
+    <key alias="paymentCaptured">Hemos cobrado con éxito %0% %1%</key>
+    <key alias="paymentAuthorize">Hemos autorizado con existo cobrar %0% %1%</key>
+    <key alias="paymentVoided">El pago ha sido anulado</key>
+    <key alias="paymentDeclined">El pago ha sido denegado</key>
+    <key alias="paymentRefunded">Hemos hecho una devolución de %0% %1% del pago</key>
+    <key alias="invoiceDeleted">El pedido %0% ha sido eliminado</key>
+    <key alias="paymentDeleted">El pago ha sido eliminado</key>
+    <key alias="invoiceCreated">Se ha hecho una venta. Pedido %0%</key>
+    <key alias="invoiceStatusChanged">El pedido ha sido actualizado %0%</key>
+    <key alias="orderCreated">El pedido %0% ha sido creado</key>
+    <key alias="shipmentCreated">Se ha creado un envío con %0% artículos</key>
+    <key alias="shipmentStatusChanged">Se ha cambiado el envío a %0%</key>
   </area>
   <area alias="merchelloMarketing">
-    <key alias="campaigns">Marketing Campaigns</key>
-    <key alias="activities">Activities</key>
-    <key alias="btnNewCampaign">New Campaign</key>
-    <key alias="btnDeleteCampaign">Delete</key>
-    <key alias="enterCampaignName">Enter a name for the campaign</key>
-    <key alias="campaignInfo">Campaign Settings</key>
-    <key alias="configCampaign">Configure this marketing campaign</key>
-    <key alias="isActive">Is active</key>
-    <key alias="currentOffers">Current Offers</key>
-    <key alias="offerCode">Offer Code</key>
-    <key alias="newOffer">New Offer</key>
-    <key alias="noOffer">No current offers</key>
-    <key alias="newOfferPrompt">You have not offered your customers any special offers.  Why not create one?</key>
-    <key alias="offerInfo">Offer Settings</key>
-    <key alias="configOffer">Configure this offer</key>
-    <key alias="offerType">Type of Offer</key>
-    <key alias="mustUniqueOfferCode">Offer codes must be unique.</key>
-    <key alias="offerSetExpires">This offer is only valid for specific dates.</key>
-    <key alias="offerNeverExpires">Does not expire.</key>
-    <key alias="offerValidDates">Offer Valid Dates</key>
-    <key alias="offerValidDatesInfo">Set the dates for which this offer is valid.</key>
-    <key alias="offerConstraintsInfo">Constraints</key>
-    <key alias="offerConstraintsConfig">Configure constraints associated with this offer.</key>
-    <key alias="offerRewardsInfo">Rewards</key>
-    <key alias="offerRewardsConfig">Configure rewards associated with this offer.</key>
+    <key alias="campaigns">Campañas de Marketing</key>
+    <key alias="activities">Actividad</key>
+    <key alias="btnNewCampaign">Nueva Campaña</key>
+    <key alias="btnDeleteCampaign">Borrar</key>
+    <key alias="enterCampaignName">Introduce un nombre para la campaña</key>
+    <key alias="campaignInfo">Configuración de la campaña</key>
+    <key alias="configCampaign">Configura esta campaña</key>
+    <key alias="isActive">Está activa</key>
+    <key alias="currentOffers">Ofertas</key>
+    <key alias="offerCode">Código de la oferta</key>
+    <key alias="newOffer">Nueva oferta</key>
+    <key alias="noOffer">No se han encontrado ofertas</key>
+    <key alias="newOfferPrompt">No has ofrecido a tus clientes ninguna oferta, por qué no crear una ahora?</key>
+    <key alias="offerInfo">Configuración de la oferta</key>
+    <key alias="configOffer">Configura esta oferta</key>
+    <key alias="offerType">Tipo de oferta</key>
+    <key alias="mustUniqueOfferCode">Los códigos de oferta tienen que ser únicos.</key>
+    <key alias="offerSetExpires">Esta oferta sólo es válida para determinadas fechas.</key>
+    <key alias="offerNeverExpires">Esta oferta no acaba nunca.</key>
+    <key alias="offerValidDates">Fechas válidas para la oferta</key>
+    <key alias="offerValidDatesInfo">Configura las fechas para las que es válida la oferta.</key>
+    <key alias="offerConstraintsInfo">Restricciones</key>
+    <key alias="offerConstraintsConfig">Configura restricciones para esta oferta.</key>
+    <key alias="offerRewardsInfo">Recompensas</key>
+    <key alias="offerRewardsConfig">Configura recompensas para esta oferta.</key>
   </area>
   <area alias="merchelloFulfillShipment">
     <!-- phrases -->
-    <key alias="fulfillManually">Fulfill Manually</key>
-    <key alias="createShipment">Create Shipment</key>
+    <key alias="fulfillManually">Enviar manualmente</key>
+    <key alias="createShipment">Crear envío</key>
   </area>
   <area alias="merchelloDelete">
-    <key alias="deleteConfirmation">Delete Confirmation</key>
-    <key alias="deleteConfirmMessage">Are you sure you want to remove the item </key>
+    <key alias="deleteConfirmation">Confirmación de borrado</key>
+    <key alias="deleteConfirmMessage">Estás seguro de que quieres eliminar este elemento?</key>
   </area>
 </language>
