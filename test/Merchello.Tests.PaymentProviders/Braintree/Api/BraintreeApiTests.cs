@@ -3,6 +3,7 @@
     using System;
 
     using global::Braintree;
+
     using Merchello.Providers.Payment.Braintree;
     using Merchello.Providers.Payment.Braintree.Services;
     using Merchello.Tests.PaymentProviders.Braintree.TestHelpers;

@@ -276,9 +276,9 @@
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
       <Name>Merchello.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Merchello.Providers.Payment\Merchello.Providers.Payment.csproj">
-      <Project>{185b4de5-f2cf-412b-a1ad-ec5163a5d2ba}</Project>
-      <Name>Merchello.Providers.Payment</Name>
+    <ProjectReference Include="..\..\src\Merchello.Providers\Merchello.Providers.csproj">
+      <Project>{6ab9b56e-91d1-400c-8977-b343f59702be}</Project>
+      <Name>Merchello.Providers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>

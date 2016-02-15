@@ -33,8 +33,8 @@ install:
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello
   - ps: cd  ..\..
-  - cmd: ECHO Changing directory to Merchello.Providers.Payment.UI.Client
-  - ps: cd src\Merchello.Providers.Payment.UI.Client
+  - cmd: ECHO Changing directory to Merchello.Providers.UI.Client
+  - ps: cd src\Merchello.Providers.UI.Client
   - npm install
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello

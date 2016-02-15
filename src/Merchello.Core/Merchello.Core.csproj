@@ -300,7 +300,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
-    <Compile Include="AutoMapperMappings.cs" />
     <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
     <Compile Include="Chains\ConfigurationChainBase.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityAttemptChainBase{T}.cs" />
