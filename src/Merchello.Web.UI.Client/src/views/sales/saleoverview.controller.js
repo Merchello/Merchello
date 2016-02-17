@@ -232,6 +232,7 @@
                 if($scope.payments.length === 0) {
                     var promise = paymentGatewayProviderResource.getAvailablePaymentMethods();
                     promise.then(function(methods) {
+                        console.info(methods);
                         $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
                         $scope.preValuesLoaded = true;
                         $scope.paymentMethodsLoaded = true;

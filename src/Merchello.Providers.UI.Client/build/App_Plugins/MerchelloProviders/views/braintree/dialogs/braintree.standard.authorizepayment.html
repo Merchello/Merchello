@@ -1,0 +1,80 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Providers.Dialogs.BraintreeStandardAuthorizeCapturePaymentController">
+    <div class="umb-modalcolumn-header">
+        <h4>Authorize {{dialogData.paymentMethodName}} Payment</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer" data-ng-show="loaded">
+        <form name="authCaptureForm" id="authCaptureForm">
+            <div class="control-group row-fluid">
+                <p>
+                    <localize key="merchelloOrder_processedBy" />: <strong>{{dialogData.paymentMethodName}}</strong><br />
+                </p>
+                <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
+                    <p class="text-warning">{{ dialogData.warning }}</p>
+                </div>
+                <div class="input-prepend col-xs-12 span12">
+                    <span class="add-on">{{dialogData.currencySymbol}}</span>
+                    <input class="col-xs-4 span4" type="text" name="amount" data-ng-model="dialogData.amount">
+                </div>
+                <div class="error" data-ng-show="authCaptureForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: dialogData.currencySymbol }} & {{ dialogData.invoiceBalance | currency: dialogData.currencySymbol }}.</div>
+            </div>
+            <div class="control-group row-fluid">
+                <label class="control-label">*Card Holder Name</label>
+                <div class="controls">
+                    <input class="span8" name="cardholderName" type="text" data-ng-model="cardholderName" required value="" placeholder="Card Holder Name">
+                    <div class="error" data-ng-show="authCaptureForm.cardholderName.$invalid && wasFormSubmitted">Card Holder Name is Required.</div>
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <label class="control-label">*Credit Card Number</label>
+                <div class="controls">
+                    <input class="span8" name="cardNumber" type="text" data-ng-model="cardNumber" required value="" placeholder="Credit Card Number">
+                    <div class="error" data-ng-show="authCaptureForm.cardNumber.$invalid && wasFormSubmitted">Credit Card Number is Required.</div>
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <div class="controls">
+                    <label class="control-label">Expiration Date</label>
+                    <select ng-init="selectedMonth = months[0]" ng-model="selectedMonth" data-ng-options="option.monthName for option in months" class="span4"></select>
+
+                    <select data-ng-init="expirationYear = years[0]" data-ng-model="expirationYear" data-ng-options="option for option in years"  class="span3"></select>
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <label class="control-label">*CVV</label>
+                <div class="controls">
+                    <input type="text" name="cvv" data-ng-model="cvv" value="" class="span3" required placeholder="CVV">
+                    <div class="error" data-ng-show="authCaptureForm.cvv.$invalid && wasFormSubmitted">CVV is Required.</div>
+                </div>
+            </div>
+            <div class="control-group row-fluid">
+                <label class="control-label">*Zip/Postal Code</label>
+                <div class="controls">
+                    <input type="text" name="postalCode" data-ng-model="postalCode" value="" required placeholder="Postal Code">
+                    <div class="error" data-ng-show="authCaptureForm.postalCode.$invalid && wasFormSubmitted">Postal Code is Required.</div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="umb-panel-footer" data-ng-show="loaded">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="save(dialogData)">
+                    <localize key="merchelloOrder_processPayment" />
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="pager" data-ng-show="!loaded">
+        <img src="/umbraco/assets/img/loader.gif" />
+    </div>
+</div>

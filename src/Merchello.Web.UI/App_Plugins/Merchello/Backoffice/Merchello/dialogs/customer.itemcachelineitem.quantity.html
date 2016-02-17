@@ -1,0 +1,23 @@
+<div class="umb-panel merchello-side-panel">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="actions_update"></localize> <localize key="merchelloGeneral_quantity"></localize></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <div class="form-group row-fluid">
+            <label for="quantity"><localize key="merchelloGeneral_quantity"></localize></label>
+            <input name="quantity" type="number" data-ng-model="dialogData.lineItem.quantity"  />
+        </div>
+    </div>
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                <!-- ACTION: Submit DialogData -->
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)">Save</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

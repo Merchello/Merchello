@@ -71,6 +71,11 @@
                  controller => controller.GetByEntityKey(Guid.Empty)));
 
             merchelloUrls.Add(
+             "merchelloBackOfficeCheckoutApiBaseUrl",
+              url.GetUmbracoApiServiceBaseUrl<BackOfficeCheckoutApiController>(
+                  controller => controller.GetPaymentMethods()));
+
+            merchelloUrls.Add(
                 "merchelloCustomerApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<CustomerApiController>(
                 controller => controller.SearchCustomers(new QueryDisplay()
