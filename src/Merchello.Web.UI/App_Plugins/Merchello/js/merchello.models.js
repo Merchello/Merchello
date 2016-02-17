@@ -1,6 +1,6 @@
-/*! merchello
+/*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2016 Merchello;
+ * Copyright (c) 2016 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -456,6 +456,24 @@ angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
 
     angular.module('merchello.models').constant('TypeFieldDisplay', TypeFieldDisplay);
 
+var AddToItemCacheInstruction = function() {
+    var self = this;
+    self.customerKey = '';
+    self.items = [];
+    self.itemCacheType = '';
+};
+
+angular.module('merchello.models').constant('AddToItemCacheInstruction', AddToItemCacheInstruction);
+
+var ItemCacheInstruction = function() {
+    var self = this;
+    self.customerKey = '';
+    self.entityKey = '';
+    self.quantity = 0;
+    self.itemCacheType = '';
+};
+
+angular.module('merchello.models').constant('ItemCacheInstruction', ItemCacheInstruction);
 /**
  * @ngdoc model
  * @name EntityCollectionDisplay
@@ -3982,6 +4000,40 @@ angular.module('merchello.models').factory('backOfficeTreeDisplayBuilder',
             }
         };
     }]);
+
+angular.module('merchello.models').factory('addToItemCacheInstructionBuilder',
+    ['genericModelBuilder', 'AddToItemCacheInstruction',
+        function(genericModelBuilder, AddToItemCacheInstruction) {
+
+
+            var Constructor = AddToItemCacheInstruction;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+        }]);
+
+angular.module('merchello.models').factory('itemCacheInstructionBuilder',
+    ['genericModelBuilder', 'ItemCacheInstruction',
+    function(genericModelBuilder, ItemCacheInstruction) {
+
+
+            var Constructor = ItemCacheInstruction;
+
+            return {
+                createDefault: function() {
+                    return new Constructor();
+                },
+                transform: function(jsonResult) {
+                    return genericModelBuilder.transform(jsonResult, Constructor);
+                }
+            };
+}]);
 
 /**
  * @ngdoc service

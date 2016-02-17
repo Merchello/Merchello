@@ -33,9 +33,8 @@
         /// </returns>
         protected override UmbContentTypeDisplay ResolveCore(IDetachedContentType source)
         {
-            // TODO change this to GetByKey in Umbraco 7.3.0
             var contentType =
-                _contentTypeService.GetAllContentTypes().FirstOrDefault(x => x.Key == source.ContentTypeKey);
+                 _contentTypeService.GetAllContentTypes().FirstOrDefault(x => x.Key == source.ContentTypeKey);
 
             return contentType != null ? contentType.ToUmbContentTypeDisplay() : new UmbContentTypeDisplay() { AllowedTemplates = Enumerable.Empty<UmbTemplateDisplay>() };
         }

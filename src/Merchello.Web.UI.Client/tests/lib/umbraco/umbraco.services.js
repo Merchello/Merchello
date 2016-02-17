@@ -1,6 +1,6 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
- * Copyright (c) 2014 Umbraco HQ;
+ * Copyright (c) 2016 Umbraco HQ;
  * Licensed MIT
  */
 
@@ -209,7 +209,8 @@ function appState(eventsService) {
         showTray: null,
         stickyNavigation: null,
         navMode: null,
-        isReady: null
+        isReady: null,
+        isTablet: null
     };
     
     var sectionState = {
@@ -507,27 +508,36 @@ angular.module('umbraco.services')
 .factory('assetsService', function ($q, $log, angularHelper, umbRequestHelper, $rootScope, $http) {
 
     var initAssetsLoaded = false;
-    var appendRnd = function(url){
+    var appendRnd = function (url) {
         //if we don't have a global umbraco obj yet, the app is bootstrapping
-        if(!Umbraco.Sys.ServerVariables.application){
+        if (!Umbraco.Sys.ServerVariables.application) {
             return url;
         }
 
-        var rnd = Umbraco.Sys.ServerVariables.application.version +"."+Umbraco.Sys.ServerVariables.application.cdf;
-        var _op = (url.indexOf("?")>0) ? "&" : "?";
+        var rnd = Umbraco.Sys.ServerVariables.application.version + "." + Umbraco.Sys.ServerVariables.application.cdf;
+        var _op = (url.indexOf("?") > 0) ? "&" : "?";
         url = url + _op + "umb__rnd=" + rnd;
         return url;
     };
 
+    function convertVirtualPath(path) {
+        //make this work for virtual paths
+        if (path.startsWith("~/")) {
+            path = umbRequestHelper.convertVirtualToAbsolutePath(path);
+        }
+        return path;
+    }
+
     var service = {
-        loadedAssets:{},
-        
-        _getAssetPromise : function(path){
-            if(this.loadedAssets[path]){
+        loadedAssets: {},
+
+        _getAssetPromise: function (path) {
+
+            if (this.loadedAssets[path]) {
                 return this.loadedAssets[path];
-            }else{
+            } else {
                 var deferred = $q.defer();
-                this.loadedAssets[path] = {deferred: deferred, state: "new", path: path};
+                this.loadedAssets[path] = { deferred: deferred, state: "new", path: path };
                 return this.loadedAssets[path];
             }
         },
@@ -540,7 +550,7 @@ angular.module('umbraco.services')
             //here we need to ensure the required application assets are loaded
             if (initAssetsLoaded === false) {
                 var self = this;
-                self.loadJs(umbRequestHelper.getApiUrl("serverVarsJs", "", ""), $rootScope).then(function() {
+                self.loadJs(umbRequestHelper.getApiUrl("serverVarsJs", "", ""), $rootScope).then(function () {
                     initAssetsLoaded = true;
 
                     //now we need to go get the legacyTreeJs - but this can be done async without waiting.
@@ -569,30 +579,33 @@ angular.module('umbraco.services')
          * @param {Number} timeout in milliseconds
          * @returns {Promise} Promise object which resolves when the file has loaded
          */
-         loadCss : function(path, scope, attributes, timeout){
-             var asset = this._getAssetPromise(path); // $q.defer();
-             var t = timeout || 5000;
-             var a = attributes || undefined;
-             
-             if(asset.state === "new"){
-                 asset.state = "loading";
-                 LazyLoad.css(appendRnd(path), function () {
-                   if (!scope) {
-                       asset.state = "loaded";  
-                       asset.deferred.resolve(true);
-                   }else{
-                       asset.state = "loaded";    
-                       angularHelper.safeApply(scope, function () {
-                           asset.deferred.resolve(true);
-                       });
-                   }
-                 });    
-             }else if(asset.state === "loaded"){
-                 asset.deferred.resolve(true);
-             }
-             return asset.deferred.promise;
-         },
-        
+        loadCss: function (path, scope, attributes, timeout) {
+
+            path = convertVirtualPath(path);
+
+            var asset = this._getAssetPromise(path); // $q.defer();
+            var t = timeout || 5000;
+            var a = attributes || undefined;
+
+            if (asset.state === "new") {
+                asset.state = "loading";
+                LazyLoad.css(appendRnd(path), function () {
+                    if (!scope) {
+                        asset.state = "loaded";
+                        asset.deferred.resolve(true);
+                    } else {
+                        asset.state = "loaded";
+                        angularHelper.safeApply(scope, function () {
+                            asset.deferred.resolve(true);
+                        });
+                    }
+                });
+            } else if (asset.state === "loaded") {
+                asset.deferred.resolve(true);
+            }
+            return asset.deferred.promise;
+        },
+
         /**
          * @ngdoc method
          * @name umbraco.services.assetsService#loadJs
@@ -607,28 +620,30 @@ angular.module('umbraco.services')
          * @param {Number} timeout in milliseconds
          * @returns {Promise} Promise object which resolves when the file has loaded
          */
-        loadJs : function(path, scope, attributes, timeout){
-            
+        loadJs: function (path, scope, attributes, timeout) {
+
+            path = convertVirtualPath(path);
+
             var asset = this._getAssetPromise(path); // $q.defer();
             var t = timeout || 5000;
             var a = attributes || undefined;
-            
-            if(asset.state === "new"){
+
+            if (asset.state === "new") {
                 asset.state = "loading";
 
                 LazyLoad.js(appendRnd(path), function () {
-                  if (!scope) {
-                      asset.state = "loaded";  
-                      asset.deferred.resolve(true);
-                  }else{
-                      asset.state = "loaded";  
-                      angularHelper.safeApply(scope, function () {
-                          asset.deferred.resolve(true);
-                      });
-                  }
+                    if (!scope) {
+                        asset.state = "loaded";
+                        asset.deferred.resolve(true);
+                    } else {
+                        asset.state = "loaded";
+                        angularHelper.safeApply(scope, function () {
+                            asset.deferred.resolve(true);
+                        });
+                    }
                 });
 
-            }else if(asset.state === "loaded"){
+            } else if (asset.state === "loaded") {
                 asset.deferred.resolve(true);
             }
 
@@ -655,7 +670,7 @@ angular.module('umbraco.services')
                 throw "pathArray must be an array";
             }
 
-            var nonEmpty = _.reject(pathArray, function(item) {
+            var nonEmpty = _.reject(pathArray, function (item) {
                 return item === undefined || item === "";
             });
 
@@ -667,12 +682,14 @@ angular.module('umbraco.services')
 
                 //compile a list of promises
                 //blocking
-                _.each(nonEmpty, function(path){
+                _.each(nonEmpty, function (path) {
+
+                    path = convertVirtualPath(path);
+
                     var asset = service._getAssetPromise(path);
                     //if not previously loaded, add to list of promises
-                    if(asset.state !== "loaded")
-                    {
-                        if(asset.state === "new"){
+                    if (asset.state !== "loaded") {
+                        if (asset.state === "new") {
                             asset.state = "loading";
                             assets.push(asset);
                         }
@@ -686,21 +703,22 @@ angular.module('umbraco.services')
 
                 //gives a central monitoring of all assets to load
                 promise = $q.all(promises);
-                
-                _.each(assets, function(asset){
+
+                _.each(assets, function (asset) {
                     LazyLoad.js(appendRnd(asset.path), function () {
-                      if (!scope) {
-                          asset.state = "loaded";  
-                          asset.deferred.resolve(true);
-                      }else{
-                          asset.state = "loaded";    
-                          angularHelper.safeApply(scope, function () {
-                              asset.deferred.resolve(true);
-                          });
-                      }
-                    });    
+                        asset.state = "loaded";
+                        if (!scope) {
+                            asset.deferred.resolve(true);
+                        }
+                        else {
+                            angularHelper.safeApply(scope, function () {
+                                asset.deferred.resolve(true);
+                            });
+                        }
+                    });
                 });
-            }else{
+            }
+            else {
                 //return and resolve
                 var deferred = $q.defer();
                 promise = deferred.promise;
@@ -718,13 +736,32 @@ angular.module('umbraco.services')
 /**
 * @ngdoc service
 * @name umbraco.services.contentEditingHelper
-* @description A helper service for most editors, some methods are specific to content/media/member model types but most are used by 
+* @description A helper service for most editors, some methods are specific to content/media/member model types but most are used by
 * all editors to share logic and reduce the amount of replicated code among editors.
 **/
 function contentEditingHelper(fileManager, $q, $location, $routeParams, notificationsService, serverValidationManager, dialogService, formHelper, appState, keyboardService) {
 
+    function isValidIdentifier(id){
+        //empty id <= 0
+        if(angular.isNumber(id) && id > 0){
+            return true;
+        }
+
+        //empty guid
+        if(id === "00000000-0000-0000-0000-000000000000"){
+            return false;
+        }
+
+        //empty string / alias
+        if(id === ""){
+            return false;
+        }
+
+        return true;
+    }
+
     return {
-        
+
         /** Used by the content editor and mini content editor to perform saving operations */
         contentEditorPerformSave: function (args) {
             if (!angular.isObject(args)) {
@@ -746,7 +783,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
             var self = this;
 
             var deferred = $q.defer();
-            
+
             if (!args.scope.busy && formHelper.submitForm({ scope: args.scope, statusMessage: args.statusMessage })) {
 
                 args.scope.busy = true;
@@ -771,6 +808,12 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                             err: err,
                             rebindCallback: self.reBindChangedProperties(args.content, err.data)
                         });
+                        //show any notifications
+                        if (angular.isArray(err.data.notifications)) {
+                            for (var i = 0; i < err.data.notifications.length; i++) {
+                                notificationsService.showNotification(err.data.notifications[i]);
+                            }
+                        }
                         args.scope.busy = false;
                         deferred.reject(err);
                     });
@@ -781,9 +824,9 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
 
             return deferred.promise;
         },
-        
+
         /** Returns the action button definitions based on what permissions the user has.
-        The content.allowedActions parameter contains a list of chars, each represents a button by permission so 
+        The content.allowedActions parameter contains a list of chars, each represents a button by permission so
         here we'll build the buttons according to the chars of the user. */
         configureContentEditorButtons: function (args) {
 
@@ -846,7 +889,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                             handler: args.methods.unPublish
                         };
                     default:
-                        return null; 
+                        return null;
                 }
             }
 
@@ -870,8 +913,8 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
 
             //Now we need to make the drop down button list, this is also slightly tricky because:
             //We cannot have any buttons if there's no default button above.
-            //We cannot have the unpublish button (Z) when there's no publish permission.    
-            //We cannot have the unpublish button (Z) when the item is not published.           
+            //We cannot have the unpublish button (Z) when there's no publish permission.
+            //We cannot have the unpublish button (Z) when the item is not published.
             if (buttons.defaultButton) {
 
                 //get the last index of the button order
@@ -884,7 +927,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                 }
 
 
-                //if we are not creating, then we should add unpublish too, 
+                //if we are not creating, then we should add unpublish too,
                 // so long as it's already published and if the user has access to publish
                 if (!args.create) {
                     if (args.content.publishDate && _.contains(args.content.allowedActions, "U")) {
@@ -945,13 +988,13 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                         }
                     }
                 }
-                
+
                 actions.push(defaultAction);
 
                 //Now we need to make the drop down button list, this is also slightly tricky because:
                 //We cannot have any buttons if there's no default button above.
-                //We cannot have the unpublish button (Z) when there's no publish permission.    
-                //We cannot have the unpublish button (Z) when the item is not published.           
+                //We cannot have the unpublish button (Z) when there's no publish permission.
+                //We cannot have the unpublish button (Z) when the item is not published.
                 if (defaultAction) {
                     //get the last index of the button order
                     var lastIndex = _.indexOf(actionOrder, defaultAction);
@@ -963,7 +1006,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                         }
                     }
 
-                    //if we are not creating, then we should add unpublish too, 
+                    //if we are not creating, then we should add unpublish too,
                     // so long as it's already published and if the user has access to publish
                     if (!creating) {
                         if (content.publishDate && _.contains(content.allowedActions,"U")) {
@@ -1039,7 +1082,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
             var allOrigProps = this.getAllProps(origContent);
             var allNewProps = this.getAllProps(savedContent);
 
-            function getNewProp(alias) {                
+            function getNewProp(alias) {
                 return _.find(allNewProps, function (item) {
                     return item.alias === alias;
                 });
@@ -1053,12 +1096,12 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
             };
             //check for changed built-in properties of the content
             for (var o in origContent) {
-                
+
                 //ignore the ones listed in the array
                 if (shouldIgnore(o)) {
                     continue;
                 }
-                
+
                 if (!_.isEqual(origContent[o], savedContent[o])) {
                     origContent[o] = savedContent[o];
                 }
@@ -1072,8 +1115,8 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                     //they have changed so set the origContent prop to the new one
                     var origVal = allOrigProps[p].value;
                     allOrigProps[p].value = newProp.value;
-                    
-                    //instead of having a property editor $watch their expression to check if it has 
+
+                    //instead of having a property editor $watch their expression to check if it has
                     // been updated, instead we'll check for the existence of a special method on their model
                     // and just call it.
                     if (angular.isFunction(allOrigProps[p].onValueChanged)) {
@@ -1098,7 +1141,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
          * A function to handle what happens when we have validation issues from the server side
          */
         handleSaveError: function (args) {
-             
+
             if (!args.err) {
                 throw "args.err cannot be null";
             }
@@ -1112,7 +1155,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
             if (args.err.status === 400) {
                 //now we need to look through all the validation errors
                 if (args.err.data && (args.err.data.ModelState)) {
-                    
+
                     //wire up the server validation errs
                     formHelper.handleServerValidation(args.err.data.ModelState);
 
@@ -1124,7 +1167,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
                         if (args.rebindCallback && angular.isFunction(args.rebindCallback)) {
                             args.rebindCallback();
                         }
-                        
+
                         serverValidationManager.executeAndClearAllSubscriptions();
                     }
 
@@ -1163,7 +1206,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
             }
 
             if (!this.redirectToCreatedContent(args.redirectId ? args.redirectId : args.savedContent.id)) {
-                
+
                 //we are not redirecting because this is not new content, it is existing content. In this case
                 // we need to detect what properties have changed and re-bind them with the server data.
                 //call the callback
@@ -1181,14 +1224,14 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
          *
          * @description
          * Changes the location to be editing the newly created content after create was successful.
-         * We need to decide if we need to redirect to edito mode or if we will remain in create mode. 
-         * We will only need to maintain create mode if we have not fulfilled the basic requirements for creating an entity which is at least having a name.
+         * We need to decide if we need to redirect to edito mode or if we will remain in create mode.
+         * We will only need to maintain create mode if we have not fulfilled the basic requirements for creating an entity which is at least having a name and ID
          */
         redirectToCreatedContent: function (id, modelState) {
 
             //only continue if we are currently in create mode and if there is no 'Name' modelstate errors
             // since we need at least a name to create content.
-            if ($routeParams.create && (!modelState || !modelState["Name"])) {
+            if ($routeParams.create && (isValidIdentifier(id) && (!modelState || !modelState["Name"]))) {
 
                 //need to change the location to not be in 'create' mode. Currently the route will be something like:
                 // /belle/#/content/edit/1234?doctype=newsArticle&create=true
@@ -1197,7 +1240,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
 
                 //clear the query strings
                 $location.search("");
-                
+
                 //change to new path
                 $location.path("/" + $routeParams.section + "/" + $routeParams.tree  + "/" + $routeParams.method + "/" + id);
                 //don't add a browser history for this
@@ -1209,6 +1252,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
     };
 }
 angular.module('umbraco.services').factory('contentEditingHelper', contentEditingHelper);
+
 /**
 * @ngdoc service
 * @name umbraco.services.cropperHelper
@@ -1891,7 +1935,7 @@ angular.module('umbraco.services')
 
         /**
         * @ngdoc method
-        * @name umbraco.services.dialogService#ysodDialog
+        * @name umbraco.services.dialogService#embedDialog
         * @methodOf umbraco.services.dialogService
         * @description
         * Opens a dialog to an embed dialog 
@@ -1914,12 +1958,19 @@ angular.module('umbraco.services')
             var newScope = $rootScope.$new();
             newScope.error = ysodError;
             return openDialog({
-                modalClass: "umb-modal wide",
+                modalClass: "umb-modal wide ysod",
                 scope: newScope,
                 //callback: options.callback,
                 template: 'views/common/dialogs/ysod.html',
                 show: true
             });
+        },
+
+        confirmDialog: function (ysodError) {
+
+            options.template = 'views/common/dialogs/confirm.html';
+            options.show = true;
+            return openDialog(options);
         }
     };
 });
@@ -2264,7 +2315,7 @@ angular.module('umbraco.services').factory('formHelper', formHelper);
 angular.module('umbraco.services')
 	.factory('gridService', function ($http, $q){
 
-		var configPath = "../config/grid.editors.config.js";
+	    var configPath = Umbraco.Sys.ServerVariables.umbracoUrls.gridConfig;
         var service = {
 			getGridEditors: function () {
 				return $http.get(configPath);
@@ -3026,122 +3077,126 @@ angular.module('umbraco.services')
 }]);
 angular.module('umbraco.services')
 .factory('localizationService', function ($http, $q, eventsService, $window, $filter, userService) {
-        var service = {
-            // array to hold the localized resource string entries
-            dictionary:[],
-            // location of the resource file
-            url: "js/language.aspx",
-            // flag to indicate if the service hs loaded the resource file
-            resourceFileLoaded:false,
 
-            // success handler for all server communication
-            successCallback:function (data) {
-                // store the returned array in the dictionary
-                service.dictionary = data;
-                // set the flag that the resource are loaded
-                service.resourceFileLoaded = true;
-                // broadcast that the file has been loaded
-                eventsService.emit("localizationService.updated", data);
-            },
+    var url = "LocalizedText";
+    var resourceFileLoadStatus = "none";
+    var resourceLoadingPromise = [];
 
-            // allows setting of language on the fly
-            setLanguage: function(value) {
-                service.initLocalizedResources();
-            },
+    function _lookup(value, tokens, dictionary) {
 
-            // allows setting of resource url on the fly
-            setUrl: function(value) {
-                service.url = value;
-                service.initLocalizedResources();
-            },
+        //strip the key identifier if its there
+        if (value && value[0] === "@") {
+            value = value.substring(1);
+        }
 
-            // loads the language resource file from the server
-            initLocalizedResources:function () {
-                var deferred = $q.defer();
-                // build the url to retrieve the localized resource file
-                $http({ method:"GET", url:service.url, cache:false })
-                    .then(function(response){
-                        service.resourceFileLoaded = true;
-                        service.dictionary = response.data;
+        //if no area specified, add general_
+        if (value && value.indexOf("_") < 0) {
+            value = "general_" + value;
+        }
 
-                        eventsService.emit("localizationService.updated", service.dictionary);
-
-                        return deferred.resolve(service.dictionary);
-                    }, function(err){
-                        return deferred.reject("Something broke");
-                    });
-                return deferred.promise;
-            },
-
-            //helper to tokenize and compile a localization string
-            tokenize: function(value,scope) {
-                if (value) {
-                    var localizer = value.split(':');
-                    var retval = { tokens: undefined, key: localizer[0].substring(0) };
-                    if (localizer.length > 1) {
-                        retval.tokens = localizer[1].split(',');
-                        for (var x = 0; x < retval.tokens.length; x++) {
-                            retval.tokens[x] = scope.$eval(retval.tokens[x]);
-                        }
-                    }
-
-                    return retval;
+        var entry = dictionary[value];
+        if (entry) {
+            if (tokens) {
+                for (var i = 0; i < tokens.length; i++) {
+                    entry = entry.replace("%" + i + "%", tokens[i]);
                 }
-                return value;
-            },
-
-            // checks the dictionary for a localized resource string
-            localize: function(value,tokens) {
-                var deferred = $q.defer();
-
-                if(service.resourceFileLoaded){
-                    var val = service._lookup(value,tokens);
-                    deferred.resolve(val);
-                }else{
-                    service.initLocalizedResources().then(function(dic){
-                           var val = service._lookup(value,tokens);
-                           deferred.resolve(val); 
-                    });
-                }
-
-                return deferred.promise;
-            },
-            _lookup: function(value,tokens){
-
-                //strip the key identifier if its there
-                if(value && value[0] === "@"){
-                    value = value.substring(1);
-                }
-
-                //if no area specified, add general_
-                if(value && value.indexOf("_") < 0){
-                    value = "general_" + value;
-                }
-
-                var entry = service.dictionary[value];
-                if(entry){
-                    if(tokens){
-                        for (var i = 0; i < tokens.length; i++) {
-                            entry = entry.replace("%"+i+"%", tokens[i]);
-                        }    
-                    }
-                    return entry;
-                }
-                return "[" + value + "]";
             }
-        };
+            return entry;
+        }
+        return "[" + value + "]";
+    }
 
-        // force the load of the resource file
-        service.initLocalizedResources();
+    var service = {
+        // array to hold the localized resource string entries
+        dictionary: [],
 
-        //This happens after login / auth and assets loading
-        eventsService.on("app.authenticated", function(){
-            service.resourceFileLoaded = false;
-        });
+        // loads the language resource file from the server
+        initLocalizedResources: function () {
+            var deferred = $q.defer();
 
-        // return the local instance when called
-        return service;
+            //if the resource is already loading, we don't want to force it to load another one in tandem, we'd rather
+            // wait for that initial http promise to finish and then return this one with the dictionary loaded
+            if (resourceFileLoadStatus === "loading") {
+                //add to the list of promises waiting
+                resourceLoadingPromise.push(deferred);
+
+                //exit now it's already loading
+                return deferred.promise;
+            }
+
+            resourceFileLoadStatus = "loading";
+
+            // build the url to retrieve the localized resource file
+            $http({ method: "GET", url: url, cache: false })
+                .then(function (response) {
+                    resourceFileLoadStatus = "loaded";
+                    service.dictionary = response.data;
+
+                    eventsService.emit("localizationService.updated", response.data);
+
+                    deferred.resolve(response.data);
+                    //ensure all other queued promises are resolved
+                    for (var p in resourceLoadingPromise) {
+                        resourceLoadingPromise[p].resolve(response.data);
+                    }
+                }, function (err) {
+                    deferred.reject("Something broke");
+                    //ensure all other queued promises are resolved
+                    for (var p in resourceLoadingPromise) {
+                        resourceLoadingPromise[p].reject("Something broke");
+                    }
+                });
+            return deferred.promise;
+        },
+
+        //helper to tokenize and compile a localization string
+        tokenize: function (value, scope) {
+            if (value) {
+                var localizer = value.split(':');
+                var retval = { tokens: undefined, key: localizer[0].substring(0) };
+                if (localizer.length > 1) {
+                    retval.tokens = localizer[1].split(',');
+                    for (var x = 0; x < retval.tokens.length; x++) {
+                        retval.tokens[x] = scope.$eval(retval.tokens[x]);
+                    }
+                }
+
+                return retval;
+            }
+            return value;
+        },
+
+        // checks the dictionary for a localized resource string
+        localize: function (value, tokens) {
+            var deferred = $q.defer();
+
+            if (resourceFileLoadStatus === "loaded") {
+                var val = _lookup(value, tokens, service.dictionary);
+                deferred.resolve(val);
+            } else {
+                service.initLocalizedResources().then(function (dic) {
+                    var val = _lookup(value, tokens, dic);
+                    deferred.resolve(val);
+                });
+            }
+
+            return deferred.promise;
+        },
+        
+    };
+
+    // force the load of the resource file
+    service.initLocalizedResources();
+
+    //This happens after login / auth and assets loading
+    eventsService.on("app.authenticated", function () {
+        resourceFileLoadStatus = "none";
+        resourceLoadingPromise = [];
     });
+
+    // return the local instance when called
+    return service;
+});
 /**
  * @ngdoc service
  * @name umbraco.services.macroService
@@ -3156,8 +3211,10 @@ function macroService() {
        
         /** parses the special macro syntax like <?UMBRACO_MACRO macroAlias="Map" /> and returns an object with the macro alias and it's parameters */
         parseMacroSyntax: function (syntax) {
-
-            var expression = /(<\?UMBRACO_MACRO macroAlias=["']([\w\.]+?)["'][\s\S]+?)(\/>|>.*?<\/\?UMBRACO_MACRO>)/i;
+            
+            //This regex will match an alias of anything except characters that are quotes or new lines (for legacy reasons, when new macros are created
+            // their aliases are cleaned an invalid chars are stripped)
+            var expression = /(<\?UMBRACO_MACRO (?:.+?)?macroAlias=["']([^\"\'\n\r]+?)["'][\s\S]+?)(\/>|>.*?<\/\?UMBRACO_MACRO>)/i;
             var match = expression.exec(syntax);
             if (!match || match.length < 3) {
                 return null;
@@ -3302,6 +3359,7 @@ function macroService() {
 }
 
 angular.module('umbraco.services').factory('macroService', macroService);
+
 /**
 * @ngdoc service
 * @name umbraco.services.mediaHelper
@@ -3631,6 +3689,11 @@ function mediaHelper(umbRequestHelper) {
          * @param {string} imagePath Image path, ex: /media/1234/my-image.jpg
          */
         detectIfImageByExtension: function (imagePath) {
+
+            if (!imagePath) {
+                return false;
+            }
+            
             var lowered = imagePath.toLowerCase();
             var ext = lowered.substr(lowered.lastIndexOf(".") + 1);
             return ("," + Umbraco.Sys.ServerVariables.umbracoSettings.imageFileTypes + ",").indexOf("," + ext + ",") !== -1;
@@ -3735,20 +3798,14 @@ angular.module('umbraco.services').factory('umbracoMenuActions', umbracoMenuActi
  */
 function navigationService($rootScope, $routeParams, $log, $location, $q, $timeout, $injector, dialogService, umbModelMapper, treeService, notificationsService, historyService, appState, angularHelper) {
 
-    var minScreenSize = 1100;
+    
     //used to track the current dialog object
     var currentDialog = null;
-    //tracks the screen size as a tablet
-    var isTablet = false;
+    
     //the main tree event handler, which gets assigned via the setupTreeEvents method
     var mainTreeEventHandler = null;
     //tracks the user profile dialog
     var userDialog = null;
-
-    function setTreeMode() {
-        isTablet = ($(window).width() <= minScreenSize);
-        appState.setGlobalState("showNavigation", !isTablet);
-    }
 
     function setMode(mode) {
         switch (mode) {
@@ -3798,7 +3855,7 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
             appState.setGlobalState("stickyNavigation", false);
             appState.setGlobalState("showTray", false);
 
-            if (isTablet) {
+            if (appState.getGlobalState("isTablet") === true) {
                 appState.setGlobalState("showNavigation", false);
             }
 
@@ -3811,8 +3868,6 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
         /** initializes the navigation service */
         init: function() {
 
-            setTreeMode();
-            
             //keep track of the current section - initially this will always be undefined so 
             // no point in setting it now until it changes.
             $rootScope.$watch(function () {
@@ -3821,10 +3876,7 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
                 appState.setSectionState("currentSection", newVal);
             });
 
-            //TODO: This does not belong here - would be much better off in a directive
-            $(window).bind("resize", function() {
-                setTreeMode();
-            });
+            
         },
 
         /**
@@ -4071,7 +4123,7 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
          */
         hideTree: function() {
 
-            if (isTablet && !appState.getGlobalState("stickyNavigation")) {
+            if (appState.getGlobalState("isTablet") === true && !appState.getGlobalState("stickyNavigation")) {
                 //reset it to whatever is in the url
                 appState.setSectionState("currentSection", $routeParams.section);
                 setMode("default-hidesectiontree");
@@ -4231,23 +4283,26 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
          * Opens the user dialog, next to the sections navigation
          * template is located in views/common/dialogs/user.html
          */
-        showUserDialog: function() {
+        showUserDialog: function () {
+            // hide tray and close help dialog
+            if (service.helpDialog) {
+                service.helpDialog.close();
+            }
+            service.hideTray();
 
-            if(userDialog){
-                userDialog.close();
-                userDialog = null;
+            if (service.userDialog) {
+                service.userDialog.close();
+                service.userDialog = undefined;
             }
 
-            userDialog = dialogService.open(
-                {
-                    template: "views/common/dialogs/user.html",
-                    modalClass: "umb-modal-left",
-                    show: true
-                });
-        
-            
+            service.userDialog = dialogService.open(
+            {
+                template: "views/common/dialogs/user.html",
+                modalClass: "umb-modal-left",
+                show: true
+            });
 
-            return userDialog;
+            return service.userDialog;
         },
 
         /**
@@ -4259,7 +4314,13 @@ function navigationService($rootScope, $routeParams, $log, $location, $q, $timeo
          * Opens the user dialog, next to the sections navigation
          * template is located in views/common/dialogs/user.html
          */
-        showHelpDialog: function() {
+        showHelpDialog: function () {
+            // hide tray and close user dialog
+            service.hideTray();
+            if (service.userDialog) {
+                service.userDialog.close();
+            }
+
             if(service.helpDialog){
                 service.helpDialog.close();
                 service.helpDialog = undefined;
@@ -4843,7 +4904,7 @@ angular.module('umbraco.services')
                 throw "args.term is required";
             }
 
-            return entityResource.search(args.term, "Document", args.searchFrom).then(function (data) {
+            return entityResource.search(args.term, "Document", args.searchFrom, args.canceler).then(function (data) {
                 _.each(data, function (item) {
                     configureContentResult(item);
                 });
@@ -4893,7 +4954,7 @@ angular.module('umbraco.services')
                 throw "args.term is required";
             }
 
-            return entityResource.searchAll(args.term).then(function (data) {
+            return entityResource.searchAll(args.term, args.canceler).then(function (data) {
 
                 _.each(data, function(resultByType) {
                     switch(resultByType.type) {
@@ -5423,9 +5484,10 @@ function tinyMceService(dialogService, $log, imageHelper, $http, $timeout, macro
                                 if (img) {
 
                                     var data = {
-                                        alt: img.altText,
+                                        alt: img.altText || "",
                                         src: (img.url) ? img.url : "nothing.jpg",
                                         rel: img.id,
+                                        'data-id': img.id,
                                         id: '__mcenew'
                                     };
 
@@ -6589,6 +6651,30 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
 
         /**
          * @ngdoc method
+         * @name umbraco.services.umbRequestHelper#convertVirtualToAbsolutePath
+         * @methodOf umbraco.services.umbRequestHelper
+         * @function
+         *
+         * @description
+         * This will convert a virtual path (i.e. ~/App_Plugins/Blah/Test.html ) to an absolute path
+         * 
+         * @param {string} a virtual path, if this is already an absolute path it will just be returned, if this is a relative path an exception will be thrown
+         */
+        convertVirtualToAbsolutePath: function(virtualPath) {
+            if (virtualPath.startsWith("/")) {
+                return virtualPath;
+            }
+            if (!virtualPath.startsWith("~/")) {
+                throw "The path " + virtualPath + " is not a virtual path";
+            }
+            if (!Umbraco.Sys.ServerVariables.application.applicationPath) { 
+                throw "No applicationPath defined in Umbraco.ServerVariables.application.applicationPath";
+            }
+            return Umbraco.Sys.ServerVariables.application.applicationPath + virtualPath.trimStart("~/");
+        },
+
+        /**
+         * @ngdoc method
          * @name umbraco.services.umbRequestHelper#dictionaryToQueryString
          * @methodOf umbraco.services.umbRequestHelper
          * @function
@@ -6802,8 +6888,14 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
                     //when there's a 500 (unhandled) error show a YSOD overlay if debugging is enabled.
                     if (status >= 500 && status < 600) {
 
-                        //show a ysod dialog
-                        if (Umbraco.Sys.ServerVariables["isDebuggingEnabled"] === true) {
+                        //This is a bit of a hack to check if the error is due to a file being uploaded that is too large,
+                        // we have to just check for the existence of a string value but currently that is the best way to
+                        // do this since it's very hacky/difficult to catch this on the server
+                        if (typeof data !== "undefined" && typeof data.indexOf === "function" && data.indexOf("Maximum request length exceeded") >= 0) {
+                            notificationsService.error("Server error", "The uploaded file was too large, check with your site administrator to adjust the maximum size allowed");
+                        }                        
+                        else if (Umbraco.Sys.ServerVariables["isDebuggingEnabled"] === true) {
+                            //show a ysod dialog
                             dialogService.ysodDialog({
                                 errorMsg: 'An error occurred',
                                 data: data
@@ -6888,7 +6980,7 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
 }
 angular.module('umbraco.services').factory('umbRequestHelper', umbRequestHelper);
 angular.module('umbraco.services')
-    .factory('userService', function ($rootScope, eventsService, $q, $location, $log, securityRetryQueue, authResource, dialogService, $timeout, angularHelper) {
+    .factory('userService', function ($rootScope, eventsService, $q, $location, $log, securityRetryQueue, authResource, dialogService, $timeout, angularHelper, $http) {
 
         var currentUser = null;
         var lastUserId = null;
@@ -6945,7 +7037,7 @@ angular.module('umbraco.services')
 
         /** 
         Method to count down the current user's timeout seconds, 
-        this will continually count down their current remaining seconds every 2 seconds until
+        this will continually count down their current remaining seconds every 5 seconds until
         there are no more seconds remaining.
         */
         function countdownUserTimeout() {
@@ -6953,8 +7045,8 @@ angular.module('umbraco.services')
             $timeout(function () {
 
                 if (currentUser) {
-                    //countdown by 2 seconds since that is how long our timer is for.
-                    currentUser.remainingAuthSeconds -= 2;
+                    //countdown by 5 seconds since that is how long our timer is for.
+                    currentUser.remainingAuthSeconds -= 5;
 
                     //if there are more than 30 remaining seconds, recurse!
                     if (currentUser.remainingAuthSeconds > 30) {
@@ -6991,7 +7083,14 @@ angular.module('umbraco.services')
                         if (Umbraco.Sys.ServerVariables.umbracoSettings.keepUserLoggedIn !== true) {
                             //NOTE: the safeApply because our timeout is set to not run digests (performance reasons)
                             angularHelper.safeApply($rootScope, function () {
-                                userAuthExpired();
+                                try {
+                                    //NOTE: We are calling this again so that the server can create a log that the timeout has expired, we
+                                    // don't actually care about this result.
+                                    authResource.getRemainingTimeoutSeconds();
+                                }
+                                finally {
+                                    userAuthExpired();
+                                } 
                             });
                         }
                         else {
@@ -7017,7 +7116,7 @@ angular.module('umbraco.services')
                         }
                     }
                 }
-            }, 2000, //every 2 seconds
+            }, 5000, //every 5 seconds
                 false); //false = do NOT execute a digest for every iteration
         }
 
@@ -7132,7 +7231,7 @@ angular.module('umbraco.services')
                             }
 
                             setCurrentUser(data);
-                            currentUser.avatar = '//www.gravatar.com/avatar/' + data.emailHash + '?s=40&d=404';
+
                             deferred.resolve(currentUser);
                         });
 
@@ -7349,14 +7448,18 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
                 //if there is only one image, then return the target height
                 return targetHeight;
             }
+            else if (currRowWidth / targetRowWidth > 0.90) {
+                //it's close enough, it's at least 90% of the width so we'll accept it with the target height
+                return targetHeight;
+            }
             else {
-                //if it's not successful, return false
+                //if it's not successful, return null
                 return null;
             }
         },
 
         /** builds an image grid row */
-        buildRow: function(imgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin) {
+        buildRow: function(imgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin, totalRemaining) {
             var currRowWidth = 0;
             var row = { images: [] };
 
@@ -7403,8 +7506,8 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
                 this.setImageStyle(row.images[j], sizes[j].width, sizes[j].height, margin, bottomMargin);
             }
 
-            if (row.images.length === 1) {
-                //if there's only one image on the row, set the container to max width
+            if (row.images.length === 1 && totalRemaining > 1) {
+                //if there's only one image on the row and there are more images remaining, set the container to max width
                 row.images[0].style.width = maxRowWidth + "px"; 
             }
             
@@ -7428,7 +7531,7 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
         buildGrid: function(images, maxRowWidth, maxRowHeight, startingIndex, minDisplayHeight, idealImgPerRow, margin,imagesOnly) {
 
             var rows = [];
-            var imagesProcessed = 0;
+            var imagesProcessed = 0; 
 
             //first fill in all of the original image sizes and URLs
             for (var i = startingIndex; i < images.length; i++) {
@@ -7448,7 +7551,8 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
                 var currImgs = images.slice(imagesProcessed);
 
                 //build the row
-                var row = this.buildRow(currImgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin);
+                var remaining = images.length - imagesProcessed;
+                var row = this.buildRow(currImgs, maxRowHeight, minDisplayHeight, maxRowWidth, idealImgPerRow, margin, remaining);
                 if (row.images.length > 0) {
                     rows.push(row);
                     imagesProcessed += row.images.length;
@@ -7497,7 +7601,7 @@ function umbModelMapper() {
          * @param {String} source.name The node name
          * @param {String} source.icon The models icon as a css class (.icon-doc)
          * @param {Number} source.parentId The parentID, if no parent, set to -1
-         * @param {path} source.path comma-seperated string of ancestor IDs (-1,1234,1782,1234)
+         * @param {path} source.path comma-separated string of ancestor IDs (-1,1234,1782,1234)
          */
 
         /** This converts the source model to a basic entity model, it will throw an exception if there isn't enough data to create the model */
@@ -7788,6 +7892,73 @@ angular.module('umbraco.services').factory('umbDataFormatter', umbDataFormatter)
 
 
 
+/**
+ * @ngdoc service
+ * @name umbraco.services.windowResizeListener
+ * @function
+ *
+ * @description
+ * A single window resize listener... we don't want to have more than one in theory to ensure that
+ * there aren't too many events raised. This will debounce the event with 100 ms intervals and force
+ * a $rootScope.$apply when changed and notify all listeners
+ *
+ */
+function windowResizeListener($rootScope) {
+
+    var WinReszier = (function () {
+        var registered = [];
+        var inited = false;        
+        var resize = _.debounce(function(ev) {
+            notify();
+        }, 100);
+        var notify = function () {
+            var h = $(window).height();
+            var w = $(window).width();
+            //execute all registrations inside of a digest
+            $rootScope.$apply(function() {
+                for (var i = 0, cnt = registered.length; i < cnt; i++) {
+                    registered[i].apply($(window), [{ width: w, height: h }]);
+                }
+            });
+        };
+        return {
+            register: function (fn) {
+                registered.push(fn);
+                if (inited === false) {
+                    $(window).bind('resize', resize);
+                    inited = true;
+                }
+            },
+            unregister: function (fn) {
+                var index = registered.indexOf(fn);
+                if (index > -1) {
+                    registered.splice(index, 1);
+                }
+            }
+        };
+    }());
+
+    return {
+
+        /**
+         * Register a callback for resizing
+         * @param {Function} cb 
+         */
+        register: function (cb) {
+            WinReszier.register(cb);
+        },
+
+        /**
+         * Removes a registered callback
+         * @param {Function} cb 
+         */
+        unregister: function(cb) {
+            WinReszier.unregister(cb);
+        }
+
+    };
+}
+angular.module('umbraco.services').factory('windowResizeListener', windowResizeListener);
 /**
  * @ngdoc service
  * @name umbraco.services.xmlhelper
@@ -8162,9 +8333,6 @@ function xmlhelper($http) {
         fromJson: function (json) {
             var xml = x2js.json2xml_str(json);
             return xml;
-        },
-        parseFeed: function (url) {
-            return $http.jsonp('//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=50&callback=JSON_CALLBACK&q=' + encodeURIComponent(url));
         }
     };
 }
