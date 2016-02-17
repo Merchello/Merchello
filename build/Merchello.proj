@@ -149,7 +149,7 @@
       AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
       AssemblyInformationalVersion="$(ProductVersion)"/>
     <AssemblyInfo CodeLanguage="CS"
-      OutputFile="$(ProjectDir)\Merchello.Providers.Payment\Properties\AssemblyInfo.cs"
+      OutputFile="$(ProjectDir)\Merchello.Providers\Properties\AssemblyInfo.cs"
       AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
       AssemblyInformationalVersion="$(ProductVersion)"/>
 	</Target>
@@ -168,8 +168,8 @@
     <ItemGroup>
       <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
-      <ProviderFiles Include="$(ProjectDir)\Merchello.Providers.Payment\bin\$(BuildConfig)\Merchello.Providers.Payment.dll;" />
-      <ProviderDependencyFiles Include="$(ProjectDir)\Merchello.Providers.Payment\bin\$(BuildConfig)\Braintree-*.dll" />
+      <ProviderFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Merchello.Providers.dll;" />
+      <ProviderDependencyFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Braintree-*.dll;$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\PayPal*.dll" />
       
       <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
       <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*;" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss;" />
