@@ -264,10 +264,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMapperMappings-AuthorizeNet.cs" />
-    <Compile Include="AutoMapperMappings-Braintree.cs" />
-    <Compile Include="AutoMapperMappings-PayPal.cs" />
     <Compile Include="AutoMapperMappings.cs" />
+	<Compile Include="AutoMapperMappings-AuthorizeNet.cs">
+	<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+    <Compile Include="AutoMapperMappings-Braintree.cs">
+	<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
+    <Compile Include="AutoMapperMappings-PayPal.cs">
+	<DependentUpon>AutoMapperMappings.cs</DependentUpon>
+	</Compile>
     <Compile Include="Payment\Braintree\BraintreeApiHelper.cs" />
     <Compile Include="Payment\Braintree\BraintreeCustomerExtensions.cs" />
     <Compile Include="Payment\Braintree\BraintreeProcessorArguementCollectionExtensions.cs" />
@@ -308,10 +314,16 @@
     <Compile Include="Payment\Braintree\Services\IBraintreeTransactionApiService.cs" />
     <Compile Include="Payment\Braintree\Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="Caching\CacheKeys.cs" />
-    <Compile Include="Constants-AuthorizeNet.cs" />
-    <Compile Include="Constants-Braintree.cs" />
-    <Compile Include="Constants-PayPal.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Constants-AuthorizeNet.cs">
+	<DependentUpon>Constants.cs</DependentUpon>
+	</Compile>
+    <Compile Include="Constants-Braintree.cs">
+	<DependentUpon>Constants.cs</DependentUpon>
+	</Compile>
+    <Compile Include="Constants-PayPal.cs">
+	<DependentUpon>Constants.cs</DependentUpon>
+	</Compile>
     <Compile Include="Exceptions\BraintreeApiException.cs" />
     <Compile Include="Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
