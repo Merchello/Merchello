@@ -118,6 +118,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -190,20 +194,20 @@
       <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=2.0.5897.33881, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000225\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=2.0.5897.31032, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000221\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=2.0.5897.33885, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000225\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=2.0.5897.31036, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000221\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Providers, Version=2.0.5897.33895, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000225\lib\net45\Merchello.Providers.dll</HintPath>
+    <Reference Include="Merchello.Providers, Version=2.0.5897.31046, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000221\lib\net45\Merchello.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=2.0.5897.33886, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000225\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=2.0.5897.31038, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000221\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">

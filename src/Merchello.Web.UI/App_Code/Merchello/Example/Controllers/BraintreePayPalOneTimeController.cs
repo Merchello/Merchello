@@ -35,47 +35,29 @@ namespace Merchello.Example.Controllers
             return this.PartialView(this.BraintreePartial("BraintreePayPalOneTime"), model);
         }
 
-        protected override IPaymentResult PerformProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod)
-        {
-            // ----------------------------------------------------------------------------
-            // WE NEED TO GET THE PAYMENT METHOD "NONCE" FOR BRAINTREE
-
-            var form = UmbracoContext.HttpContext.Request.Form;
-            var paymentMethodNonce = form.Get("payment_method_nonce");
-
-            // ----------------------------------------------------------------------------
-
-            return this.ProcessPayment(checkoutManager, paymentMethod, paymentMethodNonce);
-        }
-
         /// <summary>
-        /// The process payment.
+        /// Collects the Braintree Token (nonce) and processes the payment.
         /// </summary>
         /// <param name="checkoutManager">
-        /// Merchello's <see cref="ICheckoutManagerBase"/>.
+        /// The checkout manager.
         /// </param>
         /// <param name="paymentMethod">
         /// The payment method.
         /// </param>
-        /// <param name="paymentMethodNonce">
-        /// The payment method nonce.
-        /// </param>
         /// <returns>
         /// The <see cref="IPaymentResult"/>.
         /// </returns>
-        /// <remarks>
-        /// AuthorizeCapturePayment will save the invoice with an Invoice Number.
-        /// </remarks>
-        private IPaymentResult ProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod, string paymentMethodNonce)
+        protected override IPaymentResult PerformProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod)
         {
-            // You need a ProcessorArgumentCollection for this transaction to store the payment method nonce
-            // The braintree package includes an extension method off of the ProcessorArgumentCollection - SetPaymentMethodNonce([nonce]);
-            var args = new ProcessorArgumentCollection();
-            args.SetPaymentMethodNonce(paymentMethodNonce);
+            //// ----------------------------------------------------------------------------
+            //// WE NEED TO GET THE PAYMENT METHOD "NONCE" FOR BRAINTREE
 
-            // We will want this to be an AuthorizeCapture(paymentMethod.Key, args);
-            return checkoutManager.Payment.AuthorizeCapturePayment(paymentMethod.Key, args);
+            var form = UmbracoContext.HttpContext.Request.Form;
+            var paymentMethodNonce = form.Get("paypal_payment_method_nonce");
+
+            //// ----------------------------------------------------------------------------
+
+            return this.ProcessPayment(checkoutManager, paymentMethod, paymentMethodNonce);
         }
     }
-
 }
