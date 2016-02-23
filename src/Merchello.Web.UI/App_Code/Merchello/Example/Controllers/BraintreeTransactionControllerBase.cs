@@ -5,8 +5,11 @@
 
     using Merchello.Bazaar.Controllers;
     using Merchello.Core;
+    using Merchello.Core.Checkout;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Example.Models;
+    using Merchello.Providers.Payment.Braintree;
     using Merchello.Providers.Payment.Braintree.Provider;
     using Merchello.Providers.Payment.Braintree.Services;
     using Providers.Payment.Models;
@@ -58,6 +61,35 @@
             _service.Customer.GenerateClientRequestToken((ICustomer)CurrentCustomer);
 
             return new BraintreeToken { Token = token };
+        }
+
+        /// <summary>
+        /// The process payment.
+        /// </summary>
+        /// <param name="checkoutManager">
+        /// Merchello's <see cref="ICheckoutManagerBase"/>.
+        /// </param>
+        /// <param name="paymentMethod">
+        /// The payment method.
+        /// </param>
+        /// <param name="paymentMethodNonce">
+        /// The payment method nonce.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        /// <remarks>
+        /// AuthorizeCapturePayment will save the invoice with an Invoice Number.
+        /// </remarks>
+        protected virtual IPaymentResult ProcessPayment(ICheckoutManagerBase checkoutManager, IPaymentMethod paymentMethod, string paymentMethodNonce)
+        {
+            // You need a ProcessorArgumentCollection for this transaction to store the payment method nonce
+            // The braintree package includes an extension method off of the ProcessorArgumentCollection - SetPaymentMethodNonce([nonce]);
+            var args = new ProcessorArgumentCollection();
+            args.SetPaymentMethodNonce(paymentMethodNonce);
+
+            // We will want this to be an AuthorizeCapture(paymentMethod.Key, args);
+            return checkoutManager.Payment.AuthorizeCapturePayment(paymentMethod.Key, args);
         }
 
         /// <summary>
