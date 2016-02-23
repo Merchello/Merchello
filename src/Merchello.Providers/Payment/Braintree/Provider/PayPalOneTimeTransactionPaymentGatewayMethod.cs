@@ -31,6 +31,18 @@
         {
         }
 
+        /// <summary>
+        /// Does the actual work of authorizing the payment
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
             throw new System.NotImplementedException();
@@ -41,12 +53,7 @@
             throw new System.NotImplementedException();
         }
 
-        protected override IPaymentResult ProcessPayment(
-            IInvoice invoice,
-            TransactionOption option,
-            decimal amount,
-            string token,
-            string email = "")
+        protected override IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "")
         {
             throw new System.NotImplementedException();
         }
