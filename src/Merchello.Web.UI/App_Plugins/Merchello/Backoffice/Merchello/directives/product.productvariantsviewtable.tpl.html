@@ -16,7 +16,7 @@
             </th>
         </tr>
         <tr>
-            <th><input type="checkbox" data-ng-model="selectAll" data-ng-click="toggleAllVariants(selectAll)" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+            <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
             <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
                 data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
                 <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty == ('-' + option.name)}"></i>
