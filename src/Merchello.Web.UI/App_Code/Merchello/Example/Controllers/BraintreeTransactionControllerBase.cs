@@ -42,18 +42,36 @@
             _service = new BraintreeApiService(provider.ExtendedData.GetBrainTreeProviderSettings());
         }
 
+        /// <summary>
+        /// Renders Braintree setup js.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [ChildActionOnly]
         public ActionResult RenderBraintreeSetupJs()
         {
             return this.PartialView(this.BraintreePartial("BraintreeSetupJs"), GetToken());
         }
 
+        /// <summary>
+        /// Renders Braintree PayPal setup js.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [ChildActionOnly]
         public ActionResult RenderPayPalSetupJs()
         {
             return this.PartialView(this.BraintreePartial("BraintreePayPalSetupJs"), GetToken());
         }
 
+        /// <summary>
+        /// Gets the Braintree Server token.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="BraintreeToken"/>.
+        /// </returns>
         public BraintreeToken GetToken()
         {
             var token = CurrentCustomer.IsAnonymous ?

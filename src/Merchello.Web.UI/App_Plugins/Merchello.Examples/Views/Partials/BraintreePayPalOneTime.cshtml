@@ -10,14 +10,14 @@
 {
     @Html.AntiForgeryToken()
 
-    <input type="hidden" id="ppNonce" name="paypal_payment_method_nonce" value=""/>
+    <input type="hidden" id="paypal_payment_method_nonce" name="paypal_payment_method_nonce" value=""/>
     @Html.HiddenFor(x => x.ShipMethodKey, new { @class = "selected-shipmethod-key" })
     @Html.HiddenFor(x => x.PaymentMethodKey, new { @class = "selected-paymentmethod-key" })
     @Html.HiddenFor(x => x.CustomerToken, new { @id = "customer-token" })
     @Html.HiddenFor(x => x.ReceiptPageId)
 
     <div class="control-group">
-        <button type="submit" class="btn btn-primary">Confirm Sale</button>
+        <button type="submit" id="btpaypal-confirm-sale" class="btn btn-primary">Confirm Sale</button>
     </div>
 }
 
