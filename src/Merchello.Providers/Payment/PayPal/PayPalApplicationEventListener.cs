@@ -11,7 +11,7 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
-    using Constants = Payment.Constants;
+    using Constants = Providers.Constants;
 
     public class PayPalEvents : ApplicationEventHandler
 	{

@@ -7,8 +7,8 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
+    using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Models;
-    using Merchello.Providers.Payment.PayPal;
 
     using Constants = Merchello.Providers.Constants;
 

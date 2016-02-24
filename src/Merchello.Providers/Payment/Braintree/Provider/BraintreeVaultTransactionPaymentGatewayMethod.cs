@@ -1,21 +1,10 @@
 ﻿namespace Merchello.Providers.Payment.Braintree.Provider
 {
-    using System;
-    using System.Linq;
-
-    using Merchello.Core;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Braintree.Services;
-    using Merchello.Providers.Payment.Exceptions;
-
-    using Umbraco.Core;
-    using Umbraco.Core.Logging;
-
-    using Constants = Merchello.Providers.Constants;
 
     /// <summary>
     /// Represents a BraintreeVaultTransactionPaymentGatewayMethod

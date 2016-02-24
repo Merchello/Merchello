@@ -1,4 +1,4 @@
-﻿namespace Merchello.Example.Controllers
+﻿namespace Merchello.Bazaar.Controllers
 {
     using System.Web.Mvc;
 
@@ -7,16 +7,15 @@
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
-    using Merchello.Providers.Payment.Braintree;
 
     using Umbraco.Web.Mvc;
 
     /// <summary>
     /// A Braintree standard transaction
     /// </summary>
-    [PluginController("Example")]
-    [GatewayMethodUi("BrainTree.StandardTransaction")]
-    public class BraintreeStandardTransactionController : BraintreeTransactionControllerBase
+    [PluginController("Bazaar")]
+    [GatewayMethodUi("Braintree.PayPal.OneTime")]
+    public class BraintreePayPalOneTimeController : BraintreeTransactionControllerBase
     {
         /// <summary>
         /// Renders the payment form.
@@ -30,7 +29,7 @@
         [ChildActionOnly]
         public override ActionResult RenderForm(CheckoutConfirmationForm model)
         {
-            return this.PartialView(this.BraintreePartial("BraintreeStandardTransaction"), model);
+            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "BraintreePayPalOneTime"), model);
         }
 
         /// <summary>
@@ -50,8 +49,8 @@
             //// ----------------------------------------------------------------------------
             //// WE NEED TO GET THE PAYMENT METHOD "NONCE" FOR BRAINTREE
 
-            var form = UmbracoContext.HttpContext.Request.Form;
-            var paymentMethodNonce = form.Get("payment_method_nonce");
+            var form = this.UmbracoContext.HttpContext.Request.Form;
+            var paymentMethodNonce = form.Get("paypal_payment_method_nonce");
 
             //// ----------------------------------------------------------------------------
 

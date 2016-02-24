@@ -1,10 +1,11 @@
-﻿namespace Merchello.Providers.Payment.Models
+﻿namespace Merchello.Providers.Models
 {
     using System;
     using System.Reflection;
 
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
+    using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Resolvers;
 
     using Newtonsoft.Json;
@@ -12,7 +13,6 @@
 
     using Umbraco.Core.Logging;
 
-    using Constants = Merchello.Providers.Constants;
 
     /// <summary>
     /// The provider settings extensions.

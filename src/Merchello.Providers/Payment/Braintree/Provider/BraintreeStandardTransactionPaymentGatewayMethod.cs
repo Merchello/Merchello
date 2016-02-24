@@ -2,8 +2,6 @@
 {
     using System;
 
-    using global::Braintree;
-
     using Merchello.Core;
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
@@ -17,6 +15,8 @@
     using Umbraco.Core.Logging;
 
     using Constants = Merchello.Providers.Constants;
+    using IInvoice = Merchello.Core.Models.IInvoice;
+    using IPaymentMethod = Merchello.Core.Models.IPaymentMethod;
 
     /// <summary>
     /// Represents the BraintreePaymentGatewayMethod

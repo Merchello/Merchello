@@ -2,8 +2,6 @@
 {
     using System;
 
-    using global::Braintree;
-
     using Merchello.Core;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;

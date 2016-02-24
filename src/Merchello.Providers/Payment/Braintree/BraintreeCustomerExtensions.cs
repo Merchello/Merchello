@@ -3,6 +3,7 @@
     using System.Linq;
 
     using Merchello.Core.Models;
+
     using Address = global::Braintree.Address;
     using Customer = global::Braintree.Customer;
 
