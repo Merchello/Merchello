@@ -37,12 +37,31 @@
             Mandate.ParameterNotNull(braintreeApiService, "braintreeApiService");
 
             this.BraintreeApiService = braintreeApiService;
+            this.Initialize();
         }
 
         /// <summary>
         /// Gets the braintree api service.
         /// </summary>
         protected IBraintreeApiService BraintreeApiService { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the a description for the payment line in authorize transactions.
+        /// </summary>
+        protected abstract string PaymentLineAuthorizeDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the a description for the payment line in authorize / capture transactions.
+        /// </summary>
+        protected abstract string PaymentLineAuthorizeCaptureDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the back office payment method name.
+        /// </summary>
+        /// <remarks>
+        /// This defaults to the original payment method name set in the back office
+        /// </remarks>
+        protected virtual string BackOfficePaymentMethodName { get; set; }
 
         /// <summary>
         /// Performs the actual work of capturing the payment.
@@ -204,6 +223,14 @@
         /// This converts the <see cref="Result{Transaction}"/> into Merchello's <see cref="IPaymentResult"/>
         /// </remarks>
         protected abstract IPaymentResult ProcessPayment(IInvoice invoice, TransactionOption option, decimal amount, string token, string email = "");
-        
+
+
+        /// <summary>
+        /// Initializes the method.
+        /// </summary>
+        private void Initialize()
+        {
+            this.BackOfficePaymentMethodName = PaymentMethod.Name;
+        }
     }
 }

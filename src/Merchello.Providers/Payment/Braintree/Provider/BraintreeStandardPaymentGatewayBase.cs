@@ -5,7 +5,6 @@
     using global::Braintree;
 
     using Merchello.Core;
-    using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
@@ -19,20 +18,12 @@
     using Constants = Merchello.Providers.Constants;
 
     /// <summary>
-    /// Represents the BraintreePaymentGatewayMethod
+    /// A base class for Braintree standard (one time) transactions.
     /// </summary>
-    [GatewayMethodUi("BrainTree.StandardTransaction")]
-    [GatewayMethodEditor("BrainTree Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
-    [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.authorizepayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.authorizecapturepayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.voidpayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.refundpayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.capturepayment.html")]
-    public class BraintreeStandardTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase, IBraintreeStandardTransactionPaymentGatewayMethod
+    public abstract class BraintreeStandardPaymentGatewayBase : BraintreePaymentGatewayMethodBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BraintreeStandardTransactionPaymentGatewayMethod"/> class.
+        /// Initializes a new instance of the <see cref="BraintreeStandardPaymentGatewayBase"/> class.
         /// </summary>
         /// <param name="gatewayProviderService">
         /// The gateway provider service.
@@ -41,24 +32,12 @@
         /// The payment method.
         /// </param>
         /// <param name="braintreeApiService">
-        /// The braintree Api Service.
+        /// The braintree api service.
         /// </param>
-        public BraintreeStandardTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
+        protected BraintreeStandardPaymentGatewayBase(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod, braintreeApiService)
         {
-            this.Initialize();
         }
-
-        /// <summary>
-        /// Gets or sets the payment line authorize description.
-        /// </summary>
-        protected override string PaymentLineAuthorizeDescription { get; set; }
-
-        /// <summary>
-        /// Gets or sets the payment line authorize capture description.
-        /// </summary>
-        protected override string PaymentLineAuthorizeCaptureDescription { get; set; }
-
 
         /// <summary>
         /// Does the actual work of authorizing the payment
@@ -82,7 +61,7 @@
                 LogHelper.Debug<BraintreeStandardTransactionPaymentGatewayMethod>(error.Message);
                 return new PaymentResult(Attempt<IPayment>.Fail(error), invoice, false);
             }
-            
+
             var attempt = this.ProcessPayment(invoice, TransactionOption.Authorize, invoice.Total, paymentMethodNonce);
 
             var payment = attempt.Payment.Result;
@@ -95,7 +74,7 @@
             }
             else
             {
-                this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, this.PaymentLineAuthorizeDescription, 0);
+                this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "To show record of Braintree Authorization", 0);
             }
 
             return attempt;
@@ -146,7 +125,7 @@
             }
             else
             {
-                this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, this.PaymentLineAuthorizeCaptureDescription, amount);
+                this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "Braintree PayPal one time transaction - authorized and captured", amount);
             }
 
             return attempt;
@@ -183,7 +162,7 @@
             payment.CustomerKey = invoice.CustomerKey;
             payment.Authorized = false;
             payment.Collected = false;
-            payment.PaymentMethodName = this.BackOfficePaymentMethodName;
+            payment.PaymentMethodName = "Braintree PayPal One Time Transaction";
             payment.ExtendedData.SetValue(Constants.Braintree.ProcessorArguments.PaymentMethodNonce, token);
 
             var result = this.BraintreeApiService.Transaction.Sale(invoice, token, option: option, email: email);
@@ -208,13 +187,6 @@
             return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
         }
 
-        /// <summary>
-        /// Initializes the gateway method.
-        /// </summary>
-        private void Initialize()
-        {
-            this.PaymentLineAuthorizeDescription = "To show record of Braintree Authorization";
-            this.PaymentLineAuthorizeCaptureDescription = "Braintree transaction - authorized and captured";
-        }
+
     }
 }

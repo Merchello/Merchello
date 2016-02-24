@@ -11,20 +11,21 @@
     using Umbraco.Core.Logging;
 
     /// <summary>
-    /// Payment method for Braintree PayPal OneTime checkouts.
+    /// The PayPal vault transaction payment gateway method.
     /// </summary>
-    [GatewayMethodUi("Braintree.PayPal.OneTime")]
-    [GatewayMethodEditor("BrainTree PayPal OneTime Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
-    [PaymentGatewayMethod("Braintree PayPal Gateway Method Editors",
-        "",  // cannot authorize a payment
-        "",  // cannot authorize capture since we don't have their user/pass
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.voidpayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.refundpayment.html",
-        "")]
-    public class PayPalOneTimeTransactionPaymentGatewayMethod : BraintreeStandardPaymentGatewayBase, IPayPalOneTimeTransactionPaymentGatewayMethod
+    [GatewayMethodUi("BrainTree.PayPalVault")]
+    [GatewayMethodEditor("BrainTree PayPal Vault Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
+    [PaymentGatewayMethod("Braintree PayPal Vault Gateway Method Editors",
+    "",
+    "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.paypalvault.authorizecapturepayment.html",
+    "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.voidpayment.html",
+    "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.refundpayment.html",
+    "",
+    true, true)]
+    public class PayPalVaultTransactionPaymentGatewayMethod : BraintreeVaultPaymentGatewayMethodBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PayPalOneTimeTransactionPaymentGatewayMethod"/> class.
+        /// Initializes a new instance of the <see cref="PayPalVaultTransactionPaymentGatewayMethod"/> class.
         /// </summary>
         /// <param name="gatewayProviderService">
         /// The gateway provider service.
@@ -35,7 +36,7 @@
         /// <param name="braintreeApiService">
         /// The braintree api service.
         /// </param>
-        public PayPalOneTimeTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
+        public PayPalVaultTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod, braintreeApiService)
         {
             this.Initialize();
@@ -78,12 +79,12 @@
         }
 
         /// <summary>
-        /// Initializes the gateway method.
+        /// Initializes the method.
         /// </summary>
         private void Initialize()
         {
-            this.PaymentLineAuthorizeCaptureDescription =
-                "Braintree PayPal one time transaction - authorized and captured";
+            this.PaymentLineAuthorizeDescription = "To show record of Braintree PayPal Authorization";
+            this.PaymentLineAuthorizeCaptureDescription = "Braintree PayPal Vault Transaction Authorized and Captured";
         }
     }
 }

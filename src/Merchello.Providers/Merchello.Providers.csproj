@@ -265,15 +265,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoMapperMappings.cs" />
-	<Compile Include="AutoMapperMappings-AuthorizeNet.cs">
-	<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+    <Compile Include="AutoMapperMappings-AuthorizeNet.cs">
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings-Braintree.cs">
-	<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoMapperMappings-PayPal.cs">
-	<DependentUpon>AutoMapperMappings.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>AutoMapperMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Payment\Braintree\BraintreeApiHelper.cs" />
     <Compile Include="Payment\Braintree\BraintreeCustomerExtensions.cs" />
     <Compile Include="Payment\Braintree\BraintreeProcessorArguementCollectionExtensions.cs" />
@@ -290,8 +290,10 @@
     <Compile Include="Payment\Braintree\Models\TransactionReference.cs" />
     <Compile Include="Payment\Braintree\Provider\BraintreePaymentGatewayMethodBase.cs" />
     <Compile Include="Payment\Braintree\Provider\BraintreePaymentGatewayProvider.cs" />
+    <Compile Include="Payment\Braintree\Provider\BraintreeStandardPaymentGatewayBase.cs" />
     <Compile Include="Payment\Braintree\Provider\BraintreeStandardTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Payment\Braintree\Provider\BraintreeSubscriptionRecordPaymentMethod.cs" />
+    <Compile Include="Payment\Braintree\Provider\BraintreeVaultPaymentGatewayMethodBase.cs" />
     <Compile Include="Payment\Braintree\Provider\BraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Payment\Braintree\Provider\IBraintreePaymentGatewayProvider.cs" />
     <Compile Include="Payment\Braintree\Provider\IBraintreeStandardTransactionPaymentGatewayMethod.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Payment\Braintree\Provider\IBraintreeVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Payment\Braintree\Provider\IPayPalOneTimeTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Payment\Braintree\Provider\PayPalOneTimeTransactionPaymentGatewayMethod.cs" />
+    <Compile Include="Payment\Braintree\Provider\PayPalVaultTransactionPaymentGatewayMethod.cs" />
     <Compile Include="Payment\Braintree\Services\BraintreeApiRequestFactory.cs" />
     <Compile Include="Payment\Braintree\Services\BraintreeApiService.cs" />
     <Compile Include="Payment\Braintree\Services\BraintreeApiServiceBase.cs" />
@@ -316,14 +319,14 @@
     <Compile Include="Caching\CacheKeys.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Constants-AuthorizeNet.cs">
-	<DependentUpon>Constants.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants-Braintree.cs">
-	<DependentUpon>Constants.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants-PayPal.cs">
-	<DependentUpon>Constants.cs</DependentUpon>
-	</Compile>
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Exceptions\BraintreeApiException.cs" />
     <Compile Include="Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
