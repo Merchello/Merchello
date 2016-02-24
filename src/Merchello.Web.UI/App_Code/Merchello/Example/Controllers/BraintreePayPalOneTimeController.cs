@@ -1,4 +1,6 @@
-﻿namespace Merchello.Example.Controllers
+﻿using Umbraco.Web;
+
+namespace Merchello.Example.Controllers
 {
     using System.Web.Mvc;
 

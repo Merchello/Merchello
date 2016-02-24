@@ -370,15 +370,6 @@ namespace Umbraco.Web.PublishedContentModels
 		{
 			get { return this.GetPropertyValue<IHtmlString>("overview"); }
 		}
-
-		///<summary>
-		/// Related Products
-		///</summary>
-		[ImplementPropertyType("relatedProducts")]
-		public IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent> RelatedProducts
-		{
-			get { return this.GetPropertyValue<IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent>>("relatedProducts"); }
-		}
 	}
 
 	/// <summary>BazaarProductGroup</summary>
