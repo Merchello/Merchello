@@ -1,29 +1,24 @@
-﻿namespace Merchello.Example.Controllers
+﻿namespace Merchello.Bazaar.Controllers
 {
-    using System;
     using System.Web.Mvc;
 
-    using Merchello.Bazaar.Controllers;
+    using Merchello.Bazaar.Models;
     using Merchello.Core;
     using Merchello.Core.Checkout;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
-    using Merchello.Example.Models;
     using Merchello.Providers.Payment.Braintree;
     using Merchello.Providers.Payment.Braintree.Provider;
     using Merchello.Providers.Payment.Braintree.Services;
-    using Providers.Payment.Models;
+    using Merchello.Providers.Payment.Models;
+
+    using PathHelper = Merchello.Bazaar.PathHelper;
 
     /// <summary>
     /// Example Braintree transaction base controller
     /// </summary>
     public abstract class BraintreeTransactionControllerBase : BazaarPaymentMethodFormControllerBase
     {
-        /// <summary>
-        /// The view path.
-        /// </summary>
-        private const string ViewPath = "~/App_Plugins/Merchello.Examples/Views/Partials/";
-
         /// <summary>
         /// The <see cref="IBraintreeApiService"/>
         /// </summary>
@@ -39,26 +34,44 @@
             var provider = (BraintreePaymentGatewayProvider)MerchelloContext.Current.Gateways.Payment.GetProviderByKey(Providers.Constants.Braintree.GatewayProviderSettingsKey);
 
             // GetBraintreeProviderSettings() is an extension method with the provider
-            _service = new BraintreeApiService(provider.ExtendedData.GetBrainTreeProviderSettings());
+            this._service = new BraintreeApiService(provider.ExtendedData.GetBrainTreeProviderSettings());
         }
 
+        /// <summary>
+        /// Renders Braintree setup js.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [ChildActionOnly]
         public ActionResult RenderBraintreeSetupJs()
         {
-            return this.PartialView(this.BraintreePartial("BraintreeSetupJs"), GetToken());
+            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "BraintreeSetupJs"), this.GetToken());
         }
 
+        /// <summary>
+        /// Renders Braintree PayPal setup js.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [ChildActionOnly]
         public ActionResult RenderPayPalSetupJs()
         {
-            return this.PartialView(this.BraintreePartial("BraintreePayPalSetupJs"), GetToken());
+            return this.PartialView(PathHelper.GetThemePartialViewPath(BazaarContentHelper.GetStoreTheme(), "BraintreePayPalSetupJs"), this.GetToken());
         }
 
+        /// <summary>
+        /// Gets the Braintree Server token.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="BraintreeToken"/>.
+        /// </returns>
         public BraintreeToken GetToken()
         {
-            var token = CurrentCustomer.IsAnonymous ?
-            _service.Customer.GenerateClientRequestToken() :
-            _service.Customer.GenerateClientRequestToken((ICustomer)CurrentCustomer);
+            var token = this.CurrentCustomer.IsAnonymous ?
+            this._service.Customer.GenerateClientRequestToken() :
+            this._service.Customer.GenerateClientRequestToken((ICustomer)this.CurrentCustomer);
 
             return new BraintreeToken { Token = token };
         }
@@ -90,21 +103,6 @@
 
             // We will want this to be an AuthorizeCapture(paymentMethod.Key, args);
             return checkoutManager.Payment.AuthorizeCapturePayment(paymentMethod.Key, args);
-        }
-
-        /// <summary>
-        /// Helper method to construct the path to the MVC Partial view for this plugin.
-        /// </summary>
-        /// <param name="viewName">
-        /// The view name.
-        /// </param>
-        /// <returns>
-        /// The virtual path to the partial view.
-        /// </returns>
-        protected string BraintreePartial(string viewName)
-        {
-            viewName = viewName.EndsWith(".cshtml") ? viewName : viewName + ".cshtml";
-            return string.Format("{0}{1}", ViewPath, viewName);
         }
     }
 }

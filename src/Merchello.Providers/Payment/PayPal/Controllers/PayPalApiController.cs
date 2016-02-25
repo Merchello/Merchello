@@ -8,6 +8,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Payment.PayPal.Provider;
 

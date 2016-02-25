@@ -1,10 +1,5 @@
 ﻿namespace Merchello.Tests.PaymentProviders.Braintree.TestHelpers
 {
-    using System;
-    using System.Configuration;
-
-    using Merchello.Providers.Payment.Braintree;
-    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
 
     using Newtonsoft.Json;

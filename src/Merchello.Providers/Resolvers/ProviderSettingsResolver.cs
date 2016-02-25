@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core;

@@ -3,7 +3,6 @@
     using global::Braintree;
 
     using Merchello.Core;
-    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
 
     /// <summary>
