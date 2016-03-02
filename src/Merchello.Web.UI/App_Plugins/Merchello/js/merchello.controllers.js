@@ -8950,9 +8950,9 @@ angular.module('merchello')
 angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsController',
     ['$scope', '$log', '$routeParams', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'invoiceHelper', 'dialogDataFactory',
         'invoiceResource', 'paymentResource', 'paymentGatewayProviderResource', 'settingsResource',
-        'invoiceDisplayBuilder', 'paymentDisplayBuilder',
+        'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder',
         function($scope, $log, $routeParams, dialogService, notificationsService, merchelloTabsFactory, invoiceHelper, dialogDataFactory, invoiceResource, paymentResource, paymentGatewayProviderResource, settingsResource,
-        invoiceDisplayBuilder, paymentDisplayBuilder) {
+        invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -9094,21 +9094,31 @@ angular.module('merchello').controller('Merchello.Backoffice.InvoicePaymentsCont
                                 i++;
                             }
                         }
+
                         if (!found) {
-                            keys.push(p.paymentMethodKey);
+                            if (p.paymentMethodKey === null) {
+                                keys.push('removed');
+                            } else {
+                                keys.push(p.paymentMethodKey);
+                            }
                         }
                     }
                 });
 
                 angular.forEach(keys, function(key) {
-                    // TODO this could be done with a $q defer
-                    var promise = paymentGatewayProviderResource.getPaymentMethodByKey(key);
-                    promise.then(function(method) {
-                        $scope.paymentMethods.push(method);
-                        if ($scope.paymentMethods.length === keys.length) {
-                            $scope.preValuesLoaded = true;
-                        }
-                    });
+
+                    if (key === 'removed') {
+                        var empty = paymentMethodDisplayBuilder.createDefault();
+                            $scope.paymentMethods.push(empty)
+                        }   
+                        var promise = paymentGatewayProviderResource.getPaymentMethodByKey(key);
+                        promise.then(function(method) {
+                            $scope.paymentMethods.push(method);
+                            if ($scope.paymentMethods.length === keys.length) {
+                                $scope.preValuesLoaded = true;
+                            }
+                        });
+                    
                 });
 
                 if ($scope.paymentMethods.length === keys.length) {
