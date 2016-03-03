@@ -51,6 +51,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Web.UI", "http://
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{2A83A229-C24B-4D8D-B806-7C9999EB9461}|Merchello.Core.dll;{90C37AC8-CFE3-4199-A7B2-826278EB59E5}|Merchello.Providers.dll;{81D9E7DA-5A5A-444A-823F-1D97D7D5FEDF}|Merchello.Web.dll;{28A665A9-2AAD-4230-AB8C-0F0B0F1B2115}|Merchello.Examine.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_58400"
 		Debug.AspNetCompiler.PhysicalPath = "Merchello.Web.UI\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58400\"

@@ -2,7 +2,7 @@
 @using Merchello.Bazaar.Models
 @using System.Globalization
 @using System.Web.Mvc.Html
-@using Merchello.Example.Controllers
+@using Merchello.Bazaar.Controllers
 @using Umbraco.Web
 
 
@@ -57,5 +57,5 @@
     </div>
 }
 
-@Html.Action("RenderBraintreeSetupJs", "BraintreeStandardTransaction", new { area = "Example" })
+@Html.Action("RenderBraintreeSetupJs", "BraintreeStandardTransaction", new { area = "Bazaar" })
 
