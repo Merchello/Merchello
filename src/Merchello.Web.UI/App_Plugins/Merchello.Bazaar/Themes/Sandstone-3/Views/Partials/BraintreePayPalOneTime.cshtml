@@ -1,8 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationForm>
 @using Merchello.Bazaar.Models
-@using System.Globalization
 @using System.Web.Mvc.Html
-@using Merchello.Example.Controllers
+@using Merchello.Bazaar.Controllers
 @using Umbraco.Web
 
 <div id="paypal-container"></div>
@@ -23,4 +22,4 @@
 
 
 
-@Html.Action("RenderPayPalSetupJs", "BraintreePayPalOneTime", new { area = "Example" })
+@Html.Action("RenderPayPalSetupJs", "BraintreePayPalOneTime", new { area = "Bazaar" })
