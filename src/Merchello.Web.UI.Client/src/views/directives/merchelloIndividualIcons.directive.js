@@ -105,4 +105,26 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
     }
 });
 
+// the move icon
+angular.module('merchello.directives').directive('merchelloMoveIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doMove: '&'
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-edit" ng-click="doMove()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-width"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_move').then(function (value) {
+                scope.title = value;
+            });
+
+        }
+    }
+});
+
 

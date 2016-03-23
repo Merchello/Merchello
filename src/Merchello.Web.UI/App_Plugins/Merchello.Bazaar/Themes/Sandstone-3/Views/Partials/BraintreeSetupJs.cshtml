@@ -1,0 +1,6 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<BraintreeToken>
+@using Merchello.Bazaar.Models
+<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+<script>
+    braintree.setup("@Model.Token", "custom", { id: "braintreeCreditCard" });
+</script>

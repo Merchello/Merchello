@@ -1,0 +1,18 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<BraintreeToken>
+@using Merchello.Bazaar.Models
+<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
+<script type="text/javascript">
+    // hide the confirm sale button until token is recieved 
+    (function () {
+        document.getElementById("btpaypal-confirm-sale").style.visibility = "hidden";
+    })();
+    braintree.setup("@Model.Token", "custom", {
+        paypal: {
+            container: "paypal-container"
+        },
+        onPaymentMethodReceived: function (obj) {
+            document.getElementById('paypal_payment_method_nonce').value = obj.nonce;
+            document.getElementById("btpaypal-confirm-sale").style.visibility = "visible";
+        }
+    });
+</script>

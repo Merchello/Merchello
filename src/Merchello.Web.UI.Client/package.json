@@ -1,19 +1,19 @@
 {
-  "author": "Merchello",
-  "name": "merchello",
+  "author": "Across the Pond, LLC",
+  "name": "Merchello",
   "homepage": "https://github.com/meritage/Merchello",
-  "version": "1.6.1",
+  "version": "1.15.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:meritage/Merchello.git"
+    "url": "git@github.com:merchello/Merchello.git"
   },
   "bugs": {
-    "url": "http://meritage.myjetbrains.com/youtrack/issues"
+    "url": "http://issues.merchello.com/youtrack/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/meritage/Merchello/blob/master/License.md"
+      "url": "https://github.com/merchello/Merchello/blob/master/License.md"
     }
   ],
   "engines": {

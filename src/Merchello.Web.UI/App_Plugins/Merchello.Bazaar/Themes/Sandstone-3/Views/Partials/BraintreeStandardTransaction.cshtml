@@ -1,0 +1,61 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationForm>
+@using Merchello.Bazaar.Models
+@using System.Globalization
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar.Controllers
+@using Umbraco.Web
+
+
+@using (Html.BeginUmbracoForm<BraintreeStandardTransactionController>("ConfirmSale", null, new { area = "BraintreeBazaar", @id = "braintreeCreditCard" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="control-group">
+        <label class="control-label">Credit Card Number</label>
+        <div class="controls">
+            <input class="span12 " type="text" data-braintree-name="number" value="" placeholder="Credit Card Number">
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <select data-braintree-name="expiration_month" class="span3">
+                @{
+    var currentMonth = DateTime.Now.Month;
+    for (var i = 1; i < 13; i++)
+    {
+        <option value="@i.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0')" @(currentMonth == i ? " selected" : string.Empty)>@i.ToString(CultureInfo.InvariantCulture).PadLeft(2, '0')</option>
+    }
+                }
+            </select>
+
+            <select data-braintree-name="expiration_year" class="span4">
+                @{
+    var year = DateTime.Now.Year;
+    for (var y = year; y < year + 15; y++)
+    {
+        <option value="@y">@y</option>
+    }
+                }
+            </select>
+        </div>
+        <div class="controls">
+
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">CVV</label>
+        <div class="controls">
+            <input type="text" data-braintree-name="cvv" value="" placeholder="CVV">
+        </div>
+    </div>
+
+    @Html.HiddenFor(x => x.ShipMethodKey, new { @class = "selected-shipmethod-key" })
+    @Html.HiddenFor(x => x.PaymentMethodKey, new { @class = "selected-paymentmethod-key" })
+    @Html.HiddenFor(x => x.CustomerToken, new { @id = "customer-token" })
+    @Html.HiddenFor(x => x.ReceiptPageId)
+    <div class="control-group">
+        <button type="submit" class="btn btn-primary">Confirm Sale</button>
+    </div>
+}
+
+@Html.Action("RenderBraintreeSetupJs", "BraintreeStandardTransaction", new { area = "Bazaar" })
+

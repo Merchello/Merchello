@@ -1,6 +1,6 @@
-/*! merchello
+/*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2016 Merchello;
+ * Copyright (c) 2016 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -158,7 +158,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       }
 
       function loadCollection() {
-        if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
+        if(scope.collectionKey === 'manage' || scope.collectionKey === '' || scope.collectionKey === undefined) {
           var key = 'merchelloCollections_all' + scope.entityType;
           localizationService.localize(key).then(function (value) {
             scope.collection.name = value;
@@ -703,14 +703,18 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
     }]);
 
 angular.module('merchello.directives').directive('customerItemCacheTable',
-    ['$q', 'localizationService', 'settingsResource', 'customerResource',
-    function($q, localizationService, settingsResource, customerResource) {
+    ['$q', 'localizationService', 'dialogService', 'settingsResource', 'customerResource',
+    function($q, localizationService, dialogService, settingsResource, customerResource) {
 
         return {
             restrict: 'E',
             replace: true,
             scope: {
                 customer: '=',
+                doAdd: '&',
+                doMove: '&',
+                doEdit: '&',
+                doDelete: '&',
                 itemCacheType: '@'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/customer.itemcachetable.tpl.html',
@@ -722,6 +726,8 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                 scope.items = [];
 
                 scope.getTotal = getTotal;
+
+                scope.openProductSelection = openProductSelectionDialog;
 
                 function init() {
 
@@ -750,6 +756,22 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                        total += item.quantity * item.price;
                     });
                     return total;
+                }
+
+                function openProductSelectionDialog() {
+                    var dialogData = {};
+                    dialogData.addItems = [];
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.productselectionfilter.html',
+                        show: true,
+                        callback: processProductSelection,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processProductSelection(dialogData) {
+                    scope.doAdd()(dialogData.addItems, scope.itemCacheType);
                 }
 
                 init();
@@ -1395,6 +1417,28 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
             localizationService.localize('merchelloShippingMethod_adjustIndividualRegions').then(function(value) {
                 scope.title = value;
             });
+        }
+    }
+});
+
+// the move icon
+angular.module('merchello.directives').directive('merchelloMoveIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doMove: '&'
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-edit" ng-click="doMove()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-width"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_move').then(function (value) {
+                scope.title = value;
+            });
+
         }
     }
 });

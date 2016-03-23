@@ -53,7 +53,7 @@
 	<PropertyGroup>
 		<PackageId>Merchello.Core</PackageId>
     <TestPackageId>Merchello.TestsBase</TestPackageId>
-		<Copyright>Copyright &#169; 2015 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
+		<Copyright>Copyright &#169; 2015 - 2016 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
 		<Owners>Across the Pond, LLC</Owners>
 		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
 		<Tags>umbraco ecommerce merchello</Tags>
@@ -148,6 +148,10 @@
       OutputFile="$(ProjectDir)\Merchello.Examine\Properties\AssemblyInfo.cs"
       AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
       AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Providers\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
 	</Target>
 
 	<!-- COMPILE -->
@@ -164,8 +168,13 @@
     <ItemGroup>
       <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
+      <ProviderFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Merchello.Providers.dll;" />
+      <ProviderDependencyFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Braintree-*.dll;$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\PayPal*.dll" />
+      
       <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
-      <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss" />
+      <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*;" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss;" />
+      <AppPluginPaymentFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.scss" />
+      
       <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
       <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\Config\*.xdt.config" />
 			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
@@ -175,18 +184,29 @@
 			<NuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
       <TestNuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.TestsBase.nuspec" />
 		</ItemGroup>
-		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
+		
+    <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
+    <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
+    <Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
+    <Copy SourceFiles="@(ProviderFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
+    
+    <Copy SourceFiles="@(TestBaseFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
+    <Copy SourceFiles="@(TestPdbFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
+    <Copy SourceFiles="@(ProviderFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
+    
+    <!-- now add the payment provider dependencies for umbraco package generation -->
+    <Copy SourceFiles="@(ProviderFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
+    <Copy SourceFiles="@(ProviderDependencyFiles)" DestinationFolder="$(BuildUmbDir)\bin" /> 
     <Copy SourceFiles="@(AppTrayIcon)" DestinationFolder="$(BuildUmbDir)\Umbraco\images\tray" />
     <Copy SourceFiles="@(AppPluginFiles)" DestinationFiles="@(AppPluginFiles->'$(BuildUmbDir)\App_Plugins\Merchello\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(AppPluginPaymentFiles)" DestinationFiles="@(AppPluginPaymentFiles->'$(BuildUmbDir)\App_Plugins\MerchelloProviders\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(UaaSWebTransformFiles)" DestinationFiles="@(UaaSWebTransformFiles -> '$(BuildTransformsDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(UaaSConfigTransformFiles)" DestinationFiles="@(UaaSConfigTransformFiles -> '$(BuildTransformsDir)\Config\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
-		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
-		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\Core\lib\net45" />
-    <Copy SourceFiles="@(TestBaseFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
-    <Copy SourceFiles="@(TestPdbFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
+    
+    
 		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)\Core" />
-  <Copy SourceFiles="@(TestNuSpecFile)" DestinationFolder="$(BuildNuGetDir)\TestBase" />
+    <Copy SourceFiles="@(TestNuSpecFile)" DestinationFolder="$(BuildNuGetDir)\TestBase" />
 	</Target>
 
 	<!-- MANIFEST UMBRACO -->
@@ -294,7 +314,7 @@
       ZipFileName="$(ArtifactsDir)\$(UaaSTransformZipFile)" 
       ZipLevel="9" />
     
-		<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />
+		<!--<RemoveDir Directories="$(BuildDir)" Condition="Exists('$(BuildDir)')" />-->
 
 	</Target>
 

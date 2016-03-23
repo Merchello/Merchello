@@ -1,7 +1,7 @@
 /*! umbraco
  * https://github.com/umbraco/umbraco-cms/
  * Copyright (c) 2016 Umbraco HQ;
- * Licensed MIT
+ * Licensed 
  */
 
 (function() { 

@@ -941,8 +941,8 @@
                     writer.WriteAttributeString("billToPostalCode", invoice.BillToPostalCode);
                     writer.WriteAttributeString("billToCountryCode", invoice.BillToCountryCode);
                     writer.WriteAttributeString("billToEmail", invoice.BillToEmail);
-                    writer.WriteAttributeString("billtoPhone", invoice.BillToPhone);
-                    writer.WriteAttributeString("billtoCompany", invoice.BillToCompany);
+                    writer.WriteAttributeString("billToPhone", invoice.BillToPhone);
+                    writer.WriteAttributeString("billToCompany", invoice.BillToCompany);
                     writer.WriteAttributeString("poNumber", invoice.PoNumber);
                     writer.WriteAttributeString("exported", invoice.Exported.ToString());
                     writer.WriteAttributeString("archived", invoice.Archived.ToString());
