@@ -29,7 +29,7 @@
                 <td>{{item.quantity}}</td>
                 <td>{{item.price  | currency : settings.currencySymbol }}</td>
                 <td>{{item.price * item.quantity  | currency : settings.currencySymbol}}</td>
-                <td>
+                <td nowrap="nowrap">
                     <merchello-move-icon do-move="doMove()(item)"></merchello-move-icon>
                     <merchello-icon-bar show-delete="true" do-delete="doDelete()(item, itemCacheType)" show-edit="true" do-edit="doEdit()(item, itemCacheType)"></merchello-icon-bar>
                 </td>

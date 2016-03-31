@@ -77,7 +77,7 @@
 
     .merchello-block-label { width : auto; }
 
-    .control-group { overflow: hidden; @include box-sizing; }
+    .control-group { @include box-sizing; }
 
 
     *[class*="icon"]{
