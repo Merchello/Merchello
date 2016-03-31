@@ -7,13 +7,14 @@
     using Merchello.Core.Models;
 
     using Umbraco.Core;
+    using Umbraco.Core.Services;
 
     using PaymentMethod = global::Braintree.PaymentMethod;
 
     /// <summary>
     /// Defines the BraintreePaymentMethodApiProvider.
     /// </summary>
-    public interface IBraintreePaymentMethodApiService
+    public interface IBraintreePaymentMethodApiService : IService
     {
         /// <summary>
         /// Adds a payment method to a customer.

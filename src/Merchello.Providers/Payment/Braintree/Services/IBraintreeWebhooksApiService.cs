@@ -2,10 +2,12 @@
 {
     using global::Braintree;
 
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the Braintree Web hooks ApiService.
     /// </summary>
-    public interface IBraintreeWebhooksApiService
+    public interface IBraintreeWebhooksApiService : IService
     {
         /// <summary>
         /// Performs the Braintree web hook "verify".

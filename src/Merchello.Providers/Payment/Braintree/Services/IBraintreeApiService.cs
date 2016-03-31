@@ -2,10 +2,12 @@
 {
     using Merchello.Providers.Payment.Models;
 
+    using Umbraco.Core.Services;
+
     /// <summary>
     /// Defines the <see cref="BraintreeApiService"/>.
     /// </summary>
-    public interface IBraintreeApiService
+    public interface IBraintreeApiService : IService
     {
         /// <summary>
         /// Gets the <see cref="BraintreeProviderSettings"/>.
