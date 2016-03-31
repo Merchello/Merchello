@@ -12,7 +12,7 @@
     /// 
     /// Initial use case is for payment methods and credit card forms and notification methods for data entry.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
     public class GatewayMethodUiAttribute : Attribute
     {
         /// <summary>
