@@ -13,7 +13,7 @@
     /// <summary>
     /// Payment method for Braintree PayPal OneTime checkouts.
     /// </summary>
-    [GatewayMethodUi("Braintree.PayPal.OneTime")]
+    [GatewayMethodUi("BrainTree.PayPal.OneTime")]
     [GatewayMethodEditor("BrainTree PayPal OneTime Payment Method Editor", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
     [PaymentGatewayMethod("Braintree PayPal Gateway Method Editors",
         "",  // cannot authorize a payment
