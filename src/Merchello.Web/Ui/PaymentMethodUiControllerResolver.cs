@@ -83,7 +83,15 @@
                     x =>
                     x.GetMethods().Any(y => y.GetCustomAttributes(typeof(GatewayMethodUiAttribute), false).Length > 0));
 
-            return BuildUrlActionParams(type);
+            if (type == null)
+            {
+                return null;
+            }
+
+            var method = type.GetMethods().FirstOrDefault(x => x.GetCustomAttributes(typeof(GatewayMethodUiAttribute), false).Length > 0);
+
+
+            return BuildUrlActionParams(type, method != null ? method.Name : null);
         }
 
         /// <summary>
@@ -131,15 +139,20 @@
         /// <param name="type">
         /// The type.
         /// </param>
+        /// <param name="method">
+        /// The method to route to
+        /// </param>
         /// <returns>
         /// The <see cref="UrlActionParams"/>.
         /// </returns>
-        private UrlActionParams BuildUrlActionParams(Type type)
+        private UrlActionParams BuildUrlActionParams(Type type, string method = null)
         {
+            method = method.IsNullOrWhiteSpace() ? "RenderForm" : method;
+
             var urlActionParams = new UrlActionParams()
             {
                 Controller = type.Name.EndsWith("Controller") ? type.Name.Remove(type.Name.LastIndexOf("Controller", StringComparison.Ordinal), 10) : type.Name,
-                Method = "RenderForm"
+                Method = method
             };
 
             var att = type.GetCustomAttribute<PluginControllerAttribute>(false);
