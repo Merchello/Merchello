@@ -37,6 +37,34 @@
         }
 
         [Test]
+        public void Can_Show_Resolve_Types_With_Method()
+        {
+            var controller = "MockPaymentMethodUi";
+            var method = "FakeMethod";
+
+            var urlParams =
+                PaymentMethodUiControllerResolver.Current.GetUrlActionParamsByGatewayMethodUiAliasOnControllerAndMethod(
+                    "MockOperation3");
+
+            Assert.AreEqual(controller, urlParams.Controller);
+            Assert.AreEqual(method, urlParams.Method);
+        }
+
+        [Test]
+        public void Can_Show_Resolve_Types_With_DefaultMethod()
+        {
+            var controller = "MockPaymentMethodUi";
+            var method = "RenderForm";
+
+            var urlParams =
+                PaymentMethodUiControllerResolver.Current.GetUrlActionParamsByGatewayMethodUiAliasOnControllerAndMethod(
+                    "MockOperation2");
+
+            Assert.AreEqual(controller, urlParams.Controller);
+            Assert.AreEqual(method, urlParams.Method);
+        }
+
+        [Test]
         public void Can_Get_UrlActionParams_From_Resolver()
         {
             //// Arrange
