@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Reflection;
 
     using Merchello.Core.Gateways;
     using Merchello.Web.Models.Ui;
@@ -27,7 +28,7 @@
         /// Types which have the GatewayMethodUi attribute.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        private readonly Dictionary<string, List<Type>> _gatewayMethods = new Dictionary<string, List<Type>>(); 
+        private readonly Dictionary<string, Type> _gatewayMethods = new Dictionary<string, Type>(); 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentMethodUiControllerResolver"/> class.
@@ -55,11 +56,8 @@
         /// </returns>
         public UrlActionParams GetUrlActionParamsByGatewayMethodUiAlias(string alias)
         {
-            var types = this.GetTypeByGatewayMethodUiAlias(alias);
-            if (types == null) return null;
-
-            var type = types.First();
-
+            var type = this.GetTypeByGatewayMethodUiAlias(alias);
+            if (type == null) return null;
 
             return BuildUrlActionParams(type);
         }
@@ -76,19 +74,18 @@
         /// </returns>
         public UrlActionParams GetUrlActionParamsByGatewayMethodUiAliasOnControllerAndMethod(string alias)
         {
-            var types = this.GetTypeByGatewayMethodUiAlias(alias);
+            var type = this.GetTypeByGatewayMethodUiAlias(alias);
 
-            var type =
-                types.FirstOrDefault(
-                    x =>
-                    x.GetMethods().Any(y => y.GetCustomAttributes(typeof(GatewayMethodUiAttribute), false).Length > 0));
 
             if (type == null)
             {
                 return null;
             }
 
-            var method = type.GetMethods().FirstOrDefault(x => x.GetCustomAttributes(typeof(GatewayMethodUiAttribute), false).Length > 0);
+            var method = type.GetMethods()
+                .FirstOrDefault(
+                    x => x.GetCustomAttributes(typeof(GatewayMethodUiAttribute), false).Length > 0 &&
+                    x.GetCustomAttribute<GatewayMethodUiAttribute>(false).Alias == alias);
 
 
             return BuildUrlActionParams(type, method != null ? method.Name : null);
@@ -128,7 +125,7 @@
         /// <returns>
         /// The <see cref="Type"/>.
         /// </returns>
-        internal IEnumerable<Type> GetTypeByGatewayMethodUiAlias(string alias)
+        internal Type GetTypeByGatewayMethodUiAlias(string alias)
         {
             return this.HasTypeWithGatewayMethodUiAlias(alias) ? this._gatewayMethods[alias] : null;
         }
@@ -178,11 +175,15 @@
 
                     if (!this._gatewayMethods.ContainsKey(att.Alias))
                     {
-                        this._gatewayMethods.Add(att.Alias, new List<Type> { t });
+                        this._gatewayMethods.Add(att.Alias,  t);
                     }
                     else
                     {
-                        this._gatewayMethods[att.Alias].Add(t);
+                        var exception =
+                            new InvalidOperationException(
+                                "Resolver expects a single controller associated with a GatewayMethodAttribute.");
+                        LogHelper.Error<PaymentMethodUiControllerResolver>("More that one controller found", exception);
+
                     }
                 }
             }

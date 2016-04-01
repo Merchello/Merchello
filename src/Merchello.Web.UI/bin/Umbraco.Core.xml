@@ -7262,6 +7262,17 @@
             <param name="propertyType"></param>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.LabelValueConverter">
+            <summary>
+            We need this property converter so that we always force the value of a label to be a string
+            </summary>
+            <remarks>
+            Without a property converter defined for the label type, the value will be converted with
+            the `ConvertUsingDarkMagic` method which will try to parse the value into it's correct type, but this
+            can cause issues if the string is detected as a number and then strips leading zeros. 
+            Example: http://issues.umbraco.org/issue/U4-7929
+            </remarks>
+        </member>
         <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.ImageCropperValueConverter">
             <summary>
             This ensures that the cropper config (pre-values/crops) are merged in with the front-end value.
