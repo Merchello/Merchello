@@ -515,7 +515,7 @@
                            OrderId = invoice.PrefixedInvoiceNumber(),
                            PaymentMethodNonce = paymentMethodNonce,
                            BillingAddress = this.CreateAddressRequest(invoice.GetBillingAddress()),
-                           Channel = Constants.Braintree.TransactionChannel
+                           Channel = Constants.Braintree.TransactionChannel,                         
                        };
 
             if (customer != null) request.Customer = this.CreateCustomerRequest(customer);
