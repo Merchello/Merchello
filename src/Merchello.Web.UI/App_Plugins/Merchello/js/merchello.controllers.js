@@ -2622,7 +2622,6 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 instruction.customerKey = $scope.customer.key;
                 instruction.entityKey = dialogData.lineItem.key;
                 instruction.itemCacheType = dialogData.itemCacheType;
-                console.info(instruction);
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
@@ -2977,6 +2976,25 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             init();
     }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Customer.Dialogs.CustomerCheckoutController
+ * @function
+ *
+ * @description
+ * The controller allowing to check a customer out from the back office
+ */
+angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerCheckoutController',
+    ['$scope',
+    function($scope) {
+
+        function init() {
+
+        }
+
+        init();
+
+    }]);
     /**
      * @ngdoc controller
      * @name Merchello.Customer.Dialogs.CustomerAddressAddEditController

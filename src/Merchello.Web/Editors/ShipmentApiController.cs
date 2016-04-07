@@ -12,6 +12,7 @@ namespace Merchello.Web.Editors
 
     using Merchello.Core;
     using Merchello.Core.Builders;
+    using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
@@ -48,6 +49,11 @@ namespace Merchello.Web.Editors
         /// The ship method service.
         /// </summary>
         private readonly IShipMethodService _shipMethodService;
+
+        /// <summary>
+        /// The customer service.
+        /// </summary>
+        private readonly ICustomerService _customerService;
 
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
@@ -95,6 +101,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _customerService = merchelloContext.Services.CustomerService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -380,6 +387,49 @@ namespace Merchello.Web.Editors
         }
 
         /// <summary>
+        /// Gets a collection of shipment rate quotes for a customer's basket.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ShipmentRateQuoteDisplay}"/>.
+        /// </returns>
+        /// <remarks>
+        /// Assumes the shipping address is the default shipping address
+        /// </remarks>
+        [HttpGet]
+        public IEnumerable<ShipmentRateQuoteDisplay> GetShipmentRateQuotes(Guid customerKey)
+        {
+            // Gets the customer
+            var customer = _customerService.GetByKey(customerKey);
+            if (customer == null) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
+
+            // Gets the default shipping address saved with the customer
+            var shippingAddress = customer.DefaultCustomerAddress(AddressType.Shipping);
+            if (shippingAddress == null) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
+
+            // Gets the customer basket
+            var basket = customer.Basket();
+            if (basket.IsEmpty) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
+
+            var shipments = basket.PackageBasket(shippingAddress.AsAddress(shippingAddress.FullName));
+
+            // Quotes each shipment
+            var rateQuotes = new List<ShipmentRateQuoteDisplay>();
+            foreach (var shipment in shipments.ToArray())
+            {
+                rateQuotes.AddRange(
+                    shipment
+                    .ShipmentRateQuotes()
+                    .Select(x => x.ToShipmentRateQuoteDisplay())
+                    .Where(x => x != null));
+            }
+
+            return rateQuotes;
+        }
+
+        /// <summary>
         /// Utility method to determine the current order status.
         /// </summary>
         /// <param name="orderKeys">
@@ -439,5 +489,6 @@ namespace Merchello.Web.Editors
             order.OrderStatus = orderStatus;
             _orderService.Save(order);
         }
+
     }
 }

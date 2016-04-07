@@ -95,6 +95,16 @@
                         method: "GET",
                         params: { id: shipment.key }
                     }), 'Failed to delete shipment');
+            },
+
+            getShipmentRateQuotes: function(customerKey) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloShipmentApiBaseUrl'] + 'GetShipmentRateQuotes';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { customer: customerKey }
+                    }), 'Failed to quote shipments for customer basket');
             }
         };
     }]);

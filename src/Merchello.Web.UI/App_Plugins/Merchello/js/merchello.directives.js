@@ -563,7 +563,6 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             $scope.openDeleteAddressDialog = openDeleteAddressDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
 
-            console.info($scope.addressType);
 
             /**
              * @ngdoc method
@@ -603,7 +602,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 // address to be the primary address
 
                 dialogData.customerAddress.addressType = $scope.addressType;
-                console.info(dialogData);
+
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.customeraddress.addedit.html',
                     show: true,
@@ -661,7 +660,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     }
                 }
                 $scope.customer.addresses.push(dialogData.customerAddress);
-                console.info($scope.customer);
+
                 save();
             }
 
@@ -774,6 +773,27 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                     scope.doAdd()(dialogData.addItems, scope.itemCacheType);
                 }
 
+                scope.openCheckoutDialog = function() {
+                    var dialogData = {
+                        customer: scope.customer,
+                        items: scope.items,
+                        currencySymbol: scope.settings.currencySymbol,
+                        total: getTotal()
+                    };
+                    
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.checkout.html',
+                        show: true,
+                        callback: processCheckout,
+                        dialogData: dialogData
+                    });
+                }
+                
+                
+                function processCheckout(dialogData) {
+                    
+                }
+                
                 init();
             }
 

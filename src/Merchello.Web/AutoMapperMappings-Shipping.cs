@@ -60,6 +60,9 @@
             AutoMapper.Mapper.CreateMap<IShipmentStatus, ShipmentStatusDisplay>();
             AutoMapper.Mapper.CreateMap<ShipmentStatusDisplay, ShipmentStatus>();
             AutoMapper.Mapper.CreateMap<IShipment, ShipmentDisplay>();
+
+            // Shipment Rate Quote
+            AutoMapper.Mapper.CreateMap<IShipmentRateQuote, ShipmentRateQuoteDisplay>();
         }
     }
 }

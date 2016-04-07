@@ -1,0 +1,50 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Customer.Dialogs.CustomerCheckoutController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloGeneral_checkout"></localize></h4>
+    </div>
+    <form name="editInfoForm" id="editInfoForm">
+        <div class="umb-panel-body with-header with-footer">
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><localize key="merchelloGeneral_item" /></th>
+                    <th><localize key="merchelloVariant_sku" /></th>
+                    <th><localize key="merchelloGeneral_quantity" /></th>
+                    <th><localize key="merchelloGeneral_price"/></th>
+                    <th><localize key="merchelloGeneral_subTotal"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="item in dialogData.items">
+                    <td>{{item.name}}</td>
+                    <td>{{item.sku}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.price  | currency : dialogData.currencySymbol }}</td>
+                    <td>{{item.price * item.quantity  | currency : dialogData.currencySymbol}}</td>
+
+                </tr>
+                <tr>
+                    <td colspan="3"></td>
+                    <td><localize key="merchelloGeneral_total" /></td>
+                    <td>{{ dialogData.total | currency : dialogData.currencySymbol }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+                    <!-- ACTION: Cancel -->
+                    <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                    <!-- ACTION: Submit DialogData -->
+                    <button class="btn btn-primary" data-ng-click="save()">Save</button>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

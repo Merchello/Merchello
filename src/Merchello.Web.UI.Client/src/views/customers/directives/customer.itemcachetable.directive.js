@@ -70,6 +70,31 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                     scope.doAdd()(dialogData.addItems, scope.itemCacheType);
                 }
 
+                scope.openCheckoutDialog = function() {
+                    var dialogData = {
+                        customer: scope.customer,
+                        items: scope.items,
+                        currencySymbol: scope.settings.currencySymbol,
+                        total: getTotal()
+                    };
+                    
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.checkout.html',
+                        show: true,
+                        callback: processCheckout,
+                        dialogData: dialogData
+                    });
+                }
+                
+                
+                function processCheckout(dialogData) {
+                    
+                }
+                
+                function quoteShippingMethods() {
+                    
+                }
+                
                 init();
             }
 
