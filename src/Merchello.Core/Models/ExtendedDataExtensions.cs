@@ -675,7 +675,7 @@
                                                ? Constants.ExtendedDataKeys.ShippingDestinationAddress
                                                : Constants.ExtendedDataKeys.BillingAddress);
 
-            address.AddressType = addressType;
+            if (address != null) address.AddressType = addressType;
 
             return address;
         }
