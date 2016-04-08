@@ -90,7 +90,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
                 $scope.taxationGatewayProviders = taxationGatewayProviderDisplayBuilder.transform(allProviders);
-                console.info($scope.taxationGatewayProviders);
+
                 var noTaxProvider = taxationGatewayProviderDisplayBuilder.createDefault();
                 noTaxProvider.key = -1;
                 noTaxProvider.name = 'Not Taxed';

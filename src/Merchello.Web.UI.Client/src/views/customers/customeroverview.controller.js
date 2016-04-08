@@ -179,7 +179,6 @@
                 instruction.customerKey = $scope.customer.key;
                 instruction.entityKey = dialogData.lineItem.key;
                 instruction.itemCacheType = dialogData.itemCacheType;
-                console.info(instruction);
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });

@@ -60,6 +60,7 @@
     <key alias="totals">Totals</key>
     <key alias="quantity">Quantity</key>
     <key alias="subTotal">Sub Total</key>
+    <key alias="checkout">Checkout</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>

@@ -14,7 +14,10 @@
         </thead>
         <tfoot>
         <tr>
-            <td colspan="6"><merchello-add-icon do-add="openProductSelection()"></merchello-add-icon></td>
+            <td colspan="6">
+                <merchello-add-icon do-add="openProductSelection()"></merchello-add-icon>
+                <a data-ng-click="openCheckoutDialog()" data-ng-show="showCheckout">Checkout</a>
+            </td>
         </tr>
         </tfoot>
         <tbody data-ng-show="items.length === 0">

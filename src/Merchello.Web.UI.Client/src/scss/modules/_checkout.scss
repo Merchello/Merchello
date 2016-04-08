@@ -1,0 +1,11 @@
+.checkout-address {
+
+  .adr {
+    display: block;
+
+    .street-address,
+    .extended-address,
+    .postal-code,
+    .country-name { display: block; }
+  }
+}

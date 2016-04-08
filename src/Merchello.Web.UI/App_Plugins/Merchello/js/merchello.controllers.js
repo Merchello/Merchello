@@ -2622,7 +2622,6 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 instruction.customerKey = $scope.customer.key;
                 instruction.entityKey = dialogData.lineItem.key;
                 instruction.itemCacheType = dialogData.itemCacheType;
-                console.info(instruction);
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
@@ -2977,6 +2976,36 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             init();
     }]);
 
+/**
+ * @ngdoc controller
+ * @name Merchello.Customer.Dialogs.CustomerCheckoutController
+ * @function
+ *
+ * @description
+ * The controller allowing to check a customer out from the back office
+ */
+angular.module('merchello').controller('Merchello.Customer.Dialogs.CustomerCheckoutController',
+    ['$scope', '$filter',
+    function($scope, $filter) {
+
+        $scope.billingAddress = {};
+        $scope.shippingAddress = {};
+
+        // initializes the controller
+        function init() {
+            $scope.billingAddress = $scope.dialogData.customer.getDefaultBillingAddress();
+            $scope.shippingAddress = $scope.dialogData.customer.getDefaultShippingAddress();
+        }
+
+        // formats a quote
+        $scope.formatQuote = function(quote) {
+            return quote.shipMethod.name + ' (' + $filter('currency')(quote.rate, $scope.dialogData.currencySymbol) + ')';
+        }
+        
+        
+        init();
+
+    }]);
     /**
      * @ngdoc controller
      * @name Merchello.Customer.Dialogs.CustomerAddressAddEditController
@@ -4076,7 +4105,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                             angular.forEach(available, function(pusher) {
                                 $scope.availableProviders.push(pusher);
                             });
-                            //console.info($scope.assignedProviders);
+
                             loadProviderMethods();
                         }
                     }, function (reason) {
@@ -4149,7 +4178,6 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                 dialogData.shipMethodName = $scope.country.name + " " + dialogData.selectedResource.name;
                 dialogData.country = $scope.country;
                 dialogData.showProvidersDropDown = false;
-                console.info(dialogData);
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipcountry.addprovider.html',
                     show: true,
@@ -5755,7 +5783,7 @@ angular.module('merchello').controller('Merchello.Backoffice.TaxationProvidersCo
             var promiseAllProviders = taxationGatewayProviderResource.getAllGatewayProviders();
             promiseAllProviders.then(function (allProviders) {
                 $scope.taxationGatewayProviders = taxationGatewayProviderDisplayBuilder.transform(allProviders);
-                console.info($scope.taxationGatewayProviders);
+
                 var noTaxProvider = taxationGatewayProviderDisplayBuilder.createDefault();
                 noTaxProvider.key = -1;
                 noTaxProvider.name = 'Not Taxed';
@@ -9705,7 +9733,6 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 if($scope.payments.length === 0) {
                     var promise = paymentGatewayProviderResource.getAvailablePaymentMethods();
                     promise.then(function(methods) {
-                        console.info(methods);
                         $scope.paymentMethods = paymentMethodDisplayBuilder.transform(methods);
                         $scope.preValuesLoaded = true;
                         $scope.paymentMethodsLoaded = true;

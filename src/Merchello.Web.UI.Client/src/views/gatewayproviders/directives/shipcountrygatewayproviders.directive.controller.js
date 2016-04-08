@@ -79,7 +79,7 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                             angular.forEach(available, function(pusher) {
                                 $scope.availableProviders.push(pusher);
                             });
-                            //console.info($scope.assignedProviders);
+
                             loadProviderMethods();
                         }
                     }, function (reason) {
@@ -152,7 +152,6 @@ angular.module('merchello').controller('Merchello.Directives.ShipCountryGateways
                 dialogData.shipMethodName = $scope.country.name + " " + dialogData.selectedResource.name;
                 dialogData.country = $scope.country;
                 dialogData.showProvidersDropDown = false;
-                console.info(dialogData);
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/shipping.shipcountry.addprovider.html',
                     show: true,
