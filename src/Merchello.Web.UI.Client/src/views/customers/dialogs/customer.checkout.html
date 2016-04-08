@@ -32,7 +32,20 @@
                 </tbody>
             </table>
 
+            <div class="well checkout-address">
+                <h3><localize key="merchelloSales_billingAddress" /></h3>
+                <merchello-address address="billingAddress"></merchello-address>
+            </div>
 
+            <div class="well checkout-address">
+                <h3><localize key="merchelloSales_shippingAddress" /></h3>
+                <merchello-address address="shippingAddress"></merchello-address>
+            </div>
+
+            <div data-ng-show="dialogData.quotes.length > 0">
+                <h3>Shipping method</h3>
+                <select name="quote" class="col-xs-12 span12" data-ng-model="dialogData.selectedQuote" data-ng-options="formatQuote(p) for p in dialogData.quotes"></select>
+            </div>
 
         </div>
         <div class="umb-panel-footer">
@@ -41,7 +54,7 @@
                     <!-- ACTION: Cancel -->
                     <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
                     <!-- ACTION: Submit DialogData -->
-                    <button class="btn btn-primary" data-ng-click="save()">Save</button>
+                    <button class="btn btn-primary" data-ng-click="submit(dialogData)">Create Invoice</button>
 
                 </div>
             </div>

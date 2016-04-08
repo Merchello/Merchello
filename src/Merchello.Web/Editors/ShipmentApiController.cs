@@ -1,23 +1,18 @@
-﻿using Merchello.Web.Models.SaleHistory;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Management.Instrumentation;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
 
     using Merchello.Core;
     using Merchello.Core.Builders;
-    using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Models.Querying;
+    using Merchello.Web.Models.ContentEditing.Checkout;
     using Merchello.Web.Models.Shipping;
     using Merchello.Web.WebApi;
 
@@ -81,6 +76,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _customerService = merchelloContext.Services.CustomerService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -384,49 +380,6 @@ namespace Merchello.Web.Editors
             var statuses = _shipmentService.GetAllShipmentStatuses().OrderBy(x => x.SortOrder);
 
             return statuses.Select(x => x.ToShipmentStatusDisplay());
-        }
-
-        /// <summary>
-        /// Gets a collection of shipment rate quotes for a customer's basket.
-        /// </summary>
-        /// <param name="customerKey">
-        /// The customer key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{ShipmentRateQuoteDisplay}"/>.
-        /// </returns>
-        /// <remarks>
-        /// Assumes the shipping address is the default shipping address
-        /// </remarks>
-        [HttpGet]
-        public IEnumerable<ShipmentRateQuoteDisplay> GetShipmentRateQuotes(Guid customerKey)
-        {
-            // Gets the customer
-            var customer = _customerService.GetByKey(customerKey);
-            if (customer == null) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
-
-            // Gets the default shipping address saved with the customer
-            var shippingAddress = customer.DefaultCustomerAddress(AddressType.Shipping);
-            if (shippingAddress == null) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
-
-            // Gets the customer basket
-            var basket = customer.Basket();
-            if (basket.IsEmpty) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
-
-            var shipments = basket.PackageBasket(shippingAddress.AsAddress(shippingAddress.FullName));
-
-            // Quotes each shipment
-            var rateQuotes = new List<ShipmentRateQuoteDisplay>();
-            foreach (var shipment in shipments.ToArray())
-            {
-                rateQuotes.AddRange(
-                    shipment
-                    .ShipmentRateQuotes()
-                    .Select(x => x.ToShipmentRateQuoteDisplay())
-                    .Where(x => x != null));
-            }
-
-            return rateQuotes;
         }
 
         /// <summary>

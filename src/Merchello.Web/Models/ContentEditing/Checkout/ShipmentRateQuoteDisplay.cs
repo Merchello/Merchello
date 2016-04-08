@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing.Checkout
 {
     using System.Collections.Generic;
 

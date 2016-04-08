@@ -110,8 +110,8 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
     }]);
 
 angular.module('merchello.resources').factory('backOfficeCheckoutResource',
-    ['$http', '$q', 'umbRequestHelper', 'customerItemCacheDisplayBuilder',
-    function($http, $q, umbRequestHelper, customerItemCacheDisplayBuilder) {
+    ['$http', '$q', 'umbRequestHelper', 'customerItemCacheDisplayBuilder', 'invoiceDisplayBuilder', 'shipmentRateQuoteDisplayBuilder',
+    function($http, $q, umbRequestHelper, customerItemCacheDisplayBuilder, invoiceDisplayBuilder, shipmentRateQuoteDisplayBuilder) {
 
         var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloBackOfficeCheckoutApiBaseUrl'];
 
@@ -144,6 +144,22 @@ angular.module('merchello.resources').factory('backOfficeCheckoutResource',
                     'Failed to update item quantity');
             },
 
+            createCheckoutInvoice: function(model) {
+                var url = baseUrl + 'CreateCheckoutInvoice';
+
+                var defer = $q.defer();
+
+                umbRequestHelper.resourcePromise(
+                    $http.post(url, model),
+                    'Failed to update item quantity')
+                    .then(function(result) {
+                        var invoice = invoiceDisplayBuilder.transform(result);
+                        defer.resolve(invoice);
+                    });
+
+                return defer.promise;
+            },
+
             moveToWishlist : function(instruction) {
                 var url = baseUrl + 'MoveToWishlist';
                 return umbRequestHelper.resourcePromise(
@@ -160,6 +176,27 @@ angular.module('merchello.resources').factory('backOfficeCheckoutResource',
                         instruction
                     ),
                     'Failed to move item to basket');
+            },
+
+            getShipmentRateQuotes: function(customerKey) {
+                var url = baseUrl + 'GetShipmentRateQuotes';
+
+                var defer = $q.defer();
+
+                umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { customerKey: customerKey }
+                    }),
+                    'Failed to quote shipments for customer basket')
+                    .then(function(result) {
+                        var quotes = shipmentRateQuoteDisplayBuilder.transform(result);
+                        defer.resolve(quotes);
+                    });
+
+                return defer.promise;
+
             }
 
         };
@@ -1879,7 +1916,8 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
      * @description Loads in data and allows modification for shipments
      **/
     angular.module('merchello.resources').factory('shipmentResource',
-        ['$http', 'umbRequestHelper', function($http, umbRequestHelper) {
+        ['$http', '$q', 'umbRequestHelper',
+            function($http, $q, umbRequestHelper) {
         return {
 
             getAllShipmentStatuses: function () {
@@ -1971,6 +2009,7 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
                         params: { id: shipment.key }
                     }), 'Failed to delete shipment');
             }
+
         };
     }]);
 angular.module('merchello.resources')

@@ -329,6 +329,7 @@
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheInstruction.cs" />
     <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheItem.cs" />
+    <Compile Include="Models\ContentEditing\Checkout\CreateCustomerInvoice.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ItemCacheInstructionBase.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ItemCacheLineItemInstruction.cs" />
     <Compile Include="Models\ContentEditing\Collections\Entity2CollectionModel.cs" />
@@ -355,7 +356,7 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ProductCopySave.cs" />
-    <Compile Include="Models\ContentEditing\ShipmentRateQuoteDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Checkout\ShipmentRateQuoteDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Discounts\Coupons\CouponManager.cs" />

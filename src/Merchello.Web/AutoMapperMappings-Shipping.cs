@@ -6,6 +6,9 @@
     using Core.Gateways.Shipping.FixedRate;
     using Core.Models;
     using Core.Models.Interfaces;
+
+    using Merchello.Web.Models.ContentEditing.Checkout;
+
     using Models.ContentEditing;
     using Models.MapperResolvers;
 
