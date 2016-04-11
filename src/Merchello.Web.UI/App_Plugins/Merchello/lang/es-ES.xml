@@ -139,6 +139,7 @@
     <area alias="merchelloNotes">
       <key alias="addNote">Añadir nueva nota</key>
       <key alias="editNote">Editar nota</key>
+      <key alias="internalOnly">This note is for internal use only.</key>
     </area>
     <key alias="customerWishlist">
       <![CDATA[

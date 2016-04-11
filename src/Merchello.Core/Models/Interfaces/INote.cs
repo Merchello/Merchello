@@ -28,5 +28,11 @@
         [DataMember]
         string Message { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the not is for internal use only.
+        /// </summary>
+        [DataMember]
+        bool InternalOnly { get; set; }
+
     }
 }

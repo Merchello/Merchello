@@ -288,9 +288,11 @@
 
             try
             {
+                // Get the customer
                 var customer = _customerService.GetByKey(model.CustomerKey);
                 if (customer == null) throw new NullReferenceException("Customer not found");
 
+                // In this implementation, we require the customer addresses are populated which both a default billing and shipping address
                 if (!customer.Addresses.Any()) throw new NullReferenceException("Customer does not have any saved addresses");
 
                 var billing = customer.DefaultCustomerAddress(AddressType.Billing);
@@ -299,9 +301,11 @@
                 if (billing == null) throw new NullReferenceException("Customer does not have a default billing address");
                 if (shipping == null) throw new NullReferenceException("Customer does not have a default shipping address");
 
+                // The customer basket must have items to purchase
                 var basket = customer.Basket();
                 if (basket.IsEmpty) throw new InvalidOperationException("Cannot complete back office checkout for customer without items in their basket.");
 
+                // Use the basket checkout manager for facilate the checkout
                 var checkoutManager = basket.GetCheckoutManager();
                 checkoutManager.Customer.SaveBillToAddress(
                     billing.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
@@ -315,6 +319,8 @@
 
                 checkoutManager.Shipping.SaveShipmentRateQuote(quote);
 
+                // We are not going to pay through the back office checkout, rather redirect to the sales overview page 
+                // and pay from there since the payments can be implemented there
                 var invoice = checkoutManager.Payment.PrepareInvoice();
 
                 MerchelloContext.Services.InvoiceService.Save(invoice);
@@ -328,8 +334,6 @@
                 LogHelper.Error<BackOfficeCheckoutApiController>("Failed to create customer invoice", ex);
                 throw;
             }
-            
-
         }
 
         #endregion

@@ -247,6 +247,7 @@
 		        else
 		        {
 		            n.Message = update.Message;
+		            n.InternalOnly = update.InternalOnly;
 		        }
 		    }
 

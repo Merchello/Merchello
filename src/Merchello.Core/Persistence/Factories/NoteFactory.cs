@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.Factories
 {
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Rdbms;
 
     /// <summary>
@@ -24,6 +23,7 @@
                 {
                     Key = dto.Key,
                     Message = dto.Message,
+                    InternalOnly = dto.InternalOnly,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -50,6 +50,7 @@
                     EntityKey = entity.EntityKey,
                     EntityTfKey = entity.EntityTfKey,
                     Message = entity.Message,
+                    InternalOnly = entity.InternalOnly,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

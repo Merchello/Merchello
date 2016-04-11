@@ -41,6 +41,11 @@
         [SpecialDbType(SpecialDbTypes.NTEXT)]
         public string Message { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the note should be for internal use only.
+        /// </summary>
+        [Column("internalOnly")]
+        public bool InternalOnly { get; set; }
 
         /// <summary>
         /// Gets or sets the update date.
