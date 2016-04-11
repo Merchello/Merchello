@@ -41,6 +41,10 @@
         /// </summary>
         public string Message { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether internal only.
+        /// </summary>
+        public bool InternalOnly { get; set; }
 
         /// <summary>
         /// Gets or sets the note type field.
@@ -89,6 +93,7 @@
             var note = new Note(noteDisplay.EntityKey, noteDisplay.EntityTfKey)
             {
                 Message = noteDisplay.Message,
+                InternalOnly = noteDisplay.InternalOnly,
                 CreateDate = noteDisplay.RecordDate == DateTime.MinValue ? DateTime.Now : noteDisplay.RecordDate
             };
 

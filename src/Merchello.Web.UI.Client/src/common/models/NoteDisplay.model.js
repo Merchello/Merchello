@@ -7,6 +7,7 @@ var NoteDisplay = function() {
     self.entityType = '';
     self.noteTypeField = {};
     self.recordDate = '';
+    self.internalOnly = false;
 };
 
 NoteDisplay.prototype = (function () {

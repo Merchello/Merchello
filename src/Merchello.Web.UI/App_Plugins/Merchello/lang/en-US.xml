@@ -273,6 +273,7 @@
     <area alias="merchelloNotes">
       <key alias="addNote">Add a new note</key>
       <key alias="editNote">Edit note</key>
+      <key alias="internalOnly">This note is for internal use only.</key>
     </area>
     <key alias="emptyCustomerCollection">There are currently no customers in this collection</key>
     <key alias="customerNotes">

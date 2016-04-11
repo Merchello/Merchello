@@ -10115,6 +10115,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 });
                 if (note !== null && note !== undefined) {
                     note.message = dialogData.note.message;
+                    note.internalOnly = dialogData.note.internalOnly;
                 }
                 saveInvoice();
             }

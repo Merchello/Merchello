@@ -247,6 +247,7 @@
   <area alias="merchelloNotes">
     <key alias="addNote">Добавить заметку</key>
     <key alias="editNote">Изменить заметку</key>
+    <key alias="internalOnly">This note is for internal use only.</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>

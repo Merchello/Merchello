@@ -492,6 +492,7 @@
     <Compile Include="Models\Interfaces\IAuditLog.cs" />
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
+    <Compile Include="Models\NoteExtensions.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
     <Compile Include="Models\OfferRedeemed.cs" />
@@ -629,6 +630,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteInternalOnlyColumn.cs" />
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
