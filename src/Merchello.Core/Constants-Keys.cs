@@ -415,6 +415,17 @@
             {
                 get { return new Guid("292E477B-E39A-4B8B-9865-334EEE850FD7"); }
             }
+
+            /// <summary>
+            /// Gets the HasDomainRecord settings key.
+            /// </summary>
+            public static Guid HasDomainRecordKey
+            {
+                get
+                {
+                    return new Guid("84FC6354-5E84-495F-9CB4-1C753D612AF7");
+                }
+            }
         }
 
         /// <summary>

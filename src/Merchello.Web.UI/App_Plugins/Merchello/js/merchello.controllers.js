@@ -3503,8 +3503,18 @@ angular.module('merchello').controller('Merchello.Backoffice.SettingsController'
                     });
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
-                    $log.debug($scope.languages);
-                    $log.debug($scope.settingsDisplay);
+
+                    if ($scope.settingsDisplay.hasDomainRecord === false) {
+                        try {
+                            settingsResource.recordDomain({
+                                migrationKey: $scope.settingsDisplay.migrationKey,
+                                domainName: document.location.hostname
+                            });
+                        } catch(err) {
+                            // catch the error so it does not display
+                        }
+                    }
+
                 }, function (reason) {
                     otificationsService.error('Failed to load settings ' + reason);
                 });

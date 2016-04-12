@@ -91,7 +91,8 @@
                 return new Version(1, 13, 0);
             }
 
-            if (!this.ValidColumns.Contains("merchNote,internalOnly"))
+            if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
+                StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey))
             {
                 return new Version(1, 14, 1);
             }

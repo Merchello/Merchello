@@ -30,6 +30,7 @@
     using Umbraco.Core.Models;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Services;
+    using Umbraco.Web;
     using Umbraco.Web.Routing;
 
     using ServiceContext = Merchello.Core.Services.ServiceContext;
@@ -487,9 +488,14 @@
         /// <param name="e">
         /// The merchello migration event args.
         /// </param>
-        private void MigrationManagerOnUpgraded(object sender, MerchelloMigrationEventArgs e)
+        private async void MigrationManagerOnUpgraded(object sender, MerchelloMigrationEventArgs e)
         {
-            ((WebMigrationManager)sender).PostAnalyticInfo(e.MigrationRecord);
+            var response = await ((WebMigrationManager)sender).PostAnalyticInfo(e.MigrationRecord);
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var ex = new Exception(response.ReasonPhrase);
+                LogHelper.Error(typeof(UmbracoApplicationEventHandler), "Failed to record Merchello Migration Record", ex);
+            }
         }
     }
 }
