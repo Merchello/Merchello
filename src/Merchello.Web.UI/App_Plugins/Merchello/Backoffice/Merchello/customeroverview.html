@@ -107,7 +107,8 @@
 
             <div class="merchello-pane secondary span12">
                 <div class="control-group umb-control-group">
-                    <label class="merchello-section-label">
+                    <merchello-notes-table entity-type="entityType" notes="customer.notes" save="saveCustomer()" delete="deleteNote"></merchello-notes-table>
+                    <!--label class="merchello-section-label">
                         <localize key="merchelloCustomers_customerNotes" />
                     </label>
                     <div class="merchello-controls">
@@ -117,7 +118,7 @@
                             </div>
                             <input type="submit" class="btn btn-primary" value="Save Note" data-ng-click="saveCustomer()" />
                         </div>
-                    </div>
+                    </div-->
                 </div>
 
                 <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="customer"></entity-static-collections>

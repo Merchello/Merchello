@@ -29,6 +29,11 @@
         private readonly ICustomerAddressRepository _customerAddressRepository;
 
         /// <summary>
+        /// The note repository.
+        /// </summary>
+        private readonly INoteRepository _noteRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CustomerRepository"/> class.
         /// </summary>
         /// <param name="work">
@@ -40,17 +45,28 @@
         /// <param name="customerAddressRepository">
         /// The customer Address Repository.
         /// </param>
+        /// <param name="noteRepository">
+        /// The note Repository.
+        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICustomerAddressRepository customerAddressRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+        public CustomerRepository(
+            IDatabaseUnitOfWork work, 
+            IRuntimeCacheProvider cache, 
+            ICustomerAddressRepository customerAddressRepository, 
+            INoteRepository noteRepository,
+            ILogger logger, 
+            ISqlSyntaxProvider sqlSyntax) 
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
+            Mandate.ParameterNotNull(noteRepository, "noteRepository");
 
+            _noteRepository = noteRepository;
             _customerAddressRepository = customerAddressRepository;
         }
 
@@ -419,8 +435,7 @@
                 return null;
 
             var factory = new CustomerFactory();
-
-            var customer = factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(key));
+            var customer = factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(key), GetNotes(key));
 
             return customer;
         }
@@ -449,7 +464,7 @@
                 var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {                    
-                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key));
+                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
                 }
             }
         }
@@ -495,6 +510,7 @@
         {
             var list = new List<string>
                 {
+                    "DELETE FROM merchNote WHERE entityKey = @Key",
                     "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
                     "DELETE FROM merchItemCache WHERE entityKey = @Key",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
@@ -525,6 +541,8 @@
             Database.Insert(dto.CustomerIndexDto);
             ((Customer)entity).ExamineId = dto.CustomerIndexDto.Id;
 
+            SaveNotes(entity);
+
             entity.ResetDirtyProperties();
 
             // customer context cache
@@ -539,6 +557,8 @@
         /// </param>
         protected override void PersistUpdatedItem(ICustomer entity)
         {
+            SaveNotes(entity);
+
             ((Entity)entity).UpdatingEntity();
 
             var factory = new CustomerFactory();
@@ -616,6 +636,72 @@
             }
 
             return sql;
+        }
+
+        /// <summary>
+        /// Saves the notes.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        private void SaveNotes(ICustomer entity)
+        {
+            var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == entity.Key && x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.CustomerKey);
+            var existing = _noteRepository.GetByQuery(query);
+
+            var removers = existing.Where(x => !Guid.Empty.Equals(x.Key) && entity.Notes.All(y => y.Key != x.Key)).ToArray();
+
+            foreach (var remover in removers) _noteRepository.Delete(remover);
+
+            var updates = entity.Notes.Where(x => removers.All(y => y.Key != x.Key));
+
+            var factory = new NoteFactory();
+            foreach (var u in updates)
+            {
+                u.EntityKey = entity.Key;
+
+                if (u.HasIdentity)
+                {
+                    ((Note)u).UpdatingEntity();
+                    var dto = factory.BuildDto(u);
+                    Database.Update(dto);
+                }
+                else
+                {
+                    ((Note)u).AddingEntity();
+                    var dto = factory.BuildDto(u);
+                    Database.Insert(dto);
+                    u.Key = dto.Key;
+                }
+
+                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
+                RuntimeCache.ClearCacheItem(cacheKey);
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the notes collection for an invoice.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{INote}"/>.
+        /// </returns>
+        private IEnumerable<INote> GetNotes(Guid customerKey)
+        {
+            var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == customerKey && x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.CustomerKey);
+            var notes = _noteRepository.GetByQuery(query);
+
+            var collection = new List<INote>();
+
+            foreach (var note in notes.OrderByDescending(x => x.CreateDate))
+            {
+                collection.Add(note);
+            }
+
+            return collection;
         }
     }
 }

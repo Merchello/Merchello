@@ -589,7 +589,7 @@ angular.module('merchello.models').constant('EntityCollectionProviderDisplay', E
         self.lastActivityDate = '';
         self.lastName = '';
         self.loginName = '';
-        self.notes = '';
+        self.notes = [];
         self.email = '';
         self.taxExempt = false;
         self.extendedData = {};
@@ -4205,9 +4205,9 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
      * A utility service that builds CustomerDisplay models
      */
     angular.module('merchello.models').factory('customerDisplayBuilder',
-        ['genericModelBuilder', 'customerAddressDisplayBuilder', 'extendedDataDisplayBuilder', 'invoiceDisplayBuilder', 'CustomerDisplay',
+        ['genericModelBuilder', 'customerAddressDisplayBuilder', 'extendedDataDisplayBuilder', 'invoiceDisplayBuilder', 'noteDisplayBuilder', 'CustomerDisplay',
         function(genericModelBuilder, customerAddressDisplayBuilder, extendedDataDisplayBuilder,
-                 invoiceDisplayBuilder, CustomerDisplay) {
+                 invoiceDisplayBuilder, noteDisplayBuilder, CustomerDisplay) {
 
             var Constructor = CustomerDisplay;
             return {
@@ -4223,6 +4223,7 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
                             var customer = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             customer.addresses = customerAddressDisplayBuilder.transform(jsonResult[ i ].addresses);
                             customer.invoices = invoiceDisplayBuilder.transform(jsonResult[ i ].invoices);
+                            customer.notes = noteDisplayBuilder.transform(jsonResult[ i ].notes);
                             customer.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
                             customers.push(customer);
                         }
@@ -4230,6 +4231,7 @@ angular.module('merchello.models').factory('customerAddressDisplayBuilder',
                         customers = genericModelBuilder.transform(jsonResult, Constructor);
                         customers.addresses = customerAddressDisplayBuilder.transform(jsonResult.addresses);
                         customers.invoices = invoiceDisplayBuilder.transform(jsonResult.invoices);
+                        customers.notes = noteDisplayBuilder.transform(jsonResult.notes);
                         customers.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
                     }
                     return customers;

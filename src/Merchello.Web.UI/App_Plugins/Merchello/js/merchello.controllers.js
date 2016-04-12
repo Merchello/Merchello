@@ -2466,7 +2466,7 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             $scope.customer = {};
             $scope.invoiceTotals = [];
             $scope.settings = {};
-            $scope.entityType = 'customer';
+            $scope.entityType = 'Customer';
             $scope.listViewEntityType = 'SalesHistory';
 
             // exposed methods
@@ -2481,6 +2481,7 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
             $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
             $scope.saveCustomer = saveCustomer;
+            $scope.deleteNote = deleteNote;
 
             $scope.load = load;
             $scope.getColumnValue = getColumnValue;
@@ -2930,6 +2931,15 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 $scope.customer.email = dialogData.email;
                 saveCustomer();
             }
+
+            function deleteNote(note) {
+                $scope.customer.notes = _.reject($scope.customer.notes, function(n) {
+                    return n.key === note.key;
+                });
+
+                saveCustomer();
+            }
+
 
             /**
              * @ngdoc method
@@ -9552,11 +9562,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
-            $scope.entityType = 'invoice';
-
-            $scope.editNote = editNote;
-            $scope.deleteNote = deleteNote;
-            $scope.addNote = addNote;
+            $scope.entityType = 'Invoice';
+            
 
             // exposed methods
             //  dialogs
@@ -9571,7 +9578,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             $scope.reload = init;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
             $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
-
+            $scope.saveNotes = saveNotes;
+            $scope.deleteNote = deleteNote;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
@@ -10077,74 +10085,18 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
                 }
             }
 
-            function editNote(note) {
-                localizationService.localize('merchelloNotes_editNote').then(function(title) {
-                    var dialogData = {};
-                    dialogData.title = title;
-                    dialogData.note = angular.extend(noteDisplayBuilder.createDefault(), note);
-                    dialogService.open({
-                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
-                        show: true,
-                        callback: processEditNoteDialog,
-                        dialogData: dialogData
-                    });
-                });
+            function saveNotes() {
+                saveInvoice();
             }
-
-
-            function addNote() {
-                localizationService.localize('merchelloNotes_addNote').then(function(title) {
-                    var dialogData = {};
-                    dialogData.title = title;
-                    dialogData.note = noteDisplayBuilder.createDefault();
-                    dialogService.open({
-                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
-                        show: true,
-                        callback: processAddNoteDialog,
-                        dialogData: dialogData
-                    });
-                });
-            }
-
-
+            
             function deleteNote(note) {
-                var dialogData = {};
-                dialogData.name = note.message;
-                dialogData.note = note;
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
-                    show: true,
-                    callback: processDeleteNoteDialog,
-                    dialogData: dialogData
+                $scope.invoice.notes = _.reject($scope.invoice.notes, function(n) {
+                    return n.key === note.key;
                 });
-            }
-
-            function processEditNoteDialog(dialogData) {
-                var note = _.find($scope.invoice.notes, function(n) {
-                    return n.key === dialogData.note.key;
-                });
-                if (note !== null && note !== undefined) {
-                    note.message = dialogData.note.message;
-                    note.internalOnly = dialogData.note.internalOnly;
-                }
-                saveInvoice();
-            }
-
-            function processAddNoteDialog(dialogData) {
-
-               $scope.invoice.notes.push(dialogData.note);
 
                 saveInvoice();
             }
-
-            function processDeleteNoteDialog(dialogData) {
-                var notes = _.reject($scope.invoice.notes, function(n) {
-                   return n.key === dialogData.note.key;
-                });
-                $scope.invoice.notes = notes;
-                saveInvoice();
-            }
-
+            
             function saveInvoice() {
                 invoiceResource.saveInvoice($scope.invoice).then(function(data) {
                     $timeout(function () {

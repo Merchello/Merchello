@@ -1411,7 +1411,7 @@
         /// </returns>
         private IEnumerable<INote> GetNotes(Guid invoiceKey)
         {
-            var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == invoiceKey);
+            var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == invoiceKey && x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.InvoiceKey);
             var notes = _noteRepository.GetByQuery(query);
 
             var collection = new List<INote>();

@@ -932,8 +932,7 @@ angular.module('merchello.resources').factory('noteResource', [
                     params: { id: key }
                 }),
                 'Failed to retrieve notes for entity with following key: ' + key);
-            },
-
+            }
 
         };
     }]);

@@ -13,7 +13,7 @@
         self.lastActivityDate = '';
         self.lastName = '';
         self.loginName = '';
-        self.notes = '';
+        self.notes = [];
         self.email = '';
         self.taxExempt = false;
         self.extendedData = {};

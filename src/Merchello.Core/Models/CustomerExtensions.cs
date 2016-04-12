@@ -462,7 +462,7 @@
                     writer.WriteAttributeString("email", customer.Email);
                     writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
                     writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
-                    writer.WriteAttributeString("notes", customer.Notes);
+                    writer.WriteAttributeString("notes", customer.Notes.ToJsonCollection());
                     writer.WriteAttributeString("addresses", customer.AddressesAsJson());
                     writer.WriteAttributeString("lastActivityDate", customer.LastActivityDate.ToString("s"));
                     writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));

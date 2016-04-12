@@ -25,6 +25,11 @@
     internal class PaymentRepository : MerchelloPetaPocoRepositoryBase<IPayment>, IPaymentRepository
     {
         /// <summary>
+        /// The note repository.
+        /// </summary>
+        private readonly INoteRepository _noteRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PaymentRepository"/> class.
         /// </summary>
         /// <param name="work">
@@ -33,15 +38,21 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
+        /// <param name="noteRepository">
+        /// The note Repository.
+        /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public PaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public PaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, INoteRepository noteRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
+            Mandate.ParameterNotNull(noteRepository, "noteRepository");
+
+            _noteRepository = noteRepository;
         }
 
         #region Overrides of RepositoryBase<IPayment>
