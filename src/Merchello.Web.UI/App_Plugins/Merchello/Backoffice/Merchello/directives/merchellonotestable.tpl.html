@@ -1,0 +1,36 @@
+<div class="table-notes">
+    <div class="merchello-section-label">
+        <localize key="merchelloNotes_notes">Notes</localize>
+        <small>{{ smallText }}</small>
+    </div>
+    <div class="merchello-controls">
+        <div class="row-fluid">
+            <table class="table">
+                <tbody>
+                <thead>
+                <tr>
+                    <th colspan="2"><localize key="merchelloNotes_note">Note</localize></th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <td></td>
+                    <td>
+                        <span class="pull-right">
+                            <merchello-add-icon do-add="addNote()"></merchello-add-icon>
+                        </span>
+                    </td>
+                </tr>
+                </tfoot>
+                <tr  data-ng-repeat="item in notes">
+                    <td>
+                        <p><strong>{{item.recordDate | date : settings.dateFormat }}</strong></p>
+                        <div data-ng-bind-html="item.message"></div>
+                    </td>
+                    <td class="pull-right" nowrap="nowrap"><merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNote(item)" do-delete="deleteNote(item)"></merchello-icon-bar></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

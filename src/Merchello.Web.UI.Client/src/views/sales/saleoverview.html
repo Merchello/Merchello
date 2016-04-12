@@ -109,41 +109,7 @@
                 </div>
 
                 <div class="control-group umb-control-group">
-
-                    <div class="merchello-section-label">
-                        Notes
-                        <small>Notes about this order</small>
-                    </div>
-                    <div class="merchello-controls">
-                        <div class="row-fluid">
-                            <table class="table">
-                                <tbody>
-                                <thead>
-                                <tr>
-                                    <th colspan="2">Note</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <span class="pull-right">
-                                                <merchello-add-icon do-add="addNote()"></merchello-add-icon>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                                <tr  data-ng-repeat="item in invoice.notes">
-                                    <td>
-                                        <p><strong>{{item.recordDate | date : settings.dateFormat }}</strong></p>
-                                        <div data-ng-bind-html="item.message"></div>
-                                    </td>
-                                    <td class="pull-right" nowrap="nowrap"><merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNote(item)" do-delete="deleteNote(item)"></merchello-icon-bar></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <merchello-notes-table entity-type="entityType" notes="invoice.notes" save="saveNotes()" delete="deleteNote"></merchello-notes-table>
                 </div>
 
 

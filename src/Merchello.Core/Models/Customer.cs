@@ -44,7 +44,7 @@
         /// <summary>
         /// The notes selector.
         /// </summary>
-        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, string>(x => x.Notes);
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Customer, IEnumerable<INote>>(x => x.Notes);
 
         /// <summary>
         /// The address selector.
@@ -79,7 +79,7 @@
         /// <summary>
         /// The _notes.
         /// </summary>
-        private string _notes;
+        private IEnumerable<INote> _notes;
 
         /// <summary>
         /// The examine id.
@@ -237,11 +237,36 @@
             }
         }
 
+        ///// <summary>
+        ///// Gets or sets the notes.
+        ///// </summary>
+        //[DataMember]
+        //public string Notes
+        //{
+        //    get
+        //    {
+        //        return _notes;
+        //    }
+
+        //    set
+        //    {
+        //        SetPropertyValueAndDetectChanges(
+        //            o =>
+        //            {
+        //                _notes = value;
+        //                return _notes;
+        //            },
+        //            _notes,
+        //            NotesSelector);
+        //    }
+        //}
+
+
         /// <summary>
-        /// Gets or sets the notes.
+        /// Gets or sets the collection of notes associated with the invoice
         /// </summary>
         [DataMember]
-        public string Notes
+        public IEnumerable<INote> Notes
         {
             get
             {
@@ -256,8 +281,8 @@
                         _notes = value;
                         return _notes;
                     },
-                    _notes,
-                    NotesSelector);
+                _notes,
+                NotesSelector);
             }
         }
 

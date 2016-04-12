@@ -271,6 +271,11 @@
       ]]>
     </key>
     <area alias="merchelloNotes">
+      <key alias="notes">Notes</key>
+      <key alias="note">Note</key>
+      <key alias="saleNotes">Notes about this sale</key>
+      <key alias="customerNotes">Notes relating to this customer</key>
+      <key alias="paymentNotes">Notes relating to this payment</key>
       <key alias="addNote">Add a new note</key>
       <key alias="editNote">Edit note</key>
       <key alias="internalOnly">This note is for internal use only.</key>
