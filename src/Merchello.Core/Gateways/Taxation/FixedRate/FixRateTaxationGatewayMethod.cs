@@ -70,9 +70,9 @@
             var taxRate = baseTaxRate > 1 ? baseTaxRate / 100M : baseTaxRate;
 
             //M-979 Taxation rounding issue when "Include in product pricing"
-            var priceCalc = System.Math.Round(product.Price * taxRate, CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalDigits);
+            var priceCalc = (product.Price * taxRate).FormatAsStoreCurrency();
 
-            var salePriceCalc = System.Math.Round(product.SalePrice * taxRate, CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalDigits);
+            var salePriceCalc = (product.SalePrice * taxRate).FormatAsStoreCurrency();
 
             return new ProductTaxCalculationResult(TaxMethod.Name, product.Price, priceCalc, product.SalePrice, salePriceCalc, baseTaxRate);
         }
