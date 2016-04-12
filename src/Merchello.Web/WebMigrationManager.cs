@@ -7,6 +7,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using Merchello.Core;
     using Merchello.Core.Configuration;
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Analytics;
@@ -19,6 +20,8 @@
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
+
+    using Constants = Merchello.Core.Constants;
 
     /// <summary>
     /// The web migration manager.
@@ -87,6 +90,20 @@
         {
             if (!MerchelloConfiguration.Current.Section.EnableInstallTracking)
                 return new HttpResponseMessage(HttpStatusCode.OK);
+
+            // reset the domain analytic
+            if (MerchelloContext.HasCurrent)
+            {
+                var storeSettingService = MerchelloContext.Current.Services.StoreSettingService;
+
+                var setting = storeSettingService.GetByKey(Constants.StoreSettingKeys.HasDomainRecordKey);
+                if (setting != null)
+                {
+                    setting.Value = false.ToString();
+                }
+
+                storeSettingService.Save(setting);
+            }
 
             var data = JsonConvert.SerializeObject(record);
 
