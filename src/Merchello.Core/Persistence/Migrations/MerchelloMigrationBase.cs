@@ -7,7 +7,7 @@
     /// <summary>
     /// The merchello migration base.
     /// </summary>
-    internal abstract class MerchelloMigrationBase : MigrationBase
+    public abstract class MerchelloMigrationBase : MigrationBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloMigrationBase"/> class.

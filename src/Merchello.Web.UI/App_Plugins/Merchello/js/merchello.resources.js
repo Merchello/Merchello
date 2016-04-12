@@ -1740,6 +1740,16 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
          */
         var settingsServices = {
 
+            recordDomain: function(record) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSettingsApiBaseUrl'] + 'RecordDomain';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            record
+                        ),
+                        'Failed to save data for domain record');
+            },
+
             /**
              * @ngdoc method
              * @name getMerchelloVersion

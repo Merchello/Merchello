@@ -1,15 +1,19 @@
 ﻿namespace Merchello.Web
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
+    using System.Threading.Tasks;
 
     using Merchello.Core.Configuration;
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Analytics;
 
     using Newtonsoft.Json;
+
+    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -25,6 +29,11 @@
         /// The post URL.
         /// </summary>
         private const string PostUrl = "http://instance.merchello.com/api/migration/Post";
+
+        /// <summary>
+        /// The record domain URL.
+        /// </summary>
+        private const string RecordDomainUrl = "http://instance.merchello.com/api/migration/RecordDomain";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebMigrationManager"/> class.
@@ -66,36 +75,83 @@
         }
 
         /// <summary>
-        /// The post analytic info.
+        /// Posts the migration analytic record.
         /// </summary>
         /// <param name="record">
         /// The record.
         /// </param>
-        public async void PostAnalyticInfo(MigrationRecord record)
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        public async Task<HttpResponseMessage> PostAnalyticInfo(MigrationRecord record)
         {
-            if (!MerchelloConfiguration.Current.Section.EnableInstallTracking) return;
-            
-            var client = new HttpClient();
-            
-            try
+            if (!MerchelloConfiguration.Current.Section.EnableInstallTracking)
+                return new HttpResponseMessage(HttpStatusCode.OK);
+
+            var data = JsonConvert.SerializeObject(record);
+
+            using (var client = new HttpClient())
             {
-                var data = JsonConvert.SerializeObject(record);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                await client.PostAsync(PostUrl, new StringContent(data, Encoding.UTF8, "application/json"));
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error<WebMigrationManager>("Migration record post exception", ex);
-            }
-            finally
-            {
-                if (client != null)
+
+                HttpResponseMessage responseMessage = null;
+                try
                 {
-                    client.Dispose();
-                    client = null;
-                } 
+                    responseMessage = await client.PostAsync(PostUrl, new StringContent(data, Encoding.UTF8, "application/json"));
+                }
+                catch (Exception ex)
+                {
+                    if (responseMessage == null)
+                    {
+                        responseMessage = new HttpResponseMessage();
+                    }
+
+                    responseMessage.StatusCode = HttpStatusCode.InternalServerError;
+                    responseMessage.ReasonPhrase = string.Format("PostAnalyticInfo failed: {0}", ex);
+                }
+
+                return responseMessage;
             }
-            
+        }
+
+        /// <summary>
+        /// Posts a record of the domain.
+        /// </summary>
+        /// <param name="record">
+        /// The record.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        public async Task<HttpResponseMessage> PostDomainRecord(MigrationDomain record)
+        {
+            if (!MerchelloConfiguration.Current.Section.EnableInstallTracking)
+                return new HttpResponseMessage(HttpStatusCode.OK);
+
+            var data = JsonConvert.SerializeObject(record);
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                HttpResponseMessage responseMessage = null;
+                try
+                {
+                    responseMessage = await client.PostAsync(RecordDomainUrl, new StringContent(data, Encoding.UTF8, "application/json"));
+                }
+                catch (Exception ex)
+                {
+                    if (responseMessage == null)
+                    {
+                        responseMessage = new HttpResponseMessage();
+                    }
+
+                    responseMessage.StatusCode = HttpStatusCode.InternalServerError;
+                    responseMessage.ReasonPhrase = string.Format("PostDomainRecord failed: {0}", ex);
+                }
+
+                return responseMessage;
+            }
         }
     }
 }

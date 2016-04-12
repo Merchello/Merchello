@@ -436,7 +436,9 @@ angular.module('merchello.models').constant('NoteDisplay', NoteDisplay);
         self.globalTrackInventory = false;
         self.globalShippingIsTaxable = false;
         self.globalTaxationApplication = 'invoice';
-        self.defaultExtendedContentCulture = 'en-US'
+        self.defaultExtendedContentCulture = 'en-US';
+        self.hasDomainRecord = false;
+        self.migrationKey = '';
     };
 
     angular.module('merchello.models').constant('SettingDisplay', SettingDisplay);

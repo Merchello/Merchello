@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Threading.Tasks;
     using System.Web.Http;
     using Core;
     using Core.Models;
@@ -12,8 +13,11 @@
     using Core.Services;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Persistence.Migrations.Analytics;
 
-    using Models.ContentEditing;    
+    using Models.ContentEditing;
+
+    using Umbraco.Core.Logging;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
     using WebApi;
@@ -229,5 +233,48 @@
 
 			return response;
 		}
+
+        /// <summary>
+        /// Records the domain used by Merchello.
+        /// </summary>
+        /// <param name="record">
+        /// The record.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [HttpPost]
+        public async Task<HttpResponseMessage> RecordDomain(MigrationDomain record)
+        {
+            var setting = _storeSettingService.GetByKey(Constants.StoreSettingKeys.HasDomainRecordKey);
+
+            if (setting != null && setting.Value == "False")
+            {
+                try
+                {
+                    var migrationManager = new WebMigrationManager();
+                    var response = await migrationManager.PostDomainRecord(record);
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        var ex = new Exception(response.ReasonPhrase);
+                        LogHelper.Error<SettingsApiController>("Failed to record domain analytic", ex);
+                    }
+
+                    setting.Value = true.ToString();
+                    _storeSettingService.Save(setting);
+
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    // this is for analytics only and we don't want to throw
+                    LogHelper.Error<SettingsApiController>("Failed to record analytics (Domain)", ex);
+                }
+
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

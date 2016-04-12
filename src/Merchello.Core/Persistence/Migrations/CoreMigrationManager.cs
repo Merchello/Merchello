@@ -22,6 +22,7 @@
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations;
     using Umbraco.Core.Persistence.SqlSyntax;
+    using Umbraco.Web;
 
     using Constants = Merchello.Core.Constants;
 
@@ -390,6 +391,16 @@
             var migrationKey = migrationSetting != null ? 
                 string.IsNullOrEmpty(migrationSetting.Value) ? nullSettingKey : migrationSetting.Value : 
                 nullSettingKey;
+
+            // Saves a previously saved migration key without a value
+            if (migrationKey.Equals(nullSettingKey))
+            {
+                var setting =
+                    MerchelloContext.Current.Services.StoreSettingService.GetByKey(
+                        Constants.StoreSettingKeys.MigrationKey);
+                if (setting != null) setting.Value = migrationKey;
+                MerchelloContext.Current.Services.StoreSettingService.Save(setting);
+            }
 
             Guid validGuid;
             if (Guid.TryParse(migrationKey, out validGuid))            
