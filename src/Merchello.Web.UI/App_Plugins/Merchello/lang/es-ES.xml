@@ -308,6 +308,7 @@
     <key alias="totals">Totales</key>
     <key alias="quantity">Cantidad</key>
     <key alias="subTotal">Subtotal</key>
+    <key alias="author">Author</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Configuración de la tienda</key>

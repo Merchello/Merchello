@@ -24,6 +24,7 @@
                     Key = dto.Key,
                     Message = dto.Message,
                     InternalOnly = dto.InternalOnly,
+                    Author = dto.Author,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -49,6 +50,7 @@
                     Key = entity.Key,
                     EntityKey = entity.EntityKey,
                     EntityTfKey = entity.EntityTfKey,
+                    Author = entity.Author,
                     Message = entity.Message,
                     InternalOnly = entity.InternalOnly,
                     CreateDate = entity.CreateDate,

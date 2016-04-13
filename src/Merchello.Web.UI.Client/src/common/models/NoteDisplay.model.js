@@ -1,6 +1,7 @@
 var NoteDisplay = function() {
     var self = this;
     self.key = '';
+    self.author = '';
     self.message = '';
     self.entityKey = '';
     self.entityTfKey = '';

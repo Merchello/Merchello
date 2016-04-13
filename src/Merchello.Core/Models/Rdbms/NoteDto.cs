@@ -34,6 +34,13 @@
         public Guid EntityTfKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        [Column("author")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Author { get; set; }
+
+        /// <summary>
         /// Gets or sets the message.
         /// </summary>
         [Column("message")]

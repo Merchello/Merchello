@@ -11,10 +11,10 @@
     using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
-    /// Adds an internal only column to the notes table.
+    /// Adds an author column to the merchNote table.
     /// </summary>
-    [Migration("1.14.0", "2.0.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
-    internal class AddNoteInternalOnlyColumn : MerchelloMigrationBase, IMerchelloMigration
+    [Migration("1.14.0", "2.0.0", 2, MerchelloConfiguration.MerchelloMigrationName)]
+    public class AddNoteAuthorColumn : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
         /// The Umbraco database.
@@ -22,9 +22,9 @@
         private readonly Database _database;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddNoteInternalOnlyColumn"/> class.
+        /// Initializes a new instance of the <see cref="AddNoteAuthorColumn"/> class.
         /// </summary>
-        public AddNoteInternalOnlyColumn()
+        public AddNoteAuthorColumn()
             : base(ApplicationContext.Current.DatabaseContext.SqlSyntax, Umbraco.Core.Logging.Logger.CreateWithDefaultLog4NetConfiguration())
         {
             var dbContext = ApplicationContext.Current.DatabaseContext;
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Upgrades the database.
+        /// Adds the author field to the notes table.
         /// </summary>
         public override void Up()
         {
@@ -40,15 +40,16 @@
 
             if (
                 columns.Any(
-                    x => x.TableName.InvariantEquals("merchNote") && x.ColumnName.InvariantEquals("internalOnly"))
+                    x => x.TableName.InvariantEquals("merchNote") && x.ColumnName.InvariantEquals("author"))
                 == false)
             {
-                Logger.Info(typeof(AddNoteInternalOnlyColumn), "Adding internalOnly column to merchNode table.");
+                Logger.Info(typeof(AddNoteInternalOnlyColumn), "Adding author column to merchNode table.");
 
                 //// Add the new currency code column
-                Create.Column("internalOnly").OnTable("merchNote").AsBoolean().WithDefaultValue(false);
+                Create.Column("author").OnTable("merchNote").AsString().Nullable();
             }
         }
+
 
         /// <summary>
         /// Downgrades the database.

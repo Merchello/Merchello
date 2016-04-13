@@ -9,13 +9,14 @@
                 <tbody>
                 <thead>
                 <tr>
-                    <th colspan="2"><localize key="merchelloNotes_note">Note</localize></th>
+                    <th><localize key="merchelloNotes_note">Note</localize></th>
+                    <th><localize key="merchelloGeneral_author"></localize></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
-                    <td></td>
-                    <td>
+                    <td colspan="3">
                         <span class="pull-right">
                             <merchello-add-icon do-add="addNote()"></merchello-add-icon>
                         </span>
@@ -27,6 +28,7 @@
                         <p><strong>{{item.recordDate | date : settings.dateFormat }}</strong></p>
                         <div data-ng-bind-html="item.message"></div>
                     </td>
+                    <td>{{ item.author }}</td>
                     <td class="pull-right" nowrap="nowrap"><merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNote(item)" do-delete="deleteNote(item)"></merchello-icon-bar></td>
                 </tr>
                 </tbody>

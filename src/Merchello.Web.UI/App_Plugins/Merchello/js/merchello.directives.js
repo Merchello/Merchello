@@ -1762,8 +1762,8 @@ angular.module('merchello.directives').directive('merchelloListView',
 }]);
 
 angular.module('merchello.directives').directive('merchelloNotesTable', [
-    'localizationService', 'dialogService', 'noteResource', 'noteDisplayBuilder',
-    function(localizationService, dialogService, noteResource, noteDisplayBuilder) {
+    '$q', 'userService', 'localizationService', 'dialogService', 'noteResource', 'noteDisplayBuilder',
+    function($q, userService, localizationService, dialogService, noteResource, noteDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -1790,11 +1790,13 @@ angular.module('merchello.directives').directive('merchelloNotesTable', [
                 }
                 
                 function openNotesDialog() {
-                    localizationService.localize('merchelloNotes_addNote').then(function(title) {
+                    getNoteData().then(function(data) {
                         var dialogData = {};
-                        dialogData.title = title;
+                        dialogData.title = data[0];
                         dialogData.note = noteDisplayBuilder.createDefault();
                         dialogData.note.internalOnly = true;
+                        dialogData.note.author = data[1].email;
+                        console.info(dialogData);
                         dialogService.open({
                             template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
                             show: true,
@@ -1850,7 +1852,16 @@ angular.module('merchello.directives').directive('merchelloNotesTable', [
                 function processDeleteNoteDialog(dialogData) {
                     scope.delete()(dialogData.note);
                 }
-                
+
+                function getNoteData() {
+                    var promises = [
+                        localizationService.localize('merchelloNotes_addNote'),
+                        userService.getCurrentUser(),
+                    ];
+
+                    return $q.all(promises);
+                }
+
                 // initialize the directive
                 init();
             }
