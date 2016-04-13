@@ -377,7 +377,7 @@ var NoteDisplay = function() {
     self.entityType = '';
     self.noteTypeField = {};
     self.recordDate = '';
-    self.internalOnly = false;
+    self.internalOnly = true;
 };
 
 NoteDisplay.prototype = (function () {

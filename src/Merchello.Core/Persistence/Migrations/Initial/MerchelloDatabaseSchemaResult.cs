@@ -93,7 +93,8 @@
 
             if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
                 StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey) ||
-                !this.ValidColumns.Contains("merchNote,author"))
+                !this.ValidColumns.Contains("merchNote,author") ||
+                this.ValidColumns.Contains("merchCustomer,notes"))
             {
                 return new Version(1, 14, 1);
             }

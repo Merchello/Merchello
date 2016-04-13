@@ -634,6 +634,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteAuthorColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteInternalOnlyColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddStoreSettingHasDomainRecord.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\CopyOriginalCustomerNotesToFirstNote.cs" />
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />

@@ -33,7 +33,6 @@ angular.module('merchello.directives').directive('merchelloNotesTable', [
                         dialogData.note = noteDisplayBuilder.createDefault();
                         dialogData.note.internalOnly = true;
                         dialogData.note.author = data[1].email;
-                        console.info(dialogData);
                         dialogService.open({
                             template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
                             show: true,

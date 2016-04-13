@@ -152,8 +152,6 @@
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
 
-                    console.info($scope.invoice.notes);
-
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
 
