@@ -104,6 +104,9 @@
     <key alias="invoiceNumber">Faktura #</key>
     <key alias="paymentStatus">Betalingsstatus</key>
     <key alias="fulfillmentStatus">Ordrestatus</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">Ny kunde</key>

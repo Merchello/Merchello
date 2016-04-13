@@ -3021,6 +3021,12 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             });
         }
 
+        function getAdjustmentLineItems() {
+            return _.find(this.items, function(item) {
+               return item.lineItemTypeField.alias === 'Adjustment';
+            });
+        }
+
         // gets the custom line items
         function getCustomLineItems() {
             var custom =  _.filter(this.items, function(item) {
@@ -3100,6 +3106,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
             getDiscountLineItems: getDiscountLineItems,
+            getAdjustmentLineItems: getAdjustmentLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
             getCustomLineItems: getCustomLineItems,

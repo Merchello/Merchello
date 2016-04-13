@@ -1,0 +1,64 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.ManageAdjustmentsController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloSales_manageAdjustments">Manage Adjustments</localize></h4>
+        <h5><localize key="merchelloOrderView_invoiceNumber" />{{dialogData.invoiceNumber }}</h5>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody data-ng-show="dialogData.adjustments.length > 0">
+                <tr data-ng-repeat="item in dialogData.adjustments">
+                    <td>{{item.name}}</td>
+                    <td>{{item.amount}}</td>
+                    <td><merchello-delete-icon do-delete="deleteAdjustment(item)" /></td>
+                </tr>
+            </tbody>
+            <tbody data-ng-show="dialogData.adjustments.length === 0">
+                <tr>
+                    <td colspan="3">
+                        <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+            <h4><localize key="merchelloSales_addAdjustment"></localize></h4>
+        <form name="adjustmentFrm" id="adjustmentFrm">
+            <div class="row">
+                <div class="input-prepend col-xs-5 span5">
+                    <label><localize key="merchelloGeneral_amount"></localize></label>
+                    <span class="add-on">{{dialogData.currencySymbol}}</span>
+                    <input class="col-xs-4 span4" type="text" data-ng-model="amount">
+                </div>
+                <div class="col-xs-7 span7">
+                    <label><localize key="placeholders_enterDescription"></localize></label>
+                    <input class="col-xs-6 span6" data-ng-model="name" />
+                    <merchello-add-icon do-add="addAdjustment()"></merchello-add-icon>
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <!-- ACTION: Save Button -->
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="buttons_save" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

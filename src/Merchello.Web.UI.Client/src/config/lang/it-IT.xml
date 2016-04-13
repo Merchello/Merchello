@@ -115,6 +115,9 @@
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>

@@ -244,6 +244,9 @@
     <key alias="paid">Оплачен</key>
     <key alias="unpaid">Не оплачен</key>
     <key alias="partial">Частично</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>

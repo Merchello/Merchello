@@ -250,6 +250,9 @@
     <key alias="paid">Paid</key>
     <key alias="unpaid">Unpaid</key>
     <key alias="partial">Partial</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>

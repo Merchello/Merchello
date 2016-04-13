@@ -38,6 +38,7 @@
             $scope.authorizedCapturedLabel = '';
             $scope.shipmentLineItems = [];
             $scope.customLineItems = [];
+            $scope.adjustmentLineItems = [];
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
@@ -151,6 +152,7 @@
                     loadShippingAddress(id);
                     aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
                     aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
+                    aggregateScopeLineItemCollection($scope.invoice.getAdjustmentLineItems(), $scope.adjustmentLineItems);
 
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;

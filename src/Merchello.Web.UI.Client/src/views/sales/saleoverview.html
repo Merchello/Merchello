@@ -100,7 +100,9 @@
                                 <td class="text-right">{{invoice.total - remainingBalance | currency : currencySymbol }}</td>
                             </tr>
                             <tr>
-                                <td colspan="4" class="text-right">Balance due:</td>
+                                <td colspan="4" class="text-right"><localize key="merchelloSales_balanceDue">Balance due</localize>:
+                                <manage-invoice-adjustments pre-values-loaded="preValuesLoaded" currency-symbol="currencySymbol" invoice="invoice"></manage-invoice-adjustments>
+                                </td>
                                 <td class="text-right">{{remainingBalance | currency : currencySymbol }}</td>
                             </tr>
                             </tbody>
