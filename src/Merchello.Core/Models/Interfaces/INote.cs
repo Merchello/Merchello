@@ -23,6 +23,12 @@
         Guid EntityTfKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        [DataMember]
+        string Author { get; set; }
+
+        /// <summary>
         /// Gets or sets the message.
         /// </summary>
         [DataMember]

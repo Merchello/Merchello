@@ -63,6 +63,7 @@
     <key alias="totals">Итого</key>
     <key alias="quantity">Количество</key>
     <key alias="subTotal">Всего</key>
+    <key alias="author">Author</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>

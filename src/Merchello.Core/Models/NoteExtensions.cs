@@ -22,7 +22,7 @@
         /// The <see cref="string"/>.
         /// </returns>
         /// <remarks>
-        /// Used for writting collection to examine.
+        /// Used for writing collection to examine.
         /// </remarks>
         internal static string ToJsonCollection(this IEnumerable<INote> notes)
         {
@@ -31,6 +31,7 @@
                 new
                 {
                     key = x.Key,
+                    author = x.Author,
                     message = x.Message,
                     entityKey = x.EntityKey,
                     entityTfKey = x.EntityTfKey,

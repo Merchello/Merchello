@@ -445,7 +445,7 @@
         /// </returns>
         internal virtual IPaymentRepository CreatePaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new PaymentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateNoteRepository(uow), _logger, _sqlSyntax);
+            return new PaymentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
         }
 
         /// <summary>

@@ -353,6 +353,7 @@
     <key alias="totals">Totals</key>
     <key alias="quantity">Quantity</key>
     <key alias="subTotal">Sub Total</key>
+    <key alias="author">Author</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Impostazioni del negozio</key>

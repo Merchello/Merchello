@@ -23,6 +23,11 @@
         private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityKey);
 
         /// <summary>
+        /// The author selector.
+        /// </summary>
+        private static readonly PropertyInfo AuthorSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Author);
+
+        /// <summary>
         /// The message selector.
         /// </summary>
         private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Message);
@@ -46,6 +51,11 @@
         /// The reference type.
         /// </summary>
         private Guid _entityTfKey;
+
+        /// <summary>
+        /// The author.
+        /// </summary>
+        private string _author;
 
         /// <summary>
         /// The message.
@@ -77,6 +87,7 @@
             EntityKey = entityKey;
             EntityTfKey = entityTfKey;
             InternalOnly = false;
+            Author = string.Empty;
         }
 
         /// <summary>
@@ -124,6 +135,30 @@
                     },
                     _entityTfKey,
                     EntityTfKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        [DataMember]
+        public string Author
+        {
+            get
+            {
+                return _author;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _author = value;
+                        return _author;
+                    },
+                    _author,
+                    AuthorSelector);
             }
         }
 

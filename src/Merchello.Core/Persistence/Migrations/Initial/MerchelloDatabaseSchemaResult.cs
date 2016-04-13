@@ -92,7 +92,8 @@
             }
 
             if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
-                StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey))
+                StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey) ||
+                !this.ValidColumns.Contains("merchNote,author"))
             {
                 return new Version(1, 14, 1);
             }
