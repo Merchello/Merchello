@@ -104,6 +104,11 @@
     <key alias="invoiceNumber">Faktura #</key>
     <key alias="paymentStatus">Betalingsstatus</key>
     <key alias="fulfillmentStatus">Ordrestatus</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
+    <key alias="adjustments">Adjustments</key>
+    <key alias="adjustmentAssignedBy">Assigned by</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">Ny kunde</key>
@@ -373,6 +378,11 @@
       <key alias="quantity">Quantity</key>
       <key alias="subTotal">Sub Total</key>
     <key alias="author">Author</key>
+    <key alias="visibility">Visibility</key>
+    <key alias="public">Public</key>
+    <key alias="private">Private</key>
+    <key alias="increase">Increase</key>
+    <key alias="decrease">Decrease</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Standard indstillinger for butik</key>

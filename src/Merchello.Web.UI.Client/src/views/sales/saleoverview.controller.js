@@ -23,9 +23,6 @@
             $scope.invoiceNumber = '';
             $scope.tabs = [];
             $scope.historyLoaded = false;
-            $scope.remainingBalance = 0.0;
-            $scope.shippingTotal = 0.0;
-            $scope.taxTotal = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
@@ -35,9 +32,6 @@
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
-            $scope.authorizedCapturedLabel = '';
-            $scope.shipmentLineItems = [];
-            $scope.customLineItems = [];
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
@@ -82,6 +76,7 @@
                 if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
                     $scope.debugAllowDelete = true;
                 }
+
             }
 
             function localizeMessage(msg) {
@@ -135,22 +130,18 @@
                 $scope.shipmentLineItems = [];
                 $scope.customLineItems = [];
                 $scope.discountLineItems = [];
-
                 var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
-                    var taxLineItem = $scope.invoice.getTaxLineItem();
-                    $scope.taxTotal = taxLineItem !== undefined ? taxLineItem.price : 0;
-                    $scope.shippingTotal = $scope.invoice.shippingTotal();
+
                     $scope.invoiceNumber = $scope.invoice.prefixedInvoiceNumber();
                     loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
 
                     loadShippingAddress(id);
-                    aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
-                    aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
+
 
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
@@ -202,21 +193,16 @@
              * @description - Load the Merchello payments for the invoice.
              */
             function loadPayments(key) {
-                if (!$scope.invoice.isPaid()) {
-                    var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
-                    paymentsPromise.then(function(payments) {
-                        $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                        $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
-                        loadPaymentMethods()
-                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
-                        $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
-                        $scope.preValuesLoaded = true;
-                    }, function(reason) {
-                        notificationsService.error('Failed to load payments for invoice', reason.message);
-                    });
-                } else {
+
+                var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
+                paymentsPromise.then(function(payments) {
+                    $scope.allPayments = paymentDisplayBuilder.transform(payments);
+                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                    loadPaymentMethods();
                     $scope.preValuesLoaded = true;
-                }
+                }, function(reason) {
+                    notificationsService.error('Failed to load payments for invoice', reason.message);
+                });
             }
 
             /**
@@ -321,6 +307,7 @@
                     // added a timeout here to give the examine index
                     $timeout(function() {
                         notificationsService.success("Payment Captured");
+                        console.info(paymentRequest);
                         loadInvoice(paymentRequest.invoiceKey);
                     }, 400);
                 }, function (reason) {
@@ -463,17 +450,6 @@
                 return found;
             }
 
-            // utility method to assist in building scope line item collections
-            function aggregateScopeLineItemCollection(lineItems, collection) {
-                if(angular.isArray(lineItems)) {
-                    angular.forEach(lineItems, function(item) {
-                        collection.push(item);
-                    });
-                } else {
-                    collection.push(lineItems);
-                }
-            }
-
             /**
              * @ngdoc method
              * @name openAddressEditDialog
@@ -579,6 +555,7 @@
             function saveInvoice() {
                 invoiceResource.saveInvoice($scope.invoice).then(function(data) {
                     $timeout(function () {
+                        console.info($scope.invoice);
                         loadInvoice($scope.invoice.key);
                     }, 400);
                 });

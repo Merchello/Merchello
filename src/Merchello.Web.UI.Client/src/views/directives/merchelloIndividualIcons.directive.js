@@ -76,7 +76,7 @@ angular.module('merchello.directives').directive('merchelloDeleteIcon', function
         '</a></span>',
         link: function(scope, elm, attr) {
             scope.title = '';
-            localizationService.localize('general_edit').then(function(value) {
+            localizationService.localize('general_delete').then(function(value) {
                 scope.title = value;
             });
         }

@@ -11,12 +11,13 @@
                 <tr>
                     <th><localize key="merchelloNotes_note">Note</localize></th>
                     <th><localize key="merchelloGeneral_author"></localize></th>
+                    <th><localize key="merchelloGeneral_visibility"></localize></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="4">
                         <span class="pull-right">
                             <merchello-add-icon do-add="addNote()"></merchello-add-icon>
                         </span>
@@ -29,6 +30,10 @@
                         <div data-ng-bind-html="item.message"></div>
                     </td>
                     <td>{{ item.author }}</td>
+                    <td>
+                        <span data-ng-show="item.internalOnly"><localize key="merchelloGeneral_private"></localize></span>
+                        <span data-ng-hide="item.internalOnly"><localize key="merchelloGeneral_public"></localize></span>
+                    </td>
                     <td class="pull-right" nowrap="nowrap"><merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNote(item)" do-delete="deleteNote(item)"></merchello-icon-bar></td>
                 </tr>
                 </tbody>

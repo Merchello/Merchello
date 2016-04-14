@@ -1531,6 +1531,18 @@ angular.module('merchello.models').constant('SelectOfferProviderDialogData', Sel
         self.extendedData = {};
     };
 
+    InvoiceLineItemDisplay.prototype = (function() {
+
+        function absPrice() {
+            return Math.abs(this.price);
+        }
+
+        return {
+            absPrice : absPrice
+        };
+
+    }());
+
     angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);
     /**
      * @ngdoc model
@@ -2941,6 +2953,23 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
 
     InvoiceDisplay.prototype = (function() {
 
+        function ensureArray(items) {
+            var collection = [];
+            if (items === undefined || items === null) {
+                return collection;
+            }
+
+            if (!angular.isArray(items)) {
+                collection.push(items);
+            } else {
+                angular.forEach(items, function(item) {
+                   collection.push(item);
+                });
+            }
+
+            return collection;
+        }
+
         function getBillingAddress() {
             var adr = new AddressDisplay();
             adr.address1 = this.billToAddress1;
@@ -3006,7 +3035,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
 
         // gets the product line items
         function getProductLineItems() {
-            return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
+            return ensureArray( _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; }));
         }
 
         // gets the tax line items
@@ -3016,16 +3045,22 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
 
         // gets the shipping line items
         function getShippingLineItems() {
-            return _.find(this.items, function (item) {
+            return ensureArray(_.filter(this.items, function (item) {
                 return item.lineItemTypeField.alias === 'Shipping';
-            });
+            }));
+        }
+
+        function getAdjustmentLineItems() {
+            return ensureArray(_.filter(this.items, function(item) {
+               return item.lineItemTypeField.alias === 'Adjustment';
+            }));
         }
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.filter(this.items, function(item) {
+            var custom =  ensureArray(_.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
-            });
+            }));
             if (custom === undefined) {
                 custom = [];
             }
@@ -3100,6 +3135,7 @@ angular.module('merchello.models').constant('SalesOverTimeResult', SalesOverTime
             getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
             getDiscountLineItems: getDiscountLineItems,
+            getAdjustmentLineItems: getAdjustmentLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
             getCustomLineItems: getCustomLineItems,

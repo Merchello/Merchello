@@ -865,9 +865,28 @@
         }
 
         /// <summary>
+        /// Sums the total price of adjustment line items.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        public static decimal TotalAdjustmentItemPrice(this IInvoice invoice)
+        {
+            return invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).Sum(x => x.TotalPrice);
+        }
+
+        /// <summary>
         /// Sums the total shipping amount for the invoice items
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="invoice">
+        /// The <see cref="IInvoice"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/> total.
+        /// </returns>
         public static decimal TotalShipping(this IInvoice invoice)
         {
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice);
@@ -876,7 +895,12 @@
         /// <summary>
         /// Sums the total tax amount for the invoice items
         /// </summary>
-        /// <param name="invoice">The <see cref="IInvoice"/></param>
+        /// <param name="invoice">
+        /// The <see cref="IInvoice"/>
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/> total.
+        /// </returns>
         public static decimal TotalTax(this IInvoice invoice)
         {
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice);
@@ -896,9 +920,55 @@
             return invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
         }
 
-        
-
     #endregion
+
+        /// <summary>
+        /// Ensures the invoice status.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoiceStatus"/>.
+        /// </returns>
+        public static IInvoiceStatus EnsureInvoiceStatus(this IInvoice invoice)
+        {
+            return invoice.EnsureInvoiceStatus(MerchelloContext.Current.Services.GatewayProviderService);
+        }
+
+        /// <summary>
+        /// Ensures the invoice status.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoiceStatus"/>.
+        /// </returns>
+        internal static IInvoiceStatus EnsureInvoiceStatus(this IInvoice invoice, IGatewayProviderService gatewayProviderService)
+        {
+            var appliedPayments = gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key).ToArray();
+
+            var appliedTotal =
+                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Debit).Sum(x => x.Amount) -
+                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Credit).Sum(x => x.Amount);
+
+            var statuses = gatewayProviderService.GetAllInvoiceStatuses().ToArray();
+
+            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Partial)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Partial);
+            if (appliedTotal == 0 && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
+            if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Paid)
+                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Paid);
+
+            if (invoice.IsDirty()) gatewayProviderService.Save(invoice);
+
+            return invoice.InvoiceStatus;
+        }
 
 
         #region Examine Serialization

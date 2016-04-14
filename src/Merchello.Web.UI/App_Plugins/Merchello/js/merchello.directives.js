@@ -1457,7 +1457,7 @@ angular.module('merchello.directives').directive('merchelloDeleteIcon', function
         '</a></span>',
         link: function(scope, elm, attr) {
             scope.title = '';
-            localizationService.localize('general_edit').then(function(value) {
+            localizationService.localize('general_delete').then(function(value) {
                 scope.title = value;
             });
         }
@@ -1796,7 +1796,6 @@ angular.module('merchello.directives').directive('merchelloNotesTable', [
                         dialogData.note = noteDisplayBuilder.createDefault();
                         dialogData.note.internalOnly = true;
                         dialogData.note.author = data[1].email;
-                        console.info(dialogData);
                         dialogService.open({
                             template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
                             show: true,
@@ -2834,7 +2833,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                     // added a timeout here to give the examine index
                     $timeout(function() {
                         notificationsService.success('Payment ' + note + 'success');
-                        reload()
+                        reload();
                     }, 400);
                 }, function (reason) {
                     notificationsService.error('Payment ' + note + 'Failed', reason.message);
@@ -3016,6 +3015,174 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
             }
         };
     });
+
+angular.module('merchello.directives').directive('invoiceItemizationTable',
+    ['localizationService', 'invoiceHelper',
+        function(localizationService, invoiceHelper) {
+
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    invoice: '=',
+                    payments: '=',
+                    allPayments: '=',
+                    paymentMethods: '=',
+                    preValuesLoaded: '=',
+                    currencySymbol: '=',
+                    save: '&'
+                },
+                templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/invoiceitemizationtable.tpl.html',
+                link: function (scope, elm, attr) {
+
+                    scope.loaded = false;
+                    scope.authorizedCapturedLabel = '';
+                    scope.taxTotal = 0;
+                    scope.shippingTotal = 0;
+                    scope.customLineItems = [];
+                    scope.discountLineItems = [];
+                    scope.adjustmentLineItems = [];
+                    scope.remainingBalance = 0;
+
+                    function init() {
+
+                        // ensure that the parent scope promises have been resolved
+                        scope.$watch('preValuesLoaded', function(pvl) {
+                            if(pvl === true) {
+                               loadInvoice();
+                            }
+                        });
+                    }
+
+
+                    function loadInvoice() {
+                        var taxLineItem = scope.invoice.getTaxLineItem();
+                        scope.taxTotal = taxLineItem !== undefined ? taxLineItem.price : 0;
+                        scope.shippingTotal = scope.invoice.shippingTotal();
+
+                        scope.customLineItems = scope.invoice.getCustomLineItems();
+                        scope.discountLineItems = scope.invoice.getDiscountLineItems();
+                        scope.adjustmentLineItems = scope.invoice.getAdjustmentLineItems();
+
+                        angular.forEach(scope.adjustmentLineItems, function(item) {
+                            item.userName = item.extendedData.getValue("userName");
+                            item.email = item.extendedData.getValue("email");
+                        });
+
+                        scope.remainingBalance =
+                            invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
+
+                        var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
+
+                        localizationService.localize(label).then(function(value) {
+                            scope.authorizedCapturedLabel = value;
+                        });
+
+                        scope.loaded = true;
+                    }
+
+
+                    // utility method to assist in building scope line item collections
+                    function aggregateScopeLineItemCollection(lineItems, collection) {
+                        if(angular.isArray(lineItems)) {
+                            angular.forEach(lineItems, function(item) {
+                                collection.push(item);
+                            });
+                        } else {
+                            if(lineItems !== undefined) {
+                                collection.push(lineItems);
+                            }
+                        }
+                    }
+                    
+                    // initialize the directive
+                    init();
+                }
+            }
+        }]);
+
+angular.module('merchello.directives').directive('manageInvoiceAdjustments',
+    ['$timeout', 'dialogService', 'userService', 'invoiceDisplayBuilder', 'invoiceResource',
+    function($timeout, dialogService, userService, invoiceDisplayBuilder, invoiceResource) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                invoice: '=',
+                payments: '=',
+                allPayments: '=',
+                paymentMethods: '=',
+                preValuesLoaded: '=',
+                currencySymbol: '=',
+                reload: '&'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/manageinvoiceadjustments.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.openAdjustmentDialog = openAdjustmentDialog;
+                scope.loaded = false;
+                
+                function init() {
+
+                    // ensure that the parent scope promises have been resolved
+                    scope.$watch('preValuesLoaded', function(pvl) {
+                        if(pvl === true) {
+                            scope.loaded = true;
+                        }
+                    });
+
+                }
+
+
+                function openAdjustmentDialog() {
+                    // we need to clone the invoice so we are not affecting the saved invoice
+                    // in previews
+                    var clone = angular.extend(invoiceDisplayBuilder.createDefault(), scope.invoice);
+
+                    var dialogData = {
+                        payments: scope.payments,
+                        allPayments: scope.allPayments,
+                        paymentMethods: scope.paymentMethods,
+                        currencySymbol: scope.currencySymbol,
+                        invoice: clone
+                    };
+                    
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.manageadjustments.dialog.html',
+                        show: true,
+                        callback: manageAdjustmentsDialogConfirm,
+                        dialogData: dialogData
+                    });
+                }
+
+                function manageAdjustmentsDialogConfirm(adjustments) {
+                    if (adjustments.items !== undefined) {
+
+                    var user = userService.getCurrentUser().then(function(user) {
+
+                        _.each(adjustments.items, function(item) {
+                            if (item.key === '') {
+                                item.userName = user.name;
+                                item.email = user.email;
+                            }
+                        });
+
+                         invoiceResource.saveInvoiceAdjustments(adjustments).then(function() {
+                         $timeout(function () {
+                         scope.reload();
+                         }, 400);
+                         });
+                    });
+                }
+
+
+                }
+
+                init();
+            }
+        }
+}]);
 
 
 })();

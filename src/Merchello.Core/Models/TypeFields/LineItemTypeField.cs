@@ -19,28 +19,52 @@
             if (CachedTypeFields.IsEmpty) BuildCache();
         }
 
-
-
+        /// <summary>
+        /// Gets the product.
+        /// </summary>
         public ITypeField Product
         {
             get { return GetTypeField(LineItemType.Product); }
         }
 
+        /// <summary>
+        /// Gets the shipping.
+        /// </summary>
         public ITypeField Shipping
         {
             get { return GetTypeField(LineItemType.Shipping); }
         }
 
+        /// <summary>
+        /// Gets the tax.
+        /// </summary>
         public ITypeField Tax
         {
             get { return GetTypeField(LineItemType.Tax); }
         }
 
+        /// <summary>
+        /// Gets the discount.
+        /// </summary>
         public ITypeField Discount
         {
             get { return GetTypeField(LineItemType.Discount); }
         }
 
+        /// <summary>
+        /// Gets the adjustment.
+        /// </summary>
+        public ITypeField Adjustment
+        {
+            get
+            {
+                return GetTypeField(LineItemType.Adjustment);
+            }
+        }
+
+        /// <summary>
+        /// Gets the line items.
+        /// </summary>
         public static TypeFieldCollection LineItems
         {
             get { return Fields.LineItem; }
@@ -66,6 +90,7 @@
             AddUpdateCache(LineItemType.Shipping, new TypeField("Shipping", "Shipping", Constants.TypeFieldKeys.LineItem.ShippingKey));
             AddUpdateCache(LineItemType.Tax, new TypeField("Tax", "Tax", Constants.TypeFieldKeys.LineItem.TaxKey));
             AddUpdateCache(LineItemType.Discount, new TypeField("Discount", "Discount", Constants.TypeFieldKeys.LineItem.DiscountKey));
+            AddUpdateCache(LineItemType.Adjustment, new TypeField("Adjustment", "Adjustment", Constants.TypeFieldKeys.LineItem.AdjustmentKey));
             AddUpdateCache(LineItemType.Custom, NotFound);
         }
 

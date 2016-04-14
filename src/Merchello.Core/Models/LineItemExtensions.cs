@@ -360,6 +360,9 @@
                         EnumTypeFieldConverter.LineItemType.CustomTypeFields.FirstOrDefault(
                             x => x.TypeKey.Equals(lineItem.LineItemTfKey));
                     break;
+                case LineItemType.Adjustment:
+                    typeField = EnumTypeFieldConverter.LineItemType.Adjustment;
+                    break;
                 case LineItemType.Discount:
                     typeField = EnumTypeFieldConverter.LineItemType.Discount;
                     break;

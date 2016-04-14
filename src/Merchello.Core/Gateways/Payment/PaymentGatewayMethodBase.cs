@@ -423,23 +423,7 @@
         /// </param>
         private void AssertInvoiceStatus(IInvoice invoice)
         {
-            var appliedPayments = _gatewayProviderService.GetAppliedPaymentsByInvoiceKey(invoice.Key).ToArray();
-            
-            var appliedTotal = 
-                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Debit).Sum(x => x.Amount) - 
-                appliedPayments.Where(x => x.TransactionType == AppliedPaymentType.Credit).Sum(x => x.Amount);
-
-            var statuses = GatewayProviderService.GetAllInvoiceStatuses().ToArray();
-
-            if (invoice.Total > appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Partial)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Partial);
-            if (appliedTotal == 0 && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
-            if (invoice.Total <= appliedTotal && invoice.InvoiceStatusKey != Core.Constants.DefaultKeys.InvoiceStatus.Paid)
-                invoice.InvoiceStatus = statuses.First(x => x.Key == Core.Constants.DefaultKeys.InvoiceStatus.Paid);
-
-            if(invoice.IsDirty()) GatewayProviderService.Save(invoice);
-                
+            invoice.EnsureInvoiceStatus(GatewayProviderService);
         }        
     }
 }

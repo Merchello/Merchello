@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Web.UI;
@@ -1529,6 +1530,55 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Synchronizes invoice adjustments.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="adjustments">
+        /// The adjustments.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        internal bool AdjustInvoice(IInvoice invoice, IEnumerable<IInvoiceLineItem> adjustments)
+        {
+            if (invoice != null)
+            {
+                var existing = invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).ToArray();
+
+                var invoiceLineItems = adjustments as IInvoiceLineItem[] ?? adjustments.ToArray();
+                var goodKeys = invoiceLineItems.Where(z => z.Key != Guid.Empty).Select(y => y.Key);
+
+                // remove existing adjustments not found
+                var removers = existing.Any() && !invoiceLineItems.Any() ? existing : existing.Where(x => goodKeys.All(y => y != x.Key));
+                foreach (var remove in removers)
+                {
+                    invoice.Items.Remove(remove.Sku);
+                }
+
+                // add new adjustments
+                var adds = invoiceLineItems.Where(x => x.Key == Guid.Empty);
+                foreach (var add in adds)
+                {
+                    invoice.Items.Add(add);
+                }
+                
+                var charges = invoice.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
+                var discounts = invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
+                decimal converted;
+                invoice.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);
+                Save(invoice);
+
+                invoice.EnsureInvoiceStatus();
+
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// Gets list of all <see cref="IInvoice"/>

@@ -115,6 +115,11 @@
     <key alias="invoiceNumber">Invoice #</key>
     <key alias="paymentStatus">Payment status</key>
     <key alias="fulfillmentStatus">Fulfillment status</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
+    <key alias="adjustments">Adjustments</key>
+    <key alias="adjustmentAssignedBy">Assigned by</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>
@@ -354,6 +359,11 @@
     <key alias="quantity">Quantity</key>
     <key alias="subTotal">Sub Total</key>
     <key alias="author">Author</key>
+    <key alias="visibility">Visibility</key>
+    <key alias="public">Public</key>
+    <key alias="private">Private</key>
+    <key alias="increase">Increase</key>
+    <key alias="decrease">Decrease</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Impostazioni del negozio</key>

@@ -650,6 +650,17 @@
                 {
                     get { return new Guid("E7CC502D-DE7C-4C37-8A9C-837760533A76"); }
                 }
+
+                /// <summary>
+                /// Gets the adjustment line item type key.
+                /// </summary>
+                public static Guid AdjustmentKey
+                {
+                    get
+                    {
+                        return new Guid("AFFE34FA-B842-419C-84D0-309FAB7D2346");
+                    }
+                }
             }
 
             /// <summary>

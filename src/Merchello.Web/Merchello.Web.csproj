@@ -357,6 +357,8 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ProductCopySave.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ShipmentRateQuoteDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Sales\AdjustmentLineItemReference.cs" />
+    <Compile Include="Models\ContentEditing\Sales\InvoiceAdjustmentDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
