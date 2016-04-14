@@ -64,6 +64,11 @@
     <key alias="quantity">Количество</key>
     <key alias="subTotal">Всего</key>
     <key alias="author">Author</key>
+    <key alias="visibility">Visibility</key>
+    <key alias="public">Public</key>
+    <key alias="private">Private</key>
+    <key alias="increase">Increase</key>
+    <key alias="decrease">Decrease</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -247,6 +252,8 @@
     <key alias="balanceDue">Balance due</key>
     <key alias="manageAdjustments">Manage adjustments</key>
     <key alias="addAdjustment">Add adjustment</key>
+    <key alias="adjustments">Adjustments</key>
+    <key alias="adjustmentAssignedBy">Assigned by</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>

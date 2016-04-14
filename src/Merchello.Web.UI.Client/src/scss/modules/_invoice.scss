@@ -3,3 +3,22 @@
     display: block;
   }
 }
+
+.adjustment-operator {
+  padding-right: 11em;
+  label {
+    display: inline-block;
+    margin-right: 1em;
+  }
+}
+
+.adjustment-name {
+  span { display: block; }
+  small { display: inline; }
+}
+
+.adjustment-table {
+  a {
+    cursor: pointer;
+  }
+}

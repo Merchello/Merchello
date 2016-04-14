@@ -1,27 +1,34 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.ManageAdjustmentsController">
     <div class="umb-modalcolumn-header">
         <h4><localize key="merchelloSales_manageAdjustments">Manage Adjustments</localize></h4>
-        <h5><localize key="merchelloOrderView_invoiceNumber" />{{dialogData.invoiceNumber }}</h5>
     </div>
     <div class="umb-panel-body with-header with-footer">
 
-        <table class="table table-striped">
+        <h5><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{ invoiceNumber }}</h5>
+        <invoice-itemization-table invoice="dialogData.invoice" payment-methods="dialogData.paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="dialogData.allPayments" payments="dialogData.payments" currency-symbol="dialogData.currencySymbol"></invoice-itemization-table>
+
+        <h4><localize key="merchelloSales_adjustments"></localize></h4>
+        <table class="table table-striped adjustment-table">
             <thead>
             <tr>
                 <th>Description</th>
-                <th>Amount</th>
+                <th class="text-right">Amount</th>
                 <th></th>
             </tr>
             </thead>
-            <tbody data-ng-show="dialogData.adjustments.length > 0">
-                <tr data-ng-repeat="item in dialogData.adjustments">
+            <tbody>
+                <tr data-ng-show="adjustments.length > 0" data-ng-repeat="item in adjustments">
+
                     <td>{{item.name}}</td>
-                    <td>{{item.amount}}</td>
-                    <td><merchello-delete-icon do-delete="deleteAdjustment(item)" /></td>
+                    <td>
+                        <span data-ng-show="item.price < 0">({{item.absPrice() | currency : dialogData.currencySymbol}})</span>
+                        <span data-ng-show="item.price >= 0">{{item.absPrice() | currency : dialogData.currencySymbol}}</span>
+                    </td>
+                    <td class="text-right">
+                        <merchello-delete-icon do-delete="deleteAdjustment(item)"></merchello-delete-icon>
+                    </td>
                 </tr>
-            </tbody>
-            <tbody data-ng-show="dialogData.adjustments.length === 0">
-                <tr>
+                <tr data-ng-show="adjustments.length === 0">
                     <td colspan="3">
                         <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
                     </td>
@@ -33,18 +40,25 @@
             <h4><localize key="merchelloSales_addAdjustment"></localize></h4>
         <form name="adjustmentFrm" id="adjustmentFrm">
             <div class="row">
-                <div class="input-prepend col-xs-5 span5">
-                    <label><localize key="merchelloGeneral_amount"></localize></label>
-                    <span class="add-on">{{dialogData.currencySymbol}}</span>
-                    <input class="col-xs-4 span4" type="text" data-ng-model="amount">
-                </div>
                 <div class="col-xs-7 span7">
                     <label><localize key="placeholders_enterDescription"></localize></label>
                     <input class="col-xs-6 span6" data-ng-model="name" />
+                </div>
+                <div class="input-prepend col-xs-5 span5">
+                    <label><localize key="merchelloGeneral_amount"></localize></label>
+                    <span class="add-on">{{dialogData.currencySymbol}}</span>
+                    <input class="col-xs-4 span4" type="number" data-ng-model="amount">
                     <merchello-add-icon do-add="addAdjustment()"></merchello-add-icon>
                 </div>
             </div>
-
+            <div class="row adjustment-operator text-right">
+                <label>
+                    <input type="radio" data-ng-model="operator" value="-"> <localize key="merchelloGeneral_decrease"></localize>
+                </label>
+                <label>
+                    <input type="radio" data-ng-model="operator" value="+"> <localize key="merchelloGeneral_increase"></localize>
+                </label>
+            </div>
         </form>
 
 

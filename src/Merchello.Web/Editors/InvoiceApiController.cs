@@ -11,6 +11,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Sales;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
 
@@ -298,6 +299,47 @@
                 LogHelper.Error<InvoiceApiController>("Failed to save invoice", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Updates an invoice with adjustments.
+        /// </summary>
+        /// <param name="adjustments">
+        /// The adjustments.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage PutInvoiceAdjustments(InvoiceAdjustmentDisplay adjustments)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var invoice = _invoiceService.GetByKey(adjustments.InvoiceKey);
+
+                if (invoice != null)
+                {
+                    var invoiceItems = adjustments.Items.Select(x => x.ToInvoiceLineItem());
+
+                    var success = ((InvoiceService)_invoiceService).AdjustInvoice(invoice, invoiceItems.ToArray());
+
+                    if (success) return response;
+
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Did not successfully adjust invoice");
+                }
+
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<InvoiceApiController>("Failed to adjust invoice", ex);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
+            }
+            
 
             return response;
         }

@@ -62,6 +62,11 @@
     <key alias="subTotal">Sub Total</key>
     <key alias="checkout">Checkout</key>
     <key alias="author">Author</key>
+    <key alias="visibility">Visibility</key>
+    <key alias="public">Public</key>
+    <key alias="private">Private</key>
+    <key alias="increase">Increase</key>
+    <key alias="decrease">Decrease</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -253,6 +258,8 @@
     <key alias="balanceDue">Balance due</key>
     <key alias="manageAdjustments">Manage adjustments</key>
     <key alias="addAdjustment">Add adjustment</key>
+    <key alias="adjustments">Adjustments</key>
+    <key alias="adjustmentAssignedBy">Assigned by</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Login</key>

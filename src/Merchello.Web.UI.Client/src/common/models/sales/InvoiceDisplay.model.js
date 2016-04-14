@@ -38,6 +38,23 @@
 
     InvoiceDisplay.prototype = (function() {
 
+        function ensureArray(items) {
+            var collection = [];
+            if (items === undefined || items === null) {
+                return collection;
+            }
+
+            if (!angular.isArray(items)) {
+                collection.push(items);
+            } else {
+                angular.forEach(items, function(item) {
+                   collection.push(item);
+                });
+            }
+
+            return collection;
+        }
+
         function getBillingAddress() {
             var adr = new AddressDisplay();
             adr.address1 = this.billToAddress1;
@@ -103,7 +120,7 @@
 
         // gets the product line items
         function getProductLineItems() {
-            return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
+            return ensureArray( _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; }));
         }
 
         // gets the tax line items
@@ -113,22 +130,22 @@
 
         // gets the shipping line items
         function getShippingLineItems() {
-            return _.find(this.items, function (item) {
+            return ensureArray(_.filter(this.items, function (item) {
                 return item.lineItemTypeField.alias === 'Shipping';
-            });
+            }));
         }
 
         function getAdjustmentLineItems() {
-            return _.find(this.items, function(item) {
+            return ensureArray(_.filter(this.items, function(item) {
                return item.lineItemTypeField.alias === 'Adjustment';
-            });
+            }));
         }
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.filter(this.items, function(item) {
+            var custom =  ensureArray(_.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
-            });
+            }));
             if (custom === undefined) {
                 custom = [];
             }
