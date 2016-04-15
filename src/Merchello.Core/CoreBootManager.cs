@@ -3,7 +3,6 @@
     using System;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
 
     using Cache;
     using Configuration;
@@ -12,17 +11,11 @@
     using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Events;
-    using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Persistence;
-    using Merchello.Core.Persistence.Migrations;
-    using Merchello.Core.Persistence.Migrations.Analytics;
-    using Merchello.Core.Persistence.Migrations.Initial;
+    using Merchello.Core.Logging;
 
     using Observation;
     using Persistence.UnitOfWork;
     using Services;
-
-    using umbraco.BusinessLogic;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -147,11 +140,17 @@
 
             OnMerchelloInit();
 
+            InitializeLoggerResolver();
+
             //_timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
- 
+
             // create the service context for the MerchelloAppContext          
-            
-            var serviceContext = new ServiceContext(new RepositoryFactory(_logger, _sqlSyntaxProvider), _unitOfWorkProvider, _logger, new TransientMessageFactory());
+
+            var logger = (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false)
+                             ? _logger
+                             : MultiLogResolver.Current.Logger;
+
+            var serviceContext = new ServiceContext(new RepositoryFactory(logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
 
             var cache = ApplicationContext.Current == null
@@ -160,7 +159,7 @@
                                     new StaticCacheProvider(),
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
-            
+
             InitializeGatewayResolver(serviceContext, cache);
             
             CreateMerchelloContext(serviceContext, cache);
@@ -236,6 +235,14 @@
         {
             var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
+        }
+
+        /// <summary>
+        /// Initializes the logger resolver.
+        /// </summary>
+        protected virtual void InitializeLoggerResolver()
+        {
+            MultiLogResolver.Current = new MultiLogResolver(new MultiLogger());
         }
 
         /// <summary>
