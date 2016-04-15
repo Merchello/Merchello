@@ -325,6 +325,7 @@
     <Compile Include="Editors\Reports\SalesOverTimeReportApiController.cs" />
     <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
     <Compile Include="LocalizationHelper.cs" />
+    <Compile Include="Logging\DefaultEmptyRemoteLogger.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheInstruction.cs" />

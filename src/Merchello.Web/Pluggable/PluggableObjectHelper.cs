@@ -13,6 +13,23 @@
     public class PluggableObjectHelper
     {
         /// <summary>
+        /// Attempts to instantiate an instance of a configured "pluggable" object without parameters.
+        /// </summary>
+        /// <param name="configurationAlias">
+        /// The configuration alias.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type to return
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="T"/>.
+        /// </returns>
+        public static T GetInstance<T>(string configurationAlias) where T : class
+        {
+            return GetInstance<T>(configurationAlias, new object[] { });
+        }
+
+        /// <summary>
         /// Attempts to instantiate an instance of a configured "pluggable" object
         /// </summary>
         /// <param name="configurationAlias">

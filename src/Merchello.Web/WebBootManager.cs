@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Web
 {
+    using System;
+
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Web.Pluggable;
     using Merchello.Web.Reporting;
     using Merchello.Web.Ui;
 
@@ -99,6 +103,27 @@
 
             if(!OfferComponentResolver.HasCurrent)
                 OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
+        }
+
+        /// <summary>
+        /// Initializes the logger resolver.
+        /// </summary>
+        protected override void InitializeLoggerResolver()
+        {
+            try
+            {
+                var remoteLogger = PluggableObjectHelper.GetInstance<RemoteLoggerBase>("RemoteLogger");
+                MultiLogResolver.Current =
+                    new MultiLogResolver(
+                        new MultiLogger(
+                            Logger,
+                            remoteLogger));
+            }
+            catch (Exception ex)
+            {
+                Logger.WarnWithException<WebBootManager>("Failed to instantiate remote logger", ex, () => new object[] {});
+            }
+            
         }
     }
 }
