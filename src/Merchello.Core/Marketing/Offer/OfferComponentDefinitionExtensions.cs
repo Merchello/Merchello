@@ -3,6 +3,8 @@
     using System;
     using System.Linq;
 
+    using Merchello.Core.Logging;
+
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -38,7 +40,7 @@
             }
 
             var nullRef = new NullReferenceException("Was not able to resolve the OfferComponentType with key: " + definition.ComponentKey);
-            LogHelper.Error(typeof(OfferComponentDefinitionExtensions), "Unable to resolve OfferCompoent", nullRef);
+            MultiLogHelper.Error(typeof(OfferComponentDefinitionExtensions), "Unable to resolve OfferCompoent", nullRef);
             throw nullRef;
         }
     }

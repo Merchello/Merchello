@@ -6,6 +6,7 @@
     using Merchello.Core.Builders;
     using Merchello.Core.Events;
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
 
@@ -102,7 +103,7 @@
                 return attempt.Result;
             }
 
-            LogHelper.Error<SalePreparationBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
+            MultiLogHelper.Error<CheckoutPaymentManagerBase>("The invoice builder failed to generate an invoice.", attempt.Exception);
 
             throw attempt.Exception;
         }

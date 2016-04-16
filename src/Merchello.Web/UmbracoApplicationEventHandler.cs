@@ -16,6 +16,7 @@
 
     using Merchello.Core.Checkout;
     using Merchello.Core.Gateways.Taxation;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Persistence.Migrations;
     using Merchello.Core.Persistence.Migrations.Initial;
@@ -108,7 +109,7 @@
         {
             base.ApplicationStarted(umbracoApplication, applicationContext);
 
-            LogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
+            MultiLogHelper.Info<UmbracoApplicationEventHandler>("Initializing Customer related events");
 
             MemberService.Saving += this.MemberServiceOnSaving;
 
@@ -282,7 +283,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.Error<UmbracoApplicationEventHandler>("Failed to log invoice deleted", ex);
+                        MultiLogHelper.Error<UmbracoApplicationEventHandler>("Failed to log invoice deleted", ex);
                     }
                 }
             });
@@ -310,7 +311,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.Error<UmbracoApplicationEventHandler>("Failed to log order deleted", ex);
+                        MultiLogHelper.Error<UmbracoApplicationEventHandler>("Failed to log order deleted", ex);
                     }
                 }
             });
@@ -441,7 +442,7 @@
 
                         if (customer != null)
                         {
-                            LogHelper.Info<UmbracoApplicationEventHandler>("A customer already exists with the loginName of: " + member.Username + " -- ABORTING customer creation");
+                            MultiLogHelper.Info<UmbracoApplicationEventHandler>("A customer already exists with the loginName of: " + member.Username + " -- ABORTING customer creation");
                             return;
                         }
 
@@ -494,7 +495,7 @@
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 var ex = new Exception(response.ReasonPhrase);
-                LogHelper.Error(typeof(UmbracoApplicationEventHandler), "Failed to record Merchello Migration Record", ex);
+                MultiLogHelper.Error(typeof(UmbracoApplicationEventHandler), "Failed to record Merchello Migration Record", ex);
             }
         }
     }

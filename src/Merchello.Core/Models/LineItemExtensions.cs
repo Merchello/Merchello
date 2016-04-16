@@ -9,6 +9,9 @@
     using Formatters;
     using Gateways.Shipping;
     using Gateways.Taxation;
+
+    using Merchello.Core.Logging;
+
     using TypeFields;
     using Umbraco.Core.Logging;
 
@@ -280,7 +283,7 @@
 
             if (attempt.Success) return attempt.Result as T;
 
-            LogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
+            MultiLogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
             
             throw attempt.Exception;
         }
@@ -307,7 +310,7 @@
 
             if (attempt.Success) return attempt.Result as T;
             
-            LogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
+            MultiLogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
             
             throw attempt.Exception;
         }

@@ -13,6 +13,7 @@
     using Core.Services;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Logging;
     using Merchello.Core.Persistence.Migrations.Analytics;
 
     using Models.ContentEditing;
@@ -258,7 +259,7 @@
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
                         var ex = new Exception(response.ReasonPhrase);
-                        LogHelper.Error<SettingsApiController>("Failed to record domain analytic", ex);
+                        MultiLogHelper.Error<SettingsApiController>("Failed to record domain analytic", ex);
                     }
 
                     setting.Value = true.ToString();
@@ -269,7 +270,7 @@
                 catch (Exception ex)
                 {
                     // this is for analytics only and we don't want to throw
-                    LogHelper.Error<SettingsApiController>("Failed to record analytics (Domain)", ex);
+                    MultiLogHelper.Error<SettingsApiController>("Failed to record analytics (Domain)", ex);
                 }
 
             }

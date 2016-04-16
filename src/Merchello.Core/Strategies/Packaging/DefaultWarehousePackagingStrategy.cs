@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
 
     using Umbraco.Core.Logging;
@@ -111,7 +112,7 @@
 
                 if (!variant.CatalogInventories.Any())
                 {
-                    LogHelper.Error<ShippableProductVisitor>(
+                    MultiLogHelper.Error<ShippableProductVisitor>(
                         "ProductVariant marked as shippable was not assoicated with a WarehouseCatalog.  Product was: "
                         + variant.Key.ToString() + " -  " + variant.Name,
                         new InvalidDataException());

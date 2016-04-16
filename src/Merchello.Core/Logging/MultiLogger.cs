@@ -100,7 +100,7 @@
         public void Error(Type callingType, string message, Exception exception)
         {
             _umbracoLogger.Error(callingType, message, exception);
-            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Error(callingType, message, exception);
+            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Error(callingType, message, exception, GetBaseLoggingData());
         }
 
 
@@ -119,7 +119,7 @@
         public void Warn(Type callingType, string message, params Func<object>[] formatItems)
         {
             _umbracoLogger.Warn(callingType, message, formatItems);
-            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Warn(callingType, message);
+            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Warn(callingType, message, GetBaseLoggingData());
         }
 
         /// <summary>
@@ -140,7 +140,7 @@
         public void WarnWithException(Type callingType, string message, Exception e, params Func<object>[] formatItems)
         {
             _umbracoLogger.WarnWithException(callingType, message, e, formatItems);
-            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.WarnWithException(callingType, message, e);
+            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.WarnWithException(callingType, message, e, GetBaseLoggingData());
         }
 
         /// <summary>
@@ -155,7 +155,7 @@
         public void Info(Type callingType, Func<string> generateMessage)
         {
             _umbracoLogger.Info(callingType, generateMessage);
-            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Info(callingType, generateMessage.Invoke());
+            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Info(callingType, generateMessage.Invoke(), GetBaseLoggingData());
         }
 
         /// <summary>
@@ -187,7 +187,7 @@
         public void Debug(Type callingType, Func<string> generateMessage)
         {
             _umbracoLogger.Debug(callingType, generateMessage);
-            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Debug(callingType, generateMessage.Invoke());
+            if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Debug(callingType, generateMessage.Invoke(), GetBaseLoggingData());
         }
 
         /// <summary>
@@ -302,6 +302,20 @@
         {
             _umbracoLogger.Debug(callingType, () => message);
             if (_hasRemoteLogger && this._remoteLogger.IsReady) _remoteLogger.Debug(callingType, message, loggerData);
+        }
+
+        /// <summary>
+        /// The get base logging data.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IExtendedLoggerData"/>.
+        /// </returns>
+        internal static IExtendedLoggerData GetBaseLoggingData()
+        {
+            var data = new ExtendedLoggerData();
+            data.AddCategory("Merchello");
+
+            return data;
         }
     }
 }

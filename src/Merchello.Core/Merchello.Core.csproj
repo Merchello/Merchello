@@ -416,7 +416,6 @@
     <Compile Include="Logging\IExtendedLoggerDataLogger.cs" />
     <Compile Include="Logging\IMultiLogger.cs" />
     <Compile Include="Logging\LoggerProviderBase.cs" />
-    <Compile Include="Logging\LoggerSettings.cs" />
     <Compile Include="Logging\MultiLogger.cs" />
     <Compile Include="Logging\MultiLogHelper.cs" />
     <Compile Include="Logging\MultiLogResolver.cs" />
@@ -536,7 +535,7 @@
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Models\MonitorModels\ShipmentResultNotifyModel.cs" />
     <Compile Include="Models\NotifiedStatusBase.cs" />
-    <Compile Include="Models\Querying\public InvoiceOrderByFields.cs" />
+    <Compile Include="Models\Querying\InvoiceOrderByFields.cs" />
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
@@ -707,7 +706,6 @@
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
-    <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
     <Compile Include="Models\NotificationMethod.cs" />
     <Compile Include="Models\Order.cs" />

@@ -121,6 +121,33 @@
         }
 
         /// <summary>
+        /// Logs a message.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        public static void Info<T>(string message)
+        {
+            Info(typeof(T), message);
+        }
+
+        /// <summary>
+        /// Logs a message
+        /// </summary>
+        /// <param name="callingType">
+        /// The calling type.
+        /// </param>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        public static void Info(Type callingType, string message)
+        {
+            Info(callingType, () => message);
+        }
+
+        /// <summary>
         /// Logs an informative message.
         /// </summary>
         /// <param name="generateMessage">

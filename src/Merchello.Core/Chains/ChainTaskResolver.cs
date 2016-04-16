@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Logging;
 
     using Umbraco.Core.Logging;
 
@@ -48,7 +49,7 @@
                 var attempt = ActivatorHelper.CreateInstance<T>(typeName, ctrValues);
                 if (!attempt.Success)
                 {
-                    LogHelper.Error<ChainTaskResolver>("ResolveAttemptByAlias<T> failed to resolve type " + typeName, attempt.Exception);
+                    MultiLogHelper.Error<ChainTaskResolver>("ResolveAttemptByAlias<T> failed to resolve type " + typeName, attempt.Exception);
                     throw attempt.Exception;
                 }
                 types.Add(attempt.Result);

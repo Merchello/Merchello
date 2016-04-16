@@ -14,6 +14,7 @@
     using Gateways.Taxation;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
 
@@ -383,7 +384,7 @@
             var attempt = orderBuilder.Build();
             if (attempt.Success) return attempt.Result;
 
-            LogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
+            MultiLogHelper.Error<OrderBuilderChain>("Extension method PrepareOrder failed", attempt.Exception);
             throw attempt.Exception;
         }
 

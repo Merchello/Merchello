@@ -7,6 +7,7 @@
     using System.Reflection;
 
     using Merchello.Core.Gateways;
+    using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
 
     using Umbraco.Core;
@@ -182,7 +183,7 @@
                         var exception =
                             new InvalidOperationException(
                                 "Resolver expects a single controller associated with a GatewayMethodAttribute.");
-                        LogHelper.Error<PaymentMethodUiControllerResolver>("More that one controller found", exception);
+                        MultiLogHelper.Error<PaymentMethodUiControllerResolver>("More that one controller found", exception);
 
                     }
                 }

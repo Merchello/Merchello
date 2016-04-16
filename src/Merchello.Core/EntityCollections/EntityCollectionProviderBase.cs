@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
@@ -186,7 +187,7 @@
                 var nullReference =
                     new NullReferenceException(
                         "EntityCollectionProvider was not decorated with an EntityCollectionProviderAttribute");
-                LogHelper.Error<EntityCollectionProviderBase>("Provider must be decorated with an attribute", nullReference);
+                MultiLogHelper.Error<EntityCollectionProviderBase>("Provider must be decorated with an attribute", nullReference);
                 throw nullReference;
             }
 
@@ -207,7 +208,7 @@
             if (this.EnsureType(type)) return;
 
             var invalidType = new InvalidCastException("Cannot cast " + type.FullName + " to " + EntityCollection.TypeOfEntities().FullName);
-            LogHelper.Error<EntityCollectionProviderBase>("Invalid type", invalidType);
+            MultiLogHelper.Error<EntityCollectionProviderBase>("Invalid type", invalidType);
             throw invalidType;
         }
 

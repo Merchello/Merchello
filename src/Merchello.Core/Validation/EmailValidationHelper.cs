@@ -4,6 +4,8 @@
     using System.Globalization;
     using System.Text.RegularExpressions;
 
+    using Merchello.Core.Logging;
+
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -82,7 +84,7 @@
             }
             catch (ArgumentException)
             {
-                LogHelper.Debug<EmailValidationHelper>("Invalid email address");
+                MultiLogHelper.Debug<EmailValidationHelper>("Invalid email address");
                 this.invalid = true;
             }
 

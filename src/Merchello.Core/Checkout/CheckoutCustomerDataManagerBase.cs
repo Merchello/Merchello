@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Sales;
     using Merchello.Core.Services;
@@ -90,7 +91,7 @@
             catch (Exception ex)
             {
                 // don't throw an exception here as the customer is in the middle of a checkout.
-                LogHelper.Error<SalePreparationBase>("Failed to deserialize CheckoutCustomerTempData.  Returned empty offer code list instead.", ex);
+                MultiLogHelper.Error<CheckoutCustomerDataManagerBase>("Failed to deserialize CheckoutCustomerTempData.  Returned empty offer code list instead.", ex);
             }
 
             return data;

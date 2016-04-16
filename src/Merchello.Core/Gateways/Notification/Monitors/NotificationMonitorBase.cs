@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Events;
+    using Merchello.Core.Logging;
 
     using Models;
     using Observation;
@@ -139,7 +140,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<NotificationMonitorBase<T>>("Failed Building Cache", ex);
+                MultiLogHelper.Error<NotificationMonitorBase<T>>("Failed Building Cache", ex);
                 throw;
             }
         }

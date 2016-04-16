@@ -10,6 +10,7 @@
     using Core.Strategies.Packaging;
 
     using Merchello.Core.Checkout;
+    using Merchello.Core.Logging;
     using Merchello.Web.CheckoutManagers;
 
     using Umbraco.Core.Logging;
@@ -192,7 +193,7 @@
                 return basket.PackageBasket(merchelloContext, destination, strategy.Result);
             }
 
-            LogHelper.Error<PackagingStrategyBase>("PackageBasket failed to instantiate the defaultStrategy.", strategy.Exception);
+            MultiLogHelper.Error<PackagingStrategyBase>("PackageBasket failed to instantiate the defaultStrategy.", strategy.Exception);
             
             throw strategy.Exception;
         }
