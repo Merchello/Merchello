@@ -8,6 +8,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
@@ -136,14 +137,14 @@
                 {
                     if (!DateTime.TryParse(invoiceDateStart.Value, out startDate))
                     {
-                        LogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
+                        MultiLogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
                         startDate = DateTime.MinValue;
                     }
                     
                 }
                 else if (!DateTime.TryParseExact(invoiceDateStart.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
                 {
-                    LogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
+                    MultiLogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
                     startDate = DateTime.MinValue;
                 }
 
@@ -296,7 +297,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<InvoiceApiController>("Failed to save invoice", ex);
+                MultiLogHelper.Error<InvoiceApiController>("Failed to save invoice", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 
@@ -336,7 +337,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<InvoiceApiController>("Failed to adjust invoice", ex);
+                MultiLogHelper.Error<InvoiceApiController>("Failed to adjust invoice", ex);
                 response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
             }
             
@@ -371,7 +372,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<InvoiceApiController>("Failed to save shipping address", ex);
+                MultiLogHelper.Error<InvoiceApiController>("Failed to save shipping address", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 

@@ -7,6 +7,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
@@ -164,7 +165,7 @@
                 var invalid =
                     new InvalidOperationException(
                         "Wishlists are not supported with anonymous customers.  The customer key passed returned an anonymous customer.");
-                LogHelper.Error<CustomerApiController>("Could not retrieve customer wish list", invalid);
+                MultiLogHelper.Error<CustomerApiController>("Could not retrieve customer wish list", invalid);
                 throw invalid;
             }
 

@@ -4,6 +4,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Logging;
 
     using Umbraco.Core.Logging;
 
@@ -95,7 +96,7 @@
             if (string.IsNullOrEmpty(contextType))
             {
                 var nullReference = new NullReferenceException("Reference to the pluggable/object with key '" + configurationAlias + "' was not found in the merchello.config file.");
-                LogHelper.Error(typeof(PluggableObjectHelper), "Configuration missing", nullReference);
+                MultiLogHelper.Error(typeof(PluggableObjectHelper), "Configuration missing", nullReference);
                 throw nullReference;
             }
             var attempt = ActivatorHelper.CreateInstance<T>(contextType, ctrArgValues);
@@ -105,7 +106,7 @@
                 return attempt.Result;
             }
 
-            LogHelper.Error(typeof(PluggableObjectHelper), "Failed to instantiate configured type", attempt.Exception);
+            MultiLogHelper.Error(typeof(PluggableObjectHelper), "Failed to instantiate configured type", attempt.Exception);
             throw attempt.Exception;
         }
     }

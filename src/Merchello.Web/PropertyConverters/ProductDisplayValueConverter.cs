@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Web.Models.ContentEditing;
 
     using Umbraco.Core.Logging;
@@ -67,7 +68,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<ProductDisplayValueConverter>("Failed to Convert ProductDisplay property", ex);
+                MultiLogHelper.Error<ProductDisplayValueConverter>("Failed to Convert ProductDisplay property", ex);
                 return null;
             }
         }

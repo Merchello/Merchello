@@ -198,20 +198,20 @@
       <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=2.0.5949.102, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000272\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=2.0.5949.42566, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000280\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=2.0.5949.104, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000272\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=2.0.5949.42567, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000280\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Providers, Version=2.0.5949.108, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000272\lib\net45\Merchello.Providers.dll</HintPath>
+    <Reference Include="Merchello.Providers, Version=2.0.5949.42572, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000280\lib\net45\Merchello.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=2.0.5949.104, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000272\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=2.0.5949.42568, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000280\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">

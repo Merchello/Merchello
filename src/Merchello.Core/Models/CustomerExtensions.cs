@@ -9,6 +9,7 @@
     using System.Xml.Linq;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
 
     using Newtonsoft.Json;
@@ -189,7 +190,7 @@
 
             if (!provider.EnsureEntityType(EntityType.Customer))
             {
-                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a customer to a non customer collection");
+                MultiLogHelper.Debug(typeof(CustomerExtensions), "Attempted to add a customer to a non customer collection");
                 return;
             }
 

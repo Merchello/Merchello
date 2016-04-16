@@ -8,6 +8,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
@@ -331,7 +332,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<BackOfficeCheckoutApiController>("Failed to create customer invoice", ex);
+                MultiLogHelper.Error<BackOfficeCheckoutApiController>("Failed to create customer invoice", ex);
                 throw;
             }
         }
@@ -357,7 +358,7 @@
             if (customer == null)
             {
                 var notFound = new NullReferenceException("Customer was not found");
-                LogHelper.Error<BackOfficeCheckoutApiController>("Could not add item to customer ItemCache", notFound);
+                MultiLogHelper.Error<BackOfficeCheckoutApiController>("Could not add item to customer ItemCache", notFound);
                 return null;
             }
 

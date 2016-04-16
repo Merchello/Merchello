@@ -1,7 +1,4 @@
-﻿using Merchello.Core.Gateways.Notification.Monitors;
-using Merchello.Core.Observation;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -9,13 +6,20 @@ namespace Merchello.Web.Editors
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+
     using Core;
     using Core.Gateways;
     using Core.Gateways.Notification;
     using Core.Models;
     using Core.Services;
+
+    using Merchello.Core.Gateways.Notification.Monitors;
+    using Merchello.Core.Observation;
+
     using Models.ContentEditing;
+
     using Umbraco.Web.Mvc;
+
     using WebApi;
 
     /// <summary>

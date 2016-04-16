@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.ObjectResolution;
     using Merchello.Core.Services;
 
@@ -114,7 +115,7 @@
                 }
                 else
                 {
-                    LogHelper.Error<OfferProviderResolver>("Failed to instantiate type: " + type.Name, attempt.Exception);
+                    MultiLogHelper.Error<OfferProviderResolver>("Failed to instantiate type: " + type.Name, attempt.Exception);
                 }
             }
         }

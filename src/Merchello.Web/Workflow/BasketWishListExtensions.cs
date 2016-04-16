@@ -6,6 +6,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Checkout;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
 
     using Umbraco.Core.Logging;
@@ -28,7 +29,7 @@
             // Anonymous customers do not have wish lists
             if (basket.Customer.IsAnonymous)
             {
-                LogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
+                MultiLogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
                 return;
             }
 
@@ -69,7 +70,7 @@
             // Anonymous customers do not have wish lists
             if (basket.Customer.IsAnonymous)
             {
-                LogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
+                MultiLogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
                 return;
             }
 

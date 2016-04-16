@@ -9,6 +9,7 @@ namespace Merchello.Web.Pluggable
     using Merchello.Core;
     using Merchello.Core.Cache;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.Customer;
@@ -416,7 +417,7 @@ namespace Merchello.Web.Pluggable
 
             if (!attempt.Success)
             {
-                LogHelper.Error<CustomerContext>("Failed to convert anonymous basket to customer basket", attempt.Exception);
+                MultiLogHelper.Error<CustomerContext>("Failed to convert anonymous basket to customer basket", attempt.Exception);
                 return;
             }
 
@@ -498,7 +499,7 @@ namespace Merchello.Web.Pluggable
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error<CustomerContext>("Decrypted guid did not parse", ex);
+                    MultiLogHelper.Error<CustomerContext>("Decrypted guid did not parse", ex);
                     this.CreateAnonymousCustomer();
                 }
             }

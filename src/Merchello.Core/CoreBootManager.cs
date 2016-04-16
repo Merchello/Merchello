@@ -146,9 +146,7 @@
 
             // create the service context for the MerchelloAppContext          
 
-            var logger = (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false)
-                             ? _logger
-                             : MultiLogResolver.Current.Logger;
+            var logger = GetMultiLogger();
 
             var serviceContext = new ServiceContext(new RepositoryFactory(logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
@@ -242,7 +240,21 @@
         /// </summary>
         protected virtual void InitializeLoggerResolver()
         {
-            MultiLogResolver.Current = new MultiLogResolver(new MultiLogger());
+            MultiLogResolver.Current = new MultiLogResolver(GetMultiLogger());
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MultiLogger"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IMultiLogger"/>.
+        /// </returns>
+        /// <remarks>
+        /// We need to do this outside of the resolver due to internal resolution "Freeze"
+        /// </remarks>
+        protected virtual IMultiLogger GetMultiLogger()
+        {
+            return new MultiLogger();
         }
 
         /// <summary>

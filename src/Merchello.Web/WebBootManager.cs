@@ -106,24 +106,23 @@
         }
 
         /// <summary>
-        /// Initializes the logger resolver.
+        /// Overrides the base GetMultiLogger.
         /// </summary>
-        protected override void InitializeLoggerResolver()
+        /// <returns>
+        /// The <see cref="IMultiLogger"/>.
+        /// </returns>
+        protected override IMultiLogger GetMultiLogger()
         {
             try
             {
                 var remoteLogger = PluggableObjectHelper.GetInstance<RemoteLoggerBase>("RemoteLogger");
-                MultiLogResolver.Current =
-                    new MultiLogResolver(
-                        new MultiLogger(
-                            Logger,
-                            remoteLogger));
+                return new MultiLogger(Logger, remoteLogger);
             }
             catch (Exception ex)
             {
-                Logger.WarnWithException<WebBootManager>("Failed to instantiate remote logger", ex, () => new object[] {});
+                Logger.WarnWithException<WebBootManager>("Failed to instantiate remote logger. Returning default logger", ex, () => new object[] { });
+                return new MultiLogger();
             }
-            
         }
     }
 }

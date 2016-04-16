@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Gateways.Notification.Triggering;
+
+    using Merchello.Core.Logging;
+
     using Observation;
     using Umbraco.Core.Logging;
 
@@ -66,7 +69,7 @@
 
             var ex = new InvalidOperationException("TriggerResolver.Current has not been initialized.");
 
-            LogHelper.Error(typeof(Notification), "TriggerResolver has not be initialized", ex);
+            MultiLogHelper.Error(typeof(Notification), "TriggerResolver has not be initialized", ex);
             
             throw ex;
         }
