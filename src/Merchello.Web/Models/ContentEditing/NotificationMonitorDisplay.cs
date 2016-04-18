@@ -26,5 +26,10 @@
         /// Gets or sets the alias
         /// </summary>
         public string Alias { get; set; }
+
+        /// <summary>
+        /// Gets or sets the route path for the editor.
+        /// </summary>
+        public bool UseCodeEditor { get; set; }
     }
 }

@@ -120,7 +120,8 @@
             {
                 MonitorKey = x.MonitorFor().Key,
                 Name = x.MonitorFor().Name,
-                Alias = x.MonitorFor().ObservableTrigger.ToString()
+                Alias = x.MonitorFor().ObservableTrigger.ToString(),
+                UseCodeEditor = x.MonitorFor().UseCodeEditor
             });
         }
 

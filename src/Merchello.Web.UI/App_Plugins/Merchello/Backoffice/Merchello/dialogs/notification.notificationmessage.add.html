@@ -9,7 +9,7 @@
             <div class="row-fluid">
                 <div class="col-xs-12 span12">
                     <label for="event"><localize key="merchelloNotificationsMessage_attachedEvent" /></label>
-                    <select name="event" class="col-xs-12 span12" data-ng-model="dialogData.selectedMonitor" data-ng-options="n.name for n in dialogData.notificationMonitors" required></select>
+                    <select name="event" class="col-xs-12 span12" data-ng-model="dialogData.selectedMonitor" data-ng-change="setSubject()" data-ng-options="n.name for n in dialogData.notificationMonitors" required></select>
                 </div>
             </div>
             <div class="form-group row-fluid">

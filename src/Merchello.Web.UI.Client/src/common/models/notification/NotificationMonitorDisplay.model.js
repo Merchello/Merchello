@@ -11,6 +11,7 @@
         self.monitorKey = '';
         self.name = '';
         self.alias = '';
+        self.useCodeEditor = false;
     };
 
     angular.module('merchello.models').constant('NotificationMonitorDisplay', NotificationMonitorDisplay);

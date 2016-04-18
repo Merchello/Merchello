@@ -12,9 +12,22 @@
 
             // exposed methods
             $scope.save = save;
+            $scope.setSubject = setSubject;
+
+            function init() {
+                setSubject();
+            }
+
+            function setSubject() {
+               var subject = $scope.dialogData.selectedMonitor.name.replace(' (Legacy)', '');
+
+                $scope.dialogData.notificationMessage.name = subject;
+            }
 
             function save() {
                 $scope.dialogData.notificationMessage.monitorKey = $scope.dialogData.selectedMonitor.monitorKey;
                 $scope.submit($scope.dialogData);
             }
+
+            init();
     }]);

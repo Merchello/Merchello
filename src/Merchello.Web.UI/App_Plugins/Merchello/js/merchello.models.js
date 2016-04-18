@@ -1920,7 +1920,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.monitorKey = '';
         self.methodKey = '';
         self.recipients = '';
-        self.sendToCustomer = '';
+        self.sendToCustomer = true;
         self.disabled = false;
     };
 
@@ -1958,6 +1958,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.monitorKey = '';
         self.name = '';
         self.alias = '';
+        self.useCodeEditor = false;
     };
 
     angular.module('merchello.models').constant('NotificationMonitorDisplay', NotificationMonitorDisplay);

@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents and order confirmation monitor
     /// </summary>
-    [MonitorFor("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA", typeof(OrderConfirmationTrigger), "Order Confirmation Message (Pattern Replace)")]
+    [MonitorFor("5DB575B5-0728-4B31-9B37-E9CF6C12E0AA", typeof(OrderConfirmationTrigger), "Order Confirmation (Legacy)")]
     public class OrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
     {
         /// <summary>

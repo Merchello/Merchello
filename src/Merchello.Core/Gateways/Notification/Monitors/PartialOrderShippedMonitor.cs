@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents and order shipped monitor
     /// </summary>
-    [MonitorFor("45016334-AB36-4496-BFC4-CD860F2A7EFF", typeof(PartialOrderShippedTrigger), "Partial Order Shipped Message (Pattern Replace)")]
+    [MonitorFor("45016334-AB36-4496-BFC4-CD860F2A7EFF", typeof(PartialOrderShippedTrigger), "Partial Order Shipped (Legacy)")]
     public class PartialOrderShippedMonitor : NotificationMonitorBase<IShipmentResultNotifyModel>
     {
         /// <summary>
