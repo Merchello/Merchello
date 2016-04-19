@@ -10,7 +10,7 @@
             return {
 
                 getOrder: function (orderKey) {
-                    var url = Umbraco.Sys.ServerVariables['merchello']['merchelloOrderApiBaseUrl'] + 'GetOrder';
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetOrder';
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: url,

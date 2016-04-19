@@ -1,0 +1,17 @@
+﻿@inherits UmbracoViewPage<Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel>
+@using Merchello.Core.Models
+    
+Dear @Model.Invoice.BillToName
+
+<p>Your order has been received.</p>
+
+<strong>Invoice Number: @Model.Invoice.PrefixedInvoiceNumber()</strong>
+
+Your items:
+
+<ul>
+    @foreach (var item in Model.Invoice.Items)
+    {
+        <li>@item.Name - @item.Price</li>
+    }
+</ul>

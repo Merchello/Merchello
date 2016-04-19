@@ -282,7 +282,6 @@
              * Handles the save after recieving the save command from the dialog view/controller
              */
             function notificationsMessageAddDialogConfirm(dialogData) {
-                console.info(dialogData);
                 var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMessage(dialogData.notificationMessage);
                 promiseNotificationMethod.then(function (keyFromServer) {
                     notificationsService.success("Notification Saved", "");
@@ -323,7 +322,7 @@
                 });
 
                 if (monitor !== undefined) {
-                    $location.url('merchello/merchello/notificationpatterneditor/' + message.key, true);
+                    $location.url('merchello/merchello/notificationmessageeditor/' + message.key, true);
                 }
             }
             

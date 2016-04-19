@@ -12,6 +12,7 @@
         self.name = '';
         self.alias = '';
         self.useCodeEditor = false;
+        self.modelTypeName = '';
     };
 
     angular.module('merchello.models').constant('NotificationMonitorDisplay', NotificationMonitorDisplay);

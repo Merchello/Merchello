@@ -3,6 +3,7 @@
 @using Merchello.Bazaar.Models.ViewModels
 @using Umbraco.Core.Models
 @using ClientDependency.Core.Mvc
+@using Merchello.Web
 @using Umbraco.Web
 @{
     Layout = null;
@@ -33,10 +34,13 @@
 </head>
 <body class="@Model.DocumentTypeAlias" id="top">
     @Html.ThemedPartial(theme, "NavBar", Model)
-    <div class="container">
-        @RenderBody()
-    </div>
-    @Html.RenderJsHere()
+<div class="container">
+    @RenderBody()
+</div>
+
+    @TestEmail.GetBody()
+
+@Html.RenderJsHere()
     @RenderSection("AdditionalScripts", false)
 </body>
 </html>

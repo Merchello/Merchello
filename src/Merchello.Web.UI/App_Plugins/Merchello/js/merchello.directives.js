@@ -1980,6 +1980,12 @@ angular.module('merchello.directives').directive('merchelloNotesTable', [
         };
     });
 
+angular.module('merchello.directives').directive('merchelloNotificationTemplates',
+    [
+    function() {
+
+}]);
+
 angular.module('merchello.directives').directive('resolvedGatewayProviders', [function() {
     return {
         restrict: 'E',

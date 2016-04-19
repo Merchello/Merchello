@@ -12,16 +12,16 @@
 
             // exposed methods
             $scope.save = save;
-            $scope.setSubject = setSubject;
+            $scope.setMonitorDefaults = setMonitorDefaults;
 
             function init() {
-                setSubject();
+                setMonitorDefaults();
             }
 
-            function setSubject() {
-               var subject = $scope.dialogData.selectedMonitor.name.replace(' (Legacy)', '');
-
+            function setMonitorDefaults() {
+               var subject = $scope.dialogData.selectedMonitor.name.replace(' (Legacy)', '').replace(' (Razor)', '');
                 $scope.dialogData.notificationMessage.name = subject;
+                $scope.dialogData.notificationMessage.bodyTextIsFilePath = $scope.dialogData.selectedMonitor.useCodeEditor;
             }
 
             function save() {

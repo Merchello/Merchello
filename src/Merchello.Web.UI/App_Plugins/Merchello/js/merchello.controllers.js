@@ -3680,16 +3680,16 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
 
             // exposed methods
             $scope.save = save;
-            $scope.setSubject = setSubject;
+            $scope.setMonitorDefaults = setMonitorDefaults;
 
             function init() {
-                setSubject();
+                setMonitorDefaults();
             }
 
-            function setSubject() {
-               var subject = $scope.dialogData.selectedMonitor.name.replace(' (Legacy)', '');
-
+            function setMonitorDefaults() {
+               var subject = $scope.dialogData.selectedMonitor.name.replace(' (Legacy)', '').replace(' (Razor)', '');
                 $scope.dialogData.notificationMessage.name = subject;
+                $scope.dialogData.notificationMessage.bodyTextIsFilePath = $scope.dialogData.selectedMonitor.useCodeEditor;
             }
 
             function save() {
@@ -4628,11 +4628,11 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
 
 
 
-    angular.module('merchello').controller('Merchello.Backoffice.NotificationPatternEditorController',
+    angular.module('merchello').controller('Merchello.Backoffice.NotificationMessageEditorController',
     ['$scope', '$q', '$routeParams', '$location', 'assetsService', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'dialogDataFactory',
-    'notificationGatewayProviderResource', 'notificationMessageDisplayBuilder', 'notificationMonitorDisplayBuilder',
+    'notificationGatewayProviderResource', 'vieweditorResource', 'notificationMessageDisplayBuilder', 'notificationMonitorDisplayBuilder',
     function($scope, $q, $routeParams, $location, assetsService, dialogService, notificationsService, merchelloTabsFactory, dialogDataFactory,
-    notificationGatewayProviderResource, notificationMessageDisplayBuilder, notificationMonitorDisplayBuilder) {
+    notificationGatewayProviderResource, vieweditorResource, notificationMessageDisplayBuilder, notificationMonitorDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -4641,7 +4641,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
         $scope.notificationMonitors = [];
         $scope.currentMonitor = {};
 
-        $scope.editorOptions = {
+        $scope.cmOptions = {
             lineNumbers: true
         }
 
@@ -4664,29 +4664,19 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
 
         function init() {
             var key = $routeParams.id;
+
             $q.all([
                 notificationGatewayProviderResource.getNotificationMessagesByKey(key),
                 notificationGatewayProviderResource.getAllNotificationMonitors(),
-                assetsService.loadCss('/App_Plugins/Merchello/lib/codemirror/codemirror.css')
+                assetsService.loadCss('/App_Plugins/Merchello/lib/codemirror/codemirror.css'),
+                vieweditorResource.getAllNotificationViews()
+                
             ]).then(function(data) {
-
-                /*
-                 assetsService.loadJs('/App_Plugins/Merchello/lib/codemirror/codemirror.js'),
-                 assetsService.loadJs('/App_Plugins/Merchello/lib/codemirror/ui-codemirror.js'),
-                 
-                 
-                var isInstalled = _.find(angular.module('merchello.plugins').requires, function(mod) {
-                   return mod === 'ui.codemirror';
-                });
-
-                if (isInstalled === undefined) {
-                    angular.module('merchello.plugins').requires.push('ui.codemirror');
-                }
-                */
 
                 $scope.notificationMessage = notificationMessageDisplayBuilder.transform(data[0]);
                 $scope.notificationMonitors = notificationMonitorDisplayBuilder.transform(data[1])
-
+                console.info($scope.notificationMonitors);
+                console.info(data[3]);
                 $scope.currentMonitor = _.find($scope.notificationMonitors, function(m) {
                    return m.monitorKey === $scope.notificationMessage.monitorKey;
                 });
@@ -5048,7 +5038,6 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
              * Handles the save after recieving the save command from the dialog view/controller
              */
             function notificationsMessageAddDialogConfirm(dialogData) {
-                console.info(dialogData);
                 var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMessage(dialogData.notificationMessage);
                 promiseNotificationMethod.then(function (keyFromServer) {
                     notificationsService.success("Notification Saved", "");
@@ -5089,7 +5078,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
                 });
 
                 if (monitor !== undefined) {
-                    $location.url('merchello/merchello/notificationpatterneditor/' + message.key, true);
+                    $location.url('merchello/merchello/notificationmessageeditor/' + message.key, true);
                 }
             }
             

@@ -1,9 +1,9 @@
 
-    angular.module('merchello').controller('Merchello.Backoffice.NotificationPatternEditorController',
+    angular.module('merchello').controller('Merchello.Backoffice.NotificationMessageEditorController',
     ['$scope', '$q', '$routeParams', '$location', 'assetsService', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'dialogDataFactory',
-    'notificationGatewayProviderResource', 'notificationMessageDisplayBuilder', 'notificationMonitorDisplayBuilder',
+    'notificationGatewayProviderResource', 'vieweditorResource', 'notificationMessageDisplayBuilder', 'notificationMonitorDisplayBuilder',
     function($scope, $q, $routeParams, $location, assetsService, dialogService, notificationsService, merchelloTabsFactory, dialogDataFactory,
-    notificationGatewayProviderResource, notificationMessageDisplayBuilder, notificationMonitorDisplayBuilder) {
+    notificationGatewayProviderResource, vieweditorResource, notificationMessageDisplayBuilder, notificationMonitorDisplayBuilder) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -12,7 +12,7 @@
         $scope.notificationMonitors = [];
         $scope.currentMonitor = {};
 
-        $scope.editorOptions = {
+        $scope.cmOptions = {
             lineNumbers: true
         }
 
@@ -35,29 +35,19 @@
 
         function init() {
             var key = $routeParams.id;
+
             $q.all([
                 notificationGatewayProviderResource.getNotificationMessagesByKey(key),
                 notificationGatewayProviderResource.getAllNotificationMonitors(),
-                assetsService.loadCss('/App_Plugins/Merchello/lib/codemirror/codemirror.css')
+                assetsService.loadCss('/App_Plugins/Merchello/lib/codemirror/codemirror.css'),
+                vieweditorResource.getAllNotificationViews()
+                
             ]).then(function(data) {
-
-                /*
-                 assetsService.loadJs('/App_Plugins/Merchello/lib/codemirror/codemirror.js'),
-                 assetsService.loadJs('/App_Plugins/Merchello/lib/codemirror/ui-codemirror.js'),
-                 
-                 
-                var isInstalled = _.find(angular.module('merchello.plugins').requires, function(mod) {
-                   return mod === 'ui.codemirror';
-                });
-
-                if (isInstalled === undefined) {
-                    angular.module('merchello.plugins').requires.push('ui.codemirror');
-                }
-                */
 
                 $scope.notificationMessage = notificationMessageDisplayBuilder.transform(data[0]);
                 $scope.notificationMonitors = notificationMonitorDisplayBuilder.transform(data[1])
-
+                console.info($scope.notificationMonitors);
+                console.info(data[3]);
                 $scope.currentMonitor = _.find($scope.notificationMonitors, function(m) {
                    return m.monitorKey === $scope.notificationMessage.monitorKey;
                 });

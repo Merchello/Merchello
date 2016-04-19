@@ -1,4 +1,4 @@
-<div data-ng-controller="Merchello.Backoffice.NotificationPatternEditorController" data-ng-show="loaded">
+<div data-ng-controller="Merchello.Backoffice.NotificationMessageEditorController" data-ng-show="loaded">
 
     <!-- This is the umb-panel directive. We removed it because the ui-codemirror directive doesn't work nested under another directive.-->
     <div>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-group col-xs-6 span6">
                                 <label for="event"><localize key="merchelloNotificationsEdit_attachedEvent" /> </label>
-                                <select name="event" class="col-xs-8 span8" data-ng-model="notificationMessage.monitorKey" data-ng-options="n.monitorKey as n.name for n in notificationMonitors"></select>
+                                <select name="event" class="col-xs-8 span8" data-ng-model="notificationMessage.monitorKey" data-ng-options="n.monitorKey as n.name for n in notificationMonitors" disabled></select>
                             </div>
                         </div>
 
@@ -84,10 +84,9 @@
                     </label>
                     <div class="merchello-controls">
                         <div class="row-fluid col-xs-8 span8">
-                            <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
-                            <ng-form>
-                                <textarea ui-codemirror name="messageTemplate" id="messageTemplate" data-ng-model="notificationMessage.bodyText" class="col-xs-12 span12" rows="10"></textarea>
-                                <!--umb-editor model="rteProperties"></umb-editor-->
+                            <ng-form data-ng-if="!notificationMessage.bodyTextIsFilePath">
+                                <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
+                                <textarea name="messageTemplate" id="messageTemplate" data-ng-model="notificationMessage.bodyText" class="col-xs-12 span12" rows="10"></textarea>
                             </ng-form>
                         </div>
                     </div>

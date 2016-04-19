@@ -46,6 +46,17 @@
         }
 
         /// <summary>
+        /// Gets the message model type.
+        /// </summary>
+        public Type MessageModelType
+        {
+            get
+            {
+                return typeof(T);
+            }
+        }
+
+        /// <summary>
         /// Gets the cached collection of <see cref="INotificationMessage"/>
         /// </summary>
         protected IEnumerable<INotificationMessage> Messages
