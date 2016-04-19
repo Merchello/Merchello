@@ -15,6 +15,7 @@
 
     using Merchello.Core.Gateways.Notification.Monitors;
     using Merchello.Core.Observation;
+    using Merchello.Web.Models.ContentEditing.Templates;
 
     using Models.ContentEditing;
 
@@ -120,7 +121,9 @@
             {
                 MonitorKey = x.MonitorFor().Key,
                 Name = x.MonitorFor().Name,
-                Alias = x.MonitorFor().ObservableTrigger.ToString()
+                Alias = x.MonitorFor().ObservableTrigger.ToString(),
+                UseCodeEditor = x.MonitorFor().UseCodeEditor,
+                ModelTypeName = ((INotificationMonitorBase)x).MessageModelType.FullName
             });
         }
 
@@ -140,7 +143,6 @@
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             var methods = provider.NotificationMethods.Select(method => provider.GetNotificationGatewayMethodByKey(method.Key).ToNotificationMethodDisplay());
             return methods;
-
         }
 
         /// <summary>
@@ -177,7 +179,7 @@
                 if (newMethod)
                 {
                     var notificationGatewayMethod = provider.CreateNotificationMethod(gatewayResource, method.Name, method.ServiceCode);
-
+                   
                     provider.SaveNotificationMethod(notificationGatewayMethod);
                 }
             }
@@ -338,8 +340,13 @@
 
                 var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
 
-                var notificationMessage = new NotificationMessage(message.MethodKey, message.Name, message.FromAddress);
-
+                var notificationMessage = new NotificationMessage(message.MethodKey, message.Name, message.FromAddress)
+                                              {
+                                                  BodyTextIsFilePath
+                                                      =
+                                                      message
+                                                      .BodyTextIsFilePath
+                                              };
                 method.SaveNotificationMessage(message.ToNotificationMessage(notificationMessage));
                 
                 return notificationMessage.Key.ToString();

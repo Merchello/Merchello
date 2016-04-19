@@ -49,7 +49,7 @@
                             'Failed to save data for Notification');
                     },
 
-                    saveNotificationMethod: function (method) {
+                    addNotificationMethod: function (method) {
                         var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'AddNotificationMethod';
                         return umbRequestHelper.resourcePromise(
                             $http.post(
@@ -59,6 +59,16 @@
                             'Failed to save data for Notification');
                     },
 
+                    saveNotificationMethod: function(method) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'PutNotificationMethod';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                url,
+                                angular.toJson(method)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+                    
                     deleteNotificationMethod: function (methodKey) {
                         var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'DeleteNotificationMethod';
                         return umbRequestHelper.resourcePromise(

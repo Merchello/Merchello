@@ -82,9 +82,10 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
              * @description
              **/
             getByEntityKey: function(key) {
+                var url = Umbraco.Sys.ServerVariables["merchelloUrls"]["merchelloAuditLogApiBaseUrl"] + 'GetByEntityKey';
                 return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetByEntityKey'),
+                    url: url,
                     method: "GET",
                     params: { id: key }
                 }),
@@ -996,7 +997,7 @@ angular.module('merchello.resources').factory('noteResource', [
                             'Failed to save data for Notification');
                     },
 
-                    saveNotificationMethod: function (method) {
+                    addNotificationMethod: function (method) {
                         var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'AddNotificationMethod';
                         return umbRequestHelper.resourcePromise(
                             $http.post(
@@ -1006,6 +1007,16 @@ angular.module('merchello.resources').factory('noteResource', [
                             'Failed to save data for Notification');
                     },
 
+                    saveNotificationMethod: function(method) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'PutNotificationMethod';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                url,
+                                angular.toJson(method)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+                    
                     deleteNotificationMethod: function (methodKey) {
                         var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'DeleteNotificationMethod';
                         return umbRequestHelper.resourcePromise(
@@ -1071,7 +1082,7 @@ angular.module('merchello.resources').factory('noteResource', [
             return {
 
                 getOrder: function (orderKey) {
-                    var url = Umbraco.Sys.ServerVariables['merchello']['merchelloOrderApiBaseUrl'] + 'GetOrder';
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetOrder';
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: url,
@@ -2270,6 +2281,37 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                 'Failed to delete tax method');
         }
     };
+}]);
+
+angular.module('merchello.resources').factory('vieweditorResource',
+    ['$q', '$http', 'umbRequestHelper',
+    function($q, $http, umbRequestHelper) {
+
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPluginViewEditorApiBaseUrl'];
+
+        return {
+
+            getAllViews: function () {
+                var url = baseUrl + 'GetAllAppPluginsViews';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET"
+                    }),
+                    'Failed to get all views');
+            },
+
+            getAllNotificationViews: function() {
+                var url = baseUrl + 'GetAllNotificationViews';
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET"
+                    }),
+                    'Failed to get all notification views');
+            }
+
+        };
 }]);
 
     /**

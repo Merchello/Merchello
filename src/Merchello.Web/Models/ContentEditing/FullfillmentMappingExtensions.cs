@@ -287,6 +287,7 @@
 			destination.Description = notificationMessageDisplay.Description;
 			destination.BodyText = notificationMessageDisplay.BodyText;
 			destination.MaxLength = notificationMessageDisplay.MaxLength;
+		    destination.BodyTextIsFilePath = notificationMessageDisplay.BodyTextIsFilePath;
 		    ((NotificationMessage)destination).FromAddress = notificationMessageDisplay.FromAddress;
 			destination.BodyTextIsFilePath = notificationMessageDisplay.BodyTextIsFilePath;
             destination.MonitorKey = notificationMessageDisplay.MonitorKey;
