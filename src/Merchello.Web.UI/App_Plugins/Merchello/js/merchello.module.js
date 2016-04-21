@@ -15,7 +15,7 @@
     angular.module('merchello.directives', []);
     angular.module('merchello.resources', ['merchello.models']);
     angular.module('merchello.services', ['merchello.models']);
-    angular.module('merchello.plugins', ['chart.js', 'ui.codemirror']);
+    angular.module('merchello.plugins', ['chart.js']);
     //// Inject our dependencies
     angular.module('umbraco.packages').requires.push('merchello');
 

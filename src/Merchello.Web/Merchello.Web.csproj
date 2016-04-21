@@ -367,6 +367,7 @@
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
     <Compile Include="Models\ContentEditing\Templates\AppPluginViewEditorContent.cs" />
+    <Compile Include="Models\ContentEditing\Templates\PluginViewType.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\ContentEditing\ItemCacheLineItemDisplay.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />

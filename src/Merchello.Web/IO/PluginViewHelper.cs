@@ -28,12 +28,84 @@
         {
             if (virtualPath.IsNullOrWhiteSpace()) return Enumerable.Empty<PluginViewEditorContent>();
         
-            virtualPath = EnsureMappedPath(virtualPath);
+            var path = EnsureMappedPath(virtualPath);
 
-            var dir = new DirectoryInfo(virtualPath);
+            var dir = new DirectoryInfo(path);
 
             var files = dir.GetFiles("*.cshtml", SearchOption.AllDirectories).OrderBy(x => x.Name);
-            return files.Select(x => x.ToAppPluginViewEditorContent()).Where(x => x != null);
+            return files.Select(x => x.ToAppPluginViewEditorContent(virtualPath)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Creates a new view file.
+        /// </summary>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        /// <param name="viewType">
+        /// The view type.
+        /// </param>
+        /// <param name="modelName">
+        /// The model name.
+        /// </param>
+        /// <param name="viewBody">
+        /// The view body.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody)
+        {
+            var virtualPath = GetVirtualPathByPlugViewType(viewType);
+            var mapped = EnsureMappedPath(virtualPath);
+
+            var fullFileName = string.Format("{0}{1}", mapped, fileName);
+
+            if (!File.Exists(fullFileName))
+            {
+                using (var writer = new StreamWriter(fullFileName))
+                {
+                    var heading = string.Format("@inherits UmbracoViewPage<{0}>", modelName);
+                    writer.WriteLine(heading);
+                    writer.WriteLine("@using Merchello.Core.Models");
+                    writer.Close();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Overwrites a view.
+        /// </summary>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        /// <param name="viewType">
+        /// The view type.
+        /// </param>
+        /// <param name="viewBody">
+        /// The view body.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool SaveView(string fileName, PluginViewType viewType, string viewBody)
+        {
+            var virtualPath = GetVirtualPathByPlugViewType(viewType);
+            var mapped = EnsureMappedPath(virtualPath);
+
+            var fullFileName = string.Format("{0}{1}", mapped, fileName);
+            if (File.Exists(fullFileName))
+            {
+                File.WriteAllText(fullFileName, viewBody);
+
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -54,6 +126,15 @@
             }
 
             return mapped;
+        }
+
+        private static string GetVirtualPathByPlugViewType(PluginViewType viewType)
+        {
+            switch (viewType)
+            {
+                default:
+                    return MerchelloConfiguration.Current.GetSetting("NotificationTemplateBasePath");
+            }
         }
     }
 }

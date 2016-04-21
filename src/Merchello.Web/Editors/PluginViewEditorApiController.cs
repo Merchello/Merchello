@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
@@ -66,6 +68,49 @@
             return views;
         }
 
+        /// <summary>
+        /// Adds a new view.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        public PluginViewEditorContent AddNewView(PluginViewEditorContent content)
+        {
+            
+            if (PluginViewHelper.CreateNewView(
+                content.FileName,
+                content.PluginViewType,
+                content.ModelTypeName,
+                content.ViewBody))
+            {
+                var path = MerchelloConfiguration.Current.GetSetting("NotificationTemplateBasePath");
+                var views = PluginViewHelper.GetAllViews(path);
+                return views.FirstOrDefault(x => x.FileName == content.FileName);
+            }
 
+            throw new InvalidOperationException("Failed to create view");
+        }
+
+        /// <summary>
+        /// Saves the view.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PluginViewEditorContent"/>.
+        /// </returns>
+        public PluginViewEditorContent SaveView(PluginViewEditorContent content)
+        {
+            if (PluginViewHelper.SaveView(content.FileName, content.PluginViewType, content.ViewBody))
+            {
+                return content;
+            }
+
+            throw new InvalidOperationException("Failed to create view");
+        }
     }
 }
