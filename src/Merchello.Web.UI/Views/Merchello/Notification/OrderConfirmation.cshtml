@@ -1,4 +1,4 @@
-﻿@inherits UmbracoViewPage<Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel>
+@inherits UmbracoViewPage<Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel>
 @using Merchello.Core.Models
     
 Dear @Model.Invoice.BillToName
@@ -15,3 +15,5 @@ Your items:
         <li>@item.Name - @item.Price</li>
     }
 </ul>
+
+Goodbye!

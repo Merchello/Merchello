@@ -88,6 +88,7 @@
                                 <label for="template"><localize key="merchelloNotificationsEdit_emailTemplateEditBody" /></label>
                                 <textarea name="messageTemplate" id="messageTemplate" data-ng-model="notificationMessage.bodyText" class="col-xs-12 span12" rows="10"></textarea>
                             </ng-form>
+                            <notification-razor-template-selection data-ng-if="notificationMessage.bodyTextIsFilePath" message="notificationMessage" monitor="currentMonitor" ready="loaded" save="save()"></notification-razor-template-selection>
                         </div>
                     </div>
                 </div>

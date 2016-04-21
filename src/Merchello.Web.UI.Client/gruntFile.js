@@ -43,7 +43,7 @@
         // file locations
         src: {
             js: ['src/**/*.js', 'src/*.js'],
-            lib: ['lib/charts/*.js', 'lib/codemirror/*.js', 'lib/**/*.js'],
+            lib: ['lib/charts/*.js', 'lib/**/*.js'],
             common: ['src/common/**/*.js'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
