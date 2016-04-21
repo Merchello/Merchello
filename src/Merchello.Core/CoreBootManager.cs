@@ -162,6 +162,8 @@
             
             CreateMerchelloContext(serviceContext, cache);
 
+            InitialCurrencyContext(serviceContext.StoreSettingService);
+
             InitializeResolvers();
 
             InitializeObserverSubscriptions();
@@ -233,6 +235,17 @@
         {
             var gateways = new GatewayContext(serviceContext, GatewayProviderResolver.Current);
             _merchelloContext = MerchelloContext.Current = new MerchelloContext(serviceContext, gateways, cache);
+        }
+
+        /// <summary>
+        /// Initializes the <see cref="CurrencyContext"/>.
+        /// </summary>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        protected virtual void InitialCurrencyContext(IStoreSettingService storeSettingService)
+        {
+            CurrencyContext.Current = new CurrencyContext(storeSettingService);
         }
 
         /// <summary>

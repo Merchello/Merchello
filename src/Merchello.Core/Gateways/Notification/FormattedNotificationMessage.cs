@@ -163,18 +163,7 @@
         private string GetMessage()
         {
             if (string.IsNullOrEmpty(_notificationMessage.BodyText)) return string.Empty;
-            if (!_notificationMessage.BodyTextIsFilePath) return _notificationMessage.BodyText;
-
-            try
-            {
-                return File.ReadAllText(IOHelper.FindFile(_notificationMessage.BodyText));
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error<FormattedNotificationMessage>("Failed to parse message from file", ex);
-            }
-
-            return string.Empty;
+            return _notificationMessage.BodyText;
         }
 
         /// <summary>

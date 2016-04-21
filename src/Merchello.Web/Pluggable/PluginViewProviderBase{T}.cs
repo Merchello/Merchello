@@ -29,6 +29,23 @@ namespace Merchello.Web.Pluggable
         public abstract IEnumerable<TModel> GetAllViews(string virtualPath);
 
         /// <summary>
+        /// Gets a specific view.
+        /// </summary>
+        /// <param name="virtualPath">
+        /// The virtual path.
+        /// </param>
+        /// <param name="fileName">
+        /// The file Name.
+        /// </param>
+        /// <param name="viewType">
+        /// The view type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TModel"/>.
+        /// </returns>
+        public abstract TModel GetView(string virtualPath, string fileName, PluginViewType viewType);
+
+        /// <summary>
         /// Creates a new view.
         /// </summary>
         /// <param name="fileName">
@@ -46,7 +63,8 @@ namespace Merchello.Web.Pluggable
         /// <returns>
         /// A value indicating whether or not the create was successful.
         /// </returns>
-        public abstract bool CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody);
+        public abstract TModel CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody);
+
 
         /// <summary>
         /// Saves an existing view.
@@ -63,7 +81,21 @@ namespace Merchello.Web.Pluggable
         /// <returns>
         /// A value indicating whether or not the save was successful.
         /// </returns>
-        public abstract bool SaveView(string fileName, PluginViewType viewType, string viewBody);
+        public virtual bool SaveView(string fileName, PluginViewType viewType, string viewBody)
+        {
+            var virtualPath = GetVirtualPathByPlugViewType(viewType);
+            var mapped = EnsureMappedPath(virtualPath);
+
+            var fullFileName = string.Format("{0}{1}", mapped, fileName);
+            if (File.Exists(fullFileName))
+            {
+                File.WriteAllText(fullFileName, viewBody);
+
+                return true;
+            }
+
+            return false;
+        }
 
 
         /// <summary>
