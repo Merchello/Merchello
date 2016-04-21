@@ -325,7 +325,9 @@
     <Compile Include="Editors\Reports\ReportSqlHelper.cs" />
     <Compile Include="Editors\Reports\SalesOverTimeReportApiController.cs" />
     <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
-    <Compile Include="IO\PluginViewHelper.cs" />
+    <Compile Include="Exceptions\MerchelloApiException.cs" />
+    <Compile Include="Pluggable\PluginViewEditorProvider.cs" />
+    <Compile Include="Pluggable\PluginViewProviderBase{T}.cs" />
     <Compile Include="LocalizationHelper.cs" />
     <Compile Include="Logging\DefaultEmptyRemoteLogger.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
