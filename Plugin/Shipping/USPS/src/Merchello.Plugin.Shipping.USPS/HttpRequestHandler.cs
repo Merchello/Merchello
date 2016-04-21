@@ -41,7 +41,7 @@ namespace Merchello.Plugin.Shipping.USPS
             wr.KeepAlive = false;
             wr.UserAgent = "HGIWEB";
             wr.ContentType = "application/x-www-form-urlencoded";
-            wr.ContentLength = body.Length;
+            wr.ContentLength = bytes.Length;
             Stream sendStream = wr.GetRequestStream();
             sendStream.Write(bytes, 0, bytes.Length);
             sendStream.Close();
