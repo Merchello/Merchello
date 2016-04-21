@@ -105,8 +105,12 @@
                 using (var sw = File.CreateText(fullFileName))
                 {
                     sw.WriteLine("@inherits Merchello.Web.Mvc.MerchelloHelperViewPage<{0}>", modelName);
+                    sw.WriteLine("@using Merchello.Core");
                     sw.WriteLine("@using Merchello.Core.Models");
-
+                    sw.WriteLine("@*");
+                    sw.WriteLine("     MerchelloHelperViewPage<T> inherits from UmbracoViewPage<t> and exposes the MerchelloHelper as 'Merchello'");
+                    sw.WriteLine("     Example usage:  var product = Merchello.TypedProductContent(YOURPRODUCTKEY);");
+                    sw.WriteLine("*@");
                     sw.Close();
                 }
                     

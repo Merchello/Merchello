@@ -207,7 +207,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
             //// Act
             var merchello = new Merchello.Web.MerchelloHelper();
 
-            var invoices = merchello.InvoicesByCustomer(customer.Key);
+            var invoices = merchello.Query.Invoice.GetByCustomerKey(customer.Key);
 
             //// Assert
             Assert.NotNull(invoices, "invoices was null");

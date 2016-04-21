@@ -367,6 +367,8 @@
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
     <Compile Include="Configuration\Outline\ReplaceElement.cs" />
     <Compile Include="Configuration\Outline\TreeElement.cs" />
+    <Compile Include="CurrencyContext.cs" />
+    <Compile Include="CurrencyHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="EntityCollections\CachedEntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\CachedQueryableEntityCollectionProviderBase{T}.cs" />
@@ -1337,6 +1339,7 @@
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="TypeHelper.cs" />
+    <Compile Include="UmbracoApplicationEventHandler.cs" />
     <Compile Include="Validation\BankingValidationHelper.cs" />
     <Compile Include="Validation\EmailValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
