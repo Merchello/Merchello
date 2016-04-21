@@ -1,33 +1,31 @@
-﻿namespace Merchello.Web.IO
+﻿namespace Merchello.Web.Pluggable
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
-    using Merchello.Core.Configuration;
     using Merchello.Web.Models.ContentEditing.Templates;
 
     using Umbraco.Core;
-    using Umbraco.Core.IO;
 
     /// <summary>
-    /// A helper for manipulating Merchello Plugin generated views.
+    /// A service for working with Merchello Plugin generated views.
     /// </summary>
-    internal static class PluginViewHelper
+    internal class PluginViewEditorProvider : PluginViewProviderBase<PluginViewEditorContent>
     {
         /// <summary>
-        /// Gets all the ".
+        /// Gets all views at or below the virtual path.
         /// </summary>
         /// <param name="virtualPath">
-        /// The path.
+        /// The virtual path.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{AppPluginViewEditorContent}"/>.
+        /// The <see cref="IEnumerable{TModel}"/>.
         /// </returns>
-        public static IEnumerable<PluginViewEditorContent> GetAllViews(string virtualPath)
+        public override IEnumerable<PluginViewEditorContent> GetAllViews(string virtualPath)
         {
             if (virtualPath.IsNullOrWhiteSpace()) return Enumerable.Empty<PluginViewEditorContent>();
-        
+
             var path = EnsureMappedPath(virtualPath);
 
             var dir = new DirectoryInfo(path);
@@ -37,7 +35,7 @@
         }
 
         /// <summary>
-        /// Creates a new view file.
+        /// Creates a new view.
         /// </summary>
         /// <param name="fileName">
         /// The file name.
@@ -52,9 +50,9 @@
         /// The view body.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        /// A value indicating whether or not the create was successful.
         /// </returns>
-        public static bool CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody)
+        public override bool CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody)
         {
             var virtualPath = GetVirtualPathByPlugViewType(viewType);
             var mapped = EnsureMappedPath(virtualPath);
@@ -78,7 +76,7 @@
         }
 
         /// <summary>
-        /// Overwrites a view.
+        /// Saves an existing view.
         /// </summary>
         /// <param name="fileName">
         /// The file name.
@@ -90,9 +88,9 @@
         /// The view body.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        /// A value indicating whether or not the save was successful.
         /// </returns>
-        public static bool SaveView(string fileName, PluginViewType viewType, string viewBody)
+        public override bool SaveView(string fileName, PluginViewType viewType, string viewBody)
         {
             var virtualPath = GetVirtualPathByPlugViewType(viewType);
             var mapped = EnsureMappedPath(virtualPath);
@@ -106,35 +104,6 @@
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Ensures that the mapped path exists.
-        /// </summary>
-        /// <param name="virtualPath">
-        /// The virtual path.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private static string EnsureMappedPath(string virtualPath)
-        {
-            var mapped = IOHelper.MapPath(virtualPath);
-            if (!Directory.Exists(mapped))
-            {
-                Directory.CreateDirectory(mapped);
-            }
-
-            return mapped;
-        }
-
-        private static string GetVirtualPathByPlugViewType(PluginViewType viewType)
-        {
-            switch (viewType)
-            {
-                default:
-                    return MerchelloConfiguration.Current.GetSetting("NotificationTemplateBasePath");
-            }
         }
     }
 }
