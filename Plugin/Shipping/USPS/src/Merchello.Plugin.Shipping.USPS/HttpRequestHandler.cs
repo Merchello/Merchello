@@ -16,9 +16,8 @@ namespace Merchello.Plugin.Shipping.USPS
         #region Constructors
         public HttpRequestHandler()
         {
-            //Url = "https://onlinetools.ups.com/ups.app/xml/Rate"; 
-            //Url = "http://testing.shippingapis.com/ShippingAPITest.dll?API=RateV4";
-            Url = "http://production.shippingapis.com/ShippingAPITest.dll?API=RateV4";
+            Url = "https://secure.shippingapis.com/ShippingAPI.dll";
+            // Url = "http://production.shippingapis.com/ShippingAPI.dll";
         }
 
         public HttpRequestHandler(string url)
@@ -29,20 +28,20 @@ namespace Merchello.Plugin.Shipping.USPS
         #endregion
 
                 #region Methods
-        public string Post(string xmlPostData)
+        public string Post(string body)
         {
-            return Post(xmlPostData, Encoding.UTF8);
+            return Post(body, Encoding.GetEncoding("ISO-8859-1"));
         }
 
-        public string Post(string xmlPostData, Encoding encoding)
+        public string Post(string body, Encoding encoding)
         {
-            byte[] bytes = encoding.GetBytes(xmlPostData);
+            byte[] bytes = encoding.GetBytes(body);
             var wr = (HttpWebRequest)WebRequest.Create(new Uri(Url));
             wr.Method = "POST";
             wr.KeepAlive = false;
             wr.UserAgent = "HGIWEB";
             wr.ContentType = "application/x-www-form-urlencoded";
-            wr.ContentLength = xmlPostData.Length;
+            wr.ContentLength = body.Length;
             Stream sendStream = wr.GetRequestStream();
             sendStream.Write(bytes, 0, bytes.Length);
             sendStream.Close();
