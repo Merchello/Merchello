@@ -6,7 +6,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       collectionKey: '=',
       entityType: '='
     },
-    template: '<h2>{{ collection.name }}</h2>',
+    template: '<h4>{{ collection.name }}</h4>',
     link: function(scope, element, attrs) {
 
       scope.collection = {};

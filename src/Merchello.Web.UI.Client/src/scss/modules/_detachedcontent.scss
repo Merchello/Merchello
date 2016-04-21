@@ -1,18 +1,20 @@
+// The Merchello Language drop down
 .merch-language-select {
-  .dropdown-menu {
-    width: inherit;
-  }
-}
+    position: absolute;
+    top: 2px;
+    right: 20px;
 
-.detached-content-select {
-  display: inline-block;
-  text-align: left;
-  label {
-    font-weight: bold;
-  }
-}
-
-    .merchello .umb-el-wrap > .control-label {
-      width: 160px;
-      //position: absolute;
+    .dropdown-menu {
+        width: inherit;
     }
+}
+
+// The UI for selecting a content type
+.detached-content-select {
+    display: inline-block;
+    text-align: left;
+
+    label {
+        font-weight: bold;
+    }
+}
