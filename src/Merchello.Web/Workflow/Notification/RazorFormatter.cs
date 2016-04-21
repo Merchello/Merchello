@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Web.Workflow.Notification
 {
+    using System;
+    using System.Web.Mvc;
+
     using Merchello.Core.Formatters;
     using Merchello.Web.Mvc;
 
@@ -14,6 +17,7 @@
         /// The model to be passed to the view.
         /// </summary>
         private readonly object _model;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RazorFormatter"/> class.
@@ -39,7 +43,23 @@
         /// </returns>
         public string Format(string viewPath)
         {
-            return ViewRenderer.RenderPartialView<PartialViewFormatterController>(viewPath, _model);
+            if (viewPath.StartsWith("~/views")) viewPath = viewPath.Replace("~/views", string.Empty);
+
+            var renderer = GetViewRenderer();
+            return renderer.RenderView(viewPath, _model);
+        }
+
+        /// <summary>
+        /// Gets an instance of the view renderer.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ViewRenderer"/>.
+        /// </returns>
+        private ViewRenderer GetViewRenderer()
+        {
+            var controller = SurfaceControllerActivationHelper.CreateSurfaceController<RazorFormatterController>();
+
+            return new ViewRenderer(controller.ControllerContext);
         }
     }
 }

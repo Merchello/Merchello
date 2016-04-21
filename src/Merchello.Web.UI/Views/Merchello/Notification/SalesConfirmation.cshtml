@@ -1,10 +1,14 @@
 @inherits UmbracoViewPage<Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel>
 @using Merchello.Core.Models
+@{
+    var store = Umbraco.TypedContent(1071);
+}
 
+<h1>Store name: <a href="@store.Url">@store.Name</a></h1>
 
 Dear @Model.Invoice.BillToName
 
-Here is some new text and some more text.
+<p>Here is some new text and some more text.</p>
 <ul>
 @foreach(var item in Model.Invoice.Items)
 {
@@ -12,4 +16,5 @@ Here is some new text and some more text.
 }
 </ul>
 
-Thanks!
+<p>Thanks!</p>
+Rusty

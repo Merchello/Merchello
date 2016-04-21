@@ -40,7 +40,15 @@
         /// </summary>
         public MerchelloHelper Merchello
         {
-            get { return _helper ?? (_helper = new MerchelloHelper()); }
+            get
+            {
+                if (_helper == null)
+                {
+                    _helper = new MerchelloHelper();
+                }
+
+                return _helper;
+            }
         }
     }
 }

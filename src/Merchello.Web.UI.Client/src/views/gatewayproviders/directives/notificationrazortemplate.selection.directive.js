@@ -8,6 +8,7 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
                 message: '=',
                 monitor: '=',
                 ready: '=',
+                refresh: '&',
                 save: '&'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/notificationrazortemplate.selection.tpl.html',
@@ -21,8 +22,6 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
                 scope.fileName = '';
                 scope.showCreateButton = false;
 
-                scope.viewBody = '';
-
                 scope.editorOptions = {
                     lineNumbers: true,
                     mode: 'javascript',
@@ -35,8 +34,6 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
                 scope.$watch('ready', function(newVal, oldVal) {
                     if (newVal) {
                         init();
-                    } else {
-                        scope.loaded = false;
                     }
                 });
 
@@ -75,12 +72,10 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
                 scope.createView = function() {
                     var viewData = scope.selectedTemplate;
                     viewData.fileName = scope.fileName;
-                    console.info(scope.monitor);
+
                     viewData.modelTypeName = scope.monitor.modelTypeName;
                     vieweditorResource.addNewView(viewData).then(function(result) {
-                        console.info(result);
-                        scope.message.bodyText = result.virtualPath + result.fileName;
-                        scope.save();
+                        init();
                         scope.showCreateButton = false;
                     });
                 }
@@ -105,7 +100,6 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
                         });
 
                         setDefaultFileName();
-                        scope.loaded = true;
                     });
                 }
 
@@ -116,16 +110,17 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
                         if (checkExists(fileName)) {
                             scope.fileName = fileName;
                             scope.selectedTemplate = findMatchingTemplate(fileName);
-                            scope.viewBody = scope.selectedTemplate.viewBody;
+                            scope.message.bodyText = scope.selectedTemplate.virtualPath + scope.selectedTemplate.fileName;
                         } else {
                             scope.fileName = fileName;
                             scope.showCreateButton = true;
                         }
                     } else {
                         scope.selectedTemplate = matched;
-                        scope.viewBody = scope.selectedTemplate.viewBody;
                         scope.fileName = matched.fileName;
+                        scope.message.bodyText = scope.selectedTemplate.virtualPath + scope.selectedTemplate.fileName;
                     }
+                    scope.loaded = true;
                 }
 
                 function getFileNameFromSubject() {
@@ -148,7 +143,6 @@ angular.module('merchello.directives').directive('notificationRazorTemplateSelec
 
                 function saveRazorTemplate(name, args) {
                     if (scope.selectedTemplate.fileName !== '') {
-                        //scope.selectedTemplate.viewBody = scope.viewBody;
                         vieweditorResource.saveView(scope.selectedTemplate);
                     }
                 }

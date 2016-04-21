@@ -41,11 +41,12 @@ angular.module('merchello.directives').directive('merchelloViewEditor',
                         scope.viewData.viewBody = instance.getValue();
                     });
 
-                    editor.setValue(scope.viewData.viewBody);
 
                     scope.$watch('viewData', function(newVal, oldVal) {
                         if (newVal !== oldVal) {
-                           editor.setValue(newVal.viewBody);
+                            if (newVal.viewBody !== '') {
+                                editor.setValue(newVal.viewBody);
+                            }
                         }
                     });
 

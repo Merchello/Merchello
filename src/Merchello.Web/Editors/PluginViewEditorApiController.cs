@@ -88,22 +88,15 @@
         /// </returns>
         public PluginViewEditorContent AddNewView(PluginViewEditorContent content)
         {
-            
-            if (_provider.CreateNewView(
-                content.FileName,
-                content.PluginViewType,
-                content.ModelTypeName,
-                content.ViewBody))
+            try
             {
-                var path = MerchelloConfiguration.Current.GetSetting("NotificationTemplateBasePath");
-                var views = _provider.GetAllViews(path);
-                return views.FirstOrDefault(x => x.FileName == content.FileName);
+                return _provider.CreateNewView(content.FileName, content.PluginViewType, content.ModelTypeName, content.ViewBody);
             }
-
-
-            var ex = new MerchelloApiException("Failed to create view");
-            MultiLogHelper.Error<PluginViewEditorApiController>("View creation failed", ex, _logData);
-            throw ex;
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<PluginViewEditorApiController>("View creation failed", ex, _logData);
+                throw;
+            }
         }
 
         /// <summary>

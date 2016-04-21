@@ -326,6 +326,8 @@
     <Compile Include="Editors\Reports\SalesOverTimeReportApiController.cs" />
     <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
     <Compile Include="Exceptions\MerchelloApiException.cs" />
+    <Compile Include="Mvc\MerchelloHelperViewPage.cs" />
+    <Compile Include="Mvc\SurfaceControllerActivationHelper.cs" />
     <Compile Include="Pluggable\PluginViewEditorProvider.cs" />
     <Compile Include="Pluggable\PluginViewProviderBase{T}.cs" />
     <Compile Include="LocalizationHelper.cs" />
@@ -461,7 +463,7 @@
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
-    <Compile Include="Mvc\PartialViewFormatterController.cs" />
+    <Compile Include="Workflow\Notification\RazorFormatterController.cs" />
     <Compile Include="Mvc\PaymentMethodUiController.cs" />
     <Compile Include="Mvc\ViewRenderer.cs" />
     <Compile Include="Pluggable\CustomerContextBase.cs" />
