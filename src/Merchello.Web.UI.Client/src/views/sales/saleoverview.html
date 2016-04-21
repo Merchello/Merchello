@@ -180,19 +180,19 @@
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
                     <div class="span12">
-                        <h3 class="span10"><localize key="merchelloSales_billingAddress" /></h3>
                         <div class="pull-right" data-ng-show="!invoice.isPaid()">
                             <merchello-edit-icon do-edit="openAddressAddEditDialog(billingAddress)"></merchello-edit-icon>
                         </div>
+                        <h4 class="span10"><localize key="merchelloSales_billingAddress"/></h4>
                     </div>
                     <merchello-address address="billingAddress"></merchello-address>
                 </div>
                 <div class="well invoice-order-info" ng-hide="shippingLineItems.length > 0">
                     <div class="span12">
-                        <h3 class="span10"><localize key="merchelloSales_shippingAddress" /></h3>
                         <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
                             <merchello-edit-icon do-edit="openAddressAddEditDialog(shippingAddress)"></merchello-edit-icon>
                         </div>
+                        <h4 class="span10"><localize key="merchelloSales_shippingAddress"/></h4>
                     </div>
                     <merchello-address address="shippingAddress"></merchello-address>
 

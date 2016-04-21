@@ -193,3 +193,5 @@ src/Merchello.Providers.Payment.UI.Client/.sass-cache/
 src/Merchello.Providers.Payment.UI.Client/build/
 test/Merchello.Tests.PaymentProviders/Braintree/extendedData.json
 src/.vs/*
+src/Merchello.Providers.UI.Client/.sass-cache/*
+src/.vs/*

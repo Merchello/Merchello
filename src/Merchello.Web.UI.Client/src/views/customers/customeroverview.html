@@ -38,12 +38,12 @@
                     <!-- Billing Address -->
                     <div class="span4">
                         <div class="well billing-address-info flex-col">
-                            <h4 class="span10">
-                                <localize key="merchelloSales_billingAddress"></localize>
-                            </h4>
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultBillingAddress)"></merchello-edit-icon>
                             </div>
+                            <h4 class="span10">
+                                <localize key="merchelloSales_billingAddress"></localize>
+                            </h4>
                             <div class="vcard span12" data-ng-show="!defaultBillingAddress.isEmpty()">
                                 <h5>{{defaultBillingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
@@ -64,10 +64,10 @@
                     <!-- Shipping Address -->
                     <div class="span4">
                         <div class="well shipping-address-info flex-col">
-                            <h4 class="span10"><localize key="merchelloSales_shippingAddress"></localize></h4>
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultShippingAddress)"></merchello-edit-icon>
                             </div>
+                            <h4 class="span10"><localize key="merchelloSales_shippingAddress"></localize></h4>
                             <div class="vcard span12" data-ng-show="!defaultShippingAddress.isEmpty()">
                                 <h5>{{defaultShippingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
