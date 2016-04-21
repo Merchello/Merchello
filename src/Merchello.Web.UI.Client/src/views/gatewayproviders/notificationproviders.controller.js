@@ -1,8 +1,8 @@
     angular.module('merchello').controller('Merchello.Backoffice.NotificationProvidersController',
-        ['$scope', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'gatewayResourceDisplayBuilder',
+        ['$scope', '$location', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'gatewayResourceDisplayBuilder',
         'notificationGatewayProviderResource', 'notificationGatewayProviderDisplayBuilder', 'notificationMethodDisplayBuilder',
         'notificationMonitorDisplayBuilder', 'notificationMessageDisplayBuilder',
-        function($scope, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, gatewayResourceDisplayBuilder,
+        function($scope, $location, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, gatewayResourceDisplayBuilder,
         notificationGatewayProviderResource, notificationGatewayProviderDisplayBuilder, notificationMethodDisplayBuilder,
         notificationMonitorDisplayBuilder, notificationMessageDisplayBuilder) {
 
@@ -15,9 +15,12 @@
 
             // exposed methods
             $scope.addNotificationMethod = addNotificationMethod;
+            $scope.editNotificationMethod = editNotificationMethod;
             $scope.deleteNotificationMethod = deleteNotificationMethod;
             $scope.addNotificationMessage = addNotificationMessage;
             $scope.deleteNotificationMessage = deleteNotificationMessage;
+            
+            $scope.goToEditor = goToEditor;
 
             function init() {
                 loadAllNotificationGatewayProviders();
@@ -134,12 +137,23 @@
              */
             function addNotificationsDialogConfirm(dialogData) {
                 $scope.preValuesLoaded = false;
-                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMethod(dialogData.notificationMethod);
+                var promiseNotificationMethod = notificationGatewayProviderResource.addNotificationMethod(dialogData.notificationMethod);
                 promiseNotificationMethod.then(function(notificationFromServer) {
-                    notificationsService.success("Notification Method Created!", "");
+                    notificationsService.success("Notification Method saved.", "");
                     init();
                 }, function(reason) {
-                    notificationsService.error("Notification Method Create Failed", reason.message);
+                    notificationsService.error("Notification Method save Failed", reason.message);
+                });
+            }
+
+            function saveNotificationDialogConfirm(dialogData) {
+                $scope.preValuesLoaded = false;
+                var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMethod(dialogData.notificationMethod);
+                promiseNotificationMethod.then(function(notificationFromServer) {
+                    notificationsService.success("Notification Method saved.", "");
+                    init();
+                }, function(reason) {
+                    notificationsService.error("Notification Method save Failed", reason.message);
                 });
             }
 
@@ -165,6 +179,21 @@
                     dialogData: dialogData
                 });
             }
+
+            function editNotificationMethod(method) {
+                var dialogData = {
+                    notificationMethod: angular.extend(notificationMethodDisplayBuilder.createDefault(), method)
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notification.notificationmethod.addedit.html',
+                    show: true,
+                    callback: saveNotificationDialogConfirm,
+                    dialogData: dialogData
+                });
+            }
+
+
 
             /**
              * @ngdoc method
@@ -214,7 +243,6 @@
              * Handles the delete after recieving the deleted command from the dialog view/controller
              */
             function notificationsMessageDeleteDialogConfirm(dialogData) {
-                console.info(dialogData);
                 var promiseNotificationMethod = notificationGatewayProviderResource.deleteNotificationMessage(dialogData.notificationMessage.key);
                 promiseNotificationMethod.then(function () {
                     notificationsService.success("Notification Deleted");
@@ -254,7 +282,6 @@
              * Handles the save after recieving the save command from the dialog view/controller
              */
             function notificationsMessageAddDialogConfirm(dialogData) {
-                console.info(dialogData);
                 var promiseNotificationMethod = notificationGatewayProviderResource.saveNotificationMessage(dialogData.notificationMessage);
                 promiseNotificationMethod.then(function (keyFromServer) {
                     notificationsService.success("Notification Saved", "");
@@ -288,6 +315,17 @@
                 });
             }
 
+            
+            function goToEditor(message) {
+                var monitor = _.find($scope.notificationMonitors, function(m) {
+                    return m.monitorKey === message.monitorKey;
+                });
+
+                if (monitor !== undefined) {
+                    $location.url('merchello/merchello/notificationmessageeditor/' + message.key, true);
+                }
+            }
+            
             // Initialize the controller
             init();
     }]);

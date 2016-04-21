@@ -14,7 +14,10 @@
         </thead>
         <tfoot>
         <tr>
-            <td colspan="6"><merchello-add-icon do-add="openProductSelection()"></merchello-add-icon></td>
+            <td colspan="6">
+                <merchello-add-icon do-add="openProductSelection()"></merchello-add-icon>
+                <a data-ng-click="openCheckoutDialog()" data-ng-show="showCheckout">Checkout</a>
+            </td>
         </tr>
         </tfoot>
         <tbody data-ng-show="items.length === 0">
@@ -29,7 +32,7 @@
                 <td>{{item.quantity}}</td>
                 <td>{{item.price  | currency : settings.currencySymbol }}</td>
                 <td>{{item.price * item.quantity  | currency : settings.currencySymbol}}</td>
-                <td class="merchello-icon-cell">
+                <td nowrap="nowrap merchello-icon-cell">
                     <merchello-move-icon do-move="doMove()(item)"></merchello-move-icon>
                     <merchello-icon-bar show-delete="true" do-delete="doDelete()(item, itemCacheType)" show-edit="true" do-edit="doEdit()(item, itemCacheType)"></merchello-icon-bar>
                 </td>

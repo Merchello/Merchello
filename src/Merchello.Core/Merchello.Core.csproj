@@ -210,6 +210,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -397,16 +398,28 @@
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="EntityCollections\QueryableEntityCollectionProviderBase.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
+    <Compile Include="Events\InitializedEventArgs.cs" />
+    <Compile Include="Events\InitializingEventArgs.cs" />
+    <Compile Include="Events\ObjectEventArgsBase{T}.cs" />
     <Compile Include="Events\TransientMessageFactory.cs" />
     <Compile Include="Events\UpdateItemEventArgs.cs" />
     <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Exceptions\SkuExistsException.cs" />
+    <Compile Include="Gateways\Notification\Monitors\MonitorModelAttribute.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />
     <Compile Include="Gateways\Taxation\ProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxationApplication.cs" />
+    <Compile Include="Logging\ExtendedLoggerData.cs" />
+    <Compile Include="Logging\IExtendedLoggerData.cs" />
+    <Compile Include="Logging\IExtendedLoggerDataLogger.cs" />
+    <Compile Include="Logging\IMultiLogger.cs" />
+    <Compile Include="Logging\LoggerProviderBase.cs" />
+    <Compile Include="Logging\MultiLogger.cs" />
+    <Compile Include="Logging\MultiLogHelper.cs" />
+    <Compile Include="Logging\MultiLogResolver.cs" />
     <Compile Include="MandateWrapperExtensions.cs" />
     <Compile Include="Marketing\Constraints\OfferConstraintComponentBase.cs" />
     <Compile Include="Marketing\Constraints\ProductConstraintDataSet.cs" />
@@ -492,6 +505,7 @@
     <Compile Include="Models\Interfaces\IAuditLog.cs" />
     <Compile Include="Models\Interfaces\IOrderByField.cs" />
     <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
+    <Compile Include="Models\NoteExtensions.cs" />
     <Compile Include="Models\NotificationExtensions.cs" />
     <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
     <Compile Include="Models\OfferRedeemed.cs" />
@@ -522,7 +536,7 @@
     <Compile Include="Gateways\Notification\Triggering\OrderConfirmationTrigger.cs" />
     <Compile Include="Models\MonitorModels\ShipmentResultNotifyModel.cs" />
     <Compile Include="Models\NotifiedStatusBase.cs" />
-    <Compile Include="Models\Querying\public InvoiceOrderByFields.cs" />
+    <Compile Include="Models\Querying\InvoiceOrderByFields.cs" />
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
@@ -605,6 +619,7 @@
     <Compile Include="Persistence\Mappers\OfferSettingsMapper.cs" />
     <Compile Include="Persistence\Mappers\ShipmentStatusMapper.cs" />
     <Compile Include="Persistence\Mappers\WarehouseCatalogMapper.cs" />
+    <Compile Include="Persistence\Migrations\Analytics\MigrationDomain.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\CoreMigrationManager.cs" />
     <Compile Include="Persistence\Migrations\DataLossException.cs" />
@@ -629,6 +644,10 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteAuthorColumn.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteInternalOnlyColumn.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddStoreSettingHasDomainRecord.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\CopyOriginalCustomerNotesToFirstNote.cs" />
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
@@ -688,7 +707,6 @@
     <Compile Include="Models\Interfaces\IOrderStatus.cs" />
     <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
     <Compile Include="Models\InvoiceExtensions.cs" />
-    <Compile Include="Models\LocalizationExtensions.cs" />
     <Compile Include="Models\NotificationMessage.cs" />
     <Compile Include="Models\NotificationMethod.cs" />
     <Compile Include="Models\Order.cs" />
@@ -1197,6 +1215,7 @@
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IUaaSItemProviderService.cs" />
+    <Compile Include="Logging\ILoggerProvider.cs" />
     <Compile Include="Services\NoteService.cs" />
     <Compile Include="Services\AuditLogService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
@@ -1318,6 +1337,10 @@
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\Interfaces\ICustomerService.cs" />
     <Compile Include="TypeHelper.cs" />
+    <Compile Include="Validation\BankingValidationHelper.cs" />
+    <Compile Include="Validation\EmailValidationHelper.cs" />
+    <Compile Include="Validation\IBankingValidationHelper.cs" />
+    <Compile Include="Validation\IEmailValidationHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

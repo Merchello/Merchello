@@ -7,13 +7,14 @@
     using Merchello.Core.Models;
 
     using Umbraco.Core;
+    using Umbraco.Core.Services;
 
     using Customer = global::Braintree.Customer;
 
     /// <summary>
     /// Defines the BraintreeCustomerApiProvider.
     /// </summary>
-    public interface IBraintreeCustomerApiService
+    public interface IBraintreeCustomerApiService : IService
     {
         /// <summary>
         /// Creates a Braintree <see cref="Customer"/> from a Merchello <see cref="ICustomer"/>

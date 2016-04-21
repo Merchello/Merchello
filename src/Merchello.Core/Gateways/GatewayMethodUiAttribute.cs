@@ -5,14 +5,14 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// The gateway method ui attribute.
+    /// The gateway method UI attribute.
     /// </summary>
     /// <remarks>
     /// Intended to be used to provide context to front end designers during method selection.  
     /// 
     /// Initial use case is for payment methods and credit card forms and notification methods for data entry.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class GatewayMethodUiAttribute : Attribute
     {
         /// <summary>

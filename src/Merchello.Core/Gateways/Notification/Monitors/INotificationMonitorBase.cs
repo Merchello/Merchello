@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Monitors
 {
+    using System;
     using System.Collections.Generic;
     using Models;
     using Observation;
@@ -9,6 +10,11 @@
     /// </summary>
     public interface INotificationMonitorBase : IMonitor
     {
+        /// <summary>
+        /// Gets the message model type.
+        /// </summary>
+        Type MessageModelType { get; }
+
         /// <summary>
         /// Caches a collection of <see cref="INotificationMessage"/>
         /// </summary>

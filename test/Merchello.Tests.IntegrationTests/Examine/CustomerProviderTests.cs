@@ -85,7 +85,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
                 "test@test.com");
 
             
-            customer.Notes = "Here are some notes";
+            //customer.Notes = "Here are some notes";
             customer.LastActivityDate = lastActivityDate;
 
             _customerService.Save(customer);

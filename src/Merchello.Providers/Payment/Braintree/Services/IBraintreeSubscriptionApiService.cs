@@ -6,11 +6,12 @@
     using global::Braintree;
 
     using Umbraco.Core;
+    using Umbraco.Core.Services;
 
     /// <summary>
     /// Defines the BraintreeSubscriptionApiProvider.
     /// </summary>
-    public interface IBraintreeSubscriptionApiService
+    public interface IBraintreeSubscriptionApiService : IService
     {
         /// <summary>
         /// Creates a <see cref="Subscription"/>.

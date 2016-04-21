@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Validation
+﻿namespace Merchello.Core.Validation
 {
     using System.Diagnostics.CodeAnalysis;
 

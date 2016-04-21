@@ -23,6 +23,11 @@
         private static readonly PropertyInfo EntityKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityKey);
 
         /// <summary>
+        /// The author selector.
+        /// </summary>
+        private static readonly PropertyInfo AuthorSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Author);
+
+        /// <summary>
         /// The message selector.
         /// </summary>
         private static readonly PropertyInfo MessageSelector = ExpressionHelper.GetPropertyInfo<Note, string>(x => x.Message);
@@ -31,6 +36,11 @@
         /// The reference type selector.
         /// </summary>
         private static readonly PropertyInfo EntityTfKeySelector = ExpressionHelper.GetPropertyInfo<Note, Guid?>(x => x.EntityTfKey);
+
+        /// <summary>
+        /// The internal only selector.
+        /// </summary>
+        private static readonly PropertyInfo InternalOnlySelector = ExpressionHelper.GetPropertyInfo<Note, bool>(x => x.InternalOnly);
 
         /// <summary>
         /// The entity key.
@@ -43,9 +53,19 @@
         private Guid _entityTfKey;
 
         /// <summary>
+        /// The author.
+        /// </summary>
+        private string _author;
+
+        /// <summary>
         /// The message.
         /// </summary>
         private string _message;
+
+        /// <summary>
+        /// The internal only.
+        /// </summary>
+        private bool _internalOnly;
 
         #endregion
 
@@ -66,6 +86,8 @@
             UpdateDate = DateTime.Now;
             EntityKey = entityKey;
             EntityTfKey = entityTfKey;
+            InternalOnly = false;
+            Author = string.Empty;
         }
 
         /// <summary>
@@ -117,6 +139,30 @@
         }
 
         /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        [DataMember]
+        public string Author
+        {
+            get
+            {
+                return _author;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _author = value;
+                        return _author;
+                    },
+                    _author,
+                    AuthorSelector);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the message.
         /// </summary>
         [DataMember]
@@ -137,6 +183,29 @@
                     },
                     _message,
                     MessageSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the note should be used for internal use only.
+        /// </summary>
+        public bool InternalOnly
+        {
+            get
+            {
+                return _internalOnly;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _internalOnly = value;
+                        return _internalOnly;
+                    },
+                    _internalOnly,
+                    InternalOnlySelector);
             }
         }
     }

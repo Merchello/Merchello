@@ -83,7 +83,7 @@
             },
 
             lib: {
-                files: [{ dest: '<%= distdir %>/lib/', src: '../lib/charts/*.*', expand: true, cwd: 'lib/' }]
+                files: [{ dest: '<%= distdir %>/lib/', src: ['../lib/charts/*.*', '../lib/codemirror/*.*'], expand: true, cwd: 'lib/' }]
             },
 
             config: {

@@ -1,12 +1,14 @@
 var NoteDisplay = function() {
     var self = this;
     self.key = '';
+    self.author = '';
     self.message = '';
     self.entityKey = '';
     self.entityTfKey = '';
     self.entityType = '';
     self.noteTypeField = {};
     self.recordDate = '';
+    self.internalOnly = true;
 };
 
 NoteDisplay.prototype = (function () {

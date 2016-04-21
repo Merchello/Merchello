@@ -23,7 +23,7 @@
             $scope.customer = {};
             $scope.invoiceTotals = [];
             $scope.settings = {};
-            $scope.entityType = 'customer';
+            $scope.entityType = 'Customer';
             $scope.listViewEntityType = 'SalesHistory';
 
             // exposed methods
@@ -38,6 +38,7 @@
             $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
             $scope.saveCustomer = saveCustomer;
+            $scope.deleteNote = deleteNote;
 
             $scope.load = load;
             $scope.getColumnValue = getColumnValue;
@@ -179,7 +180,6 @@
                 instruction.customerKey = $scope.customer.key;
                 instruction.entityKey = dialogData.lineItem.key;
                 instruction.itemCacheType = dialogData.itemCacheType;
-                console.info(instruction);
                 backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
                     loadCustomer($scope.customer.key);
                 });
@@ -488,6 +488,15 @@
                 $scope.customer.email = dialogData.email;
                 saveCustomer();
             }
+
+            function deleteNote(note) {
+                $scope.customer.notes = _.reject($scope.customer.notes, function(n) {
+                    return n.key === note.key;
+                });
+
+                saveCustomer();
+            }
+
 
             /**
              * @ngdoc method

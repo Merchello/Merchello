@@ -176,7 +176,7 @@
         /// </returns>
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateCustomerAddressRepository(uow), _logger, _sqlSyntax);
+            return new CustomerRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateCustomerAddressRepository(uow), CreateNoteRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>

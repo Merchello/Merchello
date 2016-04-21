@@ -11,6 +11,7 @@
     using Merchello.Core;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Collections;
@@ -395,7 +396,7 @@
                 default:
                     var invalid =
                         new InvalidOperationException("Merchello service could not be found for the entity type");
-                    LogHelper.Error<EntityCollectionApiController>("An attempt was made to add an entity to a collection", invalid);
+                    MultiLogHelper.Error<EntityCollectionApiController>("An attempt was made to add an entity to a collection", invalid);
                     return Request.CreateResponse(HttpStatusCode.NotImplemented);
             }
 
@@ -461,7 +462,7 @@
                 default:
                     var invalid =
                         new InvalidOperationException("Merchello service could not be found for the entity type");
-                    LogHelper.Error<EntityCollectionApiController>("An attempt was made to remove an entity to a collection", invalid);
+                    MultiLogHelper.Error<EntityCollectionApiController>("An attempt was made to remove an entity to a collection", invalid);
                     return Request.CreateResponse(HttpStatusCode.NotImplemented);
             }
 

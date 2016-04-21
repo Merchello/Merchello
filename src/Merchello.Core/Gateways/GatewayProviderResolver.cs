@@ -10,6 +10,7 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Gateways.Taxation;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.ObjectResolution;
     using Merchello.Core.Services;
@@ -223,7 +224,7 @@
                     AddOrUpdateCache(attempt.Result);
                 else
                 {
-                    LogHelper.Error<GatewayProviderResolver>(string.Format("Failed to create instance of type {0}", provider.Name), attempt.Exception);
+                    MultiLogHelper.Error<GatewayProviderResolver>(string.Format("Failed to create instance of type {0}", provider.Name), attempt.Exception);
                 }
             }
         }

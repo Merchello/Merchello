@@ -58,17 +58,12 @@
            
             var merchelloUrls = new Dictionary<string, object>();
 
-            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));            
+            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
 
             merchelloUrls.Add(
                 "merchelloAuditLogApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<AuditLogApiController>(
                     controller => controller.GetSalesHistoryByInvoiceKey(Guid.Empty)));
-
-            merchelloUrls.Add(
-             "merchelloNoteApiBaseUrl",
-             url.GetUmbracoApiServiceBaseUrl<NoteApiController>(
-                 controller => controller.GetByEntityKey(Guid.Empty)));
 
             merchelloUrls.Add(
              "merchelloBackOfficeCheckoutApiBaseUrl",
@@ -121,6 +116,11 @@
                 controller => controller.GetAllOfferSettings()));
 
             merchelloUrls.Add(
+                 "merchelloNoteApiBaseUrl",
+                 url.GetUmbracoApiServiceBaseUrl<NoteApiController>(
+                     controller => controller.GetByEntityKey(Guid.Empty)));
+
+            merchelloUrls.Add(
                 "merchelloNotificationApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<NotificationGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
@@ -139,6 +139,11 @@
                 "merchelloPaymentGatewayApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<PaymentGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
+
+            merchelloUrls.Add(
+                "merchelloPluginViewEditorApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<PluginViewEditorApiController>(
+                    controller => controller.GetAllAppPluginsViews()));
 
             merchelloUrls.Add(
                 "merchelloProductApiBaseUrl",

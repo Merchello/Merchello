@@ -37,10 +37,19 @@
         public EntityType EntityType { get; set; }
 
         /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
         /// Gets or sets the message.
         /// </summary>
         public string Message { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether internal only.
+        /// </summary>
+        public bool InternalOnly { get; set; }
 
         /// <summary>
         /// Gets or sets the note type field.
@@ -88,7 +97,9 @@
 
             var note = new Note(noteDisplay.EntityKey, noteDisplay.EntityTfKey)
             {
+                Author = noteDisplay.Author,
                 Message = noteDisplay.Message,
+                InternalOnly = noteDisplay.InternalOnly,
                 CreateDate = noteDisplay.RecordDate == DateTime.MinValue ? DateTime.Now : noteDisplay.RecordDate
             };
 

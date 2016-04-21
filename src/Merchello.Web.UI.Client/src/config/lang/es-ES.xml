@@ -115,6 +115,11 @@
     <key alias="invoiceNumber">Pedido #</key>
     <key alias="paymentStatus">Estado del pago</key>
     <key alias="fulfillmentStatus">Estado del envío</key>
+    <key alias="balanceDue">Balance due</key>
+    <key alias="manageAdjustments">Manage adjustments</key>
+    <key alias="addAdjustment">Add adjustment</key>
+    <key alias="adjustments">Adjustments</key>
+    <key alias="adjustmentAssignedBy">Assigned by</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="newCustomer">Nuevo cliente</key>
@@ -137,8 +142,14 @@
       ]]>
     </key>
     <area alias="merchelloNotes">
+      <key alias="notes">Notes</key>
+      <key alias="note">Note</key>
+      <key alias="saleNotes">Notes about this sale</key>
+      <key alias="customerNotes">Notes relating to this customer</key>
+      <key alias="paymentNotes">Notes relating to this payment</key>
       <key alias="addNote">Añadir nueva nota</key>
       <key alias="editNote">Editar nota</key>
+      <key alias="internalOnly">This note is for internal use only.</key>
     </area>
     <key alias="customerWishlist">
       <![CDATA[
@@ -302,6 +313,12 @@
     <key alias="totals">Totales</key>
     <key alias="quantity">Cantidad</key>
     <key alias="subTotal">Subtotal</key>
+    <key alias="author">Author</key>
+    <key alias="visibility">Visibility</key>
+    <key alias="public">Public</key>
+    <key alias="private">Private</key>
+    <key alias="increase">Increase</key>
+    <key alias="decrease">Decrease</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Configuración de la tienda</key>

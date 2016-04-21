@@ -563,7 +563,6 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             $scope.openDeleteAddressDialog = openDeleteAddressDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
 
-            console.info($scope.addressType);
 
             /**
              * @ngdoc method
@@ -603,7 +602,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 // address to be the primary address
 
                 dialogData.customerAddress.addressType = $scope.addressType;
-                console.info(dialogData);
+
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.customeraddress.addedit.html',
                     show: true,
@@ -661,7 +660,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     }
                 }
                 $scope.customer.addresses.push(dialogData.customerAddress);
-                console.info($scope.customer);
+
                 save();
             }
 
@@ -703,8 +702,8 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
     }]);
 
 angular.module('merchello.directives').directive('customerItemCacheTable',
-    ['$q', 'localizationService', 'dialogService', 'settingsResource', 'customerResource',
-    function($q, localizationService, dialogService, settingsResource, customerResource) {
+    ['$q', '$location', 'localizationService', 'notificationsService', 'dialogService', 'settingsResource', 'customerResource', 'backOfficeCheckoutResource',
+    function($q, $location, localizationService, notificationsService, dialogService, settingsResource, customerResource, backOfficeCheckoutResource) {
 
         return {
             restrict: 'E',
@@ -728,6 +727,10 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                 scope.getTotal = getTotal;
 
                 scope.openProductSelection = openProductSelectionDialog;
+                scope.openCheckoutDialog = openCheckoutDialog;
+                scope.showCheckout = false;
+
+                const baseUrl = '/merchello/merchello/saleoverview/';
 
                 function init() {
 
@@ -747,6 +750,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                         scope.title = data[0];
                         scope.settings = data[1];
                         scope.items = data[2].items;
+                        setCheckoutLink()
                     });
                 }
 
@@ -774,6 +778,67 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                     scope.doAdd()(dialogData.addItems, scope.itemCacheType);
                 }
 
+                function setCheckoutLink() {
+                    var billingAddress = scope.customer.getDefaultBillingAddress();
+                    var shippingAddress = scope.customer.getDefaultShippingAddress();
+
+                    scope.showCheckout = (scope.items.length > 0) &&
+                            billingAddress !== null && billingAddress !== undefined &&
+                            shippingAddress !== null && shippingAddress !== undefined &&
+                            scope.itemCacheType === 'Basket';
+                }
+
+                function openCheckoutDialog () {
+
+                    backOfficeCheckoutResource.getShipmentRateQuotes(scope.customer.key)
+                        .then(function(quotes) {
+
+                            var q = quotes.length > 0 ? quotes[0] : {};
+
+                            var dialogData = {
+                                customer: scope.customer,
+                                items: scope.items,
+                                currencySymbol: scope.settings.currencySymbol,
+                                total: getTotal(),
+                                quotes: quotes,
+                                selectedQuote: q
+                            };
+
+                            dialogService.open({
+                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.checkout.html',
+                                show: true,
+                                callback: processCheckout,
+                                dialogData: dialogData
+                            });
+                    });
+                }
+                
+                
+                function processCheckout(dialogData) {
+
+                    var billingAddress = scope.customer.getDefaultBillingAddress();
+                    var shippingAddress = scope.customer.getDefaultShippingAddress();
+
+                    var checkoutData = {
+                        customerKey: dialogData.customer.key,
+                        billingAddressKey: billingAddress.key,
+                        shippingAddressKey: shippingAddress.key,
+                        shipMethodKey: dialogData.selectedQuote.shipMethod.key
+                    };
+
+                    backOfficeCheckoutResource
+                        .createCheckoutInvoice(checkoutData)
+                        .then(function(inv) {
+                            $location.url(baseUrl + inv.key, true);
+                        }, function(msg) {
+                            notificationsService.error(msg);
+                        });
+                }
+                
+                function quoteShippingMethods() {
+                    
+                }
+                
                 init();
             }
 
@@ -1392,7 +1457,7 @@ angular.module('merchello.directives').directive('merchelloDeleteIcon', function
         '</a></span>',
         link: function(scope, elm, attr) {
             scope.title = '';
-            localizationService.localize('general_edit').then(function(value) {
+            localizationService.localize('general_delete').then(function(value) {
                 scope.title = value;
             });
         }
@@ -1696,6 +1761,112 @@ angular.module('merchello.directives').directive('merchelloListView',
         }
 }]);
 
+angular.module('merchello.directives').directive('merchelloNotesTable', [
+    '$q', 'userService', 'localizationService', 'dialogService', 'noteResource', 'noteDisplayBuilder',
+    function($q, userService, localizationService, dialogService, noteResource, noteDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                entityType: '=',
+                notes: '=',
+                delete: '&',
+                save: '&',
+                noTitle: '@?'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellonotestable.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.addNote = openNotesDialog;
+                scope.editNote = openEditNote;
+                scope.deleteNote = deleteNote;
+                scope.smallText = '';
+
+                function init() {
+                    var smallTextKey = 'merchelloNotes_' + scope.entityType.toLowerCase() + 'Notes';
+                    localizationService.localize(smallTextKey).then(function(txt) {
+                       scope.smallText = txt;
+                    });
+                }
+                
+                function openNotesDialog() {
+                    getNoteData().then(function(data) {
+                        var dialogData = {};
+                        dialogData.title = data[0];
+                        dialogData.note = noteDisplayBuilder.createDefault();
+                        dialogData.note.internalOnly = true;
+                        dialogData.note.author = data[1].email;
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                            show: true,
+                            callback: processAddNoteDialog,
+                            dialogData: dialogData
+                        });
+                    });
+                }
+
+                function openEditNote(note) {
+                    localizationService.localize('merchelloNotes_editNote').then(function(title) {
+                        var dialogData = {};
+                        dialogData.title = title;
+                        dialogData.note = angular.extend(noteDisplayBuilder.createDefault(), note);
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/notes.addeditnote.dialog.html',
+                            show: true,
+                            callback: processEditNoteDialog,
+                            dialogData: dialogData
+                        });
+                    });
+                }
+
+                function deleteNote(note) {
+                    var dialogData = {};
+                    dialogData.name = note.message;
+                    dialogData.note = note;
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                        show: true,
+                        callback: processDeleteNoteDialog,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processEditNoteDialog(dialogData) {
+                    var note = _.find(scope.notes, function(n) {
+                        return n.key === dialogData.note.key;
+                    });
+                    if (note !== null && note !== undefined) {
+                        note.message = dialogData.note.message;
+                        note.internalOnly = dialogData.note.internalOnly;
+                    }
+                    
+                    scope.save();
+                }
+
+                function processAddNoteDialog(dialogData) {
+                    scope.notes.push(dialogData.note);
+                    scope.save();
+                }
+
+                function processDeleteNoteDialog(dialogData) {
+                    scope.delete()(dialogData.note);
+                }
+
+                function getNoteData() {
+                    var promises = [
+                        localizationService.localize('merchelloNotes_addNote'),
+                        userService.getCurrentUser(),
+                    ];
+
+                    return $q.all(promises);
+                }
+
+                // initialize the directive
+                init();
+            }
+        }
+    }]);
+
     /**
      * @ngdoc directive
      * @name MerchelloPagerDirective
@@ -1713,6 +1884,63 @@ angular.module('merchello.directives').directive('merchelloListView',
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/merchellopager.tpl.html'
         };
     });
+angular.module('merchello.directives').directive('merchelloViewEditor',
+    ['$q', 'assetsService',
+    function($q, assetsService) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                viewData: '='
+            },
+            template: '<div class="merchello-codemirror"></div>',
+
+            link: function (scope, elm, attr) {
+
+                scope.loaded = false;
+
+                $q.all([
+                    assetsService.loadJs('/umbraco/lib/codemirror/lib/codemirror.js'),
+                    assetsService.loadCss('/umbraco/lib/codemirror/lib/codemirror.css')
+                ]).then(function() {
+                   init();
+                });
+
+                var editor;
+
+                function init() {
+
+                    elm.html('');
+                    editor = new window.CodeMirror(function(cm) {
+                        elm.append(cm);
+                    }, {
+                        tabMode: "shift",
+                        matchBrackets: true,
+                        indentUnit: 4,
+                        indentWithTabs: true,
+                        enterMode: "keep",
+                        lineWrapping: false,
+                        lineNumbers: true
+                    });
+
+                    editor.on('change', function(instance) {
+                        scope.viewData.viewBody = instance.getValue();
+                    });
+
+                    editor.setValue(scope.viewData.viewBody);
+
+                    scope.$watch('viewData', function(newVal, oldVal) {
+                        if (newVal !== oldVal) {
+                           editor.setValue(newVal.viewBody);
+                        }
+                    });
+
+                    scope.loaded = true;
+                }
+            }
+        }
+    }]);
+
     /**
      * @ngdoc directive
      * @name resetListfilters
@@ -1808,6 +2036,164 @@ angular.module('merchello.directives').directive('merchelloListView',
             }
         };
     });
+
+angular.module('merchello.directives').directive('notificationRazorTemplateSelection',
+    ['$q', 'assetsService', 'dialogService', 'localizationService', 'eventsService', 'vieweditorResource', 'pluginViewEditorContentBuilder',
+    function($q, assetsService, dialogService, localizationService, eventsService, vieweditorResource, pluginViewEditorContentBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                message: '=',
+                monitor: '=',
+                ready: '=',
+                save: '&'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/notificationrazortemplate.selection.tpl.html',
+            link: function(scope, elm, attr) {
+
+                var saveEventName = 'notification.message.saved';
+
+                scope.loaded = false;
+                scope.templates = [];
+                scope.selectedTemplate = '';
+                scope.fileName = '';
+                scope.showCreateButton = false;
+
+                scope.viewBody = '';
+
+                scope.editorOptions = {
+                    lineNumbers: true,
+                    mode: 'javascript',
+                    gutters: ['CodeMirror-lint-markers'],
+                    lint: true
+                };
+
+                eventsService.on(saveEventName, saveRazorTemplate);
+
+                scope.$watch('ready', function(newVal, oldVal) {
+                    if (newVal) {
+                        init();
+                    } else {
+                        scope.loaded = false;
+                    }
+                });
+
+                scope.checkFileName = function() {
+                    var matched = findMatchingTemplate(scope.fileName);
+                    if (matched !== undefined) {
+                        scope.selectedTemplate = matched;
+                        scope.showCreateButton = false;
+                    } else {
+                        if (scope.selectedTemplate.fileName !== '') {
+                            scope.selectedTemplate = scope.templates[0];
+                            scope.showCreateButton = true;
+                        }
+                    }
+                };
+
+                scope.setFileName = function() {
+                    if (scope.selectedTemplate === null) {
+                        scope.selectedTemplate = scope.templates[0];
+                    }
+
+                    if (scope.selectedTemplate.fileName === '') {
+                        scope.showCreateButton = true;
+                        scope.message.bodyText = '';
+                        scope.viewBody = '';
+                        scope.fileName = getFileNameFromSubject();
+
+                    } else {
+                        scope.showCreateButton = false;
+                        scope.message.bodyText = scope.selectedTemplate.virtualPath + scope.selectedTemplate.fileName;
+                        scope.viewBody = scope.selectedTemplate.viewBody;
+                        scope.fileName = scope.selectedTemplate.fileName;
+                    }
+                };
+
+                scope.createView = function() {
+                    var viewData = scope.selectedTemplate;
+                    viewData.fileName = scope.fileName;
+                    console.info(scope.monitor);
+                    viewData.modelTypeName = scope.monitor.modelTypeName;
+                    vieweditorResource.addNewView(viewData).then(function(result) {
+                        console.info(result);
+                        scope.message.bodyText = result.virtualPath + result.fileName;
+                        scope.save();
+                        scope.showCreateButton = false;
+                    });
+                }
+                
+                function init() {
+
+                    $q.all([
+                        vieweditorResource.getAllNotificationViews(),
+                        localizationService.localize('general_create')
+
+                    ]).then(function(data) {
+
+
+                        var empty = pluginViewEditorContentBuilder.createDefault();
+                        empty.label = '-- ' + data[1] + ' --';
+
+                        data[0].unshift(empty);
+
+                        scope.templates = data[0];
+                        scope.selectedTemplate = _.find(scope.templates, function(t) {
+                            return t.virtualPath + t.fileName === scope.message.bodyText;
+                        });
+
+                        setDefaultFileName();
+                        scope.loaded = true;
+                    });
+                }
+
+                function setDefaultFileName() {
+                    var matched = findByBodyText();
+                    if (matched.fileName === '') {
+                        var fileName = getFileNameFromSubject();
+                        if (checkExists(fileName)) {
+                            scope.fileName = fileName;
+                            scope.selectedTemplate = findMatchingTemplate(fileName);
+                            scope.viewBody = scope.selectedTemplate.viewBody;
+                        } else {
+                            scope.fileName = fileName;
+                            scope.showCreateButton = true;
+                        }
+                    } else {
+                        scope.selectedTemplate = matched;
+                        scope.viewBody = scope.selectedTemplate.viewBody;
+                        scope.fileName = matched.fileName;
+                    }
+                }
+
+                function getFileNameFromSubject() {
+                    return scope.message.name.replace(/\W/g, '') + '.cshtml';
+                }
+
+                function checkExists(fileName) {
+                    return findMatchingTemplate(fileName) !== undefined;
+                }
+
+                function findMatchingTemplate(fileName) {
+                   return _.find(scope.templates, function(t) { return t.fileName === fileName });
+                }
+
+                function findByBodyText() {
+                    return _.find(scope.templates, function(t) {
+                       return t.virtualPath + t.fileName === scope.message.bodyText;
+                    });
+                }
+
+                function saveRazorTemplate(name, args) {
+                    if (scope.selectedTemplate.fileName !== '') {
+                        //scope.selectedTemplate.viewBody = scope.viewBody;
+                        vieweditorResource.saveView(scope.selectedTemplate);
+                    }
+                }
+            }
+        };
+}]);
 
 angular.module('merchello.directives').directive('resolvedGatewayProviders', [function() {
     return {
@@ -2662,7 +3048,7 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
                     // added a timeout here to give the examine index
                     $timeout(function() {
                         notificationsService.success('Payment ' + note + 'success');
-                        reload()
+                        reload();
                     }, 400);
                 }, function (reason) {
                     notificationsService.error('Payment ' + note + 'Failed', reason.message);
@@ -2844,6 +3230,174 @@ angular.module('merchello.directives').directive('addPaymentTable', function() {
             }
         };
     });
+
+angular.module('merchello.directives').directive('invoiceItemizationTable',
+    ['localizationService', 'invoiceHelper',
+        function(localizationService, invoiceHelper) {
+
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    invoice: '=',
+                    payments: '=',
+                    allPayments: '=',
+                    paymentMethods: '=',
+                    preValuesLoaded: '=',
+                    currencySymbol: '=',
+                    save: '&'
+                },
+                templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/invoiceitemizationtable.tpl.html',
+                link: function (scope, elm, attr) {
+
+                    scope.loaded = false;
+                    scope.authorizedCapturedLabel = '';
+                    scope.taxTotal = 0;
+                    scope.shippingTotal = 0;
+                    scope.customLineItems = [];
+                    scope.discountLineItems = [];
+                    scope.adjustmentLineItems = [];
+                    scope.remainingBalance = 0;
+
+                    function init() {
+
+                        // ensure that the parent scope promises have been resolved
+                        scope.$watch('preValuesLoaded', function(pvl) {
+                            if(pvl === true) {
+                               loadInvoice();
+                            }
+                        });
+                    }
+
+
+                    function loadInvoice() {
+                        var taxLineItem = scope.invoice.getTaxLineItem();
+                        scope.taxTotal = taxLineItem !== undefined ? taxLineItem.price : 0;
+                        scope.shippingTotal = scope.invoice.shippingTotal();
+
+                        scope.customLineItems = scope.invoice.getCustomLineItems();
+                        scope.discountLineItems = scope.invoice.getDiscountLineItems();
+                        scope.adjustmentLineItems = scope.invoice.getAdjustmentLineItems();
+
+                        angular.forEach(scope.adjustmentLineItems, function(item) {
+                            item.userName = item.extendedData.getValue("userName");
+                            item.email = item.extendedData.getValue("email");
+                        });
+
+                        scope.remainingBalance =
+                            invoiceHelper.round(scope.invoice.remainingBalance(scope.allPayments), 2);
+
+                        var label  = scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
+
+                        localizationService.localize(label).then(function(value) {
+                            scope.authorizedCapturedLabel = value;
+                        });
+
+                        scope.loaded = true;
+                    }
+
+
+                    // utility method to assist in building scope line item collections
+                    function aggregateScopeLineItemCollection(lineItems, collection) {
+                        if(angular.isArray(lineItems)) {
+                            angular.forEach(lineItems, function(item) {
+                                collection.push(item);
+                            });
+                        } else {
+                            if(lineItems !== undefined) {
+                                collection.push(lineItems);
+                            }
+                        }
+                    }
+                    
+                    // initialize the directive
+                    init();
+                }
+            }
+        }]);
+
+angular.module('merchello.directives').directive('manageInvoiceAdjustments',
+    ['$timeout', 'dialogService', 'userService', 'invoiceDisplayBuilder', 'invoiceResource',
+    function($timeout, dialogService, userService, invoiceDisplayBuilder, invoiceResource) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                invoice: '=',
+                payments: '=',
+                allPayments: '=',
+                paymentMethods: '=',
+                preValuesLoaded: '=',
+                currencySymbol: '=',
+                reload: '&'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/manageinvoiceadjustments.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.openAdjustmentDialog = openAdjustmentDialog;
+                scope.loaded = false;
+                
+                function init() {
+
+                    // ensure that the parent scope promises have been resolved
+                    scope.$watch('preValuesLoaded', function(pvl) {
+                        if(pvl === true) {
+                            scope.loaded = true;
+                        }
+                    });
+
+                }
+
+
+                function openAdjustmentDialog() {
+                    // we need to clone the invoice so we are not affecting the saved invoice
+                    // in previews
+                    var clone = angular.extend(invoiceDisplayBuilder.createDefault(), scope.invoice);
+
+                    var dialogData = {
+                        payments: scope.payments,
+                        allPayments: scope.allPayments,
+                        paymentMethods: scope.paymentMethods,
+                        currencySymbol: scope.currencySymbol,
+                        invoice: clone
+                    };
+                    
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sales.manageadjustments.dialog.html',
+                        show: true,
+                        callback: manageAdjustmentsDialogConfirm,
+                        dialogData: dialogData
+                    });
+                }
+
+                function manageAdjustmentsDialogConfirm(adjustments) {
+                    if (adjustments.items !== undefined) {
+
+                    var user = userService.getCurrentUser().then(function(user) {
+
+                        _.each(adjustments.items, function(item) {
+                            if (item.key === '') {
+                                item.userName = user.name;
+                                item.email = user.email;
+                            }
+                        });
+
+                         invoiceResource.saveInvoiceAdjustments(adjustments).then(function() {
+                         $timeout(function () {
+                         scope.reload();
+                         }, 400);
+                         });
+                    });
+                }
+
+
+                }
+
+                init();
+            }
+        }
+}]);
 
 
 })();

@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive('customerItemCacheTable',
-    ['$q', 'localizationService', 'dialogService', 'settingsResource', 'customerResource',
-    function($q, localizationService, dialogService, settingsResource, customerResource) {
+    ['$q', '$location', 'localizationService', 'notificationsService', 'dialogService', 'settingsResource', 'customerResource', 'backOfficeCheckoutResource',
+    function($q, $location, localizationService, notificationsService, dialogService, settingsResource, customerResource, backOfficeCheckoutResource) {
 
         return {
             restrict: 'E',
@@ -24,6 +24,10 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                 scope.getTotal = getTotal;
 
                 scope.openProductSelection = openProductSelectionDialog;
+                scope.openCheckoutDialog = openCheckoutDialog;
+                scope.showCheckout = false;
+
+                const baseUrl = '/merchello/merchello/saleoverview/';
 
                 function init() {
 
@@ -43,6 +47,7 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                         scope.title = data[0];
                         scope.settings = data[1];
                         scope.items = data[2].items;
+                        setCheckoutLink()
                     });
                 }
 
@@ -70,6 +75,67 @@ angular.module('merchello.directives').directive('customerItemCacheTable',
                     scope.doAdd()(dialogData.addItems, scope.itemCacheType);
                 }
 
+                function setCheckoutLink() {
+                    var billingAddress = scope.customer.getDefaultBillingAddress();
+                    var shippingAddress = scope.customer.getDefaultShippingAddress();
+
+                    scope.showCheckout = (scope.items.length > 0) &&
+                            billingAddress !== null && billingAddress !== undefined &&
+                            shippingAddress !== null && shippingAddress !== undefined &&
+                            scope.itemCacheType === 'Basket';
+                }
+
+                function openCheckoutDialog () {
+
+                    backOfficeCheckoutResource.getShipmentRateQuotes(scope.customer.key)
+                        .then(function(quotes) {
+
+                            var q = quotes.length > 0 ? quotes[0] : {};
+
+                            var dialogData = {
+                                customer: scope.customer,
+                                items: scope.items,
+                                currencySymbol: scope.settings.currencySymbol,
+                                total: getTotal(),
+                                quotes: quotes,
+                                selectedQuote: q
+                            };
+
+                            dialogService.open({
+                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.checkout.html',
+                                show: true,
+                                callback: processCheckout,
+                                dialogData: dialogData
+                            });
+                    });
+                }
+                
+                
+                function processCheckout(dialogData) {
+
+                    var billingAddress = scope.customer.getDefaultBillingAddress();
+                    var shippingAddress = scope.customer.getDefaultShippingAddress();
+
+                    var checkoutData = {
+                        customerKey: dialogData.customer.key,
+                        billingAddressKey: billingAddress.key,
+                        shippingAddressKey: shippingAddress.key,
+                        shipMethodKey: dialogData.selectedQuote.shipMethod.key
+                    };
+
+                    backOfficeCheckoutResource
+                        .createCheckoutInvoice(checkoutData)
+                        .then(function(inv) {
+                            $location.url(baseUrl + inv.key, true);
+                        }, function(msg) {
+                            notificationsService.error(msg);
+                        });
+                }
+                
+                function quoteShippingMethods() {
+                    
+                }
+                
                 init();
             }
 

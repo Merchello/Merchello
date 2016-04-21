@@ -185,7 +185,7 @@
                 FirstName = FieldAsString(result, "firstName"),
                 LastName = FieldAsString(result, "lastName"),
                 Email = FieldAsString(result, "email"),
-                Notes = FieldAsString(result, "notes"),
+                Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
                 TaxExempt = FieldAsBoolean(result.Fields["taxExempt"]),
                 ExtendedData =
                     RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")

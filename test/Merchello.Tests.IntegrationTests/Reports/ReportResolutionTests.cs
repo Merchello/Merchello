@@ -18,25 +18,27 @@ namespace Merchello.Tests.IntegrationTests.Reports
     [TestFixture]
     public class ReportResolutionTests : MerchelloAllInTestBase
     {
+        
         [SetUp]
         public void Setup()
         {
+            
         }
 
-        ///// <summary>
-        ///// Can resolve reports api controller 
-        ///// </summary>
-        //[Test]
-        //public void Can_Resolve_Reports_Types_With_Umbraco_Plugin_Manager()
-        //{
-        //    //// Arrange
-            
-        //    //// Act
-        //    var types = PluginManager.Current.ResolveReportApiControllers();
+        /// <summary>
+        /// Can resolve reports api controller 
+        /// </summary>
+        [Test]
+        public void Can_Resolve_Reports_Types_With_Umbraco_Plugin_Manager()
+        {
+            //// Arrange
 
-        //    //// Assert
-        //    Assert.IsTrue(types.Any());
-        //}
+            //// Act
+            var types = PluginManager.Current.ResolveReportApiControllers();
+
+            //// Assert
+            Assert.IsTrue(types.Any());
+        }
 
 
         [Test]

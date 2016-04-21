@@ -415,6 +415,17 @@
             {
                 get { return new Guid("292E477B-E39A-4B8B-9865-334EEE850FD7"); }
             }
+
+            /// <summary>
+            /// Gets the HasDomainRecord settings key.
+            /// </summary>
+            public static Guid HasDomainRecordKey
+            {
+                get
+                {
+                    return new Guid("84FC6354-5E84-495F-9CB4-1C753D612AF7");
+                }
+            }
         }
 
         /// <summary>
@@ -638,6 +649,17 @@
                 public static Guid DiscountKey
                 {
                     get { return new Guid("E7CC502D-DE7C-4C37-8A9C-837760533A76"); }
+                }
+
+                /// <summary>
+                /// Gets the adjustment line item type key.
+                /// </summary>
+                public static Guid AdjustmentKey
+                {
+                    get
+                    {
+                        return new Guid("AFFE34FA-B842-419C-84D0-309FAB7D2346");
+                    }
                 }
             }
 

@@ -1,11 +1,8 @@
-﻿using Merchello.Web.Models.SaleHistory;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Management.Instrumentation;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
@@ -13,10 +10,9 @@ namespace Merchello.Web.Editors
     using Merchello.Core;
     using Merchello.Core.Builders;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Models.Querying;
+    using Merchello.Web.Models.ContentEditing.Checkout;
     using Merchello.Web.Models.Shipping;
     using Merchello.Web.WebApi;
 
@@ -50,6 +46,11 @@ namespace Merchello.Web.Editors
         private readonly IShipMethodService _shipMethodService;
 
         /// <summary>
+        /// The customer service.
+        /// </summary>
+        private readonly ICustomerService _customerService;
+
+        /// <summary>
         /// The <see cref="MerchelloHelper"/>.
         /// </summary>
         private readonly MerchelloHelper _merchello;
@@ -75,6 +76,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _customerService = merchelloContext.Services.CustomerService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -95,6 +97,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _customerService = merchelloContext.Services.CustomerService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -439,5 +442,6 @@ namespace Merchello.Web.Editors
             order.OrderStatus = orderStatus;
             _orderService.Save(order);
         }
+
     }
 }

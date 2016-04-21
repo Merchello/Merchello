@@ -48,7 +48,7 @@
         /// Gets or sets the customer notes.
         /// </summary>
         [DataMember]
-        string Notes { get; set; }
+        IEnumerable<INote> Notes { get; set; }
 
         /// <summary>
         /// Gets the addresses.

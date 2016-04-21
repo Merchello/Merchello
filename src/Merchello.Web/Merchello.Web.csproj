@@ -319,16 +319,20 @@
     <Compile Include="Editors\NoteApiController.cs" />
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
+    <Compile Include="Editors\PluginViewEditorApiController.cs" />
     <Compile Include="Editors\Reports\AbandonedBasketReportApiController.cs" />
     <Compile Include="Editors\Reports\MonthlyReportApiControllerBase.cs" />
     <Compile Include="Editors\Reports\ReportSqlHelper.cs" />
     <Compile Include="Editors\Reports\SalesOverTimeReportApiController.cs" />
     <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
+    <Compile Include="IO\PluginViewHelper.cs" />
     <Compile Include="LocalizationHelper.cs" />
+    <Compile Include="Logging\DefaultEmptyRemoteLogger.cs" />
     <Compile Include="MerchelloContextExtensions.cs" />
     <Compile Include="Models\ContentEditing\BackOfficeTreeDisplay.cs" />
     <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheInstruction.cs" />
     <Compile Include="Models\ContentEditing\Checkout\AddToItemCacheItem.cs" />
+    <Compile Include="Models\ContentEditing\Checkout\CreateCustomerInvoice.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ItemCacheInstructionBase.cs" />
     <Compile Include="Models\ContentEditing\Checkout\ItemCacheLineItemInstruction.cs" />
     <Compile Include="Models\ContentEditing\Collections\Entity2CollectionModel.cs" />
@@ -355,10 +359,15 @@
     <Compile Include="Models\ContentEditing\LineItemDisplayBase.cs" />
     <Compile Include="Models\ContentEditing\LineItemDisplayCollectionBase.cs" />
     <Compile Include="Models\ContentEditing\ProductCopySave.cs" />
+    <Compile Include="Models\ContentEditing\Checkout\ShipmentRateQuoteDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Sales\AdjustmentLineItemReference.cs" />
+    <Compile Include="Models\ContentEditing\Sales\InvoiceAdjustmentDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShipmentStatusDisplay.cs" />
     <Compile Include="Models\ContentEditing\ShippingGatewayMethodDisplay.cs" />
     <Compile Include="Discounts\Coupons\CouponManager.cs" />
     <Compile Include="Models\ContentEditing\TaxationGatewayProviderDisplay.cs" />
+    <Compile Include="Models\ContentEditing\Templates\AppPluginViewEditorContent.cs" />
+    <Compile Include="Models\ContentEditing\Templates\PluginViewType.cs" />
     <Compile Include="Models\Customer\CustomerContextDataExtensions.cs" />
     <Compile Include="Models\ContentEditing\ItemCacheLineItemDisplay.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\AllowedTemplatesResolver.cs" />
@@ -450,7 +459,9 @@
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="Mvc\PartialViewFormatterController.cs" />
     <Compile Include="Mvc\PaymentMethodUiController.cs" />
+    <Compile Include="Mvc\ViewRenderer.cs" />
     <Compile Include="Pluggable\CustomerContextBase.cs" />
     <Compile Include="Pluggable\ICustomerContext.cs" />
     <Compile Include="Pluggable\PluggableObjectHelper.cs" />
@@ -519,8 +530,6 @@
     <Compile Include="Ui\IPaymentMethodUiControllerResolver.cs" />
     <Compile Include="Ui\PaymentMethodUiControllerResolver.cs" />
     <Compile Include="UmbracoServiceExtensions.cs" />
-    <Compile Include="Validation\BankingValidationHelper.cs" />
-    <Compile Include="Validation\IBankingValidationHelper.cs" />
     <Compile Include="Validation\CustomerItemCacheValidationChain.cs" />
     <Compile Include="Validation\IValidatationHelper.cs" />
     <Compile Include="Validation\IValidationChain{T}.cs" />
@@ -634,6 +643,8 @@
     <Compile Include="Validation\BasketItemInventoryValidation.cs" />
     <Compile Include="WebApi\MerchelloApiController.cs" />
     <Compile Include="WebBootManager.cs" />
+    <Compile Include="Workflow\Notification\Monitor\RazorOrderConfirmationMonitor.cs" />
+    <Compile Include="Workflow\Notification\RazorFormatter.cs" />
     <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>

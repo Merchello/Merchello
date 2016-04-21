@@ -9,6 +9,9 @@
     using System.Reflection;
     using System.Web.Routing;
     using System.Xml.Linq;
+
+    using Merchello.Core.Logging;
+
     using Outline;
     using Umbraco.Core.IO;
     using Umbraco.Core.Logging;
@@ -162,7 +165,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                     return null;
                 }
             }
@@ -181,7 +184,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                     return null;
                 }
             }
@@ -236,7 +239,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve pluggable object with key: " + alias, ex);
+                MultiLogHelper.Error<MerchelloConfiguration>("Failed to retrieve pluggable object with key: " + alias, ex);
                 return null;
             }
         }
@@ -256,7 +259,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve strategy with key: " + alias, ex);
+                MultiLogHelper.Error<MerchelloConfiguration>("Failed to retrieve strategy with key: " + alias, ex);
                 return null;
             }
         }
@@ -274,7 +277,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve task chain with key: " + alias, ex);
+                MultiLogHelper.Error<MerchelloConfiguration>("Failed to retrieve task chain with key: " + alias, ex);
                 return null;
             }
         }
@@ -296,7 +299,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                 return string.Empty;
             }
         }

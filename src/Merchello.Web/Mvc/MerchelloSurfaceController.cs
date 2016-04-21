@@ -6,6 +6,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Pluggable;
@@ -118,7 +119,7 @@
             var exception =
                 new InvalidOperationException(
                     "Attempt to delete an item from a collection that does not match the CurrentUser");
-            LogHelper.Error<MerchelloSurfaceController>("Customer item cache operation failed.", exception);
+            MultiLogHelper.Error<MerchelloSurfaceController>("Customer item cache operation failed.", exception);
 
             throw exception;
         }

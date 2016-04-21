@@ -1,7 +1,4 @@
-﻿using Merchello.Core.Gateways.Notification.Monitors;
-using Merchello.Core.Observation;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
@@ -9,13 +6,21 @@ namespace Merchello.Web.Editors
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+
     using Core;
     using Core.Gateways;
     using Core.Gateways.Notification;
     using Core.Models;
     using Core.Services;
+
+    using Merchello.Core.Gateways.Notification.Monitors;
+    using Merchello.Core.Observation;
+    using Merchello.Web.Models.ContentEditing.Templates;
+
     using Models.ContentEditing;
+
     using Umbraco.Web.Mvc;
+
     using WebApi;
 
     /// <summary>
@@ -116,7 +121,9 @@ namespace Merchello.Web.Editors
             {
                 MonitorKey = x.MonitorFor().Key,
                 Name = x.MonitorFor().Name,
-                Alias = x.MonitorFor().ObservableTrigger.ToString()
+                Alias = x.MonitorFor().ObservableTrigger.ToString(),
+                UseCodeEditor = x.MonitorFor().UseCodeEditor,
+                ModelTypeName = ((INotificationMonitorBase)x).MessageModelType.FullName
             });
         }
 
@@ -136,7 +143,6 @@ namespace Merchello.Web.Editors
             if (provider == null) throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             var methods = provider.NotificationMethods.Select(method => provider.GetNotificationGatewayMethodByKey(method.Key).ToNotificationMethodDisplay());
             return methods;
-
         }
 
         /// <summary>
@@ -173,7 +179,7 @@ namespace Merchello.Web.Editors
                 if (newMethod)
                 {
                     var notificationGatewayMethod = provider.CreateNotificationMethod(gatewayResource, method.Name, method.ServiceCode);
-
+                   
                     provider.SaveNotificationMethod(notificationGatewayMethod);
                 }
             }
@@ -334,8 +340,13 @@ namespace Merchello.Web.Editors
 
                 var method = provider.GetNotificationGatewayMethodByKey(message.MethodKey);
 
-                var notificationMessage = new NotificationMessage(message.MethodKey, message.Name, message.FromAddress);
-
+                var notificationMessage = new NotificationMessage(message.MethodKey, message.Name, message.FromAddress)
+                                              {
+                                                  BodyTextIsFilePath
+                                                      =
+                                                      message
+                                                      .BodyTextIsFilePath
+                                              };
                 method.SaveNotificationMessage(message.ToNotificationMessage(notificationMessage));
                 
                 return notificationMessage.Key.ToString();

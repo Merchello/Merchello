@@ -10,6 +10,7 @@
 @import "modules/orders";
 @import "modules/warehouse";
 @import "modules/customer";
+@import "modules/itemcache";
 @import "modules/settings";
 @import "modules/product";
 @import "modules/taxation";
@@ -17,6 +18,9 @@
 @import "modules/collections";
 @import "modules/controls";
 @import "modules/actionmenu";
+@import "modules/checkout";
+@import "modules/invoice";
+@import "modules/vieweditor";
 
 // Data Types
 @import "datatypes/productpicker";

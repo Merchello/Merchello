@@ -91,10 +91,10 @@
 
             <div class="merchello-pane item-cache secondary span12">
                 <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span6 basket">
                         <customer-item-cache-table item-cache-type="Basket" customer="customer" do-add="addToItemCache" do-move="moveToWishList" do-delete="removeFromItemCache" do-edit="editItemCacheItem"></customer-item-cache-table>
                     </div>
-                    <div class="span6 pull-right">
+                    <div class="span6 wishlist pull-right">
                         <customer-item-cache-table item-cache-type="Wishlist" do-move="moveToBasket" do-add="addToItemCache" do-delete="removeFromItemCache" do-edit="editItemCacheItem" customer="customer"></customer-item-cache-table>
                     </div>
                 </div>
@@ -107,17 +107,7 @@
 
             <div class="merchello-pane secondary span12">
                 <div class="control-group umb-control-group">
-                    <label class="merchello-section-label">
-                        <localize key="merchelloCustomers_customerNotes" />
-                    </label>
-                    <div class="merchello-controls">
-                        <div class="well new-note row-fluid">
-                            <div class="form-group col-xs-12 span12">
-                                <textarea name="note-message" name="customer-note" rows="8" class="span12" data-ng-model="customer.notes"></textarea>
-                            </div>
-                            <input type="submit" class="btn btn-primary" value="Save Note" data-ng-click="saveCustomer()" />
-                        </div>
-                    </div>
+                    <merchello-notes-table entity-type="entityType" notes="customer.notes" save="saveCustomer()" delete="deleteNote"></merchello-notes-table>
                 </div>
 
                 <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="customer"></entity-static-collections>

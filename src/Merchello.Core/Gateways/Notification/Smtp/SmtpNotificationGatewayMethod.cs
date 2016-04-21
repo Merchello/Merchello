@@ -5,6 +5,9 @@
     using System.Net;
     using System.Net.Mail;
     using System.Threading.Tasks;
+
+    using Merchello.Core.Logging;
+
     using Models;
     using Services;
 
@@ -58,7 +61,7 @@
                 IsBodyHtml = true
             };
 
-            LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
+            MultiLogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
 
             foreach (var to in message.Recipients)
             {
@@ -103,7 +106,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
+                MultiLogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
                 return false;
             }
         }
@@ -141,7 +144,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
+                MultiLogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
                 return false;
             }
         }

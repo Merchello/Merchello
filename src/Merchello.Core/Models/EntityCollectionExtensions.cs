@@ -6,6 +6,7 @@
     using System.Web.UI;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
@@ -288,7 +289,7 @@
 
             if (attempt.Success) return attempt.Result;
 
-            LogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
+            MultiLogHelper.Error(typeof(EntityCollectionExtensions), "Resolver failed to resolve collection provider", attempt.Exception);
             return null;
         }
 
@@ -313,7 +314,7 @@
 
             if (provider is T) return provider as T;
 
-            LogHelper.Debug(typeof(EntityCollectionExtensions), "Provider was resolved but was not of expected type.");
+            MultiLogHelper.Debug(typeof(EntityCollectionExtensions), "Provider was resolved but was not of expected type.");
 
             return null;
         }

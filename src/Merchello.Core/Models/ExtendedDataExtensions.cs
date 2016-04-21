@@ -671,9 +671,13 @@
         /// </returns>
         public static IAddress GetAddress(this ExtendedDataCollection extendedData, AddressType addressType)
         {
-            return extendedData.GetAddress(addressType == AddressType.Shipping
+            var address = extendedData.GetAddress(addressType == AddressType.Shipping
                                                ? Constants.ExtendedDataKeys.ShippingDestinationAddress
                                                : Constants.ExtendedDataKeys.BillingAddress);
+
+            if (address != null) address.AddressType = addressType;
+
+            return address;
         }
 
         /// <summary>

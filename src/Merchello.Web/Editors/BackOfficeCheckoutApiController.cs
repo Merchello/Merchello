@@ -8,6 +8,7 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
@@ -76,6 +77,49 @@
             var paymentMethods = MerchelloContext.Gateways.Payment.GetPaymentGatewayMethods();
 
             return paymentMethods.Select(x => x.ToPaymentMethodDisplay());
+        }
+
+        /// <summary>
+        /// Gets a collection of shipment rate quotes for a customer's basket.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ShipmentRateQuoteDisplay}"/>.
+        /// </returns>
+        /// <remarks>
+        /// Assumes the shipping address is the default shipping address
+        /// </remarks>
+        [HttpGet]
+        public IEnumerable<ShipmentRateQuoteDisplay> GetShipmentRateQuotes(Guid customerKey)
+        {
+            // Gets the customer
+            var customer = _customerService.GetByKey(customerKey);
+            if (customer == null) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
+
+            // Gets the default shipping address saved with the customer
+            var shippingAddress = customer.DefaultCustomerAddress(AddressType.Shipping);
+            if (shippingAddress == null) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
+
+            // Gets the customer basket
+            var basket = customer.Basket();
+            if (basket.IsEmpty) return Enumerable.Empty<ShipmentRateQuoteDisplay>();
+
+            var shipments = basket.PackageBasket(shippingAddress.AsAddress(shippingAddress.FullName));
+
+            // Quotes each shipment
+            var rateQuotes = new List<ShipmentRateQuoteDisplay>();
+            foreach (var shipment in shipments.ToArray())
+            {
+                rateQuotes.AddRange(
+                    shipment
+                    .ShipmentRateQuotes()
+                    .Select(x => x.ToShipmentRateQuoteDisplay())
+                    .Where(x => x != null));
+            }
+
+            return rateQuotes;
         }
 
         #endregion
@@ -229,6 +273,70 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Creates a customer invoice from the customer cart, default addresses and selected ship method.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public InvoiceDisplay CreateCheckoutInvoice(CreateCustomerInvoice model)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                // Get the customer
+                var customer = _customerService.GetByKey(model.CustomerKey);
+                if (customer == null) throw new NullReferenceException("Customer not found");
+
+                // In this implementation, we require the customer addresses are populated which both a default billing and shipping address
+                if (!customer.Addresses.Any()) throw new NullReferenceException("Customer does not have any saved addresses");
+
+                var billing = customer.DefaultCustomerAddress(AddressType.Billing);
+                var shipping = customer.DefaultCustomerAddress(AddressType.Shipping);
+
+                if (billing == null) throw new NullReferenceException("Customer does not have a default billing address");
+                if (shipping == null) throw new NullReferenceException("Customer does not have a default shipping address");
+
+                // The customer basket must have items to purchase
+                var basket = customer.Basket();
+                if (basket.IsEmpty) throw new InvalidOperationException("Cannot complete back office checkout for customer without items in their basket.");
+
+                // Use the basket checkout manager for facilate the checkout
+                var checkoutManager = basket.GetCheckoutManager();
+                checkoutManager.Customer.SaveBillToAddress(
+                    billing.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
+
+                checkoutManager.Customer.SaveShipToAddress(
+                    shipping.AsAddress(string.Format("{0} {1}", customer.FirstName, customer.LastName)));
+
+                // quote the shipment and then save it to the checkout manager
+                var shipment = basket.PackageBasket(checkoutManager.Customer.GetShipToAddress()).FirstOrDefault();
+                var quote = shipment.ShipmentRateQuoteByShipMethod(model.ShipMethodKey, false);
+
+                checkoutManager.Shipping.SaveShipmentRateQuote(quote);
+
+                // We are not going to pay through the back office checkout, rather redirect to the sales overview page 
+                // and pay from there since the payments can be implemented there
+                var invoice = checkoutManager.Payment.PrepareInvoice();
+
+                MerchelloContext.Services.InvoiceService.Save(invoice);
+
+                customer.Basket().Empty();
+
+                return invoice.ToInvoiceDisplay();
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<BackOfficeCheckoutApiController>("Failed to create customer invoice", ex);
+                throw;
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -250,7 +358,7 @@
             if (customer == null)
             {
                 var notFound = new NullReferenceException("Customer was not found");
-                LogHelper.Error<BackOfficeCheckoutApiController>("Could not add item to customer ItemCache", notFound);
+                MultiLogHelper.Error<BackOfficeCheckoutApiController>("Could not add item to customer ItemCache", notFound);
                 return null;
             }
 

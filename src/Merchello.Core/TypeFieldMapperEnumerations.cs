@@ -49,6 +49,7 @@
         Shipping,
         Tax,
         Discount,
+        Adjustment,
         Custom
     }
 

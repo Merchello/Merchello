@@ -7,11 +7,12 @@
     using Merchello.Providers.Payment.Braintree.Models;
 
     using Umbraco.Core;
+    using Umbraco.Core.Services;
 
     /// <summary>
     /// Defines the BraintreeTransactionApiProvider.
     /// </summary>
-    public interface IBraintreeTransactionApiService
+    public interface IBraintreeTransactionApiService : IService
     {
         /// <summary>
         /// Performs a Braintree sales transaction.
