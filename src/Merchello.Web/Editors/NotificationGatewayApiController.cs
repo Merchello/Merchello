@@ -117,14 +117,22 @@
         {
             var monitors = MonitorResolver.Current.GetAllMonitors();
 
-            return monitors.Select(x => new NotificationMonitorDisplay()
+            var results = monitors.Select(x => new NotificationMonitorDisplay()
             {
                 MonitorKey = x.MonitorFor().Key,
                 Name = x.MonitorFor().Name,
                 Alias = x.MonitorFor().ObservableTrigger.ToString(),
                 UseCodeEditor = x.MonitorFor().UseCodeEditor,
                 ModelTypeName = ((INotificationMonitorBase)x).MessageModelType.FullName
-            });
+            }).ToArray();
+
+            // Razor first
+            var returnList = new List<NotificationMonitorDisplay>();
+
+            returnList.AddRange(results.Where(x => x.Name.Contains("(Razor)")).OrderBy(x => x.Name));
+            returnList.AddRange(results.Where(x => !x.Name.Contains("(Razor)")).OrderBy(x => x.Name));
+
+            return returnList;
         }
 
         /// <summary>
