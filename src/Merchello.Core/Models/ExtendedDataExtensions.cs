@@ -50,9 +50,10 @@
         /// The key.
         /// </param>
         /// <typeparam name="T">
+        /// The type to be returned.
         /// </typeparam>
         /// <returns>
-        /// The <see cref="T"/>.
+        /// The typed value.
         /// </returns>
         public static T GetValue<T>(this ExtendedDataCollection extendedData, string key) where T : class, new()
         {
