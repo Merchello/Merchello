@@ -10,6 +10,30 @@
     public static class MultiLogHelper
     {
         /// <summary>
+        /// Gets the Umbraco <see cref="ILogger"/>.
+        /// </summary>
+        public static ILogger UmbracoLogger
+        {
+            get
+            {
+                if (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false) Logger.CreateWithDefaultLog4NetConfiguration();
+                return MultiLogResolver.Current.Logger.UmbracoLogger;
+            }
+        }
+
+        /// <summary>
+        /// Gets the remote logger.
+        /// </summary>
+        public static IRemoteLogger RemoteLogger
+        {
+            get
+            {
+                if (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false) return null;
+                return MultiLogResolver.Current.Logger.RemoteLogger;
+            }
+        }
+
+        /// <summary>
         /// Logs and error.
         /// </summary>
         /// <param name="message">

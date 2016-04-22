@@ -5,6 +5,7 @@
     public interface IExtendedLoggerDataLogger
     {
 
+
         /// <summary>
         /// The error.
         /// </summary>
