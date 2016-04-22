@@ -118,6 +118,14 @@
             Returns the currently logged in Umbraco User
             </summary>
         </member>
+        <member name="T:Umbraco.Web.IHttpContextAccessor">
+            <summary>
+            Used to retrieve the HttpContext
+            </summary>
+            <remarks>
+            NOTE: This has a singleton lifespan
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.Editors.EditorModelEventManager">
             <summary>
             Used to emit events for editor models in the back office
@@ -368,6 +376,12 @@
             an inherited item or the current item.
             </summary>        
         </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.PropertyTypeDisplay.ContentTypeName">
+            <summary>
+            This is required for the UI editor to know which content type name this property belongs
+            to based on the property inheritance structure
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Models.ContentEditing.MemberTypeSave">
             <summary>
             Model used to save a member type
@@ -501,6 +515,61 @@
             <para>The alias is case-insensitive.</para>
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.Mvc.ControllerContextExtensions.GetUmbracoContext(System.Web.Mvc.ControllerContext)">
+            <summary>
+            Tries to get the Umbraco context from the whole ControllerContext hierarchy based on data tokens and if that fails
+            it will attempt to fallback to retrieving it from the HttpContext.
+            </summary>
+            <param name="controllerContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.ControllerContextExtensions.GetDataTokenInViewContextHierarchy(System.Web.Mvc.ControllerContext,System.String)">
+            <summary>
+            Find a data token in the whole ControllerContext hierarchy of execution
+            </summary>
+            <param name="controllerContext"></param>
+            <param name="dataTokenName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.Mvc.DisableBrowserCacheAttribute">
+            <summary>
+            Ensures that the request is not cached by the browser
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Mvc.EnsurePartialViewMacroViewContextFilterAttribute">
+            <summary>
+            This is a special filter which is required for the RTE to be able to render Partial View Macros that 
+            contain forms when the RTE value is resolved outside of an MVC view being rendered
+            </summary>
+            <remarks>
+            The entire way that we support partial view macros that contain forms isn't really great, these forms
+            need to be executed as ChildActions so that the ModelState,ViewData,TempData get merged into that action
+            so the form can show errors, viewdata, etc...
+            Under normal circumstances, macros will be rendered after a ViewContext is created but in some cases 
+            developers will resolve the RTE value in the controller, in this case the Form won't be rendered correctly
+            with merged ModelState from the controller because the special DataToken hasn't been set yet (which is 
+            normally done in the UmbracoViewPageOfModel when a real ViewContext is available.
+            So we need to detect if the currently rendering controller is IRenderController and if so we'll ensure that
+            this DataToken exists before the action executes in case the developer resolves an RTE value that contains
+            a partial view macro form.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.EnsurePartialViewMacroViewContextFilterAttribute.OnActionExecuting(System.Web.Mvc.ActionExecutingContext)">
+            <summary>
+            Ensures the custom ViewContext datatoken is set before the RenderController action is invoked,
+            this ensures that any calls to GetPropertyValue with regards to RTE or Grid editors can still
+            render any PartialViewMacro with a form and maintain ModelState
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.EnsurePartialViewMacroViewContextFilterAttribute.OnResultExecuting(System.Web.Mvc.ResultExecutingContext)">
+            <summary>
+            Ensures that the custom ViewContext datatoken is set after the RenderController action is invoked,
+            this ensures that any custom ModelState that may have been added in the RenderController itself is 
+            passed onwards in case it is required when rendering a PartialViewMacro with a form
+            </summary>
+            <param name="filterContext">The filter context.</param>
+        </member>
         <member name="T:Umbraco.Web.Mvc.IRenderController">
             <summary>
             A marker interface to designate that a controller will be used for Umbraco front-end requests and/or route hijacking
@@ -556,6 +625,16 @@
             <summary>
             Stores the instance of EventMessages in the current request so all events will share the same instance
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.RouteDataExtensions.GetUmbracoContext(System.Web.Routing.RouteData)">
+            <summary>
+            Tries to get the Umbraco context from the DataTokens
+            </summary>
+            <param name="routeData"></param>
+            <returns></returns>
+            <remarks>
+            This is useful when working on async threads since the UmbracoContext is not copied over explicitly
+            </remarks>
         </member>
         <member name="T:Umbraco.Web.Scheduling.ILatchedBackgroundTask">
             <summary>
@@ -739,6 +818,20 @@
             <param name="contentType">The composition.</param>
             <param name="propertyTypeId">The identifier of the property type.</param>
             <returns>The composition content type that defines the specified property group.</returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.PreviewAuthenticationMiddleware.#ctor(Microsoft.Owin.OwinMiddleware,Umbraco.Web.Security.Identity.UmbracoBackOfficeCookieAuthOptions)">
+            <summary>
+            Instantiates the middleware with an optional pointer to the next component.
+            </summary>
+            <param name="next"/>
+            <param name="cookieOptions"></param>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.PreviewAuthenticationMiddleware.Invoke(Microsoft.Owin.IOwinContext)">
+            <summary>
+            Process an individual request.
+            </summary>
+            <param name="context"/>
+            <returns/>
         </member>
         <member name="T:Umbraco.Web.Trees.TreeController">
             <summary>
@@ -952,10 +1045,36 @@
             The startup type is specified in appSettings under owin:appStartup
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.UmbracoDefaultOwinStartup.Configuration(Owin.IAppBuilder)">
+            <summary>
+            Main startup method
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoDefaultOwinStartup.ConfigureServices(Owin.IAppBuilder)">
+            <summary>
+            Configures services to be created in the OWIN context (CreatePerOwinContext)
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoDefaultOwinStartup.ConfigureMiddleware(Owin.IAppBuilder)">
+            <summary>
+            Configures middleware to be used (i.e. app.Use...)
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="E:Umbraco.Web.UmbracoDefaultOwinStartup.MiddlewareConfigured">
+            <summary>
+            Raised when the middelware has been configured
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.IUmbracoContextAccessor">
             <summary>
             Used to retrieve the Umbraco context
-            </summary>    
+            </summary>
+            <remarks>
+            NOTE: This has a singleton lifespan
+            </remarks>    
         </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.Relation.ParentId">
             <summary>
@@ -2337,6 +2456,13 @@
             </summary>
             <returns></returns>        
         </member>
+        <member name="M:Umbraco.Web.Editors.ContentController.GetPermissions(System.Int32[])">
+            <summary>
+            Returns permissions for all nodes passed in for the current user
+            </summary>
+            <param name="nodeIds"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.ContentController.PostSave(Umbraco.Web.Models.ContentEditing.ContentItemSave)">
             <summary>
             Saves content
@@ -2471,16 +2597,25 @@
             This is required because in the case of creating/modifying a content type because new property types being added to it are not yet persisted so cannot
             be looked up via the db, they need to be passed in.
             </param>
-            <param name="contentTypeId"></param>        
+            <param name="contentTypeId"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.ContentTypeControllerBase.PerformMove``1(Umbraco.Web.Models.ContentEditing.MoveOrCopy,System.Func{System.Int32,``0},System.Func{``0,System.Int32,Umbraco.Core.Attempt{Umbraco.Core.Services.OperationStatus{Umbraco.Core.Services.MoveOperationStatusType}}})">
             <summary>
-            Change the sort order for media
+            Move
             </summary>
             <param name="move"></param>
             <param name="getContentType"></param>
             <param name="doMove"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentTypeControllerBase.PerformCopy``1(Umbraco.Web.Models.ContentEditing.MoveOrCopy,System.Func{System.Int32,``0},System.Func{``0,System.Int32,Umbraco.Core.Attempt{Umbraco.Core.Services.OperationStatus{``0,Umbraco.Core.Services.MoveOperationStatusType}}})">
+            <summary>
+            Move
+            </summary>
+            <param name="move"></param>
+            <param name="getContentType"></param>
+            <param name="doCopy"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.ContentTypeControllerBase.CreateCompositionValidationExceptionIfInvalid``3(``0,Umbraco.Core.Models.IContentTypeComposition)">
@@ -5176,11 +5311,29 @@
             <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> instance representing the execution of the background task,
             and returning a value indicating whether to repeat the task.</returns>
         </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.FinalizeMiddlewareConfiguration(Owin.IAppBuilder)">
+            <summary>
+            Called at the end of configuring middleware
+            </summary>
+            <param name="app"></param>
+            <remarks>
+            This could be used for something else in the future - maybe to inform Umbraco that middleware is done/ready, but for
+            now this is used to raise the custom event
+            
+            This is an extension method in case developer entirely replace the UmbracoDefaultOwinStartup class, in which case they will
+            need to ensure they call this extension method in their startup class.
+            
+            TODO: Move this method in v8, it doesn't belong in this namespace/extension class
+            </remarks>
+        </member>
         <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.SetUmbracoLoggerFactory(Owin.IAppBuilder)">
             <summary>
             Sets the OWIN logger to use Umbraco's logging system
             </summary>
             <param name="app"></param>
+            <remarks>
+            TODO: Move this method in v8, it doesn't belong in this namespace/extension class
+            </remarks>
         </member>
         <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.ConfigureUserManagerForUmbracoBackOffice(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Umbraco.Core.Security.MembershipProviderBase)">
             <summary>
@@ -5214,6 +5367,20 @@
             <param name="app"></param>
             <param name="appContext"></param>
             <returns></returns>
+            <remarks>
+            By default this will be configured to execute on PipelineStage.Authenticate
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Owin.PipelineStage)">
+            <summary>
+            Ensures that the UmbracoBackOfficeAuthenticationMiddleware is assigned to the pipeline
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="stage">
+            Configurable pipeline stage
+            </param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeExternalCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext)">
             <summary>
@@ -5222,6 +5389,54 @@
             </summary>
             <param name="app"></param>
             <param name="appContext"></param>
+            <returns></returns>
+            <remarks>
+            By default this will be configured to execute on PipelineStage.Authenticate
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeExternalCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Owin.PipelineStage)">
+            <summary>
+            Ensures that the cookie middleware for validating external logins is assigned to the pipeline with the correct
+            Umbraco back office configuration
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="stage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoPreviewAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext)">
+            <summary>
+            In order for preview to work this needs to be called
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <returns></returns>
+            <remarks>
+            This ensures that during a preview request that the back office use is also Authenticated and that the back office Identity
+            is added as a secondary identity to the current IPrincipal so it can be used to Authorize the previewed document.
+            </remarks>
+            <remarks>
+            By default this will be configured to execute on PipelineStage.PostAuthenticate
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoPreviewAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Owin.PipelineStage)">
+            <summary>
+            In order for preview to work this needs to be called
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="stage"></param>
+            <returns></returns>
+            <remarks>
+            This ensures that during a preview request that the back office use is also Authenticated and that the back office Identity
+            is added as a secondary identity to the current IPrincipal so it can be used to Authorize the previewed document.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.CreateCookieAuthOptions(System.String[])">
+            <summary>
+            Create the default umb cookie auth options
+            </summary>
+            <param name="explicitPaths"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Security.Identity.AuthenticationOptionsExtensions.SetExternalSignInAutoLinkOptions(Microsoft.Owin.Security.AuthenticationOptions,Umbraco.Web.Security.Identity.ExternalSignInAutoLinkOptions)">
@@ -5361,15 +5576,23 @@
             Ensure this is run when not configured
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Strategies.Migrations.ClearMediaXmlCacheForDeletedItemsAfterUpgrade">
+        <member name="P:Umbraco.Web.Strategies.Migrations.MigrationStartupHander.TargetProductNames">
             <summary>
-            This will execute after upgrading to remove any xml cache for media that are currently in the bin
+            Override to specify explicit target product names
             </summary>
-            <remarks>    
-            This will execute for specific versions - 
-            
-            * If current is less than or equal to 7.0.0
+            <remarks>
+            Leaving empty will run for all migration products
             </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Strategies.Migrations.ClearMediaXmlCacheForDeletedItemsAfterUpgrade">
+             <summary>
+             This will execute after upgrading to remove any xml cache for media that are currently in the bin
+             </summary>
+             <remarks>
+             This will execute for specific versions -
+            
+             * If current is less than or equal to 7.0.0
+             </remarks>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.EnsureDefaultListViewDataTypesCreated">
             <summary>
@@ -7417,6 +7640,11 @@
             Clears the angular csrf cookie if the request was successful
             </summary>
         </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.DisableBrowserCacheAttribute">
+            <summary>
+            Ensures that the request is not cached by the browser
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.EnableOverrideAuthorizationAttribute">
             <summary>
             This allows for Action based auth attributes to override Class based auth attributes if they are specified
@@ -7619,9 +7847,16 @@
         </member>
         <member name="M:Umbraco.Web.Editors.ContentTypeController.PostMove(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
             <summary>
-            Move the media type
+            Move the content type
             </summary>
             <param name="move"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.ContentTypeController.PostCopy(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
+            <summary>
+            Copy the content type
+            </summary>
+            <param name="copy"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Editors.LegacyController">
@@ -7896,6 +8131,13 @@
             Move the media type
             </summary>
             <param name="move"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.MediaTypeController.PostCopy(Umbraco.Web.Models.ContentEditing.MoveOrCopy)">
+            <summary>
+            Copy the media type
+            </summary>
+            <param name="copy"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Security.MembershipHelper">
@@ -10247,8 +10489,8 @@
         </member>
         <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.PublishedMediaCache.GetProperty(Umbraco.Web.PublishedCache.XmlPublishedCache.PublishedMediaCache.DictionaryPublishedContent,System.String)">
             <summary>
-            We will need to first check if the document was loaded by Examine, if so we'll need to check if this property exists 
-            in the results, if it does not, then we'll have to revert to looking up in the db. 
+            We will need to first check if the document was loaded by Examine, if so we'll need to check if this property exists
+            in the results, if it does not, then we'll have to revert to looking up in the db.
             </summary>
             <param name="dd"> </param>
             <param name="alias"></param>
@@ -10267,7 +10509,7 @@
             An IPublishedContent that is represented all by a dictionary.
             </summary>
             <remarks>
-            This is a helper class and definitely not intended for public use, it expects that all of the values required 
+            This is a helper class and definitely not intended for public use, it expects that all of the values required
             to create an IPublishedContent exist in the dictionary by specific aliases.
             </remarks>
         </member>
@@ -10776,16 +11018,16 @@
             </summary>
         </member>
         <member name="T:Umbraco.Web.Strategies.Migrations.RebuildMediaXmlCacheAfterUpgrade">
-            <summary>
-            This will execute after upgrading to rebuild the xml cache
-            </summary>
-            <remarks>
-            This cannot execute as part of a db migration since we need access to the services/repos.
+             <summary>
+             This will execute after upgrading to rebuild the xml cache
+             </summary>
+             <remarks>
+             This cannot execute as part of a db migration since we need access to the services/repos.
             
-            This will execute for specific versions - 
+             This will execute for specific versions -
             
-            * If current is less than or equal to 7.0.0
-            </remarks>
+             * If current is less than or equal to 7.0.0
+             </remarks>
         </member>
         <member name="T:Umbraco.Web.Strategies.PublicAccessEventHandler">
             <summary>
@@ -11940,6 +12182,26 @@
             Provides extension methods for <see cref="T:Umbraco.Web.UmbracoContext"/>.
             </summary>
         </member>
+        <member name="M:Umbraco.Web.UmbracoContextExtensions.GetUmbracoContext(System.Web.HttpContext)">
+            <summary>
+            tries to get the Umbraco context from the HttpContext
+            </summary>
+            <param name="http"></param>
+            <returns></returns>
+            <remarks>
+            This is useful when working on async threads since the UmbracoContext is not copied over explicitly
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoContextExtensions.GetUmbracoContext(System.Web.HttpContextBase)">
+            <summary>
+            tries to get the Umbraco context from the HttpContext
+            </summary>
+            <param name="http"></param>
+            <returns></returns>
+            <remarks>
+            This is useful when working on async threads since the UmbracoContext is not copied over explicitly
+            </remarks>
+        </member>
         <member name="M:Umbraco.Web.UmbracoContextExtensions.GetCurrentEventMessages(Umbraco.Web.UmbracoContext)">
             <summary>
             If there are event messages in the current request this will return them , otherwise it will return null
@@ -12968,6 +13230,14 @@
             </summary>
             <param name="content"></param>
             <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.IsComposedOf(Umbraco.Core.Models.IPublishedContent,System.String)">
+            <summary>
+            Gets a value indicating whether the content is of a content type composed of the given alias
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">The content type alias.</param>
+            <returns>A value indicating whether the content is of a content type composed of a content type identified by the alias.</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.HasProperty(Umbraco.Core.Models.IPublishedContent,System.String)">
             <summary>
@@ -15349,6 +15619,11 @@
             </summary>
             <param name="url"></param>
         </member>
+        <member name="M:Umbraco.Web.UI.Pages.ClientTools.ReloadLocation">
+            <summary>
+            Reloads location, refreshing what is in the content frame
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.UI.Pages.ClientTools.ShowDashboard(System.String)">
             <summary>
             Shows the dashboard for the given application
@@ -16152,6 +16427,12 @@
             </summary>
         </member>
         <member name="M:umbraco.cms.presentation.tree.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:umbraco.presentation.ping.InitializeComponent">
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
@@ -18558,6 +18839,11 @@
             <param name="actionName"></param>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Web.Mvc.RenderModelBinder">
+            <summary>
+            Allows for Model Binding any IPublishedContent or IRenderModel
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.Mvc.RenderModelBinder.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)">
             <summary>
             Binds the model to a value by using the specified controller context and binding context.
@@ -19278,6 +19564,11 @@
             Updates the request when there is no template to render the content.
             </summary>
         </member>
+        <member name="M:Umbraco.Web.Routing.PublishedContentRequest.OnPreparing">
+            <summary>
+            Triggers the Preparing event.
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.Routing.PublishedContentRequest.OnPrepared">
             <summary>
             Triggers the Prepared event.
@@ -19383,6 +19674,14 @@
             <remarks>Does not actually set the http response status code and description, only registers that
             the response should use the specified code and description. The code and description will or will
             not be used, in due time.</remarks>
+        </member>
+        <member name="E:Umbraco.Web.Routing.PublishedContentRequest.Preparing">
+            <summary>
+            Triggers before the published content request is prepared.
+            </summary>
+            <remarks>When the event triggers, no preparation has been done. It is still possible to
+            modify the request's Uri property, for example to restore its original, public-facing value
+            that might have been modified by an in-between equipement such as a load-balancer.</remarks>
         </member>
         <member name="E:Umbraco.Web.Routing.PublishedContentRequest.Prepared">
             <summary>

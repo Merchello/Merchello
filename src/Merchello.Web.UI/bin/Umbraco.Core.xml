@@ -3532,12 +3532,33 @@
             The type of event message
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion,System.String,System.Boolean)">
+            <summary>
+            Constructor accepting multiple migrations that are used in the migration runner
+            </summary>
+            <param name="eventObject"></param>
+            <param name="targetVersion"></param>
+            <param name="productName"></param>
+            <param name="canCancel"></param>
+            <param name="configuredVersion"></param>
+        </member>
         <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion,System.Boolean)">
             <summary>
             Constructor accepting multiple migrations that are used in the migration runner
             </summary>
             <param name="eventObject"></param>
             <param name="targetVersion"></param>
+            <param name="canCancel"></param>
+            <param name="configuredVersion"></param>
+        </member>
+        <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Umbraco.Core.Persistence.Migrations.MigrationContext,Semver.SemVersion,Semver.SemVersion,System.String,System.Boolean)">
+            <summary>
+            Constructor accepting multiple migrations that are used in the migration runner
+            </summary>
+            <param name="eventObject"></param>
+            <param name="migrationContext"></param>
+            <param name="targetVersion"></param>
+            <param name="productName"></param>
             <param name="canCancel"></param>
             <param name="configuredVersion"></param>
         </member>
@@ -3550,6 +3571,15 @@
             <param name="targetVersion"></param>
             <param name="canCancel"></param>
             <param name="configuredVersion"></param>
+        </member>
+        <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion,System.String)">
+            <summary>
+            Constructor accepting multiple migrations that are used in the migration runner
+            </summary>
+            <param name="eventObject"></param>
+            <param name="configuredVersion"></param>
+            <param name="targetVersion"></param>
+            <param name="productName"></param>
         </member>
         <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion)">
             <summary>
@@ -7261,6 +7291,17 @@
             </summary>
             <param name="propertyType"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.LabelValueConverter">
+            <summary>
+            We need this property converter so that we always force the value of a label to be a string
+            </summary>
+            <remarks>
+            Without a property converter defined for the label type, the value will be converted with
+            the `ConvertUsingDarkMagic` method which will try to parse the value into it's correct type, but this
+            can cause issues if the string is detected as a number and then strips leading zeros. 
+            Example: http://issues.umbraco.org/issue/U4-7929
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.ImageCropperValueConverter">
             <summary>
@@ -12748,6 +12789,13 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Umbraco.Core.Models.IMediaType" -->
+        <member name="M:Umbraco.Core.Models.IMediaType.DeepCloneWithResetIdentities(System.String)">
+            <summary>
+            Creates a deep clone of the current entity with its identity/alias and it's property identities reset
+            </summary>
+            <param name="newAlias"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Models.MediaType.#ctor(System.Int32)">
             <summary>
             Constuctor for creating a MediaType with the parent's id.
@@ -12769,6 +12817,12 @@
             <remarks>Use this to ensure inheritance from parent.</remarks>
             <param name="parent"></param>
             <param name="alias"></param>
+        </member>
+        <member name="M:Umbraco.Core.Models.MediaType.DeepCloneWithResetIdentities(System.String)">
+            <summary>
+            Creates a deep clone of the current entity with its identity/alias and it's property identities reset
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Models.Membership.IProfile">
             <summary>
@@ -15571,6 +15625,14 @@
             </param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IContentTypeRepository.GetUniqueAlias(System.String)">
+            <summary>
+            Derives a unique alias from an existing alias.
+            </summary>
+            <param name="alias">The original alias.</param>
+            <returns>The original alias with a number appended to it, so that it is unique.</returns>
+            /// <remarks>Unique accross all content, media and member types.</remarks>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeRepository.GetByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.PropertyType})">
             <summary>
             Gets all entities of the specified <see cref="T:Umbraco.Core.Models.PropertyType"/> query
@@ -15713,6 +15775,14 @@
             </summary>
             <param name="query"></param>
             <returns>An enumerable list of <see cref="T:Umbraco.Core.Models.IContentType"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IMediaTypeRepository.GetUniqueAlias(System.String)">
+            <summary>
+            Derives a unique alias from an existing alias.
+            </summary>
+            <param name="alias">The original alias.</param>
+            <returns>The original alias with a number appended to it, so that it is unique.</returns>
+            <remarks>Unique accross all content, media and member types.</remarks>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IMemberRepository.FindMembersInRole(System.String,System.String,Umbraco.Core.Persistence.Querying.StringPropertyMatchType)">
             <summary>
@@ -17542,7 +17612,7 @@
             Returns all extension methods found matching the definition
             </summary>
             <param name="runtimeCache">
-            The runtime cache is used to temporarily cache all extension methods found in the app domain so that 
+            The runtime cache is used to temporarily cache all extension methods found in the app domain so that
             while we search for individual extension methods, the process will be reasonably 'quick'. We then statically
             cache the MethodInfo's that we are looking for and then the runtime cache will expire and give back all that memory.
             </param>
@@ -18387,8 +18457,9 @@
         </member>
         <member name="P:Umbraco.Core.Models.PropertyType.PropertyGroupId">
             <summary>
-            Gets or Sets the PropertyGroup's Id for which this PropertyType belongs
+            Gets or sets the identifier of the PropertyGroup this PropertyType belongs to.
             </summary>
+            <remarks>For generic properties, the value is <c>null</c>.</remarks>
         </member>
         <member name="P:Umbraco.Core.Models.PropertyType.Mandatory">
             <summary>
@@ -30004,7 +30075,7 @@
         <member name="T:Umbraco.Core.TypeFinder">
             <summary>
             A utility class to find all classes of a certain type by reflection in the current bin folder
-            of the web application. 
+            of the web application.
             </summary>
         </member>
         <member name="M:Umbraco.Core.TypeFinder.GetAllAssemblies">
@@ -30013,7 +30084,7 @@
             This is a modified version of: http://www.dominicpettifer.co.uk/Blog/44/how-to-get-a-reference-to-all-assemblies-in-the--bin-folder
             </summary>
             <remarks>
-            We do this because we cannot use AppDomain.Current.GetAssemblies() as this will return only assemblies that have been 
+            We do this because we cannot use AppDomain.Current.GetAssemblies() as this will return only assemblies that have been
             loaded in the CLR, not all assemblies.
             See these threads:
             http://issues.umbraco.org/issue/U5-198
@@ -30023,7 +30094,7 @@
         </member>
         <member name="M:Umbraco.Core.TypeFinder.GetAssembliesWithKnownExclusions(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
             <summary>
-            Return a list of found local Assemblies excluding the known assemblies we don't want to scan 
+            Return a list of found local Assemblies excluding the known assemblies we don't want to scan
             and exluding the ones passed in and excluding the exclusion list filter, the results of this are
             cached for perforance reasons.
             </summary>
@@ -30044,6 +30115,7 @@
             </summary>
             <remarks>
             NOTE the comma vs period... comma delimits the name in an Assembly FullName property so if it ends with comma then its an exact name match
+            NOTE this means that "foo." will NOT exclude "foo.dll" but only "foo.*.dll"
             </remarks>
         </member>
         <member name="M:Umbraco.Core.TypeFinder.FindClassesOfTypeWithAttribute``2">
@@ -30143,7 +30215,7 @@
         <member name="M:Umbraco.Core.TypeFinder.GetClasses(System.Type,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Boolean,System.Func{System.Type,System.Boolean})">
             <summary>
             Finds types that are assignable from the assignTypeFrom parameter and will scan for these types in the assembly
-            list passed in, however we will only scan assemblies that have a reference to the assignTypeFrom Type or any type 
+            list passed in, however we will only scan assemblies that have a reference to the assignTypeFrom Type or any type
             deriving from the base type.
             </summary>
             <param name="assignTypeFrom"></param>
@@ -30307,6 +30379,11 @@
             <summary>
             Override init and raise the event
             </summary>
+            <remarks>
+            DID YOU KNOW? The Global.asax Init call is the thing that initializes all of the httpmodules, ties up a bunch of stuff with IIS, etc...
+            Therefore, since OWIN is an HttpModule when running in IIS/ASP.Net the OWIN startup is not executed until this method fires and by that
+            time, Umbraco has performed it's bootup sequence.
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.UmbracoApplicationBase.OnApplicationStarting(System.Object,System.EventArgs)">
             <summary>
