@@ -8,8 +8,14 @@
     using System.Linq;
     using System.Xml;
     using System.Xml.Linq;
+
+    using Merchello.Core.Logging;
+
     using Newtonsoft.Json;
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
+
+    using Constants = Core.Constants;
 
     /// <summary>
     /// Extension methods for <see cref="ExtendedDataCollection"/>
@@ -34,6 +40,69 @@
             return extendedData.Keys.ToArray().Any(keys.Contains);
         }
 
+        /// <summary>
+        /// Gets a typed value.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type to be returned.
+        /// </typeparam>
+        /// <returns>
+        /// The typed value.
+        /// </returns>
+        public static T GetValue<T>(this ExtendedDataCollection extendedData, string key) where T : class, new()
+        {
+            try
+            {
+                var value = extendedData.GetValue(key);
+                return !value.IsNullOrWhiteSpace() ? 
+                    JsonConvert.DeserializeObject<T>(value) : 
+                    default(T);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("ExtendedData");
+                MultiLogHelper.WarnWithException(typeof(ExtendedDataCollectionExtensions), "Failed to deserialize value. Proceding with operation returning default T.", ex, logData);
+                return default(T);
+            }
+        }
+
+        /// <summary>
+        /// Sets an object value into an extended data collection
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of object to be serialized
+        /// </typeparam>
+        public static void SetValue<T>(this ExtendedDataCollection extendedData, string key, T model) where T : class, new()
+        {
+            try
+            {
+                var value = JsonConvert.SerializeObject(model);
+                extendedData.SetValue(key, value);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("ExtendedData");
+                MultiLogHelper.WarnWithException(typeof(ExtendedDataCollectionExtensions), "Failed to serialize value. Proceding with operation.", ex, logData);   
+            }
+        }
+
         #region ExtendedDataCollection
 
         /// <summary>
@@ -47,7 +116,7 @@
         /// </param>
         public static void AddExtendedDataCollection(this ExtendedDataCollection extendedData, ExtendedDataCollection extendedDataToSerialize)
         {
-            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
+            extendedData.SetValue(Core.Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
         }
 
         /// <summary>
