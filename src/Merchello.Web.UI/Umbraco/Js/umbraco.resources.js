@@ -730,6 +730,16 @@ function contentResource($q, $http, umbDataFormatter, umbRequestHelper) {
                 'Failed to check permission for item ' + id);
         },
 
+        getPermissions: function (nodeIds) {
+            return umbRequestHelper.resourcePromise(
+                $http.post(
+                    umbRequestHelper.getApiUrl(
+                        "contentApiBaseUrl",
+                        "GetPermissions"),
+                    nodeIds),
+                'Failed to get permissions');
+        },
+
         /**
          * @ngdoc method
          * @name umbraco.resources.contentResource#save
@@ -899,7 +909,7 @@ function contentTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
                 filterContentTypes: filterContentTypes,
                 filterPropertyTypes: filterPropertyTypes
             };
-            
+
             return umbRequestHelper.resourcePromise(
                $http.post(
                    umbRequestHelper.getApiUrl(
@@ -1071,9 +1081,9 @@ function contentTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
          *    .then(function() {
          *        alert("node was moved");
          *    }, function(err){
-         *      alert("node didnt move:" + err.data.Message); 
+         *      alert("node didnt move:" + err.data.Message);
          *    });
-         * </pre> 
+         * </pre>
          * @param {Object} args arguments object
          * @param {Int} args.idd the ID of the node to move
          * @param {Int} args.parentId the ID of the parent node to move to
@@ -1100,6 +1110,26 @@ function contentTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
                 'Failed to move content');
         },
 
+        copy: function(args) {
+            if (!args) {
+                throw "args cannot be null";
+            }
+            if (!args.parentId) {
+                throw "args.parentId cannot be null";
+            }
+            if (!args.id) {
+                throw "args.id cannot be null";
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl("contentTypeApiBaseUrl", "PostCopy"),
+                    {
+                        parentId: args.parentId,
+                        id: args.id
+                    }),
+                'Failed to copy content');
+        },
+
         createContainer: function(parentId, name) {
 
             return umbRequestHelper.resourcePromise(
@@ -1107,7 +1137,7 @@ function contentTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
                 'Failed to create a folder under parent id ' + parentId);
 
         }
-        
+
     };
 }
 angular.module('umbraco.resources').factory('contentTypeResource', contentTypeResource);
@@ -2643,7 +2673,7 @@ function mediaTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
          *    .then(function(array) {
          *        $scope.type = type;
          *    });
-         * </pre> 
+         * </pre>
          * @param {Int} mediaId id of the media item to retrive allowed child types for
          * @returns {Promise} resourcePromise object.
          *
@@ -2735,9 +2765,9 @@ function mediaTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
          *    .then(function() {
          *        alert("node was moved");
          *    }, function(err){
-         *      alert("node didnt move:" + err.data.Message); 
+         *      alert("node didnt move:" + err.data.Message);
          *    });
-         * </pre> 
+         * </pre>
          * @param {Object} args arguments object
          * @param {Int} args.idd the ID of the node to move
          * @param {Int} args.parentId the ID of the parent node to move to
@@ -2762,6 +2792,26 @@ function mediaTypeResource($q, $http, umbRequestHelper, umbDataFormatter) {
                         id: args.id
                     }),
                 'Failed to move content');
+        },
+
+        copy: function (args) {
+            if (!args) {
+                throw "args cannot be null";
+            }
+            if (!args.parentId) {
+                throw "args.parentId cannot be null";
+            }
+            if (!args.id) {
+                throw "args.id cannot be null";
+            }
+
+            return umbRequestHelper.resourcePromise(
+                $http.post(umbRequestHelper.getApiUrl("mediaTypeApiBaseUrl", "PostCopy"),
+                    {
+                        parentId: args.parentId,
+                        id: args.id
+                    }),
+                'Failed to copy content');
         },
 
         createContainer: function(parentId, name) {
@@ -3416,7 +3466,7 @@ function treeResource($q, $http, umbRequestHelper) {
     /** internal method to get the tree menu url */
     function getTreeMenuUrl(node) {
         if (!node.menuUrl) {
-            throw "No menuUrl property found on the tree node, cannot load menu";
+            return null;
         }
         return node.menuUrl;
     }
@@ -3426,10 +3476,16 @@ function treeResource($q, $http, umbRequestHelper) {
         
         /** Loads in the data to display the nodes menu */
         loadMenu: function (node) {
-              
-            return umbRequestHelper.resourcePromise(
-                $http.get(getTreeMenuUrl(node)),
-                "Failed to retrieve data for a node's menu " + node.id);
+            var treeMenuUrl = getTreeMenuUrl(node);
+            if (treeMenuUrl !== undefined && treeMenuUrl !== null && treeMenuUrl.length > 0) {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(getTreeMenuUrl(node)),
+                    "Failed to retrieve data for a node's menu " + node.id);
+            } else {
+                return $q.reject({
+                    errorMsg: "No tree menu url defined for node " + node.id
+                });
+            }
         },
 
         /** Loads in the data to display the nodes for an application */
