@@ -9,7 +9,7 @@
     /// <summary>
     /// The currency context.
     /// </summary>
-    internal class CurrencyContext
+    public class CurrencyContext
     {
         /// <summary>
         /// The singleton instance.
