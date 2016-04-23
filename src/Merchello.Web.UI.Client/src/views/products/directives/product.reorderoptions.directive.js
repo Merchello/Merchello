@@ -29,6 +29,7 @@
                         for (var i = 0; i < $scope.product.productOptions.length; i++) {
                             $scope.product.productOptions[i].sortOrder(i + 1);
                         }
+                        console.log('lets fix');
                         $scope.product.fixAttributeSortOrders();
                     },
                     axis: 'y',
