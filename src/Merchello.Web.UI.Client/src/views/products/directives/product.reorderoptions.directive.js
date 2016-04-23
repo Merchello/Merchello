@@ -25,12 +25,11 @@
 
                 // Settings for the sortable directive
                 $scope.sortableOptions = {
-                    stop: function (e, ui) {
+                    update: function (e, ui) {
+                        // Updating sortOrder of each productOption.
                         for (var i = 0; i < $scope.product.productOptions.length; i++) {
-                            $scope.product.productOptions[i].sortOrder(i + 1);
+                            $scope.product.productOptions[i].sortOrder = i + 1;
                         }
-                        console.log('lets fix');
-                        $scope.product.fixAttributeSortOrders();
                     },
                     axis: 'y',
                     cursor: "move"
