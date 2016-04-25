@@ -77,9 +77,9 @@
     // Well Styles
     .well {
         position: relative;
-        h1:first-of-type, h2:first-of-type, h3:first-of-type, h4:first-of-type, h5:first-of-type
-        {
-            margin-top:0;
+
+        h1:first-of-type, h2:first-of-type, h3:first-of-type, h4:first-of-type, h5:first-of-type {
+            margin-top: 0;
         }
 
         .add {
@@ -212,11 +212,14 @@
 
         .form-group {
             padding-bottom: 7px;
-        }
 
+            label {
+                display: block;
+            }
+        }
         // If a heading is the first one in control, remove top padding
         h1:first-of-type, h2:first-of-type, h3:first-of-type, h4:first-of-type, h5:first-of-type, h6:first-of-type {
-            margin-top:0;
+            margin-top: 0;
         }
     }
 
@@ -265,6 +268,20 @@
             + p {
                 display: inline-block;
                 width: 90%;
+            }
+        }
+    }
+    // Because of the global style added above
+    // it screws the default umbraco image picker
+    .umb-property-editor {
+        .umb-mediapicker {
+            .add-link {
+                *[class*="icon"] {
+                    font-size: 32px;
+                    float: none;
+                    margin: 0;
+                    line-height: 120px;
+                }
             }
         }
     }
