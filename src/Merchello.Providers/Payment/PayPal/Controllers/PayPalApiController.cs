@@ -50,7 +50,7 @@
         /// </param>
         public PayPalApiController(IMerchelloContext merchelloContext)
         {
-            if (merchelloContext == null) throw new ArgumentNullException(nameof(merchelloContext));
+            if (merchelloContext == null) throw new ArgumentNullException("merchelloContext");
 
 	        var providerKey = new Guid(Constants.PayPal.GatewayProviderKey);
             var provider = (PayPalPaymentGatewayProvider)merchelloContext.Gateways.Payment.GetProviderByKey(providerKey);
