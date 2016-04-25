@@ -212,6 +212,9 @@
 
         .form-group {
             padding-bottom: 7px;
+            label {
+                display:block;
+            }
         }
 
         // If a heading is the first one in control, remove top padding
@@ -269,6 +272,17 @@
         }
     }
 
+    // Because of the global style added above
+    // it screws the default umbraco image picker
+    .umb-mediapicker {
+        *[class*="icon"]{
+            font-size:32px;
+            float:none;
+            margin:0;
+            line-height:normal;
+        }
+    }
+
     .reorder {
         margin: 0;
         list-style-type: none;
@@ -284,6 +298,7 @@
             }
         }
     }
+
     //Tables
     table.merchello-selectable-table {
         tr {
