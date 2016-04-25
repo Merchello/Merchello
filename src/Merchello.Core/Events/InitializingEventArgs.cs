@@ -6,7 +6,7 @@
     /// <typeparam name="T">
     /// The type of argument
     /// </typeparam>
-    public class InitializingEventArgs<T> : ObjectEventArgsBase<T>
+    public class InitializingEventArgs<T> : ObjectEventArgs<T>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InitializingEventArgs{T}"/> class.

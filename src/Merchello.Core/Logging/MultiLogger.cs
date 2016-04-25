@@ -32,7 +32,7 @@
         /// Initializes a new instance of the <see cref="MultiLogger"/> class.
         /// </summary>
         public MultiLogger()
-            : this(Logger.CreateWithDefaultLog4NetConfiguration())
+            : this(LoggerResolver.HasCurrent == false || LoggerResolver.Current.HasValue == false ? Logger.CreateWithDefaultLog4NetConfiguration() : LoggerResolver.Current.Logger)
         {
         }
 

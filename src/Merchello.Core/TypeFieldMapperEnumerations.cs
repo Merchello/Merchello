@@ -61,6 +61,7 @@
     {
         Cash,
         CreditCard,
+        Redirect,
         PurchaseOrder,
         CustomerCredit,
         Custom

@@ -7,8 +7,8 @@
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Exceptions;
     using Merchello.Core.Logging;
-    using Merchello.Web.Exceptions;
     using Merchello.Web.Models.ContentEditing.Templates;
     using Merchello.Web.Pluggable;
     using Merchello.Web.WebApi;

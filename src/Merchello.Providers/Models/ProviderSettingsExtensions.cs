@@ -5,7 +5,9 @@
 
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
+    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
+    using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Resolvers;
 
     using Newtonsoft.Json;

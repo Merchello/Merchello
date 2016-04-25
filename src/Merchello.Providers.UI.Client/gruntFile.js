@@ -102,7 +102,7 @@
                     { dest: '<%= vsdir %>/lang', src: '**', expand: true, cwd: '<%= distdir %>/lang' },
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/views', src: '**', expand: true, cwd: '<%= distdir %>/views/braintree' },
-
+                    { dest: '<%= vsdir %>/views', src: '**', expand: true, cwd: '<%= distdir %>/views/paypal' },
                     { dest: '<%= vsdir %>/views/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/views/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' }
                 ]

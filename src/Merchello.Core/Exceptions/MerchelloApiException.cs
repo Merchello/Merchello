@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Exceptions
+﻿namespace Merchello.Core.Exceptions
 {
     using System;
 

@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Providers.Payment.Braintree.Services
 {
+    using Merchello.Providers.Models;
+    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
 
     using Umbraco.Core.Services;

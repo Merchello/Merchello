@@ -685,6 +685,17 @@
                 }
 
                 /// <summary>
+                /// Gets the redirect key.
+                /// </summary>
+                public static Guid RedirectKey
+                {
+                    get
+                    {
+                        return new Guid("A9B043F6-2894-487C-8D2B-2AA88C129790");
+                    }
+                }
+
+                /// <summary>
                 /// Gets the purchase order type key.
                 /// </summary>
                 public static Guid PurchaseOrderKey

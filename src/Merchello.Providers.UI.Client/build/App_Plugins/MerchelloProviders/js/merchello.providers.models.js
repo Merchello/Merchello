@@ -43,6 +43,15 @@ var MerchantDescriptor = function() {
 
 angular.module('merchello.providers.models').constant('MerchantDescriptor', MerchantDescriptor);
 
+var PayPalProviderSettings = function() {
+    var self = this;
+    self.clientId = '';
+    self.clientSecret = '';
+    self.mode = 'Sandbox';
+};
+
+angular.module('merchello.providers.models').constant('PayPalProviderSettings', PayPalProviderSettings);
+
 angular.module('merchello.providers.models').factory('braintreeCreditCardBuilder',
     ['genericModelBuilder', 'BraintreeCreditCard',
         function(genericModelBuilder, BraintreeCreditCard) {
