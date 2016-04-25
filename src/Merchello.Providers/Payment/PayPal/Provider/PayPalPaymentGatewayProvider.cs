@@ -20,7 +20,7 @@
 	/// Represents a PayPalPaymentGatewayProvider
 	/// </summary>
 	[GatewayProviderActivation(Constants.PayPal.GatewayProviderKey, "PayPal Payment Provider", "PayPal Payment Provider")]
-	[GatewayProviderEditor("PayPal configuration", "~/App_Plugins/Merchello.PayPal/editor.html")]
+	[GatewayProviderEditor("PayPal configuration", "~/App_Plugins/MerchelloProviders/views/dialogs/paypal.providersettings.html")]
     [ProviderSettingsMapper(Constants.PayPal.ExtendedDataKeys.ProviderSettings, typeof(PayPalProviderSettings))]
     public class PayPalPaymentGatewayProvider : PaymentGatewayProviderBase
     {

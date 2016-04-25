@@ -40,7 +40,7 @@
                 /// <summary>
                 /// Gets the processor settings.
                 /// </summary>
-                public const string ProviderSettings = "paypalProviderSettings";
+                public const string ProviderSettings = "paypalprovidersettings";
 
 
                 /// <summary>

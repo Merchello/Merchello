@@ -4,6 +4,7 @@
     using System.Reflection;
 
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
@@ -139,11 +140,12 @@
         /// </exception>
         private static IPaymentProviderSettings GetProviderSettings(this PaymentGatewayProviderBase provider)
         {
+            var logData = MultiLogger.GetBaseLoggingData();
             var att = provider.ProviderSettingsMapping();
             if (att == null)
             {
                 var invalidOp = new InvalidOperationException("Cannot use this method if the provider is not decorated with a ProviderSettingsMapperAttribute");
-                LogHelper.Error(typeof(ProviderSettingsExtensions), "PaymentGatewayProvider does not have attribute", invalidOp);
+                MultiLogHelper.Error(typeof(ProviderSettingsExtensions), "PaymentGatewayProvider does not have attribute", invalidOp, logData);
                 throw invalidOp;
             }
 
@@ -164,10 +166,11 @@
             if (attempt.Success) return attempt.Result;
 
             var nullReference = new NullReferenceException("Provider settings for provider was not mapped");
-            LogHelper.Error(
+            MultiLogHelper.Error(
                 typeof(ProviderSettingsExtensions),
                 "Failed to create default provider settings",
-                nullReference);
+                nullReference,
+                logData);
 
             throw nullReference;
         }

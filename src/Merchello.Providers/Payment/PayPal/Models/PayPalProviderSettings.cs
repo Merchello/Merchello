@@ -12,6 +12,16 @@
     public class PayPalProviderSettings : IPaymentProviderSettings
 	{
         /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalProviderSettings"/> class.
+        /// </summary>
+        public PayPalProviderSettings()
+        {
+            this.Mode = PayPalMode.Sandbox;
+            ClientId = string.Empty;
+            ClientSecret = string.Empty;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the site is in live mode.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
