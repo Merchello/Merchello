@@ -8,7 +8,6 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Providers.Models;
-    using Merchello.Providers.Payment.Models;
 
     using Constants = Merchello.Providers.Constants;
 
@@ -17,7 +16,7 @@
 	/// </summary>
     [GatewayMethodUi("PayPalPayment")]
 	[GatewayMethodEditor("PayPal Method Editor", "PayPal - Redirects to PayPal for Payment", "~/App_Plugins/Merchello.PayPal/paymentmethod.html")]
-    public class PayPalPaymentGatewayMethod : PaymentGatewayMethodBase
+    public class PayPalPaymentGatewayMethod : RedirectPaymentMethodBase
 	{
         /// <summary>
         /// The PayPal payment processor.
@@ -42,67 +41,45 @@
 			this._processor = new PayPalPaymentProcessor(providerExtendedData.GetPayPalProviderSettings());
         }
 
-		protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
+        /// <summary>
+        /// Performs the authorize transaction.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
 		{
-			return this.InitializePayment(invoice, args, -1);
-		}
-
-        protected override IPaymentResult PerformAuthorizeCapturePayment(IInvoice invoice, decimal amount, ProcessorArgumentCollection args)
-        {
-
-			return this.InitializePayment(invoice, args, amount);
+            throw new System.NotImplementedException();
         }
 
-		private IPaymentResult InitializePayment(IInvoice invoice, ProcessorArgumentCollection args, decimal captureAmount)
+        /// <summary>
+        /// Performs the capture payment operation.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
+        protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
 		{
-			var payment = this.GatewayProviderService.CreatePayment(PaymentMethodType.CreditCard, invoice.Total, this.PaymentMethod.Key);
-			payment.CustomerKey = invoice.CustomerKey;
-			payment.Authorized = false;
-			payment.Collected = false;
-            payment.PaymentMethodName = "PayPal";
-			payment.ExtendedData.SetValue(Constants.PayPal.ExtendedDataKeys.CaptureAmount, captureAmount.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			this.GatewayProviderService.Save(payment);
-
-			var result = this._processor.InitializePayment(invoice, payment, args);
-
-			if (!result.Payment.Success)
-			{
-				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request initialization error: " + result.Payment.Exception.Message, 0);
-			}
-			else
-			{
-				this.GatewayProviderService.Save(payment);
-				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: initialized", 0);
-			}
-
-			return result;
-		}
-
-		protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
-		{
-			
-			var payedTotalList = invoice.AppliedPayments().Select(item => item.Amount).ToList();
-			var payedTotal = (payedTotalList.Count == 0 ? 0 : payedTotalList.Aggregate((a, b) => a + b));
-			var isPartialPayment = amount + payedTotal < invoice.Total;
-
-			var result = this._processor.CapturePayment(invoice, payment, amount, isPartialPayment);
-			//GatewayProviderService.Save(payment);
-			
-			if (!result.Payment.Success)
-			{
-				//payment.VoidPayment(invoice, payment.PaymentMethodKey.Value);
-				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Denied, "PayPal: request capture error: " + result.Payment.Exception.Message, 0);
-			}
-			else
-			{
-				this.GatewayProviderService.Save(payment);
-				this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal: captured", amount);
-				//GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, payment.ExtendedData.GetValue(Constants.ExtendedDataKeys.CaptureTransactionResult), amount);
-			}
-			
-
-			return result;
-		}
+            throw new System.NotImplementedException();
+        }
 
 		protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
 		{
@@ -113,5 +90,6 @@
 		{
 			throw new System.NotImplementedException();
 		}
-	}
+
+    }
 }

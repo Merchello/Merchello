@@ -8,6 +8,7 @@
     using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Braintree.Controllers;
+    using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Braintree.Provider;
     using Merchello.Providers.Payment.Models;
 

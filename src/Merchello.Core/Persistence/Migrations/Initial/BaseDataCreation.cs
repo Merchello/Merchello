@@ -94,6 +94,7 @@
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.Cash.TypeKey, Alias = ptf.Cash.Alias, Name = ptf.Cash.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.CreditCard.TypeKey, Alias = ptf.CreditCard.Alias, Name = ptf.CreditCard.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.PurchaseOrder.TypeKey, Alias = ptf.PurchaseOrder.Alias, Name = ptf.PurchaseOrder.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.Redirect.TypeKey, Alias = ptf.Redirect.Alias, Name = ptf.Redirect.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             //// AppliedPaymentType
             var apf = new AppliedPaymentTypeField();

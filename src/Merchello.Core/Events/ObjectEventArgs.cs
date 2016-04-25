@@ -8,15 +8,15 @@
     /// <typeparam name="T">
     /// The type of object
     /// </typeparam>
-    public class ObjectEventArgsBase<T> : EventArgs
+    public class ObjectEventArgs<T> : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObjectEventArgsBase{T}"/> class.
+        /// Initializes a new instance of the <see cref="ObjectEventArgs{T}"/> class.
         /// </summary>
         /// <param name="eventObject">
         /// The event object.
         /// </param>
-        protected ObjectEventArgsBase(T eventObject)
+        public ObjectEventArgs(T eventObject)
         {
             this.EventObject = eventObject;
         }

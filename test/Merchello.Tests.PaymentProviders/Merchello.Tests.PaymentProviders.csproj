@@ -295,6 +295,7 @@
     <None Include="Braintree\packages.config" />
     <None Include="Braintree\Settings.StyleCop" />
     <None Include="packages.config" />
+    <None Include="PayPal\extendedData.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Braintree\Html\braintree.html" />

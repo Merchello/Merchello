@@ -9,6 +9,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Providers.Payment.Models;
+    using Merchello.Providers.Payment.PayPal.Models;
 
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;

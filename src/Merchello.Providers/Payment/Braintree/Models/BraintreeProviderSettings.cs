@@ -1,7 +1,7 @@
-﻿namespace Merchello.Providers.Payment.Models
+﻿namespace Merchello.Providers.Payment.Braintree.Models
 {
     using Merchello.Providers.Payment.Braintree;
-    using Merchello.Providers.Payment.Braintree.Models;
+    using Merchello.Providers.Payment.Models;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
