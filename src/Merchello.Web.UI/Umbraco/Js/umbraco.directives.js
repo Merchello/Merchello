@@ -11,22 +11,24 @@ angular.module("umbraco.directives.editors", []);
 angular.module("umbraco.directives.html", []);
 angular.module("umbraco.directives.validation", []);
 /**
- * @ngdoc directive
- * @name umbraco.directives.directive:autoScale
- * @element div
- * @function
- *
- * @description
- * Resize div's automatically to fit to the bottom of the screen, as an optional parameter an y-axis offset can be set
- * So if you only want to scale the div to 70 pixels from the bottom you pass "70"
- *
- * @example
-   <example module="umbraco.directives">
-     <file name="index.html">
-         <div auto-scale="70" class="input-block-level"></div>
-     </file>
-   </example>
- */
+* @ngdoc directive
+* @name umbraco.directives.directive:autoScale
+* @element div
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
+* @function
+* @description
+* Resize div's automatically to fit to the bottom of the screen, as an optional parameter an y-axis offset can be set
+* So if you only want to scale the div to 70 pixels from the bottom you pass "70"
+
+* @example
+* <example module="umbraco.directives">
+*    <file name="index.html">
+*        <div auto-scale="70" class="input-block-level"></div>
+*    </file>
+* </example>
+**/
+
 angular.module("umbraco.directives")
   .directive('autoScale', function ($window) {
     return function (scope, el, attrs) {
@@ -48,12 +50,16 @@ angular.module("umbraco.directives")
 
     };
   });
+
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbPanel
+* @name umbraco.directives.directive:detectFold
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
 * @description This is used for the editor buttons to ensure they are displayed correctly if the horizontal overflow of the editor
- * exceeds the height of the window
+* exceeds the height of the window
 **/
+
 angular.module("umbraco.directives.html")
 	.directive('detectFold', function ($timeout, $log, windowResizeListener) {
 	    return {
@@ -131,11 +137,14 @@ angular.module("umbraco.directives.html")
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbItemSorter
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
 * @function
 * @element ANY
 * @restrict E
 * @description A re-usable directive for sorting items
 **/
+
 function umbItemSorter(angularHelper) {
     return {
         scope: {
@@ -198,11 +207,14 @@ angular.module('umbraco.directives').directive("umbItemSorter", umbItemSorter);
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbContentName
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
 * @restrict E
 * @function
 * @description
 * Used by editors that require naming an entity. Shows a textbox/headline with a required validator within it's own form.
 **/
+
 angular.module("umbraco.directives")
 	.directive('umbContentName', function ($timeout, localizationService) {
 	    return {
@@ -288,11 +300,14 @@ angular.module("umbraco.directives")
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbHeader
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
 * @restrict E
 * @function
 * @description
 * The header on an editor that contains tabs using bootstrap tabs - THIS IS OBSOLETE, use umbTabHeader instead
 **/
+
 angular.module("umbraco.directives")
 .directive('umbHeader', function ($parse, $timeout) {
     return {
@@ -349,11 +364,14 @@ angular.module("umbraco.directives")
 
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:login
+* @name umbraco.directives.directive:umbLogin
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
 * @function
 * @element ANY
 * @restrict E
 **/
+
 function loginDirective() {
     return {
         restrict: "E",    // restrict to an element
@@ -363,6 +381,16 @@ function loginDirective() {
 }
 
 angular.module('umbraco.directives').directive("umbLogin", loginDirective);
+
+/**
+* @ngdoc directive
+* @name umbraco.directives.directive:umbOptionsMenu
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
+* @function
+* @element ANY
+* @restrict E
+**/
 
 angular.module("umbraco.directives")
 .directive('umbOptionsMenu', function ($injector, treeService, navigationService, umbModelMapper, appState) {
@@ -407,8 +435,11 @@ angular.module("umbraco.directives")
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbPhotoFolder
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
 * @restrict E
 **/
+
 angular.module("umbraco.directives.html")
     .directive('umbPhotoFolder', function($compile, $log, $timeout, $filter, umbPhotoFolderHelper) {
 
@@ -473,22 +504,26 @@ angular.module("umbraco.directives.html")
     });
 
 /**
- * @ngdoc directive
- * @name umbraco.directives.directive:umbSort
- * @element div
- * @function
- *
- * @description
- * Resize div's automatically to fit to the bottom of the screen, as an optional parameter an y-axis offset can be set
- * So if you only want to scale the div to 70 pixels from the bottom you pass "70"
- *
- * @example
-   <example module="umbraco.directives">
-     <file name="index.html">
-         <div umb-sort="70" class="input-block-level"></div>
-     </file>
-   </example>
- */
+* @ngdoc directive
+* @name umbraco.directives.directive:umbSort
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
+*
+* @element div
+* @function
+*
+* @description
+* Resize div's automatically to fit to the bottom of the screen, as an optional parameter an y-axis offset can be set
+* So if you only want to scale the div to 70 pixels from the bottom you pass "70"
+*
+* @example
+* <example module="umbraco.directives">
+*     <file name="index.html">
+*         <div umb-sort="70" class="input-block-level"></div>
+*     </file>
+* </example>
+**/
+
 angular.module("umbraco.directives")
   .value('umbSortContextInternal',{})
   .directive('umbSort', function($log,umbSortContextInternal) {
@@ -639,12 +674,16 @@ angular.module("umbraco.directives")
              }
           };
 
-        });
+        });
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbTabView
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
+*
 * @restrict E
 **/
+
 angular.module("umbraco.directives")
 .directive('umbTabView', function($timeout, $log){
 	return {
@@ -658,8 +697,12 @@ angular.module("umbraco.directives")
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:umbUploadDropzone
+* @deprecated
+* We plan to remove this directive in the next major version of umbraco (8.0). The directive is not recommended to use.
+*
 * @restrict E
 **/
+
 angular.module("umbraco.directives.html")
 	.directive('umbUploadDropzone', function(){
 		return {
@@ -800,7 +843,7 @@ angular.module("umbraco.directives")
                 if(convert){
                     element.html("<i class='icon-section " + convert + "'></i>");
                 }else{
-                    element.html("<img src='images/tray/" + icon + "'>");
+                    element.html("<img class='icon-section' src='images/tray/" + icon + "'>");
                 }
                 //it's a file, normally legacy so look in the icon tray images
             }
@@ -1037,6 +1080,74 @@ function sectionsDirective($timeout, $window, navigationService, treeService, se
 
 angular.module('umbraco.directives').directive("umbSections", sectionsDirective);
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbButton
+@restrict E
+@scope
+
+@description
+Use this directive to render an umbraco button. The directive can be used to generate all types of buttons, set type, style, translation, shortcut and much more.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-button
+            action="vm.clickButton()"
+            type="button"
+            button-style="success"
+            state="vm.buttonState"
+            shortcut="ctrl+c"
+            label="My button"
+            disabled="vm.buttonState === 'busy'">
+        </umb-button>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller(myService) {
+
+            var vm = this;
+            vm.buttonState = "init";
+
+            vm.clickButton = clickButton;
+
+            function clickButton() {
+
+                vm.buttonState = "busy";
+
+                myService.clickButton().then(function() {
+                    vm.buttonState = "success";
+                }, function() {
+                    vm.buttonState = "error";
+                });
+
+            }
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+
+    })();
+</pre>
+
+@param {callback} action The button action which should be performed when the button is clicked.
+@param {string=} href Url/Path to navigato to.
+@param {string=} type Set the button type ("button" or "submit").
+@param {string=} buttonStyle Set the style of the button. The directive uses the default bootstrap styles ("primary", "info", "success", "warning", "danger", "inverse", "link").
+@param {string=} state Set a progress state on the button ("init", "busy", "success", "error").
+@param {string=} shortcut Set a keyboard shortcut for the button ("ctrl+c").
+@param {string=} label Set the button label.
+@param {string=} labelKey Set a localization key to make a multi lingual button ("general_buttonText").
+@param {string=} icon Set a button icon. Can only be used when buttonStyle is "link".
+@param {boolean=} disabled Set to <code>true</code> to disable the button.
+**/
+
 (function() {
    'use strict';
 
@@ -1105,6 +1216,97 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbButtonGroup
+@restrict E
+@scope
+
+@description
+Use this directive to render a button with a dropdown of alternative actions.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-button-group
+           ng-if="vm.buttonGroup"
+           default-button="vm.buttonGroup.defaultButton"
+           sub-buttons="vm.buttonGroup.subButtons"
+           direction="down"
+           float="right">
+        </umb-button-group>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+            vm.buttonGroup = {
+                defaultButton: {
+                    labelKey: "general_defaultButton",
+                    hotKey: "ctrl+d",
+                    hotKeyWhenHidden: true,
+                    handler: function() {
+                        // do magic here
+                    }
+                },
+                subButtons: [
+                    {
+                        labelKey: "general_subButton",
+                        hotKey: "ctrl+b",
+                        hotKeyWhenHidden: true,
+                        handler: function() {
+                            // do magic here
+                        }
+                    }
+                ]
+            };
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+
+    })();
+</pre>
+
+<h3>Button model description</h3>
+<ul>
+    <li>
+        <strong>labekKey</strong>
+        <small>(string)</small> -
+        Set a localization key to make a multi lingual button ("general_buttonText").
+    </li>
+    <li>
+        <strong>hotKey</strong>
+        <small>(array)</small> -
+        Set a keyboard shortcut for the button ("ctrl+c").
+    </li>
+    <li>
+        <strong>hotKeyWhenHidden</strong>
+        <small>(boolean)</small> -
+        As a default the hotkeys only works on elements visible in the UI. Set to <code>true</code> to set a hotkey on the hidden sub buttons.
+    </li>
+    <li>
+        <strong>handler</strong>
+        <small>(callback)</small> -
+        Set a callback to handle button click events.
+    </li>
+</ul>
+
+@param {object} defaultButton The model of the default button.
+@param {array} subButtons Array of sub buttons.
+@param {string=} state Set a progress state on the button ("init", "busy", "success", "error").
+@param {string=} direction Set the direction of the dropdown ("up", "down").
+@param {string=} float Set the float of the dropdown. ("left", "right").
+**/
+
 (function() {
    'use strict';
 
@@ -1130,6 +1332,46 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorSubHeader
+@restrict E
+
+@description
+Use this directive to construct a sub header in the main editor window.
+The sub header is sticky and will follow along down the page when scrolling.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-container>
+
+                    <umb-editor-sub-header>
+                        // sub header content here
+                    </umb-editor-sub-header>
+
+                </umb-editor-container>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderContentLeft umbEditorSubHeaderContentLeft}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderContentRight umbEditorSubHeaderContentRight}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderSection umbEditorSubHeaderSection}</li>
+</ul>
+**/
+
 (function() {
    'use strict';
 
@@ -1148,6 +1390,53 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
    angular.module('umbraco.directives').directive('umbEditorSubHeader', EditorSubHeaderDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorSubHeaderContentLeft
+@restrict E
+
+@description
+Use this directive to left align content in a sub header in the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-container>
+
+                    <umb-editor-sub-header>
+
+                        <umb-editor-sub-header-content-left>
+                            // left content here
+                        </umb-editor-sub-header-content-left>
+
+                        <umb-editor-sub-header-content-right>
+                            // right content here
+                        </umb-editor-sub-header-content-right>
+
+                    </umb-editor-sub-header>
+
+                </umb-editor-container>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeader umbEditorSubHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderContentRight umbEditorSubHeaderContentRight}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderSection umbEditorSubHeaderSection}</li>
+</ul>
+**/
 
 (function() {
    'use strict';
@@ -1168,6 +1457,53 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorSubHeaderContentRight
+@restrict E
+
+@description
+Use this directive to rigt align content in a sub header in the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-container>
+
+                    <umb-editor-sub-header>
+
+                        <umb-editor-sub-header-content-left>
+                            // left content here
+                        </umb-editor-sub-header-content-left>
+
+                        <umb-editor-sub-header-content-right>
+                            // right content here
+                        </umb-editor-sub-header-content-right>
+
+                    </umb-editor-sub-header>
+
+                </umb-editor-container>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeader umbEditorSubHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderContentLeft umbEditorSubHeaderContentLeft}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderSection umbEditorSubHeaderSection}</li>
+</ul>
+**/
+
 (function() {
    'use strict';
 
@@ -1187,6 +1523,61 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorSubHeaderSection
+@restrict E
+
+@description
+Use this directive to create sections, divided by borders, in a sub header in the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-container>
+
+                    <umb-editor-sub-header>
+
+                        <umb-editor-sub-header-content-right>
+
+                            <umb-editor-sub-header-section>
+                                // section content here
+                            </umb-editor-sub-header-section>
+
+                            <umb-editor-sub-header-section>
+                                // section content here
+                            </umb-editor-sub-header-section>
+
+                            <umb-editor-sub-header-section>
+                                // section content here
+                            </umb-editor-sub-header-section>
+
+                        </umb-editor-sub-header-content-right>
+
+                    </umb-editor-sub-header>
+
+                </umb-editor-container>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeader umbEditorSubHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderContentLeft umbEditorSubHeaderContentLeft}</li>
+    <li>{@link umbraco.directives.directive:umbEditorSubHeaderContentRight umbEditorSubHeaderContentRight}</li>
+</ul>
+**/
+
 (function() {
    'use strict';
 
@@ -1205,6 +1596,50 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
    angular.module('umbraco.directives').directive('umbEditorSubHeaderSection', EditorSubHeaderSectionDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbBreadcrumbs
+@restrict E
+@scope
+
+@description
+Use this directive to generate a list of breadcrumbs.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+        <umb-breadcrumbs
+            ng-if="vm.ancestors && vm.ancestors.length > 0"
+            ancestors="vm.ancestors"
+            entity-type="content">
+        </umb-breadcrumbs>
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller(myService) {
+
+            var vm = this;
+            vm.ancestors = [];
+
+            myService.getAncestors().then(function(ancestors){
+                vm.ancestors = ancestors;
+            });
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {array} ancestors Array of ancestors
+@param {string} entityType The content entity type (member, media, content).
+**/
 
 (function() {
   'use strict';
@@ -1228,6 +1663,45 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
   angular.module('umbraco.directives').directive('umbBreadcrumbs', BreadcrumbsDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorContainer
+@restrict E
+
+@description
+Use this directive to construct a main content area inside the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="Umbraco.Controller as vm">
+
+        <umb-editor-view>
+
+            <umb-editor-header
+                // header configuration>
+            </umb-editor-header>
+
+            <umb-editor-container>
+                // main content here
+            </umb-editor-container>
+
+            <umb-editor-footer>
+                // footer content here
+            </umb-editor-footer>
+
+        </umb-editor-view>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorView umbEditorView}</li>
+    <li>{@link umbraco.directives.directive:umbEditorHeader umbEditorHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooter umbEditorFooter}</li>
+</ul>
+**/
 
 (function() {
    'use strict';
@@ -1261,6 +1735,51 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorFooter
+@restrict E
+
+@description
+Use this directive to construct a footer inside the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-header
+                    // header configuration>
+                </umb-editor-header>
+
+                <umb-editor-container>
+                    // main content here
+                </umb-editor-container>
+
+                <umb-editor-footer>
+                    // footer content here
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorView umbEditorView}</li>
+    <li>{@link umbraco.directives.directive:umbEditorHeader umbEditorHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorContainer umbEditorContainer}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooterContentLeft umbEditorFooterContentLeft}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooterContentRight umbEditorFooterContentRight}</li>
+</ul>
+**/
+
 (function() {
    'use strict';
 
@@ -1279,6 +1798,51 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
    angular.module('umbraco.directives').directive('umbEditorFooter', EditorFooterDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorFooterContentLeft
+@restrict E
+
+@description
+Use this directive to align content left inside the main editor footer.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-footer>
+
+                    <umb-editor-footer-content-left>
+                        // align content left
+                    </umb-editor-footer-content-left>
+
+                    <umb-editor-footer-content-right>
+                        // align content right
+                    </umb-editor-footer-content-right>
+
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorView umbEditorView}</li>
+    <li>{@link umbraco.directives.directive:umbEditorHeader umbEditorHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorContainer umbEditorContainer}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooter umbEditorFooter}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooterContentRight umbEditorFooterContentRight}</li>
+</ul>
+**/
 
 (function() {
    'use strict';
@@ -1299,6 +1863,51 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorFooterContentRight
+@restrict E
+
+@description
+Use this directive to align content right inside the main editor footer.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-footer>
+
+                    <umb-editor-footer-content-left>
+                        // align content left
+                    </umb-editor-footer-content-left>
+
+                    <umb-editor-footer-content-right>
+                        // align content right
+                    </umb-editor-footer-content-right>
+
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorView umbEditorView}</li>
+    <li>{@link umbraco.directives.directive:umbEditorHeader umbEditorHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorContainer umbEditorContainer}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooter umbEditorFooter}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooterContentLeft umbEditorFooterContentLeft}</li>
+</ul>
+**/
+
 (function() {
    'use strict';
 
@@ -1317,6 +1926,209 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
    angular.module('umbraco.directives').directive('umbEditorFooterContentRight', EditorFooterContentRightDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorHeader
+@restrict E
+@scope
+
+@description
+Use this directive to construct a header inside the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-header
+                    name="vm.content.name"
+                    hide-alias="true"
+                    hide-description="true"
+                    hide-icon="true">
+                </umb-editor-header>
+
+                <umb-editor-container>
+                    // main content here
+                </umb-editor-container>
+
+                <umb-editor-footer>
+                    // footer content here
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Markup example - with tabs</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" val-form-manager novalidate>
+
+            <umb-editor-view umb-tabs>
+
+                <umb-editor-header
+                    name="vm.content.name"
+                    tabs="vm.content.tabs"
+                    hide-alias="true"
+                    hide-description="true"
+                    hide-icon="true">
+                </umb-editor-header>
+
+                <umb-editor-container>
+                    <umb-tabs-content class="form-horizontal" view="true">
+                        <umb-tab id="tab{{tab.id}}" ng-repeat="tab in vm.content.tabs" rel="{{tab.id}}">
+
+                            <div ng-show="tab.alias==='tab1'">
+                                // tab 1 content
+                            </div>
+
+                            <div ng-show="tab.alias==='tab2'">
+                                // tab 2 content
+                            </div>
+
+                        </umb-tab>
+                    </umb-tabs-content>
+                </umb-editor-container>
+
+                <umb-editor-footer>
+                    // footer content here
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Controller example - with tabs</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+            vm.content = {
+                name: "",
+                tabs: [
+                    {
+                        id: 1,
+                        label: "Tab 1",
+                        alias: "tab1",
+                        active: true
+                    },
+                    {
+                        id: 2,
+                        label: "Tab 2",
+                        alias: "tab2",
+                        active: false
+                    }
+                ]
+            };
+
+        }
+
+        angular.module("umbraco").controller("MySection.Controller", Controller);
+    })();
+</pre>
+
+<h3>Markup example - with sub views</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" val-form-manager novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-header
+                    name="vm.content.name"
+                    navigation="vm.content.navigation"
+                    hide-alias="true"
+                    hide-description="true"
+                    hide-icon="true">
+                </umb-editor-header>
+
+                <umb-editor-container>
+
+                    <umb-editor-sub-views
+                        sub-views="vm.content.navigation"
+                        model="vm.content">
+                    </umb-editor-sub-views>
+
+                </umb-editor-container>
+
+                <umb-editor-footer>
+                    // footer content here
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+
+<h3>Controller example - with sub views</h3>
+<pre>
+    (function () {
+
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+            vm.content = {
+                name: "",
+                navigation: [
+                    {
+                        "name": "Section 1",
+                        "icon": "icon-document-dashed-line",
+                        "view": "/App_Plugins/path/to/html.html",
+                        "active": true
+                    },
+                    {
+                        "name": "Section 2",
+                        "icon": "icon-list",
+                        "view": "/App_Plugins/path/to/html.html",
+                    }
+                ]
+            };
+
+        }
+
+        angular.module("umbraco").controller("MySection.Controller", Controller);
+    })();
+</pre>
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorView umbEditorView}</li>
+    <li>{@link umbraco.directives.directive:umbEditorContainer umbEditorContainer}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooter umbEditorFooter}</li>
+</ul>
+
+@param {string} name The content name.
+@param {array=} tabs Array of tabs. See example above.
+@param {array=} navigation Array of sub views. See example above.
+@param {boolean=} nameLocked Set to <code>true</code> to lock the name.
+@param {object=} menu Add a context menu to the editor.
+@param {string=} icon Show and edit the content icon. Opens an overlay to change the icon.
+@param {boolean=} hideIcon Set to <code>true</code> to hide icon.
+@param {string=} alias show and edit the content alias.
+@param {boolean=} hideAlias Set to <code>true</code> to hide alias.
+@param {string=} description Add a description to the content.
+@param {boolean=} hideDescription Set to <code>true</code> to hide description.
+
+**/
 
 (function() {
     'use strict';
@@ -1540,6 +2352,69 @@ angular.module('umbraco.directives').directive("umbSections", sectionsDirective)
    angular.module('umbraco.directives').directive('umbEditorSubViews', EditorSubViewsDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEditorView
+@restrict E
+@scope
+
+@description
+Use this directive to construct the main editor window.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="MySection.Controller as vm">
+
+        <form name="mySectionForm" novalidate>
+
+            <umb-editor-view>
+
+                <umb-editor-header
+                    name="vm.content.name"
+                    hide-alias="true"
+                    hide-description="true"
+                    hide-icon="true">
+                </umb-editor-header>
+
+                <umb-editor-container>
+                    // main content here
+                </umb-editor-container>
+
+                <umb-editor-footer>
+                    // footer content here
+                </umb-editor-footer>
+
+            </umb-editor-view>
+
+        </form>
+
+    </div>
+</pre>
+<h3>Controller example</h3>
+<pre>
+    (function () {
+
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+        }
+
+        angular.module("umbraco").controller("MySection.Controller", Controller);
+    })();
+</pre>
+
+
+<h3>Use in combination with</h3>
+<ul>
+    <li>{@link umbraco.directives.directive:umbEditorHeader umbEditorHeader}</li>
+    <li>{@link umbraco.directives.directive:umbEditorContainer umbEditorContainer}</li>
+    <li>{@link umbraco.directives.directive:umbEditorFooter umbEditorFooter}</li>
+</ul>
+**/
 
 (function() {
    'use strict';
@@ -2097,9 +2972,10 @@ function hexBgColor() {
 }
 angular.module('umbraco.directives').directive("hexBgColor", hexBgColor);
 /**
- * @ngdoc directive
- * @name umbraco.directives.directive:headline
- **/
+* @ngdoc directive
+* @name umbraco.directives.directive:hotkey
+**/
+
 angular.module("umbraco.directives")
     .directive('hotkey', function($window, keyboardService, $log) {
 
@@ -2167,15 +3043,25 @@ angular.module("umbraco.directives")
     });
 
 /**
-* @ngdoc directive
-* @name umbraco.directives.directive:preventDefault
+@ngdoc directive
+@name umbraco.directives.directive:preventDefault
+
+@description
+Use this directive to prevent default action of an element. Effectively implementing <a href="https://api.jquery.com/event.preventdefault/">jQuery's preventdefault</a>
+
+<h3>Markup example</h3>
+
+<pre>
+    <a href="https://umbraco.com" prevent-default>Don't go to Umbraco.com</a>
+</pre>
+
 **/
 angular.module("umbraco.directives")
     .directive('preventDefault', function() {
         return function(scope, element, attrs) {
 
             var enabled = true;
-            //check if there's a value for the attribute, if there is and it's false then we conditionally don't 
+            //check if there's a value for the attribute, if there is and it's false then we conditionally don't
             //prevent default.
             if (attrs.preventDefault) {
                 attrs.$observe("preventDefault", function (newVal) {
@@ -2195,6 +3081,7 @@ angular.module("umbraco.directives")
             });
         };
     });
+
 /**
 * @ngdoc directive
 * @name umbraco.directives.directive:preventEnterSubmit
@@ -2892,7 +3779,7 @@ angular.module("umbraco.directives")
 
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbProperty
+* @name umbraco.directives.directive:umbControlGroup
 * @restrict E
 **/
 angular.module("umbraco.directives.html")
@@ -2939,7 +3826,7 @@ angular.module("umbraco.directives.html")
 
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbProperty
+* @name umbraco.directives.directive:umbPane
 * @restrict E
 **/
 angular.module("umbraco.directives.html")
@@ -3254,11 +4141,10 @@ angular.module("umbraco.directives")
 
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbCropsy
+* @name umbraco.directives.directive:umbImageGravity
 * @restrict E
 * @function
 * @description
-* Used by editors that require naming an entity. Shows a textbox/headline with a required validator within it's own form.
 **/
 angular.module("umbraco.directives")
 	.directive('umbImageGravity', function ($timeout, localizationService, $log) {
@@ -3268,7 +4154,8 @@ angular.module("umbraco.directives")
 				templateUrl: 'views/components/imaging/umb-image-gravity.html',
 				scope: {
 					src: '=',
-					center: "="
+					center: "=",
+					onImageLoaded: "="
 				},
 				link: function(scope, element, attrs) {
 
@@ -3279,6 +4166,8 @@ angular.module("umbraco.directives")
 						left: 0,
 						top: 0
 					};
+
+					scope.loaded = false;
 
 					//elements
 					var $viewport = element.find(".viewport");
@@ -3296,6 +4185,19 @@ angular.module("umbraco.directives")
 						};
 					};
 
+					scope.setFocalPoint = function(event) {
+
+						scope.$emit("imageFocalPointStart");
+
+						var offsetX = event.offsetX - 10;
+						var offsetY = event.offsetY - 10;
+
+						calculateGravity(offsetX, offsetY);
+
+						lazyEndEvent();
+
+					};
+
 					var setDimensions = function(){
 						scope.dimensions.width = $image.width();
 						scope.dimensions.height = $image.height();
@@ -3308,9 +4210,9 @@ angular.module("umbraco.directives")
 						}
 					};
 
-					var calculateGravity = function(){
-						scope.dimensions.left = $overlay[0].offsetLeft;
-						scope.dimensions.top =  $overlay[0].offsetTop;
+					var calculateGravity = function(offsetX, offsetY){
+						scope.dimensions.left = offsetX;
+						scope.dimensions.top =  offsetY;
 
 						scope.center.left =  (scope.dimensions.left+10) / scope.dimensions.width;
 						scope.center.top =  (scope.dimensions.top+10) / scope.dimensions.height;
@@ -3334,7 +4236,9 @@ angular.module("umbraco.directives")
 						},
 						stop: function() {
 							scope.$apply(function(){
-								calculateGravity();
+								var offsetX = $overlay[0].offsetLeft;
+								var offsetY = $overlay[0].offsetTop;
+								calculateGravity(offsetX, offsetY);
 							});
 
 							lazyEndEvent();
@@ -3345,19 +4249,36 @@ angular.module("umbraco.directives")
 					$image.load(function(){
 						$timeout(function(){
 							setDimensions();
+							scope.loaded = true;
+							scope.onImageLoaded();
 						});
 					});
+
+					$(window).on('resize.umbImageGravity', function(){
+                        scope.$apply(function(){
+                            $timeout(function(){
+                                setDimensions();
+                            });
+							var offsetX = $overlay[0].offsetLeft;
+							var offsetY = $overlay[0].offsetTop;
+                            calculateGravity(offsetX, offsetY);
+                        });
+                    });
+
+					scope.$on('$destroy', function() {
+						$(window).off('.umbImageGravity');
+					});
+
 				}
 			};
 		});
 
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbCropsy
+* @name umbraco.directives.directive:umbImageThumbnail
 * @restrict E
 * @function
 * @description
-* Used by editors that require naming an entity. Shows a textbox/headline with a required validator within it's own form.
 **/
 angular.module("umbraco.directives")
 	.directive('umbImageThumbnail',
@@ -3379,6 +4300,7 @@ angular.module("umbraco.directives")
 				link: function(scope, element, attrs) {
 					//// INIT /////
 					var $image = element.find("img");
+					scope.loaded = false;
 
 					$image.load(function(){
 						$timeout(function(){
@@ -3405,6 +4327,7 @@ angular.module("umbraco.directives")
 							}
 
 							setPreviewStyle();
+							scope.loaded = true;
 						});
 					});
 
@@ -3534,10 +4457,411 @@ angular.module("umbraco.directives")
 })();
 
 /**
- * @ngdoc directive
- * @name umbraco.directives.directive:umbProperty
- * @restrict E
- **/
+@ngdoc directive
+@name umbraco.directives.directive:umbOverlay
+@restrict E
+@scope
+
+@description
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <button type="button" ng-click="vm.openOverlay()"></button>
+
+        <umb-overlay
+            ng-if="vm.overlay.show"
+            model="vm.overlay"
+            view="vm.overlay.view"
+            position="right">
+        </umb-overlay>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+            vm.openOverlay = openOverlay;
+
+            function openOverlay() {
+
+                vm.overlay = {
+                    view: "mediapicker",
+                    show: true,
+                    submit: function(model) {
+
+                        vm.overlay.show = false;
+                        vm.overlay = null;
+                    },
+                    close: function(oldModel) {
+                        vm.overlay.show = false;
+                        vm.overlay = null;
+                    }
+                }
+
+            };
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+<h1>General Options</h1>
+Lorem ipsum dolor sit amet..
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>model.title</td>
+        <td>String</td>
+        <td>Set the title of the overlay.</td>
+    </tr>
+    <tr>
+        <td>model.subTitle</td>
+        <td>String</td>
+        <td>Set the subtitle of the overlay.</td>
+    </tr>
+    <tr>
+        <td>model.submitButtonLabel</td>
+        <td>String</td>
+        <td>Set an alternate submit button text</td>
+    </tr>
+    <tr>
+        <td>model.submitButtonLabelKey</td>
+        <td>String</td>
+        <td>Set an alternate submit button label key for localized texts</td>
+    </tr>
+    <tr>
+        <td>model.hideSubmitButton</td>
+        <td>Boolean</td>
+        <td>Hides the submit button</td>
+    </tr>
+    <tr>
+        <td>model.closeButtonLabel</td>
+        <td>String</td>
+        <td>Set an alternate close button text</td>
+    </tr>
+    <tr>
+        <td>model.closeButtonLabelKey</td>
+        <td>String</td>
+        <td>Set an alternate close button label key for localized texts</td>
+    </tr>
+    <tr>
+        <td>model.show</td>
+        <td>Boolean</td>
+        <td>Show/hide the overlay</td>
+    </tr>
+    <tr>
+        <td>model.submit</td>
+        <td>Function</td>
+        <td>Callback function when the overlay submits. Returns the overlay model object</td>
+    </tr>
+    <tr>
+        <td>model.close</td>
+        <td>Function</td>
+        <td>Callback function when the overlay closes. Returns a copy of the overlay model object before being modified</td>
+    </tr>
+</table>
+
+
+<h1>Content Picker</h1>
+Opens a content picker.</br>
+<strong>view: </strong>contentpicker
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>model.multiPicker</td>
+        <td>Boolean</td>
+        <td>Pick one or multiple items</td>
+    </tr>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>model.selection</td>
+        <td>Array</td>
+        <td>Array of content objects</td>
+    </tr>
+</table>
+
+
+<h1>Icon Picker</h1>
+Opens an icon picker.</br>
+<strong>view: </strong>iconpicker
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>model.icon</td>
+        <td>String</td>
+        <td>The icon class</td>
+    </tr>
+</table>
+
+<h1>Item Picker</h1>
+Opens an item picker.</br>
+<strong>view: </strong>itempicker
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.availableItems</td>
+            <td>Array</td>
+            <td>Array of available items</td>
+        </tr>
+        <tr>
+            <td>model.selectedItems</td>
+            <td>Array</td>
+            <td>Array of selected items. When passed in the selected items will be filtered from the available items.</td>
+        </tr>
+        <tr>
+            <td>model.filter</td>
+            <td>Boolean</td>
+            <td>Set to false to hide the filter</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>model.selectedItem</td>
+        <td>Object</td>
+        <td>The selected item</td>
+    </tr>
+</table>
+
+<h1>Macro Picker</h1>
+Opens a media picker.</br>
+<strong>view: </strong>macropicker
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.dialogData</td>
+            <td>Object</td>
+            <td>Object which contains array of allowedMacros. Set to <code>null</code> to allow all.</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.macroParams</td>
+            <td>Array</td>
+            <td>Array of macro params</td>
+        </tr>
+        <tr>
+            <td>model.selectedMacro</td>
+            <td>Object</td>
+            <td>The selected macro</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Media Picker</h1>
+Opens a media picker.</br>
+<strong>view: </strong>mediapicker
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.multiPicker</td>
+            <td>Boolean</td>
+            <td>Pick one or multiple items</td>
+        </tr>
+        <tr>
+            <td>model.onlyImages</td>
+            <td>Boolean</td>
+            <td>Only display files that have an image file-extension</td>
+        </tr>
+        <tr>
+            <td>model.disableFolderSelect</td>
+            <td>Boolean</td>
+            <td>Disable folder selection</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.selectedImages</td>
+            <td>Array</td>
+            <td>Array of selected images</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Member Group Picker</h1>
+Opens a member group picker.</br>
+<strong>view: </strong>membergrouppicker
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.multiPicker</td>
+            <td>Boolean</td>
+            <td>Pick one or multiple items</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.selectedMemberGroup</td>
+            <td>String</td>
+            <td>The selected member group</td>
+        </tr>
+        <tr>
+            <td>model.selectedMemberGroups (multiPicker)</td>
+            <td>Array</td>
+            <td>The selected member groups</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Member Picker</h1>
+Opens a member picker. </br>
+<strong>view: </strong>memberpicker
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.multiPicker</td>
+            <td>Boolean</td>
+            <td>Pick one or multiple items</td>
+        </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+        <tr>
+            <th>Returns</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.selection</td>
+            <td>Array</td>
+            <td>Array of selected members/td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>YSOD</h1>
+Opens an overlay to show a custom YSOD. </br>
+<strong>view: </strong>ysod
+<table>
+    <thead>
+        <tr>
+            <th>Param</th>
+            <th>Type</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model.error</td>
+            <td>Object</td>
+            <td>Error object</td>
+        </tr>
+    </tbody>
+</table>
+
+@param {object} model Overlay options.
+@param {string} view Path to view or one of the default view names.
+@param {string} position The overlay position ("left", "right", "center": "target").
+**/
 
 (function() {
    'use strict';
@@ -4869,6 +6193,55 @@ function treeSearchResults() {
 }
 angular.module('umbraco.directives').directive("umbTreeSearchResults", treeSearchResults);
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbGenerateAlias
+@restrict E
+@scope
+
+@description
+Use this directive to generate a camelCased umbraco alias.
+When the aliasFrom value is changed the directive will get a formatted alias from the server and update the alias model. If "enableLock" is set to <code>true</code>
+the directive will use {@link umbraco.directives.directive:umbLockedField umbLockedField} to lock and unlock the alias.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <input type="text" ng-model="vm.name" />
+
+        <umb-generate-alias
+            enable-lock="true"
+            alias-from="vm.name"
+            alias="vm.alias">
+        </umb-generate-alias>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+            vm.name = "";
+            vm.alias = "";
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {string} alias (<code>binding</code>): The model where the alias is bound.
+@param {string} aliasFrom (<code>binding</code>): The model to generate the alias from.
+@param {boolean=} enableLock (<code>binding</code>): Set to <code>true</code> to add a lock next to the alias from where it can be unlocked and changed.
+**/
+
 angular.module("umbraco.directives")
     .directive('umbGenerateAlias', function ($timeout, entityResource) {
         return {
@@ -4951,6 +6324,120 @@ angular.module("umbraco.directives")
             }
         };
     });
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbChildSelector
+@restrict E
+@scope
+
+@description
+Use this directive to render a ui component for selecting child items to a parent node.
+
+<h3>Markup example</h3>
+<pre>
+	<div ng-controller="My.Controller as vm">
+
+        <umb-child-selector
+                selected-children="vm.selectedChildren"
+                available-children="vm.availableChildren"
+                parent-name="vm.name"
+                parent-icon="vm.icon"
+                parent-id="vm.id"
+                on-add="vm.addChild"
+                on-remove="vm.removeChild">
+        </umb-child-selector>
+
+        <!-- use overlay to select children from -->
+        <umb-overlay
+           ng-if="vm.overlay.show"
+           model="vm.overlay"
+           position="target"
+           view="vm.overlay.view">
+        </umb-overlay>
+
+	</div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+	(function () {
+		"use strict";
+
+		function Controller() {
+
+            var vm = this;
+
+            vm.id = 1;
+            vm.name = "My Parent element";
+            vm.icon = "icon-document";
+            vm.selectedChildren = [];
+            vm.availableChildren = [
+                {
+                    id: 1,
+                    alias: "item1",
+                    name: "Item 1",
+                    icon: "icon-document"
+                },
+                {
+                    id: 2,
+                    alias: "item2",
+                    name: "Item 2",
+                    icon: "icon-document"
+                }
+            ];
+
+            vm.addChild = addChild;
+            vm.removeChild = removeChild;
+
+            function addChild($event) {
+                vm.overlay = {
+                    view: "itempicker",
+                    title: "Choose child",
+                    availableItems: vm.availableChildren,
+                    selectedItems: vm.selectedChildren,
+                    event: $event,
+                    show: true,
+                    submit: function(model) {
+
+                        // add selected child
+                        vm.selectedChildren.push(model.selectedItem);
+
+                        // close overlay
+                        vm.overlay.show = false;
+                        vm.overlay = null;
+                    }
+                };
+            }
+
+            function removeChild($index) {
+                vm.selectedChildren.splice($index, 1);
+            }
+
+        }
+
+		angular.module("umbraco").controller("My.Controller", Controller);
+
+	})();
+</pre>
+
+@param {array} selectedChildren (<code>binding</code>): Array of selected children.
+@param {array} availableChildren (<code>binding</code>: Array of items available for selection.
+@param {string} parentName (<code>binding</code>): The parent name.
+@param {string} parentIcon (<code>binding</code>): The parent icon.
+@param {number} parentId (<code>binding</code>): The parent id.
+@param {callback} onRemove (<code>binding</code>): Callback when the remove button is clicked on an item.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>child</code>: The selected item.</li>
+        <li><code>$index</code>: The selected item index.</li>
+    </ul>
+@param {callback} onAdd (<code>binding</code>): Callback when the add button is clicked.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>$event</code>: The select event.</li>
+    </ul>
+**/
 
 (function() {
     'use strict';
@@ -5087,6 +6574,72 @@ function confirmDirective() {
 }
 angular.module('umbraco.directives').directive("umbConfirm", confirmDirective);
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbConfirmAction
+@restrict E
+@scope
+
+@description
+<p>Use this directive to toggle a confirmation prompt for an action.
+The prompt consists of a checkmark and a cross to confirm or cancel the action.
+The prompt can be opened in four direction up, down, left or right.</p>
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <div class="my-action" style="position:relative;">
+            <i class="icon-trash" ng-click="vm.showPrompt()"></i>
+            <umb-confirm-action
+                ng-if="vm.promptIsVisible"
+                direction="left"
+                on-confirm="vm.confirmAction()"
+                on-cancel="vm.hidePrompt()">
+            </umb-confirm-action>
+        </div>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+            vm.promptIsVisible = false;
+
+            vm.confirmAction = confirmAction;
+            vm.showPrompt = showPrompt;
+            vm.hidePrompt = hidePrompt;
+
+            function confirmAction() {
+                // confirm logic here
+            }
+
+            function showPrompt() {
+                vm.promptIsVisible = true;
+            }
+
+            function hidePrompt() {
+                vm.promptIsVisible = false;
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {string} direction The direction the prompt opens ("up", "down", "left", "right").
+@param {callback} onConfirm Callback when the checkmark is clicked.
+@param {callback} onCancel Callback when the cross is clicked.
+**/
+
 (function() {
   'use strict';
 
@@ -5126,6 +6679,111 @@ angular.module('umbraco.directives').directive("umbConfirm", confirmDirective);
   angular.module('umbraco.directives').directive('umbConfirmAction', ConfirmAction);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbContentGrid
+@restrict E
+@scope
+
+@description
+Use this directive to generate a list of content items presented as a flexbox grid.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-content-grid
+            content="vm.contentItems"
+            content-properties="vm.includeProperties"
+            on-click="vm.selectItem"
+            on-click-name="vm.clickItem">
+        </umb-content-grid>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+            vm.contentItems = [
+                {
+                    "name": "Cape",
+                    "published": true,
+                    "icon": "icon-document",
+                    "updateDate": "15-02-2016",
+                    "owner": "Mr. Batman",
+                    "selected": false
+                },
+                {
+                    "name": "Utility Belt",
+                    "published": true,
+                    "icon": "icon-document",
+                    "updateDate": "15-02-2016",
+                    "owner": "Mr. Batman",
+                    "selected": false
+                },
+                {
+                    "name": "Cave",
+                    "published": true,
+                    "icon": "icon-document",
+                    "updateDate": "15-02-2016",
+                    "owner": "Mr. Batman",
+                    "selected": false
+                }
+            ];
+            vm.includeProperties = [
+                {
+                  "alias": "updateDate",
+                  "header": "Last edited"
+                },
+                {
+                  "alias": "owner",
+                  "header": "Created by"
+                }
+            ];
+
+            vm.clickItem = clickItem;
+            vm.selectItem = selectItem;
+
+
+            function clickItem(item, $event, $index){
+                // do magic here
+            }
+
+            function selectItem(item, $event, $index) {
+                // set item.selected = true; to select the item
+                // do magic here
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {array} content (<code>binding</code>): Array of content items.
+@param {array=} contentProperties (<code>binding</code>): Array of content item properties to include in the item. If left empty the item will only show the item icon and name.
+@param {callback=} onClick (<code>binding</code>): Callback method to handle click events on the content item.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>item</code>: The clicked item</li>
+        <li><code>$event</code>: The select event</li>
+        <li><code>$index</code>: The item index</li>
+    </ul>
+@param {callback=} onClickName (<code>binding</code>): Callback method to handle click events on the checkmark icon.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>item</code>: The selected item</li>
+        <li><code>$event</code>: The select event</li>
+        <li><code>$index</code>: The item index</li>
+    </ul>
+**/
 
 (function() {
    'use strict';
@@ -5189,6 +6847,32 @@ angular.module('umbraco.directives').directive("umbConfirm", confirmDirective);
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbEmptyState
+@restrict E
+@scope
+
+@description
+Use this directive to show an empty state message.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-empty-state
+            ng-if="!vm.items"
+            position="center">
+            // Empty state content
+        </umb-empty-state>
+
+    </div>
+</pre>
+
+@param {string=} size Set the size of the text ("small", "large").
+@param {string=} position Set the position of the text ("center").
+**/
+
 (function() {
    'use strict';
 
@@ -5211,6 +6895,86 @@ angular.module('umbraco.directives').directive("umbConfirm", confirmDirective);
    angular.module('umbraco.directives').directive('umbEmptyState', EmptyStateDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbFolderGrid
+@restrict E
+@scope
+
+@description
+Use this directive to generate a list of folders presented as a flexbox grid.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+        <umb-folder-grid
+            ng-if="vm.folders.length > 0"
+            folders="vm.folders"
+            on-click="vm.clickFolder"
+            on-select="vm.selectFolder">
+        </umb-folder-grid>
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller(myService) {
+
+            var vm = this;
+            vm.folders = [
+                {
+                    "name": "Folder 1",
+                    "icon": "icon-folder",
+                    "selected": false
+                },
+                {
+                    "name": "Folder 2",
+                    "icon": "icon-folder",
+                    "selected": false
+                }
+
+            ];
+
+            vm.clickFolder = clickFolder;
+            vm.selectFolder = selectFolder;
+
+            myService.getFolders().then(function(folders){
+                vm.folders = folders;
+            });
+
+            function clickFolder(folder){
+                // Execute when clicking folder name/link
+            }
+
+            function selectFolder(folder, event, index) {
+                // Execute when clicking folder
+                // set folder.selected = true; to show checkmark icon
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {array} folders (<code>binding</code>): Array of folders
+@param {callback=} onClick (<code>binding</code>): Callback method to handle click events on the folder.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>folder</code>: The selected folder</li>
+    </ul>
+@param {callback=} onSelect (<code>binding</code>): Callback method to handle click events on the checkmark icon.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>folder</code>: The selected folder</li>
+        <li><code>$event</code>: The select event</li>
+        <li><code>$index</code>: The folder index</li>
+    </ul>
+**/
 
 (function() {
    'use strict';
@@ -6079,6 +7843,115 @@ angular.module('umbraco.directives').directive("umbConfirm", confirmDirective);
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbkeyboardShortcutsOverview
+@restrict E
+@scope
+
+@description
+
+<p>Use this directive to show an overview of keyboard shortcuts in an editor.
+The directive will render an overview trigger wich shows how the overview is opened.
+When this combination is hit an overview is opened with shortcuts based on the model sent to the directive.</p>
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-keyboard-shortcuts-overview
+            model="vm.keyboardShortcutsOverview">
+        </umb-keyboard-shortcuts-overview>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+            vm.keyboardShortcutsOverview = [
+                {
+                    "name": "Sections",
+                    "shortcuts": [
+                        {
+                            "description": "Navigate sections",
+                            "keys": [
+                                {"key": "1"},
+                                {"key": "4"}
+                            ],
+                            "keyRange": true
+                        }
+                    ]
+                },
+                {
+                    "name": "Design",
+                    "shortcuts": [
+                        {
+                            "description": "Add tab",
+                            "keys": [
+                                {"key": "alt"},
+                                {"key": "shift"},
+                                {"key": "t"}
+                            ]
+                        }
+                    ]
+                }
+            ];
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+<h3>Model description</h3>
+<ul>
+    <li>
+        <strong>name</strong>
+        <small>(string)</small> -
+        Sets the shortcut section name.
+    </li>
+    <li>
+        <strong>shortcuts</strong>
+        <small>(array)</small> -
+        Array of available shortcuts in the section.
+    </li>
+    <ul>
+        <li>
+            <strong>description</strong>
+            <small>(string)</small> -
+            Short description of the shortcut.
+        </li>
+        <li>
+            <strong>keys</strong>
+            <small>(array)</small> -
+            Array of keys in the shortcut.
+        </li>
+        <ul>
+            <li>
+                <strong>key</strong>
+                <small>(string)</small> -
+                The invidual key in the shortcut.
+            </li>
+        </ul>
+        <li>
+            <strong>keyRange</strong>
+            <small>(boolean)</small> -
+            Set to <code>true</code> to show a key range. It combines the shortcut keys with "-" instead of "+".
+        </li>
+    </ul>
+</ul>
+
+@param {object} model keyboard shortcut model. See description and example above.
+**/
+
 (function() {
   'use strict';
 
@@ -6483,6 +8356,53 @@ angular.module("umbraco.directives")
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbLoadIndicator
+@restrict E
+
+@description
+Use this directive to generate a loading indicator.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-load-indicator
+            ng-if="vm.loading">
+        </umb-load-indicator>
+
+        <div class="content" ng-if="!vm.loading">
+            <p>{{content}}</p>
+        </div>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller(myService) {
+
+            var vm = this;
+
+            vm.content = "";
+            vm.loading = true;
+
+            myService.getContent().then(function(content){
+                vm.content = content;
+                vm.loading = false;
+            });
+
+        }
+½
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+**/
+
 (function() {
   'use strict';
 
@@ -6502,13 +8422,50 @@ angular.module("umbraco.directives")
 })();
 
 /**
-* @ngdoc directive
-* @name umbraco.directives.directive:umbContentName 
-* @restrict E
-* @function
-* @description 
-* Used by editors that require naming an entity. Shows a textbox/headline with a required validator within it's own form.
+@ngdoc directive
+@name umbraco.directives.directive:umbLockedField
+@restrict E
+@scope
+
+@description
+Use this directive to render a value with a lock next to it. When the lock is clicked the value gets unlocked and can be edited.
+
+<h3>Markup example</h3>
+<pre>
+	<div ng-controller="My.Controller as vm">
+
+		<umb-locked-field
+			ng-model="vm.value"
+			placeholder-text="'Click to unlock...'">
+		</umb-locked-field>
+
+	</div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+	(function () {
+		"use strict";
+
+		function Controller() {
+
+			var vm = this;
+			vm.value = "My locked text";
+
+        }
+
+		angular.module("umbraco").controller("My.Controller", Controller);
+
+	})();
+</pre>
+
+@param {string} ngModel (<code>binding</code>): The locked text.
+@param {boolean=} locked (<code>binding</code>): <Code>true</code> by default. Set to <code>false</code> to unlock the text.
+@param {string=} placeholderText (<code>binding</code>): If ngModel is empty this text will be shown.
+@param {string=} regexValidation (<code>binding</code>): Set a regex expression for validation of the field.
+@param {string=} serverValidationField (<code>attribute</code>): Set a server validation field.
 **/
+
 (function() {
 	'use strict';
 
@@ -6575,6 +8532,90 @@ angular.module("umbraco.directives")
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbMediaGrid
+@restrict E
+@scope
+
+@description
+Use this directive to generate a thumbnail grid of media items.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-media-grid
+           items="vm.mediaItems"
+           on-click="vm.clickItem"
+           on-click-name="vm.clickItemName">
+        </umb-media-grid>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+            vm.mediaItems = [];
+
+            vm.clickItem = clickItem;
+            vm.clickItemName = clickItemName;
+
+            myService.getMediaItems().then(function (mediaItems) {
+                vm.mediaItems = mediaItems;
+            });
+
+            function clickItem(item, $event, $index){
+                // do magic here
+            }
+
+            function clickItemName(item, $event, $index) {
+                // set item.selected = true; to select the item
+                // do magic here
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {array} items (<code>binding</code>): Array of media items.
+@param {callback=} onDetailsHover (<code>binding</code>): Callback method when the details icon is hovered.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>item</code>: The hovered item</li>
+        <li><code>$event</code>: The hover event</li>
+        <li><code>hover</code>: Boolean to tell if the item is hovered or not</li>
+    </ul>
+@param {callback=} onClick (<code>binding</code>): Callback method to handle click events on the media item.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>item</code>: The clicked item</li>
+        <li><code>$event</code>: The click event</li>
+        <li><code>$index</code>: The item index</li>
+    </ul>
+@param {callback=} onClickName (<code>binding</code>): Callback method to handle click events on the media item name.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>item</code>: The clicked item</li>
+        <li><code>$event</code>: The click event</li>
+        <li><code>$index</code>: The item index</li>
+    </ul>
+@param {string=} filterBy (<code>binding</code>): String to filter media items by
+@param {string=} itemMaxWidth (<code>attribute</code>): Sets a max width on the media item thumbnails.
+@param {string=} itemMaxHeight (<code>attribute</code>): Sets a max height on the media item thumbnails.
+@param {string=} itemMinWidth (<code>attribute</code>): Sets a min width on the media item thumbnails.
+@param {string=} itemMinHeight (<code>attribute</code>): Sets a min height on the media item thumbnails.
+
+**/
+
 (function() {
     'use strict';
 
@@ -6611,6 +8652,13 @@ angular.module("umbraco.directives")
                     var item = scope.items[i];
                     setItemData(item);
                     setOriginalSize(item, itemMaxHeight);
+
+                    // remove non images when onlyImages is set to true
+                    if(scope.onlyImages === "true" && !item.isFolder && !item.thumbnail){
+                        scope.items.splice(i, 1);
+                        i--;
+                    }
+
                 }
 
                 if (scope.items.length > 0) {
@@ -6758,7 +8806,8 @@ angular.module("umbraco.directives")
                 itemMaxWidth: "@",
                 itemMaxHeight: "@",
                 itemMinWidth: "@",
-                itemMinHeight: "@"
+                itemMinHeight: "@",
+                onlyImages: "@"
             },
             link: link
         };
@@ -6769,6 +8818,91 @@ angular.module("umbraco.directives")
     angular.module('umbraco.directives').directive('umbMediaGrid', MediaGridDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbPagination
+@restrict E
+@scope
+
+@description
+Use this directive to generate a pagination.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <umb-pagination
+            page-number="vm.pagination.pageNumber"
+            total-pages="vm.pagination.totalPages"
+            on-next="vm.nextPage"
+            on-prev="vm.prevPage"
+            on-go-to-page="vm.goToPage">
+        </umb-pagination>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+            vm.pagination = {
+                pageNumber: 1,
+                totalPages: 10
+            }
+
+            vm.nextPage = nextPage;
+            vm.prevPage = prevPage;
+            vm.goToPage = goToPage;
+
+            function nextPage(pageNumber) {
+                // do magic here
+                console.log(pageNumber);
+                alert("nextpage");
+            }
+
+            function prevPage(pageNumber) {
+                // do magic here
+                console.log(pageNumber);
+                alert("prevpage");
+            }
+
+            function goToPage(pageNumber) {
+                // do magic here
+                console.log(pageNumber);
+                alert("go to");
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {number} pageNumber (<code>binding</code>): Current page number.
+@param {number} totalPages (<code>binding</code>): The total number of pages.
+@param {callback} onNext (<code>binding</code>): Callback method to go to the next page.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>pageNumber</code>: The page number</li>
+    </ul>
+@param {callback=} onPrev (<code>binding</code>): Callback method to go to the previous page.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>pageNumber</code>: The page number</li>
+    </ul>
+@param {callback=} onGoToPage (<code>binding</code>): Callback method to go to a specific page.
+    <h3>The callback returns:</h3>
+    <ul>
+        <li><code>pageNumber</code>: The page number</li>
+    </ul>
+**/
 
 (function() {
    'use strict';
@@ -6875,6 +9009,44 @@ angular.module("umbraco.directives")
    angular.module('umbraco.directives').directive('umbPagination', PaginationDirective);
 
 })();
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbStickyBar
+@restrict A
+
+@description
+Use this directive make an element sticky and follow the page when scrolling.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <div
+           class="my-sticky-bar"
+           umb-sticky-bar
+           scrollable-container=".container">
+        </div>
+
+    </div>
+</pre>
+
+<h3>CSS example</h3>
+<pre>
+    .my-sticky-bar {
+        padding: 15px 0;
+        background: #000000;
+        position: relative;
+        top: 0;
+    }
+
+    .my-sticky-bar.-umb-sticky-bar {
+        top: 100px;
+    }
+</pre>
+
+@param {string} scrollableContainer Set the class (".element") or the id ("#element") of the scrollable container element.
+**/
 
 (function() {
    'use strict';
@@ -7065,6 +9237,74 @@ angular.module("umbraco.directives")
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbTooltip
+@restrict E
+@scope
+
+@description
+Use this directive to render a tooltip.
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <div
+            ng-mouseover="vm.mouseOver($event)"
+            ng-mouseleave="vm.mouseLeave()">
+            Hover me
+        </div>
+
+        <umb-tooltip
+           ng-if="vm.tooltip.show"
+           event="vm.tooltip.event">
+           // tooltip content here
+        </umb-tooltip>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+            vm.tooltip = {
+                show: false,
+                event: null
+            };
+
+            vm.mouseOver = mouseOver;
+            vm.mouseLeave = mouseLeave;
+
+            function mouseOver($event) {
+                vm.tooltip = {
+                    show: true,
+                    event: $event
+                };
+            }
+
+            function mouseLeave() {
+                vm.tooltip = {
+                    show: false,
+                    event: null
+                };
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+
+    })();
+</pre>
+
+@param {string} event Set the $event from the target element to position the tooltip relative to the mouse cursor.
+**/
+
 (function() {
    'use strict';
 
@@ -7164,7 +9404,7 @@ angular.module("umbraco.directives")
 
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbContentName
+* @name umbraco.directives.directive:umbFileDropzone
 * @restrict E
 * @function
 * @description
@@ -7410,7 +9650,7 @@ function umbFileUpload() {
 angular.module('umbraco.directives').directive("umbFileUpload", umbFileUpload);
 /**
 * @ngdoc directive
-* @name umbraco.directives.directive:umbFileUpload
+* @name umbraco.directives.directive:umbSingleFileUpload
 * @function
 * @restrict A
 * @scope

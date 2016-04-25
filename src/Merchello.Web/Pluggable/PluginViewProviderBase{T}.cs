@@ -1,43 +1,52 @@
-﻿namespace Merchello.Web.IO
+namespace Merchello.Web.Pluggable
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
 
     using Merchello.Core.Configuration;
     using Merchello.Web.Models.ContentEditing.Templates;
 
-    using Umbraco.Core;
     using Umbraco.Core.IO;
 
     /// <summary>
-    /// A helper for manipulating Merchello Plugin generated views.
+    /// The plugin view service base.
     /// </summary>
-    internal static class PluginViewHelper
+    /// <typeparam name="TModel">
+    /// The type of model to represents a view
+    /// </typeparam>
+    internal abstract class PluginViewProviderBase<TModel>
+        where TModel : class, new()
     {
         /// <summary>
-        /// Gets all the ".
+        /// Gets all views at or below the virtual path.
         /// </summary>
         /// <param name="virtualPath">
-        /// The path.
+        /// The virtual path.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{AppPluginViewEditorContent}"/>.
+        /// The <see cref="IEnumerable{TModel}"/>.
         /// </returns>
-        public static IEnumerable<PluginViewEditorContent> GetAllViews(string virtualPath)
-        {
-            if (virtualPath.IsNullOrWhiteSpace()) return Enumerable.Empty<PluginViewEditorContent>();
-        
-            var path = EnsureMappedPath(virtualPath);
-
-            var dir = new DirectoryInfo(path);
-
-            var files = dir.GetFiles("*.cshtml", SearchOption.AllDirectories).OrderBy(x => x.Name);
-            return files.Select(x => x.ToAppPluginViewEditorContent(virtualPath)).Where(x => x != null);
-        }
+        public abstract IEnumerable<TModel> GetAllViews(string virtualPath);
 
         /// <summary>
-        /// Creates a new view file.
+        /// Gets a specific view.
+        /// </summary>
+        /// <param name="virtualPath">
+        /// The virtual path.
+        /// </param>
+        /// <param name="fileName">
+        /// The file Name.
+        /// </param>
+        /// <param name="viewType">
+        /// The view type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TModel"/>.
+        /// </returns>
+        public abstract TModel GetView(string virtualPath, string fileName, PluginViewType viewType);
+
+        /// <summary>
+        /// Creates a new view.
         /// </summary>
         /// <param name="fileName">
         /// The file name.
@@ -52,33 +61,13 @@
         /// The view body.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        /// A value indicating whether or not the create was successful.
         /// </returns>
-        public static bool CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody)
-        {
-            var virtualPath = GetVirtualPathByPlugViewType(viewType);
-            var mapped = EnsureMappedPath(virtualPath);
+        public abstract TModel CreateNewView(string fileName, PluginViewType viewType, string modelName, string viewBody);
 
-            var fullFileName = string.Format("{0}{1}", mapped, fileName);
-
-            if (!File.Exists(fullFileName))
-            {
-                using (var writer = new StreamWriter(fullFileName))
-                {
-                    var heading = string.Format("@inherits UmbracoViewPage<{0}>", modelName);
-                    writer.WriteLine(heading);
-                    writer.WriteLine("@using Merchello.Core.Models");
-                    writer.Close();
-                }
-
-                return true;
-            }
-
-            return false;
-        }
 
         /// <summary>
-        /// Overwrites a view.
+        /// Saves an existing view.
         /// </summary>
         /// <param name="fileName">
         /// The file name.
@@ -90,9 +79,9 @@
         /// The view body.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        /// A value indicating whether or not the save was successful.
         /// </returns>
-        public static bool SaveView(string fileName, PluginViewType viewType, string viewBody)
+        public virtual bool SaveView(string fileName, PluginViewType viewType, string viewBody)
         {
             var virtualPath = GetVirtualPathByPlugViewType(viewType);
             var mapped = EnsureMappedPath(virtualPath);
@@ -108,6 +97,7 @@
             return false;
         }
 
+
         /// <summary>
         /// Ensures that the mapped path exists.
         /// </summary>
@@ -117,7 +107,7 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string EnsureMappedPath(string virtualPath)
+        protected static string EnsureMappedPath(string virtualPath)
         {
             var mapped = IOHelper.MapPath(virtualPath);
             if (!Directory.Exists(mapped))
@@ -128,7 +118,16 @@
             return mapped;
         }
 
-        private static string GetVirtualPathByPlugViewType(PluginViewType viewType)
+        /// <summary>
+        /// Gets the virtual path by view type.
+        /// </summary>
+        /// <param name="viewType">
+        /// The view type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected static string GetVirtualPathByPlugViewType(PluginViewType viewType)
         {
             switch (viewType)
             {

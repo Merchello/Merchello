@@ -88,6 +88,20 @@
         }
 
         /// <summary>
+        /// Returns a value indicating whether the dictionary contains a value for the alias.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the dictionary contains a value.
+        /// </returns>
+        public bool HasValue(string alias)
+        {
+            return !GetValue(alias).IsNullOrWhiteSpace();
+        }
+
+        /// <summary>
         /// Gets a value from an internal collection.
         /// </summary>
         /// <param name="alias">

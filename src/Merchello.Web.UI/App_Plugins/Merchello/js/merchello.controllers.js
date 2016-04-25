@@ -3449,7 +3449,6 @@ angular.module('merchello').controller('Merchello.Backoffice.MerchelloDashboardC
         function init() {
             var promise = settingsResource.getMerchelloVersion();
             promise.then(function(version) {
-                console.info(version);
               $scope.merchelloVersion = version.replace(/['"]+/g, '');
                 $scope.loaded = true;
             });
@@ -4656,8 +4655,7 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
 
             $q.all([
                 notificationGatewayProviderResource.getNotificationMessagesByKey(key),
-                notificationGatewayProviderResource.getAllNotificationMonitors(),
-                assetsService.loadCss('/umbraco/lib/CodeMirror/lib/codemirror.css')
+                notificationGatewayProviderResource.getAllNotificationMonitors()
             ]).then(function(data) {
 
                 $scope.notificationMessage = notificationMessageDisplayBuilder.transform(data[0]);
@@ -4671,19 +4669,11 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
                 $scope.tabs.insertTab('messageEditor', 'merchelloTabs_message', '#/merchello/merchello/notification.messageeditor/' + key, 2);
                 $scope.tabs.setActive('messageEditor');
 
-                setupEditor();
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
             });
         }
-
-        function setupEditor() {
-            if($scope.currentMonitor.useCodeEditor === false) {
-
-            }
-            
-            
-            $scope.loaded = true;
-            $scope.preValuesLoaded = true;
-        }
+        
 
         function deleteMessage() {
             var dialogData = dialogDataFactory.createDeleteNotificationMessageDialogData();
@@ -4728,8 +4718,9 @@ angular.module("merchello").controller("Merchello.Backoffice.GatewayProvidersLis
 
             var promiseSave = notificationGatewayProviderResource.updateNotificationMessage($scope.notificationMessage);
             promiseSave.then(function () {
-                eventsService.emit(saveEventName, $scope.notificationMessage);
                 notificationsService.success("Notification Message Saved");
+                eventsService.emit(saveEventName, $scope.notificationMessage);
+                
                 init();
             }, function (reason) {
                 notificationsService.error("Notification Message Save Failed", reason.message);

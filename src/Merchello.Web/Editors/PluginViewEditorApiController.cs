@@ -2,19 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
-    using Merchello.Web.IO;
+    using Merchello.Core.Logging;
+    using Merchello.Web.Exceptions;
     using Merchello.Web.Models.ContentEditing.Templates;
+    using Merchello.Web.Pluggable;
     using Merchello.Web.WebApi;
 
-    using Umbraco.Core;
-    using Umbraco.Core.IO;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -23,6 +21,16 @@
     [PluginController("Merchello")]
     public class PluginViewEditorApiController : MerchelloApiController
     {
+        /// <summary>
+        /// The base log data.
+        /// </summary>
+        private IExtendedLoggerData _logData;
+
+        /// <summary>
+        /// The <see cref="PluginViewEditorProvider"/>.
+        /// </summary>
+        private PluginViewEditorProvider _provider;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginViewEditorApiController"/> class.
         /// </summary>
@@ -40,6 +48,7 @@
         public PluginViewEditorApiController(IMerchelloContext merchelloContext)
             : base(merchelloContext)
         {
+            Initialize();
         }
 
 
@@ -52,7 +61,7 @@
         public IEnumerable<PluginViewEditorContent> GetAllAppPluginsViews()
         {
             var path = MerchelloConfiguration.Current.GetSetting("MerchelloTemplatesBasePath");
-            return PluginViewHelper.GetAllViews(path);
+            return _provider.GetAllViews(path);
         }
 
         /// <summary>
@@ -64,7 +73,7 @@
         public IEnumerable<PluginViewEditorContent> GetAllNotificationViews()
         {
             var path = MerchelloConfiguration.Current.GetSetting("NotificationTemplateBasePath");
-            var views = PluginViewHelper.GetAllViews(path);
+            var views = _provider.GetAllViews(path);
             return views;
         }
 
@@ -79,19 +88,15 @@
         /// </returns>
         public PluginViewEditorContent AddNewView(PluginViewEditorContent content)
         {
-            
-            if (PluginViewHelper.CreateNewView(
-                content.FileName,
-                content.PluginViewType,
-                content.ModelTypeName,
-                content.ViewBody))
+            try
             {
-                var path = MerchelloConfiguration.Current.GetSetting("NotificationTemplateBasePath");
-                var views = PluginViewHelper.GetAllViews(path);
-                return views.FirstOrDefault(x => x.FileName == content.FileName);
+                return _provider.CreateNewView(content.FileName, content.PluginViewType, content.ModelTypeName, content.ViewBody);
             }
-
-            throw new InvalidOperationException("Failed to create view");
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<PluginViewEditorApiController>("View creation failed", ex, _logData);
+                throw;
+            }
         }
 
         /// <summary>
@@ -105,12 +110,33 @@
         /// </returns>
         public PluginViewEditorContent SaveView(PluginViewEditorContent content)
         {
-            if (PluginViewHelper.SaveView(content.FileName, content.PluginViewType, content.ViewBody))
+            if (_provider.SaveView(content.FileName, content.PluginViewType, content.ViewBody))
             {
                 return content;
             }
 
-            throw new InvalidOperationException("Failed to create view");
+            var ex = new MerchelloApiException("Failed to save view");
+            MultiLogHelper.Error<PluginViewEditorApiController>("View save failed", ex, _logData);
+            throw ex;
+        }
+
+        /// <summary>
+        /// Initializes the controller.
+        /// </summary>
+        private void Initialize()
+        {
+            _logData = MultiLogger.GetBaseLoggingData();
+            _logData.AddCategory("Pluggable");
+
+            try
+            {
+                _provider = PluggableObjectHelper.GetInstance<PluginViewEditorProvider>("PluginViewEditorProvider");
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<PluginViewEditorApiController>("Failed to instantiate PlugViewEditorProvider", ex, _logData);
+                throw;
+            }
         }
     }
 }

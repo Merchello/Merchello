@@ -75,6 +75,28 @@
         }
 
         /// <summary>
+        /// Gets the Umbraco <see cref="ILogger"/>.
+        /// </summary>
+        public virtual ILogger UmbracoLogger
+        {
+            get
+            {
+                return _umbracoLogger;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IRemoteLogger"/>.
+        /// </summary>
+        public virtual IRemoteLogger RemoteLogger
+        {
+            get
+            {
+                return _remoteLogger;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether is ready.
         /// </summary>
         public virtual bool IsReady

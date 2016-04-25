@@ -10,17 +10,13 @@
     /// <typeparam name="TModel">
     /// The type of the model to be rendered
     /// </typeparam>
-    public abstract class MerchelloViewPage<TModel> : Umbraco.Web.Mvc.UmbracoViewPage<TModel>
+    public abstract class MerchelloViewPage<TModel> : MerchelloHelperViewPage<TModel>
     {
         /// <summary>
         /// The <see cref="CustomerContext"/>.
         /// </summary>
         private ICustomerContext _customerContext;
 
-        /// <summary>
-        /// The <see cref="MerchelloHelper"/>
-        /// </summary>
-        private MerchelloHelper _helper;
 
         /// <summary>
         /// Gets the CurrentCustomer from the CustomerContext
@@ -34,14 +30,6 @@
 
                 return _customerContext.CurrentCustomer;
             }
-        }
-
-        /// <summary>
-        /// Gets the <see cref="MerchelloHelper"/>.
-        /// </summary>
-        public MerchelloHelper Merchello
-        {
-            get { return _helper ?? (_helper = new MerchelloHelper()); }
         }
     }
 }

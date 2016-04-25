@@ -12,7 +12,7 @@
     /// A razor based order confirmation monitor.
     /// </summary>
     [MonitorFor("8DA9C3DA-1169-4E36-9D35-C8DF2C52CD93", typeof(OrderConfirmationTrigger), "Order Confirmation (Razor)", true)]
-    public class RazorOrderConfirmationMonitor : NotificationMonitorBase<IPaymentResultMonitorModel>
+    public class RazorOrderConfirmationMonitor : RazorMonitorBase<IPaymentResultMonitorModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RazorOrderConfirmationMonitor"/> class.
@@ -35,27 +35,7 @@
         {
             if (!value.PaymentSuccess) return;
 
-            if (!Messages.Any()) return;
-
-            var formatter = new RazorFormatter(value);
-
-            foreach (var message in Messages)
-            {
-                if (value.Contacts.Any() && message.SendToCustomer)
-                {
-                    // add the additional contacts to the recipients list
-                    if (!message.Recipients.EndsWith(";"))
-                        message.Recipients += ";";
-
-                    if (message.Recipients[0] == ';')
-                        message.Recipients = message.Recipients.TrimStart(';');
-
-                    message.Recipients = string.Format("{0}{1}", message.Recipients, string.Join(";", value.Contacts));
-                }
-
-                // send the message
-                NotificationContext.Send(message, formatter);
-            }
+            base.OnNext(value);
         }
     }
 }

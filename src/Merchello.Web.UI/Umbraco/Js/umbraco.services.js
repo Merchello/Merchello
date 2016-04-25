@@ -789,7 +789,7 @@ function contentEditingHelper(fileManager, $q, $location, $routeParams, notifica
 
             var deferred = $q.defer();
 
-            if (!args.scope.busy && formHelper.submitForm({ scope: args.scope, statusMessage: args.statusMessage })) {
+            if (!args.scope.busy && formHelper.submitForm({ scope: args.scope, statusMessage: args.statusMessage, action: args.action })) {
 
                 args.scope.busy = true;
 
@@ -2574,7 +2574,7 @@ function formHelper(angularHelper, serverValidationManager, $timeout, notificati
             }
             
             //the first thing any form must do is broadcast the formSubmitting event
-            args.scope.$broadcast("formSubmitting", { scope: args.scope });
+            args.scope.$broadcast("formSubmitting", { scope: args.scope, action: args.action });
 
             //then check if the form is valid
             if (!args.skipValidation) {                
@@ -3226,559 +3226,846 @@ function imageHelper(umbRequestHelper, mediaHelper) {
 angular.module('umbraco.services').factory('imageHelper', imageHelper);
 // This service was based on OpenJS library available in BSD License
 // http://www.openjs.com/scripts/events/keyboard_shortcuts/index.php
-angular.module('umbraco.services')
-.factory('keyboardService', ['$window', '$timeout', function ($window, $timeout) {
-	var keyboardManagerService = {};
-	var defaultOpt = {
-		'type':             'keydown',
-		'propagate':        false,
-		'inputDisabled':    false,
-		'target':           $window.document,
-		'keyCode':          false
-	};
 
-	var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+function keyboardService($window, $timeout) {
+    
+    var keyboardManagerService = {};
+    
+    var defaultOpt = {
+        'type':             'keydown',
+        'propagate':        false,
+        'inputDisabled':    false,
+        'target':           $window.document,
+        'keyCode':          false
+    };
 
-	// Store all keyboard combination shortcuts
-	keyboardManagerService.keyboardEvent = {};
+    // Work around for stupid Shift key bug created by using lowercase - as a result the shift+num combination was broken
+    var shift_nums = {
+        "`": "~",
+        "1": "!",
+        "2": "@",
+        "3": "#",
+        "4": "$",
+        "5": "%",
+        "6": "^",
+        "7": "&",
+        "8": "*",
+        "9": "(",
+        "0": ")",
+        "-": "_",
+        "=": "+",
+        ";": ":",
+        "'": "\"",
+        ",": "<",
+        ".": ">",
+        "/": "?",
+        "\\": "|"
+    };
 
+    // Special Keys - and their codes
+    var special_keys = {
+        'esc': 27,
+        'escape': 27,
+        'tab': 9,
+        'space': 32,
+        'return': 13,
+        'enter': 13,
+        'backspace': 8,
 
-	// Add a new keyboard combination shortcut
-	keyboardManagerService.bind = function (label, callback, opt) {
+        'scrolllock': 145,
+        'scroll_lock': 145,
+        'scroll': 145,
+        'capslock': 20,
+        'caps_lock': 20,
+        'caps': 20,
+        'numlock': 144,
+        'num_lock': 144,
+        'num': 144,
 
-		//replace ctrl key with meta key
-		if(isMac && label !== "ctrl+space"){
-		  label = label.replace("ctrl","meta");
-		}
+        'pause': 19,
+        'break': 19,
 
-		var fct, elt, code, k;
-		// Initialize opt object
-		opt   = angular.extend({}, defaultOpt, opt);
-		label = label.toLowerCase();
-		elt   = opt.target;
-		if(typeof opt.target === 'string'){
-			elt = document.getElementById(opt.target);
-		}
+        'insert': 45,
+        'home': 36,
+        'delete': 46,
+        'end': 35,
 
+        'pageup': 33,
+        'page_up': 33,
+        'pu': 33,
 
-		fct = function (e) {
-			e = e || $window.event;
+        'pagedown': 34,
+        'page_down': 34,
+        'pd': 34,
 
-			// Disable event handler when focus input and textarea
-			if (opt['inputDisabled']) {
-				var elt;
-				if (e.target){
-					elt = e.target;
-				}else if (e.srcElement){
-					elt = e.srcElement;
-				}
+        'left': 37,
+        'up': 38,
+        'right': 39,
+        'down': 40,
 
-				if (elt.nodeType === 3){elt = elt.parentNode;}
-				if (elt.tagName === 'INPUT' || elt.tagName === 'TEXTAREA'){return;}
-			}
+        'f1': 112,
+        'f2': 113,
+        'f3': 114,
+        'f4': 115,
+        'f5': 116,
+        'f6': 117,
+        'f7': 118,
+        'f8': 119,
+        'f9': 120,
+        'f10': 121,
+        'f11': 122,
+        'f12': 123
+    };
 
-			// Find out which key is pressed
-			if (e.keyCode){
-				code = e.keyCode;
-			}else if (e.which){
-				code = e.which;
-			}
+    var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 
-			var character = String.fromCharCode(code).toLowerCase();
+    // The event handler for bound element events
+    function eventHandler(e) {
+        e = e || $window.event;
 
-			if (code === 188){character = ",";} // If the user presses , when the type is onkeydown
-			if (code === 190){character = ".";} // If the user presses , when the type is onkeydown
+        var code, k;
 
-			var keys = label.split("+");
-			// Key Pressed - counts the number of valid keypresses - if it is same as the number of keys, the shortcut function is invoked
-			var kp = 0;
-			// Work around for stupid Shift key bug created by using lowercase - as a result the shift+num combination was broken
-			var shift_nums = {
-				"`":"~",
-				"1":"!",
-				"2":"@",
-				"3":"#",
-				"4":"$",
-				"5":"%",
-				"6":"^",
-				"7":"&",
-				"8":"*",
-				"9":"(",
-				"0":")",
-				"-":"_",
-				"=":"+",
-				";":":",
-				"'":"\"",
-				",":"<",
-				".":">",
-				"/":"?",
-				"\\":"|"
-			};
-			// Special Keys - and their codes
-			var special_keys = {
-				'esc':27,
-				'escape':27,
-				'tab':9,
-				'space':32,
-				'return':13,
-				'enter':13,
-				'backspace':8,
+        // Find out which key is pressed
+        if (e.keyCode)
+        {
+            code = e.keyCode;
+        }
+        else if (e.which) {
+            code = e.which;
+        }
 
-				'scrolllock':145,
-				'scroll_lock':145,
-				'scroll':145,
-				'capslock':20,
-				'caps_lock':20,
-				'caps':20,
-				'numlock':144,
-				'num_lock':144,
-				'num':144,
+        var character = String.fromCharCode(code).toLowerCase();
 
-				'pause':19,
-				'break':19,
+        if (code === 188){character = ",";} // If the user presses , when the type is onkeydown
+        if (code === 190){character = ".";} // If the user presses , when the type is onkeydown
 
-				'insert':45,
-				'home':36,
-				'delete':46,
-				'end':35,
+        var propagate = true;
 
-				'pageup':33,
-				'page_up':33,
-				'pu':33,
+        //Now we need to determine which shortcut this event is for, we'll do this by iterating over each 
+        //registered shortcut to find the match. We use Find here so that the loop exits as soon
+        //as we've found the one we're looking for
+        _.find(_.keys(keyboardManagerService.keyboardEvent), function(key) {
 
-				'pagedown':34,
-				'page_down':34,
-				'pd':34,
+            var shortcutLabel = key;
+            var shortcutVal = keyboardManagerService.keyboardEvent[key];
 
-				'left':37,
-				'up':38,
-				'right':39,
-				'down':40,
+            // Key Pressed - counts the number of valid keypresses - if it is same as the number of keys, the shortcut function is invoked
+            var kp = 0;
 
-				'f1':112,
-				'f2':113,
-				'f3':114,
-				'f4':115,
-				'f5':116,
-				'f6':117,
-				'f7':118,
-				'f8':119,
-				'f9':120,
-				'f10':121,
-				'f11':122,
-				'f12':123
-			};
-			// Some modifiers key
-			var modifiers = {
-				shift: {
-					wanted:		false,
-					pressed:	e.shiftKey ? true : false
-				},
-				ctrl : {
-					wanted:		false,
-					pressed:	e.ctrlKey ? true : false
-				},
-				alt  : {
-					wanted:		false,
-					pressed:	e.altKey ? true : false
-				},
-				meta : { //Meta is Mac specific
-					wanted:		false,
-					pressed:	e.metaKey ? true : false
-				}
-			};
-			// Foreach keys in label (split on +)
-			var l = keys.length;
-			for (var i = 0; i < l; i++) {
+            // Some modifiers key
+            var modifiers = {
+                shift: {
+                    wanted: false,
+                    pressed: e.shiftKey ? true : false
+                },
+                ctrl: {
+                    wanted: false,
+                    pressed: e.ctrlKey ? true : false
+                },
+                alt: {
+                    wanted: false,
+                    pressed: e.altKey ? true : false
+                },
+                meta: { //Meta is Mac specific
+                    wanted: false,
+                    pressed: e.metaKey ? true : false
+                }
+            };
 
-				var k=keys[i];
-				switch (k) {
-					case 'ctrl':
-					case 'control':
-						kp++;
-						modifiers.ctrl.wanted = true;
-						break;
-					case 'shift':
-					case 'alt':
-					case 'meta':
-						kp++;
-						modifiers[k].wanted = true;
-						break;
-				}
+            var keys = shortcutLabel.split("+");
+            var opt = shortcutVal.opt;
+            var callback = shortcutVal.callback;
 
-				if (k.length > 1) { // If it is a special key
-					if(special_keys[k] === code){
-						kp++;
-					}
+            // Foreach keys in label (split on +)
+            var l = keys.length;
+            for (var i = 0; i < l; i++) {
 
-				} else if (opt['keyCode']) { // If a specific key is set into the config
-					if (opt['keyCode'] === code) {
-						kp++;
-					}
+                var k = keys[i];
+                switch (k) {
+                    case 'ctrl':
+                    case 'control':
+                        kp++;
+                        modifiers.ctrl.wanted = true;
+                        break;
+                    case 'shift':
+                    case 'alt':
+                    case 'meta':
+                        kp++;
+                        modifiers[k].wanted = true;
+                        break;
+                }
 
-				} else { // The special keys did not match
-					if(character === k) {
-						kp++;
-					}else {
-						if(shift_nums[character] && e.shiftKey) { // Stupid Shift key bug created by using lowercase
-							character = shift_nums[character];
-							if(character === k){
-								kp++;
-							}
-						}
-					}
-				}
+                if (k.length > 1) { // If it is a special key
+                    if (special_keys[k] === code) {
+                        kp++;
+                    }
+                }
+                else if (opt['keyCode']) { // If a specific key is set into the config
+                    if (opt['keyCode'] === code) {
+                        kp++;
+                    }
+                }
+                else { // The special keys did not match
+                    if (character === k) {
+                        kp++;
+                    }
+                    else {
+                        if (shift_nums[character] && e.shiftKey) { // Stupid Shift key bug created by using lowercase
+                            character = shift_nums[character];
+                            if (character === k) {
+                                kp++;
+                            }
+                        }
+                    }
+                }
 
-			} //for end
+            } //for end
 
-			if(kp === keys.length &&
-				modifiers.ctrl.pressed === modifiers.ctrl.wanted &&
-				modifiers.shift.pressed === modifiers.shift.wanted &&
-				modifiers.alt.pressed === modifiers.alt.wanted &&
-				modifiers.meta.pressed === modifiers.meta.wanted) {
-		        $timeout(function() {
-					callback(e);
-		        }, 1);
+            if (kp === keys.length &&
+                modifiers.ctrl.pressed === modifiers.ctrl.wanted &&
+                modifiers.shift.pressed === modifiers.shift.wanted &&
+                modifiers.alt.pressed === modifiers.alt.wanted &&
+                modifiers.meta.pressed === modifiers.meta.wanted) {
 
-				if(!opt['propagate']) { // Stop the event
-					// e.cancelBubble is supported by IE - this will kill the bubbling process.
-					e.cancelBubble = true;
-					e.returnValue = false;
+                //found the right callback!
 
-					// e.stopPropagation works in Firefox.
-					if (e.stopPropagation) {
-						e.stopPropagation();
-						e.preventDefault();
-					}
-					return false;
-				}
-			}
-		};
-		// Store shortcut
-		keyboardManagerService.keyboardEvent[label] = {
-			'callback': fct,
-			'target':   elt,
-			'event':    opt['type']
-		};
+                // Disable event handler when focus input and textarea
+                if (opt['inputDisabled']) {
+                    var elt;
+                    if (e.target) {
+                        elt = e.target;
+                    } else if (e.srcElement) {
+                        elt = e.srcElement;
+                    }
 
-		//Attach the function with the event
-		if(elt.addEventListener){
-			elt.addEventListener(opt['type'], fct, false);
-		}else if(elt.attachEvent){
-			elt.attachEvent('on' + opt['type'], fct);
-		}else{
-			elt['on' + opt['type']] = fct;
-		}
-	};
-	// Remove the shortcut - just specify the shortcut and I will remove the binding
-	keyboardManagerService.unbind = function (label) {
-		label = label.toLowerCase();
-		var binding = keyboardManagerService.keyboardEvent[label];
-		delete(keyboardManagerService.keyboardEvent[label]);
+                    if (elt.nodeType === 3) { elt = elt.parentNode; }
+                    if (elt.tagName === 'INPUT' || elt.tagName === 'TEXTAREA') {
+                        //This exits the Find loop
+                        return true;
+                    }
+                }
 
-		if(!binding){return;}
+                $timeout(function () {
+                    callback(e);
+                }, 1);
 
-		var type		= binding['event'],
+                if (!opt['propagate']) { // Stop the event
+                    propagate = false;
+                }
+
+                //This exits the Find loop
+                return true;
+            }
+
+            //we haven't found one so continue looking
+            return false;
+
+        });
+
+        // Stop the event if required
+        if (!propagate) {
+            // e.cancelBubble is supported by IE - this will kill the bubbling process.
+            e.cancelBubble = true;
+            e.returnValue = false;
+
+            // e.stopPropagation works in Firefox.
+            if (e.stopPropagation) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            return false;
+        }
+    }
+
+    // Store all keyboard combination shortcuts
+    keyboardManagerService.keyboardEvent = {};
+
+    // Add a new keyboard combination shortcut
+    keyboardManagerService.bind = function (label, callback, opt) {
+
+        //replace ctrl key with meta key
+        if(isMac && label !== "ctrl+space"){
+            label = label.replace("ctrl","meta");
+        }
+
+        var elt;
+        // Initialize opt object
+        opt   = angular.extend({}, defaultOpt, opt);
+        label = label.toLowerCase();
+        elt   = opt.target;
+        if(typeof opt.target === 'string'){
+            elt = document.getElementById(opt.target);
+        }
+        
+        //Ensure we aren't double binding to the same element + type otherwise we'll end up multi-binding
+        // and raising events for now reason. So here we'll check if the event is already registered for the element
+        var boundValues = _.values(keyboardManagerService.keyboardEvent);
+        var found = _.find(boundValues, function (i) {
+            return i.target === elt && i.event === opt['type'];
+        });
+
+        // Store shortcut
+        keyboardManagerService.keyboardEvent[label] = {
+            'callback': callback,
+            'target':   elt,
+            'opt':      opt
+        };
+
+        if (!found) {
+            //Attach the function with the event
+            if (elt.addEventListener) {
+                elt.addEventListener(opt['type'], eventHandler, false);
+            } else if (elt.attachEvent) {
+                elt.attachEvent('on' + opt['type'], eventHandler);
+            } else {
+                elt['on' + opt['type']] = eventHandler;
+            }
+        }
+        
+    };
+    // Remove the shortcut - just specify the shortcut and I will remove the binding
+    keyboardManagerService.unbind = function (label) {
+        label = label.toLowerCase();
+        var binding = keyboardManagerService.keyboardEvent[label];
+        delete(keyboardManagerService.keyboardEvent[label]);
+
+        if(!binding){return;}
+
+        var type	= binding['event'],
 		elt			= binding['target'],
 		callback	= binding['callback'];
 
-		if(elt.detachEvent){
-			elt.detachEvent('on' + type, callback);
-		}else if(elt.removeEventListener){
-			elt.removeEventListener(type, callback, false);
-		}else{
-			elt['on'+type] = false;
-		}
-	};
-	//
+        if(elt.detachEvent){
+            elt.detachEvent('on' + type, callback);
+        }else if(elt.removeEventListener){
+            elt.removeEventListener(type, callback, false);
+        }else{
+            elt['on'+type] = false;
+        }
+    };
+    //
 
-	return keyboardManagerService;
-}]);
-(function() {
-   'use strict';
+    return keyboardManagerService;
+}angular.module('umbraco.services').factory('keyboardService', ['$window', '$timeout', keyboardService]);
+/**
+ @ngdoc service
+ * @name umbraco.services.listViewHelper
+ *
+ *
+ * @description
+ * Service for performing operations against items in the list view UI. Used by the built-in internal listviews
+ * as well as custom listview.
+ *
+ * A custom listview is always used inside a wrapper listview, so there are a number of inherited values on its
+ * scope by default:
+ *
+ * **$scope.selection**: Array containing all items currently selected in the listview
+ *
+ * **$scope.items**: Array containing all items currently displayed in the listview
+ *
+ * **$scope.folders**: Array containing all folders in the current listview (only for media)
+ *
+ * **$scope.options**: configuration object containing information such as pagesize, permissions, order direction etc.
+ *
+ * **$scope.model.config.layouts**: array of available layouts to apply to the listview (grid, list or custom layout)
+ *
+ * ##Usage##
+ * To use, inject listViewHelper into custom listview controller, listviewhelper expects you
+ * to pass in the full collection of items in the listview in several of its methods
+ * this collection is inherited from the parent controller and is available on $scope.selection
+ *
+ * <pre>
+ *      angular.module("umbraco").controller("my.listVieweditor". function($scope, listViewHelper){
+ *
+ *          //current items in the listview
+ *          var items = $scope.items;
+ *
+ *          //current selection
+ *          var selection = $scope.selection;
+ *
+ *          //deselect an item , $scope.selection is inherited, item is picked from inherited $scope.items
+ *          listViewHelper.deselectItem(item, $scope.selection);
+ *
+ *          //test if all items are selected, $scope.items + $scope.selection are inherited
+ *          listViewhelper.isSelectedAll($scope.items, $scope.selection);
+ *      });
+ * </pre>
+ */
+(function () {
+    'use strict';
 
-   function listViewHelper(localStorageService) {
+    function listViewHelper(localStorageService) {
 
-      var firstSelectedIndex = 0;
-      var localStorageKey = "umblistViewLayout";
+        var firstSelectedIndex = 0;
+        var localStorageKey = "umblistViewLayout";
 
-      function getLayout(nodeId, availableLayouts) {
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#getLayout
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Method for internal use, based on the collection of layouts passed, the method selects either
+        * any previous layout from local storage, or picks the first allowed layout
+        *
+        * @param {Number} nodeId The id of the current node displayed in the content editor
+        * @param {Array} availableLayouts Array of all allowed layouts, available from $scope.model.config.layouts
+        */
 
-          var storedLayouts = [];
+        function getLayout(nodeId, availableLayouts) {
 
-          if(localStorageService.get(localStorageKey)) {
-              storedLayouts = localStorageService.get(localStorageKey);
-          }
+            var storedLayouts = [];
 
-          if (storedLayouts && storedLayouts.length > 0) {
-              for (var i = 0; storedLayouts.length > i; i++) {
-                  var layout = storedLayouts[i];
-                  if (layout.nodeId === nodeId) {
-                      return setLayout(nodeId, layout, availableLayouts);
-                  }
-              }
-
-          }
-
-          return getFirstAllowedLayout(availableLayouts);
-
-      }
-
-      function setLayout(nodeId, selectedLayout, availableLayouts) {
-
-          var activeLayout = {};
-          var layoutFound = false;
-
-          for (var i = 0; availableLayouts.length > i; i++) {
-              var layout = availableLayouts[i];
-              if (layout.path === selectedLayout.path) {
-                  activeLayout = layout;
-                  layout.active = true;
-                  layoutFound = true;
-              } else {
-                  layout.active = false;
-              }
-          }
-
-          if(!layoutFound) {
-              activeLayout = getFirstAllowedLayout(availableLayouts);
-          }
-
-          saveLayoutInLocalStorage(nodeId, activeLayout);
-
-          return activeLayout;
-
-      }
-
-      function saveLayoutInLocalStorage(nodeId, selectedLayout) {
-          var layoutFound = false;
-          var storedLayouts = [];
-
-          if(localStorageService.get(localStorageKey)) {
-              storedLayouts = localStorageService.get(localStorageKey);
-          }
-
-          if(storedLayouts.length > 0) {
-              for(var i = 0; storedLayouts.length > i; i++) {
-                  var layout = storedLayouts[i];
-                  if(layout.nodeId === nodeId) {
-                      layout.path = selectedLayout.path;
-                      layoutFound = true;
-                  }
-              }
-          }
-
-          if(!layoutFound) {
-              var storageObject = {
-                  "nodeId": nodeId,
-                  "path": selectedLayout.path
-              };
-              storedLayouts.push(storageObject);
-          }
-
-          localStorageService.set(localStorageKey, storedLayouts);
-
-      }
-
-      function getFirstAllowedLayout(layouts) {
-
-         var firstAllowedLayout = {};
-
-         for (var i = 0; layouts.length > i; i++) {
-            var layout = layouts[i];
-            if (layout.selected === true) {
-               firstAllowedLayout = layout;
-               break;
+            if (localStorageService.get(localStorageKey)) {
+                storedLayouts = localStorageService.get(localStorageKey);
             }
-         }
 
-         return firstAllowedLayout;
-      }
+            if (storedLayouts && storedLayouts.length > 0) {
+                for (var i = 0; storedLayouts.length > i; i++) {
+                    var layout = storedLayouts[i];
+                    if (layout.nodeId === nodeId) {
+                        return setLayout(nodeId, layout, availableLayouts);
+                    }
+                }
 
-      function selectHandler(selectedItem, selectedIndex, items, selection, $event) {
+            }
 
-         var start = 0;
-         var end = 0;
-         var item = null;
+            return getFirstAllowedLayout(availableLayouts);
 
-         if ($event.shiftKey === true) {
+        }
 
-            if(selectedIndex > firstSelectedIndex) {
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#setLayout
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Changes the current layout used by the listview to the layout passed in. Stores selection in localstorage
+        *
+        * @param {Number} nodeID Id of the current node displayed in the content editor
+        * @param {Object} selectedLayout Layout selected as the layout to set as the current layout
+        * @param {Array} availableLayouts Array of all allowed layouts, available from $scope.model.config.layouts
+        */
 
-               start = firstSelectedIndex;
-               end = selectedIndex;
+        function setLayout(nodeId, selectedLayout, availableLayouts) {
 
-               for (; end >= start; start++) {
-                  item = items[start];
-                  selectItem(item, selection);
-               }
+            var activeLayout = {};
+            var layoutFound = false;
+
+            for (var i = 0; availableLayouts.length > i; i++) {
+                var layout = availableLayouts[i];
+                if (layout.path === selectedLayout.path) {
+                    activeLayout = layout;
+                    layout.active = true;
+                    layoutFound = true;
+                } else {
+                    layout.active = false;
+                }
+            }
+
+            if (!layoutFound) {
+                activeLayout = getFirstAllowedLayout(availableLayouts);
+            }
+
+            saveLayoutInLocalStorage(nodeId, activeLayout);
+
+            return activeLayout;
+
+        }
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#saveLayoutInLocalStorage
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Stores a given layout as the current default selection in local storage
+        *
+        * @param {Number} nodeId Id of the current node displayed in the content editor
+        * @param {Object} selectedLayout Layout selected as the layout to set as the current layout
+        */
+
+        function saveLayoutInLocalStorage(nodeId, selectedLayout) {
+            var layoutFound = false;
+            var storedLayouts = [];
+
+            if (localStorageService.get(localStorageKey)) {
+                storedLayouts = localStorageService.get(localStorageKey);
+            }
+
+            if (storedLayouts.length > 0) {
+                for (var i = 0; storedLayouts.length > i; i++) {
+                    var layout = storedLayouts[i];
+                    if (layout.nodeId === nodeId) {
+                        layout.path = selectedLayout.path;
+                        layoutFound = true;
+                    }
+                }
+            }
+
+            if (!layoutFound) {
+                var storageObject = {
+                    "nodeId": nodeId,
+                    "path": selectedLayout.path
+                };
+                storedLayouts.push(storageObject);
+            }
+
+            localStorageService.set(localStorageKey, storedLayouts);
+
+        }
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#getFirstAllowedLayout
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Returns currently selected layout, or alternatively the first layout in the available layouts collection
+        *
+        * @param {Array} layouts Array of all allowed layouts, available from $scope.model.config.layouts
+        */
+
+        function getFirstAllowedLayout(layouts) {
+
+            var firstAllowedLayout = {};
+
+            for (var i = 0; layouts.length > i; i++) {
+                var layout = layouts[i];
+                if (layout.selected === true) {
+                    firstAllowedLayout = layout;
+                    break;
+                }
+            }
+
+            return firstAllowedLayout;
+        }
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#selectHandler
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Helper method for working with item selection via a checkbox, internally it uses selectItem and deselectItem.
+        * Working with this method, requires its triggered via a checkbox which can then pass in its triggered $event
+        * When the checkbox is clicked, this method will toggle selection of the associated item so it matches the state of the checkbox
+        *
+        * @param {Object} selectedItem Item being selected or deselected by the checkbox
+        * @param {Number} selectedIndex Index of item being selected/deselected, usually passed as $index
+        * @param {Array} items All items in the current listview, available as $scope.items
+        * @param {Array} selection All selected items in the current listview, available as $scope.selection
+        * @param {Event} $event Event triggered by the checkbox being checked to select / deselect an item
+        */
+
+        function selectHandler(selectedItem, selectedIndex, items, selection, $event) {
+
+            var start = 0;
+            var end = 0;
+            var item = null;
+
+            if ($event.shiftKey === true) {
+
+                if (selectedIndex > firstSelectedIndex) {
+
+                    start = firstSelectedIndex;
+                    end = selectedIndex;
+
+                    for (; end >= start; start++) {
+                        item = items[start];
+                        selectItem(item, selection);
+                    }
+
+                } else {
+
+                    start = firstSelectedIndex;
+                    end = selectedIndex;
+
+                    for (; end <= start; start--) {
+                        item = items[start];
+                        selectItem(item, selection);
+                    }
+
+                }
 
             } else {
 
-               start = firstSelectedIndex;
-               end = selectedIndex;
+                if (selectedItem.selected) {
+                    deselectItem(selectedItem, selection);
+                } else {
+                    selectItem(selectedItem, selection);
+                }
 
-               for (; end <= start; start--) {
-                  item = items[start];
-                  selectItem(item, selection);
-               }
+                firstSelectedIndex = selectedIndex;
 
             }
 
-         } else {
+        }
 
-            if(selectedItem.selected) {
-               deselectItem(selectedItem, selection);
-            } else {
-               selectItem(selectedItem, selection);
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#selectItem
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Selects a given item to the listview selection array, requires you pass in the inherited $scope.selection collection
+        *
+        * @param {Object} item Item to select
+        * @param {Array} selection Listview selection, available as $scope.selection
+        */
+
+        function selectItem(item, selection) {
+            var isSelected = false;
+            for (var i = 0; selection.length > i; i++) {
+                var selectedItem = selection[i];
+                if (item.id === selectedItem.id) {
+                    isSelected = true;
+                }
+            }
+            if (!isSelected) {
+                selection.push({ id: item.id });
+                item.selected = true;
+            }
+        }
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#deselectItem
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Deselects a given item from the listviews selection array, requires you pass in the inherited $scope.selection collection
+        *
+        * @param {Object} item Item to deselect
+        * @param {Array} selection Listview selection, available as $scope.selection
+        */
+
+        function deselectItem(item, selection) {
+            for (var i = 0; selection.length > i; i++) {
+                var selectedItem = selection[i];
+                if (item.id === selectedItem.id) {
+                    selection.splice(i, 1);
+                    item.selected = false;
+                }
+            }
+        }
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#clearSelection
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Removes a given number of items and folders from the listviews selection array
+        * Folders can only be passed in if the listview is used in the media section which has a concept of folders.
+        *
+        * @param {Array} items Items to remove, can be null
+        * @param {Array} folders Folders to remove, can be null
+        * @param {Array} selection Listview selection, available as $scope.selection
+        */
+
+        function clearSelection(items, folders, selection) {
+
+            var i = 0;
+
+            selection.length = 0;
+
+            if (angular.isArray(items)) {
+                for (i = 0; items.length > i; i++) {
+                    var item = items[i];
+                    item.selected = false;
+                }
             }
 
-            firstSelectedIndex = selectedIndex;
-
-         }
-
-      }
-
-      function selectItem(item, selection) {
-         var isSelected = false;
-         for (var i = 0; selection.length > i; i++) {
-            var selectedItem = selection[i];
-            if (item.id === selectedItem.id) {
-               isSelected = true;
+         if(angular.isArray(folders)) {
+                for (i = 0; folders.length > i; i++) {
+                    var folder = folders[i];
+                    folder.selected = false;
+                }
             }
-         }
-         if(!isSelected) {
-            selection.push({id: item.id});
-            item.selected = true;
-         }
-      }
+        }
 
-      function deselectItem(item, selection) {
-         for (var i = 0; selection.length > i; i++) {
-            var selectedItem = selection[i];
-            if (item.id === selectedItem.id) {
-               selection.splice(i, 1);
-               item.selected = false;
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#selectAllItems
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Helper method for toggling the select state on all items in the active listview
+        * Can only be used from a checkbox as a checkbox $event is required to pass in.
+        *
+        * @param {Array} items Items to toggle selection on, should be $scope.items
+        * @param {Array} selection Listview selection, available as $scope.selection
+        * @param {$event} $event Event passed from the checkbox being toggled
+        */
+
+        function selectAllItems(items, selection, $event) {
+
+            var checkbox = $event.target;
+            var clearSelection = false;
+
+            if (!angular.isArray(items)) {
+                return;
             }
-         }
-      }
 
-      function clearSelection(items, folders, selection) {
+            selection.length = 0;
 
-         var i = 0;
+            for (var i = 0; i < items.length; i++) {
 
-         selection.length = 0;
+                var item = items[i];
 
-         if(angular.isArray(items)) {
-            for(i = 0; items.length > i; i++) {
-               var item = items[i];
-               item.selected = false;
+                if (checkbox.checked) {
+                    selection.push({ id: item.id });
+                } else {
+                    clearSelection = true;
+                }
+
+                item.selected = checkbox.checked;
+
             }
-         }
 
-         if(angular.isArray(items)) {
-            for(i = 0; folders.length > i; i++) {
-               var folder = folders[i];
-               folder.selected = false;
+            if (clearSelection) {
+                selection.length = 0;
             }
-         }
-      }
 
-      function selectAllItems(items, selection, $event) {
+        }
 
-          var checkbox = $event.target;
-          var clearSelection = false;
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#isSelectedAll
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Method to determine if all items on the current page in the list has been selected
+        * Given the current items in the view, and the current selection, it will return true/false
+        *
+        * @param {Array} items Items to test if all are selected, should be $scope.items
+        * @param {Array} selection Listview selection, available as $scope.selection
+        * @returns {Boolean} boolean indicate if all items in the listview have been selected
+        */
 
-          if (!angular.isArray(items)) {
-             return;
-          }
+        function isSelectedAll(items, selection) {
 
-          selection.length = 0;
+            var numberOfSelectedItem = 0;
 
-          for (var i = 0; i < items.length; i++) {
+            for (var itemIndex = 0; items.length > itemIndex; itemIndex++) {
+                var item = items[itemIndex];
 
-             var item = items[i];
+                for (var selectedIndex = 0; selection.length > selectedIndex; selectedIndex++) {
+                    var selectedItem = selection[selectedIndex];
 
-             if (checkbox.checked) {
-                selection.push({id: item.id});
-             } else {
-                clearSelection = true;
-             }
+                    if (item.id === selectedItem.id) {
+                        numberOfSelectedItem++;
+                    }
+                }
 
-             item.selected = checkbox.checked;
+            }
 
-          }
+            if (numberOfSelectedItem === items.length) {
+                return true;
+            }
 
-          if (clearSelection) {
-             selection.length = 0;
-         }
+        }
 
-      }
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#setSortingDirection
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * *Internal* method for changing sort order icon
+        * @param {String} col Column alias to order after
+        * @param {String} direction Order direction `asc` or `desc`
+        * @param {Object} options object passed from the parent listview available as $scope.options
+        */
 
-      function isSelectedAll(items, selection) {
+        function setSortingDirection(col, direction, options) {
+            return options.orderBy.toUpperCase() === col.toUpperCase() && options.orderDirection === direction;
+        }
 
-          var numberOfSelectedItem = 0;
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewHelper#setSorting
+        * @methodOf umbraco.services.listViewHelper
+        *
+        * @description
+        * Method for setting the field on which the listview will order its items after.
+        *
+        * @param {String} field Field alias to order after
+        * @param {Boolean} allow Determines if the user is allowed to set this field, normally true
+        * @param {Object} options Options object passed from the parent listview available as $scope.options
+        */
 
-          for(var itemIndex = 0; items.length > itemIndex; itemIndex++) {
-              var item = items[itemIndex];
+        function setSorting(field, allow, options) {
+            if (allow) {
+                options.orderBy = field;
 
-              for(var selectedIndex = 0; selection.length > selectedIndex; selectedIndex++) {
-                  var selectedItem = selection[selectedIndex];
+                if (options.orderDirection === "desc") {
+                    options.orderDirection = "asc";
+                } else {
+                    options.orderDirection = "desc";
+                }
+            }
+        }
 
-                  if(item.id === selectedItem.id) {
-                      numberOfSelectedItem++;
-                  }
-              }
+        //This takes in a dictionary of Ids with Permissions and determines
+        // the intersect of all permissions to return an object representing the
+        // listview button permissions
+        function getButtonPermissions(unmergedPermissions, currentIdsWithPermissions) {
 
-          }
+            if (currentIdsWithPermissions == null) {
+                currentIdsWithPermissions = {};
+            }
 
-          if(numberOfSelectedItem === items.length) {
-              return true;
-          }
+            //merge the newly retrieved permissions to the main dictionary
+            _.each(unmergedPermissions, function (value, key, list) {
+                currentIdsWithPermissions[key] = value;
+            });
 
-      }
+            //get the intersect permissions
+            var arr = [];
+            _.each(currentIdsWithPermissions, function (value, key, list) {
+                arr.push(value);
+            });
+
+            //we need to use 'apply' to call intersection with an array of arrays,
+            //see: http://stackoverflow.com/a/16229480/694494
+            var intersectPermissions = _.intersection.apply(_, arr);
+
+            return {
+                canCopy: _.contains(intersectPermissions, 'O'), //Magic Char = O
+                canCreate: _.contains(intersectPermissions, 'C'), //Magic Char = C
+                canDelete: _.contains(intersectPermissions, 'D'), //Magic Char = D
+                canMove: _.contains(intersectPermissions, 'M'), //Magic Char = M
+                canPublish: _.contains(intersectPermissions, 'U'), //Magic Char = U
+                canUnpublish: _.contains(intersectPermissions, 'U'), //Magic Char = Z (however UI says it can't be set, so if we can publish 'U' we can unpublish)
+            };
+        }
+
+        var service = {
+
+          getLayout: getLayout,
+          getFirstAllowedLayout: getFirstAllowedLayout,
+          setLayout: setLayout,
+          saveLayoutInLocalStorage: saveLayoutInLocalStorage,
+          selectHandler: selectHandler,
+          selectItem: selectItem,
+          deselectItem: deselectItem,
+          clearSelection: clearSelection,
+          selectAllItems: selectAllItems,
+          isSelectedAll: isSelectedAll,
+          setSortingDirection: setSortingDirection,
+          setSorting: setSorting,
+          getButtonPermissions: getButtonPermissions
+
+        };
+
+        return service;
+
+    }
 
 
-      function setSortingDirection(col, direction, options) {
-          return options.orderBy.toUpperCase() === col.toUpperCase() && options.orderDirection === direction;
-      }
-
-
-      function setSorting(field, allow, options) {
-          if (allow) {
-              options.orderBy = field;
-
-              if (options.orderDirection === "desc") {
-                  options.orderDirection = "asc";
-              } else {
-                  options.orderDirection = "desc";
-              }
-          }
-      }
-
-
-
-      var service = {
-         getLayout: getLayout,
-         getFirstAllowedLayout: getFirstAllowedLayout,
-         setLayout: setLayout,
-         saveLayoutInLocalStorage: saveLayoutInLocalStorage,
-         selectHandler: selectHandler,
-         selectItem: selectItem,
-         deselectItem: deselectItem,
-         clearSelection: clearSelection,
-         selectAllItems: selectAllItems,
-         isSelectedAll: isSelectedAll,
-         setSortingDirection: setSortingDirection,
-         setSorting: setSorting
-      };
-
-      return service;
-
-   }
-
-
-   angular.module('umbraco.services').factory('listViewHelper', listViewHelper);
+    angular.module('umbraco.services').factory('listViewHelper', listViewHelper);
 
 
 })();
@@ -8376,6 +8663,7 @@ function packageHelper(assetsService, treeService, eventsService, $templateCache
 }
 angular.module('umbraco.services').factory('packageHelper', packageHelper);
 
+//TODO: I believe this is obsolete
 function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, mediaHelper, umbRequestHelper) {
     return {
         /** sets the image's url, thumbnail and if its a folder */
@@ -8674,7 +8962,6 @@ function umbPhotoFolderHelper($compile, $log, $timeout, $filter, imageHelper, me
         }
     };
 }
-
 angular.module("umbraco.services").factory("umbPhotoFolderHelper", umbPhotoFolderHelper);
 
 /**
