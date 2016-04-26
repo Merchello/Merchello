@@ -5,6 +5,7 @@
     using global::Braintree;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Braintree.Controllers;
@@ -69,8 +70,12 @@
 
             if (provider != null) return provider.ExtendedData.GetBrainTreeProviderSettings();
 
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("GatewayProviders");
+            logData.AddCategory("Braintree");
+
             var ex = new NullReferenceException("The BraintreePaymentGatewayProvider could not be resolved.  The provider must be activiated");
-            LogHelper.Error<BraintreeApiController>("BraintreePaymentGatewayProvider not activated.", ex);
+            MultiLogHelper.Error<BraintreeApiController>("BraintreePaymentGatewayProvider not activated.", ex, logData);
             throw ex;
         }
     }

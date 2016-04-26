@@ -8,6 +8,11 @@
         /// <summary>
         /// Gets the <see cref="IPayPalApiPaymentService"/>.
         /// </summary>
-        IPayPalApiPaymentService Payment { get; } 
+        IPayPalApiPaymentService ApiPayment { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IPayPalExpressCheckoutService"/>.
+        /// </summary>
+        IPayPalExpressCheckoutService ExpressCheckout { get; } 
     }
 }

@@ -1,0 +1,81 @@
+﻿namespace Merchello.Providers.Payment.PayPal.Factories
+{
+    using System;
+    using System.Web;
+
+    using Merchello.Core;
+    using Merchello.Core.Logging;
+
+    using Umbraco.Core;
+
+    /// <summary>
+    /// Setting for the <see cref="PayPalPaymentDetailsTypeFactory"/>.
+    /// </summary>
+    public class PayPalFactorySettings
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalFactorySettings"/> class.
+        /// </summary>
+        public PayPalFactorySettings()
+            : this(string.Empty)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalFactorySettings"/> class.
+        /// </summary>
+        /// <param name="websiteUrl">
+        /// The website URL.
+        /// </param>
+        /// <param name="usesProductContent">
+        /// A value indicating that the store is rendering product via IProductContent.
+        /// </param>
+        public PayPalFactorySettings(string websiteUrl, bool usesProductContent = true)
+        {
+            this.UsesProductContent = usesProductContent;
+            this.WebsiteUrl = WebsiteUrl;
+
+            this.Initialize();
+        }
+
+        /// <summary>
+        /// Gets or sets the website url.
+        /// </summary>
+        public string WebsiteUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether uses product content.
+        /// </summary>
+        public bool UsesProductContent { get; set; }
+
+        /// <summary>
+        /// Initializes the factory.
+        /// </summary>
+        private void Initialize()
+        {
+            if (!this.WebsiteUrl.IsNullOrWhiteSpace()) return;
+
+            try
+            {
+                var url = HttpContext.Current.Request.Url;
+                this.WebsiteUrl =
+                    string.Format(
+                        "{0}://{1}{2}",
+                        url.Scheme,
+                        url.Host,
+                        url.IsDefaultPort ? string.Empty : ":" + url.Port).EnsureNotEndsWith('/');
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("GatewayProviders");
+                logData.AddCategory("PayPal");
+
+                MultiLogHelper.WarnWithException<PayPalFactorySettings>(
+                    "Failed to initialize factory setting for WebsiteUrl.  HttpContext.Current.Request is likely null.",
+                    ex,
+                    logData);
+            }
+        }
+    }
+}

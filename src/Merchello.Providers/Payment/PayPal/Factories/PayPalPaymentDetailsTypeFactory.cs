@@ -4,16 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::PayPal.PayPalAPIInterfaceService.Model;
-
-    using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-    using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Web;
+    using Merchello.Web.Models.VirtualContent;
+
+    using global::PayPal.PayPalAPIInterfaceService.Model;
 
     using Umbraco.Core;
-    using Umbraco.Core.Events;
 
     /// <summary>
     /// A factory responsible for building <see cref="PaymentDetailsItemType"/>.
@@ -28,18 +26,26 @@
         /// <summary>
         /// The base url.
         /// </summary>
-        private readonly string _baseUrl;
+        private readonly PayPalFactorySettings _settings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PayPalPaymentDetailsTypeFactory"/> class.
         /// </summary>
-        /// <param name="baseUrl">
-        /// The base url.
+        public PayPalPaymentDetailsTypeFactory()
+            : this(new PayPalFactorySettings())
+        { 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalPaymentDetailsTypeFactory"/> class.
+        /// </summary>
+        /// <param name="settings">
+        /// The PayPal factory settings.
         /// </param>
-        public PayPalPaymentDetailsTypeFactory(string baseUrl)
+        public PayPalPaymentDetailsTypeFactory(PayPalFactorySettings settings)
         {
-            Mandate.ParameterNotNullOrEmpty(baseUrl, "baseUrl");
-            _baseUrl = baseUrl;
+            Mandate.ParameterNotNull(settings, "settings");
+            _settings = settings;
         }
 
         /// <summary>
@@ -48,10 +54,13 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
+        /// <param name="actionCode">
+        /// The <see cref="PaymentActionCodeType"/>.
+        /// </param>
         /// <returns>
         /// The <see cref="PaymentDetailsType"/>.
         /// </returns>
-        public PaymentDetailsType Build(IInvoice invoice)
+        public PaymentDetailsType Build(IInvoice invoice, PaymentActionCodeType actionCode)
         {
             // Get the decimal configuration for the current currency
             var currencyCodeType = GetPayPalCurrency(invoice.CurrencyCode);
@@ -63,18 +72,27 @@
             var taxTotal = basicAmountFactory.Build(invoice.TotalTax());
             var invoiceTotal = basicAmountFactory.Build(invoice.Total);
 
-            var items = BuildPaymentDetailsItemTypes(invoice.ProductLineItems());
+            var items = BuildPaymentDetailsItemTypes(invoice.ProductLineItems(), basicAmountFactory);
+
+            var paymentDetails = new PaymentDetailsType
+            {
+                PaymentDetailsItem = items.ToList(),
+                ItemTotal = itemTotal,
+                TaxTotal = taxTotal,
+                ShippingTotal = shippingTotal,
+                OrderTotal = invoiceTotal,
+                PaymentAction = actionCode,
+                InvoiceID = invoice.PrefixedInvoiceNumber()
+            };
 
             // ShipToAddress
-            AddressType shipToAddress = null;
             if (invoice.ShippingLineItems().Any())
             {
                 var addressTypeFactory = new PayPalAddressTypeFactory();
-                shipToAddress = addressTypeFactory.Build(invoice.GetShippingAddresses().FirstOrDefault());
-
+                paymentDetails.ShipToAddress = addressTypeFactory.Build(invoice.GetShippingAddresses().FirstOrDefault());
             }
 
-            throw new NotImplementedException();
+            return paymentDetails;
         }
 
 
@@ -111,15 +129,18 @@
         /// <param name="invoice">
         /// The invoice.
         /// </param>
+        /// <param name="factory">
+        /// The <see cref="PayPalBasicAmountTypeFactory"/>.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{PaymentDetailsItemType}"/>.
         /// </returns>
-        public virtual IEnumerable<PaymentDetailsItemType> BuildPaymentDetailsItemTypes(IInvoice invoice)
+        public virtual IEnumerable<PaymentDetailsItemType> BuildPaymentDetailsItemTypes(IInvoice invoice, PayPalBasicAmountTypeFactory factory)
         {
             var paymentDetailItems = new List<PaymentDetailsItemType>();
-            paymentDetailItems.AddRange(BuildPaymentDetailsItemTypes(invoice.ProductLineItems()));
-            paymentDetailItems.AddRange(BuildPaymentDetailsItemTypes(invoice.CustomLineItems()));
-            paymentDetailItems.AddRange(BuildPaymentDetailsItemTypes(invoice.DiscountLineItems(), true));
+            paymentDetailItems.AddRange(BuildPaymentDetailsItemTypes(invoice.ProductLineItems(), factory));
+            paymentDetailItems.AddRange(BuildPaymentDetailsItemTypes(invoice.CustomLineItems(), factory));
+            paymentDetailItems.AddRange(BuildPaymentDetailsItemTypes(invoice.DiscountLineItems(), factory, true));
 
             return paymentDetailItems;
         }
@@ -129,6 +150,9 @@
         /// </summary>
         /// <param name="items">
         /// The items.
+        /// </param>        
+        /// <param name="factory">
+        /// The <see cref="PayPalBasicAmountTypeFactory"/>.
         /// </param>
         /// <param name="areDiscounts">
         /// The are discounts.
@@ -136,11 +160,70 @@
         /// <returns>
         /// The <see cref="IEnumerable{PaymentDetailItemType}"/>.
         /// </returns>
-        public virtual IEnumerable<PaymentDetailsItemType> BuildPaymentDetailsItemTypes(IEnumerable<ILineItem> items, bool areDiscounts = false)
+        public virtual IEnumerable<PaymentDetailsItemType> BuildPaymentDetailsItemTypes(IEnumerable<ILineItem> items, PayPalBasicAmountTypeFactory factory, bool areDiscounts = false)
         {
-            var paymentDetailItems = new List<PaymentDetailsItemType>();
+            return items.ToArray().Select(
+                item => item.ExtendedData.ContainsProductKey() ? 
+                    this.BuildProductPaymentDetailsItemType(item, factory) : 
+                    this.BuildGenericPaymentDetailsItemType(item, factory, areDiscounts)).ToList();
+        }
 
-            return paymentDetailItems;
+        /// <summary>
+        /// Builds a <see cref="PaymentDetailsItemType"/>.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <param name="factory">
+        /// The <see cref="PayPalBasicAmountTypeFactory"/>.
+        /// </param>
+        /// <param name="isDiscount">
+        /// The is discount.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentDetailsItemType"/>.
+        /// </returns>
+        protected virtual PaymentDetailsItemType BuildGenericPaymentDetailsItemType(ILineItem item, PayPalBasicAmountTypeFactory factory, bool isDiscount)
+        {
+            var detailsItemType = new PaymentDetailsItemType
+            {
+                Name = item.Name,
+                ItemURL = null,
+                Amount = factory.Build(item.Price),
+                Quantity = item.Quantity,
+            };
+
+            return detailsItemType;
+        }
+
+        /// <summary>
+        /// The build product payment details item type.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>        
+        /// <param name="factory">
+        /// The <see cref="PayPalBasicAmountTypeFactory"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentDetailsItemType"/>.
+        /// </returns>
+        protected virtual PaymentDetailsItemType BuildProductPaymentDetailsItemType(ILineItem item, PayPalBasicAmountTypeFactory factory)
+        {
+            IProductContent product = null;
+            if (_settings.UsesProductContent) product = _merchello.TypeProductContentBySku(item.Sku);
+
+            var detailsItemType = new PaymentDetailsItemType
+            {
+                Name = item.Name,
+                ItemURL = product != null ? 
+                    string.Format("{0}{1}", _settings.WebsiteUrl, product.Url) :
+                    null,
+                Amount = factory.Build(item.Price),
+                Quantity = item.Quantity
+            };
+
+            return detailsItemType;
         }
     }
 }

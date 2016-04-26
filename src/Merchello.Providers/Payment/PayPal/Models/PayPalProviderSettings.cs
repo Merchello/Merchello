@@ -19,6 +19,9 @@
             this.Mode = PayPalMode.Sandbox;
             ClientId = string.Empty;
             ClientSecret = string.Empty;
+            ApiUsername = string.Empty;
+            ApiPassword = string.Empty;
+            ApiSignature = string.Empty;
         }
 
         /// <summary>
@@ -36,5 +39,20 @@
         /// Gets or sets the client secret.
         /// </summary>
         public string ClientSecret { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API username.
+        /// </summary>
+        public string ApiUsername { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API password.
+        /// </summary>
+        public string ApiPassword { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API signature.
+        /// </summary>
+        public string ApiSignature { get; set; }
 	}
 }

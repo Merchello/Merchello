@@ -61,7 +61,7 @@
 
             //// If this were using a service we might want to store some of the transaction data in the ExtendedData for record
             ////payment.ExtendData
-
+        
             return new PaymentResult(Attempt.Succeed(payment), invoice, false);
         }
 

@@ -60,9 +60,11 @@
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 ServicePointManager.DefaultConnectionLimit = 9999;
 
-                var sdkConfig = _settings.GetSdkConfig();
+                var attempt = _settings.GetApiSdkConfig();
 
-                var accessToken = new OAuthTokenCredential(_settings.ClientId, _settings.ClientSecret, sdkConfig).GetAccessToken();
+                if (!attempt.Success) throw attempt.Exception;
+
+                var accessToken = new OAuthTokenCredential(_settings.ClientId, _settings.ClientSecret, attempt.Result).GetAccessToken();
 
                 return new APIContext(accessToken);
             }

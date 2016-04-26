@@ -24,13 +24,12 @@
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             ServicePointManager.DefaultConnectionLimit = 9999;
 
-            
             var settings = ((PayPalApiService)PayPalApiService).Settings;
 
-            var sdkConfig = settings.GetSdkConfig();
+            var sdkConfig = settings.GetApiSdkConfig();
 
             //// Act
-            var accessToken = new OAuthTokenCredential(settings.ClientId, settings.ClientSecret, sdkConfig).GetAccessToken();
+            var accessToken = new OAuthTokenCredential(settings.ClientId, settings.ClientSecret, sdkConfig.Result).GetAccessToken();
 
             //// Assert
             Console.WriteLine(accessToken);
@@ -47,9 +46,9 @@
 
             var settings = ((PayPalApiService)PayPalApiService).Settings;
 
-            var sdkConfig = settings.GetSdkConfig();
+            var sdkConfig = settings.GetApiSdkConfig();
 
-            var accessToken = new OAuthTokenCredential(settings.ClientId, settings.ClientSecret, sdkConfig).GetAccessToken();
+            var accessToken = new OAuthTokenCredential(settings.ClientId, settings.ClientSecret, sdkConfig.Result).GetAccessToken();
 
             //// Act
             var apiContext = new APIContext(accessToken);

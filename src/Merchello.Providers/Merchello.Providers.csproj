@@ -286,14 +286,18 @@
     <Compile Include="Constants-PayPal.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\RedirectProviderApiControllerBase.cs" />
     <Compile Include="Exceptions\BraintreeApiException.cs" />
     <Compile Include="Exceptions\PayPalApiException.cs" />
     <Compile Include="Payment\Braintree\Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
+    <Compile Include="Payment\PayPal\Controllers\PayPalApiControllerBase.cs" />
+    <Compile Include="Payment\PayPal\Controllers\PayPalExpressApiController.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalBasicAmountTypeFactory.cs" />
+    <Compile Include="Payment\PayPal\Factories\PayPalFactorySettings.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalPaymentDetailsTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalAddressTypeFactory.cs" />
+    <Compile Include="Payment\PayPal\Models\ExpressCheckoutResponse.cs" />
+    <Compile Include="Payment\PayPal\Models\PayPalExpressCheckoutUrls.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettings.cs" />
     <Compile Include="Models\ProviderSettingsExtensions.cs" />
     <Compile Include="Models\ProviderSettingsMapperAttribute.cs" />
@@ -339,21 +343,24 @@
     <Compile Include="Payment\Braintree\Services\IBraintreeSubscriptionApiService.cs" />
     <Compile Include="Payment\Braintree\Services\IBraintreeTransactionApiService.cs" />
     <Compile Include="Payment\Braintree\Services\IBraintreeWebhooksApiService.cs" />
-    <Compile Include="Payment\PayPal\Controllers\PayPalApiController.cs" />
     <Compile Include="Payment\PayPal\Models\CurrencyCodeTypeDecimal.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettingsExtensions.cs" />
     <Compile Include="Payment\PayPal\Models\SdkConfig.cs" />
+    <Compile Include="Payment\PayPal\PayPalApiHelper.cs" />
     <Compile Include="Payment\PayPal\PayPalMode.cs" />
     <Compile Include="Payment\PayPal\PayPalPaymentProcessor.cs" />
     <Compile Include="Payment\PayPal\PayPalProcessorArgumentCollectionsExtensions.cs" />
+    <Compile Include="Payment\PayPal\Provider\PayPalExpressCheckoutPaymentGatewayMethod.cs" />
     <Compile Include="Payment\PayPal\Provider\PayPalPaymentGatewayMethod.cs" />
     <Compile Include="Payment\PayPal\Provider\PayPalPaymentGatewayProvider.cs" />
     <Compile Include="Payment\PayPal\Services\IPayPalApiPaymentService.cs" />
     <Compile Include="Payment\PayPal\Services\IPayPalApiService.cs" />
     <Compile Include="Payment\PayPal\Services\IPayPalApiServiceBase.cs" />
+    <Compile Include="Payment\PayPal\Services\IPayPalExpressCheckoutService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiServiceBase.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiPaymentService.cs" />
+    <Compile Include="Payment\PayPal\Services\PayPalExpressCheckoutService.cs" />
     <Compile Include="Payment\RedirectPaymentMethodBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />

@@ -21,7 +21,12 @@
         /// <summary>
         /// The <see cref="IPayPalApiPaymentService"/>.
         /// </summary>
-        private Lazy<IPayPalApiPaymentService> _payment;
+        private Lazy<IPayPalApiPaymentService> _apiPayment;
+
+        /// <summary>
+        /// The <see cref="IPayPalExpressCheckoutService"/>.
+        /// </summary>
+        private Lazy<IPayPalExpressCheckoutService> _expressCheckout;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PayPalApiService"/> class.
@@ -41,11 +46,22 @@
         /// <summary>
         /// Gets the <see cref="IPayPalApiPaymentService"/>.
         /// </summary>
-        public IPayPalApiPaymentService Payment
+        public IPayPalApiPaymentService ApiPayment
         {
             get
             {
-                return _payment.Value;
+                return this._apiPayment.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IPayPalExpressCheckoutService"/>.
+        /// </summary>
+        public IPayPalExpressCheckoutService ExpressCheckout
+        {
+            get
+            {
+                return _expressCheckout.Value;
             }
         }
 
@@ -54,7 +70,8 @@
         /// </summary>
         private void Initialize()
         {
-            _payment = new Lazy<IPayPalApiPaymentService>(() => new PayPalApiPaymentService(_settings));
+            this._apiPayment = new Lazy<IPayPalApiPaymentService>(() => new PayPalApiPaymentService(_settings));
+            this._expressCheckout = new Lazy<IPayPalExpressCheckoutService>(() => new PayPalExpressCheckoutService(_settings));
         }
     }
 }

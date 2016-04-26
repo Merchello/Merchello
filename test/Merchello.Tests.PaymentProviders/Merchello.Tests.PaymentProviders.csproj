@@ -277,7 +277,6 @@
     <Compile Include="Braintree\TestHelpers\TestHelper.cs" />
     <Compile Include="Braintree\Webhooks\WebhooksTests.cs" />
     <Compile Include="PayPal\Api\GeneralApiTests.cs" />
-    <Compile Include="PayPal\Factories\PaymentDetailsTypeFactory.cs" />
     <Compile Include="PayPal\TestHelpers\PayPalTestBase.cs" />
     <Compile Include="PayPal\TestHelpers\TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

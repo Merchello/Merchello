@@ -33,6 +33,17 @@
             }
 
             /// <summary>
+            /// Payment codes for the PayPal provider.
+            /// </summary>
+            public static class PaymentCodes
+            {
+                /// <summary>
+                /// Gets the Express Checkout Payment code.
+                /// </summary>
+                public const string ExpressCheckout = "PayPalExpress";
+            }
+
+            /// <summary>
             /// PayPal ExtendedData keys.
             /// </summary>
             public static class ExtendedDataKeys
@@ -171,7 +182,7 @@
                 {
                     get
                     {
-                      return "paypalAuthorizeDeclined";
+                        return "paypalAuthorizeDeclined";
                     }
                 }
 
