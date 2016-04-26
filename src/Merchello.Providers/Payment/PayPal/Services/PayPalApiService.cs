@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Services
 {
-    
+    using System;
+
     using Merchello.Providers.Payment.PayPal.Models;
 
     using global::PayPal;
@@ -8,9 +9,9 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// Represents a PayPalApiService.
+    /// Represents a PayPal API Service.
     /// </summary>
-    public class PayPalApiService
+    public class PayPalApiService : PayPalApiServiceBase, IPayPalApiService
     {
         /// <summary>
         /// The <see cref="PayPalProviderSettings"/>.
@@ -18,9 +19,9 @@
         private readonly PayPalProviderSettings _settings;
 
         /// <summary>
-        /// The <see cref="APIContext"/>.
+        /// The <see cref="IPayPalApiPaymentService"/>.
         /// </summary>
-        private APIContext _apiContext;
+        private Lazy<IPayPalApiPaymentService> _payment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PayPalApiService"/> class.
@@ -29,21 +30,31 @@
         /// The settings.
         /// </param>
         public PayPalApiService(PayPalProviderSettings settings)
+            : base(settings)
         {
             Mandate.ParameterNotNull(settings, "settings");
             _settings = settings;
+
+            this.Initialize();
         }
 
+        /// <summary>
+        /// Gets the <see cref="IPayPalApiPaymentService"/>.
+        /// </summary>
+        public IPayPalApiPaymentService Payment
+        {
+            get
+            {
+                return _payment.Value;
+            }
+        }
 
         /// <summary>
-        /// Gets the access token.
+        /// Initializes the service.
         /// </summary>
-        /// <returns>
-        /// The access token.
-        /// </returns>
-        private string GetAccessToken()
+        private void Initialize()
         {
-            return string.Empty;
+            _payment = new Lazy<IPayPalApiPaymentService>(() => new PayPalApiPaymentService(_settings));
         }
     }
 }

@@ -103,7 +103,6 @@ namespace Merchello.Tests.IntegrationTests.Examine
             Assert.AreEqual("Rusty", customerDisplay.FirstName);
             Assert.AreEqual("Swayne", customerDisplay.LastName);
             Assert.AreEqual("test@test.com", customer.Email);
-            Assert.AreEqual("Here are some notes", customerDisplay.Notes);
             Assert.AreEqual(lastActivityDate, customerDisplay.LastActivityDate);
             Assert.IsFalse(customerDisplay.Addresses.Any());
             Assert.IsFalse(customerDisplay.TaxExempt);

@@ -106,6 +106,7 @@
             _loginName = loginName;
 
             _addresses = new List<ICustomerAddress>();
+            _notes = new List<INote>();
         }
 
         /// <summary>

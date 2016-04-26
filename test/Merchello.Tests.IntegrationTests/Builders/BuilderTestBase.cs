@@ -15,6 +15,7 @@ using Merchello.Web;
 
 namespace Merchello.Tests.IntegrationTests.Builders
 {
+    using Merchello.Core.Logging;
 
     public class BuilderTestBase : DatabaseIntegrationTestBase
     {

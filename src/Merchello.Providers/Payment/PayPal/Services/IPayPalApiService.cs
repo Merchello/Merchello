@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Services
 {
-
     /// <summary>
     /// Defines a PayPal API Service.
     /// </summary>
@@ -9,6 +8,6 @@
         /// <summary>
         /// Gets the <see cref="IPayPalApiPaymentService"/>.
         /// </summary>
-        IPayPalApiPaymentService Payment { get; }
+        IPayPalApiPaymentService Payment { get; } 
     }
 }
