@@ -90,12 +90,12 @@
         public event TypedEventHandler<CustomerItemCacheBase, Core.Events.NewEventArgs<ILineItem>> AddedItem;
 
         /// <summary>
-        /// Occurs before an item quatity is updated.
+        /// Occurs before an item quantity is updated.
         /// </summary>
         public event TypedEventHandler<CustomerItemCacheBase, Core.Events.UpdateItemEventArgs<ILineItem>> UpdatingItem;
 
         /// <summary>
-        /// Occurs after an item quatity is updated.
+        /// Occurs after an item quantity is updated.
         /// </summary>
         public event TypedEventHandler<CustomerItemCacheBase, Core.Events.UpdateItemEventArgs<ILineItem>> UpdatedItem;
 

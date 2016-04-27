@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Services
 {
-    public interface IPayPalApiPaymentService
+    using Umbraco.Core.Services;
+
+    /// <summary>
+    /// Defines a PayPalApiPaymentService
+    /// </summary>
+    public interface IPayPalApiPaymentService : IService
     {
-         
     }
 }

@@ -15,6 +15,7 @@
                 </select>
             </div>
         </div>
+        <h3>API Checkout</h3>
         <div class="control-group row-fluid">
             <div class="col-xs-12 span12">
                 <label for="clientId">Client Id</label>
@@ -28,11 +29,32 @@
             </div>
         </div>
 
+        <h3>PayPal Express Checkout</h3>
+        <div class="control-group row-fluid">
+            <p>API Username<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiUsername" placeholder="paypal_api_account_com">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>API Password<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiPassword">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>API Signature<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiSignature">
+            </div>
+        </div>
+
         <div class="control-group row-fluid">
             <label class="checkbox col-xs-12 span12">
                 <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
             </label>
         </div>
+
     </div>
 </div>
 

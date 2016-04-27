@@ -4,6 +4,7 @@
     using System.Reflection;
 
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.Braintree.Models;
     using Merchello.Providers.Payment.Models;
@@ -21,20 +22,6 @@
     /// </summary>
     public static class ProviderSettingsExtensions
     {
-
-        /// <summary>
-        /// Get the PayPal provider settings from the extended data collection
-        /// </summary>
-        /// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
-        /// <returns>The deserialized <see cref="PayPalProviderSettings"/></returns>
-        public static PayPalProviderSettings GetPayPalProviderSettings(this ExtendedDataCollection extendedData)
-        {
-            if (!extendedData.ContainsKey(Constants.PayPal.ExtendedDataKeys.ProviderSettings)) return new PayPalProviderSettings();
-
-            return
-                JsonConvert.DeserializeObject<PayPalProviderSettings>(
-                    extendedData.GetValue(Constants.PayPal.ExtendedDataKeys.ProviderSettings));
-        }
 
         /// <summary>
         /// Gets the Braintree provider settings from the ExtendedDataCollection
@@ -60,6 +47,32 @@
 
             return settings;
         }
+
+        /// <summary>
+        /// Gets the <see cref="PayPalProviderSettings"/>.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PayPalProviderSettings"/>.
+        /// </returns>
+        public static PayPalProviderSettings GetPayPalProviderSettings(this ExtendedDataCollection extendedData)
+        {
+            PayPalProviderSettings settings;
+            if (extendedData.ContainsKey(Constants.PayPal.ExtendedDataKeys.ProviderSettings))
+            {
+                var json = extendedData.GetValue(Constants.PayPal.ExtendedDataKeys.ProviderSettings);
+                settings = JsonConvert.DeserializeObject<PayPalProviderSettings>(json);
+            }
+            else
+            {
+                settings = new PayPalProviderSettings();
+            }
+
+            return settings;
+        }
+
 
         /// <summary>
         /// Gets the <see cref="ProviderSettingsMapperAttribute"/>.
@@ -139,11 +152,12 @@
         /// </exception>
         private static IPaymentProviderSettings GetProviderSettings(this PaymentGatewayProviderBase provider)
         {
+            var logData = MultiLogger.GetBaseLoggingData();
             var att = provider.ProviderSettingsMapping();
             if (att == null)
             {
                 var invalidOp = new InvalidOperationException("Cannot use this method if the provider is not decorated with a ProviderSettingsMapperAttribute");
-                LogHelper.Error(typeof(ProviderSettingsExtensions), "PaymentGatewayProvider does not have attribute", invalidOp);
+                MultiLogHelper.Error(typeof(ProviderSettingsExtensions), "PaymentGatewayProvider does not have attribute", invalidOp, logData);
                 throw invalidOp;
             }
 
@@ -164,10 +178,11 @@
             if (attempt.Success) return attempt.Result;
 
             var nullReference = new NullReferenceException("Provider settings for provider was not mapped");
-            LogHelper.Error(
+            MultiLogHelper.Error(
                 typeof(ProviderSettingsExtensions),
                 "Failed to create default provider settings",
-                nullReference);
+                nullReference,
+                logData);
 
             throw nullReference;
         }

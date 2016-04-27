@@ -30,40 +30,6 @@
         }
 
         /// <summary>
-        /// Performs authorize payment operation.
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPaymentResult"/>.
-        /// </returns>
-        protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
-        {
-            var payment = GatewayProviderService.CreatePayment(PaymentMethodType.Cash, invoice.Total, PaymentMethod.Key);
-            payment.CustomerKey = invoice.CustomerKey;
-            payment.PaymentMethodName = PaymentMethod.Name;
-            payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
-            payment.Collected = false;
-            payment.Authorized = true;
-
-            GatewayProviderService.Save(payment);
-
-            // In this case, we want to do our own Apply Payment operation as the amount has not been collected -
-            // so we create an applied payment with a 0 amount.  Once the payment has been "collected", another Applied Payment record will
-            // be created showing the full amount and the invoice status will be set to Paid.
-            GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, string.Format("To show promise of a {0} payment", PaymentMethod.Name), 0);
-
-            //// If this were using a service we might want to store some of the transaction data in the ExtendedData for record
-            ////payment.ExtendData
-
-            return new PaymentResult(Attempt.Succeed(payment), invoice, false);
-        }
-
-        /// <summary>
         /// Payment methods derived from <see cref="RedirectPaymentMethodBase"/> cannot implement <see cref="PerformAuthorizeCapturePayment(IInvoice, decimal, ProcessorArgumentCollection)"/>.
         /// </summary>
         /// <param name="invoice">

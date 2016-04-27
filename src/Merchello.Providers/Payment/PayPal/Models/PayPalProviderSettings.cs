@@ -12,6 +12,19 @@
     public class PayPalProviderSettings : IPaymentProviderSettings
 	{
         /// <summary>
+        /// Initializes a new instance of the <see cref="PayPalProviderSettings"/> class.
+        /// </summary>
+        public PayPalProviderSettings()
+        {
+            this.Mode = PayPalMode.Sandbox;
+            ClientId = string.Empty;
+            ClientSecret = string.Empty;
+            ApiUsername = string.Empty;
+            ApiPassword = string.Empty;
+            ApiSignature = string.Empty;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the site is in live mode.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
@@ -26,5 +39,20 @@
         /// Gets or sets the client secret.
         /// </summary>
         public string ClientSecret { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API username.
+        /// </summary>
+        public string ApiUsername { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API password.
+        /// </summary>
+        public string ApiPassword { get; set; }
+
+        /// <summary>
+        /// Gets or sets the API signature.
+        /// </summary>
+        public string ApiSignature { get; set; }
 	}
 }

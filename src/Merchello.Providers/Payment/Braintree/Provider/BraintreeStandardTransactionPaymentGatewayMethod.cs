@@ -35,13 +35,13 @@
         /// Initializes a new instance of the <see cref="BraintreeStandardTransactionPaymentGatewayMethod"/> class.
         /// </summary>
         /// <param name="gatewayProviderService">
-        /// The gateway provider service.
+        /// The <see cref="GatewayProviderService"/>.
         /// </param>
         /// <param name="paymentMethod">
         /// The payment method.
         /// </param>
         /// <param name="braintreeApiService">
-        /// The braintree Api Service.
+        /// The <see cref="BraintreeApiService"/>.
         /// </param>
         public BraintreeStandardTransactionPaymentGatewayMethod(IGatewayProviderService gatewayProviderService, IPaymentMethod paymentMethod, IBraintreeApiService braintreeApiService)
             : base(gatewayProviderService, paymentMethod, braintreeApiService)

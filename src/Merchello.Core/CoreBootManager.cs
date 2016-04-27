@@ -139,17 +139,15 @@
                 throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
 
             OnMerchelloInit();
-
-            InitializeLoggerResolver();
-
-            //_timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
-
+            
             // create the service context for the MerchelloAppContext          
 
             var logger = GetMultiLogger();
 
             var serviceContext = new ServiceContext(new RepositoryFactory(logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
+
+            InitializeLoggerResolver(logger);
 
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
@@ -251,9 +249,13 @@
         /// <summary>
         /// Initializes the logger resolver.
         /// </summary>
-        protected virtual void InitializeLoggerResolver()
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        protected virtual void InitializeLoggerResolver(IMultiLogger logger)
         {
-            MultiLogResolver.Current = new MultiLogResolver(GetMultiLogger());
+            if (MultiLogResolver.HasCurrent)
+            MultiLogResolver.Current = new MultiLogResolver(logger);
         }
 
         /// <summary>

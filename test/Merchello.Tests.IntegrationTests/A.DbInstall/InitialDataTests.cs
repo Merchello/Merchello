@@ -38,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            const int expected = 33;
+            const int expected = 34;
 
             //// Act
             _creation.InitializeBaseData("merchTypeField");
@@ -118,7 +118,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_StoreSettings()
         {
             //// Arrange
-            const int expected = 14;
+            const int expected = 15;
 
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");
