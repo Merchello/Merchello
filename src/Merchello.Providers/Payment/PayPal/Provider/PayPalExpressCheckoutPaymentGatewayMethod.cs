@@ -20,8 +20,8 @@
     /// <summary>
     /// A payment method for facilitating PayPal Express Checkouts.
     /// </summary>
-    [GatewayMethodUi("PayPalExpressCheckout")]
-    [GatewayMethodEditor("PayPal Express Checkout Method Editor", "PayPal Express Checkout", "~/App_Plugins/Merchello.PayPal/paymentmethod.html")]
+    [GatewayMethodUi("PayPal.ExpressCheckout")]
+    [GatewayMethodEditor("PayPal Express Checkout Method Editor", "PayPal Express Checkout", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
     public class PayPalExpressCheckoutPaymentGatewayMethod : RedirectPaymentMethodBase
     {
         /// <summary>

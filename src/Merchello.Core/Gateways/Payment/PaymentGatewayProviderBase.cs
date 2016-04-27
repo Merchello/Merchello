@@ -11,7 +11,7 @@
     /// <summary>
     /// Represents an abstract PaymentGatewayProvider
     /// </summary>
-    public abstract class PaymentGatewayProviderBase  : GatewayProviderBase, IPaymentGatewayProvider
+    public abstract class PaymentGatewayProviderBase : GatewayProviderBase, IPaymentGatewayProvider
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PaymentGatewayProviderBase"/> class.

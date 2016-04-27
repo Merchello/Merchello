@@ -10,7 +10,6 @@
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Providers.Models;
-    using Merchello.Providers.Payment.Braintree.Services;
     using Merchello.Providers.Payment.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Services;
@@ -23,10 +22,8 @@
     /// <summary>
     /// Represents a PayPalPaymentGatewayProvider
     /// </summary>
-    [GatewayProviderActivation(Constants.PayPal.GatewayProviderKey, "PayPal Payment Provider", "PayPal Payment Provider"
-        )]
-    [GatewayProviderEditor("PayPal configuration",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/paypal.providersettings.html")]
+    [GatewayProviderActivation(Constants.PayPal.GatewayProviderKey, "PayPal Payment Provider", "PayPal Payment Provider")]
+    [GatewayProviderEditor("PayPal configuration", "~/App_Plugins/MerchelloProviders/views/dialogs/paypal.providersettings.html")]
     [ProviderSettingsMapper(Constants.PayPal.ExtendedDataKeys.ProviderSettings, typeof(PayPalProviderSettings))]
     public class PayPalPaymentGatewayProvider : PaymentGatewayProviderBase
     {
@@ -105,10 +102,7 @@
             {
                 this.PaymentMethods = null;
 
-                return new PayPalPaymentGatewayMethod(
-                    this.GatewayProviderService,
-                    attempt.Result,
-                    this.GatewayProviderSettings.ExtendedData);
+                return GetPaymentGatewayMethodByPaymentCode(available.ServiceCode);
             }
 
             LogHelper.Error<PayPalPaymentGatewayProvider>(
@@ -133,10 +127,7 @@
 
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
-            return new PayPalPaymentGatewayMethod(
-                this.GatewayProviderService,
-                paymentMethod,
-                this.GatewayProviderSettings.ExtendedData);
+            return GetPaymentGatewayMethodByPaymentCode(paymentMethod.PaymentCode);
         }
 
         /// <summary>
@@ -174,6 +165,8 @@
 
             throw nullRef;
         }
+
+       
 
         /// <summary>
         /// Gets the <see cref="IPayPalApiService"/>.

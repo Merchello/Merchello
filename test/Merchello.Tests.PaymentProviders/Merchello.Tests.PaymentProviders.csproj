@@ -276,10 +276,12 @@
     <Compile Include="Braintree\TestHelpers\ProviderTestsBase.cs" />
     <Compile Include="Braintree\TestHelpers\TestHelper.cs" />
     <Compile Include="Braintree\Webhooks\WebhooksTests.cs" />
+    <Compile Include="PayPal\Api\CheckoutExpressTests.cs" />
     <Compile Include="PayPal\Api\GeneralApiTests.cs" />
     <Compile Include="PayPal\TestHelpers\PayPalTestBase.cs" />
     <Compile Include="PayPal\TestHelpers\TestHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolvers\ResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Merchello.Core\Merchello.Core.csproj">
