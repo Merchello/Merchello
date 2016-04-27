@@ -64,6 +64,9 @@
         /// </summary>
         public bool ApproveOrderCreation { get; internal set; }
 
-        public string RedirectUrl { get; }
+        /// <summary>
+        /// Gets the redirect URL.
+        /// </summary>
+        public string RedirectUrl { get; internal set; }
     }
 }
