@@ -53,7 +53,11 @@
         {
             get
             {
-                return _customerContext ?? PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);        
+                if (_customerContext == null)
+                {
+                    _customerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
+                }
+                return _customerContext;        
             }
         }
 
@@ -122,6 +126,19 @@
             MultiLogHelper.Error<MerchelloSurfaceController>("Customer item cache operation failed.", exception);
 
             throw exception;
+        }
+
+        /// <summary>
+        /// Gets default <see cref="IExtendedLoggerData"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IExtendedLoggerData"/>.
+        /// </returns>
+        protected virtual IExtendedLoggerData GetExtendedLoggerData()
+        {
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("SurfaceController");
+            return logData;
         }
     }
 }

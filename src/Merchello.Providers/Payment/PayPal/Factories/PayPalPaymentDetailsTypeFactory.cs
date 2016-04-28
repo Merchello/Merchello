@@ -211,7 +211,11 @@
         protected virtual PaymentDetailsItemType BuildProductPaymentDetailsItemType(ILineItem item, PayPalBasicAmountTypeFactory factory)
         {
             IProductContent product = null;
-            if (_settings.UsesProductContent) product = _merchello.TypeProductContentBySku(item.Sku);
+            if (_settings.UsesProductContent)
+            {
+                var productKey = item.ExtendedData.GetProductKey();
+                product = _merchello.TypedProductContent(productKey);
+            }
 
             var detailsItemType = new PaymentDetailsItemType
             {

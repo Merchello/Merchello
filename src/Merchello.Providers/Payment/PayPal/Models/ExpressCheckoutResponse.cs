@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Models
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
@@ -9,6 +10,14 @@
     /// </summary>
     public class ExpressCheckoutResponse
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExpressCheckoutResponse"/> class.
+        /// </summary>
+        public ExpressCheckoutResponse()
+        {
+            ErrorTypes = Enumerable.Empty<ErrorType>();
+        }
+
         /// <summary>
         /// Gets or sets the token.
         /// </summary>

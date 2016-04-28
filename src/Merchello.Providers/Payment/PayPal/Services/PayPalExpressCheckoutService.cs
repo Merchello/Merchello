@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Services
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Events;
@@ -21,17 +22,22 @@
         /// <summary>
         /// The default return URL.
         /// </summary>
-        private const string DefaultReturnUrl = "/umbraco/merchelloproviders/paypalexpressapi/success?invoiceKey={0}&paymentKey={1}";
+        private const string DefaultReturnUrl = "{0}/umbraco/merchelloproviders/paypalexpress/success?invoiceKey={1}&paymentKey={2}";
 
         /// <summary>
         /// The default cancel URL.
         /// </summary>
-        private const string DefaultCancelUrl = "/umbraco/merchelloproviders/paypalexpressapi/success?invoiceKey={0}&paymentKey={1}";
+        private const string DefaultCancelUrl = "{0}/umbraco/merchelloproviders/paypalexpress/success?invoiceKey={1}&paymentKey={2}";
 
         /// <summary>
         /// The version.
         /// </summary>
         private const string Version = "104.0";
+
+        /// <summary>
+        /// The Website URL.
+        /// </summary>
+        private readonly string _websiteUrl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PayPalExpressCheckoutService"/> class.
@@ -42,6 +48,7 @@
         public PayPalExpressCheckoutService(PayPalProviderSettings settings)
             : base(settings)
         {
+            _websiteUrl = PayPalApiHelper.GetBaseWebsiteUrl();
         }
 
         /// <summary>
@@ -69,8 +76,8 @@
         {
             var urls = new PayPalExpressCheckoutUrls
                 {
-                    ReturnUrl = string.Format(DefaultReturnUrl, invoice.Key, payment.Key),
-                    CancelUrl = string.Format(DefaultCancelUrl, invoice.Key, payment.Key)
+                    ReturnUrl = string.Format(DefaultReturnUrl, _websiteUrl, invoice.Key, payment.Key),
+                    CancelUrl = string.Format(DefaultCancelUrl, _websiteUrl, invoice.Key, payment.Key)
                 };
 
             // Raise the event so that the urls can be overridden
@@ -100,13 +107,11 @@
         protected virtual ExpressCheckoutResponse SetExpressCheckout(IInvoice invoice, IPayment payment, string returnUrl, string cancelUrl)
         {
             // Internal factory to build PaymentDetailsType from IInvoice
-            var factory = new PayPalPaymentDetailsTypeFactory();
+            var factory = new PayPalPaymentDetailsTypeFactory(new PayPalFactorySettings { WebsiteUrl = _websiteUrl });
+            var paymentDetailsType = factory.Build(invoice, PaymentActionCodeType.SALE);
 
             // The API requires this be in a list
-            var paymentDetailsList = new List<PaymentDetailsType>()
-                    {
-                        factory.Build(invoice, PaymentActionCodeType.SALE)
-                    };
+            var paymentDetailsList = new List<PaymentDetailsType>() { paymentDetailsType };
 
             // ExpressCheckout details
             var ecDetails = new SetExpressCheckoutRequestDetailsType()
@@ -131,27 +136,37 @@
             // assert that the values have been entered into the back office.
             var attempSdk = Settings.GetExpressCheckoutSdkConfig();
 
-            if (attempSdk.Success)
-            {
-                var service = new PayPalAPIInterfaceServiceService(attempSdk.Result);
-                var response = service.SetExpressCheckout(wrapper);
-
-                return new ExpressCheckoutResponse
-                           {
-                               Ack = response.Ack,
-                               Token = response.Token,
-                               Version = response.Version,
-                               Build = response.Build,
-                               ErrorTypes = response.Errors,
-                               RedirectUrl = GetRedirectUrl(response.Token)
-                           };
-            }
-
             var logData = MultiLogger.GetBaseLoggingData();
             logData.AddCategory("GatewayProviders");
             logData.AddCategory("PayPal");
 
-            MultiLogHelper.Error<IPayPalExpressCheckoutService>("Could not load SDK settings", attempSdk.Exception, logData);
+            if (attempSdk.Success)
+            {
+                var service = new PayPalAPIInterfaceServiceService(attempSdk.Result);
+                try
+                {
+                    EnsureSslTslChannel();
+                    var response = service.SetExpressCheckout(wrapper);
+
+                    return new ExpressCheckoutResponse
+                               {
+                                   Ack = response.Ack,
+                                   Token = response.Token,
+                                   Version = response.Version,
+                                   Build = response.Build,
+                                   ErrorTypes = response.Errors,
+                                   RedirectUrl = GetRedirectUrl(response.Token)
+                               };
+                }
+                catch (Exception ex)
+                {
+                    MultiLogHelper.Error<PayPalExpressCheckoutService>("Failed to get response from PayPalAPIInterfaceServiceService", ex, logData);
+
+                    return new ExpressCheckoutResponse { Ack = AckCodeType.CUSTOMCODE };
+                }
+            }
+
+            MultiLogHelper.Error<PayPalExpressCheckoutService>("Could not load SDK settings", attempSdk.Exception, logData);
 
             throw attempSdk.Exception;
         }

@@ -13,6 +13,7 @@
 
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Providers.Exceptions;
 
     using Umbraco.Core;
@@ -101,9 +102,39 @@
             return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, false);
         }
 
+        /// <summary>
+        /// Performs the capture payment operation.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            throw new System.NotImplementedException();
+            // We need to determine if the entire amount authorized has been collected before marking
+            // the payment collected.
+            var appliedPayments = GatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);
+            var applied = appliedPayments.Sum(x => x.Amount);
+
+            payment.Collected = (amount + applied) == payment.Amount;
+            payment.Authorized = true;
+
+            GatewayProviderService.Save(payment);
+
+            GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal ExpressCheckout SUCCESS payment", amount);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
         }
 
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
@@ -111,9 +142,27 @@
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Does the actual work of voiding a payment
+        /// </summary>
+        /// <param name="invoice">The invoice to which the payment is associated</param>
+        /// <param name="payment">The payment to be voided</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
+        /// <returns>A <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
         {
-            throw new System.NotImplementedException();
+            foreach (var applied in payment.AppliedPayments())
+            {
+                applied.TransactionType = AppliedPaymentType.Void;
+                applied.Amount = 0;
+                applied.Description += " - **Void**";
+                GatewayProviderService.Save(applied);
+            }
+
+            payment.Voided = true;
+            GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
         }
     }
 }

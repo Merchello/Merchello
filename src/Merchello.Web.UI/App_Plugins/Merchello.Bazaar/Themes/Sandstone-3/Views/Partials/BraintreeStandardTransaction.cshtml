@@ -6,7 +6,7 @@
 @using Umbraco.Web
 
 
-@using (Html.BeginUmbracoForm<BraintreeStandardTransactionController>("ConfirmSale", null, new { area = "BraintreeBazaar", @id = "braintreeCreditCard" }))
+@using (Html.BeginUmbracoForm<BraintreeStandardTransactionController>("ConfirmSale", null, new { area = "Bazaar", @id = "braintreeCreditCard" }))
 {
     @Html.AntiForgeryToken()
     <div class="control-group">

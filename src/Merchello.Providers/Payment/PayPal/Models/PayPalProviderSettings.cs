@@ -22,6 +22,8 @@
             ApiUsername = string.Empty;
             ApiPassword = string.Empty;
             ApiSignature = string.Empty;
+            ApplicationId = string.Empty;
+            DeleteInvoiceOnCancel = false;
         }
 
         /// <summary>
@@ -54,5 +56,25 @@
         /// Gets or sets the API signature.
         /// </summary>
         public string ApiSignature { get; set; }
+
+        /// <summary>
+        /// Gets or sets the application id.
+        /// </summary>
+        public string ApplicationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the success url.
+        /// </summary>
+        public string SuccessUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cancel url.
+        /// </summary>
+        public string CancelUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to delete the invoice on cancel.
+        /// </summary>
+        public bool DeleteInvoiceOnCancel { get; set; }
 	}
 }

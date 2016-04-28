@@ -165,42 +165,6 @@
         }
 
         /// <summary>
-        /// Performs the actual work of voiding a payment in Merchello ONLY
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <param name="payment">
-        /// The payment.
-        /// </param>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IPaymentResult"/>.
-        /// </returns>
-        /// <remarks>
-        /// This merely VOIDs the payment in Merchello and does nothing against the Braintree API as Braintree does not do a VOID
-        /// </remarks>
-        protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
-        {
-            payment.Voided = true;
-            payment.Amount = 0;
-
-            foreach (var applied in payment.AppliedPayments(this.GatewayProviderService))
-            {
-                applied.TransactionType = AppliedPaymentType.Void;
-                applied.Amount = 0;
-                applied.Description += " - Voided";
-                this.GatewayProviderService.Save(applied);
-            }
-
-            this.GatewayProviderService.Save(payment);
-
-            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
-        }
-
-        /// <summary>
         /// Processes a payment against the Braintree API using the BraintreeApiService.
         /// </summary>
         /// <param name="invoice">
