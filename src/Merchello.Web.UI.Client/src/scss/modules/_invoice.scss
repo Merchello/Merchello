@@ -4,11 +4,26 @@
   }
 }
 
-.adjustment-operator {
-  padding-right: 11em;
-  label {
-    display: inline-block;
-    margin-right: 1em;
+#adjustmentFrm {
+  .adjustment-desc {width:98%;}
+  .input-prepend {width:100%;}
+  .adjustment-amount {
+      input[type=number]{
+          width:75%;
+      }
+  }
+  .adjustment-radio {
+      padding-top:25px;
+      label:first-child {
+          margin-right:6px;
+      }
+  }
+  .adjustment-icon {
+      padding-top:24px;
+      text-align:right;
+  }
+  .form-group {
+      padding-bottom:0;
   }
 }
 

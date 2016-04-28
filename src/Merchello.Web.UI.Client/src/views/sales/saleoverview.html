@@ -9,7 +9,7 @@
             <div class="span5">
 
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                    <div class="btn-group" >
+                    <div class="btn-group">
                         <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><localize key="general_actions" /> <i class="icon-navigation-down"></i></a>
                         <ul class="dropdown-menu merchello-action-menu">
                             <li data-ng-hide="invoice.getFulfillmentStatus()==='Fulfilled' && !debugAllowDelete"><a data-ng-click="openDeleteInvoiceDialog()"><localize key="general_delete" /></a></li>
@@ -39,7 +39,7 @@
                             <!-- ACTION: Fulfill Shipment -->
                             <button type="button" class="btn btn-default btn-action" data-ng-show="showFulfill && invoice.hasOrder()" data-ng-click="openFulfillShipmentDialog()"><localize key="merchelloGeneral_fulfill" /></button>
 
-                            <manage-invoice-adjustments  invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()"></manage-invoice-adjustments>
+                            <manage-invoice-adjustments invoice="invoice" payment-methods="paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="allPayments" payments="payments" currency-symbol="currencySymbol" reload="reload()"></manage-invoice-adjustments>
                         </div>
 
                         <add-payment-table is-open="newPaymentOpen" payments="allPayments" toggle-open="toggleNewPaymentOpen()" reload="reload()" currency-symbol="currencySymbol" invoice="invoice" show-spinner="setNotPreValuesLoaded()" payment-methods="paymentMethods"></add-payment-table>
@@ -64,9 +64,9 @@
                             <table class="table">
                                 <tbody>
                                 <thead>
-                                <tr>
-                                    <th colspan="2">{{item.toDateString() | date : settings.dateFormat }}</th>
-                                </tr>
+                                    <tr>
+                                        <th colspan="2">{{item.toDateString() | date : settings.dateFormat }}</th>
+                                    </tr>
                                 </thead>
                                 <tr data-ng-repeat="log in item.logs track by $index">
                                     <td>{{ log.message.formattedMessage }}</td>
@@ -78,28 +78,24 @@
                     </div>
                 </div>
 
-                <entity-static-collections pre-values-loaded="preValuesLoaded"  entity-type="entityType" entity="invoice" />
+                <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="invoice" />
 
             </div>
             <!-- Sidebar -->
             <div class="merchello-pane secondary span3">
                 <!-- Invoice & Order Status -->
                 <div class="well invoice-order-info">
-                    <div class="span12">
-                        <div class="pull-right" data-ng-show="!invoice.isPaid()">
-                            <merchello-edit-icon do-edit="openAddressAddEditDialog(billingAddress)"></merchello-edit-icon>
-                        </div>
-                        <h4 class="span10"><localize key="merchelloSales_billingAddress"/></h4>
+                    <div class="pull-right" data-ng-show="!invoice.isPaid()">
+                        <merchello-edit-icon do-edit="openAddressAddEditDialog(billingAddress)"></merchello-edit-icon>
                     </div>
+                    <h4><localize key="merchelloSales_billingAddress" /></h4>
                     <merchello-address address="billingAddress"></merchello-address>
                 </div>
                 <div class="well invoice-order-info" ng-hide="shippingLineItems.length > 0">
-                    <div class="span12">
-                        <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
-                            <merchello-edit-icon do-edit="openAddressAddEditDialog(shippingAddress)"></merchello-edit-icon>
-                        </div>
-                        <h4 class="span10"><localize key="merchelloSales_shippingAddress"/></h4>
+                    <div class="pull-right" data-ng-show="invoice.getFulfillmentStatus() !== 'Fulfilled'">
+                        <merchello-edit-icon do-edit="openAddressAddEditDialog(shippingAddress)"></merchello-edit-icon>
                     </div>
+                    <h4><localize key="merchelloSales_shippingAddress" /></h4>
                     <merchello-address address="shippingAddress"></merchello-address>
 
                 </div>

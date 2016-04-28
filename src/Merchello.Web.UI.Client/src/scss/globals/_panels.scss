@@ -899,6 +899,14 @@
         top: 120px;
     }
 
+    .form-group {
+        padding-bottom: 7px;
+
+        label {
+            display: block;
+        }
+    }
+
     h4 {
         white-space: normal;
     }
@@ -963,5 +971,13 @@
 
     .padTop {
         padding-top: 1em;
+    }
+
+    .form-group {
+        padding-bottom: 7px;
+
+        label {
+            display: block;
+        }
     }
 }
