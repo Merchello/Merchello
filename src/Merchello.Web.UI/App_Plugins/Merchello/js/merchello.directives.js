@@ -1974,7 +1974,7 @@ angular.module('merchello.directives').directive('merchelloViewEditor',
             scope: { option: '=' },
             template:
             '<div class="tags">' +
-            '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
+            '<a ng-repeat="(idx, choice) in option.choices | orderBy:\'sortOrder\'" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
             '</div>' +
             '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName" /> ' +
             '<merchello-add-icon do-add="add()"></merchello-add-icon>',
@@ -2319,11 +2319,11 @@ angular.module('merchello.directives').directive('productVariantsViewTable', fun
 
                 // Settings for the sortable directive
                 $scope.sortableOptions = {
-                    stop: function (e, ui) {
+                    update: function (e, ui) {
+                        // Updating sortOrder of each productOption.
                         for (var i = 0; i < $scope.product.productOptions.length; i++) {
-                            $scope.product.productOptions[i].sortOrder(i + 1);
+                            $scope.product.productOptions[i].sortOrder = i + 1;
                         }
-                        $scope.product.fixAttributeSortOrders();
                     },
                     axis: 'y',
                     cursor: "move"
