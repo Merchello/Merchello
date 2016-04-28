@@ -67,8 +67,8 @@
         /// clicked the Pay button, we then save the invoice and "Authorize" a payment setting the invoice status to Unpaid before redirecting.
         /// IN this way, we have both an Invoice and a Payment (denoting the redirect).  When the customer completes the purchase on PayPal sites
         /// the payment will be used to perform a capture and the invoice status will be changed to Paid.  In the event the customer cancels,
-        /// the invoice will remain unpaid.  Events will be included in the controller handling the response to allow developers to delete invoices
-        /// that are canceled if they choose.
+        /// the invoice will either be voided or deleted depending on the configured setting.  
+        /// Events are included in the controller handling the response to allow developers to override success and cancel redirect URLs.
         /// </remarks>
         protected override IPaymentResult PerformAuthorizePayment(IInvoice invoice, ProcessorArgumentCollection args)
         {
