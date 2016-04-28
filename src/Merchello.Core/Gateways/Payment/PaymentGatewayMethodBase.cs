@@ -6,6 +6,7 @@
     using Merchello.Core.Configuration;
     using Merchello.Core.Events;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
 
     using Umbraco.Core;
@@ -369,6 +370,15 @@
         /// <returns>A <see cref="IPaymentResult"/></returns>
         protected abstract IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args);
 
+        ///// <summary>
+        ///// Does the actual work of voiding a payment
+        ///// </summary>
+        ///// <param name="invoice">The invoice to which the payment is associated</param>
+        ///// <param name="payment">The payment to be voided</param>
+        ///// <param name="args">Additional arguments required by the payment processor</param>
+        ///// <returns>A <see cref="IPaymentResult"/></returns>
+        //protected abstract IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
+
         /// <summary>
         /// Does the actual work of voiding a payment
         /// </summary>
@@ -376,7 +386,51 @@
         /// <param name="payment">The payment to be voided</param>
         /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
-        protected abstract IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args);
+        protected virtual IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
+        {
+            foreach (var applied in payment.AppliedPayments())
+            {
+                applied.TransactionType = AppliedPaymentType.Void;
+                applied.Amount = 0;
+                applied.Description += " - **Void**";
+                GatewayProviderService.Save(applied);
+            }
+
+            payment.Voided = true;
+            GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
+        }
+
+        /// <summary>
+        /// The calculate total owed.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The <see cref="decimal"/>.
+        /// </returns>
+        protected decimal CalculateTotalOwed(IInvoice invoice)
+        {
+            var applied = invoice.AppliedPayments(this.GatewayProviderService).ToArray();
+
+            var owed =
+                applied.Where(
+                    x =>
+                    x.AppliedPaymentTfKey.Equals(
+                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Debit).TypeKey))
+                    .Select(y => y.Amount)
+                    .Sum()
+                - applied.Where(
+                    x =>
+                    x.AppliedPaymentTfKey.Equals(
+                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Credit).TypeKey))
+                      .Select(y => y.Amount)
+                      .Sum();
+
+            return owed;
+        }
 
         /// <summary>
         /// Provides the assertion that the payment is applied to the invoice

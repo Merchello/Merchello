@@ -52,10 +52,11 @@
                            new SdkConfig
                                {
                                     { "mode", settings.Mode.ToString().ToLowerInvariant() },
-                                    { "acct1.UserName", settings.ApiUsername },
-                                    { "acct1.Password", settings.ApiPassword },
-                                    { "acct1.Signature", settings.ApiSignature }
+                                    { "account1.apiUsername", settings.ApiUsername },
+                                    { "account1.apiPassword", settings.ApiPassword },
+                                    { "account1.apiSignature", settings.ApiSignature }
                                })
+
                        : Attempt<SdkConfig>.Fail(isReady.Exception);
         }
 
@@ -77,8 +78,10 @@
             if (isExpress)
             {
                 success =
-                    !(settings.ApiUsername.IsNullOrWhiteSpace() || settings.ApiPassword.IsNullOrWhiteSpace()
-                      || settings.ApiSignature.IsNullOrWhiteSpace());
+                    !(settings.ApiUsername.IsNullOrWhiteSpace() || 
+                    settings.ApiPassword.IsNullOrWhiteSpace() || 
+                    settings.ApiSignature.IsNullOrWhiteSpace() ||
+                    settings.ApplicationId.IsNullOrWhiteSpace());
             }
             else
             {

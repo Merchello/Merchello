@@ -33,7 +33,7 @@
         public PayPalFactorySettings(string websiteUrl, bool usesProductContent = true)
         {
             this.UsesProductContent = usesProductContent;
-            this.WebsiteUrl = WebsiteUrl;
+            this.WebsiteUrl = websiteUrl;
 
             this.Initialize();
         }
@@ -54,28 +54,8 @@
         private void Initialize()
         {
             if (!this.WebsiteUrl.IsNullOrWhiteSpace()) return;
+            this.WebsiteUrl = PayPalApiHelper.GetBaseWebsiteUrl();
 
-            try
-            {
-                var url = HttpContext.Current.Request.Url;
-                this.WebsiteUrl =
-                    string.Format(
-                        "{0}://{1}{2}",
-                        url.Scheme,
-                        url.Host,
-                        url.IsDefaultPort ? string.Empty : ":" + url.Port).EnsureNotEndsWith('/');
-            }
-            catch (Exception ex)
-            {
-                var logData = MultiLogger.GetBaseLoggingData();
-                logData.AddCategory("GatewayProviders");
-                logData.AddCategory("PayPal");
-
-                MultiLogHelper.WarnWithException<PayPalFactorySettings>(
-                    "Failed to initialize factory setting for WebsiteUrl.  HttpContext.Current.Request is likely null.",
-                    ex,
-                    logData);
-            }
         }
     }
 }

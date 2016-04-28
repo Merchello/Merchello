@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Mvc
 {
+    using System;
     using System.Web.Mvc;
 
     /// <summary>
@@ -9,6 +10,11 @@
     /// <typeparam name="TModel">
     /// The type of the model passed to the controller
     /// </typeparam>
+    /// <remarks>
+    /// Forcing the RenderForm method is not necessary.  Likewise passing a model makes this controller less useful.
+    /// Instead we should simply allow resolving via the IPaymentMethodUiController interface
+    /// </remarks>
+    [Obsolete("Implement IPaymentMethodUiController marker interface for controller resolution")]
     public abstract class PaymentMethodUiController<TModel> : MerchelloSurfaceController, IPaymentMethodUiController
         where TModel : class
     {

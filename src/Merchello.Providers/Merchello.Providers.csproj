@@ -290,14 +290,15 @@
     <Compile Include="Exceptions\PayPalApiException.cs" />
     <Compile Include="Payment\Braintree\Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
-    <Compile Include="Payment\PayPal\Controllers\PayPalApiControllerBase.cs" />
-    <Compile Include="Payment\PayPal\Controllers\PayPalExpressApiController.cs" />
+    <Compile Include="Payment\PayPal\Controllers\PayPalExpressController.cs" />
+    <Compile Include="Payment\PayPal\Controllers\PayPalSurfaceControllerBase.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalBasicAmountTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalFactorySettings.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalPaymentDetailsTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalAddressTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Models\ExpressCheckoutResponse.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalExpressCheckoutUrls.cs" />
+    <Compile Include="Payment\PayPal\Models\PayPalExpressTransaction.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettings.cs" />
     <Compile Include="Models\ProviderSettingsExtensions.cs" />
     <Compile Include="Models\ProviderSettingsMapperAttribute.cs" />
@@ -345,6 +346,7 @@
     <Compile Include="Payment\Braintree\Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="Payment\PayPal\Models\CurrencyCodeTypeDecimal.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettingsExtensions.cs" />
+    <Compile Include="Payment\PayPal\Models\PayPalRedirectingUrl.cs" />
     <Compile Include="Payment\PayPal\Models\SdkConfig.cs" />
     <Compile Include="Payment\PayPal\PayPalApiHelper.cs" />
     <Compile Include="Payment\PayPal\PayPalMode.cs" />
@@ -381,9 +383,7 @@
     <None Include="packages.config" />
     <None Include="Settings.StyleCop" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

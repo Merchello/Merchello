@@ -15,7 +15,7 @@
                 </select>
             </div>
         </div>
-        <h3>API Checkout</h3>
+        <!--h3>API Checkout</h3>
         <div class="control-group row-fluid">
             <div class="col-xs-12 span12">
                 <label for="clientId">Client Id</label>
@@ -27,7 +27,7 @@
                 <label for="clientSecret">Client Secret</label>
                 <input class="col-xs-12 span12" name="clientSecret" id="clientSecret" type="text" data-ng-model="providerSettings.clientSecret">
             </div>
-        </div>
+        </div-->
 
         <h3>PayPal Express Checkout</h3>
         <div class="control-group row-fluid">
@@ -48,7 +48,30 @@
                 <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiSignature">
             </div>
         </div>
+        <div class="control-group row-fluid">
+            <p>Redirect URL (Success)<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.successUrl" placeholder="/receipt/">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Redirect URL (Success)<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.cancelUrl" placeholder="/retry/">
+            </div>
+        </div>
 
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="providerSettings.deleteInvoiceOnCancel"> Delete invoice on cancel
+            </label>
+        </div>
+        <!--div class="control-group row-fluid">
+            <p>Application Id<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.applicationId">
+            </div>
+        </div-->
         <div class="control-group row-fluid">
             <label class="checkbox col-xs-12 span12">
                 <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration

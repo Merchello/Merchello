@@ -30,7 +30,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ConfirmSale(CheckoutConfirmationForm model)
+        public virtual ActionResult ConfirmSale(CheckoutConfirmationForm model)
         {
             if (!ModelState.IsValid) return this.CurrentUmbracoPage();
 
@@ -73,6 +73,26 @@
                 return this.CurrentUmbracoPage();   
             }
 
+            // store the invoice key in the CustomerContext for use on the receipt page.
+            CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
+
+            return FinalizeSale(model, attempt);
+        }
+
+        /// <summary>
+        /// Finalizes the sale and performs the redirection.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="attempt">
+        /// The attempt.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        protected virtual ActionResult FinalizeSale(CheckoutConfirmationForm model, IPaymentResult attempt)
+        {
             // Trigger the order confirmation notification
             var billingAddress = attempt.Invoice.GetBillingAddress();
             string contactEmail;
@@ -89,12 +109,9 @@
             {
                 Notification.Trigger("OrderConfirmation", attempt, new[] { contactEmail });
             }
-            
-            // store the invoice key in the CustomerContext for use on the receipt page.
-            CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
 
             return RedirectToUmbracoPage(model.ReceiptPageId);
-        }
+        } 
 
         /// <summary>
         /// Responsible for actually processing the payment with the PaymentProvider

@@ -466,7 +466,7 @@
     <Compile Include="Workflow\Notification\Monitor\RazorOrderShippedMonitor.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorPartialOrderShippedMonitor.cs" />
     <Compile Include="Workflow\Notification\RazorFormatterController.cs" />
-    <Compile Include="Mvc\PaymentMethodUiController.cs" />
+    <Compile Include="Mvc\PaymentMethodUiController{T}.cs" />
     <Compile Include="Mvc\ViewRenderer.cs" />
     <Compile Include="Pluggable\CustomerContextBase.cs" />
     <Compile Include="Pluggable\ICustomerContext.cs" />

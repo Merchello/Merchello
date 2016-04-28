@@ -47,6 +47,16 @@
         }
 
         /// <summary>
+        /// Ensures the connection channel to PayPal.
+        /// </summary>
+        protected static void EnsureSslTslChannel()
+        {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.DefaultConnectionLimit = 9999;
+        }
+
+        /// <summary>
         /// Gets the access token.
         /// </summary>
         /// <returns>
@@ -56,9 +66,7 @@
         {
             try
             {
-                ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                ServicePointManager.DefaultConnectionLimit = 9999;
+                EnsureSslTslChannel();
 
                 var attempt = _settings.GetApiSdkConfig();
 

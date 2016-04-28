@@ -102,7 +102,7 @@
         /// <param name="invoice">The <see cref="IInvoice"/></param>
         /// <param name="payment">the <see cref="IPayment"/></param>
         /// <param name="amount">The amount</param>
-        /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some Api Key)</param>
+        /// <param name="args">Any arguments required to process the payment. (Maybe a username, password or some API Key)</param>
         /// <returns>The <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformCapturePayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
@@ -127,7 +127,7 @@
         /// <param name="invoice">The invoice to be the payment was applied</param>
         /// <param name="payment">The payment to be refunded</param>
         /// <param name="amount">The amount of the payment to be refunded</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
+        /// <param name="args">Additional arguments required by the payment processor</param>
         /// <returns>A <see cref="IPaymentResult"/></returns>
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
@@ -150,50 +150,6 @@
 
             return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
 
-        }
-
-        /// <summary>
-        /// Does the actual work of voiding a payment
-        /// </summary>
-        /// <param name="invoice">The invoice to which the payment is associated</param>
-        /// <param name="payment">The payment to be voided</param>
-        /// <param name="args">Additional arguements required by the payment processor</param>
-        /// <returns>A <see cref="IPaymentResult"/></returns>
-        protected override IPaymentResult PerformVoidPayment(IInvoice invoice, IPayment payment, ProcessorArgumentCollection args)
-        {
-            foreach (var applied in payment.AppliedPayments())
-            {
-                applied.TransactionType = AppliedPaymentType.Void;
-                applied.Amount = 0;
-                applied.Description += " - **Void**";
-                GatewayProviderService.Save(applied);
-            }
-
-            payment.Voided = true;
-            GatewayProviderService.Save(payment);
-
-            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
-        }
-
-        private decimal CalculateTotalOwed(IInvoice invoice)
-        {
-            var applied = invoice.AppliedPayments(GatewayProviderService).ToArray();
-
-            var owed =
-                applied.Where(
-                    x =>
-                    x.AppliedPaymentTfKey.Equals(
-                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Debit).TypeKey))
-                    .Select(y => y.Amount)
-                    .Sum()
-                - applied.Where(
-                    x =>
-                    x.AppliedPaymentTfKey.Equals(
-                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Credit).TypeKey))
-                      .Select(y => y.Amount)
-                      .Sum();
-
-            return owed;
         }
     }
 }

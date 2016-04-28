@@ -27,7 +27,7 @@
     public class BraintreeSubscriptionRecordPaymentMethod : PaymentGatewayMethodBase, IBraintreeSubscriptionRecordPaymentGatewayMethod
     {
         /// <summary>
-        /// The _braintree api service.
+        /// The <see cref="IBraintreeApiService"/>.
         /// </summary>
         private readonly IBraintreeApiService _braintreeApiService;
 
@@ -233,36 +233,6 @@
             }
             
             return new PaymentResult(Attempt<IPayment>.Fail(payment), invoice, false);
-        }
-
-        /// <summary>
-        /// The calculate total owed.
-        /// </summary>
-        /// <param name="invoice">
-        /// The invoice.
-        /// </param>
-        /// <returns>
-        /// The <see cref="decimal"/>.
-        /// </returns>
-        private decimal CalculateTotalOwed(IInvoice invoice)
-        {
-            var applied = invoice.AppliedPayments(this.GatewayProviderService).ToArray();
-
-            var owed =
-                applied.Where(
-                    x =>
-                    x.AppliedPaymentTfKey.Equals(
-                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Debit).TypeKey))
-                    .Select(y => y.Amount)
-                    .Sum()
-                - applied.Where(
-                    x =>
-                    x.AppliedPaymentTfKey.Equals(
-                        EnumTypeFieldConverter.AppliedPayment.GetTypeField(AppliedPaymentType.Credit).TypeKey))
-                      .Select(y => y.Amount)
-                      .Sum();
-
-            return owed;
         }
     }
 }

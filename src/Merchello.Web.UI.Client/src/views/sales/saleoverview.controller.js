@@ -360,7 +360,7 @@
                     var shipmentLineItems = $scope.invoice.getShippingLineItems();
                     if (shipmentLineItems[0]) {
                         var shipMethodKey = shipmentLineItems[0].extendedData.getValue('merchShipMethodKey');
-                        var request = { shipMethodKey: shipMethodKey, invoiceKey: data.invoiceKey, lineItemKey: $scope.shipmentLineItems[0].key };
+                        var request = { shipMethodKey: shipMethodKey, invoiceKey: data.invoiceKey, lineItemKey: shipmentLineItems[0].key };
                         var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(request);
                         shipMethodPromise.then(function(result) {
                             data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
