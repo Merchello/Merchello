@@ -12,7 +12,7 @@
             scope: { option: '=' },
             template:
             '<div class="tags">' +
-            '<a ng-repeat="(idx, choice) in option.choices" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
+            '<a ng-repeat="(idx, choice) in option.choices | orderBy:\'sortOrder\'" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
             '</div>' +
             '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName" /> ' +
             '<merchello-add-icon do-add="add()"></merchello-add-icon>',
