@@ -1,7 +1,7 @@
 ﻿namespace Merchello.Core
 {
     using System;
-
+    using System.Globalization;
     /// <summary>
     /// The price extensions.
     /// </summary>
@@ -38,6 +38,38 @@
             var dateFormat =
                 merchelloContext.Services.StoreSettingService.GetByKey(Constants.StoreSettingKeys.DateFormatKey);
             return dateFormat == null ? value.ToShortDateString() : value.ToString(dateFormat.Value);
+        }
+
+        /// <summary>
+        /// The format as store currency.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The store formatted decimal.
+        /// </returns>
+        internal static decimal FormatAsStoreCurrency(this decimal value)
+        {
+            return value.FormatAsStoreCurrency(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// The format as store currency.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// The store formatted decimal.
+        /// </returns>
+        internal static decimal FormatAsStoreCurrency(this decimal value, IMerchelloContext merchelloContext)
+        {
+            var currencyCode = merchelloContext.Services.StoreSettingService.GetByKey(Constants.StoreSettingKeys.CurrencyCodeKey);
+            return currencyCode == null ? value : System.Math.Round(value, new CultureInfo(currencyCode.Value, false).NumberFormat.CurrencyDecimalDigits);
         }
 
         /// <summary>
