@@ -275,7 +275,8 @@
                            CountryCode = form.ShippingCountryCode,
                            PostalCode = form.ShippingPostalCode,
                            Email = form.ShippingEmail,
-                           Phone = form.ShippingPhone
+                           Phone = form.ShippingPhone,
+                           Organization=form.BillingOrganization
                        };
         }
     }
