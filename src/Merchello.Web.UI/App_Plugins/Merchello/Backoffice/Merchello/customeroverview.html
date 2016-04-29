@@ -24,14 +24,11 @@
                     <!-- Customer Info -->
                     <div class="span4">
                         <div class="well customer-info flex-col">
-                            <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
-                            <!-- ACTION: Edit Info -->
-
+                            <img class="customer-avatar photo pull-left" data-ng-show="avatarUrl != ''" src="{{avatarUrl}}" alt="" />
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openEditInfoDialog()"></merchello-edit-icon>
                             </div>
-
-                            <h4 class="span10">{{customer.firstName}} {{customer.lastName}}</h4>
+                            <h4>{{customer.firstName}} {{customer.lastName}}</h4>
                             <div class="span12"><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
                         </div>
                     </div>
@@ -41,7 +38,7 @@
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultBillingAddress)"></merchello-edit-icon>
                             </div>
-                            <h4 class="span10">
+                            <h4>
                                 <localize key="merchelloSales_billingAddress"></localize>
                             </h4>
                             <div class="vcard span12" data-ng-show="!defaultBillingAddress.isEmpty()">
@@ -67,7 +64,7 @@
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultShippingAddress)"></merchello-edit-icon>
                             </div>
-                            <h4 class="span10"><localize key="merchelloSales_shippingAddress"></localize></h4>
+                            <h4><localize key="merchelloSales_shippingAddress"></localize></h4>
                             <div class="vcard span12" data-ng-show="!defaultShippingAddress.isEmpty()">
                                 <h5>{{defaultShippingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>

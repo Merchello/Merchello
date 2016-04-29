@@ -3,16 +3,24 @@
         <h4><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h4>
     </div>
     <div class="umb-panel-body with-header with-footer">
-        <h3><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h3>
+        <!--<h3><localize key="actions_create" /> <localize key="merchelloGeneral_shipment" /></h3>-->
         <div class="control-group row-fluid">
-            <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
-            <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6" />
-            <label for="provider"><localize key="merchelloGeneral_via" /></label>
-            <select name="shipmentStatus" class="col-xs-6 span6" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
-            <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
-            <!--<label><input type="checkbox" checked="checked" /> Email shipment notification to the customer</label>-->
-            <label>Shipment Status</label>
-            <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+            <div class="form-group">
+                <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber"/></label>
+                <input name="trackingNo" data-ng-model="dialogData.trackingNumber" type="text" class="col-xs-6 span6"/>
+            </div>
+            <div class="form-group">
+                <label for="provider"><localize key="merchelloGeneral_via"/></label>
+                <select name="shipmentStatus" class="col-xs-6 span6" data-ng-model="dialogData.shipMethods.selected" data-ng-options="option.name for option in dialogData.shipMethods.alternatives"></select>
+            </div>
+            <!--<div class="form-group">-->
+                <!--<label><input type="checkbox" checked="checked"/> Email shipment notification to the customer</label>-->
+                <!--<select name="provider" disabled="disabled" class="col-xs-6 span6"><option>{{shipMethod}}</option></select>-->
+            <!--</div>-->
+            <div class="form-group">
+                <label>Shipment Status</label>
+                <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+            </div>
         </div>
         <table class="table table-striped merchello-striped-table order-items">
             <tbody>
