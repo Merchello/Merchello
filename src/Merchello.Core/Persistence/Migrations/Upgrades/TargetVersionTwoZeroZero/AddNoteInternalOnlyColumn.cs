@@ -13,7 +13,7 @@
     /// <summary>
     /// Adds an internal only column to the notes table.
     /// </summary>
-    [Migration("1.14.0", "2.0.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.14.0", "2.0.0", 2, MerchelloConfiguration.MerchelloMigrationName)]
     internal class AddNoteInternalOnlyColumn : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>

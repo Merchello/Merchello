@@ -15,7 +15,7 @@
     /// Adds a new store setting that is toggled during migrations to ping with the current domain name.
     /// Used to assist Merchello project team (internally) to better understand Merchello usage and implementations anonymously.
     /// </summary>
-    [Migration("1.14.0", "2.0.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.14.0", "2.0.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
     internal class AddStoreSettingHasDomainRecord : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>

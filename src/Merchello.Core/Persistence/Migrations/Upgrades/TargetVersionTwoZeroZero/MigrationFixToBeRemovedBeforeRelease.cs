@@ -1,8 +1,11 @@
 ﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoZeroZero
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Configuration;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -11,10 +14,11 @@
     using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
-    /// Adds an author column to the merchNote table.
+    /// Previous testing migrations have notes column in customer field removed (which it can't be since we have to alter the customerDto to remove the notes column ref).
+    /// Removing this field will need to be done in the 2.1.0 release
     /// </summary>
-    [Migration("1.14.0", "2.0.0", 3, MerchelloConfiguration.MerchelloMigrationName)]
-    public class AddNoteAuthorColumn : MerchelloMigrationBase, IMerchelloMigration
+    [Migration("1.14.0", "2.0.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    public class MigrationFixToBeRemovedBeforeRelease : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
         /// The Umbraco database.
@@ -22,9 +26,9 @@
         private readonly Database _database;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddNoteAuthorColumn"/> class.
+        /// Initializes a new instance of the <see cref="MigrationFixToBeRemovedBeforeRelease"/> class.
         /// </summary>
-        public AddNoteAuthorColumn()
+        public MigrationFixToBeRemovedBeforeRelease()
             : base(ApplicationContext.Current.DatabaseContext.SqlSyntax, Umbraco.Core.Logging.Logger.CreateWithDefaultLog4NetConfiguration())
         {
             var dbContext = ApplicationContext.Current.DatabaseContext;
@@ -32,31 +36,22 @@
         }
 
         /// <summary>
-        /// Adds the author field to the notes table.
+        /// The up.
         /// </summary>
         public override void Up()
         {
+            //// Don't exeucte if the column is already there
             var columns = SqlSyntax.GetColumnsInSchema(_database).ToArray();
-
-            if (
-                columns.Any(
-                    x => x.TableName.InvariantEquals("merchNote") && x.ColumnName.InvariantEquals("author"))
-                == false)
+            if (columns.Any(x => x.TableName.InvariantEquals("merchCustomer") && x.ColumnName.InvariantEquals("notes") == false))
             {
-                Logger.Info(typeof(AddNoteInternalOnlyColumn), "Adding author column to merchNode table.");
-
-                //// Add the new currency code column
-                Create.Column("author").OnTable("merchNote").AsString().Nullable();
+                Create.Column("notes").OnTable("merchCustomer").AsString().Nullable();
             }
         }
 
 
-        /// <summary>
-        /// Downgrades the database.
-        /// </summary>
         public override void Down()
         {
-            throw new DataLossException("Cannot downgrade from a version 2.0.0 database to a prior version, the database schema has already been modified");
+            throw new System.NotImplementedException();
         }
     }
 }

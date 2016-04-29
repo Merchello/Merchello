@@ -18,7 +18,7 @@
     /// <summary>
     /// Copies original customer notes to first note.
     /// </summary>
-    [Migration("1.14.0", "2.0.0", 3, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.14.0", "2.0.0", 4, MerchelloConfiguration.MerchelloMigrationName)]
     public class CopyOriginalCustomerNotesToFirstNote : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
@@ -75,8 +75,9 @@
 
                 if (notes.Any()) _noteService.Save(notes);
 
-                // now remove the notes column from the merchCustomer table
-                Delete.Column("notes").FromTable("merchCustomer");
+                //// now remove the notes column from the merchCustomer table
+                //// We can't do this without messing up the Migration.
+                //Delete.Column("notes").FromTable("merchCustomer");
             }
         }
 
