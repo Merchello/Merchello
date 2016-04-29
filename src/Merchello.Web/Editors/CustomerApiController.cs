@@ -261,8 +261,6 @@
                 customer.FirstName,
                 customer.LastName,
                 customer.Email);
-
-            //newCustomer.Notes = customer.Notes;
             newCustomer.LastActivityDate = DateTime.Today;
 
             ////((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress(new CustomerAddress(customer.Key)));

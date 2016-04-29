@@ -18,7 +18,7 @@
     /// <summary>
     /// Adds a redirect payment method type.
     /// </summary>
-    [Migration("1.14.0", "2.0.0", 4, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.14.0", "2.0.0", 5, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddRedirectPaymentMethodType : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
