@@ -461,6 +461,7 @@
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityBase\DeployableEntity.cs" />
     <Compile Include="Models\EntityCollection.cs" />
+    <Compile Include="Models\Interfaces\IHasNotes.cs" />
     <Compile Include="Models\Interfaces\INote.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\EntityCollectionExtensions.cs" />

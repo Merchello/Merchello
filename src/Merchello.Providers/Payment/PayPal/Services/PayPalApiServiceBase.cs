@@ -3,15 +3,12 @@
     using System;
     using System.Net;
 
+    using Merchello.Core.Logging;
     using Merchello.Providers.Payment.PayPal.Models;
 
     using global::PayPal;
 
-    using Merchello.Core.Events;
-    using Merchello.Core.Logging;
-
     using Umbraco.Core;
-    using Umbraco.Core.Events;
 
     /// <summary>
     /// A base class of <see cref="IPayPalApiServiceBase"/>s.

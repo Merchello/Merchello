@@ -4,6 +4,8 @@
     using System.Net;
     using System.Web.Mvc;
 
+    using global::PayPal.PayPalAPIInterfaceService.Model;
+
     using Merchello.Core;
     using Merchello.Core.Events;
     using Merchello.Core.Gateways;
@@ -12,6 +14,7 @@
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Provider;
+    using Merchello.Providers.Payment.PayPal.Services;
     using Merchello.Web.Mvc;
 
     using Umbraco.Core;
@@ -24,9 +27,13 @@
     /// A surface controller for used for accepting PayPal Express Payments.
     /// </summary>
     [PluginController("MerchelloProviders")]
-    [GatewayMethodUi("PayPal.ExpressCheckout")]
     public partial class PayPalExpressController : PayPalSurfaceControllerBase
     {
+        /// <summary>
+        /// The <see cref="IPayPalApiPaymentService"/>.
+        /// </summary>
+        private IPayPalApiService _paypalApiService;
+
         /// <summary>
         /// The URL for a Success return.
         /// </summary>
@@ -36,6 +43,14 @@
         /// The URL for a Cancel return.
         /// </summary>
         private string _cancelUrl;
+
+        /// <summary>
+        /// A value indicating whether or not to delete the invoice on cancel.
+        /// </summary>
+        /// <remarks>
+        /// If false the authorize payment is voided.
+        /// </remarks>
+        private bool _deleteInvoiceOnCancel;
 
         /// <summary>
         /// The <see cref="PayPalExpressCheckoutPaymentGatewayMethod"/>.
@@ -84,31 +99,21 @@
 
             try
             {
-                Mandate.ParameterCondition(!Guid.Empty.Equals(invoiceKey), "invoiceKey");
-                Mandate.ParameterCondition(!Guid.Empty.Equals(paymentKey), "paymentKey");
-
-                var invoice = InvoiceService.GetByKey(invoiceKey);
-                if (invoice == null)
-                {
-                    throw new NullReferenceException("Invoice was not found.");
-                }
-
-                var payment = PaymentService.GetByKey(paymentKey);
-                if (payment == null)
-                {
-                    throw new NullReferenceException("Payment was not found.");
-                }
-
-                var transaction = new PayPalExpressTransaction { Token = token, PayerId = payerId };
-                payment.ExtendedData.SetValue<PayPalExpressTransaction>(Constants.PayPal.ExtendedDataKeys.PayPalExpressTransaction, transaction);
+                var invoice = GetInvoice(invoiceKey);
+                var payment = GetPayment(paymentKey);
 
 
-                invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
+
+                // We can now capture the payment
+                var attempt = invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
 
                 // raise the event so the redirect URL can be manipulated
                 RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
 
                 return Redirect(redirecting.RedirectingToUrl);
+
+
+                throw new NotImplementedException("TODO error handling result");
             }
             catch (Exception ex)
             {
@@ -149,8 +154,40 @@
         {
             var redirecting = new PayPalRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
 
-            RedirectingForCancel.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
-            return Redirect(redirecting.RedirectingToUrl);
+            try
+            {
+                var invoice = GetInvoice(invoiceKey);
+                var payment = GetPayment(paymentKey);
+
+                if (_deleteInvoiceOnCancel)
+                {
+                    InvoiceService.Delete(invoice);
+                }
+                else
+                {
+                    // TODO add invoice note
+                    payment.VoidPayment(invoice, _paymentMethod.PaymentMethod.Key);
+                }
+               
+                // raise the event so the redirect URL can be manipulated
+                RedirectingForCancel.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
+                return Redirect(redirecting.RedirectingToUrl);
+            }
+            catch (Exception ex)
+            {
+                var logData = GetExtendedLoggerData();
+
+                var extra = new { InvoiceKey = invoiceKey, PaymentKey = paymentKey, Token = token, PayerId = payerId };
+
+                logData.SetValue<object>("extra", extra);
+
+                MultiLogHelper.Error<PayPalExpressController>(
+                    "Failed to Cancel PayPal Express checkout response.",
+                    ex,
+                    logData);
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -158,6 +195,7 @@
         /// </summary>
         private void Initialize()
         {
+            
             var provider = GatewayContext.Payment.GetProviderByKey(Constants.PayPal.GatewayProviderSettingsKey) as PayPalPaymentGatewayProvider;
             if (provider == null)
             {
@@ -172,9 +210,13 @@
                 throw nullRef;
             }
 
+            // instantiate the service
+            _paypalApiService = new PayPalApiService(provider.ExtendedData.GetPayPalProviderSettings());
+
             var settings = provider.ExtendedData.GetPayPalProviderSettings();
             _successUrl = settings.SuccessUrl;
             _cancelUrl = settings.CancelUrl;
+            _deleteInvoiceOnCancel = settings.DeleteInvoiceOnCancel;
 
             _paymentMethod = provider.GetPaymentGatewayMethodByPaymentCode(Constants.PayPal.PaymentCodes.ExpressCheckout) as PayPalExpressCheckoutPaymentGatewayMethod;
 

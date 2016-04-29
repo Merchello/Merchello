@@ -63,7 +63,7 @@
         public PaymentDetailsType Build(IInvoice invoice, PaymentActionCodeType actionCode)
         {
             // Get the decimal configuration for the current currency
-            var currencyCodeType = GetPayPalCurrency(invoice.CurrencyCode);
+            var currencyCodeType = PayPalApiHelper.GetPayPalCurrencyCode(invoice.CurrencyCode);
             var basicAmountFactory = new PayPalBasicAmountTypeFactory(currencyCodeType);
 
             // Get the tax total
@@ -94,34 +94,6 @@
 
             return paymentDetails;
         }
-
-
-        /// <summary>
-        /// Gets the PayPal <see cref="CurrencyCodeType"/>.
-        /// </summary>
-        /// <param name="currencyCode">
-        /// The currency code.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CurrencyCodeType"/>.
-        /// </returns>
-        public virtual CurrencyCodeType GetPayPalCurrency(string currencyCode)
-        {
-            try
-            {
-                return (CurrencyCodeType)Enum.Parse(typeof(CurrencyCodeType), currencyCode, true);
-            }
-            catch (Exception ex)
-            {
-                var logData = MultiLogger.GetBaseLoggingData();
-                logData.AddCategory("PayPal");
-
-                MultiLogHelper.Error<PayPalBasicAmountTypeFactory>("Failed to map currency code", ex, logData);
-
-                throw;
-            }
-        }
-
 
         /// <summary>
         /// Builds a list of <see cref="PaymentDetailsItemType"/>.

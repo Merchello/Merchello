@@ -2,8 +2,6 @@
 {
     using Merchello.Core.Models;
 
-    using global::PayPal.PayPalAPIInterfaceService.Model;
-
     using Merchello.Providers.Payment.PayPal.Models;
 
     using Umbraco.Core.Services;
@@ -25,6 +23,27 @@
         /// <returns>
         /// The <see cref="ExpressCheckoutResponse"/>.
         /// </returns>
-        ExpressCheckoutResponse SetExpressCheckout(IInvoice invoice, IPayment payment);
+        PayPalExpressTransactionRecord SetExpressCheckout(IInvoice invoice, IPayment payment);
+
+
+        /// <summary>
+        /// The capture success.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="isPartialPayment">
+        /// The is partial payment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ExpressCheckoutResponse"/>.
+        /// </returns>
+        PayPalExpressTransactionRecord Capture(IInvoice invoice, IPayment payment, decimal amount, bool isPartialPayment);
     }
 } 

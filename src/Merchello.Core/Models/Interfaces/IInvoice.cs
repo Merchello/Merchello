@@ -9,7 +9,7 @@
     /// <summary>
     /// Defines an invoice.
     /// </summary>
-    public interface IInvoice : ILineItemContainer
+    public interface IInvoice : ILineItemContainer, IHasNotes
     {
         /// <summary>
         /// Gets or sets the unique customer 'key' to associated with the invoice
@@ -145,12 +145,6 @@
         /// </summary>
         [DataMember]
         OrderCollection Orders { get; set; }
-
-        /// <summary>
-        /// Gets or sets the notes associated with the Invoice
-        /// </summary>
-        [DataMember]
-        IEnumerable<INote> Notes { get; set; }
 
         /// <summary>
         /// Accepts visitor class to visit invoice line items
