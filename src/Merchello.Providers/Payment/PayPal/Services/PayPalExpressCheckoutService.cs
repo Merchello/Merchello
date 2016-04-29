@@ -4,13 +4,14 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Events;
-    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.PayPal.Factories;
     using Merchello.Providers.Payment.PayPal.Models;
 
     using global::PayPal.PayPalAPIInterfaceService;
     using global::PayPal.PayPalAPIInterfaceService.Model;
+
+    using Merchello.Providers.Exceptions;
 
     using Umbraco.Core.Events;
 
@@ -40,6 +41,11 @@
         private readonly string _websiteUrl;
 
         /// <summary>
+        /// The <see cref="ExpressCheckoutResponseFactory"/>.
+        /// </summary>
+        private readonly ExpressCheckoutResponseFactory _responseFactory;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PayPalExpressCheckoutService"/> class.
         /// </summary>
         /// <param name="settings">
@@ -49,6 +55,7 @@
             : base(settings)
         {
             _websiteUrl = PayPalApiHelper.GetBaseWebsiteUrl();
+            _responseFactory = new ExpressCheckoutResponseFactory();
         }
 
         /// <summary>
@@ -59,6 +66,10 @@
         /// </remarks>
         public static event TypedEventHandler<PayPalExpressCheckoutService, ObjectEventArgs<PayPalExpressCheckoutUrls>> InitializingExpressCheckout;
 
+        /// <summary>
+        /// Occurs before adding the PayPal Express Checkout details to the request
+        /// </summary>
+        public static event TypedEventHandler<IPayPalExpressCheckoutService, ObjectEventArgs<PayPalExpressCheckoutRequestDetailsOverride>> SettingCheckoutRequestDetails;
 
         /// <summary>
         /// Performs the setup for an express checkout.
@@ -72,7 +83,7 @@
         /// <returns>
         /// The <see cref="SetExpressCheckoutResponseType"/>.
         /// </returns>
-        public ExpressCheckoutResponse SetExpressCheckout(IInvoice invoice, IPayment payment)
+        public PayPalExpressTransactionRecord SetExpressCheckout(IInvoice invoice, IPayment payment)
         {
             var urls = new PayPalExpressCheckoutUrls
                 {
@@ -82,9 +93,250 @@
 
             // Raise the event so that the urls can be overridden
             InitializingExpressCheckout.RaiseEvent(new ObjectEventArgs<PayPalExpressCheckoutUrls>(urls), this);
-
             return SetExpressCheckout(invoice, payment, urls.ReturnUrl, urls.CancelUrl);
         }
+
+
+        /// <summary>
+        /// The capture success.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="isPartialPayment">
+        /// The is partial payment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ExpressCheckoutResponse"/>.
+        /// </returns>
+        public PayPalExpressTransactionRecord Capture(IInvoice invoice, IPayment payment, decimal amount, bool isPartialPayment)
+        {
+            // Get the transaction record
+            var record = payment.GetPayPalTransactionRecord();
+
+            ExpressCheckoutResponse result = null;
+
+            try
+            {
+                var amountFactory = new PayPalBasicAmountTypeFactory(PayPalApiHelper.GetPayPalCurrencyCode(invoice.CurrencyCode));
+
+                var authorizationId = record.Data.AuthorizationTransactionId;
+
+                // do express checkout
+                var request = new DoCaptureRequestType()
+                {
+                    AuthorizationID = authorizationId,
+                    Amount = amountFactory.Build(amount),
+                    CompleteType = isPartialPayment ? CompleteCodeType.NOTCOMPLETE : CompleteCodeType.COMPLETE
+                };
+
+                var doCaptureReq = new DoCaptureReq() { DoCaptureRequest = request };
+
+                var service = GetPayPalService();
+                var doCaptureResponse = service.DoCapture(doCaptureReq);
+                result = _responseFactory.Build(doCaptureResponse, record.Data.Token);
+
+                if (result.Success())
+                {
+                    var transactionId = doCaptureResponse.DoCaptureResponseDetails.PaymentInfo.TransactionID;
+                    record.Data.CaptureTransactionId = transactionId;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = _responseFactory.Build(ex);
+            }
+
+            record.DoCapture = result;
+            record.Success = result.Success();
+            return record;
+        }
+
+        public ExpressCheckoutResponse Refund(IInvoice invoice, IPayment payment)
+        {
+            var attempSdk = Settings.GetExpressCheckoutSdkConfig();
+            var service = new PayPalAPIInterfaceServiceService(attempSdk.Result);
+
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Performs the GetExpressCheckoutDetails operation.
+        /// </summary>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PayPalExpressTransactionRecord"/>.
+        /// </returns>
+        internal PayPalExpressTransactionRecord GetExpressCheckoutDetails(IPayment payment, string token, PayPalExpressTransactionRecord record)
+        {
+            record.Success = true;
+            ExpressCheckoutResponse result = null;
+            try
+            {
+                var getDetailsRequest = new GetExpressCheckoutDetailsReq
+                {
+                    GetExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType(token)
+                };
+
+                var service = GetPayPalService();
+                var response = service.GetExpressCheckoutDetails(getDetailsRequest);
+                result = _responseFactory.Build(response, token);
+
+                if (result.Success())
+                {
+                    record.Data.PayerId = response.GetExpressCheckoutDetailsResponseDetails.PayerInfo.PayerID;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = _responseFactory.Build(ex);
+            }
+
+            record.GetExpressCheckoutDetails = result;
+            record.Success = result.Success();
+            return record;
+        }
+
+        /// <summary>
+        /// The do express checkout payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <param name="payerId">
+        /// The payer id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PayPalExpressTransactionRecord"/>.
+        /// </returns>
+        internal PayPalExpressTransactionRecord DoExpressCheckoutPayment(IInvoice invoice, IPayment payment, string token, string payerId, PayPalExpressTransactionRecord record)
+        {
+            var factory = new PayPalPaymentDetailsTypeFactory();
+
+            ExpressCheckoutResponse result = null;
+            try
+            {
+                // do express checkout
+                var request = new DoExpressCheckoutPaymentRequestType(
+                        new DoExpressCheckoutPaymentRequestDetailsType
+                        {
+                            Token = token,
+                            PayerID = payerId,
+                            PaymentDetails =
+                                    new List<PaymentDetailsType>
+                                        {
+                                            factory.Build(invoice, PaymentActionCodeType.ORDER)
+                                        }
+                        });
+
+                var doExpressCheckoutPayment = new DoExpressCheckoutPaymentReq
+                {
+                    DoExpressCheckoutPaymentRequest = request
+                };
+
+                var service = GetPayPalService();
+                var response = service.DoExpressCheckoutPayment(doExpressCheckoutPayment);
+                result = _responseFactory.Build(response, token);
+
+                var transactionId = response.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].TransactionID;
+                var currency = response.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].GrossAmount.currencyID;
+                var amount = response.DoExpressCheckoutPaymentResponseDetails.PaymentInfo[0].GrossAmount.value;
+
+                record.Data.CheckoutPaymentTransactionId = transactionId;
+                record.Data.CurrencyId = currency.ToString();
+                record.Data.AuthorizedAmount = amount;
+
+            }
+            catch (Exception ex)
+            {
+                result = _responseFactory.Build(ex);
+            }
+
+            record.DoExpressCheckoutPayment = result;
+            record.Success = result.Success();
+
+            return record;
+        }
+
+        /// <summary>
+        /// Validates a successful response.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <param name="payerId">
+        /// The payer id.
+        /// </param>
+        /// <param name="record">
+        /// The record.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ExpressCheckoutResponse"/>.
+        /// </returns>
+        /// <remarks>
+        /// PayPal returns to the success URL even if the payment was declined. e.g.  The success URL represents a successful transaction
+        /// not a successful payment so we need to do another request to verify the payment was completed and get additional information
+        /// such as the transaction id so we can do refunds etc.
+        /// </remarks>
+        internal PayPalExpressTransactionRecord Authorize(IInvoice invoice, IPayment payment, string token, string payerId, PayPalExpressTransactionRecord record)
+        {
+            // Now we have to get the transaction details for the successful payment
+            ExpressCheckoutResponse result = null;
+            try
+            {
+                // do authorization
+                var service = GetPayPalService();
+                var doAuthorizationResponse = service.DoAuthorization(new DoAuthorizationReq
+                {
+                    DoAuthorizationRequest = new DoAuthorizationRequestType
+                    {
+                        TransactionID = record.Data.CheckoutPaymentTransactionId,
+                        Amount = new BasicAmountType(PayPalApiHelper.GetPayPalCurrencyCode(record.Data.CurrencyId), record.Data.AuthorizedAmount)
+                    }
+                });
+
+                result = _responseFactory.Build(doAuthorizationResponse, token);
+                if (result.Success())
+                {
+                    record.Data.Authorized = true;
+                    record.Data.AuthorizationTransactionId = doAuthorizationResponse.TransactionID;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = _responseFactory.Build(ex);
+            }
+
+            record.DoAuthorization = result;
+
+            return record;
+        }
+
+
 
         /// <summary>
         /// Performs the setup for an express checkout.
@@ -104,11 +356,12 @@
         /// <returns>
         /// The <see cref="ExpressCheckoutResponse"/>.
         /// </returns>
-        protected virtual ExpressCheckoutResponse SetExpressCheckout(IInvoice invoice, IPayment payment, string returnUrl, string cancelUrl)
+        protected virtual PayPalExpressTransactionRecord SetExpressCheckout(IInvoice invoice, IPayment payment, string returnUrl, string cancelUrl)
         {
-            // Internal factory to build PaymentDetailsType from IInvoice
+            var record = new PayPalExpressTransactionRecord { Success = true };
+
             var factory = new PayPalPaymentDetailsTypeFactory(new PayPalFactorySettings { WebsiteUrl = _websiteUrl });
-            var paymentDetailsType = factory.Build(invoice, PaymentActionCodeType.SALE);
+            var paymentDetailsType = factory.Build(invoice, PaymentActionCodeType.ORDER);
 
             // The API requires this be in a list
             var paymentDetailsList = new List<PaymentDetailsType>() { paymentDetailsType };
@@ -121,54 +374,56 @@
                         PaymentDetails = paymentDetailsList
                     };
 
+            // Trigger the event to allow for overriding ecDetails
+            var ecdOverride = new PayPalExpressCheckoutRequestDetailsOverride(invoice, payment, ecDetails);
+            SettingCheckoutRequestDetails.RaiseEvent(new ObjectEventArgs<PayPalExpressCheckoutRequestDetailsOverride>(ecdOverride), this);
+
             // The ExpressCheckoutRequest
             var request = new SetExpressCheckoutRequestType
                     {
                         Version = Version,
-                        SetExpressCheckoutRequestDetails = ecDetails
+                        SetExpressCheckoutRequestDetails = ecdOverride.ExpressCheckoutDetails
                     };
 
             // Crete the wrapper for Express Checkout
             var wrapper = new SetExpressCheckoutReq { SetExpressCheckoutRequest = request };
 
+            try
+            {
+                var service = GetPayPalService();
+                var response = service.SetExpressCheckout(wrapper);
+                record.SetExpressCheckout = _responseFactory.Build(response, response.Token);
+                record.Data.Token = response.Token;
+                record.SetExpressCheckout.RedirectUrl = GetRedirectUrl(response.Token);
+            }
+            catch (Exception ex)
+            {
+                record.Success = false;
+                record.SetExpressCheckout = _responseFactory.Build(ex);
+            }
+
+            return record;
+        }
+        
+        /// <summary>
+        /// Gets the <see cref="PayPalAPIInterfaceServiceService"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PayPalAPIInterfaceServiceService"/>.
+        /// </returns>
+        /// <exception cref="PayPalApiException">
+        /// Throws an exception if 
+        /// </exception>
+        protected virtual PayPalAPIInterfaceServiceService GetPayPalService()
+        {
             // We are getting the SDK authentication values from the settings saved through the back office
             // and stored in ExtendedData.  This returns an Attempt<PayPalSettings> so that we can 
             // assert that the values have been entered into the back office.
-            var attempSdk = Settings.GetExpressCheckoutSdkConfig();
+            var attemptSdk = Settings.GetExpressCheckoutSdkConfig();
+            if (!attemptSdk.Success) throw attemptSdk.Exception;
 
-            var logData = MultiLogger.GetBaseLoggingData();
-            logData.AddCategory("GatewayProviders");
-            logData.AddCategory("PayPal");
-
-            if (attempSdk.Success)
-            {
-                var service = new PayPalAPIInterfaceServiceService(attempSdk.Result);
-                try
-                {
-                    EnsureSslTslChannel();
-                    var response = service.SetExpressCheckout(wrapper);
-
-                    return new ExpressCheckoutResponse
-                               {
-                                   Ack = response.Ack,
-                                   Token = response.Token,
-                                   Version = response.Version,
-                                   Build = response.Build,
-                                   ErrorTypes = response.Errors,
-                                   RedirectUrl = GetRedirectUrl(response.Token)
-                               };
-                }
-                catch (Exception ex)
-                {
-                    MultiLogHelper.Error<PayPalExpressCheckoutService>("Failed to get response from PayPalAPIInterfaceServiceService", ex, logData);
-
-                    return new ExpressCheckoutResponse { Ack = AckCodeType.CUSTOMCODE };
-                }
-            }
-
-            MultiLogHelper.Error<PayPalExpressCheckoutService>("Could not load SDK settings", attempSdk.Exception, logData);
-
-            throw attempSdk.Exception;
+            EnsureSslTslChannel();
+            return new PayPalAPIInterfaceServiceService(attemptSdk.Result);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Provider
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -15,6 +16,7 @@
 
     using Merchello.Core.Models.TypeFields;
     using Merchello.Providers.Exceptions;
+    using Merchello.Providers.Payment.PayPal.Models;
 
     using Umbraco.Core;
 
@@ -77,8 +79,16 @@
             payment.PaymentMethodName = PaymentMethod.Name;
             payment.ReferenceNumber = PaymentMethod.PaymentCode + "-" + invoice.PrefixedInvoiceNumber();
             payment.Collected = false;
-            payment.Authorized = true;
+            payment.Authorized = false; // this is technically not the authorization.  We'll mark this in a later step.
 
+            // Have to save here to generate the payment key
+            GatewayProviderService.Save(payment);
+
+            // Now we want to get things setup for the ExpressCheckout
+            var record = this._paypalApiService.ExpressCheckout.SetExpressCheckout(invoice, payment);
+            payment.SavePayPalTransactionRecord(record);
+
+            // Have to save here to persist the record so it can be used in later processing.
             GatewayProviderService.Save(payment);
 
             // In this case, we want to do our own Apply Payment operation as the amount has not been collected -
@@ -86,18 +96,16 @@
             // be created showing the full amount and the invoice status will be set to Paid.
             GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, string.Format("To show promise of a {0} payment via PayPal Express Checkout", PaymentMethod.Name), 0);
 
-            // Now we want to get things setup for the ExpressCheckout
-            var apiResponse = this._paypalApiService.ExpressCheckout.SetExpressCheckout(invoice, payment);
 
             // if the ACK was success return a success IPaymentResult
-            if (apiResponse.Ack != null && apiResponse.Ack == AckCodeType.SUCCESS)
+            if (record.Success)
             {
-                return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false, apiResponse.RedirectUrl);
+                return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false, record.SetExpressCheckout.RedirectUrl);
             }
 
             // In the case of a failure, package up the exception so we can bubble it up.
             var ex = new PayPalApiException("PayPal Checkout Express initial response ACK was not Success");
-            if (apiResponse.ErrorTypes.Any()) ex.ErrorTypes = apiResponse.ErrorTypes;
+            if (record.SetExpressCheckout.ErrorTypes.Any()) ex.ErrorTypes = record.SetExpressCheckout.ErrorTypes;
 
             return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, false);
         }
@@ -127,14 +135,29 @@
             var appliedPayments = GatewayProviderService.GetAppliedPaymentsByPaymentKey(payment.Key);
             var applied = appliedPayments.Sum(x => x.Amount);
 
-            payment.Collected = (amount + applied) == payment.Amount;
-            payment.Authorized = true;
+            var isPartialPayment = amount - applied <= 0;
 
-            GatewayProviderService.Save(payment);
+            var processor = new PayPalExpressCheckoutPaymentProcessor(_paypalApiService);
+            var record = processor.VerifySuccessAuthorziation(invoice, payment);
 
-            GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal ExpressCheckout SUCCESS payment", amount);
+            if (record.Success)
+            {
+                record = _paypalApiService.ExpressCheckout.Capture(invoice, payment, amount, isPartialPayment);
+                payment.SavePayPalTransactionRecord(record);
 
-            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
+                payment.Collected = (amount + applied) == payment.Amount;
+                payment.Authorized = true;
+
+                GatewayProviderService.Save(payment);
+
+                GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "PayPal ExpressCheckout SUCCESS payment", amount);
+
+                return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
+            }
+
+
+            throw new NotImplementedException();
+
         }
 
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)

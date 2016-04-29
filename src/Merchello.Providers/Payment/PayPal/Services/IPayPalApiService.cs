@@ -14,5 +14,6 @@
         /// Gets the <see cref="IPayPalExpressCheckoutService"/>.
         /// </summary>
         IPayPalExpressCheckoutService ExpressCheckout { get; } 
+
     }
 }

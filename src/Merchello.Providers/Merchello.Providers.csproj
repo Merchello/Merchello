@@ -292,13 +292,16 @@
     <Compile Include="Models\IPaymentProviderSettings.cs" />
     <Compile Include="Payment\PayPal\Controllers\PayPalExpressController.cs" />
     <Compile Include="Payment\PayPal\Controllers\PayPalSurfaceControllerBase.cs" />
+    <Compile Include="Payment\PayPal\Factories\ExpressCheckoutResponseFactory.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalBasicAmountTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalFactorySettings.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalPaymentDetailsTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Factories\PayPalAddressTypeFactory.cs" />
     <Compile Include="Payment\PayPal\Models\ExpressCheckoutResponse.cs" />
+    <Compile Include="Payment\PayPal\Models\PayPalExpressCheckoutRequestDetailsOverride.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalExpressCheckoutUrls.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalExpressTransaction.cs" />
+    <Compile Include="Payment\PayPal\Models\PayPalExpressTransactionRecord.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettings.cs" />
     <Compile Include="Models\ProviderSettingsExtensions.cs" />
     <Compile Include="Models\ProviderSettingsMapperAttribute.cs" />
@@ -350,7 +353,7 @@
     <Compile Include="Payment\PayPal\Models\SdkConfig.cs" />
     <Compile Include="Payment\PayPal\PayPalApiHelper.cs" />
     <Compile Include="Payment\PayPal\PayPalMode.cs" />
-    <Compile Include="Payment\PayPal\PayPalPaymentProcessor.cs" />
+    <Compile Include="Payment\PayPal\PayPalExpressCheckoutPaymentProcessor.cs" />
     <Compile Include="Payment\PayPal\PayPalProcessorArgumentCollectionsExtensions.cs" />
     <Compile Include="Payment\PayPal\Provider\PayPalExpressCheckoutPaymentGatewayMethod.cs" />
     <Compile Include="Payment\PayPal\Provider\PayPalPaymentGatewayProvider.cs" />

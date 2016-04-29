@@ -3,8 +3,11 @@
     using System;
     using System.Web;
 
+    using global::PayPal.PayPalAPIInterfaceService.Model;
+
     using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.Braintree.Controllers;
     using Merchello.Providers.Payment.PayPal.Factories;
@@ -18,6 +21,32 @@
     /// </summary>
     public class PayPalApiHelper
     {
+        /// <summary>
+        /// Maps <see cref="ICurrency"/> to <see cref="CurrencyCodeType"/>.
+        /// </summary>
+        /// <param name="currencyCode">
+        /// The currency code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CurrencyCodeType"/>.
+        /// </returns>
+        public static CurrencyCodeType GetPayPalCurrencyCode(string currencyCode)
+        {
+            try
+            {
+                return (CurrencyCodeType)Enum.Parse(typeof(CurrencyCodeType), currencyCode, true);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("PayPal");
+
+                MultiLogHelper.WarnWithException<PayPalBasicAmountTypeFactory>("Failed to map currency code", ex, logData);
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Gets the <see cref="PayPalProviderSettings"/>.
         /// </summary>

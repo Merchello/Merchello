@@ -6,7 +6,7 @@
     /// <summary>
     /// Defines a Merchello customer
     /// </summary>
-    public interface ICustomer : ICustomerBase
+    public interface ICustomer : ICustomerBase, IHasNotes
     {
         /// <summary>
         /// Gets the full name of the customer
@@ -43,12 +43,6 @@
         /// </summary>
         [DataMember]
         bool TaxExempt { get; set; }
-
-        /// <summary>
-        /// Gets or sets the customer notes.
-        /// </summary>
-        [DataMember]
-        IEnumerable<INote> Notes { get; set; }
 
         /// <summary>
         /// Gets the addresses.
