@@ -57,7 +57,19 @@
         /// <summary>
         /// Gets or sets the detached data values.
         /// </summary>
-        public IEnumerable<KeyValuePair<string, string>> DetachedDataValues { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> DetachedDataValues
+        {
+            get
+            {
+                return IsForBackOfficeForEditor ? EditorDetachedDataValues : RawDetachedDataValues;
+            }
+
+            set
+            {
+                IsForBackOfficeForEditor = false;
+                RawDetachedDataValues = value;
+            }
+        }
 
         // Some properties use the create and update dates for caching - like ImageCropper
 
@@ -70,6 +82,29 @@
         /// Gets or sets the update date.
         /// </summary>
         public DateTime UpdateDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is for back office for editor.
+        /// </summary>
+        /// <remarks>
+        /// We need this due the ability for developers to override the value returned 
+        /// from a property specifically for back office editors and when rendering for the 
+        /// front end content we want to use the raw database value instead.
+        /// </remarks>
+        [JsonIgnore]
+        internal bool IsForBackOfficeForEditor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the raw detached data values.
+        /// </summary>
+        [JsonIgnore]
+        internal IEnumerable<KeyValuePair<string, string>> RawDetachedDataValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets the editor detached data values.
+        /// </summary>
+        [JsonIgnore]
+        internal IEnumerable<KeyValuePair<string, string>> EditorDetachedDataValues { get; set; }
     }
 
     /// <summary>

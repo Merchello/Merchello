@@ -137,29 +137,29 @@
             return destination;
         }
 
-        /// <summary>
-        /// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
-        /// </summary>
-        /// <param name="productDisplay">
-        /// The product display.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="sku">
-        /// The SKU.
-        /// </param>
-        /// <param name="price">
-        /// The price.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProduct"/>.
-        /// </returns>
-        internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
-        {
-            var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
-            return ToProduct(productDisplay, destination);
-        }
+        ///// <summary>
+        ///// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
+        ///// </summary>
+        ///// <param name="productDisplay">
+        ///// The product display.
+        ///// </param>
+        ///// <param name="name">
+        ///// The name.
+        ///// </param>
+        ///// <param name="sku">
+        ///// The SKU.
+        ///// </param>
+        ///// <param name="price">
+        ///// The price.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="IProduct"/>.
+        ///// </returns>
+        //internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
+        //{
+        //    var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
+        //    return ToProduct(productDisplay, destination);
+        //}
 
         #endregion
 
@@ -209,12 +209,17 @@
         /// <param name="product">
         /// The product.
         /// </param>
+        /// <param name="isBackOfficeForEditor">
+        /// A value indicating if the resulting object is intended for back office usage.
+        /// This is required to determine how detached content values are to be converted.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        public static ProductDisplay ToProductDisplay(this IProduct product)
-        {            
+        public static ProductDisplay ToProductDisplay(this IProduct product, bool isBackOfficeForEditor = false)
+        {
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+            productDisplay.SetIsForBackOfficeEditor(isBackOfficeForEditor);
             return productDisplay;
         }        
                
@@ -505,13 +510,56 @@
             }         
         }
 
+        /// <summary>
+        /// Utility for setting the IsForBackOfficeEditor property.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        internal static void SetIsForBackOfficeEditor(this ProductDisplay display, bool value = true)
+        {
+            ((ProductDisplayBase)display).SetIsForBackOfficeEditor(value);
+            if (display.ProductVariants.Any())
+            {
+                foreach (var variant in display.ProductVariants)
+                {
+                    variant.SetIsForBackOfficeEditor(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Utility for setting the IsForBackOfficeEditor property.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        internal static void SetIsForBackOfficeEditor(this ProductDisplayBase display, bool value = true)
+        {
+            if (display.DetachedContents.Any())
+            {
+                foreach (var dc in display.DetachedContents)
+                {
+                    dc.IsForBackOfficeForEditor = value;
+                }
+            }    
+        }
+
         #endregion
 
         #region IProductVariant
 
-        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant)
+        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, bool isForBackOfficeEditors = false)
         {            
-            return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            var display = AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            display.SetIsForBackOfficeEditor(isForBackOfficeEditors);
+            return display;
         }
 
         internal static IProductVariant ToProductVariant(this ProductVariantDisplay productVariantDisplay, IProductVariant destination)

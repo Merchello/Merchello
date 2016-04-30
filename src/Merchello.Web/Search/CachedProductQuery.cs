@@ -31,6 +31,11 @@
         private readonly ProductService _productService;
 
         /// <summary>
+        /// A value indicating whether or not this is being used for back office editors.
+        /// </summary>
+        private readonly bool _isForBackOfficeEditors;
+
+        /// <summary>
         /// The data modifier.
         /// </summary>
         private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier; 
@@ -53,11 +58,7 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         public CachedProductQuery(IProductService productService, bool enableDataModifiers)
-            : this(
-            productService,
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"],
-            ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"],
-            enableDataModifiers)
+            : this(productService, enableDataModifiers, false)
         {            
         }
 
@@ -77,9 +78,55 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         public CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers) 
+            : this(service, indexProvider, searchProvider, enableDataModifiers, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
+        /// </summary>
+        /// <param name="productService">
+        /// The product service.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="isForBackOfficeEditors">
+        /// The is for back office editors.
+        /// </param>
+        internal CachedProductQuery(IProductService productService, bool enableDataModifiers, bool isForBackOfficeEditors)
+            : this(
+            productService,
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"],
+            ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"],
+            enableDataModifiers,
+            isForBackOfficeEditors)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        /// <param name="indexProvider">
+        /// The index provider.
+        /// </param>
+        /// <param name="searchProvider">
+        /// The search provider.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="isForBackOfficeEditors">
+        /// The is for back office editors.
+        /// </param>
+        internal CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers, bool isForBackOfficeEditors)
             : base(service, indexProvider, searchProvider, enableDataModifiers)
         {
             _productService = (ProductService)service;
+            _isForBackOfficeEditors = isForBackOfficeEditors;
             this.Initialize();
         }
 
@@ -130,7 +177,7 @@
 
             ReindexEntity(entity);
 
-            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
+            return this.ModifyData(entity.ToProductDisplay(_isForBackOfficeEditors));
         }
 
         /// <summary>
@@ -172,6 +219,7 @@
             criteria.Field("productVariantKey", key.ToString());
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+            result.SetIsForBackOfficeEditor(_isForBackOfficeEditors);
 
             if (result != null) return this.ModifyData(result);
 
@@ -179,7 +227,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay());
+            return this.ModifyData(variant.ToProductVariantDisplay(_isForBackOfficeEditors));
         }
 
         /// <summary>
@@ -197,6 +245,7 @@
             criteria.Field("sku", sku).Not().Field("master", "True");
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+            result.SetIsForBackOfficeEditor(_isForBackOfficeEditors);
 
             if (result != null) return this.ModifyData(result);
 
@@ -204,7 +253,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay());
+            return this.ModifyData(variant.ToProductVariantDisplay(_isForBackOfficeEditors));
         }
 
         /// <summary>
@@ -778,7 +827,11 @@
 
             var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
 
-            if (display != null) return display;
+            if (display != null)
+            {
+                display.SetIsForBackOfficeEditor(_isForBackOfficeEditors);
+                return display;
+            }
 
             var entity = Service.GetByKey(key);
 
@@ -786,7 +839,7 @@
 
             ReindexEntity(entity);
 
-            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
+            return this.ModifyData(entity.ToProductDisplay(_isForBackOfficeEditors));
         }
 
         /// <summary>
@@ -800,7 +853,7 @@
         /// </returns>
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return this.ModifyData(result.ToProductDisplay(GetVariantsByProduct));
+            return this.ModifyData(result.ToProductDisplay(GetVariantsByProduct, _isForBackOfficeEditors));
         }
      
 

@@ -17,6 +17,11 @@
         private readonly bool _enableDataModifiers;
 
         /// <summary>
+        /// A value indicating whether or not this is being used for back office editors.
+        /// </summary>
+        private readonly bool _isForBackOfficeEditors;
+
+        /// <summary>
         /// The <see cref="ICachedCustomerQuery"/>.
         /// </summary>
         private Lazy<ICachedCustomerQuery> _customerQuery; 
@@ -54,9 +59,15 @@
         /// A value indicating whether or not to enable any data modifiers.
         /// </param>
         public CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers)
+            : this(serviceContext, enableDataModifiers, false)
+        {
+        }
+
+        internal CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers, bool isForBackOfficeEditors)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext is not initialized");
             _enableDataModifiers = enableDataModifiers;
+            _isForBackOfficeEditors = isForBackOfficeEditors;
             InitializeProvider(serviceContext);
         }
 

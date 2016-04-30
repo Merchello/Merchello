@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Models.VirtualContent
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Web.Models.DetachedContent;
 
@@ -15,6 +16,8 @@
     /// (with some OCD formatting =) )
     /// </remarks>
     /// <seealso cref="https://github.com/leekelleher/umbraco-nested-content/blob/master/src/Our.Umbraco.NestedContent/Models/DetachedPublishedProperty.cs"/>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1604:ElementDocumentationMustHaveSummary", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
     internal class DetachedPublishedProperty : IDetachedPublishedProperty
     {
         /// <summary>

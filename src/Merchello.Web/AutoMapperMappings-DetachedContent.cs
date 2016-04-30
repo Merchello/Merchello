@@ -43,10 +43,18 @@
                     .ConstructedBy(() => new AllowedTemplatesResolver()));
 
             AutoMapper.Mapper.CreateMap<IProductVariantDetachedContent, ProductVariantDetachedContentDisplay>()
+                //.ForMember(
+                //    dest => dest.DetachedDataValues,
+                //    opt =>
+                //    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()))
                 .ForMember(
-                    dest => dest.DetachedDataValues,
+                    dest => dest.RawDetachedDataValues,
                     opt =>
-                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()));
+                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()))
+                .ForMember(
+                    dest => dest.EditorDetachedDataValues,
+                    opt =>
+                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver(true)));
 
         }
     }

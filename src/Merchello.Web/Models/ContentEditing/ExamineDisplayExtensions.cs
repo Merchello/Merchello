@@ -33,7 +33,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants)
+        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants, bool isForBackOfficeEditor = false)
         {
             // this should be the master variant
             var productDisplay = new ProductDisplay(result.ToProductVariantDisplay());
@@ -84,7 +84,6 @@
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
                 DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")
             };
-  
             return pvd;
         }
 

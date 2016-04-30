@@ -70,7 +70,7 @@
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
 
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, true);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@
         [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
-            return _productService.GetByKey(id).ToProductDisplay();
+            return _productService.GetByKey(id).ToProductDisplay(true);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@
         [HttpPost]
         public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
         {
-            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay());
+            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(true));
         }
 
             /// <summary>
@@ -213,7 +213,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(true);
         }
 
         /// <summary>
@@ -244,7 +244,7 @@
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return attempt.Result.ToProductDisplay();
+            return attempt.Result.ToProductDisplay(true);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(true);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(true);
         }
 
         /// <summary>

@@ -81,6 +81,23 @@
         /// A value indicating whether or not to enable data modifiers
         /// </param>
         public MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers)
+            : this (serviceContext, enableDataModifiers, false)
+        { 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="isForBackOfficeEditors">
+        /// The is for back office editors.
+        /// </param>
+        internal MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers, bool isForBackOfficeEditors)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
 

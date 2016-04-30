@@ -35,5 +35,21 @@
     {
         @Html.ThemedPartial(BazaarContentHelper.GetStoreTheme(), "RelatedProducts", BazaarContentHelper.GetProductBoxModels(Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts")))
     }
-    
+
+    @if (Model.HasProperty("bullets") && Model.HasValue("bullets"))
+    {
+        <ul>
+        @foreach (var item in Model.GetPropertyValue<IEnumerable<string>>("bullets").Where(x => !x.IsNullOrWhiteSpace()))
+         {
+            <li>@item</li>     
+         }
+        </ul>
+    }
+
+    @if (Model.HasProperty("datepicker") && Model.HasValue("datepicker"))
+    {
+        var dt = Model.GetPropertyValue<DateTime>("datepicker");
+        @Model.GetPropertyValue("datepicker");
+    }
+
 </div>
