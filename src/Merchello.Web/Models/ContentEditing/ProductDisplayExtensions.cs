@@ -9,6 +9,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
@@ -209,17 +210,16 @@
         /// <param name="product">
         /// The product.
         /// </param>
-        /// <param name="isBackOfficeForEditor">
-        /// A value indicating if the resulting object is intended for back office usage.
-        /// This is required to determine how detached content values are to be converted.
+        /// <param name="conversionType">
+        /// The detached value conversion type.
         /// </param>
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        public static ProductDisplay ToProductDisplay(this IProduct product, bool isBackOfficeForEditor = false)
+        public static ProductDisplay ToProductDisplay(this IProduct product, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
-            productDisplay.SetIsForBackOfficeEditor(isBackOfficeForEditor);
+            productDisplay.SetConversionType(conversionType);
             return productDisplay;
         }        
                
@@ -516,17 +516,17 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="value">
-        /// The value.
+        /// <param name="conversionType">
+        /// The value conversion type.
         /// </param>
-        internal static void SetIsForBackOfficeEditor(this ProductDisplay display, bool value = true)
+        internal static void SetConversionType(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
-            ((ProductDisplayBase)display).SetIsForBackOfficeEditor(value);
+            ((ProductDisplayBase)display).SetConversionType(conversionType);
             if (display.ProductVariants.Any())
             {
                 foreach (var variant in display.ProductVariants)
                 {
-                    variant.SetIsForBackOfficeEditor(value);
+                    variant.SetConversionType(conversionType);
                 }
             }
         }
@@ -537,16 +537,16 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="value">
-        /// The value.
+        /// <param name="conversionType">
+        /// The value conversion type.
         /// </param>
-        internal static void SetIsForBackOfficeEditor(this ProductDisplayBase display, bool value = true)
+        internal static void SetConversionType(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             if (display.DetachedContents.Any())
             {
                 foreach (var dc in display.DetachedContents)
                 {
-                    dc.IsForBackOfficeForEditor = value;
+                    dc.ValueConversion = conversionType;
                 }
             }    
         }
@@ -555,10 +555,10 @@
 
         #region IProductVariant
 
-        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, bool isForBackOfficeEditors = false)
+        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {            
             var display = AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
-            display.SetIsForBackOfficeEditor(isForBackOfficeEditors);
+            display.SetConversionType(conversionType);
             return display;
         }
 

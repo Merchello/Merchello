@@ -296,9 +296,9 @@
         protected virtual void InitializeValueConverters()
         {
             // initialize the DetachedPublishedPropertyConverter singleton
-            if (!DetachedPublishedPropertyValueConverter.HasCurrent)
+            if (!DetachedValuesConverter.HasCurrent)
             {
-                DetachedPublishedPropertyValueConverter.Current = new DetachedPublishedPropertyValueConverter(ApplicationContext.Current);
+                DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current);
             }
         }
 

@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Web
 {
-    using System.Diagnostics;
-
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.MapperResolvers;
@@ -43,18 +41,10 @@
                     .ConstructedBy(() => new AllowedTemplatesResolver()));
 
             AutoMapper.Mapper.CreateMap<IProductVariantDetachedContent, ProductVariantDetachedContentDisplay>()
-                //.ForMember(
-                //    dest => dest.DetachedDataValues,
-                //    opt =>
-                //    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()))
                 .ForMember(
                     dest => dest.RawDetachedDataValues,
                     opt =>
-                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()))
-                .ForMember(
-                    dest => dest.EditorDetachedDataValues,
-                    opt =>
-                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver(true)));
+                    opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()));
 
         }
     }

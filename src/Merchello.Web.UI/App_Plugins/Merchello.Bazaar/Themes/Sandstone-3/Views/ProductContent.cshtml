@@ -39,7 +39,7 @@
     @if (Model.HasProperty("bullets") && Model.HasValue("bullets"))
     {
         <ul>
-        @foreach (var item in Model.GetPropertyValue<IEnumerable<string>>("bullets").Where(x => !x.IsNullOrWhiteSpace()))
+        @foreach (var item in Model.GetPropertyValue<IEnumerable<string>>("bullets"))
          {
             <li>@item</li>     
          }

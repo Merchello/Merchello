@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;
@@ -18,6 +20,14 @@
     /// </summary>
     public class ProductVariantDetachedContentDisplay
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantDetachedContentDisplay"/> class.
+        /// </summary>
+        public ProductVariantDetachedContentDisplay()
+        {
+            ValueConversion = DetachedValuesConversionType.Db;
+            this.Initialize();
+        }
 
         /// <summary>
         /// Gets or sets the key.
@@ -61,12 +71,12 @@
         {
             get
             {
-                return IsForBackOfficeForEditor ? EditorDetachedDataValues : RawDetachedDataValues;
+                return ValueConversion == DetachedValuesConversionType.Editor ? EditorDetachedDataValues.Value : RawDetachedDataValues;
             }
 
             set
             {
-                IsForBackOfficeForEditor = false;
+                ValueConversion = DetachedValuesConversionType.Db;
                 RawDetachedDataValues = value;
             }
         }
@@ -92,7 +102,7 @@
         /// front end content we want to use the raw database value instead.
         /// </remarks>
         [JsonIgnore]
-        internal bool IsForBackOfficeForEditor { get; set; }
+        internal DetachedValuesConversionType ValueConversion { get; set; }
 
         /// <summary>
         /// Gets or sets the raw detached data values.
@@ -101,10 +111,65 @@
         internal IEnumerable<KeyValuePair<string, string>> RawDetachedDataValues { get; set; }
 
         /// <summary>
-        /// Gets or sets the editor detached data values.
+        /// Gets the editor detached data values.
         /// </summary>
         [JsonIgnore]
-        internal IEnumerable<KeyValuePair<string, string>> EditorDetachedDataValues { get; set; }
+        internal Lazy<IEnumerable<KeyValuePair<string, string>>> EditorDetachedDataValues { get; private set; }
+
+        /// <summary>
+        /// The convert values.
+        /// </summary>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <returns>
+        /// The collection of converted values
+        /// </returns>
+        internal IEnumerable<KeyValuePair<string, string>> ConvertValues(DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            if (DetachedContentType == null) return RawDetachedDataValues;
+
+            return ConvertValues(RawDetachedDataValues, conversionType);
+        }
+
+        /// <summary>
+        /// The convert values.
+        /// </summary>
+        /// <param name="detachedValues">
+        /// The detached Values.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <returns>
+        /// The collection of converted values
+        /// </returns>
+        private IEnumerable<KeyValuePair<string, string>> ConvertValues(IEnumerable<KeyValuePair<string, string>> detachedValues, DetachedValuesConversionType conversionType)
+        {
+            try
+            {
+                var contentType =
+                    DetachedValuesConverter.Current.GetContentTypeByKey(DetachedContentType.UmbContentType.Key);
+
+                return DetachedValuesConverter.Current.Convert(contentType, RawDetachedDataValues, conversionType);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("DetachedValueConversion");
+                MultiLogHelper.WarnWithException<ProductVariantDetachedContentDisplay>("Failed to convert detached values.  Using raw values", ex, logData);
+
+                return RawDetachedDataValues;
+            }
+        }
+
+        /// <summary>
+        /// Initializes the object.
+        /// </summary>
+        private void Initialize()
+        {
+            EditorDetachedDataValues = new Lazy<IEnumerable<KeyValuePair<string, string>>>(() => ConvertValues(DetachedValuesConversionType.Editor));
+        }
     }
 
     /// <summary>
@@ -211,6 +276,7 @@
         public static IEnumerable<IPublishedProperty> DataValuesAsPublishedProperties(this ProductVariantDetachedContentDisplay pvd, PublishedContentType contentType)
         {
             var properties = new List<IPublishedProperty>();
+
             foreach (var value in pvd.DetachedDataValues)
             {
                 var propType = contentType.GetPropertyType(value.Key);
