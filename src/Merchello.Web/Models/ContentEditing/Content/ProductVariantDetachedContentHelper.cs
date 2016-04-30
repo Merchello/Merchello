@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core;
+
     using Newtonsoft.Json;
 
     using Umbraco.Core;
@@ -101,7 +103,7 @@
                             //// var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
 
                             detachedValue = propVal == null ? string.Empty : 
-                                IsJsonObject(propVal) ? 
+                                JsonHelper.IsJsonObject(propVal) ? 
                                     propVal.ToString() : 
                                     string.Format("\"{0}\"", propVal);
 
@@ -112,23 +114,6 @@
             }
 
             updatedContent.DetachedDataValues = updatedValues;           
-        }
-
-        /// <summary>
-        /// Simple check to guess if a property value is a JSON string
-        /// </summary>
-        /// <param name="propVal">
-        /// The prop val.
-        /// </param>
-        /// <returns>
-        /// The guess.
-        /// </returns>
-        private static bool IsJsonObject(object propVal)
-        {
-            var stringify = propVal.ToString().Trim();
-
-            return (stringify.StartsWith("{") && stringify.EndsWith("}")) || 
-                   (stringify.StartsWith("[") && stringify.EndsWith("]"));
         }
     }
 }

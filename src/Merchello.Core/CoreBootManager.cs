@@ -12,6 +12,7 @@
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Events;
     using Merchello.Core.Logging;
+    using Merchello.Core.ValueConverters;
 
     using Observation;
     using Persistence.UnitOfWork;
@@ -164,6 +165,8 @@
 
             InitializeResolvers();
 
+            InitializeValueConverters();
+
             InitializeObserverSubscriptions();
 
             this.InitializeEntityCollectionProviderResolver(MerchelloContext.Current);
@@ -285,6 +288,18 @@
 
             if (!OfferProcessorFactory.HasCurrent)
             OfferProcessorFactory.Current = new OfferProcessorFactory(PluginManager.Current.ResolveOfferConstraintChains());
+        }
+
+        /// <summary>
+        /// Initializes value converters.
+        /// </summary>
+        protected virtual void InitializeValueConverters()
+        {
+            // initialize the DetachedPublishedPropertyConverter singleton
+            if (!DetachedPublishedPropertyValueConverter.HasCurrent)
+            {
+                DetachedPublishedPropertyValueConverter.Current = new DetachedPublishedPropertyValueConverter(ApplicationContext.Current);
+            }
         }
 
         /// <summary>

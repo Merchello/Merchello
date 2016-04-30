@@ -415,6 +415,7 @@
     <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />
     <Compile Include="Gateways\Taxation\ProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\TaxationApplication.cs" />
+    <Compile Include="JsonHelper.cs" />
     <Compile Include="Logging\ExtendedLoggerData.cs" />
     <Compile Include="Logging\IExtendedLoggerData.cs" />
     <Compile Include="Logging\IExtendedLoggerDataLogger.cs" />
@@ -1348,6 +1349,7 @@
     <Compile Include="Validation\EmailValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
     <Compile Include="Validation\IEmailValidationHelper.cs" />
+    <Compile Include="ValueConverters\DetachedPublishedPropertyValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

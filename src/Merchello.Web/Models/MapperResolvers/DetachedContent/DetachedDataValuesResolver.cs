@@ -6,6 +6,7 @@
     using AutoMapper;
 
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
 
     /// <summary>
     /// Maps the detached data values to an enumerable of KeyValuePair.
@@ -23,9 +24,15 @@
         /// </returns>
         protected override IEnumerable<KeyValuePair<string, string>> ResolveCore(IDetachedContent source)
         {
-            return source.DetachedDataValues != null
-                       ? source.DetachedDataValues.AsEnumerable()
-                       : Enumerable.Empty<KeyValuePair<string, string>>();
+            if (source.DetachedDataValues == null) return Enumerable.Empty<KeyValuePair<string, string>>();
+
+            var converter = DetachedPublishedPropertyValueConverter.Current;
+
+            var contentType = converter.GetContentTypeFromDetachedContentType(source.DetachedContentType);
+
+            var converted = source.DetachedDataValues.Select(pair => converter.ConvertDbToEditor(contentType, pair));
+
+            return converted;
         }
     }
 }
