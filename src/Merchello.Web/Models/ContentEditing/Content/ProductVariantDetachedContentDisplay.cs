@@ -147,21 +147,10 @@
         /// </returns>
         private IEnumerable<KeyValuePair<string, string>> ConvertValues(IEnumerable<KeyValuePair<string, string>> detachedValues, DetachedValuesConversionType conversionType)
         {
-            try
-            {
                 var contentType =
                     DetachedValuesConverter.Current.GetContentTypeByKey(DetachedContentType.UmbContentType.Key);
 
                 return DetachedValuesConverter.Current.Convert(contentType, RawDetachedDataValues, conversionType);
-            }
-            catch (Exception ex)
-            {
-                var logData = MultiLogger.GetBaseLoggingData();
-                logData.AddCategory("DetachedValueConversion");
-                MultiLogHelper.WarnWithException<ProductVariantDetachedContentDisplay>("Failed to convert detached values.  Using raw values", ex, logData);
-
-                return RawDetachedDataValues;
-            }
         }
 
         /// <summary>

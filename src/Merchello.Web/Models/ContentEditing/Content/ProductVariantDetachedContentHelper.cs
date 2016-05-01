@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.ValueConverters;
 
     using Newtonsoft.Json;
 
@@ -61,8 +62,6 @@
                 return;
             }
 
-            var dataTypeService = ApplicationContext.Current.Services.DataTypeService;
-
             // a new container for property values returning from editors
             var updatedValues = new List<KeyValuePair<string, string>>();
 
@@ -76,40 +75,43 @@
                 {
                     d.Add("files", files);
                 }
-                
-                var detachedValue = updatedContent.DetachedDataValues.FirstOrDefault(x => x.Key == p.Alias).Value;
-                if (!detachedValue.IsNullOrWhiteSpace())
-                {
-                                     
-                    var editor = PropertyEditorResolver.Current.GetByAlias(p.PropertyEditorAlias);
-                    if (editor == null)
-                    {
-                        LogHelper.Warn<ProductVariantDetachedContentHelper<TSaveModel, TDisplay>>(
-                            "No property editor found for property " + p.Alias);
-                    }
-                    else
-                    {
-                        var preValues = dataTypeService.GetPreValuesCollectionByDataTypeId(p.DataTypeDefinitionId);
 
-                        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue.Trim()), preValues, d);
+                var dcv = updatedContent.DetachedDataValues.FirstOrDefault(x => x.Key == p.Alias);
+                updatedValues.Add(DetachedValuesConverter.Current.Convert(contentType, dcv));
 
-                        var valueEditor = editor.ValueEditor;
-                        if (valueEditor.IsReadOnly == false)
-                        {
-                            var propVal = editor.ValueEditor.ConvertEditorToDb(data, null);
+                //var detachedValue = updatedContent.DetachedDataValues.FirstOrDefault(x => x.Key == p.Alias).Value;
+                //if (!detachedValue.IsNullOrWhiteSpace())
+                //{
 
-                            //// TODO fighting internals
-                            //// var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
+                //    var editor = PropertyEditorResolver.Current.GetByAlias(p.PropertyEditorAlias);
+                //    if (editor == null)
+                //    {
+                //        LogHelper.Warn<ProductVariantDetachedContentHelper<TSaveModel, TDisplay>>(
+                //            "No property editor found for property " + p.Alias);
+                //    }
+                //    else
+                //    {
+                //        var preValues = dataTypeService.GetPreValuesCollectionByDataTypeId(p.DataTypeDefinitionId);
 
-                            detachedValue = propVal == null ? string.Empty : propVal.ToString();
-                                //JsonHelper.IsJsonObject(propVal) ? 
-                                //    propVal.ToString() : 
-                                //    string.Format("\"{0}\"", propVal);
+                //        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue.Trim()), preValues, d);
 
-                            updatedValues.Add(new KeyValuePair<string, string>(p.Alias, detachedValue));                            
-                        }    
-                    }                  
-                }
+                //        var valueEditor = editor.ValueEditor;
+                //        if (valueEditor.IsReadOnly == false)
+                //        {
+                //            var propVal = editor.ValueEditor.ConvertEditorToDb(data, null);
+
+                //            //// TODO fighting internals
+                //            //// var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
+
+                //            detachedValue = propVal == null ? string.Empty : propVal.ToString();
+                //                //JsonHelper.IsJsonObject(propVal) ? 
+                //                //    propVal.ToString() : 
+                //                //    string.Format("\"{0}\"", propVal);
+
+                //            updatedValues.Add(new KeyValuePair<string, string>(p.Alias, detachedValue));                            
+                //        }    
+                //    }                  
+                //}
             }
 
             updatedContent.DetachedDataValues = updatedValues;           

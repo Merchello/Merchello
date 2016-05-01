@@ -300,7 +300,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
                                 try {
-                                    p.value = stored;
+                                    p.value = angular.fromJson(stored);
                                 }
                                 catch (e) {
                                     // Hack fix for some property editors

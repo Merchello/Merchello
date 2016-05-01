@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
 
     using Newtonsoft.Json;
@@ -121,6 +122,36 @@
         }
 
         /// <summary>
+        /// Converts the detached value collection to property values for various usages depending on type passed.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <param name="dcv">
+        /// The detached content value.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <returns>
+        /// The converted values.
+        /// </returns>
+        public KeyValuePair<string, string> Convert(IContentType contentType, KeyValuePair<string, string> dcv, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            switch (conversionType)
+            {
+                case DetachedValuesConversionType.Editor:
+                    return ConvertDbToEditor(contentType, dcv);
+
+                case DetachedValuesConversionType.Db:
+                    return ConvertEditorToDb(contentType, dcv);
+
+                default:
+                    return ConvertEditorToDb(contentType, dcv);
+            }
+        }
+
+        /// <summary>
         /// Gets <see cref="IContentType"/> from <see cref="IDetachedContentType"/>.
         /// </summary>
         /// <param name="detachedContentType">
@@ -176,76 +207,70 @@
         {
             if (contentType == null || !_ready) return detachedContentValues;
 
-            var converted = new List<KeyValuePair<string, string>>();
-            foreach (var dcv in detachedContentValues.ToArray())
+            return detachedContentValues.ToArray().Select(dcv => this.ConvertEditorToDb(contentType, dcv)).ToList();
+        }
+
+        /// <summary>
+        /// A method to deserialize the value that has been saved by an editor
+        ///             to an object to be stored in the database.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <param name="dcv">
+        /// The detached content value.
+        /// </param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        private KeyValuePair<string, string> ConvertEditorToDb(IContentType contentType, KeyValuePair<string, string> dcv)
+        {
+            var propType = contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == dcv.Key);
+            if (propType == null)
             {
-                var propType = contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == dcv.Key);
-                if (propType == null)
-                {
-                    converted.Add(dcv);
-                    continue;
-                }
-                
-                // Fetch the property types prevalue
-                var propPreValues = _dataTypeService.GetPreValuesCollectionByDataTypeId(propType.DataTypeDefinitionId);
+                return dcv;
+            }
 
-                // Lookup the property editor
-                var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
+            // Lookup the property editor
+            var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
 
-                // Create a fake content property data object
-                var contentPropData = new ContentPropertyData(dcv.Value, propPreValues, new Dictionary<string, object>());
+            if (propEditor.ValueEditor.IsReadOnly) return dcv;
 
+            // Fetch the property types prevalue
+            var propPreValues = _dataTypeService.GetPreValuesCollectionByDataTypeId(propType.DataTypeDefinitionId);
 
+            // Create a fake content property data object
+            var contentPropData = new ContentPropertyData(dcv.Value, propPreValues, new Dictionary<string, object>());
 
+            var rawValue = !JsonHelper.IsJsonObject(dcv.Value) ?
+                    JsonConvert.DeserializeObject(dcv.Value) :
+                    dcv.Value;
+
+            try
+            {
                 // Get the property editor to do it's conversion
-                var newValue = propEditor.ValueEditor.ConvertEditorToDb(contentPropData, dcv.Value);
+
+                //// TODO - this is the new place the serialization starts to error
+                var newValue = propEditor.ValueEditor.ConvertEditorToDb(contentPropData, rawValue);
 
                 // Store the value back
                 var value = newValue == null ? null : JsonConvert.SerializeObject(newValue);
 
-                converted.Add(new KeyValuePair<string, string>(dcv.Key, value));
+                return new KeyValuePair<string, string>(dcv.Key, value);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("ValueEditor");
+                MultiLogHelper.WarnWithException<DetachedValuesConverter>(
+                    "Failed to convert property value for Database",
+                    ex,
+                    logData);
+
+                return dcv;
             }
 
-            return converted;
         }
-
-        //private IEnumerable<KeyValuePair<string, string>> ConvertDbToCache(IContentType contentType, IEnumerable<KeyValuePair<string, string>> detachedContentValues)
-        //{
-        //    if (contentType == null || !_ready) return detachedContentValues;
-
-        //    var converted = new List<KeyValuePair<string, string>>();
-        //    foreach (var dcv in detachedContentValues.ToArray())
-        //    {
-        //        var propType = contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == dcv.Key);
-        //        if (propType == null)
-        //        {
-        //            converted.Add(dcv);
-        //            continue;
-        //        }
-
-        //        // Fetch the property types prevalue
-        //        var propPreValues = _dataTypeService.GetPreValuesCollectionByDataTypeId(propType.DataTypeDefinitionId);
-
-        //        // Lookup the property editor
-        //        var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
-
-        //        // Create a fake content property data object
-        //        var prop = new Property(propType, JsonConvert.SerializeObject(dcv.Value));
-
-        //        var contentPropData = new ContentPropertyData(dcv.Value, propPreValues, new Dictionary<string, object>());
-
-                
-        //        // Get the property editor to do it's conversion
-        //        var newValue = propEditor.ValueEditor.ConvertDbToXml(prop, propType, _dataTypeService);
-
-        //        // Store the value back
-        //        var value = newValue == null ? null : JToken.FromObject(newValue);
-
-        //        converted.Add(new KeyValuePair<string, string>(dcv.Key, JsonConvert.SerializeObject(value)));
-        //    }
-
-        //    return converted;
-        //}
 
         /// <summary>
         /// A method used to format the database values to a value that can be used by the editor
@@ -268,36 +293,60 @@
         {
             if (contentType == null || !_ready) return detachedContentValues;
 
-            var converted = new List<KeyValuePair<string, string>>();
-            foreach (var dvc in detachedContentValues.ToArray())
+            return detachedContentValues.ToArray().Select(dcv => this.ConvertDbToEditor(contentType, dcv)).ToList();
+        }
+
+        /// <summary>
+        /// A method used to format the database value to a value that can be used by the editor.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <param name="dcv">
+        /// The detached content value.
+        /// </param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        private KeyValuePair<string, string> ConvertDbToEditor(IContentType contentType, KeyValuePair<string, string> dcv)
+        {
+            var propType = contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == dcv.Key);
+            if (propType == null)
             {
-                var propType = contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == dvc.Key);
-                if (propType == null)
-                {
-                    converted.Add(dvc);
-                    continue;
-                }
-
-
-                // TODO THIS IS THE START OF ONE ERROR - Look at relatedProducts property
-                var rawValue = JsonHelper.IsJsonObject(dvc.Value)
-                                   ? JsonConvert.DeserializeObject(dvc.Value)
-                                   : dvc.Value;
-
-                //// Adapted from Nested Content
-                // Create a fake property using the property to add the stored value
-                var prop = new Property(propType, rawValue);
-
-                // Lookup the property editor
-                var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
-
-                // Get the editor to do it's conversion
-                var editorObject = propEditor.ValueEditor.ConvertDbToEditor(prop, propType, _dataTypeService);
-                var json = JsonConvert.SerializeObject(editorObject);
-                converted.Add(new KeyValuePair<string, string>(dvc.Key, json));
+                return dcv;
             }
 
-            return converted;
+            // Lookup the property editor
+            var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
+
+            if (propEditor.ValueEditor.IsReadOnly) return dcv;
+
+            var rawValue = !JsonHelper.IsJsonObject(dcv.Value) ? 
+                JsonConvert.DeserializeObject(dcv.Value) : 
+                dcv.Value;
+
+            //// Adapted from Nested Content
+            // Create a fake property using the property to add the stored value
+            var prop = new Property(propType, rawValue);
+
+            // Get the editor to do it's conversion
+            try
+            {
+                var editorObject = propEditor.ValueEditor.ConvertDbToEditor(prop, propType, _dataTypeService);
+                var json = JsonConvert.SerializeObject(editorObject);
+                return new KeyValuePair<string, string>(dcv.Key, json);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("ValueEditor");
+                MultiLogHelper.WarnWithException<DetachedValuesConverter>(
+                    "Failed to convert property value for Editor",
+                    ex,
+                    logData);
+
+                return dcv;
+            }
         }
     }
 }
