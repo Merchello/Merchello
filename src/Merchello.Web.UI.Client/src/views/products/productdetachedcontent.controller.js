@@ -254,7 +254,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 productVariantContent.canBeRendered = true;
                 angular.forEach(tabs, function(tab) {
                     angular.forEach(tab.properties, function(prop) {
-                        productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));
+                        //productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));
+                        productVariantContent.detachedDataValues.setValue(prop.alias, prop.value);
                     })
                 });
                 return productVariantContent;
@@ -299,11 +300,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
                             if (stored !== '') {
                                 try {
-                                    p.value = angular.fromJson(stored);
+                                    p.value = stored;
                                 }
                                 catch (e) {
                                     // Hack fix for some property editors
-                                    p.value = stored.substring(1, stored.length-1);
+                                    p.value = '';
+                                    //p.value = stored.substring(1, stored.length-1);
                                 }
                             }
                         });

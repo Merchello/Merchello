@@ -201,9 +201,9 @@
                 var newValue = propEditor.ValueEditor.ConvertEditorToDb(contentPropData, dcv.Value);
 
                 // Store the value back
-                var value = newValue == null ? null : JToken.FromObject(newValue);
+                var value = newValue == null ? null : JsonConvert.SerializeObject(newValue);
 
-                converted.Add(new KeyValuePair<string, string>(dcv.Key, JsonConvert.SerializeObject(value)));
+                converted.Add(new KeyValuePair<string, string>(dcv.Key, value));
             }
 
             return converted;
@@ -279,7 +279,8 @@
                 }
 
 
-                var rawValue = !JsonHelper.IsJsonObject(dvc.Value)
+                // TODO THIS IS THE START OF ONE ERROR - Look at relatedProducts property
+                var rawValue = JsonHelper.IsJsonObject(dvc.Value)
                                    ? JsonConvert.DeserializeObject(dvc.Value)
                                    : dvc.Value;
 

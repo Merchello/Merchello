@@ -101,10 +101,10 @@
                             //// TODO fighting internals
                             //// var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
 
-                            detachedValue = propVal == null ? string.Empty : 
-                                JsonHelper.IsJsonObject(propVal) ? 
-                                    propVal.ToString() : 
-                                    string.Format("\"{0}\"", propVal);
+                            detachedValue = propVal == null ? string.Empty : propVal.ToString();
+                                //JsonHelper.IsJsonObject(propVal) ? 
+                                //    propVal.ToString() : 
+                                //    string.Format("\"{0}\"", propVal);
 
                             updatedValues.Add(new KeyValuePair<string, string>(p.Alias, detachedValue));                            
                         }    

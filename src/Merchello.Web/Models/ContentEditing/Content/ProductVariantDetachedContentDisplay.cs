@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
@@ -283,11 +284,15 @@
                 object valObj;
                 try
                 {
-                    valObj = JsonConvert.DeserializeObject<object>(value.Value);
+                    valObj = JsonHelper.IsJsonObject(value.Value) ?
+                        JsonConvert.DeserializeObject<object>(value.Value) :
+                        value.Value;
+                    //valObj = JsonConvert.DeserializeObject<object>(value.Value);
                 }
                 catch
-                {                    
-                    valObj = value.Value.Substring(1, value.Value.Length - 1);
+                {
+                    //valObj = value.Value.Substring(1, value.Value.Length - 1);
+                    valObj = value.Value;
                 }
 
                 if (propType != null)
@@ -297,6 +302,11 @@
             }
 
             return properties;
-        } 
+        }
+
+        private static string RunCorrections(string value)
+        {
+            return value.Replace("\r\n", Environment.NewLine);
+        }
     }
 }
