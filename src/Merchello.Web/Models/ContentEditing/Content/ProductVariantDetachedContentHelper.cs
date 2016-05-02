@@ -69,6 +69,7 @@
             {
                 //// create the property data to send to the property editor
                 var d = new Dictionary<string, object>();
+
                 //// add the files if any
                 var files = detachedContentItem.UploadedFiles.Where(x => x.PropertyAlias == p.Alias).ToArray();
                 if (files.Any())
@@ -78,40 +79,6 @@
 
                 var dcv = updatedContent.DetachedDataValues.FirstOrDefault(x => x.Key == p.Alias);
                 updatedValues.Add(DetachedValuesConverter.Current.Convert(contentType, dcv));
-
-                //var detachedValue = updatedContent.DetachedDataValues.FirstOrDefault(x => x.Key == p.Alias).Value;
-                //if (!detachedValue.IsNullOrWhiteSpace())
-                //{
-
-                //    var editor = PropertyEditorResolver.Current.GetByAlias(p.PropertyEditorAlias);
-                //    if (editor == null)
-                //    {
-                //        LogHelper.Warn<ProductVariantDetachedContentHelper<TSaveModel, TDisplay>>(
-                //            "No property editor found for property " + p.Alias);
-                //    }
-                //    else
-                //    {
-                //        var preValues = dataTypeService.GetPreValuesCollectionByDataTypeId(p.DataTypeDefinitionId);
-
-                //        var data = new ContentPropertyData(JsonConvert.DeserializeObject(detachedValue.Trim()), preValues, d);
-
-                //        var valueEditor = editor.ValueEditor;
-                //        if (valueEditor.IsReadOnly == false)
-                //        {
-                //            var propVal = editor.ValueEditor.ConvertEditorToDb(data, null);
-
-                //            //// TODO fighting internals
-                //            //// var supportTagsAttribute = TagExtractor.GetAttribute(p.PropertyEditor);
-
-                //            detachedValue = propVal == null ? string.Empty : propVal.ToString();
-                //                //JsonHelper.IsJsonObject(propVal) ? 
-                //                //    propVal.ToString() : 
-                //                //    string.Format("\"{0}\"", propVal);
-
-                //            updatedValues.Add(new KeyValuePair<string, string>(p.Alias, detachedValue));                            
-                //        }    
-                //    }                  
-                //}
             }
 
             updatedContent.DetachedDataValues = updatedValues;           

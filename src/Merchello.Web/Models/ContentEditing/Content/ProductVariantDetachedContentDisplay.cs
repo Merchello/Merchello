@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Logging;
@@ -267,21 +268,23 @@
         {
             var properties = new List<IPublishedProperty>();
 
-            foreach (var value in pvd.DetachedDataValues)
+            foreach (var dcv in pvd.DetachedDataValues)
             {
-                var propType = contentType.GetPropertyType(value.Key);
+                var propType = contentType.GetPropertyType(dcv.Key);
                 object valObj;
                 try
                 {
-                    valObj = JsonHelper.IsJsonObject(value.Value) ?
-                        JsonConvert.DeserializeObject<object>(value.Value) :
-                        value.Value;
+                    valObj = DetachedValuesConverter.Current.ConvertDbForContent(propType, dcv).Value;
+
+                    //!JsonHelper.IsJsonObject(value.Value) ?
+                    //JsonConvert.DeserializeObject<object>(value.Value) :
+                    //value.Value;
                     //valObj = JsonConvert.DeserializeObject<object>(value.Value);
                 }
                 catch
                 {
                     //valObj = value.Value.Substring(1, value.Value.Length - 1);
-                    valObj = value.Value;
+                    valObj = dcv.Value;
                 }
 
                 if (propType != null)

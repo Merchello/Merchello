@@ -7807,6 +7807,7 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
         function remove(product) {
             console.info(product);
             $scope.products = _.reject($scope.products, function (p) { return p.key === product.key });
+            setModelValue();
         }
 
         function openPickerDialog() {
@@ -7824,6 +7825,10 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
 
         function selectProductFromDialog(dialogData) {
             $scope.products = dialogData.products;
+            setModelValue();
+        }
+
+        function setModelValue() {
             $scope.model.value = _.pluck($scope.products, 'key');
         }
 

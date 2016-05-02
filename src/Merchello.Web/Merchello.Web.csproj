@@ -654,9 +654,7 @@
     <Compile Include="Workflow\Payment\PaymentProcessor.cs" />
     <Compile Include="Workflow\Wishlist.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
       <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>

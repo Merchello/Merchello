@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.ValueConverters
 {
+    using Umbraco.Core.Models;
+
     /// <summary>
     /// Specifies the how the Detached Values should be converted.
     /// </summary>
@@ -17,8 +19,8 @@
         Editor,
 
         /// <summary>
-        /// Indicates conversion of a value as if it was retrieved from the Umbraco's contextual cache
+        /// Indicates conversion of a value as if it was retrieved from the should be used for <see cref="IPublishedContent"/>
         /// </summary>
-        Cache
+        Content
     }
 }

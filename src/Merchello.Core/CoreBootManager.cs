@@ -297,9 +297,11 @@
         {
             // initialize the DetachedPublishedPropertyConverter singleton
             if (!DetachedValuesConverter.HasCurrent)
-            {
                 DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current);
-            }
+            
+
+            if (!DetachedValueOverriderResolver.HasCurrent)
+                DetachedValueOverriderResolver.Current = new DetachedValueOverriderResolver(PluginManager.Current.ResolveDetachedValueOverriders());
         }
 
         /// <summary>

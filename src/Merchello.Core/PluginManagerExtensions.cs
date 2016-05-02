@@ -10,6 +10,7 @@
     using Merchello.Core.Configuration;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.ValueConverters.ValueOverrides;
 
     using Observation;
     using Umbraco.Core;
@@ -20,6 +21,20 @@
     /// </summary>
     internal static class PluginManagerExtensions
     {
+        /// <summary>
+        /// Resolves the <see cref="DetachedValueOverriderBase"/>.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IDetachedValueOverrider"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveDetachedValueOverriders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<DetachedValueOverriderBase, DetachedValueOverriderAttribute>();
+        }
+
         /// <summary>
         /// Returns all available GatewayProvider
         /// </summary>

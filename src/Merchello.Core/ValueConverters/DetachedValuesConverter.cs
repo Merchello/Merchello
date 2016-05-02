@@ -8,11 +8,11 @@
     using Merchello.Core.Models.DetachedContent;
 
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.Editors;
+    using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Core.PropertyEditors;
     using Umbraco.Core.Services;
 
@@ -140,6 +140,7 @@
         {
             switch (conversionType)
             {
+
                 case DetachedValuesConversionType.Editor:
                     return ConvertDbToEditor(contentType, dcv);
 
@@ -149,6 +150,29 @@
                 default:
                     return ConvertEditorToDb(contentType, dcv);
             }
+        }
+
+        /// <summary>
+        /// The converts the stored value for content.
+        /// </summary>
+        /// <param name="publishedPropertyType">
+        /// The published property type.
+        /// </param>
+        /// <param name="dcv">
+        /// The detached content value.
+        /// </param>
+        /// <returns>
+        /// The value for displaying in <see cref="IPublishedContent"/>.
+        /// </returns>
+        public KeyValuePair<string, object> ConvertDbForContent(PublishedPropertyType publishedPropertyType, KeyValuePair<string, string> dcv)
+        {
+            var value = JsonConvert.DeserializeObject(dcv.Value);
+
+            // override the value if an overrider has been resolved.
+            var overrider = DetachedValueOverriderResolver.Current.GetFor(publishedPropertyType.PropertyEditorAlias);
+            if (overrider != null) value = overrider.Override(value);
+
+            return new KeyValuePair<string, object>(dcv.Key, value);
         }
 
         /// <summary>
@@ -234,27 +258,35 @@
             // Lookup the property editor
             var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
 
+            var type = propEditor.GetType();
+
             if (propEditor.ValueEditor.IsReadOnly) return dcv;
 
             // Fetch the property types prevalue
             var propPreValues = _dataTypeService.GetPreValuesCollectionByDataTypeId(propType.DataTypeDefinitionId);
 
-            // Create a fake content property data object
-            var contentPropData = new ContentPropertyData(dcv.Value, propPreValues, new Dictionary<string, object>());
 
-            var rawValue = !JsonHelper.IsJsonObject(dcv.Value) ?
-                    JsonConvert.DeserializeObject(dcv.Value) :
-                    dcv.Value;
+            var rawValue = JsonConvert.DeserializeObject(dcv.Value.Trim());
+
+            //JsonConvert.DeserializeObject(dcv.Value.Trim());
+
+            // Create a fake content property data object
+            var contentPropData = new ContentPropertyData(rawValue, propPreValues, new Dictionary<string, object>());
+
 
             try
             {
                 // Get the property editor to do it's conversion
 
                 //// TODO - this is the new place the serialization starts to error
-                var newValue = propEditor.ValueEditor.ConvertEditorToDb(contentPropData, rawValue);
+                var newValue = propEditor.ValueEditor.ConvertEditorToDb(contentPropData, null);
 
                 // Store the value back
-                var value = newValue == null ? null : JsonConvert.SerializeObject(newValue);
+                var value = newValue == null ? string.Empty :
+                    JsonHelper.IsJsonObject(newValue) ?
+                                    newValue.ToString() :
+                                    JsonConvert.SerializeObject(newValue);
+
 
                 return new KeyValuePair<string, string>(dcv.Key, value);
             }
@@ -348,5 +380,7 @@
                 return dcv;
             }
         }
+
+
     }
 }

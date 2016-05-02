@@ -49,7 +49,7 @@
     @if (Model.HasProperty("datepicker") && Model.HasValue("datepicker"))
     {
         var dt = Model.GetPropertyValue<DateTime>("datepicker");
-        @Model.GetPropertyValue("datepicker");
+        @dt.ToShortDateString()
     }
 
 </div>
