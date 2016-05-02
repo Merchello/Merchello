@@ -9,6 +9,7 @@
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
@@ -137,29 +138,29 @@
             return destination;
         }
 
-        /// <summary>
-        /// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
-        /// </summary>
-        /// <param name="productDisplay">
-        /// The product display.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="sku">
-        /// The SKU.
-        /// </param>
-        /// <param name="price">
-        /// The price.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProduct"/>.
-        /// </returns>
-        internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
-        {
-            var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
-            return ToProduct(productDisplay, destination);
-        }
+        ///// <summary>
+        ///// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
+        ///// </summary>
+        ///// <param name="productDisplay">
+        ///// The product display.
+        ///// </param>
+        ///// <param name="name">
+        ///// The name.
+        ///// </param>
+        ///// <param name="sku">
+        ///// The SKU.
+        ///// </param>
+        ///// <param name="price">
+        ///// The price.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="IProduct"/>.
+        ///// </returns>
+        //internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
+        //{
+        //    var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
+        //    return ToProduct(productDisplay, destination);
+        //}
 
         #endregion
 
@@ -209,12 +210,16 @@
         /// <param name="product">
         /// The product.
         /// </param>
+        /// <param name="conversionType">
+        /// The detached value conversion type.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        public static ProductDisplay ToProductDisplay(this IProduct product)
-        {            
+        public static ProductDisplay ToProductDisplay(this IProduct product, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+            productDisplay.SetConversionType(conversionType);
             return productDisplay;
         }        
                
@@ -505,13 +510,56 @@
             }         
         }
 
+        /// <summary>
+        /// Utility for setting the IsForBackOfficeEditor property.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="conversionType">
+        /// The value conversion type.
+        /// </param>
+        internal static void SetConversionType(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            ((ProductDisplayBase)display).SetConversionType(conversionType);
+            if (display.ProductVariants.Any())
+            {
+                foreach (var variant in display.ProductVariants)
+                {
+                    variant.SetConversionType(conversionType);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Utility for setting the IsForBackOfficeEditor property.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="conversionType">
+        /// The value conversion type.
+        /// </param>
+        internal static void SetConversionType(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            if (display.DetachedContents.Any())
+            {
+                foreach (var dc in display.DetachedContents)
+                {
+                    dc.ValueConversion = conversionType;
+                }
+            }    
+        }
+
         #endregion
 
         #region IProductVariant
 
-        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant)
+        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {            
-            return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            var display = AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            display.SetConversionType(conversionType);
+            return display;
         }
 
         internal static IProductVariant ToProductVariant(this ProductVariantDisplay productVariantDisplay, IProductVariant destination)

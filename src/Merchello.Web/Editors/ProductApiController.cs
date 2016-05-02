@@ -11,6 +11,7 @@
     using Merchello.Core;
     using Merchello.Core.Chains.CopyEntity.Product;
     using Merchello.Core.Services;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
@@ -70,7 +71,7 @@
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
 
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -89,7 +90,7 @@
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -142,7 +143,7 @@
         [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
-            return _productService.GetByKey(id).ToProductDisplay();
+            return _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -157,7 +158,7 @@
         [HttpPost]
         public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
         {
-            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay());
+            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
         }
 
             /// <summary>
@@ -213,7 +214,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -244,7 +245,7 @@
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return attempt.Result.ToProductDisplay();
+            return attempt.Result.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -267,7 +268,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -293,7 +294,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -313,7 +314,7 @@
 
             _productVariantService.Save(variant);
 
-            return variant.ToProductVariantDisplay();
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -338,7 +339,7 @@
 
             _productVariantService.Save(variant);
 
-            return variant.ToProductVariantDisplay();
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>

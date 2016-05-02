@@ -1349,7 +1349,12 @@
     <Compile Include="Validation\EmailValidationHelper.cs" />
     <Compile Include="Validation\IBankingValidationHelper.cs" />
     <Compile Include="Validation\IEmailValidationHelper.cs" />
-    <Compile Include="ValueConverters\DetachedPublishedPropertyValueConverter.cs" />
+    <Compile Include="ValueConverters\DetachedValuesConverter.cs" />
+    <Compile Include="ValueConverters\DetachedValuesConversionType.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\DetachedValueCorrectionAttribute.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\DetachedValueCorrectionBase.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\IDetachedValueCorrection.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\RepeatableTextstringValueCorrection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

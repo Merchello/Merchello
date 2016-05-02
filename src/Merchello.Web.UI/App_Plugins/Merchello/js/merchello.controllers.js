@@ -6871,7 +6871,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 productVariantContent.canBeRendered = true;
                 angular.forEach(tabs, function(tab) {
                     angular.forEach(tab.properties, function(prop) {
-                        productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));
+                        //productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));
+                        productVariantContent.detachedDataValues.setValue(prop.alias, prop.value);
                     })
                 });
                 return productVariantContent;
@@ -6920,7 +6921,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                                 }
                                 catch (e) {
                                     // Hack fix for some property editors
-                                    p.value = stored.substring(1, stored.length-1);
+                                    p.value = '';
+                                    //p.value = stored.substring(1, stored.length-1);
                                 }
                             }
                         });
@@ -7094,7 +7096,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.context = 'varianteditor';
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
                     }
-
+                    
                     $scope.preValuesLoaded = true;
                     $scope.tabs.setActive($scope.context);
                 }, function (reason) {
@@ -7805,6 +7807,7 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
         function remove(product) {
             console.info(product);
             $scope.products = _.reject($scope.products, function (p) { return p.key === product.key });
+            setModelValue();
         }
 
         function openPickerDialog() {
@@ -7822,6 +7825,10 @@ angular.module('merchello').controller('Merchello.PropertyEditors.MerchelloMulti
 
         function selectProductFromDialog(dialogData) {
             $scope.products = dialogData.products;
+            setModelValue();
+        }
+
+        function setModelValue() {
             $scope.model.value = _.pluck($scope.products, 'key');
         }
 

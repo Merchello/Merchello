@@ -9,6 +9,7 @@
     
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Validation;
 
@@ -81,6 +82,23 @@
         /// A value indicating whether or not to enable data modifiers
         /// </param>
         public MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers)
+            : this(serviceContext, enableDataModifiers, DetachedValuesConversionType.Db)
+        { 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type for detached values.
+        /// </param>
+        internal MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
 

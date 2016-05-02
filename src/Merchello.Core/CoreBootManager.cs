@@ -296,10 +296,8 @@
         protected virtual void InitializeValueConverters()
         {
             // initialize the DetachedPublishedPropertyConverter singleton
-            if (!DetachedPublishedPropertyValueConverter.HasCurrent)
-            {
-                DetachedPublishedPropertyValueConverter.Current = new DetachedPublishedPropertyValueConverter(ApplicationContext.Current);
-            }
+            if (!DetachedValuesConverter.HasCurrent)
+                DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current, PluginManager.Current.ResolveDetachedValueOverriders());
         }
 
         /// <summary>

@@ -10,6 +10,7 @@
     using Merchello.Core.Configuration;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.ValueConverters.ValueCorrections;
 
     using Observation;
     using Umbraco.Core;
@@ -20,6 +21,20 @@
     /// </summary>
     internal static class PluginManagerExtensions
     {
+        /// <summary>
+        /// Resolves the <see cref="DetachedValueCorrectionBase"/>.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IDetachedValueCorrection"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveDetachedValueOverriders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<DetachedValueCorrectionBase, DetachedValueCorrectionAttribute>();
+        }
+
         /// <summary>
         /// Returns all available GatewayProvider
         /// </summary>

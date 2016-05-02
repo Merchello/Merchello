@@ -3,8 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
+    using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;
@@ -18,6 +22,14 @@
     /// </summary>
     public class ProductVariantDetachedContentDisplay
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantDetachedContentDisplay"/> class.
+        /// </summary>
+        public ProductVariantDetachedContentDisplay()
+        {
+            ValueConversion = DetachedValuesConversionType.Db;
+            this.Initialize();
+        }
 
         /// <summary>
         /// Gets or sets the key.
@@ -57,7 +69,19 @@
         /// <summary>
         /// Gets or sets the detached data values.
         /// </summary>
-        public IEnumerable<KeyValuePair<string, string>> DetachedDataValues { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> DetachedDataValues
+        {
+            get
+            {
+                return ValueConversion == DetachedValuesConversionType.Editor ? EditorDetachedDataValues.Value : RawDetachedDataValues;
+            }
+
+            set
+            {
+                ValueConversion = DetachedValuesConversionType.Db;
+                RawDetachedDataValues = value;
+            }
+        }
 
         // Some properties use the create and update dates for caching - like ImageCropper
 
@@ -70,6 +94,73 @@
         /// Gets or sets the update date.
         /// </summary>
         public DateTime UpdateDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is for back office for editor.
+        /// </summary>
+        /// <remarks>
+        /// We need this due the ability for developers to override the value returned 
+        /// from a property specifically for back office editors and when rendering for the 
+        /// front end content we want to use the raw database value instead.
+        /// </remarks>
+        [JsonIgnore]
+        internal DetachedValuesConversionType ValueConversion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the raw detached data values.
+        /// </summary>
+        [JsonIgnore]
+        internal IEnumerable<KeyValuePair<string, string>> RawDetachedDataValues { get; set; }
+
+        /// <summary>
+        /// Gets the editor detached data values.
+        /// </summary>
+        [JsonIgnore]
+        internal Lazy<IEnumerable<KeyValuePair<string, string>>> EditorDetachedDataValues { get; private set; }
+
+        /// <summary>
+        /// The convert values.
+        /// </summary>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <returns>
+        /// The collection of converted values
+        /// </returns>
+        internal IEnumerable<KeyValuePair<string, string>> ConvertValues(DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            if (DetachedContentType == null) return RawDetachedDataValues;
+
+            return ConvertValues(RawDetachedDataValues, conversionType);
+        }
+
+        /// <summary>
+        /// The convert values.
+        /// </summary>
+        /// <param name="detachedValues">
+        /// The detached Values.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <returns>
+        /// The collection of converted values
+        /// </returns>
+        private IEnumerable<KeyValuePair<string, string>> ConvertValues(IEnumerable<KeyValuePair<string, string>> detachedValues, DetachedValuesConversionType conversionType)
+        {
+                var contentType =
+                    DetachedValuesConverter.Current.GetContentTypeByKey(DetachedContentType.UmbContentType.Key);
+
+                return DetachedValuesConverter.Current.Convert(contentType, RawDetachedDataValues, conversionType);
+        }
+
+        /// <summary>
+        /// Initializes the object.
+        /// </summary>
+        private void Initialize()
+        {
+            EditorDetachedDataValues = new Lazy<IEnumerable<KeyValuePair<string, string>>>(() => ConvertValues(DetachedValuesConversionType.Editor));
+        }
     }
 
     /// <summary>
@@ -153,6 +244,14 @@
             destination.TemplateId = display.TemplateId;
             destination.CanBeRendered = display.CanBeRendered;
 
+            // Find any detached content items that should be removed
+            var validPropertyTypeAliases = display.DetachedDataValues.Select(x => x.Key);
+            var removers = destination.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+            foreach (var remove in removers)
+            {
+                destination.DetachedDataValues.RemoveValue(remove.Key);
+            }
+
             foreach (var item in display.DetachedDataValues)
             {
                 destination.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
@@ -176,17 +275,18 @@
         public static IEnumerable<IPublishedProperty> DataValuesAsPublishedProperties(this ProductVariantDetachedContentDisplay pvd, PublishedContentType contentType)
         {
             var properties = new List<IPublishedProperty>();
-            foreach (var value in pvd.DetachedDataValues)
+
+            foreach (var dcv in pvd.DetachedDataValues)
             {
-                var propType = contentType.GetPropertyType(value.Key);
+                var propType = contentType.GetPropertyType(dcv.Key);
                 object valObj;
                 try
                 {
-                    valObj = JsonConvert.DeserializeObject<object>(value.Value);
+                    valObj = DetachedValuesConverter.Current.ConvertDbForContent(propType, dcv).Value;
                 }
                 catch
-                {                    
-                    valObj = value.Value.Substring(1, value.Value.Length - 1);
+                {
+                    valObj = dcv.Value;
                 }
 
                 if (propType != null)
@@ -196,6 +296,6 @@
             }
 
             return properties;
-        } 
+        }
     }
 }
