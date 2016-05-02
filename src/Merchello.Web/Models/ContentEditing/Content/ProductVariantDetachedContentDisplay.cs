@@ -283,15 +283,9 @@
                 try
                 {
                     valObj = DetachedValuesConverter.Current.ConvertDbForContent(propType, dcv).Value;
-
-                    //!JsonHelper.IsJsonObject(value.Value) ?
-                    //JsonConvert.DeserializeObject<object>(value.Value) :
-                    //value.Value;
-                    //valObj = JsonConvert.DeserializeObject<object>(value.Value);
                 }
                 catch
                 {
-                    //valObj = value.Value.Substring(1, value.Value.Length - 1);
                     valObj = dcv.Value;
                 }
 
@@ -302,11 +296,6 @@
             }
 
             return properties;
-        }
-
-        private static string RunCorrections(string value)
-        {
-            return value.Replace("\r\n", Environment.NewLine);
         }
     }
 }
