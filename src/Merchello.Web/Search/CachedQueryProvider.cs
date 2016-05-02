@@ -4,6 +4,8 @@
     using Core;
     using Core.Services;
 
+    using Merchello.Core.ValueConverters;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -15,6 +17,11 @@
         /// A value indicating whether or not to enable any data modifiers.
         /// </summary>
         private readonly bool _enableDataModifiers;
+
+        /// <summary>
+        /// A value indicating the conversion type for detached content values.
+        /// </summary>
+        private readonly DetachedValuesConversionType _conversionType;
 
         /// <summary>
         /// The <see cref="ICachedCustomerQuery"/>.
@@ -54,9 +61,27 @@
         /// A value indicating whether or not to enable any data modifiers.
         /// </param>
         public CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers)
+            : this(serviceContext, enableDataModifiers, DetachedValuesConversionType.Db)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        internal CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext is not initialized");
             _enableDataModifiers = enableDataModifiers;
+            _conversionType = conversionType;
             InitializeProvider(serviceContext);
         }
 
@@ -113,7 +138,7 @@
             _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(serviceContext.OrderService, _enableDataModifiers));
 
             if (_productQuery == null)
-            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(serviceContext.ProductService, _enableDataModifiers));
+            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(serviceContext.ProductService, _enableDataModifiers, _conversionType));
         }
     }
 }

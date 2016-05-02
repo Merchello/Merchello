@@ -24,15 +24,9 @@
         /// </returns>
         protected override IEnumerable<KeyValuePair<string, string>> ResolveCore(IDetachedContent source)
         {
-            if (source.DetachedDataValues == null) return Enumerable.Empty<KeyValuePair<string, string>>();
-
-            var converter = DetachedPublishedPropertyValueConverter.Current;
-
-            var contentType = converter.GetContentTypeFromDetachedContentType(source.DetachedContentType);
-
-            var converted = source.DetachedDataValues.Select(pair => converter.ConvertDbToEditor(contentType, pair));
-
-            return converted;
+            return source.DetachedDataValues == null ? 
+                Enumerable.Empty<KeyValuePair<string, string>>() : 
+                source.DetachedDataValues.AsEnumerable();
         }
     }
 }

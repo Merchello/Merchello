@@ -10,6 +10,7 @@
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing.Content;
 
     using Newtonsoft.Json;
@@ -33,13 +34,14 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants)
+        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             // this should be the master variant
             var productDisplay = new ProductDisplay(result.ToProductVariantDisplay());
 
             productDisplay.ProductVariants = getProductVariants(productDisplay.Key);
             productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
+            productDisplay.SetConversionType(conversionType);
             return productDisplay;
         }
 
@@ -84,7 +86,6 @@
                 CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
                 DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")
             };
-  
             return pvd;
         }
 

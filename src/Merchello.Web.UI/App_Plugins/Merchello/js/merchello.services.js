@@ -106,6 +106,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
                             angular.forEach(ct.properties, function (p) {
                                 if (typeof p.value !== "function") {
                                     args.scope.detachedContent.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
+                                    //args.scope.detachedContent.detachedDataValues.setValue(p.alias, p.value);
                                 }
                             });
                         }
