@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.ValueConverters.ValueOverrides
+﻿namespace Merchello.Core.ValueConverters.ValueCorrections
 {
     /// <summary>
     /// Defines a property value converter override.
@@ -8,7 +8,7 @@
     /// such as the multi-text string legacy property editor.
     /// 
     /// </remarks>
-    internal interface IDetachedValueOverrider
+    internal interface IDetachedValueCorrection
     {
         /// <summary>
         /// Overrides the object value.
@@ -19,6 +19,6 @@
         /// <returns>
         /// The <see cref="object"/>.
         /// </returns>
-        object Override(object value);
+        object ApplyCorrection(object value);
     }
 }

@@ -1,11 +1,13 @@
 ﻿namespace Merchello.Core.ValueConverters
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters.ValueCorrections;
 
     using Newtonsoft.Json;
 
@@ -26,6 +28,7 @@
         /// </summary>
         private static DetachedValuesConverter _instance;
 
+
         /// <summary>
         /// The <see cref="IDataTypeService"/>.
         /// </summary>
@@ -35,6 +38,11 @@
         /// The <see cref="ContentTypeService"/>.
         /// </summary>
         private readonly IContentTypeService _contentTypeService;
+
+        /// <summary>
+        /// Internal class for correcting stored detached values.
+        /// </summary>
+        private readonly DetachedValueCorrector _corrector;
 
         /// <summary>
         /// A value to indicate if the converter singleton is ready.
@@ -50,7 +58,10 @@
         /// <param name="applicationContext">
         /// The <see cref="ApplicationContext"/>.
         /// </param>
-        internal DetachedValuesConverter(ApplicationContext applicationContext)
+        /// <param name="values">
+        /// The resolved DefaultValueCorrection types.
+        /// </param>
+        internal DetachedValuesConverter(ApplicationContext applicationContext, IEnumerable<Type> values)
         {
             if (applicationContext != null)
             {
@@ -62,6 +73,9 @@
             {
                 _ready = false;
             }
+
+            // Instantiate the corrector
+            _corrector = new DetachedValueCorrector(values);
         }
 
         /// <summary>
@@ -89,6 +103,26 @@
             {
                 _instance = value;
             }
+        }
+
+        /// <summary>
+        /// Verifies a property still exists on the content type.
+        /// </summary>
+        /// <param name="contentType">
+        /// The content type.
+        /// </param>
+        /// <param name="propertyAlias">
+        /// The property alias.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the property exists.
+        /// </returns>
+        /// <remarks>
+        /// In cases where the property has been removed, we don't want to store previously saved values.
+        /// </remarks>
+        public bool VerifyPropertyExists(IContentType contentType, string propertyAlias)
+        {
+            return contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == propertyAlias) != null;
         }
 
         /// <summary>
@@ -166,12 +200,7 @@
         /// </returns>
         public KeyValuePair<string, object> ConvertDbForContent(PublishedPropertyType publishedPropertyType, KeyValuePair<string, string> dcv)
         {
-            var value = JsonConvert.DeserializeObject(dcv.Value);
-
-            // override the value if an overrider has been resolved.
-            var overrider = DetachedValueOverriderResolver.Current.GetFor(publishedPropertyType.PropertyEditorAlias);
-            if (overrider != null) value = overrider.Override(value);
-
+            var value = _corrector.CorrectedValue(publishedPropertyType.PropertyEditorAlias, JsonConvert.DeserializeObject(dcv.Value));
             return new KeyValuePair<string, object>(dcv.Key, value);
         }
 
@@ -258,27 +287,19 @@
             // Lookup the property editor
             var propEditor = PropertyEditorResolver.Current.GetByAlias(propType.PropertyEditorAlias);
 
-            var type = propEditor.GetType();
-
             if (propEditor.ValueEditor.IsReadOnly) return dcv;
 
             // Fetch the property types prevalue
             var propPreValues = _dataTypeService.GetPreValuesCollectionByDataTypeId(propType.DataTypeDefinitionId);
 
-
             var rawValue = JsonConvert.DeserializeObject(dcv.Value.Trim());
-
-            //JsonConvert.DeserializeObject(dcv.Value.Trim());
 
             // Create a fake content property data object
             var contentPropData = new ContentPropertyData(rawValue, propPreValues, new Dictionary<string, object>());
 
-
             try
             {
                 // Get the property editor to do it's conversion
-
-                //// TODO - this is the new place the serialization starts to error
                 var newValue = propEditor.ValueEditor.ConvertEditorToDb(contentPropData, null);
 
                 // Store the value back
@@ -381,6 +402,77 @@
             }
         }
 
+        /// <summary>
+        /// Allows for overriding stored detached values with corrections.
+        /// </summary>
+        /// <remarks>
+        /// Generally used for legacy data types or handling problems with the way Merchello stores property data during JSON serialization
+        /// </remarks>
+        protected class DetachedValueCorrector
+        {
+            /// <summary>
+            /// The activated gateway provider cache.
+            /// </summary>
+            private readonly ConcurrentDictionary<string, IDetachedValueCorrection> _correctionCache = new ConcurrentDictionary<string, IDetachedValueCorrection>();
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="DetachedValueCorrector"/> class.
+            /// </summary>
+            /// <param name="values">
+            /// The values.
+            /// </param>
+            public DetachedValueCorrector(IEnumerable<Type> values)
+            {
+                BuildCache(values);
+            }
+
+            /// <summary>
+            /// Applies the resolved correction if there are any.
+            /// </summary>
+            /// <param name="propertyEditorAlias">
+            /// The property editor alias.
+            /// </param>
+            /// <param name="value">
+            /// The value.
+            /// </param>
+            /// <returns>
+            /// The corrected value <see cref="object"/>.
+            /// </returns>
+            public object CorrectedValue(string propertyEditorAlias, object value)
+            {
+                var correction =  this._correctionCache.FirstOrDefault(x => x.Key == propertyEditorAlias).Value;
+                return correction == null ? value : correction.ApplyCorrection(value);
+            }
+
+            /// <summary>
+            /// Builds the type cache.
+            /// </summary>
+            /// <param name="values">
+            /// The values.
+            /// </param>
+            private void BuildCache(IEnumerable<Type> values)
+            {
+                foreach (var attempt in values.Select(type => ActivatorHelper.CreateInstance<DetachedValueCorrectionBase>(type, new Type[] { })).Where(attempt => attempt.Success))
+                {
+                    this.AddOrUpdateCache(attempt.Result);
+                }
+            }
+
+            /// <summary>
+            /// Adds or updates a <see cref="IDetachedValueCorrection"/> instance to the concurrent cache.
+            /// </summary>
+            /// <param name="correction">
+            /// The correction.
+            /// </param>
+            private void AddOrUpdateCache(IDetachedValueCorrection correction)
+            {
+                var att = correction.GetType().GetCustomAttribute<DetachedValueCorrectionAttribute>(false);
+                if (att != null)
+                {
+                    this._correctionCache.AddOrUpdate(att.PropertyEditorAlias, correction, (x, y) => correction);
+                }
+            }
+        }
+        
     }
 }

@@ -3,15 +3,10 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core;
     using Merchello.Core.ValueConverters;
-
-    using Newtonsoft.Json;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
-    using Umbraco.Core.Models.Editors;
-    using Umbraco.Core.PropertyEditors;
 
     /// <summary>
     /// Utility helper for correctly emulating content properties.
@@ -78,7 +73,12 @@
                 }
 
                 var dcv = updatedContent.DetachedDataValues.FirstOrDefault(x => x.Key == p.Alias);
-                updatedValues.Add(DetachedValuesConverter.Current.Convert(contentType, dcv));
+
+                // only convert and add the property if it still exists on the content type
+                if (DetachedValuesConverter.Current.VerifyPropertyExists(contentType, dcv.Key))
+                {
+                    updatedValues.Add(DetachedValuesConverter.Current.Convert(contentType, dcv));
+                }
             }
 
             updatedContent.DetachedDataValues = updatedValues;           

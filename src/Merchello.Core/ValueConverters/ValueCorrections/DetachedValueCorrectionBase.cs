@@ -1,12 +1,12 @@
-﻿namespace Merchello.Core.ValueConverters.ValueOverrides
+﻿namespace Merchello.Core.ValueConverters.ValueCorrections
 {
     /// <summary>
     /// A base class for detached value override objects.
     /// </summary>
-    internal abstract class DetachedValueOverriderBase : IDetachedValueOverrider
+    internal abstract class DetachedValueCorrectionBase : IDetachedValueCorrection
     {
         /// <summary>
-        /// The override.
+        /// Applies the correction and returns the corrected value.
         /// </summary>
         /// <param name="value">
         /// The value.
@@ -14,6 +14,6 @@
         /// <returns>
         /// The <see cref="object"/>.
         /// </returns>
-        public abstract object Override(object value);
+        public abstract object ApplyCorrection(object value);
     }
 }

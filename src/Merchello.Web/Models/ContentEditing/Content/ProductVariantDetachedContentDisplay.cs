@@ -244,6 +244,14 @@
             destination.TemplateId = display.TemplateId;
             destination.CanBeRendered = display.CanBeRendered;
 
+            // Find any detached content items that should be removed
+            var validPropertyTypeAliases = display.DetachedDataValues.Select(x => x.Key);
+            var removers = destination.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+            foreach (var remove in removers)
+            {
+                destination.DetachedDataValues.RemoveValue(remove.Key);
+            }
+
             foreach (var item in display.DetachedDataValues)
             {
                 destination.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);

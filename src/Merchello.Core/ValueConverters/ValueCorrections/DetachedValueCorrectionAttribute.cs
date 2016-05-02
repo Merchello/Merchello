@@ -1,19 +1,19 @@
-﻿namespace Merchello.Core.ValueConverters.ValueOverrides
+﻿namespace Merchello.Core.ValueConverters.ValueCorrections
 {
     using System;
 
     /// <summary>
-    /// An attribute to decorate DetachedValue ValueConverterOverrides for resolution.
+    /// An attribute to decorate DetachedValue to associated a correction class during resolution.
     /// </summary>
-    internal class DetachedValueOverriderAttribute : Attribute
+    internal class DetachedValueCorrectionAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DetachedValueOverriderAttribute"/> class.
+        /// Initializes a new instance of the <see cref="DetachedValueCorrectionAttribute"/> class.
         /// </summary>
         /// <param name="propertyEditorAlias">
         /// The property editor alias.
         /// </param>
-        public DetachedValueOverriderAttribute(string propertyEditorAlias)
+        public DetachedValueCorrectionAttribute(string propertyEditorAlias)
         {
             this.PropertyEditorAlias = propertyEditorAlias;
         }

@@ -1351,11 +1351,10 @@
     <Compile Include="Validation\IEmailValidationHelper.cs" />
     <Compile Include="ValueConverters\DetachedValuesConverter.cs" />
     <Compile Include="ValueConverters\DetachedValuesConversionType.cs" />
-    <Compile Include="ValueConverters\DetachedValueOverriderResolver.cs" />
-    <Compile Include="ValueConverters\ValueOverrides\DetachedValueOverriderAttribute.cs" />
-    <Compile Include="ValueConverters\ValueOverrides\DetachedValueOverriderBase.cs" />
-    <Compile Include="ValueConverters\ValueOverrides\IDetachedValueOverrider.cs" />
-    <Compile Include="ValueConverters\ValueOverrides\RepeatableTextstringValueOverrider.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\DetachedValueCorrectionAttribute.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\DetachedValueCorrectionBase.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\IDetachedValueCorrection.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\RepeatableTextstringValueCorrection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
