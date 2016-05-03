@@ -5,17 +5,15 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
-    using Merchello.Core;
-    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
-    using Umbraco.Web.Models;
 
     /// <summary>
     /// The product variant detached content display.
@@ -27,8 +25,7 @@
         /// </summary>
         public ProductVariantDetachedContentDisplay()
         {
-            ValueConversion = DetachedValuesConversionType.Db;
-            this.Initialize();
+            this.ValueConversion = DetachedValuesConversionType.Db;
         }
 
         /// <summary>
@@ -69,19 +66,7 @@
         /// <summary>
         /// Gets or sets the detached data values.
         /// </summary>
-        public IEnumerable<KeyValuePair<string, string>> DetachedDataValues
-        {
-            get
-            {
-                return ValueConversion == DetachedValuesConversionType.Editor ? EditorDetachedDataValues.Value : RawDetachedDataValues;
-            }
-
-            set
-            {
-                ValueConversion = DetachedValuesConversionType.Db;
-                RawDetachedDataValues = value;
-            }
-        }
+        public IEnumerable<KeyValuePair<string, string>> DetachedDataValues { get; set; }
 
         // Some properties use the create and update dates for caching - like ImageCropper
 
@@ -105,62 +90,6 @@
         /// </remarks>
         [JsonIgnore]
         internal DetachedValuesConversionType ValueConversion { get; set; }
-
-        /// <summary>
-        /// Gets or sets the raw detached data values.
-        /// </summary>
-        [JsonIgnore]
-        internal IEnumerable<KeyValuePair<string, string>> RawDetachedDataValues { get; set; }
-
-        /// <summary>
-        /// Gets the editor detached data values.
-        /// </summary>
-        [JsonIgnore]
-        internal Lazy<IEnumerable<KeyValuePair<string, string>>> EditorDetachedDataValues { get; private set; }
-
-        /// <summary>
-        /// The convert values.
-        /// </summary>
-        /// <param name="conversionType">
-        /// The conversion type.
-        /// </param>
-        /// <returns>
-        /// The collection of converted values
-        /// </returns>
-        internal IEnumerable<KeyValuePair<string, string>> ConvertValues(DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-            if (DetachedContentType == null) return RawDetachedDataValues;
-
-            return ConvertValues(RawDetachedDataValues, conversionType);
-        }
-
-        /// <summary>
-        /// The convert values.
-        /// </summary>
-        /// <param name="detachedValues">
-        /// The detached Values.
-        /// </param>
-        /// <param name="conversionType">
-        /// The conversion type.
-        /// </param>
-        /// <returns>
-        /// The collection of converted values
-        /// </returns>
-        private IEnumerable<KeyValuePair<string, string>> ConvertValues(IEnumerable<KeyValuePair<string, string>> detachedValues, DetachedValuesConversionType conversionType)
-        {
-                var contentType =
-                    DetachedValuesConverter.Current.GetContentTypeByKey(DetachedContentType.UmbContentType.Key);
-
-                return DetachedValuesConverter.Current.Convert(contentType, RawDetachedDataValues, conversionType);
-        }
-
-        /// <summary>
-        /// Initializes the object.
-        /// </summary>
-        private void Initialize()
-        {
-            EditorDetachedDataValues = new Lazy<IEnumerable<KeyValuePair<string, string>>>(() => ConvertValues(DetachedValuesConversionType.Editor));
-        }
     }
 
     /// <summary>
@@ -254,6 +183,7 @@
 
             foreach (var item in display.DetachedDataValues)
             {
+                if (!item.Key.IsNullOrWhiteSpace())
                 destination.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
             }
 

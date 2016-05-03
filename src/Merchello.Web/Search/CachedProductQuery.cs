@@ -220,7 +220,7 @@
             criteria.Field("productVariantKey", key.ToString());
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
-            result.SetConversionType(this._conversionType);
+            result.EnsureValueConversion(this._conversionType);
 
             if (result != null) return this.ModifyData(result);
 
@@ -246,7 +246,7 @@
             criteria.Field("sku", sku).Not().Field("master", "True");
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
-            result.SetConversionType(this._conversionType);
+            result.EnsureValueConversion(this._conversionType);
 
             if (result != null) return this.ModifyData(result);
 
@@ -830,7 +830,7 @@
 
             if (display != null)
             {
-                display.SetConversionType(this._conversionType);
+                display.EnsureValueConversion(this._conversionType);
                 return display;
             }
 

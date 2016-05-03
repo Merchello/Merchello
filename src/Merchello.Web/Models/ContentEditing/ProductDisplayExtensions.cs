@@ -219,7 +219,7 @@
         public static ProductDisplay ToProductDisplay(this IProduct product, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
-            productDisplay.SetConversionType(conversionType);
+            productDisplay.EnsureValueConversion(conversionType);
             return productDisplay;
         }        
                
@@ -494,7 +494,6 @@
 
             foreach (var detachedContent in display.DetachedContents.ToArray())
             {
-                IProductVariantDetachedContent pvdc;
                 if (destination.DetachedContents.Contains(detachedContent.CultureName))
                 {
                     var destContent = destination.DetachedContents[detachedContent.CultureName];
@@ -519,14 +518,14 @@
         /// <param name="conversionType">
         /// The value conversion type.
         /// </param>
-        internal static void SetConversionType(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        internal static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
-            ((ProductDisplayBase)display).SetConversionType(conversionType);
+            ((ProductDisplayBase)display).EnsureValueConversion(conversionType);
             if (display.ProductVariants.Any())
             {
                 foreach (var variant in display.ProductVariants)
                 {
-                    variant.SetConversionType(conversionType);
+                    variant.EnsureValueConversion(conversionType);
                 }
             }
         }
@@ -540,13 +539,19 @@
         /// <param name="conversionType">
         /// The value conversion type.
         /// </param>
-        internal static void SetConversionType(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
+           
             if (display.DetachedContents.Any())
             {
                 foreach (var dc in display.DetachedContents)
                 {
-                    dc.ValueConversion = conversionType;
+                    var contentType = DetachedValuesConverter.Current.GetContentTypeByKey(dc.DetachedContentType.UmbContentType.Key);
+                    if (dc.ValueConversion != conversionType)
+                    {
+                        dc.ValueConversion = conversionType;
+                        if (contentType != null) dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues, conversionType);
+                    }                    
                 }
             }    
         }
@@ -558,7 +563,7 @@
         internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {            
             var display = AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
-            display.SetConversionType(conversionType);
+            display.EnsureValueConversion(conversionType);
             return display;
         }
 

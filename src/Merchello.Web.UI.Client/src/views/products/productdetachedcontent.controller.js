@@ -1,8 +1,10 @@
 angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedContentController',
-    ['$scope', '$q', '$log', '$route', '$routeParams', '$location', 'editorState', 'notificationsService', 'dialogService', 'localizationService', 'merchelloTabsFactory', 'dialogDataFactory',
+    ['$scope', '$q', '$log', '$route', '$routeParams', '$timeout', '$location', 'editorState', 'notificationsService',
+        'dialogService', 'localizationService', 'merchelloTabsFactory', 'dialogDataFactory',
         'contentResource', 'detachedContentResource', 'productResource', 'settingsResource',
         'detachedContentHelper', 'productDisplayBuilder', 'productVariantDetachedContentDisplayBuilder',
-        function($scope, $q, $log, $route, $routeParams, $location, editorState, notificationsService, dialogService, localizationService, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $q, $log, $route, $routeParams, $timeout, $location, editorState, notificationsService,
+                 dialogService, localizationService, merchelloTabsFactory, dialogDataFactory,
                  contentResource, detachedContentResource, productResource, settingsResource,
                  detachedContentHelper, productDisplayBuilder, productVariantDetachedContentDisplayBuilder) {
 
@@ -54,6 +56,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 if (key === '' || key === undefined) {
                     $location.url('/merchello/merchello/productlist/manage', true);
                 }
+
+
                 var productVariantKey = $routeParams.variantid;
                 loadArgs.key = key;
                 loadArgs.productVariantKey = productVariantKey;
@@ -89,10 +93,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
                 });
+
             }
 
             // loads the product from the resource
             function loadProduct(args) {
+                
                 productResource.getByKey(args.key).then(function(p) {
 
                     product = productDisplayBuilder.transform(p);
@@ -116,10 +122,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(args.key, args.productVariantKey);
                         $scope.isVariant = true;
                     }
-
-
-                    //editorState.set($scope.productVariant);
-
+                    
                     $scope.loaded = true;
 
                     if ($scope.productVariant.hasDetachedContent()) {
@@ -128,8 +131,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             var detachedContentType = $scope.productVariant.detachedContentType();
                             createDetachedContent(detachedContentType, missing);
                         }
+                        
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
-
+                        
                         $scope.isConfigured = true;
 
                         loadScaffold();
@@ -149,6 +153,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                     filterTabs(scaffold);
                     fillValues();
+                    
                     if ($scope.contentTabs.length > 0) {
                         if ($scope.currentTab === null) {
                             $scope.currentTab = $scope.contentTabs[0];
@@ -203,7 +208,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                         // we have to save here without assigning the scope.detachedContent otherwise we will only save the scaffold for the current language
                         // but the helper is expecting the scope value to be set.
-                        saveWithoutEvents();
+                        createDetachedContentSave();
                     });
                 }
             }
@@ -217,7 +222,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 saveDetachedContent();
             }
 
-            function saveWithoutEvents() {
+
+            function createDetachedContentSave() {
                 var promise;
                 if ($scope.productVariant.master) {
                     promise = productResource.save(product);
@@ -239,8 +245,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     promise = detachedContentHelper.detachedContentPerformSave({ saveMethod: productResource.saveVariantContent, content: $scope.productVariant, scope: $scope, statusMessage: 'Saving...' });
                 }
                 promise.then(function(data) {
+                    
                     $scope.loaded = false;
                     $scope.preValuesLoaded = false;
+
                     loadProduct(loadArgs);
                 });
             }
@@ -305,7 +313,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                                 catch (e) {
                                     // Hack fix for some property editors
                                     p.value = '';
-                                    //p.value = stored.substring(1, stored.length-1);
                                 }
                             }
                         });
