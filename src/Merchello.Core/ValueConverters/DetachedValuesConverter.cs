@@ -411,7 +411,7 @@
         protected class DetachedValueCorrector
         {
             /// <summary>
-            /// The activated gateway provider cache.
+            /// The cache of corrections.
             /// </summary>
             private readonly ConcurrentDictionary<string, IDetachedValueCorrection> _correctionCache = new ConcurrentDictionary<string, IDetachedValueCorrection>();
 
@@ -440,7 +440,7 @@
             /// </returns>
             public object CorrectedValue(string propertyEditorAlias, object value)
             {
-                var correction =  this._correctionCache.FirstOrDefault(x => x.Key == propertyEditorAlias).Value;
+                var correction = this._correctionCache.FirstOrDefault(x => x.Key == propertyEditorAlias).Value;
                 return correction == null ? value : correction.ApplyCorrection(value);
             }
 
@@ -452,7 +452,7 @@
             /// </param>
             private void BuildCache(IEnumerable<Type> values)
             {
-                foreach (var attempt in values.Select(type => ActivatorHelper.CreateInstance<DetachedValueCorrectionBase>(type, new Type[] { })).Where(attempt => attempt.Success))
+                foreach (var attempt in values.Select(type => ActivatorHelper.CreateInstance<DetachedValueCorrectionBase>(type, new object[] { })).Where(attempt => attempt.Success))
                 {
                     this.AddOrUpdateCache(attempt.Result);
                 }
