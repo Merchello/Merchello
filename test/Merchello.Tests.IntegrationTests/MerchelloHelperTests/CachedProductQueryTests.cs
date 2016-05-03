@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Tests.IntegrationTests.MerchelloHelperTests
 {
+    using System;
+    using System.Diagnostics;
     using System.Linq;
 
     using global::Examine;
@@ -53,6 +55,7 @@
             product.Height = 11M;
             product.Price = 30M;
             product.Width = 11M;
+            product.Weight = 2M;
             product.Length = 11M;
             product.Barcode = "barcode1";
             product.Manufacturer = "Manufacturer1";
@@ -72,6 +75,7 @@
             product2.Height = 11M;
             product2.Width = 11M;
             product2.Length = 11M;
+            product2.Weight = 1M;
             product2.CostOfGoods = 15M;
             product2.Barcode = "barcode2";
             product2.Manufacturer = "Manufacturer2";
@@ -93,6 +97,7 @@
             product3.Height = 11M;
             product3.Width = 11M;
             product3.Length = 11M;
+            product3.Weight = 2M;
             product3.CostOfGoods = 15M;
             product3.Barcode = "barcode3";
             product3.Manufacturer = "Manufacturer2";
@@ -114,6 +119,7 @@
             product4.Height = 11M;
             product4.Width = 11M;
             product4.Length = 11M;
+            product4.Weight = 3M;
             product4.CostOfGoods = 15M;
             product4.Barcode = "barcode4";
             product4.Manufacturer = "Manufacturer3";
@@ -276,6 +282,42 @@
 
             //// Assert
             Assert.AreEqual(3, result.Items.Count());
+        }
+
+        /// <summary>
+        /// Test proves that ProductDisplay objects returned from the product query include set width, height, length and weight
+        /// </summary>
+        /// <seealso cref="http://issues.merchello.com/youtrack/issue/M-1009"/>
+        [Test]
+        public void Can_Show_Queried_Products_Have_Dimensions()
+        {
+            //// Arrange
+            
+            //// Act
+            var results = _merchello.Query.Product.Search(1, 150);
+            var product = results.Items.Any() ? (ProductDisplay)results.Items.First() : null;
+
+            if (product == null) Assert.Ignore("Can't test product since there were'nt any");
+
+            //// Assert
+            Assert.Greater(product.Weight, 0, "Product weight was 0");
+            Assert.Greater(product.Height, 0);
+            Assert.Greater(product.Width, 0);
+            Assert.Greater(product.Length, 0);
+        }
+
+        [Test]
+        public void Can_Show_Queried_Products_Can_Be_Selected_By_Dimension()
+        {
+            //// Arrange
+
+            //// Act
+            var results = _merchello.Query.Product.Search(1, 150);
+            var products = results.Items.Any() ? results.Items.Where(x => ((ProductDisplay)x).Length == 11M) : Enumerable.Empty<ProductDisplay>();
+
+            //// Assert
+            Console.WriteLine("Products count returned: {0}", products.Count());
+            Assert.IsTrue(products.Any());
         }
     }
 }
