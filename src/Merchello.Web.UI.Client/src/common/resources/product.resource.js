@@ -73,7 +73,7 @@
                  **/
                 save: function (product) {
                     angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
@@ -85,7 +85,7 @@
 
                 saveProductContent: function(product, cultureName, files) {
                     angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
 
                     angular.forEach(product.productVariants, function(pv) {
@@ -128,7 +128,7 @@
                  **/
                 saveVariant: function (productVariant) {
                     angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
@@ -140,7 +140,7 @@
 
                 saveVariantContent: function(productVariant, cultureName, files) {
                     angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
 

@@ -1446,7 +1446,7 @@ angular.module('merchello.resources').factory('noteResource', [
                  **/
                 save: function (product) {
                     angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
@@ -1458,7 +1458,7 @@ angular.module('merchello.resources').factory('noteResource', [
 
                 saveProductContent: function(product, cultureName, files) {
                     angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
 
                     angular.forEach(product.productVariants, function(pv) {
@@ -1501,7 +1501,7 @@ angular.module('merchello.resources').factory('noteResource', [
                  **/
                 saveVariant: function (productVariant) {
                     angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
@@ -1513,7 +1513,7 @@ angular.module('merchello.resources').factory('noteResource', [
 
                 saveVariantContent: function(productVariant, cultureName, files) {
                     angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
 

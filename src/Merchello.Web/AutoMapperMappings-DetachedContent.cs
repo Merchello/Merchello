@@ -42,7 +42,7 @@
 
             AutoMapper.Mapper.CreateMap<IProductVariantDetachedContent, ProductVariantDetachedContentDisplay>()
                 .ForMember(
-                    dest => dest.RawDetachedDataValues,
+                    dest => dest.DetachedDataValues,
                     opt =>
                     opt.ResolveUsing<DetachedDataValuesResolver>().ConstructedBy(() => new DetachedDataValuesResolver()));
 

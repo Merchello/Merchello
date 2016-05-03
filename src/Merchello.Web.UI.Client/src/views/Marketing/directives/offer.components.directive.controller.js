@@ -203,7 +203,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function onComponentCollectionChanged() {
-            loadComponents();
+            eventsService.unsubscribe(loadComponents);
         }
 
         function saveOffer() {

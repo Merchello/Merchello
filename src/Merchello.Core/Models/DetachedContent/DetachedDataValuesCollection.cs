@@ -3,6 +3,9 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
+
+    using Umbraco.Core;
 
     /// <summary>
     /// The detached data values collection.
@@ -105,7 +108,9 @@
         /// </param>
         private void Load(IEnumerable<KeyValuePair<string, string>> keyValues)
         {
-            foreach (var pair in keyValues)
+            // TODO the keyvalue pairs should never be empty but we need a hack fix to account for 
+            // a WebAPi deserialization when creating a new detached content item.
+            foreach (var pair in keyValues.Where(x => !x.Key.IsNullOrWhiteSpace()))
             {
                 this.SetValue(pair.Key, pair.Value);
             }
