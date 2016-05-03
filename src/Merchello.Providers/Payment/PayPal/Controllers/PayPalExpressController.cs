@@ -97,28 +97,31 @@
         {
             var redirecting = new PayPalRedirectingUrl("Success") { RedirectingToUrl = _successUrl };
 
+            var logData = GetExtendedLoggerData();
+
             try
             {
                 var invoice = GetInvoice(invoiceKey);
                 var payment = GetPayment(paymentKey);
 
-
-
                 // We can now capture the payment
+                // This will actually make a few more API calls back to PayPal to get required transaction
+                // data so that we can refund the payment later through the back office if needed.
                 var attempt = invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
 
-                // raise the event so the redirect URL can be manipulated
-                RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
+                if (attempt.Payment.Success)
+                {
+                    // raise the event so the redirect URL can be manipulated
+                    RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
 
-                return Redirect(redirecting.RedirectingToUrl);
+                    return Redirect(redirecting.RedirectingToUrl);
+                }
 
 
                 throw new NotImplementedException("TODO error handling result");
             }
             catch (Exception ex)
             {
-                var logData = GetExtendedLoggerData();
-
                 var extra = new { InvoiceKey = invoiceKey, PaymentKey = paymentKey, Token = token, PayerId = payerId };
 
                 logData.SetValue<object>("extra", extra);
