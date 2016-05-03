@@ -146,7 +146,11 @@
         {
             var isValid = ModelState.IsValidField("FullName") && ModelState.IsValidField("Label")
                           && ModelState.IsValidField("Address1") && ModelState.IsValidField("Locality")
-                          && ModelState.IsValidField("PostalCode") && ModelState.IsValidField("CountryCode");
+                          && ModelState.IsValidField("PostalCode") && ModelState.IsValidField("CountryCode")
+                          && !model.CustomerKey.Equals(Guid.Empty);
+
+            var customer = MerchelloServices.CustomerService.GetByKey(model.CustomerKey);
+            if (customer == null) throw new NullReferenceException("customer was null");
 
             if (!isValid) return this.CurrentUmbracoPage();
             ICustomerAddress customerAddress;
@@ -160,7 +164,15 @@
                 customerAddress = model.AsCustomerAddress();
             }
 
-            MerchelloServices.CustomerService.Save(customerAddress);
+            // Using the extension internally adds or updates against the existing addresses
+            // and then saves the customer record rather than the address independently.
+            // This asserts the customer index (Examine) will be updated correctly.
+            //// http://issues.merchello.com/youtrack/issue/M-786
+            customer.SaveCustomerAddress(customerAddress);
+
+            // This method is obsolete and never should have been exposed as it "may not" reindex
+            // the customer correctly in Examine.
+            // MerchelloServices.CustomerService.Save(customerAddress);
             CustomerContext.Reinitialize(CurrentCustomer);
             return this.SuccessfulRedirect(model.AccountPageId);
         }
