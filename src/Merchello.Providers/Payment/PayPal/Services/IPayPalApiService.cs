@@ -5,10 +5,10 @@
     /// </summary>
     public interface IPayPalApiService
     {
-        /// <summary>
-        /// Gets the <see cref="IPayPalApiPaymentService"/>.
-        /// </summary>
-        IPayPalApiPaymentService ApiPayment { get; }
+        ///// <summary>
+        ///// Gets the <see cref="IPayPalApiPaymentService"/>.
+        ///// </summary>
+        //IPayPalApiPaymentService ApiPayment { get; }
 
         /// <summary>
         /// Gets the <see cref="IPayPalExpressCheckoutService"/>.

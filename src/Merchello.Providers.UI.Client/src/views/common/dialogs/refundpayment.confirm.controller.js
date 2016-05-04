@@ -1,4 +1,4 @@
-angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.BraintreeRefundPaymentController',
+angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.RefundPaymentController',
     ['$scope', 'invoiceHelper',
         function($scope, invoiceHelper) {
 
@@ -7,7 +7,6 @@ angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.Br
 
             function init() {
                 $scope.dialogData.amount = invoiceHelper.round($scope.dialogData.appliedAmount, 2);
-                $scope.dialogData.warning = 'Please note this operation will refund process a refund with Braintree.';
             }
 
             function save() {
@@ -21,3 +20,4 @@ angular.module('merchello.providers').controller('Merchello.Providers.Dialogs.Br
             // initializes the controller
             init();
         }]);
+

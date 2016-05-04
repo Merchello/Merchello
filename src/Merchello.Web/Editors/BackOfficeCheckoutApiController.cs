@@ -10,7 +10,6 @@
     using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Checkout;
@@ -19,7 +18,6 @@
     using Merchello.Web.Workflow;
     using Merchello.Web.Workflow.CustomerItemCache;
 
-    using Umbraco.Core.Logging;
     using Umbraco.Web.Mvc;
 
     /// <summary>

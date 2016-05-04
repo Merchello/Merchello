@@ -11,8 +11,6 @@
     using global::PayPal.PayPalAPIInterfaceService;
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
-    using Merchello.Providers.Exceptions;
-
     using Umbraco.Core.Events;
 
     /// <summary>
@@ -158,13 +156,51 @@
             return record;
         }
 
-        public ExpressCheckoutResponse Refund(IInvoice invoice, IPayment payment)
+        /// <summary>
+        /// Refunds or partially refunds a payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount of the refund.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ExpressCheckoutResponse"/>.
+        /// </returns>
+        public PayPalExpressTransactionRecord Refund(IInvoice invoice, IPayment payment, decimal amount)
         {
-            var attempSdk = Settings.GetExpressCheckoutSdkConfig();
-            var service = new PayPalAPIInterfaceServiceService(attempSdk.Result);
+            var record = payment.GetPayPalTransactionRecord();
 
+            ExpressCheckoutResponse result = null;
 
-            throw new NotImplementedException();
+            try
+            {
+                var wrapper = new RefundTransactionReq
+                {
+                    RefundTransactionRequest =
+                    {
+                        TransactionID = record.Data.CaptureTransactionId,
+                        RefundType = amount == payment.Amount ? RefundType.FULL : RefundType.PARTIAL
+                    }
+                };
+
+                var service = GetPayPalService();
+                var refundTransactionResponse = GetPayPalService().RefundTransaction(wrapper);
+
+                result = _responseFactory.Build(refundTransactionResponse, record.Data.Token);
+            }
+            catch (Exception ex)
+            {
+                result = _responseFactory.Build(ex);
+            }
+
+            record.RefundTransaction = result;
+            record.Success = result.Success();
+            return record;
         }
 
         /// <summary>

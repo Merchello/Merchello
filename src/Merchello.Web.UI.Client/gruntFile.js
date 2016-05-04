@@ -65,6 +65,7 @@
                 files: [
                     { dest: '<%= distdir %>/views', src: ['**/*.html', '!**/*.controller.js'], expand: true, cwd: 'src/views/' },
                     { dest: '<%= distdir %>/views', src: ['**/*.html', '!**/*.js'], expand: true, cwd: 'src/common/' }
+
                 ]
             },
 

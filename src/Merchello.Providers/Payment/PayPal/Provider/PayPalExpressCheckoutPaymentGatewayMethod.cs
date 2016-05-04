@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Provider
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
@@ -9,14 +8,9 @@
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
-
-    using Merchello.Providers.Payment.PayPal.Services;
-
-    using global::PayPal.PayPalAPIInterfaceService.Model;
-
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Providers.Exceptions;
     using Merchello.Providers.Payment.PayPal.Models;
+    using Merchello.Providers.Payment.PayPal.Services;
 
     using Umbraco.Core;
 
@@ -25,6 +19,11 @@
     /// </summary>
     [GatewayMethodUi("PayPal.ExpressCheckout")]
     [GatewayMethodEditor("PayPal Express Checkout Method Editor", "PayPal Express Checkout", "~/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/payment.paymentmethod.addedit.html")]
+    [PaymentGatewayMethod("PayPal Express Checkout Method Editors",
+        "",
+        "",
+        "~/App_Plugins/MerchelloProviders/views/dialogs/voidpayment.confirm.html",
+        "~/App_Plugins/MerchelloProviders/views/dialogs/refundpayment.confirm.html")]
     public class PayPalExpressCheckoutPaymentGatewayMethod : RedirectPaymentMethodBase
     {
         /// <summary>

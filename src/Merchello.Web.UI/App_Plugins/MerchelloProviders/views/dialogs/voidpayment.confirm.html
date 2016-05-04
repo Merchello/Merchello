@@ -1,4 +1,4 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Providers.Dialogs.BraintreeStandardVoidPaymentController">
+<div class="umb-panel merchello-side-panel">
     <div class="umb-modalcolumn-header">
         <h4><localize key="merchelloOrder_voidPayment" /></h4>
     </div>
@@ -6,9 +6,7 @@
 
         <div class="control-group row-fluid">
             <h4><localize key="merchelloOrder_voidPaymentConfirmMessage" /></h4>
-            <div data-ng-show="dialogData.warning !== undefined && dialogData.warning != ''">
-                <p class="text-warning">{{ dialogData.warning }}</p>
-            </div>
+            <p class="text-warning"><localize key="merchelloProviders_paymentVoidWarning" /></p>
         </div>
 
     </div>
