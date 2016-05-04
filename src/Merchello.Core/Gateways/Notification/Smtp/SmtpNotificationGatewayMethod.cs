@@ -13,7 +13,9 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
-
+    using Merchello.Core.Events;
+    using Events;
+    using Umbraco.Core.Events;
     /// <summary>
     /// Represents a SmtpNotificationGatewayMethod
     /// </summary>
@@ -45,6 +47,8 @@
             _settings.Port = _settings.Port == 0 ? 25 : _settings.Port;
         }
 
+        public static event TypedEventHandler<SmtpNotificationGatewayMethod, ObjectEventArgs<MailMessage>> Sending;
+
         /// <summary>
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
@@ -70,10 +74,10 @@
                     msg.To.Add(new MailAddress(to));
                 }
             }
-            
+
             //// We want to send the email async
             ////Task<bool> sendAsync = this.SendAsync(msg);
-
+            Sending.RaiseEvent(new ObjectEventArgs<MailMessage>(msg), this);
             this.Send(msg);
         }
 
