@@ -26,7 +26,7 @@
     [PaymentGatewayMethod("Braintree Payment Gateway Method Editors",
         "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.authorizepayment.html",
         "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.authorizecapturepayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.voidpayment.html",
+        "~/App_Plugins/MerchelloProviders/views/dialogs/voidpayment.confirm.html",
         "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.refundpayment.html",
         "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.capturepayment.html")]
     public class BraintreeStandardTransactionPaymentGatewayMethod : BraintreePaymentGatewayMethodBase, IBraintreeStandardTransactionPaymentGatewayMethod

@@ -363,7 +363,6 @@
     <Compile Include="Payment\PayPal\Services\IPayPalExpressCheckoutService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiServiceBase.cs" />
-    <Compile Include="Payment\PayPal\Services\PayPalApiPaymentService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalExpressCheckoutService.cs" />
     <Compile Include="Payment\RedirectPaymentMethodBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

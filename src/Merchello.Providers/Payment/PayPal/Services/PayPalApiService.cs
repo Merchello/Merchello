@@ -19,11 +19,6 @@
         private readonly PayPalProviderSettings _settings;
 
         /// <summary>
-        /// The <see cref="IPayPalApiPaymentService"/>.
-        /// </summary>
-        private Lazy<IPayPalApiPaymentService> _apiPayment;
-
-        /// <summary>
         /// The <see cref="IPayPalExpressCheckoutService"/>.
         /// </summary>
         private Lazy<IPayPalExpressCheckoutService> _expressCheckout;
@@ -44,17 +39,6 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="IPayPalApiPaymentService"/>.
-        /// </summary>
-        public IPayPalApiPaymentService ApiPayment
-        {
-            get
-            {
-                return this._apiPayment.Value;
-            }
-        }
-
-        /// <summary>
         /// Gets the <see cref="IPayPalExpressCheckoutService"/>.
         /// </summary>
         public IPayPalExpressCheckoutService ExpressCheckout
@@ -70,7 +54,6 @@
         /// </summary>
         private void Initialize()
         {
-            this._apiPayment = new Lazy<IPayPalApiPaymentService>(() => new PayPalApiPaymentService(_settings));
             this._expressCheckout = new Lazy<IPayPalExpressCheckoutService>(() => new PayPalExpressCheckoutService(_settings));
         }
     }
