@@ -6,16 +6,17 @@
     using System.Net.Mail;
     using System.Threading.Tasks;
 
+    using Events;
+
     using Merchello.Core.Logging;
 
     using Models;
+
     using Services;
 
     using Umbraco.Core;
-    using Umbraco.Core.Logging;
-    using Merchello.Core.Events;
-    using Events;
     using Umbraco.Core.Events;
+
     /// <summary>
     /// Represents a SmtpNotificationGatewayMethod
     /// </summary>
@@ -47,6 +48,9 @@
             _settings.Port = _settings.Port == 0 ? 25 : _settings.Port;
         }
 
+        /// <summary>
+        /// Occurs before sending the email message.
+        /// </summary>
         public static event TypedEventHandler<SmtpNotificationGatewayMethod, ObjectEventArgs<MailMessage>> Sending;
 
         /// <summary>
@@ -75,9 +79,9 @@
                 }
             }
 
-            //// We want to send the email async
-            ////Task<bool> sendAsync = this.SendAsync(msg);
+            // Event raised to allow further modification to msg (like attachments)
             Sending.RaiseEvent(new ObjectEventArgs<MailMessage>(msg), this);
+
             this.Send(msg);
         }
 

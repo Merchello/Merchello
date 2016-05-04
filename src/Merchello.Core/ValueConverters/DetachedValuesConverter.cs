@@ -21,7 +21,7 @@
     /// <summary>
     /// A converter to assist in saving detached property data correctly.
     /// </summary>
-    internal class DetachedValuesConverter
+    public class DetachedValuesConverter
     {
         /// <summary>
         /// The singleton instance of the converter.
@@ -90,7 +90,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the current.
+        /// Gets the current.
         /// </summary>
         public static DetachedValuesConverter Current
         {

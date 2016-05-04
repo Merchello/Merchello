@@ -436,11 +436,15 @@
             var paymentDetailsList = new List<PaymentDetailsType>() { paymentDetailsType };
 
             // ExpressCheckout details
+            //// We do not want the customer to be able to reset their shipping address at PayPal
+            //// due to the fact that it could affect shipping charges and in some cases tax rates.
+            //// This is the AddressOverride = "0" - NOT WORKING!
             var ecDetails = new SetExpressCheckoutRequestDetailsType()
                     {
                         ReturnURL = returnUrl,
                         CancelURL = cancelUrl,
-                        PaymentDetails = paymentDetailsList
+                        PaymentDetails = paymentDetailsList,
+                        AddressOverride = "0"
                     };
 
             // Trigger the event to allow for overriding ecDetails
@@ -455,7 +459,10 @@
                     };
 
             // Crete the wrapper for Express Checkout
-            var wrapper = new SetExpressCheckoutReq { SetExpressCheckoutRequest = request };
+            var wrapper = new SetExpressCheckoutReq
+                              {
+                                  SetExpressCheckoutRequest = request
+                              };
 
             try
             {
