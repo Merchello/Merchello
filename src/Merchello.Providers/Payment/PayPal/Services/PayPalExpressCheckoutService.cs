@@ -212,6 +212,9 @@
         /// <param name="token">
         /// The token.
         /// </param>
+        /// <param name="record">
+        /// The record.
+        /// </param>
         /// <returns>
         /// The <see cref="PayPalExpressTransactionRecord"/>.
         /// </returns>
