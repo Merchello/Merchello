@@ -1,10 +1,8 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Factories
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Web;
     using Merchello.Web.Models.VirtualContent;

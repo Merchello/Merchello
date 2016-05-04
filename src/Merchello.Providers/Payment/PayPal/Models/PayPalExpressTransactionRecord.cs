@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Models
 {
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     using Merchello.Core.Models;
 
@@ -16,10 +18,11 @@
         {
             this.Success = true;
             this.Data = new PayPalExpressTransaction() { Authorized = false };
+            this.RefundTransactions = Enumerable.Empty<ExpressCheckoutResponse>();
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the currenct transcation was successful.
+        /// Gets or sets a value indicating whether the current transaction was successful.
         /// </summary>
         public bool Success { get; set; }
 
@@ -56,7 +59,7 @@
         /// <summary>
         /// Gets or sets the RefundTransaction response.
         /// </summary>
-        public ExpressCheckoutResponse RefundTransaction { get; set; }
+        public IEnumerable<ExpressCheckoutResponse> RefundTransactions { get; set; }
     }
 
     /// <summary>
