@@ -45,5 +45,22 @@
         /// The <see cref="ExpressCheckoutResponse"/>.
         /// </returns>
         PayPalExpressTransactionRecord Capture(IInvoice invoice, IPayment payment, decimal amount, bool isPartialPayment);
+
+        /// <summary>
+        /// Refunds or partially refunds a payment.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount of the refund.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PayPalExpressTransactionRecord"/>.
+        /// </returns>
+        ExpressCheckoutResponse Refund(IInvoice invoice, IPayment payment, decimal amount);
     }
 } 

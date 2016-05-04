@@ -11,6 +11,9 @@
     using global::PayPal.PayPalAPIInterfaceService;
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
+    using Merchello.Providers.Exceptions;
+
+    using Umbraco.Core;
     using Umbraco.Core.Events;
 
     /// <summary>
@@ -169,26 +172,48 @@
         /// The amount of the refund.
         /// </param>
         /// <returns>
-        /// The <see cref="ExpressCheckoutResponse"/>.
+        /// The <see cref="PayPalExpressTransactionRecord"/>.
         /// </returns>
-        public PayPalExpressTransactionRecord Refund(IInvoice invoice, IPayment payment, decimal amount)
+        public ExpressCheckoutResponse Refund(IInvoice invoice, IPayment payment, decimal amount)
         {
             var record = payment.GetPayPalTransactionRecord();
 
+            // Ensure the currency code
+            if (record.Data.CurrencyCode.IsNullOrWhiteSpace())
+            {
+                var ex = new PayPalApiException("CurrencyCode was not found in payment extended data PayPal transaction data record.  Cannot perform refund.");
+                return _responseFactory.Build(ex);
+            }
+
+            // Ensure the transaction id
+            if (record.Data.CaptureTransactionId.IsNullOrWhiteSpace())
+            {
+                var ex = new PayPalApiException("CaptureTransactionId was not found in payment extended data PayPal transaction data record.  Cannot perform refund.");
+                return _responseFactory.Build(ex);
+            }
+
+            // Get the decimal configuration for the current currency
+            var currencyCodeType = PayPalApiHelper.GetPayPalCurrencyCode(record.Data.CurrencyCode);
+            var basicAmountFactory = new PayPalBasicAmountTypeFactory(currencyCodeType);
+
             ExpressCheckoutResponse result = null;
+
+            if (amount > payment.Amount) amount = payment.Amount;
 
             try
             {
-                var wrapper = new RefundTransactionReq
-                {
-                    RefundTransactionRequest =
+                var request = new RefundTransactionRequestType
                     {
+                        InvoiceID = invoice.PrefixedInvoiceNumber(),
+                        PayerID = record.Data.PayerId,
+                        RefundSource = RefundSourceCodeType.DEFAULT,
+                        Version = record.DoCapture.Version,
                         TransactionID = record.Data.CaptureTransactionId,
-                        RefundType = amount == payment.Amount ? RefundType.FULL : RefundType.PARTIAL
-                    }
-                };
+                        Amount = basicAmountFactory.Build(amount)
+                    };
 
-                var service = GetPayPalService();
+                var wrapper = new RefundTransactionReq { RefundTransactionRequest = request };
+
                 var refundTransactionResponse = GetPayPalService().RefundTransaction(wrapper);
 
                 result = _responseFactory.Build(refundTransactionResponse, record.Data.Token);
@@ -198,9 +223,7 @@
                 result = _responseFactory.Build(ex);
             }
 
-            record.RefundTransaction = result;
-            record.Success = result.Success();
-            return record;
+            return result;
         }
 
         /// <summary>
@@ -262,6 +285,9 @@
         /// </param>
         /// <param name="payerId">
         /// The payer id.
+        /// </param>
+        /// <param name="record">
+        /// The record of the transaction.
         /// </param>
         /// <returns>
         /// The <see cref="PayPalExpressTransactionRecord"/>.
@@ -397,7 +423,11 @@
         /// </returns>
         protected virtual PayPalExpressTransactionRecord SetExpressCheckout(IInvoice invoice, IPayment payment, string returnUrl, string cancelUrl)
         {
-            var record = new PayPalExpressTransactionRecord { Success = true };
+            var record = new PayPalExpressTransactionRecord
+                             {
+                                 Success = true,
+                                 Data = { Authorized = false, CurrencyCode = invoice.CurrencyCode }
+                             };
 
             var factory = new PayPalPaymentDetailsTypeFactory(new PayPalFactorySettings { WebsiteUrl = _websiteUrl });
             var paymentDetailsType = factory.Build(invoice, PaymentActionCodeType.ORDER);

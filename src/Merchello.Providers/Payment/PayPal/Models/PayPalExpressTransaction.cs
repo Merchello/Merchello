@@ -25,6 +25,11 @@
         public string Token { get; set; }
 
         /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        public string CurrencyCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the payer id.
         /// </summary>
         public string PayerId { get; set; }

@@ -159,9 +159,72 @@
 
         }
 
+        /// <summary>
+        /// Performs a refund or a partial refund.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="amount">
+        /// The amount.
+        /// </param>
+        /// <param name="args">
+        /// The processor arguments.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPaymentResult"/>.
+        /// </returns>
         protected override IPaymentResult PerformRefundPayment(IInvoice invoice, IPayment payment, decimal amount, ProcessorArgumentCollection args)
         {
-            throw new System.NotImplementedException();
+            var record = payment.GetPayPalTransactionRecord();
+
+            if (record.Data.CaptureTransactionId.IsNullOrWhiteSpace())
+            {
+                var error = new NullReferenceException("PayPal transaction could not be found and/or deserialized from payment extended data collection");
+                return new PaymentResult(Attempt<IPayment>.Fail(payment, error), invoice, false);
+            }
+
+            var attempt = _paypalApiService.ExpressCheckout.Refund(invoice, payment, amount);
+
+            // store the transaction
+            var refundTransActions = record.RefundTransactions.ToList();
+            refundTransActions.Add(attempt);
+            record.RefundTransactions = refundTransActions;
+
+            if (!attempt.Success())
+            {
+                // In the case of a failure, package up the exception so we can bubble it up.
+                var ex = new PayPalApiException("PayPal Checkout Express refund response ACK was not Success");
+                if (record.SetExpressCheckout.ErrorTypes.Any()) ex.ErrorTypes = record.SetExpressCheckout.ErrorTypes;
+
+                // ensure that transaction is stored in the payment
+                payment.SavePayPalTransactionRecord(record);
+                GatewayProviderService.Save(payment);
+
+                return new PaymentResult(Attempt<IPayment>.Fail(payment, ex), invoice, false);
+            }
+
+            foreach (var applied in payment.AppliedPayments())
+            {
+                applied.TransactionType = AppliedPaymentType.Refund;
+                applied.Amount = 0;
+                applied.Description += " - Refunded";
+                this.GatewayProviderService.Save(applied);
+            }
+
+            payment.Amount = payment.Amount - amount;
+
+            if (payment.Amount != 0)
+            {
+                this.GatewayProviderService.ApplyPaymentToInvoice(payment.Key, invoice.Key, AppliedPaymentType.Debit, "To show partial payment remaining after refund", payment.Amount);
+            }
+
+            this.GatewayProviderService.Save(payment);
+
+            return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, false);
         }
 
         /// <summary>
