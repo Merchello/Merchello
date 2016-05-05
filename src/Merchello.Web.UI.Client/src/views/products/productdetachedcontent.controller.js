@@ -183,6 +183,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     });
                 } else {
                     filterTabs(editor.scaffold);
+                    setTabVisibility();
                     ensureRenderTab();
                     $scope.tabs.setActive($scope.currentTab.id);
                     $scope.preValuesLoaded = true;
@@ -254,6 +255,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             }
 
 
+            // TODO move this to a service
             function buildProductVariantDetachedContent(cultureName, detachedContent, tabs) {
                 var productVariantContent = productVariantDetachedContentDisplayBuilder.createDefault();
                 productVariantContent.cultureName = cultureName;
@@ -268,6 +270,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 });
                 return productVariantContent;
             }
+
+
             function fillValues() {
 
                 if ($scope.contentTabs.length > 0) {

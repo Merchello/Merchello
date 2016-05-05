@@ -14,14 +14,11 @@
         /// Overrides the stored detached value to correct serialization issues with the required Environment NewLine.
         /// </summary>
         /// <param name="value">
-        /// The value.
+        /// The value stored by Merchello.
         /// </param>
         /// <returns>
-        /// The <see cref="object"/>.
+        /// The corrected value <see cref="object"/>.
         /// </returns>
-        /// <remarks>
-        /// We need to watch 
-        /// </remarks>
         public override object ApplyCorrection(object value)
         {
             if (!EnsureValueNeedsCorrection(value)) return value;

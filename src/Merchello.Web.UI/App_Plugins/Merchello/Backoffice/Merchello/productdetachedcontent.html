@@ -43,7 +43,7 @@
                 <div class="merchello-pane">
                     <div class="pager well" data-ng-hide="isConfigured">
                         <localize key="merchelloDetachedContent_noProductContentType" />
-                        <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" save="saveContentType(contentType)"></detached-content-type-select>
+                        <detached-content-type-select data-ng-if="!isConfigured" entity-type="Product" selected-content-type="contentType" show-save="preValuesLoaded" save="saveContentType(contentType)"></detached-content-type-select>
                     </div>
                 </div>
                 <!-- /merchello-pane -->

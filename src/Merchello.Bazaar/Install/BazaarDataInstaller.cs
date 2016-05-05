@@ -392,6 +392,8 @@
             despiteShirt.AddToCollection(funny);
             despiteShirt.AddToCollection(geeky);
 
+
+
             despiteShirt.DetachedContents.Add(
                 new ProductVariantDetachedContent(
                     despiteShirt.ProductVariantKey,

@@ -8,6 +8,7 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
             scope: {
                 entityType: '@',
                 selectedContentType: '=',
+                showSave: '=?',
                 save: '&'
             },
             template:         '<div class="detached-content-select">' +
@@ -16,7 +17,7 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
             '<select data-ng-model="selectedContentType" data-ng-options="ct.name for ct in detachedContentTypes track by ct.key" data-ng-show="loaded">' +
             '<option value="">{{ noSelection }}</option>' +
             '</select>' +
-            ' <merchello-save-icon show-save="true" do-save="save()"></merchello-save-icon>' +
+            ' <merchello-save-icon show-save="showSave" do-save="save()"></merchello-save-icon>' +
             '</div>' +
                 '<div data-ng-hide="detachedContentTypes.length > 0 && loaded" style="text-align: center">' +
                 '<localize key="merchelloDetachedContent_noDetachedContentTypes" />' +
