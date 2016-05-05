@@ -18,6 +18,8 @@
                  * @name add
                  * @description Creates a new product with an API call to the server
                  **/
+                // TODO this method is obsolete but it is still possible to get here so leave it
+                // Remove in version 3.0.0 or in Angular 2.x refactor
                 add: function (product) {
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'AddProduct';
                     return umbRequestHelper.resourcePromise(
@@ -27,6 +29,39 @@
                         'Failed to create product sku ' + product.sku);
                 },
 
+                /**
+                 * @ngdoc method
+                 * @name add
+                 * @description Creates a new product with an API call to the server
+                 **/
+                create: function(product) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'CreateProduct';
+                    angular.forEach(product.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+                    });
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            product
+                        ),
+                        'Failed to create product sku ' + product.sku);
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name getByKey
+                 * @description Gets a value indicating whether or not a SKU exists
+                 **/
+                getSkuExists: function(sku) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetSkuExists';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { sku: sku }
+                        }),
+                        'Failed to test SKU');
+                },
+                
                 /**
                  * @ngdoc method
                  * @name getByKey

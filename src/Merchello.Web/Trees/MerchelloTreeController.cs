@@ -151,7 +151,11 @@
             {
                 menu.Items.Add<NewCollectionAction>(
                     _textService.Localize("merchelloVariant/newProduct", _culture),
-                    false).NavigateToRoute("merchello/merchello/productedit/create");
+                    false)
+                    .LaunchDialogView(
+                        DialogsPath + "product.add.html",
+                        _textService.Localize("merchelloVariant/newProduct", _culture));
+                    //.NavigateToRoute("merchello/merchello/productedit/create");
 
                 menu.Items.Add<NewProductContentTypeAction>(
                     _textService.Localize("merchelloDetachedContent/productContentType", _culture),

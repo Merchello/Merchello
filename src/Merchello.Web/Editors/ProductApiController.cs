@@ -147,6 +147,21 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether or not a SKU exists.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The value indicating whether the SKU exists.
+        /// </returns>
+        [HttpGet]
+        public bool GetSkuExists(string sku)
+        {
+            return _productService.SkuExists(sku);
+        }
+
+        /// <summary>
         /// The get by ids.
         /// </summary>
         /// <param name="keys">
@@ -204,14 +219,47 @@
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
         [HttpPost]
+        [Obsolete("AddProduct is being superceded by CreateProduct so we can attach content at time of creation")]
         public ProductDisplay AddProduct(ProductDisplay product)
         {
             var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
 
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
 
+        [HttpPost]
+        public ProductDisplay CreateProduct(ProductDisplay product)
+        {
+            // we need to remove the detached content to generate the product to begin with due to db foreign keys
+            var detachedContents = product.DetachedContents.ToArray();
+            product.DetachedContents = Enumerable.Empty<ProductVariantDetachedContentDisplay>();
 
+            // First create the product record and save it
+            var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
+            merchProduct = product.ToProduct(merchProduct);
+
+            // we don't want to raise events here since we will be saving again and there is no sense
+            // in having examine index it twice. Use the detached contents to determine whether we need to fire event
+            _productService.Save(merchProduct, !detachedContents.Any());
+
+            if (!detachedContents.Any()) return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+
+            // convert the product back so we can reassociate the detached content.
+            product = merchProduct.ToProductDisplay();
+
+            // asscociate the product variant key (master variant) with the detached content
+            foreach (var pvdc in detachedContents)
+            {
+                pvdc.ProductVariantKey = merchProduct.ProductVariantKey;
+            }
+
+            // add the detached contents back
+            product.DetachedContents = detachedContents;
+
+            // this adds the detached content to the product
+            merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
 
             return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
