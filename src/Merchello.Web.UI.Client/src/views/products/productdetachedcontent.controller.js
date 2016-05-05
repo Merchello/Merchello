@@ -146,15 +146,16 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                         loadScaffold();
                     } else {
+                        $scope.tabs.setActive('productcontent');
                         $scope.preValuesLoaded = true;
                     }
-                    $scope.tabs.setActive('productcontent');
+
                 });
             }
 
             // The content type scaffold
             function loadScaffold() {
-
+                console.info($scope.currentTab);
                 // every detached content associated with a variant MUST share the same content type,
                 var detachedContentType = $scope.productVariant.detachedContentType();
 
@@ -169,23 +170,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         filterTabs(scaffold);
                         fillValues();
 
-                        if ($scope.contentTabs.length > 0) {
-                            if ($scope.currentTab === null) {
-                                $scope.currentTab = $scope.contentTabs[0];
-                            }
-                            setTabVisibility();
-                        }
+                        stickTab();
 
-                        ensureRenderTab();
-
-                        $scope.tabs.setActive($scope.currentTab.id);
                         $scope.preValuesLoaded = true;
                     });
                 } else {
                     filterTabs(editor.scaffold);
-                    setTabVisibility();
-                    ensureRenderTab();
-                    $scope.tabs.setActive($scope.currentTab.id);
+                    stickTab();
                     $scope.preValuesLoaded = true;
                 }
             }
@@ -290,6 +281,17 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         });
                     });
                 }
+            }
+
+            function stickTab() {
+                if ($scope.contentTabs.length > 0) {
+                    if ($scope.currentTab === null) {
+                        $scope.currentTab = $scope.contentTabs[0];
+                    }
+                    setTabVisibility();
+                }
+                ensureRenderTab();
+                $scope.tabs.setActive($scope.currentTab.id);
             }
 
             function ensureRenderTab() {
