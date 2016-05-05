@@ -3,7 +3,7 @@
     /// <summary>
     /// A base class for detached value override objects.
     /// </summary>
-    internal abstract class DetachedValueCorrectionBase : IDetachedValueCorrection
+    public abstract class DetachedValueCorrectionBase : IDetachedValueCorrection
     {
         /// <summary>
         /// Applies the correction and returns the corrected value.
