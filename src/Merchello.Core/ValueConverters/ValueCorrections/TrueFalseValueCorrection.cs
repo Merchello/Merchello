@@ -9,6 +9,15 @@
     [DetachedValueCorrection("Umbraco.TrueFalse")]
     internal class TrueFalseValueCorrection : DetachedValueCorrectionBase
     {
+        /// <summary>
+        /// Overrides the stored detached value to correct JSON serialized object value.
+        /// </summary>
+        /// <param name="value">
+        /// The value stored by Merchello.
+        /// </param>
+        /// <returns>
+        /// The corrected value <see cref="object"/>.
+        /// </returns>
         public override object ApplyCorrection(object value)
         {
             if (value != null)
