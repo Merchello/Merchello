@@ -1354,7 +1354,10 @@
     <Compile Include="ValueConverters\ValueCorrections\DetachedValueCorrectionAttribute.cs" />
     <Compile Include="ValueConverters\ValueCorrections\DetachedValueCorrectionBase.cs" />
     <Compile Include="ValueConverters\ValueCorrections\IDetachedValueCorrection.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\DecimalValueCorrection.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\NumericValueCorrection.cs" />
     <Compile Include="ValueConverters\ValueCorrections\RepeatableTextstringValueCorrection.cs" />
+    <Compile Include="ValueConverters\ValueCorrections\TrueFalseValueCorrection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
