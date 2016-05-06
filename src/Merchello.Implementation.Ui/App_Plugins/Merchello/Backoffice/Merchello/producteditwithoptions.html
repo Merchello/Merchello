@@ -1,0 +1,73 @@
+<form novalidate name="productForm"
+      data-ng-controller="Merchello.Backoffice.ProductEditWithOptionsController"
+      data-ng-show="loaded"
+      data-ng-submit="save()">
+
+    <umb-panel val-show-validation>
+
+        <umb-header>
+
+            <div class="span4">
+                <umb-content-name
+                        ng-model="product.name"
+                        localize="placeholder"
+                        placeholder="@merchelloProductEdit_enterProductName">
+                </umb-content-name>
+            </div>
+
+            <div class="col-xs-8 span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <button data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success"><localize key="buttons_save" /></button>
+                        <button class="btn dropdown-toggle btn-success" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu merchello-action-menu" role="menu">
+                            <li><a data-ng-click="openCopyProductDialog()"><localize key="merchelloProducts_copyProduct" /></a></li>
+                            <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs for Variants & Options -->
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+            <div class="merchello-pane">
+                <!---------------------------------------------------------------------------------------
+                    Variants tab
+                ----------------------------------------------------------------------------------------->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloProductEdit_variantInformation" />
+                        <small><localize key="merchelloProductEdit_variantInformationHelper" /></small>
+                        <a data-ng-click="reorderVariants=!reorderVariants"><i class="icon-ordered-list"></i> <localize key="merchelloProductEdit_reorderVariants" /></a>
+                    </label>
+
+
+
+                    <div class="merchello-controls row-fluid">
+
+                        <!-- Appears when Reorder Variants is clicked -->
+                        <merchello-slide-open-panel is-open="reorderVariants" hide-close="hideClose" classes="'well row-fluid col-xs-10 span10'">
+
+                            <product-reorder-options is-open="reorderVariants" product="product" reload="init()"></product-reorder-options>
+
+                        </merchello-slide-open-panel>
+
+                        <product-option-attributes-select product="product" on-select-variants="selectVariants(attributeToSelect)"></product-option-attributes-select>
+
+                        <product-variants-view-table product="product" currency-symbol="currencySymbol" reload="init()"></product-variants-view-table>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </merchello-panel>
+
+
+    </umb-panel>
+</form>

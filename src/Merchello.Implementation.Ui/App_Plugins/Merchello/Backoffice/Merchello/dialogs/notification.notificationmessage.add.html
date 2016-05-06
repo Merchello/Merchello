@@ -1,0 +1,50 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.NotificationsMessageAddController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloNotificationsMessage_addEditMessage" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when edit or Add a Method is clicked -->
+        <form name="addManualNotificationMessageForm">
+            <div class="row-fluid">
+                <div class="col-xs-12 span12">
+                    <label for="event"><localize key="merchelloNotificationsMessage_attachedEvent" /></label>
+                    <select name="event" class="col-xs-12 span12" data-ng-model="dialogData.selectedMonitor" data-ng-change="setMonitorDefaults()" data-ng-options="n.name for n in dialogData.notificationMonitors" required></select>
+                </div>
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="general_name" /> / Subject</label>
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.notificationMessage.name" required />
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="merchelloNotificationsMessage_fromEmail" /></label>
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.notificationMessage.fromAddress" required/>
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="merchelloNotificationsEdit_description " /></label>
+                <textarea class="col-xs-12 span12" rows="4" data-ng-model="dialogData.notificationMessage.description"></textarea>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-disabled="addManualNotificationMessageForm.$invalid"
+                        data-ng-click="save()">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

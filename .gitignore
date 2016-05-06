@@ -17,3 +17,9 @@
 
 # ImageProcessor DiskCache 
 **/App_Data/cache/
+src/Merchello.Implementation.Ui/App_Data/Models/
+src/.vs/
+src/Merchello.Implementation/bin/
+src/Merchello.Implementation/obj/
+src/packages/
+src/Merchello.Implementation.Ui/obj/

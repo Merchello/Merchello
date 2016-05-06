@@ -1,0 +1,41 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.PaymentMethodAddEditController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloPaymentMethod_addEditPayment" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when edit or Add a Method is clicked -->
+        <form name="addManualPaymentMethodForm">
+
+            <div class="form-group row-fluid">
+                <label><localize key="general_name" /></label>
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.name" />
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="merchelloNotificationsEdit_description" /></label>
+                <textarea class="col-xs-12 span12" rows="4" data-ng-model="dialogData.description"></textarea>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button
+                        class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

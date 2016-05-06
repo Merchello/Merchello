@@ -1,0 +1,41 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Providers.Dialogs.RefundPaymentController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloOrder_refundPayment" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <form name="refundForm" id="refundForm">
+            <div class="control-group row-fluid">
+                <p>
+                    <localize key="merchelloOrder_refundMethod" /> <strong>{{dialogData.paymentMethodName}}</strong><br />
+                </p>
+                <div class="col-xs-12 span12">
+                    <label for="amount">*Amount</label>
+                    <div class="error" data-ng-show="refundForm.amount.$invalid && wasFormSubmitted">Amount between {{0 | currency: currencySymbol }} & {{ dialogData.appliedAmount | currency: currencySymbol }}.</div>
+                </div>
+                <div class="input-prepend col-xs-12 span12">
+                    <span class="add-on">{{dialogData.currencySymbol}}</span>
+                    <input name="amount" class="col-xs-4 span4" type="text" data-ng-model="dialogData.amount">
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button
+                        class="btn btn-primary"
+                        data-ng-click="save()">
+                    <localize key="merchelloOrder_refundPayment" />
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
