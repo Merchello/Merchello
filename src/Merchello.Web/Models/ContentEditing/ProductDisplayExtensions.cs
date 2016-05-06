@@ -338,11 +338,16 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="cultureName">The cultureName</param>
+        /// <param name="cultureName">
+        /// The cultureName
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IProductVariantContent}"/>.
         /// </returns>
-        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, string cultureName)
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, string cultureName, IPublishedContent parent = null)
         {
             var variantContent = new List<IProductVariantContent>();
 
@@ -355,7 +360,7 @@
                                           variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
                                       : null;
 
-                variantContent.Add(new ProductVariantContent(variant, contentType, cultureName));
+                variantContent.Add(new ProductVariantContent(variant, contentType, cultureName, parent));
             }
 
             return variantContent;

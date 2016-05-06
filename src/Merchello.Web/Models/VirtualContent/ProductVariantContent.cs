@@ -14,6 +14,11 @@
     public class ProductVariantContent : ProductContentBase, IProductVariantContent
     {
         /// <summary>
+        /// The parent <see cref="IProductContent"/>.
+        /// </summary>
+        private readonly IPublishedContent _parent;
+
+        /// <summary>
         /// The <see cref="ProductVariantDisplay"/>.
         /// </summary>
         private readonly ProductVariantDisplay _variant;
@@ -30,10 +35,14 @@
         /// <param name="cultureName">
         /// The culture name.
         /// </param>
-        public ProductVariantContent(ProductVariantDisplay variant, PublishedContentType contentType, string cultureName = "en-US")
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        public ProductVariantContent(ProductVariantDisplay variant, PublishedContentType contentType, string cultureName = "en-US", IPublishedContent parent = null)
             : base(variant, contentType, cultureName)
         {
             _variant = variant;
+            _parent = parent;
         }
 
         /// <summary>
@@ -123,7 +132,7 @@
         {
             get
             {
-                return null;
+                return _parent;
             }
         }
 

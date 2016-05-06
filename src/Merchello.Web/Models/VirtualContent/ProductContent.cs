@@ -247,7 +247,7 @@
         /// </summary>
         private void Initialize()
         {
-            _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(CultureName));
+            _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(CultureName, this));
         }
     }
 }
