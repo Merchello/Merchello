@@ -16,13 +16,13 @@
 
 <div class="row">
     <div class="col-md-4 col-md-push-8">
-        @Html.Action("AddProductToBasketForm", "GenericBasket", new { area = "Merchello", model = Model })
+        @Html.Action("AddProductToBasketForm", "DefaultBasket", new { area = "Merchello", model = Model })
     </div>
     <div class="col-md-8 col-md-pull-4">
         <div class="row">
             @if (Model.HasValue("image"))
             {
-                // this is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
+                // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
                 var image = Model.GetPropertyValue<IPublishedContent>("image");
                 <div class="col-xs-8">
                     <img class="img-responsive" src="@image.GetCropUrl(height: 450)" alt="@Model.Name">

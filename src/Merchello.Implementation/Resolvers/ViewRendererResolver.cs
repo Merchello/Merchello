@@ -4,8 +4,19 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
+    using Merchello.Core;
+    using Merchello.Core.Logging;
+    using Merchello.Web.Mvc;
 
     using Umbraco.Core;
+    using Umbraco.Web;
+    using Umbraco.Web.Mvc;
+
+    using CallingConventions = System.Reflection.CallingConventions;
 
     /// <summary>
     /// Resolver for ViewRenders.

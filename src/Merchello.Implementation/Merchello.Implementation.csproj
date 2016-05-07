@@ -105,20 +105,20 @@
       <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=2.0.5970.40046, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=2.0.5971.37987, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000363\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=2.0.5970.40048, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=2.0.5971.37988, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000363\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Providers, Version=2.0.5970.40058, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Providers.dll</HintPath>
+    <Reference Include="Merchello.Providers, Version=2.0.5971.37993, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000363\lib\net45\Merchello.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=2.0.5970.40050, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=2.0.5971.37989, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000363\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
@@ -194,6 +194,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\System.Data.SqlServerCe.dll</HintPath>
@@ -305,13 +306,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ComponentSetAliasAttribute.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
-    <Compile Include="Controllers\IViewRendererController.cs" />
+    <Compile Include="Controllers\IBasketViewRenderer.cs" />
+    <Compile Include="Controllers\IViewRenderer.cs" />
+    <Compile Include="Default\Controllers\DefaultBasketController.cs" />
+    <Compile Include="Default\Models\AddItemModel.cs" />
+    <Compile Include="Default\Models\BasketItemModel.cs" />
+    <Compile Include="Default\Models\BasketModel.cs" />
     <Compile Include="Factories\BasketItemExtendedDataFactory.cs" />
-    <Compile Include="Generic\Controllers\GenericBasketController.cs" />
-    <Compile Include="Generic\Models\AddItemModel.cs" />
-    <Compile Include="Generic\Models\BasketItemModel.cs" />
-    <Compile Include="Generic\Models\BasketModel.cs" />
+    <Compile Include="ItemCacheLineItemExtensions.cs" />
+    <Compile Include="Models\Async\AsyncResponse.cs" />
+    <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
+    <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
+    <Compile Include="Models\ModelExtensions.cs" />
+    <Compile Include="RenderingExtensions.cs" />
     <Compile Include="Models\IAddItemModel.cs" />
     <Compile Include="Models\IBasketItemModel.cs" />
     <Compile Include="Models\IBasketModel.cs" />
@@ -319,10 +329,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolvers\ViewRendererResolver.cs" />
     <Compile Include="UmbracoApplicationEventHandler.cs" />
+    <Compile Include="Validation\ValidateExpiresDateAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Generic\Readme.md" />
+    <None Include="Default\Readme.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

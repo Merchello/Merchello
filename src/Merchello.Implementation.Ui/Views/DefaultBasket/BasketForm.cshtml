@@ -1,0 +1,91 @@
+﻿@inherits UmbracoViewPage<Merchello.Implementation.Default.Models.BasketModel>
+@using Merchello.Core
+@using Merchello.Core.Logging
+@using Merchello.Implementation.Default.Controllers
+@using Merchello.Implementation.Models
+@using Merchello.Implementation.Ui
+@{
+    var currentPage = Umbraco.TypedContent(UmbracoContext.Current.PageId);
+
+    using (Html.BeginUmbracoForm<DefaultBasketController>("UpdateBasket", new { area = "Merchello" }, new { data_muifrm="basket" }))
+    {
+    <table class="table basket">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+        @for (var i = 0; i < Model.Items.Count(); i++)
+        {
+            var product = Model.Items[i].Product;
+            if (product != null)
+            {
+                <tr>
+                    <td class="image">
+                        @Html.HiddenFor(model => Model.Items[i].Key)
+
+
+                        @{
+                            // This is a property reference to a content type on the default starter kit
+                            // and may need to change for site specific implementations.  Example!
+                            if (product.HasValue("image"))
+                            {
+                                // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
+                                var image = product.GetPropertyValue<IPublishedContent>
+                                    ("image");
+
+                                <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20" /></a>
+                            }
+                            <a href="@product.Url">
+                                <span>@product.Name</span>
+                                @foreach(var choice in Model.Items[i].CustomerOptionChoices)
+                                {
+                                    <span class="option-choice">@choice.Key - @choice.Value</span>
+                                }
+                            </a>
+                        }
+
+                    </td>
+                    <td>@Model.Items[i].Amount.AsFormattedCurrency()</td>
+                    <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min="1" })</td>
+                    <td data-muivalue="linetotal">@Model.Items[i].Total().AsFormattedCurrency()</td>
+                    <td>
+                        @if (Model.WishListEnabled)
+                        {
+                            // the 'area' parameter in the route values should match the PluginController attribute alias
+                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+                        }
+
+                        @Html.ActionLink("Remove", "RemoveBasketItem", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+
+            }
+        }
+        <tr>
+            <td colspan="3" class="align-right">Sub Total</td>
+            <td colspan="2" data-muivalue="total">@Model.Total().AsFormattedCurrency()</td>
+        </tr>
+        <tr>
+            <td colspan="3">&nbsp;</td>
+            <td colspan="2"><input type="submit" id="update-cart" class="btn btn-default" name="update" value="Update" data-muibtn="update" /></td>
+        </tr>
+    </tbody>
+    </table>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <a href="@StoreUiHelper.Content.GetStoreRoot().Url">Continue Shopping</a>
+            </div>
+            <div class="col-lg-4 text-right">
+                <a href="@StoreUiHelper.Content.GetCheckout().Url" class="btn btn-primary">Checkout</a>
+            </div>
+        </div>
+    }
+}

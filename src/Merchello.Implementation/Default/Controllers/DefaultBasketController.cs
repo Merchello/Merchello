@@ -1,10 +1,14 @@
-﻿namespace Merchello.Implementation.Generic.Controllers
+﻿namespace Merchello.Implementation.Default.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
+    using Merchello.Core.Models;
     using Merchello.Implementation.Controllers;
+    using Merchello.Implementation.Default.Models;
     using Merchello.Implementation.Factories;
-    using Merchello.Implementation.Generic.Models;
+    using Merchello.Implementation.Models;
+    using Merchello.Web;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Web.Mvc;
@@ -13,10 +17,15 @@
     /// The default (generic) basket controller.
     /// </summary>
     [PluginController("Merchello")]
-    public class GenericBasketController : BasketControllerBase<BasketModel, AddItemModel>
+    public class DefaultBasketController : BasketControllerBase<BasketModel, BasketItemModel, AddItemModel>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericBasketController"/> class.
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello = new MerchelloHelper();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultBasketController"/> class.
         /// </summary>
         /// <remarks>
         /// This constructor is actually required for this controller since we are not actually
@@ -24,7 +33,7 @@
         /// of how it would be done.  To override, create a factory that inherits from BasketItemExtendedDataFactory
         /// and pass it into the base constructor.
         /// </remarks>
-        public GenericBasketController()
+        public DefaultBasketController()
             : base(new BasketItemExtendedDataFactory<AddItemModel>())
         {
         }
@@ -40,7 +49,34 @@
         /// </returns>
         protected override ActionResult RedirectAddItemSuccess(AddItemModel model)
         {
-            return Redirect(model.SuccessRedirectUrl);
+            return this.Redirect(model.SuccessRedirectUrl);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="ILineItem"/> to <see cref="IBasketItemModel"/>.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IBasketItemModel"/>.
+        /// </returns>
+        protected override BasketItemModel MapLineItemToBasketLineItem(ILineItem lineItem)
+        {
+            var productKey = lineItem.ExtendedData.GetProductKey();
+            IProductContent product = null;
+            if (!productKey.Equals(Guid.Empty)) product = _merchello.TypedProductContent(productKey);
+
+            return new BasketItemModel
+            {
+                Key = lineItem.Key,
+                Name = lineItem.Name,
+                ProductKey = productKey,
+                Product = product,
+                Amount = lineItem.Price,
+                Quantity = lineItem.Quantity,
+                CustomerOptionChoices = lineItem.GetProductOptionChoicePairs()
+            };
         }
 
         /// <summary>

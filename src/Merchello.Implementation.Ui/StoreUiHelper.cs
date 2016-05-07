@@ -29,6 +29,16 @@
             /// </summary>
             private const string ContentTypeAliasStore = "store";
 
+            /// <summary>
+            /// The Umbraco ContentTypeAlias for the "basket" ContentType.
+            /// </summary>
+            private const string ContentTypeAliasBasket = "basket";
+
+            /// <summary>
+            /// The Umbraco ContentTypeAlias for the "checkout" ContentTypes
+            /// </summary>
+            private const string ContentTypeAliasCheckout = "checkout";
+
             #endregion
 
 
@@ -59,6 +69,28 @@
             public static IPublishedContent GetStoreRoot()
             {
                 return UmbracoContext.ContentCache.GetByXPath(string.Format("//root/{0}", ContentTypeAliasStore)).FirstOrDefault();
+            }
+
+            /// <summary>
+            /// Gets the first child of the store root content with content type alias of 'basket'.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetBasket()
+            {
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasBasket);
+            }
+
+            /// <summary>
+            /// Gets the first child of the store root content with content type alias of 'checkout'.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetCheckout()
+            {
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasCheckout);
             }
         }
     }

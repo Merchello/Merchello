@@ -2,7 +2,7 @@
 @model IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent>
     
 
-<section class="recentlyviewedsection">
+<section class="product-box-list">
     <div class="page-header">
         <h1>Related Products</h1>
     </div>
@@ -12,27 +12,7 @@
             @foreach (var product in Model)
             {
                 <div class="col-md-4">
-                    <a href="@product.Url" class="thumbnail">
-                        @*@if (!string.IsNullOrEmpty(product.Image))
-                        {
-                            <img src="@(product.Image)&rnd=@DateTime.Now.Ticks" alt="@product.Name" />
-                        }*@
-                        <div class="caption">
-                            <h3>@product.Name</h3>
-                            <p class="price">
-                                @if (product.OnSale)
-                                {
-                                    <span class="price-sale">
-                                        @product.SalePrice.AsFormattedCurrency() <span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
-                                    </span>
-                                }
-                                else
-                                {
-                                    @product.Price.AsFormattedCurrency()
-                                }
-                            </p>
-                        </div>
-                    </a>
+                    @Html.Partial("_ProductBox", product)
                 </div>
             }
         </div>

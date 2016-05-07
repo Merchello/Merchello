@@ -3,21 +3,20 @@
     /// <summary>
     /// Defines a basket UI component.
     /// </summary>
-    public interface IBasketModel : IMerchelloImplementationModel
+    /// <typeparam name="TBasketItemModel">
+    /// The type of the basket item.
+    /// </typeparam>
+    public interface IBasketModel<TBasketItemModel> : IMerchelloImplementationModel
+        where TBasketItemModel : class, IBasketItemModel, new()
     {
-        /// <summary>
-        /// Gets or sets the checkout page url.
-        /// </summary>
-        string CheckoutPageUrl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the continue shopping url.
-        /// </summary>
-        string ContinueShoppingUrl { get; set; }
-
         /// <summary>
         /// Gets or sets the basket items.
         /// </summary>
-        IBasketItemModel[] Items { get; set; } 
+        TBasketItemModel[] Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the wish list is enabled.
+        /// </summary>
+        bool WishListEnabled { get; set; }
     }
 }

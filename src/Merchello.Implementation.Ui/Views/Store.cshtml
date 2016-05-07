@@ -20,7 +20,9 @@
 
         @foreach (var fp in Model.FeaturedProducts)
         {
-            @Html.Partial("_ProductBox", fp)
+            <div class="col-xs-4">
+                @Html.Partial("_ProductBox", fp)
+            </div>
         }
 
     </div>
