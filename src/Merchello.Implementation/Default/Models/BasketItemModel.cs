@@ -30,12 +30,20 @@
         /// </summary>
         public Guid ProductKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets the product.
+        /// </summary>
         public IProductContent Product { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SKU.
+        /// </summary>
+        public string Sku { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity.

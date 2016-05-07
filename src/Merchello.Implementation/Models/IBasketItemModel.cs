@@ -16,19 +16,14 @@
         Guid Key { get; set; }
 
         /// <summary>
-        /// Gets or sets the product key.
-        /// </summary>
-        Guid ProductKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the product.
-        /// </summary>
-        IProductContent Product { get; set; }
-
-        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SKU.
+        /// </summary>
+        string Sku { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity.
@@ -42,10 +37,5 @@
         /// This could either by the price or the sale price of a product
         /// </remarks>
         decimal Amount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the attributes.
-        /// </summary>
-        IEnumerable<KeyValuePair<string, string>> CustomerOptionChoices { get; set; }
     }
 }

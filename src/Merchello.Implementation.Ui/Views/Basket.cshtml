@@ -1,4 +1,6 @@
 ﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Basket>
+@using Merchello.Implementation
+@using Merchello.Implementation.Ui
 @using Merchello.Web
 @{
 	Layout = "Master.cshtml";
@@ -17,6 +19,6 @@
 }
 else
 {
-    <p>@*<a href="@Model.BasketTable.ContinueShoppingPage.Url">*@There's nothing in your shopping cart, start shopping!@*</a>*@</p>
+    <p><a href="@StoreUiHelper.Content.GetStoreRoot().Url">There's nothing in your shopping cart, start shopping!</a></p>
 }
 

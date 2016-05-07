@@ -151,16 +151,34 @@ MUI.Basket = {
     bind: {
         form: function(frm) {
 
+            // Watch for changes in the input fields
             $(frm).find(':input').change(function() {
                 var frmRef = $(this).closest('form');
-                $.ajax({
-                    type: 'POST',
-                    url: MUI.Settings.basketSurfaceEndpoint + 'UpdateBasket',
-                    data: $(frmRef).serialize(),
-                    success: function(data) {
-                        console.info(data);
-                    }
-                });
+
+                // post the form to update the basket quantities
+                MUI.Forms.post(frmRef, MUI.Settings.basketSurfaceEndpoint + 'UpdateBasket')
+                    .then(function(results) {
+
+                        // update the line items sub totals
+                        $.each(results.UpdatedItems, function(idx, item) {
+                            var hid = $('input:hidden[value="' + item.Key + '"]')
+                            if (hid.length > 0) {
+                                var subtotal = $(hid).closest('tr').find('[data-muivalue="linetotal"]');
+                                if (subtotal.length > 0) {
+                                    $(subtotal).html(item.FormattedTotal);
+                                }
+                            }
+                        });
+
+                        // set the new basket total
+                        var total = $(frmRef).find('[data-muivalue="total"]');
+                        if (total.length > 0) {
+                            $(total).html(results.FormattedTotal);
+                        }
+
+                    }, function(err) {
+                       MUI.Logger.captureError(err);
+                    });
             });
 
 

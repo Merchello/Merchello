@@ -26,47 +26,51 @@
             var product = Model.Items[i].Product;
             if (product != null)
             {
-            <tr>
-                <td class="image">
-                    @Html.HiddenFor(model => Model.Items[i].Key)
+                <tr>
+                    <td class="image">
+                        @Html.HiddenFor(model => Model.Items[i].Key)
 
-                    @if (!Model.Items[i].Name.IsNullOrWhiteSpace())
-                    {
-                        <span>@Model.Items[i].Name</span>
-                    }
-                    else
-                    {
-                        // This is a property reference to a content type on the default starter kit
-                        // and may need to change for site specific implementations.  Example!
-                        if (product.HasValue("image"))
-                        {
-                            // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
-                            var image = product.GetPropertyValue<IPublishedContent>("image");
 
-                            <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20"/></a>
+                        @{
+                            // This is a property reference to a content type on the default starter kit
+                            // and may need to change for site specific implementations.  Example!
+                            if (product.HasValue("image"))
+                            {
+                                // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
+                                var image = product.GetPropertyValue<IPublishedContent>
+                                    ("image");
+
+                                <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20" /></a>
+                            }
+                            <a href="@product.Url">
+                                <span>@product.Name</span>
+                                @foreach(var choice in Model.Items[i].CustomerOptionChoices)
+                                {
+                                    <span class="option-choice">@choice.Key - @choice.Value</span>
+                                }
+                            </a>
                         }
-                        <a href="@product.Url"><span>@Model.Items[i].Name</span></a>
-                    }
-                </td>
-                <td>@Model.Items[i].Amount.AsFormattedCurrency()</td>
-                <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number" })</td>
-                <td>@Model.Items[i].Total().AsFormattedCurrency()</td>
-                <td>
-                    @if (Model.WishListEnabled)
-                    {
-                        // the 'area' parameter in the route values should match the PluginController attribute alias
-                        @Html.ActionLink("Wish List +", "MoveItemToWishList", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
-                    }
 
-                    @Html.ActionLink("Remove", "RemoveBasketItem", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
-                </td>
-            </tr>
+                    </td>
+                    <td>@Model.Items[i].Amount.AsFormattedCurrency()</td>
+                    <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min="1" })</td>
+                    <td data-muivalue="linetotal">@Model.Items[i].Total().AsFormattedCurrency()</td>
+                    <td>
+                        @if (Model.WishListEnabled)
+                        {
+                            // the 'area' parameter in the route values should match the PluginController attribute alias
+                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+                        }
+
+                        @Html.ActionLink("Remove", "RemoveBasketItem", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
 
             }
         }
         <tr>
             <td colspan="3" class="align-right">Sub Total</td>
-            <td colspan="2">@Model.Total().AsFormattedCurrency()</td>
+            <td colspan="2" data-muivalue="total">@Model.Total().AsFormattedCurrency()</td>
         </tr>
         <tr>
             <td colspan="3">&nbsp;</td>

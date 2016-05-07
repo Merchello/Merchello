@@ -137,22 +137,23 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            // in case of Async call we need to construct the response
-            var resp = new UpdateQuantityAsyncResponse<TBasketItemModel> { Success = true };
+            
 
             // The only thing that can be updated in this basket is the quantity
             foreach (var item in model.Items.Where(item => this.Basket.Items.First(x => x.Key == item.Key).Quantity != item.Quantity))
             {
                 this.Basket.UpdateQuantity(item.Key, item.Quantity);
-                resp.UpdatedItems.Add(item);
             }
 
             this.Basket.Save();
 
             if (Request.IsAjaxRequest())
             {
+                // in case of Async call we need to construct the response
+                var resp = new UpdateQuantityAsyncResponse { Success = true };
                 try
                 {
+                    resp.AddUpdatedItems(Basket.Items);
                     resp.FormattedTotal = Basket.TotalBasketPrice.AsFormattedCurrency();
                     return Json(resp);
                 }
@@ -378,7 +379,6 @@
             {
                 Key = lineItem.Key,
                 Name = lineItem.Name,
-                ProductKey = lineItem.ExtendedData.GetProductKey(),
                 Amount = lineItem.Price,
                 Quantity = lineItem.Quantity
             };

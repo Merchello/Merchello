@@ -35,10 +35,10 @@
         /// </param>
         public void OnApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ViewRendererResolver.Current =
-                new ViewRendererResolver(
-                    PluginManager.Current.ResolveTypesWithAttribute<IViewRenderer, ComponentSetAliasAttribute>(),
-                    ApplicationContext.Current.ApplicationCache);
+            //ViewRendererResolver.Current =
+            //    new ViewRendererResolver(
+            //        PluginManager.Current.ResolveTypesWithAttribute<IViewRenderer, ComponentSetAliasAttribute>(),
+            //        ApplicationContext.Current.ApplicationCache);
         }
 
         /// <summary>

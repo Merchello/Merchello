@@ -22,9 +22,10 @@
         /// </returns>
         public static Dictionary<string, string> GetProductOptionChoicePairs(this ILineItem lineItem)
         {
-            return
-                lineItem.ExtendedData.GetValue<Dictionary<string, string>>(
-                    Constants.ExtendedDataKeys.BasketItemCustomerChoice);
+            var values =
+                lineItem.ExtendedData.GetValue<Dictionary<string, string>>(Constants.ExtendedDataKeys.BasketItemCustomerChoice);
+
+            return values ?? new Dictionary<string, string>();
         } 
     }
 }

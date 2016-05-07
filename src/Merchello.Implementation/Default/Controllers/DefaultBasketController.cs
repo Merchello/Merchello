@@ -1,11 +1,14 @@
 ﻿namespace Merchello.Implementation.Default.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
-    using Merchello.Implementation.Attributes;
+    using Merchello.Core.Models;
     using Merchello.Implementation.Controllers;
     using Merchello.Implementation.Default.Models;
     using Merchello.Implementation.Factories;
+    using Merchello.Implementation.Models;
+    using Merchello.Web;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Web.Mvc;
@@ -14,9 +17,13 @@
     /// The default (generic) basket controller.
     /// </summary>
     [PluginController("Merchello")]
-    [ComponentSetAlias("Default")]
     public class DefaultBasketController : BasketControllerBase<BasketModel, BasketItemModel, AddItemModel>
     {
+        /// <summary>
+        /// The <see cref="MerchelloHelper"/>.
+        /// </summary>
+        private readonly MerchelloHelper _merchello = new MerchelloHelper();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultBasketController"/> class.
         /// </summary>
@@ -43,6 +50,33 @@
         protected override ActionResult RedirectAddItemSuccess(AddItemModel model)
         {
             return this.Redirect(model.SuccessRedirectUrl);
+        }
+
+        /// <summary>
+        /// Maps a <see cref="ILineItem"/> to <see cref="IBasketItemModel"/>.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IBasketItemModel"/>.
+        /// </returns>
+        protected override BasketItemModel MapLineItemToBasketLineItem(ILineItem lineItem)
+        {
+            var productKey = lineItem.ExtendedData.GetProductKey();
+            IProductContent product = null;
+            if (!productKey.Equals(Guid.Empty)) product = _merchello.TypedProductContent(productKey);
+
+            return new BasketItemModel
+            {
+                Key = lineItem.Key,
+                Name = lineItem.Name,
+                ProductKey = productKey,
+                Product = product,
+                Amount = lineItem.Price,
+                Quantity = lineItem.Quantity,
+                CustomerOptionChoices = lineItem.GetProductOptionChoicePairs()
+            };
         }
 
         /// <summary>
