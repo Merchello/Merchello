@@ -1,10 +1,12 @@
-﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Merchello.Implementation.Generic.Models.AddItemModel>
+﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Merchello.Implementation.Default.Models.AddItemModel>
 @using System.Text
 @using Merchello.Core
-@using Merchello.Implementation.Generic.Controllers
+@using Merchello.Implementation.Default.Controllers
 @using Merchello.Web.Models.VirtualContent
 @{
-    // Get the IProductContent from the Merchello helper.
+    // Get the IProductContent from the Merchello helper which is already instantiate by the MerchelloViewPage reference.
+    //// https://merchello.readme.io/docs/view-pages
+    //
     // This is in most cases retrieved from the Examine index (so really fast) but it does have a fallback to query the database
     // in cases where the product has not been indexed.
     var product = Merchello.TypedProductContent(Model.ProductKey);
@@ -17,16 +19,16 @@
     @if (hasVariants)
     {
         // A container to populate the variant pricing via JavaScript
-        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-mproductkey="@product.Key"></div>
+        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muiproduct="@product.Key"></div>
     }
     else
     {<div class="price text-center">@GetSingleProductPrice(product)</div>}
 
     <div class="form-group add-button">
         @{
-            using (Html.BeginUmbracoForm<GenericBasketController>("AddBasketItem", new { role = "form" }))
+            using (Html.BeginUmbracoForm<DefaultBasketController>("AddBasketItem", new { role = "form" }))
             {
-                // if the product has variants, we MUST determine which variant the customer intends to purchase
+                // If the product has variants, we MUST determine which variant the customer intends to purchase
                 // so we need to give them a selection of options so that they make choices.  The collection of choices (one per options)
                 // is used to determine which variant they intend to purchase.
                 if (hasVariants)
@@ -55,7 +57,7 @@
                 // Inventory display
                 if (hasVariants || product.TrackInventory)
                 {
-                    <div data-inventory="@product.Key">
+                    <div data-muiinv="@product.Key">
                         @if (!hasVariants && product.TrackInventory)
                         {
                             if (product.TotalInventoryCount > 0)

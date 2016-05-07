@@ -3,7 +3,7 @@
     /// <summary>
     /// Marker interface to resolve view renderers.
     /// </summary>
-    internal interface IViewRendererController
+    internal interface IViewRenderer
     {  
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Implementation.Generic.Models
+﻿namespace Merchello.Implementation.Default.Models
 {
     using System;
     using System.Collections.Generic;

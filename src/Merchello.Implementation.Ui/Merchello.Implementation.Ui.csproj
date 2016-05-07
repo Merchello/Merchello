@@ -336,6 +336,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Merchello\client\mui.js" />
+    <Content Include="App_Plugins\Merchello\client\mui.settings.js" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\ModelsBuilder\package.manifest" />
     <Content Include="Views\Web.config" />
@@ -377,6 +379,7 @@
     <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\Basket.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -600,8 +603,8 @@
     <Content Include="Styles\css\bootstrap.min.css" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Web.config" />
-    <Content Include="Views\GenericBasket\AddToBasketForm.cshtml" />
-    <Content Include="Views\GenericBasket\BasketForm.cshtml" />
+    <Content Include="Views\DefaultBasket\AddToBasketForm.cshtml" />
+    <Content Include="Views\DefaultBasket\BasketForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

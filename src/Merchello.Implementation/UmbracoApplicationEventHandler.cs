@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Implementation
 {
+    using Merchello.Implementation.Attributes;
     using Merchello.Implementation.Controllers;
     using Merchello.Implementation.Resolvers;
 
@@ -36,7 +37,7 @@
         {
             ViewRendererResolver.Current =
                 new ViewRendererResolver(
-                    PluginManager.Current.ResolveTypes<IViewRendererController>(),
+                    PluginManager.Current.ResolveTypesWithAttribute<IViewRenderer, ComponentSetAliasAttribute>(),
                     ApplicationContext.Current.ApplicationCache);
         }
 

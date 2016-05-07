@@ -23,3 +23,5 @@ src/Merchello.Implementation/bin/
 src/Merchello.Implementation/obj/
 src/packages/
 src/Merchello.Implementation.Ui/obj/
+src/Merchello.Implementation.Ui.Client/.idea
+src/Merchello.Implementation.Ui.Client/node_modules
