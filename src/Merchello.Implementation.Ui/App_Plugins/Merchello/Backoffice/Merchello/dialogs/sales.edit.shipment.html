@@ -1,0 +1,44 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.EditShipmentController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="general_edit" /> <localize key="merchelloGeneral_shipment" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <h3><localize key="general_edit" /> <localize key="merchelloGeneral_shipment" /></h3>
+        <div class="control-group row-fluid">
+            <label for="trackingNo"><localize key="merchelloGeneral_trackingNumber" />:</label>
+            <input name="trackingNo" data-ng-model="dialogData.shipment.trackingCode" type="text" class="col-xs-6 span6" />
+            <label>Shipment Status</label>
+            <select name="status" class="col-xs-6 span6" data-ng-model="dialogData.shipment.shipmentStatus" data-ng-options="option.name for option in dialogData.shipmentStatuses"></select>
+        </div>
+        <table class="table table-striped merchello-striped-table order-items">
+            <tbody>
+            <tr>
+                <th><localize key="general_add" /></th>
+                <th><localize key="merchelloVariant_product" /></th>
+                <th><localize key="merchelloGeneral_quantity" /></th>
+            </tr>
+            <tr data-ng-repeat="lineitem in dialogData.shipment.items">
+                <td><input type="checkbox" data-ng-model="lineitem.selected" data-ng-disabled="checkboxDisabled()" /></td>
+                <td>
+                    <h4>{{lineitem.name}}</h4>
+                    <span><localize key="merchelloGeneral_sku" />: {{lineitem.sku}}</span>
+                </td>
+                <td class="text-right">{{lineitem.quantity}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <!-- ACTION: Save Button -->
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="buttons_save" /> <localize key="merchelloGeneral_shipment" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

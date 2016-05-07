@@ -1,0 +1,26 @@
+﻿@using Merchello.Core
+@model Merchello.Web.Models.VirtualContent.IProductContent
+
+<div class="product-box">
+    <div class="caption">
+        <h3><a href="@Model.Url">@Model.Name</a></h3>
+        @if (Model.HasValue("brief"))
+        {
+            <p>@Model.GetPropertyValue("brief")</p>
+        }
+
+        <p class="price">
+            @if (Model.OnSale)
+            {
+                <span class="price-sale">
+                    @Model.SalePrice.AsFormattedCurrency() <span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
+                </span>
+            }
+            else
+            {
+                @Model.Price.AsFormattedCurrency()
+            }
+        </p>
+    </div>
+
+</div>

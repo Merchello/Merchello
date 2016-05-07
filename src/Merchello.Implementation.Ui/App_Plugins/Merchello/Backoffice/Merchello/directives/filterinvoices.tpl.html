@@ -1,0 +1,38 @@
+<div class="row-fluid">
+    <label class="control-label" for="salesFilter">Filter Orders:</label>
+    <div class="controls">
+        <input type="text" id="salesFilter" class="form-control span8" name="salesFilter" data-ng-model="filterText" localize="placeholder" placeholder="Search by invoice number or customer name" />
+        <!-- ACTION: Filter Sales  -->
+        <!--<button id="salesFilterGo" class="btn" data-ng-click="filterWithWildcard(filterText)"><localize key="merchelloGeneral_filter" /></button>-->
+        <button data-ng-click="changeTermFilter()" class="btn" data-ng-show="!dateFilterOpen" style="margin-top: -10px"><localize key="merchelloOrder_filter" /></button>
+    </div>
+
+    <a data-ng-click="toggleDateFilterOpen()" data-ng-show="!dateFilterOpen && showDateFilter"><localize key="merchelloOrder_addDateFilters" /></a>
+    <a data-ng-click="toggleDateFilterOpen()" data-ng-show="dateFilterOpen && showDateFilter"><localize key="merchelloOrder_removeDateFilters"  /></a><br />
+
+    <merchello-slide-open-panel hide-close="true" is-open="dateFilterOpen">
+    <p style="margin-top: 20px">Show items for sales between</p>
+    <div class="form-inline">
+        <div>
+            Dates:
+            <div class="input-append date datepicker" id="filterStartDate">
+                <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
+                       data-ng-model="filterStartDate" />
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+                </span>
+            </div>
+            -
+            <div class="input-append date datepicker" id="filterEndDate">
+                <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
+                       data-ng-model="filterEndDate" />
+                <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+                </span>
+            </div>
+            <button id="orderFilterDateGo" class="btn" data-ng-click="changeDateFilters(filterStartDate, filterEndDate)">{{filterButtonText}}</button>
+        </div>
+    </div>
+    </merchello-slide-open-panel>
+</div>
+

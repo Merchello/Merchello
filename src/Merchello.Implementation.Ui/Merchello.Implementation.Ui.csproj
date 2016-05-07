@@ -1,0 +1,666 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\UmbracoCms.7.4.3\build\UmbracoCms.props" Condition="Exists('..\packages\UmbracoCms.7.4.3\build\UmbracoCms.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5B948F92-5C2A-4F3E-9004-7E451C4B2B98}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Merchello.Implementation.Ui</RootNamespace>
+    <AssemblyName>Merchello.Implementation.Ui</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Braintree-2.54.0, Version=2.54.0.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Braintree.2.54.0\lib\Braintree-2.54.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="businesslogic, Version=1.0.5948.18144, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\businesslogic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClientDependency.Core, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClientDependency.1.8.4\lib\net45\ClientDependency.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClientDependency.Core.Mvc, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClientDependency-Mvc5.1.8.0.0\lib\net45\ClientDependency.Core.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="cms, Version=1.0.5948.18144, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\cms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="controls, Version=1.0.5948.18145, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\controls.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
+      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Diplo.TraceLogViewer">
+      <HintPath>..\packages\DiploTraceLogViewer.2.2.6\lib\net45\Diplo.TraceLogViewer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Examine, Version=0.1.68.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Examine.0.1.68.0\lib\Examine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ImageProcessor, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.3.3.0\lib\net45\ImageProcessor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ImageProcessor.Web, Version=4.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.Web.4.5.3.0\lib\net45\ImageProcessor.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="interfaces, Version=1.0.5948.18141, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MarkdownSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Merchello.Core, Version=2.0.5970.40046, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Merchello.Examine, Version=2.0.5970.40048, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Examine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Merchello.Providers, Version=2.0.5970.40058, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Providers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Merchello.Web, Version=2.0.5970.40050, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MiniProfiler, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Our.Umbraco.PropertyEditorConverters, Version=2.1.5.35, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Our.Umbraco.CoreValueConverters.2.1.5\lib\net45\Our.Umbraco.PropertyEditorConverters.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PayPalCoreSDK, Version=1.6.1.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalCoreSDK.1.6.1\lib\net45\PayPalCoreSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PayPalMerchantSDK, Version=2.15.117.0, Culture=neutral, PublicKeyToken=5b4afc1ccaef40fb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalMerchantSDK.2.15.117\lib\net20\PayPalMerchantSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Semver, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLCE4Umbraco, Version=1.0.5948.18145, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\SQLCE4Umbraco.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata, Version=1.0.21.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\TidyNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco, Version=1.0.5948.18146, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\umbraco.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Umbraco.Core, Version=1.0.5948.18141, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\Umbraco.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.DataLayer, Version=1.0.5948.18143, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\umbraco.DataLayer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.editorControls, Version=1.0.5948.18148, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\umbraco.editorControls.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.MacroEngines, Version=1.0.5948.18149, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\umbraco.MacroEngines.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Umbraco.ModelsBuilder, Version=3.0.2.93, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Umbraco.ModelsBuilder.3.0.2\lib\Umbraco.ModelsBuilder.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="umbraco.providers, Version=1.0.5948.18146, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\umbraco.providers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Umbraco.Web.UI, Version=1.0.5948.18150, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\Umbraco.Web.UI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UmbracoExamine, Version=0.7.0.18144, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\UmbracoExamine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UrlRewritingNet.UrlRewriter, Version=2.0.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UrlRewritingNet.2.0.7\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="App_Plugins\ModelsBuilder\package.manifest" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Config\UrlRewriting.config" />
+    <Content Include="Config\umbracoSettings.config" />
+    <Content Include="Config\trees.config" />
+    <Content Include="Config\tinyMceConfig.config" />
+    <Content Include="Config\scripting.config" />
+    <Content Include="Config\metablogConfig.config" />
+    <Content Include="Config\log4net.config" />
+    <Content Include="Config\FileSystemProviders.config" />
+    <Content Include="Config\feedProxy.config" />
+    <Content Include="Config\ExamineSettings.config" />
+    <Content Include="Config\ExamineIndex.config" />
+    <Content Include="Config\EmbeddedMedia.config" />
+    <Content Include="Config\Dashboard.config" />
+    <Content Include="Config\ClientDependency.config" />
+    <Content Include="Config\BaseRestExtensions.config" />
+    <Content Include="Config\applications.config" />
+    <Content Include="Config\404handlers.config" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\backoffice\diplotracelog\ng-table\ng-table.map" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\package.manifest" />
+    <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css.map" />
+    <Content Include="App_Plugins\MerchelloProviders\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
+    <Content Include="App_Plugins\Merchello\config\merchello.config" />
+    <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="Views\Master.cshtml" />
+    <Content Include="Views\Product.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_ProductBox.cshtml" />
+    <Content Include="Views\Shared\_ProductBoxList.cshtml" />
+    <Content Include="Views\Store.cshtml" />
+    <Content Include="Styles\css\bootstrap-theme.css.map" />
+    <Content Include="Styles\css\bootstrap-theme.min.css.map" />
+    <Content Include="Styles\css\bootstrap.css.map" />
+    <Content Include="Styles\css\bootstrap.min.css.map" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\Umbraco.sdf" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\backoffice\diplotracelog\detail.html" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\backoffice\diplotracelog\edit.html" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\backoffice\diplotracelog\EditController.js" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\backoffice\diplotracelog\ng-table\ng-table.min.js" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\backoffice\diplotracelog\tracelog.css" />
+    <Content Include="App_Plugins\DiploTraceLogViewer\readme.txt" />
+    <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.controllers.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.directives.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.models.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.module.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.resources.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.services.js" />
+    <Content Include="App_Plugins\MerchelloProviders\lang\en-GB.xml" />
+    <Content Include="App_Plugins\MerchelloProviders\lang\en-US.xml" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.paypalvault.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.providersettings.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.authorizepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.capturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.vault.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.vault.authorizepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\paypal.providersettings.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\refundpayment.confirm.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\voidpayment.confirm.html" />
+    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css" />
+    <Content Include="App_Plugins\Merchello\assets\images\docs.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\heart.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\logo-tag.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\logo.png" />
+    <Content Include="App_Plugins\Merchello\assets\images\website.png" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\abandonedBasket.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\collectionproviderlist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\couponeditor.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\customeraddresses.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\customerlist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\customeroverview.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dashboard.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\create.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\customer.checkout.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\customer.customeraddress.addedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\customer.info.addedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\customer.itemcachelineitem.quantity.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\customer.newcustomer.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\customer.productselectionfilter.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\daterange.selection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\delete.confirmation.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\delete.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\detachedcontenttype.edit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\edit.address.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\manage.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.couponreward.discountprice.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.newofferproviderselection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.collectionpricerules.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.collectionquantityrules.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.filterpricerules.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.filterquantityrules.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.maximumquantity.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.productselectionfilter.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerconstraint.redemptionlimit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.offerproviderselection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\notes.addeditnote.dialog.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\notification.notificationmessage.add.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\notification.notificationmethod.addedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\notification.providersettings.smtp.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\payment.cashpaymentmethod.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\payment.cashpaymentmethod.authorizepayment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\payment.cashpaymentmethod.refundpayment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\payment.cashpaymentmethod.voidpayment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\payment.paymentmethod.addedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\pick.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\product.add.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\product.copy.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productcontenttype.add.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.changeprice.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.updateinventory.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.create.shipment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.edit.shipment.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.manageadjustments.dialog.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.addcountry.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.fixedrate.shipmethod.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.shipcountry.addprovider.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.shipmethod.regions.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.warehouse.addedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.warehousecatalog.addedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.warehousecatalog.select.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sort.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\taxation.edittaxmethod.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\addpaymenttable.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\comparisonOperatorRadioButtons.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\customer.customeraddresstable.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\customer.customerlocation.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\customer.itemcachetable.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\detachedcontenttype.list.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\entity.staticcollections.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\filterbydaterange.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\filterinvoices.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchellopanel.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchelloslidepanelopen.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchellospinner.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchellotabs.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\invoiceitemizationtable.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\manageinvoiceadjustments.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\merchelloAddress.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\merchelloiconbar.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\merchellolistview.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\merchellonotestable.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\merchellopager.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\notificationmethods.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\notificationrazortemplate.selection.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\offer.components.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\offer.mainproperties.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\offer.uniqueoffercode.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\product.optionsmanage.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\product.productvariantsviewtable.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\product.reorderoptions.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productvariant.digitaldownload.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productvariant.mainproperties.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productvariant.shipping.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\reportwidget.abandonedbasketradar.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\reportwidget.customerbaskets.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\reportwidget.thisweekvslast.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\reportwidget.topselling.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\resetlistfilters.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\resolvedgatewayproviders.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\shipcountrygatewayproviders.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\gatewayproviderlist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\invoicepayments.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\notificationmessageeditor.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\notificationproviders.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\offerslist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\ordershipments.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\paymentproviders.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productcontenttypelist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productdetachedcontent.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productedit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\producteditwithoptions.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productlist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productoptionseditor.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\reports.viewreport.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\reportsdashboard.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\saleoverview.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\salesByItem.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\saleslist.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\salesOverTime.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\settings.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\shippingproviders.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\taxationproviders.html" />
+    <Content Include="App_Plugins\Merchello\js\merchello.controllers.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.directives.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.filters.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.models.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.module.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.resources.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.services.js" />
+    <Content Include="App_Plugins\Merchello\js\merchello.testing.js" />
+    <Content Include="App_Plugins\Merchello\lang\da-DK.xml" />
+    <Content Include="App_Plugins\Merchello\lang\en-GB.xml" />
+    <Content Include="App_Plugins\Merchello\lang\en-US.xml" />
+    <Content Include="App_Plugins\Merchello\lang\es-ES.xml" />
+    <Content Include="App_Plugins\Merchello\lang\it-IT.xml" />
+    <Content Include="App_Plugins\Merchello\lang\ru-RU.xml" />
+    <Content Include="App_Plugins\Merchello\lib\charts\angular-chart.js" />
+    <Content Include="App_Plugins\Merchello\lib\charts\angular-chart.min.css" />
+    <Content Include="App_Plugins\Merchello\lib\charts\angular-chart.min.js" />
+    <Content Include="App_Plugins\Merchello\lib\charts\Chart.min.js" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\multiproductpicker\merchello.multiproductpicker.dialog.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\multiproductpicker\merchello.multiproductpicker.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\productlistview\merchello.productlistview.dialog.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\productlistview\merchello.productlistview.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.multiproductpicker.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.productselector.dialog.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.productselector.html" />
+    <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.controller.js" />
+    <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.htm" />
+    <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.resource.js" />
+    <Content Include="bin\Diplo.TraceLogViewer.dll" />
+    <Content Include="Config\grid.editors.config.js" />
+    <Content Include="Config\Lang\cs-CZ.user.xml" />
+    <Content Include="Config\Lang\da-DK.user.xml" />
+    <Content Include="Config\Lang\de-DE.user.xml" />
+    <Content Include="Config\Lang\en-GB.user.xml" />
+    <Content Include="Config\Lang\en-US.user.xml" />
+    <Content Include="Config\Lang\es-ES.user.xml" />
+    <Content Include="Config\Lang\fr-FR.user.xml" />
+    <Content Include="Config\Lang\he-IL.user.xml" />
+    <Content Include="Config\Lang\it-IT.user.xml" />
+    <Content Include="Config\Lang\ja-JP.user.xml" />
+    <Content Include="Config\Lang\ko-KR.user.xml" />
+    <Content Include="Config\Lang\nb-NO.user.xml" />
+    <Content Include="Config\Lang\nl-NL.user.xml" />
+    <Content Include="Config\Lang\pl-PL.user.xml" />
+    <Content Include="Config\Lang\pt-BR.user.xml" />
+    <Content Include="Config\Lang\ru-RU.user.xml" />
+    <Content Include="Config\Lang\sv-SE.user.xml" />
+    <Content Include="Config\Lang\zh-CN.user.xml" />
+    <Content Include="default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.creditCardValidator.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\underscore.min.js" />
+    <Content Include="Styles\css\bootstrap-theme.css" />
+    <Content Include="Styles\css\bootstrap-theme.min.css" />
+    <Content Include="Styles\css\bootstrap.css" />
+    <Content Include="Styles\css\bootstrap.min.css" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Web.config" />
+    <Content Include="Views\GenericBasket\AddToBasketForm.cshtml" />
+    <Content Include="Views\GenericBasket\BasketForm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreUiHelper.cs" />
+    <Compile Include="UmbracoEventHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Merchello.Implementation\Merchello.Implementation.csproj">
+      <Project>{b17000d0-75e6-46fa-8e78-2f4588b82c89}</Project>
+      <Name>Merchello.Implementation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Partials\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>24926</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:24926/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\UmbracoCms.7.4.3\build\UmbracoCms.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\UmbracoCms.7.4.3\build\UmbracoCms.props'))" />
+    <Error Condition="!Exists('..\packages\UmbracoCms.7.4.3\build\UmbracoCms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\UmbracoCms.7.4.3\build\UmbracoCms.targets'))" />
+  </Target>
+  <Import Project="..\packages\UmbracoCms.7.4.3\build\UmbracoCms.targets" Condition="Exists('..\packages\UmbracoCms.7.4.3\build\UmbracoCms.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

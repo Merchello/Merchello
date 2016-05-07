@@ -1,0 +1,81 @@
+<div class="col-xs-10 span10">
+    <table class="table table-hover merchello-selectable-table sortable">
+        <thead>
+        <!-- Displays the bulk action button & dropdown menu when the checkbox is selected. Replaces the normal header TR -->
+        <tr data-ng-show="allVariants">
+            <th colspan="{{product.productOptions.length + 9}}">
+                <div class="btn-group" data-ng-class="{ 'open': bulkAction }">
+                    <a data-ng-click="bulkAction = !bulkAction" class="btn dropdown-toggle" data-toggle="dropdown">Bulk Action ({{selectedVariants().length}} Variants) <i class="icon-navigation-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a data-ng-click="changePrices()"><localize key="merchelloProductEdit_changePrices" /></a></li>
+                        <li><a data-ng-click="updateInventory()"><localize key="merchelloProductEdit_updateInventory" /></a></li>
+                        <li><a data-ng-click="toggleOnSale()"><localize key="merchelloProductEdit_toggleOnSale" /></a></li>
+                        <li><a data-ng-click="toggleAvailable()"><localize key="merchelloProductEdit_toggleAvailable" /></a></li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+            <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
+                data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
+                <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty == ('-' + option.name)}"></i>
+                {{option.name}}
+            </th>
+            <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
+                <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i>
+                <localize key="merchelloGeneral_sku" />
+            </th>
+            <th>
+                <localize key="merchelloVariant_toggleAvailable" />
+            </th>
+            <th>
+                Shippable
+            </th>
+            <th>
+                Taxable
+            </th>
+            <th data-ng-click="changeSortOrder('totalInventoryCount')" data-ng-class="{'sorted': sortProperty == 'totalInventoryCount'}">
+                <i data-ng-class="{'icon-navigation-up': sortProperty == 'totalInventoryCount', 'icon-navigation-down': sortProperty == '-totalInventoryCount'}"></i>
+                <localize key="merchelloGeneral_total" /> <localize key="merchelloGeneral_quantity" />
+            </th>
+            <th>
+                <localize key="merchelloVariant_toggleOnSale" />
+            </th>
+            <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price'}">
+                <i data-ng-class="{'icon-navigation-up': sortProperty == 'price', 'icon-navigation-down': sortProperty == '-price'}"></i>
+                <localize key="merchelloGeneral_price" />
+            </th>
+            <th><localize key="general_edit" /></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="variant in product.productVariants | orderBy:sortProperty"
+            data-ng-class="{active: variant.selected}"
+            data-ng-click="toggleAVariant(variant)">
+            <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="toggleAVariant(variant)" /></td>
+            <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
+            <td>{{variant.sku}}</td>
+            <!-- availability -->
+            <td data-ng-hide="variant.available"><localize key="general_no" /></td>
+            <td data-ng-show="variant.available"><localize key="general_yes" /></td>
+            <!-- shippable -->
+            <td data-ng-hide="variant.shippable"><localize key="general_no" /></td>
+            <td data-ng-show="variant.shippable"><localize key="general_yes" /></td>
+            <!-- taxable -->
+            <td data-ng-hide="variant.taxable"><localize key="general_no" /></td>
+            <td data-ng-show="variant.taxable"><localize key="general_yes" /></td>
+            <!-- inventory count -->
+            <td>{{variant.totalInventoryCount}}</td>
+            <!-- sale information -->
+            <td data-ng-hide="variant.onSale"><localize key="general_no" /></td>
+            <td data-ng-show="variant.onSale">{{variant.salePrice | currency : currencySymbol }}</td>
+            <!-- price -->
+            <td>{{variant.price | currency : currencySymbol }}</td>
+            <td>
+                <merchello-edit-icon do-edit="redirectToEditor(variant)"></merchello-edit-icon>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

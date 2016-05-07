@@ -1,0 +1,15 @@
+﻿{     
+	propertyEditors: [
+	],
+	javascript: [
+		'~/App_Plugins/MerchelloProviders/js/merchello.providers.module.js',
+		'~/App_Plugins/MerchelloProviders/js/merchello.providers.models.js',
+		'~/App_Plugins/MerchelloProviders/js/merchello.providers.resources.js',
+		'~/App_Plugins/MerchelloProviders/js/merchello.providers.services.js',
+		'~/App_Plugins/MerchelloProviders/js/merchello.providers.directives.js',
+		'~/App_Plugins/MerchelloProviders/js/merchello.providers.controllers.js'
+	],
+	css: [
+		'~/App_Plugins/MerchelloProviders/assets/Css/styles.css'
+	]
+}

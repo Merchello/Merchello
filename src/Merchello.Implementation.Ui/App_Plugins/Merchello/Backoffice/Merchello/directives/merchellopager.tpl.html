@@ -1,0 +1,9 @@
+<div class="pager" data-ng-show="numberOfPages() > 1">
+    <button class="btn" data-ng-disabled="currentPage == 0" data-ng-click="changePage(currentPage-1)">
+        <localize key="general_previous" />
+    </button>
+    {{currentPage+1}}/{{numberOfPages()}}
+    <button class="btn" data-ng-disabled="currentPage >= numberOfPages() - 1" data-ng-click="changePage(currentPage+1)">
+        <localize key="general_next" />
+    </button>
+</div>

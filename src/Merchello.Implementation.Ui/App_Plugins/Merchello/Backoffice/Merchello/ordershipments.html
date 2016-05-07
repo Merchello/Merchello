@@ -1,0 +1,75 @@
+<div data-ng-controller="Merchello.Backoffice.OrderShipmentsController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{invoice.invoiceNumber}}</h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <!-- New Order Button -->
+                    <div class="btn-group">
+                        <!--<a href="#" class="btn btn-standard">Print</a>-->
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <!-- Main Content Area -->
+            <div class="merchello-pane primary" data-ng-show="preValuesLoaded">
+                <div class="control-group umb-control-group">
+                    <div class="merchello-section-label">
+                        Shipment Information
+                        <small>Shipments & Providers</small>
+                    </div>
+                    <div class="merchello-controls">
+                        <div class="row-fluid">
+                            <table class="table" data-ng-hide="shipments.length === 0">
+                                <tbody>
+                                <tr>
+                                    <th>Shipment #</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Items</th>
+                                    <th>Tracking #</th>
+                                    <th>Actions</th>
+                                </tr>
+                                <tr data-ng-repeat="shipment in shipments">
+                                    <td>#{{shipment.shipmentNumber}}</td>
+                                    <td>{{shipment.shippedDate | date: settings.dateFormat }}</td>
+                                    <td>{{shipment.shipmentStatus.name}}</td>
+                                    <td merchello-address set-address="shipment.getOriginAddress()"></td>
+                                    <td merchello-address set-address="shipment.getDestinationAddress()"></td>
+                                    <td>{{shipment.items.length}}</td>
+                                    <td>{{shipment.trackingCode}}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">Actions <i class="icon-navigation-down"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a data-ng-click="openShipmentDialog(shipment)">Edit Shipment</a></li>
+                                                <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'origin')">Edit Origin</a></li>
+                                                <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openAddressDialog(shipment, 'destination')">Edit Destination</a></li>
+                                                <li><a data-ng-click="updateShippingAddressLineItem(shipment)">Set Sale Destination</a></li>
+                                                <li data-ng-hide="!isEditableAddress(shipment.shipmentStatus)"><a data-ng-click="openDeleteShipmentDialog(shipment)">Delete Shipment</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="well" style="margin-top: 1em" data-ng-hide="shipments.length > 0">
+                                There are no shipments.
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

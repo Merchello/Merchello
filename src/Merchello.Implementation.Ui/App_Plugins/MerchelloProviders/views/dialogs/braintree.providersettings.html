@@ -1,0 +1,66 @@
+<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Providers.Dialogs.BraintreeProviderSettingsController">
+
+    <div class="umb-modalcolumn-header">
+        <h4><strong>BrainTree Payments Provider Configuration</strong></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="environment">Environment</label>
+                <select name="environment" class="col-xs-12 span12" data-ng-model="providerSettings.environment">
+                    <option value="Development">Development</option>
+                    <option value="Sandbox">Sandbox</option>
+                    <option value="Qa">QA</option>
+                    <option value="Production">Production</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="public-key">Public Key</label>
+                <input class="col-xs-12 span12" name="public-key" type="text" data-ng-model="providerSettings.publicKey">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="private-key">Private Key</label>
+                <input class="col-xs-12 span12" name="private-key" type="text" data-ng-model="providerSettings.privateKey">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="merchant-id">Merchant Id</label>
+                <input class="col-xs-12 span12" name="merchant-id" type="text" data-ng-model="providerSettings.merchantId">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="default-transaction-option">Default transaction option</label>
+                <select name="environment" class="col-xs-12 span12" data-ng-model="providerSettings.defaultTransactionOption">
+                    <option value="SubmitForSettlement">Submit For Settlement</option>
+                    <option value="Authorize">Authorize</option>
+                </select>
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="umb-panel-footer">
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <a href data-ng-click="close()" class="btn btn-link">
+                <localize key="general_cancel">Cancel</localize>
+            </a>
+            <button class="btn btn-primary" data-ng-click="submit(dialogData)">
+                <localize key="buttons_save"></localize>
+            </button>
+        </div>
+    </div>
+</div>
