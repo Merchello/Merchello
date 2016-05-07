@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Ui.Implementation
+﻿namespace Merchello.Implementation.Models
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +22,11 @@
         /// Gets or sets the name.
         /// </summary>
         string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quantity.
+        /// </summary>
+        int Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the attributes.

@@ -1,23 +1,23 @@
-﻿namespace Merchello.Web.Ui.Implementation
+﻿namespace Merchello.Implementation.Models
 {
     /// <summary>
-    /// A model to represent a basket in the UI.
+    /// Defines a basket UI component.
     /// </summary>
-    public class BasketModel : IBasketModel
+    public interface IBasketModel : IMerchelloImplementationModel
     {
         /// <summary>
         /// Gets or sets the checkout page url.
         /// </summary>
-        public string CheckoutPageUrl { get; set; }
+        string CheckoutPageUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the continue shopping url.
         /// </summary>
-        public string ContinueShoppingUrl { get; set; }
+        string ContinueShoppingUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the basket items.
         /// </summary>
-        public IBasketItemModel[] Items { get; set; }
+        IBasketItemModel[] Items { get; set; } 
     }
 }

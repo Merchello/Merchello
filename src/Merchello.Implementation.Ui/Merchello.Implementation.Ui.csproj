@@ -80,6 +80,10 @@
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Diplo.TraceLogViewer">
+      <HintPath>..\packages\DiploTraceLogViewer.2.2.6\lib\net45\Diplo.TraceLogViewer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Examine, Version=0.1.68.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Examine.0.1.68.0\lib\Examine.dll</HintPath>
       <Private>True</Private>
@@ -116,24 +120,20 @@
       <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=2.0.5969.39538, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000354\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=2.0.5970.40046, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=2.0.5969.39539, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000354\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=2.0.5970.40048, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Providers, Version=2.0.5969.39544, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000354\lib\net45\Merchello.Providers.dll</HintPath>
+    <Reference Include="Merchello.Providers, Version=2.0.5970.40058, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=2.0.5969.39540, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000354\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=2.0.5970.40050, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000361\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
@@ -195,6 +195,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Our.Umbraco.PropertyEditorConverters, Version=2.1.5.35, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Our.Umbraco.CoreValueConverters.2.1.5\lib\net45\Our.Umbraco.PropertyEditorConverters.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -361,7 +365,7 @@
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="Views\Master.cshtml" />
     <Content Include="Views\Product.cshtml" />
-    <Content Include="Views\Partials\Merchello\StoreHeader.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_ProductBox.cshtml" />
     <Content Include="Views\Shared\_ProductBoxList.cshtml" />
     <Content Include="Views\Store.cshtml" />
@@ -559,10 +563,6 @@
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.htm" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.resource.js" />
     <Content Include="bin\Diplo.TraceLogViewer.dll" />
-    <Content Include="bin\Merchello.Core.dll" />
-    <Content Include="bin\Merchello.Examine.dll" />
-    <Content Include="bin\Merchello.Providers.dll" />
-    <Content Include="bin\Merchello.Web.dll" />
     <Content Include="Config\grid.editors.config.js" />
     <Content Include="Config\Lang\cs-CZ.user.xml" />
     <Content Include="Config\Lang\da-DK.user.xml" />
@@ -600,13 +600,26 @@
     <Content Include="Styles\css\bootstrap.min.css" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Web.config" />
+    <Content Include="Views\GenericBasket\AddToBasketForm.cshtml" />
+    <Content Include="Views\GenericBasket\BasketForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreUiHelper.cs" />
+    <Compile Include="UmbracoEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Merchello.Implementation\Merchello.Implementation.csproj">
+      <Project>{b17000d0-75e6-46fa-8e78-2f4588b82c89}</Project>
+      <Name>Merchello.Implementation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Partials\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
