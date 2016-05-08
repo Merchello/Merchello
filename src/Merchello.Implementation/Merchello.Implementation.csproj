@@ -314,9 +314,13 @@
     <Compile Include="Controllers\Base\CheckoutControllerBase.cs" />
     <Compile Include="Controllers\DefaultBasketController.cs" />
     <Compile Include="Controllers\DefaultCheckoutAddressController.cs" />
+    <Compile Include="Factories\AddItemModelFactory.cs" />
+    <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
     <Compile Include="Factories\Custom\CheckoutBillingAddressModelFactory.cs" />
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
+    <Compile Include="Factories\Custom\DefaultAddItemModelFactory.cs" />
+    <Compile Include="Factories\Custom\DefaultBasketModelFactory.cs" />
     <Compile Include="Models\AddItemModel.cs" />
     <Compile Include="Models\BasketItemModel.cs" />
     <Compile Include="Models\BasketModel.cs" />
