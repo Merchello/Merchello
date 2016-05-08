@@ -2,6 +2,10 @@ if (MUI !== undefined) {
 
     MUI.Settings = {
 
-        basketSurfaceEndpoint: '/umbraco/Merchello/DefaultBasket/'
+        // the basket surface controller end point
+        basketSurfaceEndpoint: '/umbraco/Merchello/DefaultBasket/',
+
+        // the product table api controller end point
+        productTableApiEndpoint: '/umbraco/Merchello/DefaultProductDataTableApi/'
     }
 }

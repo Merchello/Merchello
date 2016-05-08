@@ -13,7 +13,7 @@ var MUI = (function() {
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
         events: false,
-        console: false
+        console: true
     };
 
     // Private members
@@ -24,6 +24,8 @@ var MUI = (function() {
         $(document).ready(function() {
             // initialize the logger module
             MUI.Logger.init();
+            // initialize the add item module
+            MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
         });
@@ -67,7 +69,7 @@ var MUI = (function() {
                 cb(name, args);
             }
             catch(err) {
-                FRF.Logger.captureError(err, {
+                MUI.Logger.captureError(err, {
                     extra: {
                         eventName: name,
                         args: args
@@ -131,6 +133,30 @@ var MUI = (function() {
     }
 
 })();
+
+//// A class to deal with AddItem box JQuery functions
+//// This looks for a form with data attribute "data-muifrm='additem'"
+MUI.AddItem = {
+
+    init: function() {
+        // find all of the AddItem forms
+        var frms = $('[data-muifrm="additem"]');
+        if (frms.length > 0) {
+            $.each(frms, function(idx, frm) {
+               MUI.AddItem.bind.form(frm);
+            });
+        }
+    },
+
+    bind: {
+
+        // bind the form;
+        form: function(frm) {
+            
+        }
+    }
+
+};
 
 //// A class to deal with basket JQuery functions
 //// This looks for a form with data attribute "data-muifrm='basket'"
@@ -257,7 +283,7 @@ MUI.Forms = {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
-}
+};
 
 //// The logger interface
 // If you have a remove logger you can wire it in here.
@@ -281,10 +307,14 @@ MUI.Logger = {
 
     // Captures an error
     captureError: function(e, args) {
+        var consoleLog = args === undefined ? message : { error: e, args: args };
+        MUI.debugConsole(consoleLog);
         return;
     },
 
     captureMessage: function(msg, args) {
+        var consoleLog = args === undefined ? message : { message: msg, args: args };
+        MUI.debugConsole(consoleLog);
         return;
     },
 

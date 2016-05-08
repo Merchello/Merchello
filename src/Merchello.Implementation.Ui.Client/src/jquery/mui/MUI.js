@@ -6,7 +6,7 @@ var MUI = (function() {
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
         events: false,
-        console: false
+        console: true
     };
 
     // Private members
@@ -17,6 +17,8 @@ var MUI = (function() {
         $(document).ready(function() {
             // initialize the logger module
             MUI.Logger.init();
+            // initialize the add item module
+            MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
         });
@@ -60,7 +62,7 @@ var MUI = (function() {
                 cb(name, args);
             }
             catch(err) {
-                FRF.Logger.captureError(err, {
+                MUI.Logger.captureError(err, {
                     extra: {
                         eventName: name,
                         args: args

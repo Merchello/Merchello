@@ -15,18 +15,18 @@
     var hasVariants = product.ProductVariants.Any();
 }
 
-<div class="well">
+<div class="well" data-muiproduct="@product.Key">
     @if (hasVariants)
     {
         // A container to populate the variant pricing via JavaScript
-        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muiproduct="@product.Key"></div>
+        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muivalue="total"></div>
     }
     else
     {<div class="price text-center">@GetSingleProductPrice(product)</div>}
 
     <div class="form-group add-button">
         @{
-            using (Html.BeginUmbracoForm<DefaultBasketController>("AddBasketItem", new { role = "form" }))
+            using (Html.BeginUmbracoForm<DefaultBasketController>("AddBasketItem", null, new { role = "form", data_muifrm="additem" }))
             {
                 // If the product has variants, we MUST determine which variant the customer intends to purchase
                 // so we need to give them a selection of options so that they make choices.  The collection of choices (one per options)

@@ -20,10 +20,14 @@ MUI.Logger = {
 
     // Captures an error
     captureError: function(e, args) {
+        var consoleLog = args === undefined ? message : { error: e, args: args };
+        MUI.debugConsole(consoleLog);
         return;
     },
 
     captureMessage: function(msg, args) {
+        var consoleLog = args === undefined ? message : { message: msg, args: args };
+        MUI.debugConsole(consoleLog);
         return;
     },
 
