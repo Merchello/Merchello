@@ -1,7 +1,5 @@
-﻿namespace Merchello.Implementation.Default.Models
+﻿namespace Merchello.Implementation.Models
 {
-    using Merchello.Implementation.Models;
-
     /// <summary>
     /// A model to represent a basket in the UI.
     /// </summary>

@@ -2,3 +2,7 @@
 @{
 	Layout = "Master.cshtml";
 }
+
+@Html.Action("BillingAddressForm", "DefaultCheckoutAddress", new { area = "Merchello" });
+
+@Html.Action("ShippingAddressForm", "DefaultCheckoutAddress", new { area = "Merchello"});

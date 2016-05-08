@@ -1,9 +1,8 @@
-﻿namespace Merchello.Implementation.Default.Models
+﻿namespace Merchello.Implementation.Models
 {
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Implementation.Models;
     using Merchello.Web.Models.ContentEditing;
 
     /// <summary>

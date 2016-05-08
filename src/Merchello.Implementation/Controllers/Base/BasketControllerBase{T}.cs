@@ -1,4 +1,4 @@
-﻿namespace Merchello.Implementation.Controllers
+﻿namespace Merchello.Implementation.Controllers.Base
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,6 @@
     using System.Web.Mvc;
 
     using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Implementation.Default.Models;
     using Merchello.Implementation.Factories;
     using Merchello.Implementation.Models;
     using Merchello.Implementation.Models.Async;
@@ -24,7 +22,7 @@
     /// <summary>
     /// A base controller used for Basket implementations.
     /// </summary>
-    /// <typeparam name="TBasket">
+    /// <typeparam name="TBasketModel">
     /// The type of <see cref="IBasketModel{TBasketItemModel}"/>
     /// </typeparam>
     /// <typeparam name="TBasketItemModel">
@@ -33,34 +31,60 @@
     /// <typeparam name="TAddItem">
     /// The type of <see cref="IAddItemModel"/>
     /// </typeparam>
-    public abstract class BasketControllerBase<TBasket, TBasketItemModel, TAddItem> : MerchelloSurfaceController, IBasketViewRenderer
+    public abstract class BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem> : MerchelloSurfaceController
         where TBasketItemModel : class, IBasketItemModel, new()
-        where TBasket : class, IBasketModel<TBasketItemModel>, new()
+        where TBasketModel : class, IBasketModel<TBasketItemModel>, new()
         where TAddItem : class, IAddItemModel, new()
     {
+        /// <summary>
+        /// The factory responsible for building the <see cref="TBasketModel"/>.
+        /// </summary>
+        private readonly BasketModelFactory<TBasketModel, TBasketItemModel> _basketModelFactory;
+
+        /// <summary>
+        /// The factory responsible for building the <see cref="AddItemModel"/>s.
+        /// </summary>
+        private readonly AddItemModelFactory<TAddItem> _addItemFactory;
+
         /// <summary>
         /// The factory responsible for building <see cref="ExtendedDataCollection"/>s when adding items to the basket.
         /// </summary>
         private readonly BasketItemExtendedDataFactory<TAddItem> _addItemExtendedDataFactory;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketControllerBase{TBasket,TBasketItemModel,TAddItem}"/> class. 
+        /// Initializes a new instance of the <see cref="BasketControllerBase{TBasketModel,TBasketItemModel,TAddItem}"/> class. 
         /// </summary>
         protected BasketControllerBase()
-            : this(new BasketItemExtendedDataFactory<TAddItem>())
+            : this(
+                  new BasketModelFactory<TBasketModel, TBasketItemModel>(),
+                  new AddItemModelFactory<TAddItem>(),
+                  new BasketItemExtendedDataFactory<TAddItem>())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketControllerBase{TBasket,TBasketItemModel,TAddItem}"/> class. 
+        /// Initializes a new instance of the <see cref="BasketControllerBase{TBasketModel,TBasketItemModel,TAddItem}"/> class. 
         /// </summary>
+        /// <param name="basketModelFactory">
+        /// The <see cref="BasketModelFactory{TBasketModel, TBasketItemModel}"/>.
+        /// </param>
+        /// <param name="addItemFactory">
+        /// The <see cref="AddItemModelFactory{TAddItemModel}"/>
+        /// </param>
         /// <param name="addItemExtendedDataFactory">
         /// The <see cref="BasketItemExtendedDataFactory{TAddItemModel}"/>.
         /// </param>
-        protected BasketControllerBase(BasketItemExtendedDataFactory<TAddItem> addItemExtendedDataFactory)
+        protected BasketControllerBase(
+            BasketModelFactory<TBasketModel, TBasketItemModel> basketModelFactory,
+            AddItemModelFactory<TAddItem> addItemFactory,
+            BasketItemExtendedDataFactory<TAddItem> addItemExtendedDataFactory)
         {
-            Mandate.ParameterNotNull(addItemExtendedDataFactory, "addItemExtendedDataFactor");
+            Mandate.ParameterNotNull(basketModelFactory, "basketModelFactory");
+            Mandate.ParameterNotNull(addItemFactory, "addItemFactory");
+            Mandate.ParameterNotNull(addItemExtendedDataFactory, "addItemExtendedDataFactory");
 
+            _basketModelFactory = basketModelFactory;
+            _addItemFactory = addItemFactory;
             _addItemExtendedDataFactory = addItemExtendedDataFactory;
         }
 
@@ -81,7 +105,7 @@
             // e.g. if you need to store custom extended data values, create your own factory
             // inheriting from BasketItemExtendedDataFactory and override the "OnCreate" method to store
             // any addition values you have added to the model
-            var extendedData = _addItemExtendedDataFactory.Build(model);
+            var extendedData = this._addItemExtendedDataFactory.Create(model);
             
             // We've added some data modifiers that can handle such things as including taxes in product
             // pricing.  The data modifiers can either get executed when the item is added to the basket or
@@ -123,21 +147,19 @@
 
             this.Basket.Save();
 
-            return RedirectAddItemSuccess(model);
+            return this.RedirectAddItemSuccess(model);
         }
 
 
         /// <summary>
         /// Responsible for updating the quantities of items in the basket
         /// </summary>
-        /// <param name="model">The <see cref="TBasket"/></param>
+        /// <param name="model">The <see cref="TBasketModel"/></param>
         /// <returns>Redirects to the current Umbraco page (generally the basket page)</returns>
         [HttpPost]
-        public virtual ActionResult UpdateBasket(TBasket model)
+        public virtual ActionResult UpdateBasket(TBasketModel model)
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
-
-            
 
             // The only thing that can be updated in this basket is the quantity
             foreach (var item in model.Items.Where(item => this.Basket.Items.First(x => x.Key == item.Key).Quantity != item.Quantity))
@@ -147,26 +169,26 @@
 
             this.Basket.Save();
 
-            if (Request.IsAjaxRequest())
+            if (this.Request.IsAjaxRequest())
             {
                 // in case of Async call we need to construct the response
                 var resp = new UpdateQuantityAsyncResponse { Success = true };
                 try
                 {
-                    resp.AddUpdatedItems(Basket.Items);
-                    resp.FormattedTotal = Basket.TotalBasketPrice.AsFormattedCurrency();
-                    return Json(resp);
+                    resp.AddUpdatedItems(this.Basket.Items);
+                    resp.FormattedTotal = this.Basket.TotalBasketPrice.AsFormattedCurrency();
+                    return this.Json(resp);
                 }
                 catch (Exception ex)
                 {
                     resp.Success = false;
                     resp.ErrorMessages.Add(ex.Message);
-                    return Json(resp);
+                    return this.Json(resp);
                 }
                
             }
 
-            return RedirectUpdateBasketSuccess(model);
+            return this.RedirectUpdateBasketSuccess(model);
         }
 
         /// <summary>
@@ -184,14 +206,14 @@
         [HttpGet]
         public ActionResult RemoveBasketItem(Guid lineItemKey, int redirectId)
         {
-            EnsureOwner(Basket.Items, lineItemKey);
+            this.EnsureOwner(this.Basket.Items, lineItemKey);
 
             // remove the item by it's pk.  
             this.Basket.RemoveItem(lineItemKey);
 
             this.Basket.Save();
 
-            return RedirectToUmbracoPage(redirectId);
+            return this.RedirectToUmbracoPage(redirectId);
         }
 
         /// <summary>
@@ -214,16 +236,16 @@
         public virtual ActionResult MoveItemToWishList(Guid lineItemKey, int successRedirectId)
         {
             // Assert the customer is not anonymous
-            if (CurrentCustomer.IsAnonymous) return RedirectToCurrentUmbracoPage();
+            if (this.CurrentCustomer.IsAnonymous) return this.RedirectToCurrentUmbracoPage();
 
             // Ensure the basket item reference is in the current customer's basket
             // e.g. it is not a reference to some other customer's basket
-            EnsureOwner(Basket.Items, lineItemKey);
+            this.EnsureOwner(this.Basket.Items, lineItemKey);
 
             // Move the item to the wish list collection
-            Basket.MoveItemToWishList(lineItemKey);
+            this.Basket.MoveItemToWishList(lineItemKey);
 
-            return RedirectToUmbracoPage(successRedirectId);
+            return this.RedirectToUmbracoPage(successRedirectId);
         }
 
         #region ChildActions
@@ -236,15 +258,18 @@
         /// </returns>
         public virtual ActionResult BasketForm()
         {
-            var model = MapBasketToBasketModel(CurrentCustomer.Basket());
-            return PartialView(model);
+            var model = _basketModelFactory.Create(Basket);
+            return this.PartialView(model);
         }
 
         /// <summary>
-        /// Responsible for rendering the Add.
+        /// Responsible for rendering the Add Item Form.
         /// </summary>
         /// <param name="model">
         /// The <see cref="IProductContent"/>.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity to be added
         /// </param>
         /// <param name="view">
         /// The name of the view to render.
@@ -253,11 +278,34 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [ChildActionOnly]
-        public virtual ActionResult AddProductToBasketForm(IProductContent model, string view = "AddToBasketForm")
+        public virtual ActionResult AddProductToBasketForm(IProductContent model, int quantity = 1, string view = "AddToBasketForm")
         {
-            var addItem = MapProductContentToAddItemModel(model);
-            return AddToBasketForm(addItem, view);
+            var addItem = _addItemFactory.Create(model, quantity);
+            return this.AddToBasketForm(addItem, view);
         }
+
+        /// <summary>
+        /// Responsible for rendering the Add Item Form.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ProductDisplay"/>.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity to be added
+        /// </param>
+        /// <param name="view">
+        /// The name of the view to render.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public virtual ActionResult AddProductDisplayToBasketForm(ProductDisplay model, int quantity = 1, string view = "AddToBasketForm")
+        {
+            var addItem = _addItemFactory.Create(model, quantity);
+            return this.AddToBasketForm(addItem, view);
+        }
+
 
         /// <summary>
         /// Renders the add to basket form.
@@ -274,7 +322,7 @@
         [ChildActionOnly]
         public virtual ActionResult AddToBasketForm(TAddItem model, string view = "")
         {
-            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+            return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
         }
 
         #endregion
@@ -293,9 +341,9 @@
         /// <remarks>
         /// Allows for customization of the redirection after a custom update basket operation
         /// </remarks>
-        protected virtual ActionResult RedirectUpdateBasketSuccess(TBasket model)
+        protected virtual ActionResult RedirectUpdateBasketSuccess(TBasketModel model)
         {
-            return RedirectToCurrentUmbracoPage();
+            return this.RedirectToCurrentUmbracoPage();
         }
 
         /// <summary>
@@ -307,99 +355,11 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected abstract ActionResult RedirectAddItemSuccess(TAddItem model);
+        protected virtual ActionResult RedirectAddItemSuccess(TAddItem model)
+        {
+            return CurrentUmbracoPage();
+        }
 
         #endregion
-
-        /// <summary>
-        /// Maps the Merchello Basket item to the implementation basket model.
-        /// </summary>
-        /// <param name="basket">
-        /// The basket.
-        /// </param>
-        /// <returns>
-        /// The <see cref="TBasket"/>.
-        /// </returns>
-        protected virtual TBasket MapBasketToBasketModel(IBasket basket)
-        {
-            var merchello = new MerchelloHelper();
-
-            var items =
-                basket.Items.Select(
-                    basketItem =>
-                    new BasketItemModel
-                        {
-                            Key = basketItem.Key,
-                            Name = basketItem.Name,
-                            Amount = basketItem.Price,
-                            ProductKey = basketItem.ExtendedData.GetProductKey(),
-                            Product = basketItem.ExtendedData.ContainsProductKey() && 
-                                      basketItem.LineItemType == LineItemType.Product ? 
-                                        GetProductContent(merchello, basketItem.ExtendedData.GetProductKey()) :
-                                        null,
-                            Quantity = basketItem.Quantity,
-                            CustomerOptionChoices = basketItem.GetProductOptionChoicePairs()
-                        }
-                     
-                    as TBasketItemModel);
-
-            // TODO wish list setting
-            var model = new TBasket
-                {
-                    WishListEnabled = false,
-                    Items = items.ToArray()
-                };
-
-            return model;
-        }
-
-        /// <summary>
-        /// Maps <see cref="IProductContent"/> to <see cref="TAddItem"/>.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <returns>
-        /// The mapped <see cref="TAddItem"/> object.
-        /// </returns>
-        protected abstract TAddItem MapProductContentToAddItemModel(IProductContent product);
-
-        /// <summary>
-        /// Maps a <see cref="ILineItem"/> to <see cref="IBasketItemModel"/>.
-        /// </summary>
-        /// <param name="lineItem">
-        /// The line item.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IBasketItemModel"/>.
-        /// </returns>
-        protected virtual TBasketItemModel MapLineItemToBasketLineItem(ILineItem lineItem)
-        {
-            return new TBasketItemModel
-            {
-                Key = lineItem.Key,
-                Name = lineItem.Name,
-                Amount = lineItem.Price,
-                Quantity = lineItem.Quantity
-            };
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IProductContent"/>.
-        /// </summary>
-        /// <param name="merchello">
-        /// The merchello.
-        /// </param>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductContent"/>.
-        /// </returns>
-        private IProductContent GetProductContent(MerchelloHelper merchello, Guid productKey)
-        {
-            if (productKey.Equals(Guid.Empty)) return null;
-            return merchello.TypedProductContent(productKey);
-        }
     }
 }

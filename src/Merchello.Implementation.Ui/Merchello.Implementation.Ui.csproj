@@ -380,6 +380,9 @@
     <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Views\Basket.cshtml" />
+    <Content Include="Views\DefaultCheckoutAddress\BillingAddressForm.cshtml" />
+    <Content Include="Views\CheckoutAddressForms.cshtml" />
+    <Content Include="Views\DefaultCheckoutAddress\ShippingAddressForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

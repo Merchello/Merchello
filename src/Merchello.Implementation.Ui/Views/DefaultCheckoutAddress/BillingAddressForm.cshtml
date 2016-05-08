@@ -1,0 +1,65 @@
+﻿@inherits UmbracoViewPage<Merchello.Implementation.Models.CheckoutBillingAddressModel>
+@using Merchello.Implementation.Controllers
+
+<h2>Billing Address</h2>
+@using (Html.BeginUmbracoForm<DefaultCheckoutAddressController>("SaveBillingAddress", new { area = "Merchello" }, new { data_muistage = "BillingAddress" }))
+{
+    <div class="control-group">
+        @Html.LabelFor(x => x.FirstName)
+        @Html.ValidationMessageFor(x => x.FirstName)
+        @Html.TextBoxFor(x => x.FirstName)
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(x => x.LastName)
+        @Html.ValidationMessageFor(x => x.LastName)
+        @Html.TextBoxFor(x => x.LastName)
+    </div>
+
+    <div class="control-group">
+        @Html.LabelFor(x => x.Email)
+        @Html.ValidationMessageFor(x => x.Email)
+        @Html.TextBoxFor(x => x.Email)
+    </div>
+
+    <div class="control-group">
+        <label>Company name (Optional)</label>
+        @Html.TextBoxFor(x => x.Organization)
+    </div>
+    <div class="control-group">
+        <label>Address line 1 *</label>
+        @Html.ValidationMessageFor(x => x.Address1)
+        @Html.TextBoxFor(x => x.Address1)
+    </div>
+    <div class="control-group">
+        <label>Address line 2</label>
+        @Html.TextBoxFor(x => x.Address2)
+    </div>
+    <div class="control-group">
+        <label>Town / City *</label>
+        @Html.ValidationMessageFor(x => x.Locality)
+        @Html.TextBoxFor(x => x.Locality)
+    </div>
+    <div class="control-group">
+        <label>Postal Code *</label>
+        @Html.ValidationMessageFor(x => x.PostalCode)
+        @Html.TextBoxFor(x => x.PostalCode)
+    </div>
+
+    <div class="control-group">
+        @Html.CheckBoxFor(x => x.UseForShipping)
+        @Html.LabelFor(x => x.UseForShipping)
+    </div>
+    @Html.HiddenFor(x => x.Key)
+    @Html.HiddenFor(x => x.AddressType)
+    @Html.AntiForgeryToken()
+    <div class="buttons stage-buttons">
+        <div class="buttons stage-buttons">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 pull-right">
+                    <input type="submit" class="btn-silver btn-full-width btn-next" value="Next" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
