@@ -307,31 +307,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\CheckAjaxRequestAttribute.cs" />
-    <Compile Include="Attributes\ComponentSetAliasAttribute.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\Base\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\Base\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\Base\CheckoutControllerBase.cs" />
-    <Compile Include="Controllers\DefaultBasketController.cs" />
-    <Compile Include="Controllers\DefaultCheckoutAddressController.cs" />
+    <Compile Include="Controllers\Default\DefaultBasketController.cs" />
+    <Compile Include="Controllers\Default\DefaultCheckoutAddressController.cs" />
     <Compile Include="Factories\AddItemModelFactory.cs" />
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
-    <Compile Include="Factories\Custom\CheckoutBillingAddressModelFactory.cs" />
+    <Compile Include="Factories\Default\CheckoutBillingAddressModelFactory.cs" />
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
-    <Compile Include="Factories\Custom\DefaultAddItemModelFactory.cs" />
-    <Compile Include="Factories\Custom\DefaultBasketModelFactory.cs" />
-    <Compile Include="Models\AddItemModel.cs" />
-    <Compile Include="Models\BasketItemModel.cs" />
-    <Compile Include="Models\BasketModel.cs" />
+    <Compile Include="Factories\Default\DefaultAddItemModelFactory.cs" />
+    <Compile Include="Factories\Default\DefaultBasketModelFactory.cs" />
+    <Compile Include="Models\Default\AddItemModel.cs" />
+    <Compile Include="Models\Default\BasketItemModel.cs" />
+    <Compile Include="Models\Default\BasketModel.cs" />
     <Compile Include="Factories\BasketItemExtendedDataFactory.cs" />
     <Compile Include="ItemCacheLineItemExtensions.cs" />
     <Compile Include="Models\Async\AsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
     <Compile Include="CheckoutStage.cs" />
-    <Compile Include="Models\CheckoutAddressModel.cs" />
-    <Compile Include="Models\CheckoutBillingAddressModel.cs" />
+    <Compile Include="Models\Default\CheckoutAddressModel.cs" />
+    <Compile Include="Models\Default\CheckoutBillingAddressModel.cs" />
     <Compile Include="Models\CheckoutWorkflowMarker.cs" />
     <Compile Include="Models\ICheckoutAddressModel.cs" />
     <Compile Include="Models\ICheckoutModel.cs" />
@@ -344,7 +343,6 @@
     <Compile Include="Models\IBasketModel.cs" />
     <Compile Include="Models\IMerchelloImplementationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resolvers\ViewRendererResolver.cs" />
     <Compile Include="UmbracoApplicationEventHandler.cs" />
     <Compile Include="Validation\ValidateExpiresDateAttribute.cs" />
   </ItemGroup>

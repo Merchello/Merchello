@@ -1,9 +1,5 @@
 ﻿namespace Merchello.Implementation
 {
-    using Merchello.Implementation.Attributes;
-    using Merchello.Implementation.Controllers;
-    using Merchello.Implementation.Resolvers;
-
     using Umbraco.Core;
 
     /// <summary>
@@ -35,10 +31,6 @@
         /// </param>
         public void OnApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            //ViewRendererResolver.Current =
-            //    new ViewRendererResolver(
-            //        PluginManager.Current.ResolveTypesWithAttribute<IViewRenderer, ComponentSetAliasAttribute>(),
-            //        ApplicationContext.Current.ApplicationCache);
         }
 
         /// <summary>
