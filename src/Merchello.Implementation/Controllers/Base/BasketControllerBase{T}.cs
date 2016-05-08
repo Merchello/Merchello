@@ -116,6 +116,9 @@
 
             var product = merchello.Query.Product.GetByKey(model.ProductKey);
 
+            // ensure the quantity on the model
+            var quantity = model.Quantity <= 0 ? 1 : model.Quantity;
+
             // In the event the product has options we want to add the "variant" to the basket.
             // -- If a product that has variants is defined, the FIRST variant will be added to the cart. 
             // -- This was done so that we did not have to throw an error since the Master variant is no
@@ -138,11 +141,11 @@
                 // store the choice explainations in the extended data collection
                 extendedData.SetValue(Implementation.Constants.ExtendedDataKeys.BasketItemCustomerChoice, JsonConvert.SerializeObject(choiceExplainations));
 
-                this.Basket.AddItem(variant, variant.Name, 1, extendedData);
+                this.Basket.AddItem(variant, variant.Name, quantity, extendedData);
             }
             else
             {
-                this.Basket.AddItem(product, product.Name, 1, extendedData);
+                this.Basket.AddItem(product, product.Name, quantity, extendedData);
             }
 
             this.Basket.Save();
