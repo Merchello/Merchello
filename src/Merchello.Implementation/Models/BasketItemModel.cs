@@ -1,10 +1,9 @@
-﻿namespace Merchello.Implementation.Default.Models
+﻿namespace Merchello.Implementation.Models
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Implementation.Models;
     using Merchello.Web.Models.VirtualContent;
 
     /// <summary>

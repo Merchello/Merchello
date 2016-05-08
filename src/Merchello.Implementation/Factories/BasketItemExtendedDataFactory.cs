@@ -26,13 +26,13 @@
         /// <returns>
         /// The <see cref="ExtendedDataCollection"/>.
         /// </returns>
-        public ExtendedDataCollection Build(TAddItemModel model)
+        public ExtendedDataCollection Create(TAddItemModel model)
         {
             return OnCreate(new ExtendedDataCollection(), model);
         }
 
         /// <summary>
-        /// A overridable method that allows for adding custom extended data values to the line item that is to be created
+        /// An overridable method that allows for adding custom extended data values to the line item that is to be created
         /// and added to the basket.
         /// </summary>
         /// <param name="extendedData">

@@ -1,7 +1,7 @@
-﻿@inherits UmbracoViewPage<Merchello.Implementation.Default.Models.BasketModel>
+﻿@inherits UmbracoViewPage<BasketModel>
 @using Merchello.Core
 @using Merchello.Core.Logging
-@using Merchello.Implementation.Default.Controllers
+@using Merchello.Implementation.Controllers
 @using Merchello.Implementation.Models
 @using Merchello.Implementation.Ui
 @{
@@ -61,6 +61,7 @@
                             // the 'area' parameter in the route values should match the PluginController attribute alias
                             @Html.ActionLink("Wish List +", "MoveItemToWishList", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
                         }
+
 
                         @Html.ActionLink("Remove", "RemoveBasketItem", "DefaultBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
                     </td>

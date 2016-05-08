@@ -1,11 +1,10 @@
-﻿namespace Merchello.Implementation.Default.Controllers
+﻿namespace Merchello.Implementation.Controllers
 {
     using System;
     using System.Web.Mvc;
 
     using Merchello.Core.Models;
-    using Merchello.Implementation.Controllers;
-    using Merchello.Implementation.Default.Models;
+    using Merchello.Implementation.Controllers.Base;
     using Merchello.Implementation.Factories;
     using Merchello.Implementation.Models;
     using Merchello.Web;
@@ -39,20 +38,6 @@
         }
 
         /// <summary>
-        /// Handles the redirection after successfully adding an item to the basket.
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        protected override ActionResult RedirectAddItemSuccess(AddItemModel model)
-        {
-            return this.Redirect(model.SuccessRedirectUrl);
-        }
-
-        /// <summary>
         /// Maps a <see cref="ILineItem"/> to <see cref="IBasketItemModel"/>.
         /// </summary>
         /// <param name="lineItem">
@@ -61,11 +46,12 @@
         /// <returns>
         /// The <see cref="IBasketItemModel"/>.
         /// </returns>
+        //// TODO put in factory
         protected override BasketItemModel MapLineItemToBasketLineItem(ILineItem lineItem)
         {
             var productKey = lineItem.ExtendedData.GetProductKey();
             IProductContent product = null;
-            if (!productKey.Equals(Guid.Empty)) product = _merchello.TypedProductContent(productKey);
+            if (!productKey.Equals(Guid.Empty)) product = this._merchello.TypedProductContent(productKey);
 
             return new BasketItemModel
             {
@@ -88,6 +74,7 @@
         /// <returns>
         /// The mapped <see cref="AddItemModel"/> object.
         /// </returns>
+        //// TODO put in factory
         protected override AddItemModel MapProductContentToAddItemModel(IProductContent product)
         {
             // We map every property except OptionChoices which are used in the post back to determine

@@ -306,20 +306,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\CheckAjaxRequestAttribute.cs" />
     <Compile Include="Attributes\ComponentSetAliasAttribute.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\BasketControllerBase{T}.cs" />
-    <Compile Include="Controllers\IBasketViewRenderer.cs" />
-    <Compile Include="Controllers\IViewRenderer.cs" />
-    <Compile Include="Default\Controllers\DefaultBasketController.cs" />
-    <Compile Include="Default\Models\AddItemModel.cs" />
-    <Compile Include="Default\Models\BasketItemModel.cs" />
-    <Compile Include="Default\Models\BasketModel.cs" />
+    <Compile Include="Controllers\Base\BasketControllerBase{T}.cs" />
+    <Compile Include="Controllers\Base\CheckoutAddressControllerBase{T}.cs" />
+    <Compile Include="Controllers\Base\CheckoutControllerBase.cs" />
+    <Compile Include="Controllers\DefaultBasketController.cs" />
+    <Compile Include="Controllers\DefaultCheckoutAddressController.cs" />
+    <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
+    <Compile Include="Factories\Custom\CheckoutBillingAddressModelFactory.cs" />
+    <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
+    <Compile Include="Models\AddItemModel.cs" />
+    <Compile Include="Models\BasketItemModel.cs" />
+    <Compile Include="Models\BasketModel.cs" />
     <Compile Include="Factories\BasketItemExtendedDataFactory.cs" />
     <Compile Include="ItemCacheLineItemExtensions.cs" />
     <Compile Include="Models\Async\AsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
+    <Compile Include="CheckoutStage.cs" />
+    <Compile Include="Models\CheckoutAddressModel.cs" />
+    <Compile Include="Models\CheckoutBillingAddressModel.cs" />
+    <Compile Include="Models\CheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\ICheckoutAddressModel.cs" />
+    <Compile Include="Models\ICheckoutModel.cs" />
+    <Compile Include="Models\ICheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\ICustomerMembershipProfile.cs" />
     <Compile Include="Models\ModelExtensions.cs" />
     <Compile Include="RenderingExtensions.cs" />
     <Compile Include="Models\IAddItemModel.cs" />
@@ -333,7 +346,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Default\Readme.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

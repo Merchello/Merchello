@@ -1,4 +1,4 @@
-﻿namespace Merchello.Implementation.Controllers
+﻿namespace Merchello.Implementation.Controllers.Base
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,6 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
-    using Merchello.Implementation.Default.Models;
     using Merchello.Implementation.Factories;
     using Merchello.Implementation.Models;
     using Merchello.Implementation.Models.Async;
@@ -33,7 +32,7 @@
     /// <typeparam name="TAddItem">
     /// The type of <see cref="IAddItemModel"/>
     /// </typeparam>
-    public abstract class BasketControllerBase<TBasket, TBasketItemModel, TAddItem> : MerchelloSurfaceController, IBasketViewRenderer
+    public abstract class BasketControllerBase<TBasket, TBasketItemModel, TAddItem> : MerchelloSurfaceController
         where TBasketItemModel : class, IBasketItemModel, new()
         where TBasket : class, IBasketModel<TBasketItemModel>, new()
         where TAddItem : class, IAddItemModel, new()
@@ -61,7 +60,7 @@
         {
             Mandate.ParameterNotNull(addItemExtendedDataFactory, "addItemExtendedDataFactor");
 
-            _addItemExtendedDataFactory = addItemExtendedDataFactory;
+            this._addItemExtendedDataFactory = addItemExtendedDataFactory;
         }
 
         /// <summary>
@@ -81,7 +80,7 @@
             // e.g. if you need to store custom extended data values, create your own factory
             // inheriting from BasketItemExtendedDataFactory and override the "OnCreate" method to store
             // any addition values you have added to the model
-            var extendedData = _addItemExtendedDataFactory.Build(model);
+            var extendedData = this._addItemExtendedDataFactory.Create(model);
             
             // We've added some data modifiers that can handle such things as including taxes in product
             // pricing.  The data modifiers can either get executed when the item is added to the basket or
@@ -123,7 +122,7 @@
 
             this.Basket.Save();
 
-            return RedirectAddItemSuccess(model);
+            return this.RedirectAddItemSuccess(model);
         }
 
 
@@ -137,8 +136,6 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            
-
             // The only thing that can be updated in this basket is the quantity
             foreach (var item in model.Items.Where(item => this.Basket.Items.First(x => x.Key == item.Key).Quantity != item.Quantity))
             {
@@ -147,26 +144,26 @@
 
             this.Basket.Save();
 
-            if (Request.IsAjaxRequest())
+            if (this.Request.IsAjaxRequest())
             {
                 // in case of Async call we need to construct the response
                 var resp = new UpdateQuantityAsyncResponse { Success = true };
                 try
                 {
-                    resp.AddUpdatedItems(Basket.Items);
-                    resp.FormattedTotal = Basket.TotalBasketPrice.AsFormattedCurrency();
-                    return Json(resp);
+                    resp.AddUpdatedItems(this.Basket.Items);
+                    resp.FormattedTotal = this.Basket.TotalBasketPrice.AsFormattedCurrency();
+                    return this.Json(resp);
                 }
                 catch (Exception ex)
                 {
                     resp.Success = false;
                     resp.ErrorMessages.Add(ex.Message);
-                    return Json(resp);
+                    return this.Json(resp);
                 }
                
             }
 
-            return RedirectUpdateBasketSuccess(model);
+            return this.RedirectUpdateBasketSuccess(model);
         }
 
         /// <summary>
@@ -184,14 +181,14 @@
         [HttpGet]
         public ActionResult RemoveBasketItem(Guid lineItemKey, int redirectId)
         {
-            EnsureOwner(Basket.Items, lineItemKey);
+            this.EnsureOwner(this.Basket.Items, lineItemKey);
 
             // remove the item by it's pk.  
             this.Basket.RemoveItem(lineItemKey);
 
             this.Basket.Save();
 
-            return RedirectToUmbracoPage(redirectId);
+            return this.RedirectToUmbracoPage(redirectId);
         }
 
         /// <summary>
@@ -214,16 +211,16 @@
         public virtual ActionResult MoveItemToWishList(Guid lineItemKey, int successRedirectId)
         {
             // Assert the customer is not anonymous
-            if (CurrentCustomer.IsAnonymous) return RedirectToCurrentUmbracoPage();
+            if (this.CurrentCustomer.IsAnonymous) return this.RedirectToCurrentUmbracoPage();
 
             // Ensure the basket item reference is in the current customer's basket
             // e.g. it is not a reference to some other customer's basket
-            EnsureOwner(Basket.Items, lineItemKey);
+            this.EnsureOwner(this.Basket.Items, lineItemKey);
 
             // Move the item to the wish list collection
-            Basket.MoveItemToWishList(lineItemKey);
+            this.Basket.MoveItemToWishList(lineItemKey);
 
-            return RedirectToUmbracoPage(successRedirectId);
+            return this.RedirectToUmbracoPage(successRedirectId);
         }
 
         #region ChildActions
@@ -236,8 +233,8 @@
         /// </returns>
         public virtual ActionResult BasketForm()
         {
-            var model = MapBasketToBasketModel(CurrentCustomer.Basket());
-            return PartialView(model);
+            var model = this.MapBasketToBasketModel(this.CurrentCustomer.Basket());
+            return this.PartialView(model);
         }
 
         /// <summary>
@@ -255,8 +252,8 @@
         [ChildActionOnly]
         public virtual ActionResult AddProductToBasketForm(IProductContent model, string view = "AddToBasketForm")
         {
-            var addItem = MapProductContentToAddItemModel(model);
-            return AddToBasketForm(addItem, view);
+            var addItem = this.MapProductContentToAddItemModel(model);
+            return this.AddToBasketForm(addItem, view);
         }
 
         /// <summary>
@@ -274,7 +271,7 @@
         [ChildActionOnly]
         public virtual ActionResult AddToBasketForm(TAddItem model, string view = "")
         {
-            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+            return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
         }
 
         #endregion
@@ -295,7 +292,7 @@
         /// </remarks>
         protected virtual ActionResult RedirectUpdateBasketSuccess(TBasket model)
         {
-            return RedirectToCurrentUmbracoPage();
+            return this.RedirectToCurrentUmbracoPage();
         }
 
         /// <summary>
@@ -307,7 +304,10 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected abstract ActionResult RedirectAddItemSuccess(TAddItem model);
+        protected virtual ActionResult RedirectAddItemSuccess(TAddItem model)
+        {
+            return CurrentUmbracoPage();
+        }
 
         #endregion
 
@@ -335,7 +335,7 @@
                             ProductKey = basketItem.ExtendedData.GetProductKey(),
                             Product = basketItem.ExtendedData.ContainsProductKey() && 
                                       basketItem.LineItemType == LineItemType.Product ? 
-                                        GetProductContent(merchello, basketItem.ExtendedData.GetProductKey()) :
+                                        this.GetProductContent(merchello, basketItem.ExtendedData.GetProductKey()) :
                                         null,
                             Quantity = basketItem.Quantity,
                             CustomerOptionChoices = basketItem.GetProductOptionChoicePairs()
