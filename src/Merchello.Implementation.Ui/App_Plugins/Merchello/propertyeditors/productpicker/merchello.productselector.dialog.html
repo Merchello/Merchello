@@ -1,0 +1,78 @@
+<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.PropertyEditors.MerchelloProductSelectorDialogController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloProductEdit_selectMerchelloProduct" /></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+
+        <div class="merchello-pane">
+            <form class="form-horizontal">
+                <div class="form-group control-group row-fluid">
+
+                    <div class="col-xs-7 span7 controls">
+                        <label for="productFilter"><localize key="merchelloGeneral_filterBy"/></label>
+                        <input id="productFilter" class="form-control span8" name="productFilter" data-ng-model="filtertext" localize="placeholder" placeholder="@placeholders_filter" />
+                        <button id="productFilterGo" class="btn" data-ng-click="getFilteredProducts(filtertext)"><localize key="merchelloGeneral_filter">Filter</localize></button>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+
+        <div class="merchello-pane">
+            <div class="col-xs-2 span2" data-ng-show="dialogData.products.length > 0">
+                <select name="limitSelect" class="col-xs-2 span2" data-ng-model="limitAmount" data-ng-change="limitChanged(limitAmount)">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+
+            <merchello-pager></merchello-pager>
+        </div>
+
+        <table class="table table-hover merchello-selectable-table sortable">
+            <thead>
+            <tr>
+                <th data-ng-click="changeSortOrder('name')" data-ng-class="{'sorted': sortProperty == 'name' ||  sortProperty == '-name'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'name', 'icon-navigation-down': sortProperty == '-name'}"></i> <localize key="merchelloVariant_product"/>
+                </th>
+                <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku' ||  sortProperty == '-sku'}">
+                    <i data-ng-class="{'icon-navigation-up': sortProperty == 'sku', 'icon-navigation-down': sortProperty == '-sku'}"></i> <localize key="merchelloVariant_sku"/>
+                </th>
+                <th data-ng-click="changeSortOrder('price')" data-ng-class="{'sorted': sortProperty == 'price' ||  sortProperty == '-price'}">
+                    <i data-ng-class="{'icon-navigation-down': sortProperty == 'price', 'icon-navigation-up': sortProperty == '-price'}"></i> <localize key="merchelloGeneral_price"/>
+                </th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="product in products"
+                data-ng-class="{active: product.selected}">
+                <td>{{product.name}}</td>
+                <td>{{product.sku}}</td>
+                <td data-ng-hide="product.hasVariants">{{product.price | currency : currencySymbol}}</td>
+                <td data-ng-show="product.hasVariants">{{product.variantsMinimumPrice() | currency : currencySymbol}} - {{product.variantsMaximumPrice() | currency : currencySymbol}}</td>
+                <td>
+                    <a class="btn btn-default btn-xs btn-mini" href data-ng-click="setProduct(product)"><localize key="buttons_select" /></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

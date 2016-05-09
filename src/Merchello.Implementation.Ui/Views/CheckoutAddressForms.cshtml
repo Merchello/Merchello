@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Master.cshtml";
+}
+
+@Html.Action("BillingAddressForm", "DefaultCheckoutAddress", new { area = "Merchello" });
+
+@Html.Action("ShippingAddressForm", "DefaultCheckoutAddress", new { area = "Merchello"});

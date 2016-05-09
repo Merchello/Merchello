@@ -1,0 +1,61 @@
+<div data-ng-controller="Merchello.Backoffice.ShippingProvidersController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1>{{selectedCatalog.name}}: <localize key="merchelloShipping_shippingProvidersMethodsTitle" /></h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                        <a class="btn-primary btn" data-ng-click="changeSelectedCatalogOpen()" data-ng-show="primaryWarehouse.warehouseCatalogs.length > 1"><localize key="merchelloShipping_selectCatalog"></localize></a>
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel class="row-fluid">
+            <div class="merchello-pane span9">
+                <!-- Shipping Providers & Methods -->
+                <div class="control-group umb-control-group">
+                    <div class="merchello-section-label">
+                       <localize key="merchelloShipping_shipContriesInfo"></localize>
+                        <!-- ACTION: Add Country -->
+                        <a class="" data-ng-click="addCountry()"><i class="icon icon-add"></i> <localize key="merchelloShipping_addCountry"></localize></a>
+                    </div>
+                    <div class="merchello-controls" data-ng-show="preValuesLoaded">
+                        <div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group umb-control-group">
+                    <!-- Shipping Countries -->
+                    <div data-ng-repeat="country in countries | orderBy: 'sortHelper'" class="merchello-shipping-country">
+                        <ship-country-gateway-providers country="country" reload="loadCountries()" delete="deleteCountryDialog(country)"></ship-country-gateway-providers>
+                    </div>
+                </div>
+            </div>
+            <div class="merchello-pane secondary span3">
+                <!-- Warehouse(s) -->
+                <div class="well warehouse-info" data-ng-show="visible.warehouseListPanel">
+                    <h3 class="span10"><localize key="merchelloShipping_warehouse"></localize></h3>
+                    <div class="pull-right"><merchello-edit-icon do-edit="addEditWarehouseDialogOpen(primaryWarehouse)"></merchello-edit-icon></div>
+                    <merchello-address address="primaryWarehouseAddress" data-ng-show="!primaryWarehouseAddress.isEmpty()"></merchello-address>
+                </div>
+                <!-- Catalogs -->
+                <div class="well catalog-info" data-ng-show="visible.catalogPanel">
+                    <h3 class="span10">Current Catalog</h3>
+                    <div class="pull-right">
+                        <merchello-icon-bar show-edit="true" show-delete="!selectedCatalog.isDefault" do-edit="addEditWarehouseCatalogDialogOpen(selectedCatalog)" do-delete="deleteWarehouseCatalogOpen()"></merchello-icon-bar>
+                    </div>
+                    <h4>{{selectedCatalog.name}}</h4>
+                    <div>{{selectedCatalog.description}}</div><br />
+                    <!-- ACTION: Add Catalog -->
+                    <a class="" data-ng-click="addEditWarehouseCatalogDialogOpen()"><i class="icon icon-add"></i> <localize key="merchelloShipping_addCatalog"></localize></a>
+                </div>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

@@ -1,0 +1,13 @@
+<div id="unique-offer-code" data-ng-show="loaded">
+    <label for="offer-code"><localize key="merchelloMarketing_offerCode" /> <small><localize key="merchelloMarketing_mustUniqueOfferCode" /></small></label>
+    <input id="offerCode" data-ng-required="true" name="offerCode" required type="text" class="form-control col-xs-8 span8" data-ng-model="offer.offerCode" placeholder="eg. 10OFF" />
+    <div id="unique-offer-check">
+        <img src="/umbraco/assets/img/loader.gif" class="small-loader" data-ng-show="checking" />
+        <span data-ng-show="isUnique">
+            <i class="icon-check"></i> Ok!
+        </span>
+        <span class="warn" data-ng-hide="isUnique">
+            <i class="icon-os-x"></i> Already in use
+        </span>
+    </div>
+</div>

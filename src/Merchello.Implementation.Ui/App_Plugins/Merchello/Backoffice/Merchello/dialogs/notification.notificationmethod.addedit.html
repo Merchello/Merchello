@@ -1,0 +1,46 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.NotificationsMethodAddEditController">
+    <div class="umb-modalcolumn-header">
+        <h4>Add/Edit a Notification Method</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when edit or Add a Method is clicked -->
+        <form name="addManualNotificationMethodForm">
+            <div class="form-group row-fluid" data-ng-show="dialogData.resources.length > 0">
+                <div class="col-xs-8 span8">
+                    <label for="event">Notification Method</label>
+                    <select name="event" class="col-xs-8 span8" data-ng-model="dialogData.notificationMethod.serviceCode" data-ng-options="n.name for n in dialogData.resources track by n.ServiceCode"></select>
+                </div>
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="general_name" /></label>
+                <input type="text" class="col-xs-12 span12" data-ng-model="dialogData.notificationMethod.name" required/>
+            </div>
+            <div class="form-group row-fluid">
+                <label><localize key="merchelloNotificationsEdit_description " /></label>
+                <textarea class="col-xs-12 span12" rows="4" data-ng-model="dialogData.notificationMethod.description"></textarea>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-disabled="addManualNotificationMethodForm.$invalid"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

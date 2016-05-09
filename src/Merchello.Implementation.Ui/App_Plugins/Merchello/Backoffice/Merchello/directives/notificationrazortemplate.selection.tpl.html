@@ -1,0 +1,16 @@
+<div data-ng-show="loaded">
+    <span>Filename: {{ fileName }}</span>
+
+    <div class="form-group control-group">
+        <label for="fileName">View file name</label>
+        <input name="fileName" id="fileName" type="text" class="col-xs-8 span8" data-ng-model="fileName" data-ng-change="checkFileName()" />
+        <button data-ng-click="createView()" data-ng-show="showCreateButton">Create</button>
+    </div>
+
+    <div class="form-group control-group">
+        <label for="fileName">Use Existing Template</label>
+        <select data-ng-model="selectedTemplate" data-ng-init="selectedTemplate = templates[0]" data-ng-change="setFileName()" data-ng-options="tpl.label for tpl in templates track by tpl.virtualPath + tpl.fileName"></select>
+    </div>
+
+    <merchello-view-editor view-data="selectedTemplate" data-ng-if="selectedTemplate.fileName !== ''"></merchello-view-editor>
+</div>

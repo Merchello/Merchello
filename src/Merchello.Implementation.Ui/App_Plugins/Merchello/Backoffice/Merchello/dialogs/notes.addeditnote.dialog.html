@@ -1,0 +1,35 @@
+<div class="umb-panel merchello-side-panel constraint-product-selector" ng-controller="Merchello.Notes.Dialog.NoteAddEditController">
+    <div class="umb-modalcolumn-header">
+        <h4>{{ dialogData.title }}</h4>
+    </div>
+
+    <form id="addEditNoteForm" name="addEditNoteForm">
+    <div class="umb-panel-body with-header with-footer">
+        <div class="control-group">
+            <label><localize key="merchelloNotificationsMethod_message" /></label>
+            <div class="error" data-ng-show="addEditNoteForm.$invalid && wasFormSubmitted"><localize key="merchelloValidation_noteMessageRequired" /></div>
+            <umb-editor model="rteProperties"></umb-editor>
+        </div>
+
+        <div class="control-group">
+            <label><input type="checkbox" data-ng-model="dialogData.note.internalOnly"> <localize key="merchelloNotes_internalOnly" /></label>
+        </div>
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="save()">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

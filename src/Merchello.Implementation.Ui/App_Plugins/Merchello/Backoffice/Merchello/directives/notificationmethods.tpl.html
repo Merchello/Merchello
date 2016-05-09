@@ -1,0 +1,56 @@
+<div>
+    <div data-ng-repeat="notificationMethods in provider.notificationMethods">
+        <h4 class="row-fluid col-xs-5 span5 clear" data-ng-bind="notificationMethods.name"></h4>
+        <div class="pull-right">
+        <merchello-icon-bar show-add="true" show-delete="true" do-add="addNotificationMessage(notificationMethods)" do-delete="deleteNotificationMethod(notificationMethods)">
+        </merchello-icon-bar>
+        </div>
+        <form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
+            <button class="btn close" data-ng-click="editTemplateFlyout.close()"><i class="icon-delete"></i></button>
+            <h4><localize key="general_edit" /> <b>{{editTemplateFlyout.model.name}}</b> <localize key="merchelloNotificationsMethod_notification" /></h4>
+            <p><localize key="merchelloNotificationsEditTemplate_templateHelper" /></p>
+            <div class="form-group">
+                <label><localize key="merchelloNotificationsEditTemplate_header" /></label>
+                <textarea class="col-xs-12 span12" rows="4" data-ng-model="editTemplateFlyout.model.header"></textarea>
+            </div>
+            <div class="form-group">
+                <label><localize key="merchelloNotificationsEditTemplate_footer" /></label>
+                <textarea class="col-xs-12 span12" rows="4" data-ng-model="editTemplateFlyout.model.footer"></textarea>
+            </div>
+
+            <div>
+                <input type="submit" class="btn" value="Cancel" data-ng-click="editTemplateFlyout.close()" />
+                <input type="submit" class="btn btn-primary" value="Save" data-ng-click="editTemplateFlyout.confirm()" />
+            </div>
+        </form>
+
+        <table class="table table-striped merchello-striped-table notifications-table form-horizontal">
+            <thead>
+            <tr>
+                <th><localize key="merchelloNotificationsMethod_notification" /> Subject</th>
+                <th><localize key="merchelloNotificationsEdit_description" /></th>
+                <th><localize key="merchelloNotificationsMethod_event" /></th>
+                <th><localize key="general_email" /></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr data-ng-repeat="message in notificationMethods.notificationMessages">
+                <td>{{message.name}}</td>
+                <td>{{message.description}}</td>
+
+                <td>{{ getMonitorName(message.monitorKey) }}</td>
+                <td><a href="{{message.fromAddress}}">{{message.fromAddress}}</a></td>
+                <td class="merchello-icon-container pull-right">
+                    <merchello-icon-bar show-edit="true" show-delete="true" do-edit="redirectForEdit(message.key)" do-delete="deleteNotificationMessage(message)">
+                    </merchello-icon-bar>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="control-group umb-control-group warning" data-ng-show="provider.notificationMethods.length == 0">
+        No notification methods have been created for this provider.
+    </div>
+</div>

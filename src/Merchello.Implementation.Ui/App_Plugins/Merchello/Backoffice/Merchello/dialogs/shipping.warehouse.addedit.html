@@ -1,0 +1,56 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.WarehouseAddEditController">
+    <div class="umb-modalcolumn-header">
+        <h4 data-ng-switch="dialogData.warehouse.key">
+            <span data-ng-switch-when="no key created"><localize key="merchelloShippingWarehouse_addWarehouse" /></span>
+            <span data-ng-switch-default=""><localize key="merchelloShippingWarehouse_editWarehouse" /></span>
+        </h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when edit is clicked -->
+
+        <form class="form-group row-fluid">
+            <div class="form-group row-fluid">
+                <label for="name"><localize key="general_name" /></label>
+                <input class="span6" name="name" type="text" data-ng-model="dialogData.warehouse.name" />
+            </div>
+            <div class="form-group row-fluid">
+                <label for="address"><localize key="merchelloShippingWarehouse_address" /></label>
+                <input class="span12" name="address" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_streetAddress" data-ng-model="dialogData.warehouse.address1" />
+                <input class="span12" name="extended-address" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_extendedAddress" data-ng-model="dialogData.warehouse.address2" />
+                <input class="span12" name="city" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_city" data-ng-model="dialogData.warehouse.locality" />
+                <select class="span12" name="state-province" data-ng-model="dialogData.selectedProvince"
+                        data-ng-options="option.name for option in dialogData.selectedCountry.provinces"
+                        data-ng-show="dialogData.selectedCountry.provinces.length > 0">
+                </select>
+                <input class="span6" name="state-province" data-ng-show="dialogData.selectedCountry.provinces.length === 0" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_stateProvince" data-ng-model="dialogData.warehouse.region" />
+                <select class="span12" data-ng-model="dialogData.selectedCountry"
+                        data-ng-options="option.name for option in dialogData.availableCountries">
+                    <option style="display:none" value=""><localize key="merchelloShippingWarehouse_selectCountry" />select a Country</option>
+                </select>
+                <input class="span12" name="postal-code" type="text" localize="placeholder" placeholder="@merchelloShippingWarehouse_zip" data-ng-model="dialogData.warehouse.postalCode" />
+                <input class="span12" name="email" type="text" localize="placeholder" placeholder="@general_email" data-ng-model="dialogData.warehouse.email" />
+                <input class="span12" name="phone" type="text" placeholder="Phone" data-ng-model="dialogData.warehouse.phone" />
+                <label class="label-checkbox"><input name="primary" type="checkbox" data-ng-disabled="true" data-ng-model="dialogData.warehouse.isDefault"> <span><localize key="merchelloShippingWarehouse_makePrimaryWarehouse" /></span></label>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="save()">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
