@@ -6,13 +6,15 @@ MUI.AddItem = {
         { alias: 'added', name: 'AddItem.added' }
     ],
 
+    addItemSuccess: 'Successfully added item to basket',
+
     postUrl: '',
 
     // Initializes the AddItem object
     init: function() {
 
-        if (MUI.Settings.basketSurfaceEndpoint !== '') {
-            MUI.AddItem.postUrl = MUI.Settings.basketSurfaceEndpoint + 'AddBasketItem';
+        if (MUI.Settings.Endpoints.basketSurface !== undefined && MUI.Settings.Endpoints.basketSurface !== '') {
+            MUI.AddItem.postUrl = MUI.Settings.Endpoints.basketSurface + 'AddBasketItem';
         }
 
         // find all of the AddItem forms
@@ -26,9 +28,9 @@ MUI.AddItem = {
 
         // loads the product data tables after the keys have been acquired
         function loadData() {
-            if (MUI.Settings.productTableApiEndpoint === '') return;
+            if (MUI.Settings.Endpoints.productTableApi !== undefined && MUI.Settings.Endpoints.productTableApi === '') return;
             if (MUI.AddItem.bind.keys.length > 0) {
-                var url = MUI.Settings.productTableApiEndpoint + 'PostGetProductDataTables';
+                var url = MUI.Settings.Endpoints.productTableApi + 'PostGetProductDataTables';
 
                 $.ajax({
                     type: 'POST',
@@ -52,6 +54,7 @@ MUI.AddItem = {
                     }
 
                 }, function (err) {
+                    MUI.Notify.error(err);
                     MUI.Logger.captureError(err);
                 });
             }
@@ -87,8 +90,8 @@ MUI.AddItem = {
                     }).then(function(result) {
 
                         MUI.emit('AddItem.added', result);
-
-                        // TODO Add some sort of success message (notification panel?)
+                        
+                        MUI.Notify.success('Successfully added item to basket');
 
                     }, function(err) {
                        MUI.Logger.captureError(err); 

@@ -10,7 +10,7 @@
 //          JQuery unobrusive
 //          underscore.js
 var MUI = (function() {
-
+    
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
@@ -26,10 +26,14 @@ var MUI = (function() {
         $(document).ready(function() {
             // initialize the logger module
             MUI.Logger.init();
+            // intialize the notifications
+            MUI.Notify.init();
             // initialize the add item module
             MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
+            // initialize the checkout module
+            MUI.Checkout.init();
             // initialize the labels
             MUI.Labels.init();
         });
@@ -124,6 +128,11 @@ var MUI = (function() {
 
     // exposed members
     return {
+        // ensures the settings object is created
+        Settings: {
+            Notifications: {},
+            Endpoints: {}
+        },
         init: init,
         hasLogger: hasLogger,
         createCache: createCache,
@@ -144,13 +153,15 @@ MUI.AddItem = {
         { alias: 'added', name: 'AddItem.added' }
     ],
 
+    addItemSuccess: 'Successfully added item to basket',
+
     postUrl: '',
 
     // Initializes the AddItem object
     init: function() {
 
-        if (MUI.Settings.basketSurfaceEndpoint !== '') {
-            MUI.AddItem.postUrl = MUI.Settings.basketSurfaceEndpoint + 'AddBasketItem';
+        if (MUI.Settings.Endpoints.basketSurface !== undefined && MUI.Settings.Endpoints.basketSurface !== '') {
+            MUI.AddItem.postUrl = MUI.Settings.Endpoints.basketSurface + 'AddBasketItem';
         }
 
         // find all of the AddItem forms
@@ -164,9 +175,9 @@ MUI.AddItem = {
 
         // loads the product data tables after the keys have been acquired
         function loadData() {
-            if (MUI.Settings.productTableApiEndpoint === '') return;
+            if (MUI.Settings.Endpoints.productTableApi !== undefined && MUI.Settings.Endpoints.productTableApi === '') return;
             if (MUI.AddItem.bind.keys.length > 0) {
-                var url = MUI.Settings.productTableApiEndpoint + 'PostGetProductDataTables';
+                var url = MUI.Settings.Endpoints.productTableApi + 'PostGetProductDataTables';
 
                 $.ajax({
                     type: 'POST',
@@ -190,6 +201,7 @@ MUI.AddItem = {
                     }
 
                 }, function (err) {
+                    MUI.Notify.error(err);
                     MUI.Logger.captureError(err);
                 });
             }
@@ -225,8 +237,8 @@ MUI.AddItem = {
                     }).then(function(result) {
 
                         MUI.emit('AddItem.added', result);
-
-                        // TODO Add some sort of success message (notification panel?)
+                        
+                        MUI.Notify.success('Successfully added item to basket');
 
                     }, function(err) {
                        MUI.Logger.captureError(err); 
@@ -335,9 +347,8 @@ MUI.Basket = {
 
     // initialize the basket
     init: function() {
-        if (MUI.Settings === undefined) return;
-        if (MUI.Settings.basketSurfaceEndpoint === '') return;
-
+        if (MUI.Settings.Endpoints.basketSurface === undefined || MUI.Settings.Endpoints.basketSurface === '') return;
+        
         var frm = $('[data-muifrm="basket"]');
         if (frm.length > 0) {
             MUI.Basket.bind.form(frm[0]);
@@ -353,7 +364,7 @@ MUI.Basket = {
                 var frmRef = $(this).closest('form');
 
                 // post the form to update the basket quantities
-                var url = MUI.Settings.basketSurfaceEndpoint + 'UpdateBasket';
+                var url = MUI.Settings.Endpoints.basketSurface + 'UpdateBasket';
                 $.ajax({
                     type: 'POST',
                     url: url,
@@ -393,6 +404,14 @@ MUI.Basket = {
 
         }
     }
+};
+
+MUI.Checkout = {
+  
+    init: function() {
+        
+    }
+    
 };
 
 MUI.Forms = {
@@ -522,6 +541,127 @@ MUI.Logger = {
     }
 };
 
+MUI.Notify = {
+
+    types: [
+        'success',
+        'info',
+        'error',
+        'warn'
+    ],
+
+    // Value to check to see if notifications are enabled and the bar has been appended to the page
+    enabled: false,
+    
+    bar: undefined,
+
+    // initializes the Notify class
+    init: function() {
+        MUI.Notify.appendNotifyBar();
+    },
+
+    // renders an info message
+    info: function(msg) {
+      MUI.Notify.message(msg, 'info', 1000);
+    },
+
+    // renders a success message
+    success: function(msg) {
+      MUI.Notify.message(msg, 'success', 500);
+    },
+
+    // renders an error message
+    error: function(msg) {
+        MUI.Notify.message(msg, 'error', 1000);
+    },
+
+    // renders a warning message
+    warn: function(msg) {
+        MUI.Notify.message(msg, 'warn', 750);
+    },
+
+    // renders a message
+    message: function(msg, type, delay) {
+        if (MUI.Notify.bar !== undefined && MUI.Notify.enabled) {
+
+            if(delay === undefined) delay = 500;
+
+            var bar = MUI.Notify.bar;
+            var container = $(bar).find('[data-muivalue="nofity"]');
+            if (container.length > 0) {
+
+                // removes previous class from notify bar
+                reset();
+                // get the current css class
+                if (type === undefined) type = 'info';
+                var ref = MUI.Notify.getClassRef(type);
+                var css = MUI.Notify.getCssClass(ref);
+                $(bar).addClass(css);
+                $(container).html(msg);
+                $(bar).fadeIn().delay(delay).fadeOut();
+            }
+        }
+
+        // removes all the css classes
+        function reset() {
+            var bar = MUI.Notify.bar;
+            var refs = MUI.Notify.getClassRef('all');
+            $.each(refs, function(ref) {
+                var css = MUI.Notify.getCssClass(ref);
+                $(bar).removeClass(css);
+            });
+        }
+    },
+
+
+    getCssClass: function(ref) {
+        try {
+            var css = MUI.Settings.Notifications[ref];
+            if (css === undefined) {
+                MUI.Logger.captureMessage('Failed to find CSS class for ' + ref + '. Returning alert-info');
+                return 'alert-info';
+            } else {
+                return css;
+            }
+        } catch(err) {
+            MUI.Logger.captureError(err);
+        }
+    },
+
+    getClassRef: function (type) {
+        if (type === 'all') {
+            var refs = [];
+            $.each(MUI.Notify.types, function(t) {
+                refs.push(t + 'Css');
+            });
+            return refs;
+        } else {
+            var found = _.find(MUI.Notify.types, function(t) { return t === type });
+            return found === undefined ? 'infoCss' : type + 'Css';
+        }
+    },
+
+    // Appends the notify bar to the bottom of the current page
+    appendNotifyBar: function() {
+        if (MUI.Settings.Notifications.enabled !== undefined &&
+            MUI.Settings.Notifications.enabled === true &&
+            MUI.Settings.Notifications.template !== undefined &&
+            MUI.Settings.Notifications.template !== '') {
+
+            // ensure not exists
+            if($('[data-muinotify="notifybar"]').length === 0)
+            {
+                var div = MUI.Settings.Notifications.template;
+
+                $('body').append(div);
+                MUI.Notify.bar = $('[data-muinotify="notifybar"]');
+                $(MUI.Notify.bar).hide();
+                MUI.Notify.enabled = true;
+            }
+        }
+    }
+};
+
 //// Cart model
 MUI.AddItem.ProductDataTable = function() {
     var self = this;
@@ -563,6 +703,17 @@ MUI.AddItem.ProductDataTableRow = function() {
     self.matchKeys = [];
     self.inventoryCount = 0;
     self.outOfStockPurchase = false;
+};
+
+MUI.Checkout.Address = {
+  
+    addressType: '',
+    
+    init: function() {
+        
+    }
+    
+    
 };
 
 // put prototype methods there

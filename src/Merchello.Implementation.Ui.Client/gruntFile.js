@@ -6,7 +6,7 @@
     grunt.registerTask('default', ['jshint:dev', 'build']);
 
     //triggered from grunt dev or grunt
-    grunt.registerTask('build', ['clean', 'concat', 'sass:build', 'copy']);
+    grunt.registerTask('build', ['clean', 'concat', 'sass', 'uglify:build', 'copy']);
 
 
 
@@ -18,7 +18,7 @@
     // Project configuration.
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
-        distdir: 'build/App_Plugins/Merchello/client',
+        distdir: 'build/App_Plugins/Merchello',
         vsdir: '../Merchello.Implementation.UI/App_Plugins/Merchello',
         appdir: '../Merchello.Implementation.UI',
         pkg: grunt.file.readJSON('package.json'),
@@ -45,15 +45,15 @@
             assets: {
                 // this requires that the scss as been compiled.
                 files: [
-                    { dest: '<%= distdir %>/assets/css', src: '*.css', expand: true, cwd: 'src/scss/' }
+                    { dest: '<%= distdir %>/client/css', src: '*.css', expand: true, cwd: 'src/scss/' }
                 ]
             },
 
             vs: {
                 files: [
                     //then we need to figure out how to not copy all the test stuff either!?
-                    { dest: '<%= vsdir %>/assets', src: '**', expand: true, cwd: '<%= distdir %>/assets' },
-                    { dest: '<%= vsdir %>/client', src: '**', expand: true, cwd: '<%= distdir %>/js' },
+                    { dest: '<%= vsdir %>/client', src: '**', expand: true, cwd: '<%= distdir %>/client/' },
+                    //{ dest: '<%= vsdir %>/client', src: '**', expand: true, cwd: '<%= distdir %>/client/js' },
                     { dest: '<%= vsdir %>/config', src: '*.config', expand: true, cwd: '<%= distdir %>/config' },
                     { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' },
                     { dest: '<%= vsdir %>/backoffice/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/dialogs' }
@@ -64,7 +64,7 @@
         concat: {
             mui: {
                 src: ['src/jquery/mui/*.js', 'src/jquery/mui/modules/*/*.js', 'src/jquery/mui/modules/*/components/*.js', 'src/jquery/bootstrapper.js'],
-                dest: '<%= distdir %>/js/mui.js',
+                dest: '<%= distdir %>/client/js/mui.js',
                 options: {
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
@@ -73,7 +73,7 @@
             ,
             settings: {
                 src: ['src/jquery/mui.settings.js'],
-                dest: '<%= distdir %>/js/mui.settings.js',
+                dest: '<%= distdir %>/client/js/mui.settings.js',
                 options: {
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
@@ -84,13 +84,13 @@
         sass: {
             dev: {
                 files: {
-                    '<%= distdir %>/assets/css/mui.css':
+                    '<%= distdir %>/client/css/default/mui.css':
                     '<%= src.scss %>'
                 }
             },
-            build: {
+            prod: {
                 files: {
-                    '<%= distdir %>/assets/css/mui.css':
+                    '<%= distdir %>/client/css/default/mui.min.css':
                     '<%= src.scss %>'
                 },
                 options: {
@@ -98,7 +98,22 @@
                 }
             }
         },
-        
+
+        uglify: {
+            build: {
+                files: {
+                    '<%= distdir %>/client/js/mui.min.js': ['<%= distdir %>/client/js/mui.js']
+                },
+                options: {
+                    mangle: true,
+                    sourceMap: true,
+                    sourceMapName: '<%= distdir %>/client/js/mui.js.map',
+                    banner: '<%= banner %>\n\n',
+                    footer: '\n'
+                }
+            }
+        },
+
 
         jshint: {
             dev: {
@@ -106,6 +121,7 @@
                     src: ['<%= src.common %>', '<%= src.specs %>', '<%= src.scenarios %>']
                 },
                 options: {
+                    JQuery: true,
                     curly: true,
                     eqeqeq: true, 
                     immed: true,

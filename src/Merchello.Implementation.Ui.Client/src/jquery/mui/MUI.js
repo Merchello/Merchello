@@ -3,7 +3,7 @@
 //          JQuery unobrusive
 //          underscore.js
 var MUI = (function() {
-
+    
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
@@ -19,10 +19,14 @@ var MUI = (function() {
         $(document).ready(function() {
             // initialize the logger module
             MUI.Logger.init();
+            // intialize the notifications
+            MUI.Notify.init();
             // initialize the add item module
             MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
+            // initialize the checkout module
+            MUI.Checkout.init();
             // initialize the labels
             MUI.Labels.init();
         });
@@ -117,6 +121,11 @@ var MUI = (function() {
 
     // exposed members
     return {
+        // ensures the settings object is created
+        Settings: {
+            Notifications: {},
+            Endpoints: {}
+        },
         init: init,
         hasLogger: hasLogger,
         createCache: createCache,

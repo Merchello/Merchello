@@ -1,0 +1,7 @@
+MUI.Checkout = {
+  
+    init: function() {
+        
+    }
+    
+};

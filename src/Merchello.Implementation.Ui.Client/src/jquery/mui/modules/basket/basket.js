@@ -4,9 +4,8 @@ MUI.Basket = {
 
     // initialize the basket
     init: function() {
-        if (MUI.Settings === undefined) return;
-        if (MUI.Settings.basketSurfaceEndpoint === '') return;
-
+        if (MUI.Settings.Endpoints.basketSurface === undefined || MUI.Settings.Endpoints.basketSurface === '') return;
+        
         var frm = $('[data-muifrm="basket"]');
         if (frm.length > 0) {
             MUI.Basket.bind.form(frm[0]);
@@ -22,7 +21,7 @@ MUI.Basket = {
                 var frmRef = $(this).closest('form');
 
                 // post the form to update the basket quantities
-                var url = MUI.Settings.basketSurfaceEndpoint + 'UpdateBasket';
+                var url = MUI.Settings.Endpoints.basketSurface + 'UpdateBasket';
                 $.ajax({
                     type: 'POST',
                     url: url,

@@ -13,11 +13,11 @@
     /// The type of <see cref="IBasketModel{TBasketItemModel}"/>
     /// </typeparam>
     /// <typeparam name="TBasketItemModel">
-    /// The type of <see cref="IBasketItemModel"/>
+    /// The type of <see cref="ILineItemModel"/>
     /// </typeparam>
     public class BasketModelFactory<TBasketModel, TBasketItemModel>
         where TBasketModel : class, IBasketModel<TBasketItemModel>, new()
-        where TBasketItemModel : class, IBasketItemModel, new()
+        where TBasketItemModel : class, ILineItemModel, new()
     {
         /// <summary>
         /// Creates <see cref="TBasketModel"/> from <see cref="IBasket"/>.

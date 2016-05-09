@@ -17,6 +17,18 @@
     public class CheckoutAddressModelFactory<TAddress>
         where TAddress : class, ICheckoutAddressModel, new()
     {
+        private readonly IMerchelloContext _merchelloContext;
+
+        public CheckoutAddressModelFactory()
+            : this(MerchelloContext.Current)
+        {
+        }
+
+        public CheckoutAddressModelFactory(IMerchelloContext merchelloContext)
+        {
+            _merchelloContext = merchelloContext;
+        }
+
         /// <summary>
         /// Creates a <see cref="IAddress"/> from <see cref="TAddress"/>.
         /// </summary>
@@ -56,7 +68,8 @@
         /// The <see cref="TAddress"/>.
         /// </returns>
         public TAddress Create(IAddress adr)
-        {
+        {   
+
             return new TAddress
                 {
                     Name = adr.Name,

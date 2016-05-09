@@ -61,7 +61,7 @@
             // Ensure to order of the basket items is in alphabetical order.
             basketModel.Items = basketModel.Items.OrderBy(x => x.Name).ToArray();
 
-            return basketModel;
+            return base.OnCreate(basketModel, basket);
         }
 
         /// <summary>

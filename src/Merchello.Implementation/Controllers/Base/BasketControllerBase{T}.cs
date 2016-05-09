@@ -36,7 +36,7 @@
     /// The type of <see cref="IAddItemModel"/>
     /// </typeparam>
     public abstract class BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem> : MerchelloSurfaceController
-        where TBasketItemModel : class, IBasketItemModel, new()
+        where TBasketItemModel : class, ILineItemModel, new()
         where TBasketModel : class, IBasketModel<TBasketItemModel>, new()
         where TAddItem : class, IAddItemModel, new()
     {

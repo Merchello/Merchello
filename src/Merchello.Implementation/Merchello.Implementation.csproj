@@ -312,9 +312,11 @@
     <Compile Include="Controllers\Base\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\Base\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\Base\CheckoutControllerBase.cs" />
+    <Compile Include="Controllers\Base\CheckoutSummaryControllerBase{T}.cs" />
     <Compile Include="Controllers\Default\Api\DefaultProductDataTableApiController.cs" />
     <Compile Include="Controllers\Default\DefaultBasketController.cs" />
     <Compile Include="Controllers\Default\DefaultCheckoutAddressController.cs" />
+    <Compile Include="Controllers\Default\DefaultCheckoutSummaryController.cs" />
     <Compile Include="Factories\AddItemModelFactory.cs" />
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
@@ -337,6 +339,8 @@
     <Compile Include="Models\Default\CheckoutAddressModel.cs" />
     <Compile Include="Models\Default\CheckoutBillingAddressModel.cs" />
     <Compile Include="Models\CheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\Default\CheckoutSummaryModel.cs" />
+    <Compile Include="Models\ICheckoutSummaryModel.cs" />
     <Compile Include="Models\IProductDataTableRow.cs" />
     <Compile Include="Models\IProductDataTable.cs" />
     <Compile Include="Models\ICheckoutAddressModel.cs" />

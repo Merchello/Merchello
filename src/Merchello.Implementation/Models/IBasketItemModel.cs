@@ -1,14 +1,11 @@
 ﻿namespace Merchello.Implementation.Models
 {
     using System;
-    using System.Collections.Generic;
-
-    using Merchello.Web.Models.VirtualContent;
 
     /// <summary>
     /// Defines a basket item UI component.
     /// </summary>
-    public interface IBasketItemModel
+    public interface ILineItemModel
     {
         /// <summary>
         /// Gets or sets the key.

@@ -9,7 +9,7 @@
     /// <summary>
     /// A model used to represent items in a basket or cart.
     /// </summary>
-    public class BasketItemModel : IBasketItemModel
+    public class BasketItemModel : ILineItemModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketItemModel"/> class.
