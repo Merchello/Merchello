@@ -50,5 +50,19 @@
         {
             return ((ProductVariantContent)content).ProductVariantDisplay;
         }
+
+        /// <summary>
+        /// The current effective price.
+        /// </summary>
+        /// <param name="content">
+        /// The content.
+        /// </param>
+        /// <returns>
+        /// The sale price if on sale, otherwise returns the price.
+        /// </returns>
+        public static decimal PriceOrSalePrice(this IProductContentBase content)
+        {
+            return content.OnSale ? content.SalePrice : content.Price;
+        }
     }
 }
