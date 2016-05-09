@@ -1,0 +1,1164 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Umbraco.Web.UI</name>
+    </assembly>
+    <members>
+        <member name="F:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.pl_loadStarterKits">
+            <summary>
+            pl_loadStarterKits control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.rep_starterKits">
+            <summary>
+            rep_starterKits control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.LinkButton1">
+            <summary>
+            LinkButton1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.LinkButton2">
+            <summary>
+            LinkButton2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.PackageInstallServiceBaseUrl">
+            <summary>
+            Returns the string for the package installer web service base url
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Install.Steps.Skinning.LoadStarterKits.CannotConnect">
+            <summary>
+            Flag to show if we can connect to the repo or not
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.UI.Config.Splashes.NoNodes.Form1">
+            <summary>
+            Form1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.ResetPlaceHolder">
+            <summary>
+            ResetPlaceHolder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.CurrentPasswordPlaceHolder">
+            <summary>
+            CurrentPasswordPlaceHolder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.CurrentPasswordValidator">
+            <summary>
+            CurrentPasswordValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.NewPasswordRequiredValidator">
+            <summary>
+            NewPasswordRequiredValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.NewPasswordLengthValidator">
+            <summary>
+            NewPasswordLengthValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Controls.PasswordChanger.Div1">
+            <summary>
+            Div1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.CreateDialog.AccessError">
+            <summary>
+            AccessError control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialView.FileName">
+            <summary>
+            FileName control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialView.RequiredFieldValidator1">
+            <summary>
+            RequiredFieldValidator1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialView.EndsWithValidator">
+            <summary>
+            EndsWithValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialView.PartialViewTemplate">
+            <summary>
+            PartialViewTemplate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialView.Textbox1">
+            <summary>
+            Textbox1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialView.sbmt">
+            <summary>
+            sbmt control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.FileName">
+            <summary>
+            FileName control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.RequiredFieldValidator2">
+            <summary>
+            RequiredFieldValidator2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.EndsWithValidator">
+            <summary>
+            EndsWithValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.PartialViewTemplate">
+            <summary>
+            PartialViewTemplate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.CreateMacroCheckBox">
+            <summary>
+            CreateMacroCheckBox control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.MacroExistsValidator">
+            <summary>
+            MacroExistsValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.Textbox2">
+            <summary>
+            Textbox2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.PartialViewMacro.SubmitButton">
+            <summary>
+            SubmitButton control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Create.User.LoginExistsCheck(System.Object,System.Web.UI.WebControls.ServerValidateEventArgs)">
+            <summary>
+            Validation to Check if Login Name Exists
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Create.User.EmailExistsCheck(System.Object,System.Web.UI.WebControls.ServerValidateEventArgs)">
+            <summary>
+            Validation to Check if Member with email Exists
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.validationSummary">
+            <summary>
+            validationSummary control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.loginRequired">
+            <summary>
+            loginRequired control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.loginExistsCheck">
+            <summary>
+            loginExistsCheck control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.Login">
+            <summary>
+            Login control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.emailRequired">
+            <summary>
+            emailRequired control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.emailExistsCheck">
+            <summary>
+            emailExistsCheck control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.EmailValidator">
+            <summary>
+            EmailValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.Email">
+            <summary>
+            Email control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.Textbox1">
+            <summary>
+            Textbox1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Create.User.sbmt">
+            <summary>
+            sbmt control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.ExamineManagement.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.ExamineManagement.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.ExamineManagement.ProgBar1">
+            <summary>
+            ProgBar1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.ExamineManagement.ProgressBar1">
+            <summary>
+            ProgressBar1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.ExamineManagement.ProgressBar2">
+            <summary>
+            ProgressBar2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.ClientLoader">
+            <summary>
+            ClientLoader control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.JsInclude3">
+            <summary>
+            JsInclude3 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.JsInclude6">
+            <summary>
+            JsInclude6 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.JsInclude11">
+            <summary>
+            JsInclude11 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.JsInclude12">
+            <summary>
+            JsInclude12 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.JsInclude2">
+            <summary>
+            JsInclude2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.form1">
+            <summary>
+            form1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dashboard.UserControlProxy.container">
+            <summary>
+            container control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.PopulateFieldsOnLoad(Umbraco.Core.Models.IMacro,System.String,System.String)">
+            <summary>
+            This ensures that the SelectedPartialView txt box value is set correctly when the m_macro object's 
+            ScriptingFile property contains a full virtual path beginning with the MacroPartials path
+            </summary>
+            <param name="macro"> </param>
+            <param name="macroAssemblyValue"></param>
+            <param name="macroTypeValue"></param>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.SetMacroValuesFromPostBack(Umbraco.Core.Models.IMacro,System.Int32,System.String,System.String)">
+            <summary>
+            This changes the macro type to a PartialViewMacro if the SelectedPartialView txt box has a value.
+            This then also updates the file path saved for the partial view to be the full virtual path, not just the file name.
+            </summary>
+            <param name="macro"> </param>
+            <param name="macroCachePeriod"></param>
+            <param name="macroAssemblyValue"></param>
+            <param name="macroTypeValue"></param>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.PopulatePartialViewFiles">
+            <summary>
+            Populate the drop down list for partial view files
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.GetPartialViewFiles(System.String,System.String,System.String)">
+            <summary>
+            Get the list of partial view files in the ~/Views/MacroPartials folder and in all 
+            folders of ~/App_Plugins/[PackageName]/Views/MacroPartials
+            </summary>
+            <param name="orgPath"></param>
+            <param name="path"></param>
+            <param name="prefixVirtualPath"> </param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.MacroPropertiesOnItemDataBound(System.Object,System.Web.UI.WebControls.RepeaterItemEventArgs)">
+            <summary>
+            Binds the drop down list but ensures that the macro param type exists if it doesn't the drop down will be left blank
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.SelectedPartialView">
+            <summary>
+            SelectedPartialView control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Macros.EditMacro.PartialViewList">
+            <summary>
+            PartialViewList control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.DirectoryBrowser.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.DirectoryBrowser.pane">
+            <summary>
+            pane control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.DirectoryBrowser.Output">
+            <summary>
+            Output control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.Panel1">
+            <summary>
+            Panel1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.fb">
+            <summary>
+            fb control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.StarterKitNotInstalled">
+            <summary>
+            StarterKitNotInstalled control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.ph_starterkits">
+            <summary>
+            ph_starterkits control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.installationCompleted">
+            <summary>
+            installationCompleted control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Packages.StarterKits.InstallationDirectoryNotAvailable">
+            <summary>
+            InstallationDirectoryNotAvailable control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Developer.Python.EditPython.JsInclude2">
+            <summary>
+            JsInclude2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ChangeDocTypePane">
+            <summary>
+            ChangeDocTypePane control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ContentNamePropertyPanel">
+            <summary>
+            ContentNamePropertyPanel control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ContentNameLabel">
+            <summary>
+            ContentNameLabel control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.CurrentTypePropertyPanel">
+            <summary>
+            CurrentTypePropertyPanel control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.CurrentTypeLabel">
+            <summary>
+            CurrentTypeLabel control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.NewTypePropertyPanel">
+            <summary>
+            NewTypePropertyPanel control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.NewDocumentTypeList">
+            <summary>
+            NewDocumentTypeList control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.NewDocumentTypeValidator">
+            <summary>
+            NewDocumentTypeValidator control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.NewTemplatePropertyPanel">
+            <summary>
+            NewTemplatePropertyPanel control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.NewTemplateList">
+            <summary>
+            NewTemplateList control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.NotAvailablePlaceholder">
+            <summary>
+            NotAvailablePlaceholder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ChangeDocTypePropertyMappingPane">
+            <summary>
+            ChangeDocTypePropertyMappingPane control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.PropertyMappingRepeater">
+            <summary>
+            PropertyMappingRepeater control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.SuccessPlaceholder">
+            <summary>
+            SuccessPlaceholder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.SuccessMessage">
+            <summary>
+            SuccessMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.PropertiesMappedMessage">
+            <summary>
+            PropertiesMappedMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ContentPublishedMessage">
+            <summary>
+            ContentPublishedMessage control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ValidationPlaceholder">
+            <summary>
+            ValidationPlaceholder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ValidationError">
+            <summary>
+            ValidationError control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.SaveAndCancelPlaceholder">
+            <summary>
+            SaveAndCancelPlaceholder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.SavePlaceholder">
+            <summary>
+            SavePlaceholder control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.ChangeDocType.ValidateAndSave">
+            <summary>
+            ValidateAndSave control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Dialogs.EditMacro.OnPreRender(System.EventArgs)">
+            <summary>
+            Sets the macro propery count if the macro object has been loaded
+            </summary>
+            <param name="e"></param>
+            <remarks>
+            The macro property will only have been loaded on a post back from the first screen after selecting a macro, otherwise it will be zero.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.UI.Umbraco.Dialogs.EditMacro.CountOfMacroProperties">
+            <summary>
+            Returns the number of macro properties defined on the macro found
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.Sort.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.Sort.JsInclude3">
+            <summary>
+            JsInclude3 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.Publish.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.Publish.JsInclude2">
+            <summary>
+            JsInclude2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.Publish.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Dialogs.Publish.ProgBar1">
+            <summary>
+            ProgBar1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Masterpages.UmbracoDialog.DocType">
+            <summary>
+            DocType control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Masterpages.UmbracoPage.DocType">
+            <summary>
+            DocType control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.EditTemplate.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.InitializeEditorForPartialView">
+            <summary>
+            Configure the editor for partial view editing
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.InitializeEditorForTemplate">
+            <summary>
+            Configure the editor for editing a template
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.JsInclude1">
+            <summary>
+            JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.Panel1">
+            <summary>
+            Panel1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.Pane8">
+            <summary>
+            Pane8 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.pp_source">
+            <summary>
+            pp_source control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.editorSource">
+            <summary>
+            editorSource control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.Pane7">
+            <summary>
+            Pane7 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.pp_name">
+            <summary>
+            pp_name control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.PathPrefix">
+            <summary>
+            PathPrefix control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.NameTxt">
+            <summary>
+            NameTxt control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.pp_alias">
+            <summary>
+            pp_alias control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.AliasTxt">
+            <summary>
+            AliasTxt control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.pp_masterTemplate">
+            <summary>
+            pp_masterTemplate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.MasterTemplate">
+            <summary>
+            MasterTemplate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.EditorType">
+            <summary>
+            Returns the type of view being edited
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.CurrentTreeType">
+            <summary>
+            This view is shared between different trees so we'll look for the query string
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.OriginalFileName">
+            <summary>
+            Returns the original file name that the editor was loaded with
+            </summary>
+            <remarks>
+            this is used for editing a partial view
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.UI.Umbraco.Settings.Views.EditView.ViewEditorType">
+            <summary>
+            The type of MVC/Umbraco view the editor is editing
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.TreeInit.Head1">
+            <summary>
+            Head1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.TreeInit.ClientLoader">
+            <summary>
+            ClientLoader control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.TreeInit.CssInclude1">
+            <summary>
+            CssInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.TreeInit.form1">
+            <summary>
+            form1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.TreeInit.ScriptManager1">
+            <summary>
+            ScriptManager1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Web.UI.Umbraco.TreeInit.JTree">
+            <summary>
+            JTree control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+    </members>
+</doc>

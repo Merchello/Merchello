@@ -1,0 +1,40 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.ProductCopyController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloProducts_copyProduct" /></h4>
+    </div>
+    <!-- Flyout when Change Prices is clicked -->
+    <form name="copyProductForm" id="copyProductForm">
+    <div class="umb-panel-body with-header with-footer">
+
+
+            <div class="form-group row-fluid">
+                <label for="name"><localize key="merchelloProducts_newProductName" /></label>
+                <div class="error" data-ng-show="copyProductForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+                <input name="name" id="name" data-ng-model="dialogData.name" class="span8" type="text" required />
+            </div>
+            <div class="form-group row-fluid">
+                <label for="sku"><localize key="merchelloProducts_newProductSku" /></label>
+                <div class="error" data-ng-show="copyProductForm.sku.$invalid && wasFormSubmitted">SKU is a required field.</div>
+                <input name="sku" id="sku" data-ng-model="dialogData.sku" class="span8" type="text" required />
+            </div>
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+

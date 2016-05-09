@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>controls</name>
+    </assembly>
+    <members>
+        <member name="M:umbraco.uicontrols.DatePicker.DateTimePicker.#ctor">
+            <summary>
+            Constructor, set defaults.
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.GetItemTitle">
+            <summary>
+            If item has been selected or stored, this will query the db for its title
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.GetItemBreadcrumbs">
+            <summary>
+            Just like GetItemTitle, except returns the full path (breadcrumbs) of the node
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.GetJSScript">
+            <summary>
+            Outputs the JavaScript instances used to make this control work
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.RenderJSComponents">
+            <summary>
+            Registers the required JS classes required to make this control work
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.CreateChildControls">
+            <summary>
+            Create the native .net child controls for this control
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreePicker.BaseTreePicker.OnPreRender(System.EventArgs)">
+            <summary>
+            Registers the JavaScript required for the control to function and hides/shows controls depending on it's properties
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.Value">
+            <summary>
+            Wraps the hidden vield value
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.TreePickerUrl">
+            <summary>
+            Need to specify the tree picker url (iframe)
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePicker.ModalWindowTitle">
+            <summary>
+            The title to specify for the picker window
+            </summary>
+        </member>
+        <member name="T:umbraco.uicontrols.TreePicker.BaseTreePickerScripts">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePickerScripts.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePickerScripts.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.TreePicker.BaseTreePickerScripts.BaseTreePicker">
+             <summary>
+               Looks up a localized string similar to /// &lt;reference path=&quot;/umbraco_client/Application/NamespaceManager.js&quot; /&gt;
+            
+            Umbraco.Sys.registerNamespace(&quot;Umbraco.Controls&quot;);
+            
+            (function($) {
+                Umbraco.Controls.TreePicker = function(clientId, label, itemIdValueClientID, itemTitleClientID, itemPickerUrl, width, height, showHeader, umbracoPath) {
+                    var obj = {
+                        _itemPickerUrl: itemPickerUrl,
+                        _webServiceUrl: umbracoPath + &quot;/webservices/legacyAjaxCalls.asmx/GetNodeBreadcrumbs&quot;,
+                        _label: label,
+                        _wid [rest of string was truncated]&quot;;.
+             </summary>
+        </member>
+        <member name="T:umbraco.uicontrols.TreeUrlGenerator">
+            <summary>
+            This class will generate the URLs for iframe tree pages. 
+            Generally used to get the a tree picker url.    
+            </summary>
+            <remarks>
+            This was created in 4.1 so that this helper class can be exposed to other assemblies since
+            it only existed in the presentation assembly in previous versions
+            </remarks>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetServiceUrl">
+            <summary>
+            Returns the url for servicing the xml tree request based on the parameters specified on this class.
+            </summary>
+            <returns>Tree service url as a string</returns>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetServiceUrl(System.Nullable{System.Int32},System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.String,System.String)">
+            <summary>
+            Static method to return the tree service url with the specified parameters
+            </summary>
+            <param name="startNodeID"></param>
+            <param name="treeType"></param>
+            <param name="showContextMenu"></param>
+            <param name="isDialog"></param>
+            <param name="app"></param>
+            <param name="nodeKey"></param>
+            <param name="functionToCall"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetInitUrl">
+            <summary>
+            Returns the url for initializing the tree based on the parameters specified on this class
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetInitUrl(System.Nullable{System.Int32},System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.String,System.String)">
+            <summary>
+            static method to return the tree init url with the specified parameters
+            </summary>
+            <param name="startNodeID"></param>
+            <param name="treeType"></param>
+            <param name="showContextMenu"></param>
+            <param name="isDialog"></param>
+            <param name="app"></param>
+            <param name="nodeKey"></param>
+            <param name="functionToCall"></param>
+            <returns></returns>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetPickerUrl(System.String,System.String)">
+            <summary>
+            Returns the url for the tree picker (used on modal windows) based on the parameters specified on this class
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetPickerUrl">
+            <summary>
+            Returns the url for the tree picker (used on modal windows) based on the parameters specified on this class
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.TreeUrlGenerator.GetUrl(System.String)">
+            <summary>
+            Generates the URL parameters for the tree service.
+            </summary>
+            <param name="pageUrl">the base url (i.e. tree.aspx)</param>
+            <returns></returns>
+        </member>
+        <member name="T:umbraco.uicontrols.UmbracoClientDependencyLoader">
+            <summary>
+            Used to load in all client dependencies for Umbraco.
+            Ensures that both UmbracoClient and UmbracoRoot paths are added to the loader.
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.UmbracoClientDependencyLoader.#ctor">
+            <summary>
+            Set the defaults
+            </summary>
+        </member>
+        <member name="P:umbraco.uicontrols.CodeArea.ClientID">
+            <summary>
+            Client ID is different if the code editor is turned on/off
+            </summary>
+        </member>
+        <member name="M:umbraco.uicontrols.ScrollingMenu.InsertNewControl(System.Web.UI.Control,System.Int32)">
+            <summary>
+            Inserts a new web control into the scrolling menu
+            </summary>
+            <param name="control"></param>
+            <param name="extraWidth">The additional width to extend the scrolling menu by if the control being inserted is wider than the standard</param>
+        </member>
+        <member name="M:umbraco.uicontrols.ScrollingMenu.FindSplitter(System.Int32)">
+            <summary>
+            Finds the index of the n-th Splitter in this Menu
+            </summary>
+            <param name="n"></param>
+            <returns>The index of the n-th Splitter, or -1 if the number of Splitters is smaller than n</returns>
+        </member>
+    </members>
+</doc>

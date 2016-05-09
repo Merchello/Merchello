@@ -1,0 +1,12 @@
+<div class="vcard">
+    <span class="fn" data-ng-show="invoice.billToName != ''">{{address.name}}</span>
+    <span class="org" data-ng-show="invoice.billToCompany != ''">{{address.organization}}</span>
+                        <span class="adr">
+                            <span class="street-address">{{address.address1}}</span>
+                            <span class="extended-address" data-ng-show="address.address2 != ''">{{address.address2}}</span>
+                            <span class="locality">{{address.locality}}</span>, <span class="region">{{address.region}}</span> <span class="postal-code">{{address.postalCode}}</span>
+                            <span class="country-name">{{address.countryCode}}</span>
+                        </span>
+    <span class="tel" data-ng-show="address.phone !== '' && address.phone !== null">Phone: {{address.phone}}</span>
+    <span data-ng-show="address.email != ''"><a data-ng-href="mailto:{{address.email}}" class="email">{{address.email}}</a></span>
+</div>

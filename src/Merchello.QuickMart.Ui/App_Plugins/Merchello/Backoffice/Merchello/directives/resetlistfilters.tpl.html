@@ -1,0 +1,4 @@
+<div class="form-inline" data-ng-show="currentFilters.length > 0">
+    <strong>Current Filters</strong> <span data-ng-repeat="filter in currentFilters"> <span class="label label-inverse">{{ filter.fieldname }} '{{ filter.value }}'</span>  </span>
+    <button class="btn" data-ng-click="resetFilters()"><localize key="merchelloOrder_resetFilters" /></button>
+</div>

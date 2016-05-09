@@ -1,0 +1,21 @@
+<div class="form-inline">
+    <div>
+        <span data-ng-show="!hideDatesLabel">Dates:</span>
+        <div class="input-append date datepicker" id="filterStartDate">
+            <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
+                   data-ng-model="filterStartDate" />
+            <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+            </span>
+        </div>
+        -
+        <div class="input-append date datepicker" id="filterEndDate">
+            <input name="datepicker" data-format="{{settings.dateFormat}}" type="text"
+                   data-ng-model="filterEndDate" />
+            <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+            </span>
+        </div>
+        <button data-ng-hide="hideFilterButton" id="orderFilterDateGo" class="btn" data-ng-click="changeDateFilters(filterStartDate, filterEndDate)">{{filterButtonText}}</button>
+    </div>
+</div>

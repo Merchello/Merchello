@@ -1,0 +1,64 @@
+﻿@inherits UmbracoViewPage<Merchello.Implementation.Models.CheckoutBillingAddressModel>
+@using Merchello.Implementation.Controllers
+
+<h3>Billing Address</h3>
+@using (Html.BeginUmbracoForm<DefaultCheckoutAddressController>("SaveBillingAddress", new { area = "Merchello" }, new { data_muistage = "BillingAddress" }))
+{
+    <div class="form-group">
+        <label>First name *</label>
+        @Html.ValidationMessageFor(x => x.FirstName)
+        @Html.TextBoxFor(x => x.FirstName, new { @class="form-control" })
+    </div>
+
+    <div class="form-group">
+       <label>Last name *</label>
+        @Html.ValidationMessageFor(x => x.LastName)
+        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Email address *</label>
+        @Html.ValidationMessageFor(x => x.Email)
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Company name (Optional)</label>
+        @Html.TextBoxFor(x => x.Organization, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Address line 1 *</label>
+        @Html.ValidationMessageFor(x => x.Address1)
+        @Html.TextBoxFor(x => x.Address1, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Address line 2</label>
+        @Html.TextBoxFor(x => x.Address2, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Town / City *</label>
+        @Html.ValidationMessageFor(x => x.Locality)
+        @Html.TextBoxFor(x => x.Locality, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>State / Province</label>
+        @Html.TextBoxFor(x => x.Region, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Postal Code *</label>
+        @Html.ValidationMessageFor(x => x.PostalCode)
+        @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group checkbox">
+        <label>
+            @Html.CheckBoxFor(x => x.UseForShipping) Use for shipping address
+        </label>
+    </div>
+    @Html.HiddenFor(x => x.Key)
+    @Html.HiddenFor(x => x.AddressType)
+    @Html.AntiForgeryToken()
+    <div class="text-right">
+        <input type="submit" class="btn btn-default" value="Save" />
+    </div>
+}

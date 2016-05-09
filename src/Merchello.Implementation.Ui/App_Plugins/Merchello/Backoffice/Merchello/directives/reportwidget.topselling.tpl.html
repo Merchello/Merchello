@@ -1,0 +1,39 @@
+<div data-ng-show="loaded">
+    <h2><localize key="merchelloReports_topSellingItems" /></h2>
+    <div class="row">
+        <merchello-date-range-button reload="reload" start-date="startDate" end-date="endDate"></merchello-date-range-button>
+        <div>
+            <canvas id="pie" class="chart chart-pie"
+                    chart-data="chartData" chart-labels="labels">
+            </canvas>
+        </div>
+        <div>
+            <div class="merchello-list-view umb-listview">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th nowrap="nowrap"><localize key="merchelloGeneral_item" /></th>
+                        <th nowrap="nowrap"><localize key="merchelloVariant_sku" /></th>
+                        <th><localize key="merchelloReports_quantitySold" /></th>
+                        <th><localize key="merchelloReports_numberOfInvoices" /></th>
+                        <th><localize key="merchelloGeneral_totals" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="result in results">
+                        <td nowrap="nowrap">{{result.productVariant.name}}</td>
+                        <td nowrap="nowrap">{{result.productVariant.sku}}</td>
+                        <td>{{result.quantitySold}}</td>
+                        <td>{{result.invoiceCount}}</td>
+                        <td>
+                            <div data-ng-repeat="total in result.totals">
+                                {{ total.value | currency: total.currency.symbol }}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>

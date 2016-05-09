@@ -1,0 +1,55 @@
+<div data-ng-controller="Merchello.Backoffice.GatewayProvidersListController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloGatewayProvider_gatewayProvider" /></h1>
+                </div>
+            </div>
+            <div class="span5">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                    <div class="btn-group">
+                    </div>
+                </div>
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel>
+            <div class="merchello-pane row-fluid">
+                <!-- Notification Providers -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloGatewayProvider_notificationProvider" />
+                        <small><localize key="merchelloGatewayProvider_notificationProviderHelper" /></small>
+                    </label>
+                    <resolved-gateway-providers provider-list="notificationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+                <!-- Payment Providers -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloGatewayProvider_paymentProvider" />
+                        <small><localize key="merchelloGatewayProvider_paymentProviderHelper" /></small>
+                    </label>
+                    <resolved-gateway-providers provider-list="paymentGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+                <!-- Shipping Providers -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloGatewayProvider_shippingProvider" />
+                        <small><localize key="merchelloGatewayProvider_shippingProviderHelper" /></small>
+                    </label>
+                    <resolved-gateway-providers provider-list="shippingGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+                <!-- Taxation Providers -->
+                <div class="control-group umb-control-group">
+                    <label class="merchello-control-label">
+                        <localize key="merchelloGatewayProvider_taxationProvider" />
+                        <small><localize key="merchelloGatewayProvider_taxationProviderHelper" /></small>
+                    </label>
+                    <resolved-gateway-providers provider-list="taxationGatewayProviders" on-activate="activateProvider(provider)" on-deactivate="deactivateProvider(provider)" on-configure="editProviderConfigDialogOpen(provider)"></resolved-gateway-providers>
+                </div>
+                <merchello-debug-section data-props-to-debug="paymentGatewayProviders,shippingGatewayProviders,taxationGatewayProviders"></merchello-debug-section>
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

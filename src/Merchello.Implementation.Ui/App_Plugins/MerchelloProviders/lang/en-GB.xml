@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+    <area alias="merchelloProviders">
+        <key alias="paymentVoidWarning">
+            <![CDATA[
+              Note this will only void the store payment record and this DOES NOT pass any information back to the API.
+            ]]>
+        </key>
+    </area>
+</language>

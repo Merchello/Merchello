@@ -1,0 +1,43 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.ProductVariantBulkUpdateInventoryController">
+    <div class="umb-modalcolumn-header">
+        <h4>Update Inventory For All Selected Items</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when Update Inventory is clicked -->
+        <form>
+            <div class="form-group row-fluid">
+                <label for="update-inventory">New quantity</label>
+                <input name="update-inventory" data-ng-model="dialogData.count" class="col-xs-3 span3" type="number" />
+            </div>
+            <div class="form-group row-fluid">
+                <label class="label-checkbox"><input name="includeLowCount" type="checkbox" data-ng-model="dialogData.includeLowCount"> <span>Update low count.</span></label>
+            </div>
+            <div class="form-group row-fluid" data-ng-show="dialogData.includeLowCount">
+                <label for="update-inventory">New low stock quantity</label>
+                <input name="update-inventory" data-ng-model="dialogData.lowCount" class="col-xs-3 span3" type="number" />
+            </div>
+        </form>
+
+        <p class="text-warning" data-ng-show="dialogData.warning != ''">{{dialogData.warning}}</p>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

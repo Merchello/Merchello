@@ -1,0 +1,55 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.NotificationsProviderSettingsSmtpController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="general_edit" /> <b>{{dialogData.provider.name}}</b></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!--network host="127.0.0.1" userName="username" password="password" /-->
+        <!-- Flyout when Edit is clicked -->
+        <form name="editTemplateForm" class="well" data-ng-class="{ 'open': flyouts.editTemplate, 'closed': !flyouts.editTemplate }">
+            <div class="form-group">
+                <label><localize key="merchelloGatewayProvider_host" /></label>
+                <input type="text" data-ng-model="notificationProviderSettings.Host" />
+            </div>
+            <div class="form-group">
+                <label>Port</label><!-- KSW: Need localization for this, not sure how to find it. -->
+                <input type="text" data-ng-model="notificationProviderSettings.Port" />
+            </div>
+            <div class="form-group">
+                <label><localize key="user_username" /></label>
+                <input type="text" data-ng-model="notificationProviderSettings.UserName" />
+            </div>
+            <div class="form-group">
+                <label><localize key="user_password" /></label>
+                <input type="text" data-ng-model="notificationProviderSettings.Password" />
+            </div>
+            <label class="checkbox col-xs-6 span6">
+                <input type="checkbox" data-ng-model="notificationProviderSettings.EnableSsl"> <localize key="merchelloGatewayProvider_enableSSL" />
+            </label>
+            <label class="checkbox col-xs-6 span6">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"><localize key="merchelloGatewayProvider_encryptProviderConfiguration" />
+            </label>
+            <div class="clearfix"></div>
+        </form>
+
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"><localize key="general_cancel" /></localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"><localize key="buttons_save" /></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

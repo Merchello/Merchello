@@ -1,0 +1,35 @@
+<div data-ng-show="providersLoaded">
+    <div class="merchello-section-label">
+        <h4 style="width: 100%">
+            {{country.name}}
+            <div class="merchello-icon-container pull-right">
+            <merchello-delete-icon do-delete="deleteCountry()"></merchello-delete-icon>
+            </div>
+            <!-- a data-ng-click="deleteCountry()" class="btn btn-default btn-trash btn-xs btn-mini pull-right"><i class="icon-trash"></i></a-->
+        </h4>
+        <!-- ACTION: Add Shipping Provider to Country -->
+        <a data-ng-click="addShippingProviderDialogOpen()" data-ng-show="availableProviders.length > 0"><i class="icon-add"></i> Add Provider</a><br /><br />
+    </div>
+    <!-- Shipping Provider -->
+    <div class="merchello-controls" data-ng-repeat="shippingGatewayProvider in assignedProviders" class="merchello-shipping-gateway-provider">
+        <h5 class="row-fluid col-xs-12 span12">
+            {{shippingGatewayProvider.name}}
+            <!-- ACTION: Add Shipping Method to Provider -->
+            <a data-ng-click="addAddShipMethodDialogOpen(shippingGatewayProvider)" class="pull-right"><i class="icon-add"></i> Add Method</a>
+        </h5>
+        <!-- Shipping Methods -->
+        <table class="table table-striped merchello-striped-table">
+            <tbody>
+            <tr data-ng-repeat="gatewayMethod in shippingGatewayProvider.shippingGatewayMethods">
+                <td>{{gatewayMethod.shipMethod.name}}</td>
+                <td class="merchello-icon-container">
+                    <div class="pull-right">
+                    <merchello-provinces-icon show-provinces="country.provinces.length > 0" do-provinces="editShippingMethodRegionsOpen(gatewayMethod)"></merchello-provinces-icon>
+                    <merchello-icon-bar show-edit="gatewayMethod.dialogEditorView.editorView !== ''" show-delete="true" do-edit="editShippingMethodDialogOpen(gatewayMethod)" do-delete="deleteShipMethodOpen(gatewayMethod.shipMethod)"></merchello-icon-bar>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

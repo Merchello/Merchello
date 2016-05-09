@@ -1,0 +1,20 @@
+<div data-ng-controller="Merchello.Backoffice.MerchelloReportsDashboardController" data-ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloTree_reports" /></h1>
+                </div>
+            </div>
+            <div class="span5"></div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+        <merchello-panel>
+            <!-- Tabular Order List -->
+            <div class="merchello-pane">
+                <report-widge-this-week-vs-last ready="preValuesLoaded"></report-widge-this-week-vs-last>
+
+            </div>
+        </merchello-panel>
+    </umb-panel>
+</div>

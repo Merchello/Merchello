@@ -1,0 +1,36 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.ShippingAddCountryProviderController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloShippingProvider_addProvider" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <h5>{{dialogData.selectedProvider.name}}</h5>
+        <div class="form-group row-fluid provider-dropdown" data-ng-show="dialogData.showProvidersDropDown">
+            <label for="provider-name"><localize key="merchelloShippingProvider_selectProvider" /></label>
+            <div class="input-append col-xs-12 span12">
+                <select name="availableProviders" data-ng-model="dialogData.selectedProvider" data-ng-options="p.name for p in dialogData.availableProviders track by p.key"></select>
+            </div>
+        </div>
+        <div class="form-group row-fluid">
+            <label for="method-name"><localize key="general_name" /></label>
+            <input name="method-name" data-ng-model="dialogData.shipMethodName" class="col-xs-12 span12" type="text" />
+        </div>
+        <div class="form-group row-fluid provider-dropdown">
+            <label for="provider-name"><localize key="merchelloShippingProvider_selectResource" /></label>
+            <div class="input-append col-xs-12 span12">
+                <select name="availableResources" data-ng-model="dialogData.selectedResource" data-ng-options="p.name for p in dialogData.selectedProvider.availableResources track by p.serviceCode"></select>
+            </div>
+        </div>
+    </div>
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

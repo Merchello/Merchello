@@ -1,0 +1,74 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.ShippingFixedRateShipMethodController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloShippingMethod_addEditShippingMethod" /> <strong>{{dialogData.shippingGatewayMethod.getName()}}</strong></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <!-- Add/Edit Shipping Method Flyout -->
+        <div class="form-group row-fluid">
+            <label for="method-name"><localize key="general_name" /></label>
+            <input name="method-name" data-ng-model="dialogData.shippingGatewayMethod.shipMethod.name" class="col-xs-12 span12" type="text" />
+        </div>
+
+        <!-- Rate Table -->
+        <table class="table settings-table col-xs-6 span6">
+            <thead>
+            <tr>
+                <th colspan="3"><localize key="merchelloShippingMethod_setRange" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="tier in rateTable.rows">
+                <td class="col-xs-4 span4">
+                    <span>{{tier.rangeLow}} - {{tier.rangeHigh}}</span>
+                </td>
+                <td>
+                    <div class="input-prepend">
+                        <span class="add-on">{{ dialogData.currencySymbol }}</span>
+                        <input type="number" data-ng-model="tier.rate" class="span2 col-xs-2" />
+                    </div>
+                </td>
+                <td>
+                    <!-- ACTION: Remove Rate Tier -->
+                    <a data-ng-click="removeRateTier(tier)" class="btn btn-default btn-xs btn-mini btn-warning">X</a>
+                </td>
+            </tr>
+            <tr data-ng-show="isAddNewTier">
+                <td class="col-xs-4 span4">
+                    <input type="number" data-ng-model="newTier.rangeLow" class="span1 col-xs-1" />
+                    -
+                    <input type="number" data-ng-model="newTier.rangeHigh" class="span1 col-xs-1" />
+                </td>
+                <td>
+                    <div class="input-prepend">
+                        <span class="add-on">{{ dialogData.currencySymbol }}</span>
+                        <input type="number" data-ng-model="newTier.rate" class="span1 col-xs-1" />
+                    </div>
+                </td>
+                <td>
+                    <!-- ACTION: Add (Save) Rate Tier -->
+                    <a data-ng-click="addRateTier()" class="btn btn-default btn-xs btn-mini btn-warning"><localize key="general_add" /></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- ACTION: Insert Rate Tier -->
+        <a data-ng-click="insertRateTier()" class="btn btn-default btn-primary" data-ng-show="!isAddNewTier"><localize key="merchelloShippingMethod_addNewRange" /></a>
+        <a data-ng-click="cancelRateTier()" class="btn btn-default" data-ng-show="isAddNewTier"><localize key="general_cancel" /></a>
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel/Close Flyout -->
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+                <!-- ACTION: Save Flyout -->
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

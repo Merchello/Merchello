@@ -1,0 +1,110 @@
+<form novalidate name="storeSettingsForm"
+      data-ng-controller="Merchello.Backoffice.SettingsController"
+      ng-submit="save(settingDisplay)"
+      data-ng-show="loaded">
+
+    <merchello-panel>
+        <div class="merchello-pane row-fluid">
+            <div class="control-group umb-control-group merchello-settings">
+                <label class="merchello-control-label">
+                    <localize key="merchelloSettings_storeDefaults" />
+                    <small><localize key="merchelloSettings_setDefaultSettingsHelper" /></small>
+                </label>
+
+                <div class="merchello-controls">
+                    <div class="form-group col-xs-6 span6">
+                        <label for="currency"><localize key="merchelloSettings_currency" /></label>
+                        <select class="form-control col-xs-8 span8" name="currency" data-ng-change="currencyChanged(selectedCurrency)" data-ng-model="selectedCurrency" data-ng-options="c.name for c in currencies track by c.currencyCode" no-dirty-check></select>
+                    </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="dateformat"><localize key="merchelloSettings_dateFormat" /></label>
+                        <select class="form-control col-xs-8 span8" name="dateformat" data-ng-model="settingsDisplay.dateFormat" no-dirty-check>
+                            <option value="MM-dd-yyyy">MM-dd-yyyy (ex: 01-31-2014)</option>
+                            <option value="dd-MM-yyyy">dd-MM-yyyy (ex: 31-01-2014)</option>
+                            <option value="yyyy-MM-dd">yyyy-MM-dd (ex: 2014-01-01)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="cultureName"><localize key="merchelloSettings_defaultCultureName" /></label>
+                        <select class="form-control col-xs-8 span8" name="cultureName" data-ng-model="selectedLanguage" data-ng-change="languageChanged(selectedLanguage)" data-ng-options="l.name for l in languages track by l.isoCode" no-dirty-check>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="startingorder"><localize key="merchelloSettings_startingOrderNumber" /></label>
+                        <input type="number" class="form-control col-xs-8 span8" name="startingorder" required data-ng-model="settingsDisplay.nextOrderNumber" no-dirty-check />
+                    </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="timeformat"><localize key="merchelloSettings_timeFormat" /></label>
+                        <select class="form-control col-xs-8 span8" name="timeformat" data-ng-model="settingsDisplay.timeFormat" no-dirty-check>
+                            <option value="am-pm">AM/PM</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="startinginvoice"><localize key="merchelloSettings_startingInvoiceNumber" /></label>
+                        <input type="number" class="form-control col-xs-8 span8" name="startinginvoice" required data-ng-model="settingsDisplay.nextInvoiceNumber" no-dirty-check />
+                    </div>
+
+                    <!-- Unit System and Time Zone will be included in version 2 -->
+                    <div class="form-group col-xs-6 span6">
+                        <label for="unit-system"><localize key="merchelloSettings_unitSystem" /></label>
+                        <select class="form-control col-xs-8 span8" name="unit-system" data-ng-model="settingsDisplay.unitSystem" no-dirty-check>
+                            <option value="Imperial">Imperial System (Pound, Inch)</option>
+                            <option value="Metric">Metric System (Centimeter, Meter)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <label for="startingshipment"><localize key="merchelloSettings_startingShipmentNumber" /></label>
+                        <input type="number" class="form-control col-xs-8 span8" name="startingShipment" required data-ng-model="settingsDisplay.nextShipmentNumber" no-dirty-check />
+                    </div>
+
+                    <div class="form-group col-xs-6 span6">
+                        <!-- open -->
+                        <label for="taxationApplication"><localize key="merchelloSettings_globalTaxationApplication" /></label>
+                        <select class="form-control col-xs-8 span8" name="taxationApplication" data-ng-model="settingsDisplay.globalTaxationApplication" no-dirty-check>
+                            <option value="Invoice">Invoice</option>
+                            <option value="Product">Product</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group umb-control-group merchello-settings">
+                <label class="merchello-control-label">
+                    <localize key="merchelloSettings_catalogDefaults" />
+                    <small><localize key="merchelloSettings_catalogDefaultsHelper" /></small>
+                </label>
+
+                <div class="merchello-controls">
+                    <div class="row-fluid">
+                        <div class="col-xs-6 span6">
+                            <div class="form-group">
+                                <!-- All Digital Goods will be goods will be included in version 2 -->
+                                <!--<label class="label-checkbox"><input name="digital" type="checkbox"> <span>All items have/are digital goods</span></label>-->
+                                <label><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalTaxable" /></span></label>
+                                <label><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" no-dirty-check> <span><localize key="merchelloSettings_globalShippable" /></span></label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 span6">
+                            <div class="form-group">
+                                <label><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory" no-dirty-check> <span><localize key="merchelloSettings_globalTrackInventory" /></span></label>
+                                <label><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalShippingIsTaxable" /></span></label>
+                            </div>
+                        </div>
+
+                        <!-- TODO This needs to be in the header for consistency -->
+                        <div class="col-xs-6 span12" style="padding-top: 3em">
+                            <button class="btn btn-success" data-ng-disabled="storeSettingsForm.$invalid" type="submit"><localize key="buttons_save" /></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </merchello-panel>
+</form>

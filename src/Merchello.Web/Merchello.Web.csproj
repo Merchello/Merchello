@@ -279,6 +279,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Controllers\BasketControllerBase{T}.cs" />
+    <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
+    <Compile Include="Controllers\CheckoutControllerBase.cs" />
+    <Compile Include="Controllers\CheckoutSummaryControllerBase{T}.cs" />
     <Compile Include="DataModifiers\Product\IncludeTaxProductDisplayPriceModifier.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierChain.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierExtensions.cs" />
@@ -325,6 +329,32 @@
     <Compile Include="Editors\Reports\ReportSqlHelper.cs" />
     <Compile Include="Editors\Reports\SalesOverTimeReportApiController.cs" />
     <Compile Include="Editors\Reports\SalesByItemReportApiController.cs" />
+    <Compile Include="Factories\AddItemModelFactory.cs" />
+    <Compile Include="Factories\BasketItemExtendedDataFactory.cs" />
+    <Compile Include="Factories\BasketModelFactory.cs" />
+    <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
+    <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
+    <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\Ui\Async\AddItemAsyncResponse.cs" />
+    <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
+    <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />
+    <Compile Include="Models\Ui\Async\UpdateQuantityAsyncResponse.cs" />
+    <Compile Include="Models\Ui\Async\UpdateQuantityResponseItem.cs" />
+    <Compile Include="Models\Ui\CheckoutStage.cs" />
+    <Compile Include="Models\Ui\CheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\Ui\IAddItemModel.cs" />
+    <Compile Include="Models\Ui\IBasketModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutAddressModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutSummaryModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\Ui\ICustomerMembershipProfile.cs" />
+    <Compile Include="Models\Ui\ILineItemModel.cs" />
+    <Compile Include="Models\Ui\IUiModel.cs" />
+    <Compile Include="Models\Ui\IProductDataTable.cs" />
+    <Compile Include="Models\Ui\IProductDataTableRow.cs" />
+    <Compile Include="Models\Ui\UiModelExtensions.cs" />
+    <Compile Include="Mvc\CheckAjaxRequestAttribute.cs" />
     <Compile Include="Mvc\MerchelloHelperViewPage.cs" />
     <Compile Include="Mvc\SurfaceControllerActivationHelper.cs" />
     <Compile Include="Pluggable\PluginViewEditorProvider.cs" />

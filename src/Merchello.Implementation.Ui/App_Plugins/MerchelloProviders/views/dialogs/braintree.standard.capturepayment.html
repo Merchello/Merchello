@@ -1,0 +1,43 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Providers.Dialogs.BraintreeStandardCapturePaymentController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloOrder_capturePayment" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <form name="captureForm" id="refundForm">
+            <div class="control-group row-fluid">
+                <p>
+                    <localize key="merchelloOrder_processedBy" /> <strong>{{dialogData.paymentMethodName}}</strong><br />
+                </p>
+                <div class="col-xs-12 span12">
+                    <label for="amount">Amount</label>
+                </div>
+                <div class="input-prepend col-xs-12 span12">
+                    <span class="add-on">{{dialogData.currencySymbol}}</span>
+                    <input name="amount" class="col-xs-4 span4" type="text" disabled="disabled" data-ng-model="dialogData.amount">
+                </div>
+
+                <p class="text-warning">{{ dialogData.warning }}</p>
+
+                <p>Card ending: {{ transaction.CreditCard.LastFour }}</p>
+            </div>
+        </form>
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button
+                        class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="merchelloOrder_processPayment" />
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
