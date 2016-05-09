@@ -197,3 +197,9 @@ src/Merchello.Providers.UI.Client/.idea/
 src/Merchello.Providers.UI.Client/.sass-cache/*
 src/.vs/*
 test/Merchello.Tests.PaymentProviders/PayPal/extendedData.json
+src/Merchello.Mui.Client/.idea/
+src/Merchello.Mui.Client/.sass-cache/
+src/Merchello.Core/bin/
+src/Merchello.QuickMart.Ui/App_Data/Logs/
+src/Merchello.QuickMart.Ui/App_Data/NuGetBackup/
+src/Merchello.QuickMart.Ui/App_Data/TEMP/

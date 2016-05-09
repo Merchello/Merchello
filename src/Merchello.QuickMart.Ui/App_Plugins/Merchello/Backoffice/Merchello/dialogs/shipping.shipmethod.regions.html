@@ -1,0 +1,62 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.GatewayProviders.Dialogs.ShipMethodRegionsController">
+    <div class="umb-modalcolumn-header">
+        <h4>Adjust Regional Shipping Rates for <strong>{{dialogData.shippingGatewayMethod.shipMethod.name}}</strong></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <!-- Adjust Regional Shipping Rates Flyout -->
+        <div data-ng-hide="dialogData.method.provinces.length == 0">
+            <h5><localize key="merchelloShippingMethod_adjustIndividualRegions" /></h5>
+
+            <table class="table merchello-striped-table settings-table adjustment-table col-xs-6 span6">
+                <thead>
+                <tr>
+                    <th class="span1 col-xs-1">
+                        <!-- ACTION: Toggle All Provinces -->
+                        <input type="checkbox" data-ng-model="allProvinces" data-ng-change="toggleAllProvinces()" />
+                    </th>
+                    <th><localize key="merchelloShippingMethod_region" /></th>
+                    <th><localize key="merchelloShippingMethod_adjustRate" /></th>
+                    <th><localize key="merchelloShippingMethod_adjustBy" /></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="province in dialogData.shippingGatewayMethod.shipMethod.provinces">
+                    <td class="span1 col-xs-1">
+                        <input type="checkbox" data-ng-model="province.allowShipping" />
+                    </td>
+                    <td class="col-xs-5 span5">
+                        {{province.name}}
+                    </td>
+                    <td class="col-xs-4 span4 row-fluid">
+                        <div data-ng-class="{'input-prepend': province.rateAdjustmentType == 1, 'input-append': province.rateAdjustmentType == 2 }">
+                            <span class="add-on" data-ng-show="province.rateAdjustmentType == 1">{{ dialogData.currencySymbol }}</span>
+                            <input type="number" data-ng-model="province.rateAdjustment" class="span8 col-xs-8" />
+                            <span class="add-on" data-ng-show="province.rateAdjustmentType == 2"><localize key="merchelloGeneral_percentSymbol" /></span>
+                        </div>
+                    </td>
+                    <td class="col-xs-2 span2 row-fluid">
+                        <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="1" /> {{ dialogData.currencySymbol }}</label>
+                        <label class="col-xs-6 span6"><input type="radio" data-ng-model="province.rateAdjustmentType" value="2" /> <localize key="merchelloGeneral_percentSymbol" /></label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel Dialog -->
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+                <!-- ACTION: Submit Dialog Callback -->
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save"></localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

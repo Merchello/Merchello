@@ -1,0 +1,34 @@
+<div class="umb-panel merchello-side-panel">
+    <div class="umb-modalcolumn-header">
+        <h4 data-ng-switch="dialogData.catalog.key">
+            <span data-ng-switch-when="">Add Catalog</span>
+            <span data-ng-switch-default="">Edit Catalog</span>
+        </h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <!-- Flyout when edit is clicked -->
+
+        <form class="form-group row-fluid">
+            <div class="form-group row-fluid">
+                <label for="name"><localize key="general_name" /></label>
+                <input class="span12 col-xs-12" name="name" type="text" data-ng-model="dialogData.warehouseCatalog.name" />
+            </div>
+            <div class="form-group row-fluid">
+                <textarea class="span12 col-xs-12" rows="4" data-ng-model="dialogData.warehouseCatalog.description"></textarea>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+                <!-- ACTION: Save-->
+                <button class="btn btn-primary" data-ng-click="submit(dialogData)"><localize key="buttons_save"></localize></button>
+            </div>
+        </div>
+    </div>
+</div>

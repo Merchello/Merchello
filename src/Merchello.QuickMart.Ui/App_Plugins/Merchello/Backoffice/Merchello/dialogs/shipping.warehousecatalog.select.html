@@ -1,0 +1,33 @@
+<div class="umb-panel merchello-side-panel">
+    <div class="umb-modalcolumn-header">
+        <h4>Warehouse Catalogs</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="form-group row-fluid provider-dropdown">
+            <label for="catalog-name">Select Your Catalog</label>
+            <div class="input-append col-xs-12 span12">
+                <select name="availableCatalogs" data-ng-model="dialogData.selectedWarehouseCatalog" data-ng-options="item.name for item in dialogData.warehouse.warehouseCatalogs">
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel"></localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    Confirm
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
