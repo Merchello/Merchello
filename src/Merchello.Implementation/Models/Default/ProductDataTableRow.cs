@@ -18,6 +18,11 @@
         public Guid ProductVariantKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the formatted sale price.
+        /// </summary>
+        public string FormattedSalePrice { get; set; }
+
+        /// <summary>
         /// Gets or sets the SKU.
         /// </summary>
         public string Sku { get; set; }
@@ -36,6 +41,11 @@
         /// Gets or sets the price.
         /// </summary>
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// Gets or sets the formatted price.
+        /// </summary>
+        public string FormattedPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the sale price.

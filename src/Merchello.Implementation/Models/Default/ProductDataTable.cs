@@ -11,7 +11,7 @@
     /// Used to preload JavaScript pricing table to reduce the number of roundtrip AJAX transactions
     /// when selecting product variants to add to the basket
     /// </remarks>
-    public class ProductDataTable : IProductDataTable
+    public class ProductDataTable : IProductDataTable<ProductDataTableRow>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductDataTable"/> class.

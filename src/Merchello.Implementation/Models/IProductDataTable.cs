@@ -6,11 +6,15 @@
     /// <summary>
     /// Defines a product data type.
     /// </summary>
+    /// <typeparam name="TProductDataTableRow">
+    /// The type of the <see cref="IProductDataTableRow"/>
+    /// </typeparam>
     /// <remarks>
     /// Used to preload JavaScript pricing table to reduce the number of roundtrip AJAX transactions
     /// when selecting product variants to add to the basket
     /// </remarks>
-    public interface IProductDataTable
+    public interface IProductDataTable<TProductDataTableRow>
+        where TProductDataTableRow : class, IProductDataTableRow, new()
     {
         /// <summary>
         /// Gets or sets the product key.
@@ -20,6 +24,6 @@
         /// <summary>
         /// Gets or sets the rows.
         /// </summary>
-        IEnumerable<ProductDataTableRow> Rows { get; set; }
+        IEnumerable<TProductDataTableRow> Rows { get; set; }
     }
 }

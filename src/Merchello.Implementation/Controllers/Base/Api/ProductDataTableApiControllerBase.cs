@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Http;
 
     using Merchello.Implementation.Factories;
     using Merchello.Implementation.Models;
@@ -15,13 +16,14 @@
     /// An API controller for handling product data tables.
     /// </summary>
     /// <typeparam name="TTable">
-    /// The type of <see cref="IProductDataTable"/>
+    /// The type of <see cref="IProductDataTable{TRow}"/>
     /// </typeparam>
     /// <typeparam name="TRow">
     /// The type of <see cref="IProductDataTableRow"/>
     /// </typeparam>
+    [Merchello.Web.WebApi.JsonCamelCaseFormatter]
     public abstract class ProductDataTableApiControllerBase<TTable, TRow> : UmbracoApiController
-        where TTable : class, IProductDataTable, new()
+        where TTable : class, IProductDataTable<TRow>, new()
         where TRow : class, IProductDataTableRow, new()
     {
         /// <summary>
@@ -73,7 +75,8 @@
         /// <returns>
         /// The <see cref="IEnumerable{TTable}"/>.
         /// </returns>
-        public virtual IEnumerable<TTable> GetProductDataTables(Guid[] keys)
+        [HttpPost]
+        public virtual IEnumerable<TTable> PostGetProductDataTables(Guid[] keys)
         {
             if (!keys.Any()) return Enumerable.Empty<TTable>();
 

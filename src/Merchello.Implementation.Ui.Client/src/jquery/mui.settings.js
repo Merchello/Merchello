@@ -8,4 +8,4 @@ if (MUI !== undefined) {
         // the product table api controller end point
         productTableApiEndpoint: '/umbraco/Merchello/DefaultProductDataTableApi/'
     }
-}
+};

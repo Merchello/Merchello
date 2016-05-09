@@ -19,7 +19,7 @@
     @if (hasVariants)
     {
         // A container to populate the variant pricing via JavaScript
-        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muivalue="total"></div>
+        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muivalue="variantprice"></div>
     }
     else
     {<div class="price text-center">@GetSingleProductPrice(product)</div>}
@@ -44,8 +44,8 @@
 
                         @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })
 
-                        <div class="form-group">
-                            @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), id = option.Key, @class = "form-control ProductVariants" })
+                        <div class="form-group" data-muioption="@option.Key">
+                            @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")
                         </div>
 
@@ -72,8 +72,8 @@
                     </div>
                 }
 
-                @Html.HiddenFor(x => x.ProductKey, new { @id = "pkey-" + Model.ProductKey })
-                @Html.HiddenFor(x => x.SuccessRedirectUrl, new { @id = "bid-" + Model.ProductKey })
+                @Html.HiddenFor(x => x.ProductKey)
+                @Html.HiddenFor(x => x.SuccessRedirectUrl)
 
                 // Determine if the add to cart button should be displayed in case item is out of stock
                 if (product.ProductVariants.Any() || (!product.ProductVariants.Any() && product.TrackInventory && product.TotalInventoryCount > 0) || !product.TrackInventory)

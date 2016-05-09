@@ -6,6 +6,8 @@
     using System.Web.Mvc;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
+    using Merchello.Core.Models;
     using Merchello.Implementation.Factories;
     using Merchello.Implementation.Models;
     using Merchello.Implementation.Models.Async;
@@ -16,6 +18,8 @@
     using Merchello.Web.Workflow;
 
     using Newtonsoft.Json;
+
+    using PayPal;
 
     using Umbraco.Core;
 
@@ -114,43 +118,73 @@
             // In this case we want to get the product without any data modification
             var merchello = new MerchelloHelper(false);
 
-            var product = merchello.Query.Product.GetByKey(model.ProductKey);
-
-            // ensure the quantity on the model
-            var quantity = model.Quantity <= 0 ? 1 : model.Quantity;
-
-            // In the event the product has options we want to add the "variant" to the basket.
-            // -- If a product that has variants is defined, the FIRST variant will be added to the cart. 
-            // -- This was done so that we did not have to throw an error since the Master variant is no
-            // -- longer valid for sale.
-            if (model.OptionChoices != null && model.OptionChoices.Any())
+            try
             {
-                var variant = product.GetProductVariantDisplayWithAttributes(model.OptionChoices);
+                var product = merchello.Query.Product.GetByKey(model.ProductKey);
 
-                // Log the option choice for this variant in the extend data collection
-                var choiceExplainations = new Dictionary<string, string>();
-                foreach (var choice in variant.Attributes)
+                // ensure the quantity on the model
+                var quantity = model.Quantity <= 0 ? 1 : model.Quantity;
+
+                // In the event the product has options we want to add the "variant" to the basket.
+                // -- If a product that has variants is defined, the FIRST variant will be added to the cart. 
+                // -- This was done so that we did not have to throw an error since the Master variant is no
+                // -- longer valid for sale.
+                if (model.OptionChoices != null && model.OptionChoices.Any())
                 {
-                    var option = product.ProductOptions.FirstOrDefault(x => x.Key == choice.OptionKey);
-                    if (option != null)
+                    var variant = product.GetProductVariantDisplayWithAttributes(model.OptionChoices);
+
+                    // Log the option choice for this variant in the extend data collection
+                    var choiceExplainations = new Dictionary<string, string>();
+                    foreach (var choice in variant.Attributes)
                     {
-                        choiceExplainations.Add(option.Name, choice.Name);
+                        var option = product.ProductOptions.FirstOrDefault(x => x.Key == choice.OptionKey);
+                        if (option != null)
+                        {
+                            choiceExplainations.Add(option.Name, choice.Name);
+                        }
                     }
+
+                    // store the choice explainations in the extended data collection
+                    extendedData.SetValue(Implementation.Constants.ExtendedDataKeys.BasketItemCustomerChoice, JsonConvert.SerializeObject(choiceExplainations));
+
+                    this.Basket.AddItem(variant, variant.Name, quantity, extendedData);
+                }
+                else
+                {
+                    this.Basket.AddItem(product, product.Name, quantity, extendedData);
                 }
 
-                // store the choice explainations in the extended data collection
-                extendedData.SetValue(Implementation.Constants.ExtendedDataKeys.BasketItemCustomerChoice, JsonConvert.SerializeObject(choiceExplainations));
+                this.Basket.Save();
 
-                this.Basket.AddItem(variant, variant.Name, quantity, extendedData);
+                // If this request is not an AJAX request return the redirect
+                if (!this.Request.IsAjaxRequest())
+                {
+                    return this.RedirectAddItemSuccess(model);
+                }
+
+                // Construct the response object to return
+                var resp = new AddItemAsyncResponse
+                    {
+                        Success = true,
+                        BasketItemCount = this.GetBasketItemCountForDisplay()
+                    };
+
+                return this.Json(resp);
             }
-            else
+            catch (Exception ex)
             {
-                this.Basket.AddItem(product, product.Name, quantity, extendedData);
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("Controllers");
+
+                MultiLogHelper.Error<BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem>>("Failed to add item to basket", ex, logData);
+
+                // If the request is not an AJAX request throw the error
+                if (!this.Request.IsAjaxRequest()) throw;
+
+                var resp = new AddItemAsyncResponse { Success = false, ErrorMessages = { ex.Message } };
+
+                return this.Json(resp);
             }
-
-            this.Basket.Save();
-
-            return this.RedirectAddItemSuccess(model);
         }
 
 
@@ -180,6 +214,7 @@
                 {
                     resp.AddUpdatedItems(this.Basket.Items);
                     resp.FormattedTotal = this.Basket.TotalBasketPrice.AsFormattedCurrency();
+                    resp.BasketItemCount = GetBasketItemCountForDisplay();
                     return this.Json(resp);
                 }
                 catch (Exception ex)
@@ -364,5 +399,22 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the total basket count.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        /// <remarks>
+        /// This is generally used in navigations and labels.  Some implementations show the total number of line items while
+        /// others show the total number of items (total sum of product quantities - default).
+        /// 
+        /// Method is used in Async responses to allow for easier HTML label updates 
+        /// </remarks>
+        protected virtual int GetBasketItemCountForDisplay()
+        {
+            return Basket.TotalQuantityCount;
+        }
     }
 }

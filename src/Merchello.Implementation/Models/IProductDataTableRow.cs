@@ -27,9 +27,19 @@
         decimal Price { get; set; }
 
         /// <summary>
+        /// Gets or sets the formatted price.
+        /// </summary>
+        string FormattedPrice { get; set; }
+
+        /// <summary>
         /// Gets or sets the sale price.
         /// </summary>
         decimal SalePrice { get; set; }
+
+        /// <summary>
+        /// Gets or sets the formatted sale price.
+        /// </summary>
+        string FormattedSalePrice { get; set; }
 
         /// <summary>
         /// Gets or sets the SKU.

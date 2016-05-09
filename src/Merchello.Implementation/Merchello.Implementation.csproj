@@ -323,6 +323,8 @@
     <Compile Include="Factories\Default\DefaultAddItemModelFactory.cs" />
     <Compile Include="Factories\Default\DefaultBasketModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
+    <Compile Include="Models\Async\IEmitsBasketItemCount.cs" />
     <Compile Include="Models\Default\AddItemModel.cs" />
     <Compile Include="Models\Default\BasketItemModel.cs" />
     <Compile Include="Models\Default\BasketModel.cs" />

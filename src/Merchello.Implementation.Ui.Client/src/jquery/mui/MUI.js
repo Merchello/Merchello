@@ -1,5 +1,7 @@
 // Generic Merchello UI scripts.
 // Requires JQuery version 1.10.2 or higher
+//          JQuery unobrusive
+//          underscore.js
 var MUI = (function() {
 
     // If DEBUG_MODE is true allows messages to be written to the console
@@ -21,6 +23,8 @@ var MUI = (function() {
             MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
+            // initialize the labels
+            MUI.Labels.init();
         });
     }
     
@@ -48,7 +52,6 @@ var MUI = (function() {
         catch(err) {
             MUI.Logger.captureError(err);
         }
-
     }
 
     /// emit the event
@@ -72,7 +75,6 @@ var MUI = (function() {
         });
     }
 
-
     // create a generic cache of functions, where fn is the function to retrieve and execute for a value.
     // also ensures, the function is executed once and a single value is returned.
     function createCache(fn) {
@@ -90,7 +92,7 @@ var MUI = (function() {
     // utility method to map the event name from an alias so they can be
     // more easily referenced in other modules
     function getEventNameByAlias(events, alias) {
-        var evt = _.find(events, function(e) { return e.attempt === alias});
+        var evt = _.find(events, function(e) { return e.alias === alias});
         return evt === undefined ? '' : evt.name;
     }
 
@@ -98,7 +100,7 @@ var MUI = (function() {
     function debugConsoleEvents(events) {
         if (DEBUG_MODE.events) {
             _.each(events, function(ev) {
-                CO.on(ev.name, function(name, args) {
+                MUI.on(ev.name, function(name, args) {
                     console.info(ev);
                     console.info(args === undefined ? 'No args' : args);
                 });

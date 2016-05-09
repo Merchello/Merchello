@@ -20,7 +20,7 @@ MUI.Logger = {
 
     // Captures an error
     captureError: function(e, args) {
-        var consoleLog = args === undefined ? message : { error: e, args: args };
+        var consoleLog = args === undefined ? e : { error: e, args: args };
         MUI.debugConsole(consoleLog);
         return;
     },
@@ -33,6 +33,6 @@ MUI.Logger = {
 
     isReady: function() {
         return MUI.Logger.hasLogger;
-        // this can be used to test a logger ex. getsentry.com -> Raven.isSetup();
+        // this can be used to test a logger is available ex. getsentry.com -> Raven.isSetup();
     }
 };
