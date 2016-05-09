@@ -352,7 +352,7 @@
     <Compile Include="Models\Default\ProductDataTableRow.cs" />
     <Compile Include="RenderingExtensions.cs" />
     <Compile Include="Models\IAddItemModel.cs" />
-    <Compile Include="Models\IBasketItemModel.cs" />
+    <Compile Include="Models\ILineItemModel.cs" />
     <Compile Include="Models\IBasketModel.cs" />
     <Compile Include="Models\IMerchelloImplementationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

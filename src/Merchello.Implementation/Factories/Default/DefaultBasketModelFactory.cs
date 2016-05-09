@@ -96,7 +96,7 @@
             basketItem.ProductKey = productKey;
             basketItem.CustomerOptionChoices = customerChoices;
 
-            return basketItem;
+            return base.OnCreate(basketItem, lineItem);
         }
 
         /// <summary>

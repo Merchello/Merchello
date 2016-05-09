@@ -392,6 +392,7 @@
     <Content Include="Views\Shared\_Headline.cshtml" />
     <Content Include="Views\Checkout.cshtml" />
     <Content Include="Views\DefaultCheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="Views\Shared\_ProductPricing.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -26,7 +26,7 @@
 
             result.Name = string.Format("{0} {1}", adr.FirstName, adr.Label);
 
-            return result;
+            return base.OnCreate(result, adr);
         }
     }
 }

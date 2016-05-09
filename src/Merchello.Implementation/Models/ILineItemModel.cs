@@ -2,6 +2,11 @@
 {
     using System;
 
+    using Merchello.Core;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// Defines a basket item UI component.
     /// </summary>
@@ -34,5 +39,11 @@
         /// This could either by the price or the sale price of a product
         /// </remarks>
         decimal Amount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="LineItemType"/>.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        LineItemType LineItemType { get; set; }
     }
 }
