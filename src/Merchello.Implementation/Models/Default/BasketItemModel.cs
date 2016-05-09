@@ -4,12 +4,16 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Web.Models.VirtualContent;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// A model used to represent items in a basket or cart.
     /// </summary>
-    public class BasketItemModel : IBasketItemModel
+    public class BasketItemModel : ILineItemModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketItemModel"/> class.
@@ -53,6 +57,12 @@
         /// Gets or sets the unit price.
         /// </summary>
         public decimal Amount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="LineItemType"/>.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public LineItemType LineItemType { get; set; }
 
         /// <summary>
         /// Gets or sets the attributes.

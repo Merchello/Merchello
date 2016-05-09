@@ -16,7 +16,7 @@
         /// <returns>
         /// The total price.
         /// </returns>
-        public static decimal Total(this IBasketItemModel item)
+        public static decimal Total(this ILineItemModel item)
         {
             return item.Quantity * item.Amount;
         }
@@ -34,7 +34,7 @@
         /// The total price.
         /// </returns>
         public static decimal Total<TBasketItemModel>(this IBasketModel<TBasketItemModel> basket)
-            where TBasketItemModel : class, IBasketItemModel, new()
+            where TBasketItemModel : class, ILineItemModel, new()
         {
             return basket.Items.Sum(x => x.Total());
         }

@@ -1,9 +1,11 @@
 ﻿namespace Merchello.Implementation.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core;
+    using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
     /// A model used for collecting and persisting checkout addresses.
@@ -74,6 +76,8 @@
         /// </summary>
         [EmailAddress]
         public string Email { get; set; }
+
+        public IEnumerable<CountryDisplay> Countries { get; set; }
 
         /// <summary>
         /// Gets or sets the address type.

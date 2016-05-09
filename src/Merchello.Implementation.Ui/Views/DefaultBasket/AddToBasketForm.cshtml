@@ -4,7 +4,7 @@
 @using Merchello.Implementation.Controllers
 @using Merchello.Web.Models.VirtualContent
 @{
-    // Get the IProductContent from the Merchello helper which is already instantiate by the MerchelloViewPage reference.
+    // Get the IProductContent from the Merchello helper which is already instantiated by the MerchelloViewPage reference.
     //// https://merchello.readme.io/docs/view-pages
     //
     // This is in most cases retrieved from the Examine index (so really fast) but it does have a fallback to query the database
@@ -15,18 +15,18 @@
     var hasVariants = product.ProductVariants.Any();
 }
 
-<div class="well">
+<div class="well" data-muiproduct="@product.Key">
     @if (hasVariants)
     {
         // A container to populate the variant pricing via JavaScript
-        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muiproduct="@product.Key"></div>
+        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muivalue="variantprice"></div>
     }
     else
     {<div class="price text-center">@GetSingleProductPrice(product)</div>}
 
     <div class="form-group add-button">
         @{
-            using (Html.BeginUmbracoForm<DefaultBasketController>("AddBasketItem", new { role = "form" }))
+            using (Html.BeginUmbracoForm<DefaultBasketController>("AddBasketItem", null, new { role = "form", data_muifrm="additem" }))
             {
                 // If the product has variants, we MUST determine which variant the customer intends to purchase
                 // so we need to give them a selection of options so that they make choices.  The collection of choices (one per options)
@@ -44,8 +44,8 @@
 
                         @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })
 
-                        <div class="form-group">
-                            @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), id = option.Key, @class = "form-control ProductVariants" })
+                        <div class="form-group" data-muioption="@option.Key">
+                            @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")
                         </div>
 
@@ -72,8 +72,8 @@
                     </div>
                 }
 
-                @Html.HiddenFor(x => x.ProductKey, new { @id = "pkey-" + Model.ProductKey })
-                @Html.HiddenFor(x => x.SuccessRedirectUrl, new { @id = "bid-" + Model.ProductKey })
+                @Html.HiddenFor(x => x.ProductKey)
+                @Html.HiddenFor(x => x.SuccessRedirectUrl)
 
                 // Determine if the add to cart button should be displayed in case item is out of stock
                 if (product.ProductVariants.Any() || (!product.ProductVariants.Any() && product.TrackInventory && product.TotalInventoryCount > 0) || !product.TrackInventory)

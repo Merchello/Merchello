@@ -9,7 +9,7 @@
     /// <summary>
     /// A response object to for an AJAX UpdateQuantity operation.
     /// </summary>
-    internal class UpdateQuantityAsyncResponse : AsyncResponse
+    internal class UpdateQuantityAsyncResponse : AsyncResponse, IEmitsBasketItemCount
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateQuantityAsyncResponse"/> class.
@@ -28,6 +28,11 @@
         /// Gets or sets the updated items.
         /// </summary>
         public List<UpdateQuantityResponseItem> UpdatedItems { get; set; }
+
+        /// <summary>
+        /// Gets or sets the basket item count.
+        /// </summary>
+        public int BasketItemCount { get; set; }
     }
 
     /// <summary>

@@ -25,7 +25,7 @@
             // Set the success URL to the product page
             addItem.SuccessRedirectUrl = productContent.Url;
 
-            return addItem;
+            return base.OnCreate(addItem, productContent);
         }
     }
 }

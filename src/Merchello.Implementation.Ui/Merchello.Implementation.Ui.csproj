@@ -336,8 +336,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Merchello\client\mui.js" />
-    <Content Include="App_Plugins\Merchello\client\mui.settings.js" />
+    <Content Include="App_Plugins\Merchello\client\css\default\mui.css" />
+    <Content Include="App_Plugins\Merchello\client\css\default\mui.min.css" />
+    <Content Include="App_Plugins\Merchello\client\js\mui.js" />
+    <Content Include="App_Plugins\Merchello\client\js\mui.min.js" />
+    <Content Include="App_Plugins\Merchello\client\js\mui.settings.js" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\ModelsBuilder\package.manifest" />
     <Content Include="Views\Web.config" />
@@ -383,6 +386,13 @@
     <Content Include="Views\DefaultCheckoutAddress\BillingAddressForm.cshtml" />
     <Content Include="Views\CheckoutAddressForms.cshtml" />
     <Content Include="Views\DefaultCheckoutAddress\ShippingAddressForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\client\js\mui.js.map" />
+    <Content Include="App_Plugins\Merchello\client\css\default\mui.css.map" />
+    <Content Include="App_Plugins\Merchello\client\css\default\mui.min.css.map" />
+    <Content Include="Views\Shared\_Headline.cshtml" />
+    <Content Include="Views\Checkout.cshtml" />
+    <Content Include="Views\DefaultCheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="Views\Shared\_ProductPricing.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

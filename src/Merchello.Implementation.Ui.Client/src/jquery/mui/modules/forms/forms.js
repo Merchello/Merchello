@@ -27,12 +27,7 @@ MUI.Forms = {
 
     // Post a form and return the promise
     post: function(frm, url) {
-        
-        return $.ajax({
-            type: 'POST',
-            url: url,
-            data: $(frm).serialize()
-        });
+        return MUI.resourcePromise(url, $(frm).serialize());
     },
     
     // rebinds a form unobtrusive validation
@@ -64,4 +59,4 @@ MUI.Forms = {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
     }
-}
+};

@@ -55,7 +55,7 @@
                 {
                     <li><a href="@BazaarContentHelper.GetWishListContent().Url">Wish List (@(((ICustomer)CurrentCustomer).WishList().TotalItemCount))</a></li>
                 }*@
-                <li class="active"><a href="@StoreUiHelper.Content.GetBasket().Url">Basket (@CurrentCustomer.Basket().TotalItemCount)</a></li>
+                <li class="active"><a href="@StoreUiHelper.Content.GetBasket().Url">Basket (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a></li>
             </ul>
         </div>
     </div>

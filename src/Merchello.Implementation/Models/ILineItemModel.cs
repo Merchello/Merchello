@@ -1,14 +1,16 @@
 ﻿namespace Merchello.Implementation.Models
 {
     using System;
-    using System.Collections.Generic;
 
-    using Merchello.Web.Models.VirtualContent;
+    using Merchello.Core;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// Defines a basket item UI component.
     /// </summary>
-    public interface IBasketItemModel
+    public interface ILineItemModel
     {
         /// <summary>
         /// Gets or sets the key.
@@ -37,5 +39,11 @@
         /// This could either by the price or the sale price of a product
         /// </remarks>
         decimal Amount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="LineItemType"/>.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        LineItemType LineItemType { get; set; }
     }
 }

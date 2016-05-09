@@ -1,9 +1,11 @@
 ﻿namespace Merchello.Implementation.Controllers
 {
+    using System.Web.Mvc;
     using Merchello.Implementation.Controllers.Base;
     using Merchello.Implementation.Factories;
     using Merchello.Implementation.Models;
 
+    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>

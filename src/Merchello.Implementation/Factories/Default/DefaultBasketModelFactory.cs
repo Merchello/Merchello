@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Implementation.Factories
 {
     using System;
+    using System.Linq;
 
     using Core.Models;
 
@@ -10,6 +11,8 @@
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
+
+    using Web.Workflow;
 
     /// <summary>
     /// The basket model factory for the default implementation.
@@ -42,16 +45,36 @@
         }
 
         /// <summary>
-        /// The on create.
+        /// Overrides the base basket model creation.
         /// </summary>
-        /// <param name="basketItem">
-        /// The basket item.
+        /// <param name="basketModel">
+        /// The <see cref="BasketModel"/>.
         /// </param>
-        /// <param name="lineItem">
-        /// The line item.
+        /// <param name="basket">
+        /// The <see cref="IBasket"/>.
         /// </param>
         /// <returns>
+        /// The modified <see cref="BasketModel"/>.
+        /// </returns>
+        protected override BasketModel OnCreate(BasketModel basketModel, IBasket basket)
+        {
+            // Ensure to order of the basket items is in alphabetical order.
+            basketModel.Items = basketModel.Items.OrderBy(x => x.Name).ToArray();
+
+            return base.OnCreate(basketModel, basket);
+        }
+
+        /// <summary>
+        /// Overrides the base basket item model creation.
+        /// </summary>
+        /// <param name="basketItem">
         /// The <see cref="BasketItemModel"/>.
+        /// </param>
+        /// <param name="lineItem">
+        /// The <see cref="ILineItem"/>.
+        /// </param>
+        /// <returns>
+        /// The modified <see cref="BasketItemModel"/>.
         /// </returns>
         protected override BasketItemModel OnCreate(BasketItemModel basketItem, ILineItem lineItem)
         {
@@ -73,7 +96,7 @@
             basketItem.ProductKey = productKey;
             basketItem.CustomerOptionChoices = customerChoices;
 
-            return basketItem;
+            return base.OnCreate(basketItem, lineItem);
         }
 
         /// <summary>

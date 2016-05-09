@@ -308,11 +308,15 @@
   <ItemGroup>
     <Compile Include="Attributes\CheckAjaxRequestAttribute.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\Base\Api\ProductDataTableApiControllerBase.cs" />
     <Compile Include="Controllers\Base\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\Base\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\Base\CheckoutControllerBase.cs" />
+    <Compile Include="Controllers\Base\CheckoutSummaryControllerBase{T}.cs" />
+    <Compile Include="Controllers\Default\Api\DefaultProductDataTableApiController.cs" />
     <Compile Include="Controllers\Default\DefaultBasketController.cs" />
     <Compile Include="Controllers\Default\DefaultCheckoutAddressController.cs" />
+    <Compile Include="Controllers\Default\DefaultCheckoutSummaryController.cs" />
     <Compile Include="Factories\AddItemModelFactory.cs" />
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
@@ -320,6 +324,9 @@
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
     <Compile Include="Factories\Default\DefaultAddItemModelFactory.cs" />
     <Compile Include="Factories\Default\DefaultBasketModelFactory.cs" />
+    <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
+    <Compile Include="Models\Async\IEmitsBasketItemCount.cs" />
     <Compile Include="Models\Default\AddItemModel.cs" />
     <Compile Include="Models\Default\BasketItemModel.cs" />
     <Compile Include="Models\Default\BasketModel.cs" />
@@ -332,14 +339,20 @@
     <Compile Include="Models\Default\CheckoutAddressModel.cs" />
     <Compile Include="Models\Default\CheckoutBillingAddressModel.cs" />
     <Compile Include="Models\CheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\Default\CheckoutSummaryModel.cs" />
+    <Compile Include="Models\ICheckoutSummaryModel.cs" />
+    <Compile Include="Models\IProductDataTableRow.cs" />
+    <Compile Include="Models\IProductDataTable.cs" />
     <Compile Include="Models\ICheckoutAddressModel.cs" />
     <Compile Include="Models\ICheckoutModel.cs" />
     <Compile Include="Models\ICheckoutWorkflowMarker.cs" />
     <Compile Include="Models\ICustomerMembershipProfile.cs" />
     <Compile Include="Models\ModelExtensions.cs" />
+    <Compile Include="Models\Default\ProductDataTable.cs" />
+    <Compile Include="Models\Default\ProductDataTableRow.cs" />
     <Compile Include="RenderingExtensions.cs" />
     <Compile Include="Models\IAddItemModel.cs" />
-    <Compile Include="Models\IBasketItemModel.cs" />
+    <Compile Include="Models\ILineItemModel.cs" />
     <Compile Include="Models\IBasketModel.cs" />
     <Compile Include="Models\IMerchelloImplementationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

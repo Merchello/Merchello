@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Implementation.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.ContentEditing;
 
     /// <summary>
     /// Defines an address used in checkout implementations.
@@ -79,6 +81,11 @@
         string Email { get; set; }
 
         /// <summary>
+        /// Gets or sets the countries valid for the address entry.
+        /// </summary>
+        IEnumerable<CountryDisplay> Countries { get; set; }
+
+            /// <summary>
         /// Gets or sets the address type.
         /// </summary>
         AddressType AddressType { get; set; }

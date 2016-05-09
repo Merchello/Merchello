@@ -1,12 +1,14 @@
 // Generic Merchello UI scripts.
 // Requires JQuery version 1.10.2 or higher
+//          JQuery unobrusive
+//          underscore.js
 var MUI = (function() {
-
+    
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
         events: false,
-        console: false
+        console: true
     };
 
     // Private members
@@ -17,8 +19,16 @@ var MUI = (function() {
         $(document).ready(function() {
             // initialize the logger module
             MUI.Logger.init();
+            // intialize the notifications
+            MUI.Notify.init();
+            // initialize the add item module
+            MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
+            // initialize the checkout module
+            MUI.Checkout.init();
+            // initialize the labels
+            MUI.Labels.init();
         });
     }
     
@@ -46,7 +56,6 @@ var MUI = (function() {
         catch(err) {
             MUI.Logger.captureError(err);
         }
-
     }
 
     /// emit the event
@@ -60,7 +69,7 @@ var MUI = (function() {
                 cb(name, args);
             }
             catch(err) {
-                FRF.Logger.captureError(err, {
+                MUI.Logger.captureError(err, {
                     extra: {
                         eventName: name,
                         args: args
@@ -69,7 +78,6 @@ var MUI = (function() {
             }
         });
     }
-
 
     // create a generic cache of functions, where fn is the function to retrieve and execute for a value.
     // also ensures, the function is executed once and a single value is returned.
@@ -88,7 +96,7 @@ var MUI = (function() {
     // utility method to map the event name from an alias so they can be
     // more easily referenced in other modules
     function getEventNameByAlias(events, alias) {
-        var evt = _.find(events, function(e) { return e.attempt === alias});
+        var evt = _.find(events, function(e) { return e.alias === alias});
         return evt === undefined ? '' : evt.name;
     }
 
@@ -96,7 +104,7 @@ var MUI = (function() {
     function debugConsoleEvents(events) {
         if (DEBUG_MODE.events) {
             _.each(events, function(ev) {
-                CO.on(ev.name, function(name, args) {
+                MUI.on(ev.name, function(name, args) {
                     console.info(ev);
                     console.info(args === undefined ? 'No args' : args);
                 });
@@ -113,6 +121,11 @@ var MUI = (function() {
 
     // exposed members
     return {
+        // ensures the settings object is created
+        Settings: {
+            Notifications: {},
+            Endpoints: {}
+        },
         init: init,
         hasLogger: hasLogger,
         createCache: createCache,
