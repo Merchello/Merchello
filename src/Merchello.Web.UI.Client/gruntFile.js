@@ -29,8 +29,8 @@
         distdir: 'build/App_Plugins/Merchello',
         transformdir: 'build/transforms',
         bowerfiles: 'bower_components',
-        vsdir: '../Merchello.Web.UI/App_Plugins/Merchello',
-        appdir: '../Merchello.Web.UI',
+        vsdir: '../Merchello.QuickMart.UI/App_Plugins/Merchello',
+        appdir: '../Merchello.QuickMart.UI',
         pkg: grunt.file.readJSON('package.json'),
 
         // The comment block that is inserted at the top of files during build
