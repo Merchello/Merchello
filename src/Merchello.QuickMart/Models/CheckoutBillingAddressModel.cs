@@ -3,6 +3,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Store.Models;
 
     /// <summary>
     /// The checkout billing address model.

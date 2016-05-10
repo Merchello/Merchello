@@ -2,6 +2,7 @@
 {
     using Merchello.QuickMart.Models;
     using Merchello.Web.Controllers;
+    using Merchello.Web.Store.Models;
 
     using Umbraco.Web.Mvc;
 
@@ -9,7 +10,7 @@
     /// The default checkout summary controller.
     /// </summary>
     [PluginController("QuickMart")]
-    public class CheckoutSummaryController : CheckoutSummaryControllerBase<CheckoutSummaryModel, CheckoutBillingAddressModel, CheckoutAddressModel, BasketItemModel>
+    public class CheckoutSummaryController : CheckoutSummaryControllerBase<QuickMartCheckoutSummary, CheckoutBillingAddressModel, CheckoutAddressModel, BasketItemModel>
     {
     }
 }

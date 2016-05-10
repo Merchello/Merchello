@@ -1,8 +1,8 @@
-﻿@inherits UmbracoViewPage<Merchello.QuickMart.Models.BasketModel>
+﻿@inherits UmbracoViewPage<Merchello.Web.Store.Models.BasketModel>
 @using Merchello.Core
-@using Merchello.QuickMart.Controllers
 @using Merchello.QuickMart.Ui
 @using Merchello.Web.Models.Ui
+@using Merchello.Web.Store.Controllers
 @{
     var currentPage = Umbraco.TypedContent(UmbracoContext.Current.PageId);
 
@@ -58,10 +58,10 @@
                         @if (Model.WishListEnabled)
                         {
                             // the 'area' parameter in the route values should match the PluginController attribute alias
-                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "Basket", new { area = "QuickMart", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "Basket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
                         }
 
-                        @Html.ActionLink("Remove", "RemoveBasketItem", "Basket", new { area = "QuickMart", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
+                        @Html.ActionLink("Remove", "RemoveBasketItem", "Basket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
                     </td>
                 </tr>
 

@@ -1,9 +1,9 @@
-﻿namespace Merchello.QuickMart.Controllers
+﻿namespace Merchello.Web.Store.Controllers
 {
     using Merchello.QuickMart.Factories;
-    using Merchello.QuickMart.Models;
     using Merchello.Web.Controllers;
     using Merchello.Web.Factories;
+    using Merchello.Web.Store.Factories;
     using Merchello.Web.Store.Models;
 
     using Umbraco.Web.Mvc;
@@ -11,15 +11,15 @@
     /// <summary>
     /// The controller responsible for rendering and processing addresses in the default checkout process.
     /// </summary>
-    [PluginController("QuickMart")]
-    public class CheckoutAddressController : CheckoutAddressControllerBase<CheckoutBillingAddressModel, CheckoutAddressModel>
+    [PluginController("Merchello")]
+    public class CheckoutAddressController : CheckoutAddressControllerBase<CheckoutAddressModel, CheckoutAddressModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutAddressController"/> class.
         /// </summary>
         public CheckoutAddressController()
             : base(
-                  new QuickMartBillingAddressModelFactory(),
+                  new CheckoutAddressModelFactory<CheckoutAddressModel>(),
                   new CheckoutAddressModelFactory<CheckoutAddressModel>())
         {
         }

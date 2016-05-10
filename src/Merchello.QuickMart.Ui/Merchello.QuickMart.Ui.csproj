@@ -444,6 +444,10 @@
       <Project>{0fb8f983-0a17-413b-be84-638268bc048c}</Project>
       <Name>Merchello.QuickMart</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Merchello.Web.Store\Merchello.Web.Store.csproj">
+      <Project>{fd39d1aa-8f6e-474f-af2d-24219e1934fe}</Project>
+      <Name>Merchello.Web.Store</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Merchello.Web\Merchello.Web.csproj">
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
       <Name>Merchello.Web</Name>

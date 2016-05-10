@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0FB8F983-0A17-413B-BE84-638268BC048C}</ProjectGuid>
+    <ProjectGuid>{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Merchello.QuickMart</RootNamespace>
-    <AssemblyName>Merchello.QuickMart</AssemblyName>
+    <RootNamespace>Merchello.Web.Store</RootNamespace>
+    <AssemblyName>Merchello.Web.Store</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -110,7 +110,6 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -254,16 +253,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Api\ProductDataTableApiController.cs" />
+    <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\CheckoutAddressController.cs" />
     <Compile Include="Controllers\CheckoutSummaryController.cs" />
-    <Compile Include="Factories\QuickMartBillingAddressModelFactory.cs" />
-    <Compile Include="Models\CheckoutBillingAddressModel.cs" />
-    <Compile Include="Models\QuickMartCheckoutSummary.cs" />
+    <Compile Include="Factories\AddItemModelFactory.cs" />
+    <Compile Include="Factories\BasketModelFactory.cs" />
+    <Compile Include="Models\AddItemModel.cs" />
+    <Compile Include="Models\BasketItemModel.cs" />
+    <Compile Include="Models\BasketModel.cs" />
+    <Compile Include="Models\CheckoutAddressModel.cs" />
+    <Compile Include="Models\CheckoutSummaryModel.cs" />
+    <Compile Include="Models\ProductDataTable.cs" />
+    <Compile Include="Models\ProductDataTableRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
@@ -278,16 +281,15 @@
       <Project>{90c37ac8-cfe3-4199-a7b2-826278eb59e5}</Project>
       <Name>Merchello.Providers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Merchello.Web.Store\Merchello.Web.Store.csproj">
-      <Project>{fd39d1aa-8f6e-474f-af2d-24219e1934fe}</Project>
-      <Name>Merchello.Web.Store</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Merchello.Web\Merchello.Web.csproj">
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
