@@ -11600,6 +11600,17 @@
             The sale price if on sale, otherwise returns the price.
             </returns>
         </member>
+        <member name="M:Merchello.Web.Models.VirtualContent.ProductContentExtensions.GetCollectionsContaining(Merchello.Web.Models.VirtualContent.IProductContent)">
+            <summary>
+            Returns static collections containing the product.
+            </summary>
+            <param name="product">
+            The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Models.VirtualContent.ProductContentFactory">
             <summary>
             Represents a ProductContentFactory.
