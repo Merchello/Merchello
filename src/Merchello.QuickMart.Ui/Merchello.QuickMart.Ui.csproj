@@ -116,22 +116,6 @@
       <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=2.0.5973.38091, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000365\lib\net45\Merchello.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Merchello.Examine, Version=2.0.5973.38093, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000365\lib\net45\Merchello.Examine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Merchello.Providers, Version=2.0.5973.38098, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000365\lib\net45\Merchello.Providers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Merchello.Web, Version=2.0.5973.38094, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0-alpha-000365\lib\net45\Merchello.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.4.3\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
       <Private>True</Private>
@@ -191,6 +175,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Our.Umbraco.PropertyEditorConverters, Version=2.1.5.35, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Our.Umbraco.CoreValueConverters.2.1.5\lib\net45\Our.Umbraco.PropertyEditorConverters.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -400,19 +388,65 @@
     <Content Include="Config\Lang\zh-CN.user.xml" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.creditCardValidator.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\underscore.min.js" />
+    <Content Include="Styles\css\bootstrap-theme.css" />
+    <Content Include="Styles\css\bootstrap-theme.min.css" />
+    <Content Include="Styles\css\bootstrap.css" />
+    <Content Include="Styles\css\bootstrap.min.css" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Web.config" />
+    <Content Include="Styles\css\bootstrap-theme.css.map" />
+    <Content Include="Styles\css\bootstrap-theme.min.css.map" />
+    <Content Include="Styles\css\bootstrap.css.map" />
+    <Content Include="Styles\css\bootstrap.min.css.map" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\Basket\AddToBasketForm.cshtml" />
+    <Content Include="Views\Basket\BasketForm.cshtml" />
+    <Content Include="Views\CheckoutAddress\BillingAddressForm.cshtml" />
+    <Content Include="Views\CheckoutAddress\ShippingAddressForm.cshtml" />
+    <Content Include="Views\CheckoutSummary\BasketSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreUiHelper.cs" />
+    <Compile Include="UmbracoEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">
+      <Project>{2a83a229-c24b-4d8d-b806-7c9999eb9461}</Project>
+      <Name>Merchello.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Merchello.Examine\Merchello.Examine.csproj">
+      <Project>{28a665a9-2aad-4230-ab8c-0f0b0f1b2115}</Project>
+      <Name>Merchello.Examine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Merchello.Providers\Merchello.Providers.csproj">
+      <Project>{90c37ac8-cfe3-4199-a7b2-826278eb59e5}</Project>
+      <Name>Merchello.Providers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Merchello.QuickMart\Merchello.QuickMart.csproj">
       <Project>{0fb8f983-0a17-413b-be84-638268bc048c}</Project>
       <Name>Merchello.QuickMart</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Merchello.Web\Merchello.Web.csproj">
+      <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
+      <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

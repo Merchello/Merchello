@@ -279,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Controllers\Api\ProductDataTableApiControllerBase.cs" />
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutControllerBase.cs" />

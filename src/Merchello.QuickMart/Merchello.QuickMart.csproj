@@ -254,9 +254,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\QuickMartBasketController.cs" />
-    <Compile Include="Controllers\QuickMartCheckoutAddressController.cs" />
-    <Compile Include="Controllers\QuickMartCheckoutSummaryController.cs" />
+    <Compile Include="Controllers\Api\ProductDataTableApiController.cs" />
+    <Compile Include="Controllers\BasketController.cs" />
+    <Compile Include="Controllers\CheckoutAddressController.cs" />
+    <Compile Include="Controllers\CheckoutSummaryController.cs" />
     <Compile Include="Factories\QuickMartBillingAddressModelFactory.cs" />
     <Compile Include="Factories\QuickMartAddItemModelFactory.cs" />
     <Compile Include="Factories\QuickMartBasketModelFactory.cs" />

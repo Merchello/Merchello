@@ -1,4 +1,6 @@
 ﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Basket>
+@using Merchello.QuickMart.Ui
+@using Merchello.Web
 @{
 	Layout = "Master.cshtml";
 }
@@ -7,7 +9,7 @@
 
 @if (CurrentCustomer.Basket().Items.Any())
 {
-    @Html.Action("BasketForm", "DefaultBasket", new { area = "Merchello" })
+    @Html.Action("BasketForm", "Basket", new { area = "QuickMart" })
 }
 else
 {

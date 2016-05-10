@@ -23,10 +23,10 @@ if (MUI !== undefined) {
         // These can be adjusted to match custom controllers which implement base classes
         Endpoints: {
             // the basket surface controller end point
-            basketSurface: '/umbraco/Merchello/DefaultBasket/',
+            basketSurface: '/umbraco/QuickMart/Basket/',
 
             // the product table api controller end point
-            productTableApi: '/umbraco/Merchello/DefaultProductDataTableApi/'
+            productTableApi: '/umbraco/QuickMart/ProductDataTableApi/'
         }
     }
 };

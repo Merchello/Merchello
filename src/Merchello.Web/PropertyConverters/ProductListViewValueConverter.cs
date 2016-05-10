@@ -8,7 +8,7 @@
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.VirtualContent;
 
-    using Umbraco.Core.Logging;
+    using Umbraco.Core;
     using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Core.PropertyEditors;
 
@@ -62,6 +62,12 @@
                 return null;
 
             var collectionKey = source.ToString();
+
+            if (collectionKey.IsNullOrWhiteSpace())
+            {
+                return merchello.Query.Product.Search(1, 10)
+                    .Items.Select(x => merchello.TypedProductContent(((ProductDisplay)x).Key));
+            }
 
             try
             {

@@ -19,8 +19,8 @@
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/App_Plugins/Merchello',
-        vsdir: '../Merchello.Implementation.UI/App_Plugins/Merchello',
-        appdir: '../Merchello.Implementation.UI',
+        vsdir: '../Merchello.QuickMart.UI/App_Plugins/Merchello',
+        appdir: '../Merchello.QuickMart.UI',
         pkg: grunt.file.readJSON('package.json'),
 
         // The comment block that is inserted at the top of files during build
@@ -84,13 +84,13 @@
         sass: {
             dev: {
                 files: {
-                    '<%= distdir %>/client/css/default/mui.css':
+                    '<%= distdir %>/client/css/mui.css':
                     '<%= src.scss %>'
                 }
             },
             prod: {
                 files: {
-                    '<%= distdir %>/client/css/default/mui.min.css':
+                    '<%= distdir %>/client/css/mui.min.css':
                     '<%= src.scss %>'
                 },
                 options: {

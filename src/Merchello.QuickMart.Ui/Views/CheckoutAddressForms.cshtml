@@ -3,6 +3,6 @@
 	Layout = "Master.cshtml";
 }
 
-@Html.Action("BillingAddressForm", "DefaultCheckoutAddress", new { area = "Merchello" });
+@Html.Action("BillingAddressForm", "CheckoutAddress", new { area = "QuickMart" });
 
-@Html.Action("ShippingAddressForm", "DefaultCheckoutAddress", new { area = "Merchello"});
+@Html.Action("ShippingAddressForm", "CheckoutAddress", new { area = "QuickMart" });
