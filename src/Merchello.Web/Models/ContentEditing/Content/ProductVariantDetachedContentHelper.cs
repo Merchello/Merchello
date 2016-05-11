@@ -77,7 +77,7 @@
                 // only convert and add the property if it still exists on the content type
                 if (DetachedValuesConverter.Current.VerifyPropertyExists(contentType, dcv.Key))
                 {
-                    updatedValues.Add(DetachedValuesConverter.Current.Convert(contentType, dcv));
+                    updatedValues.Add(DetachedValuesConverter.Current.Convert(contentType, dcv, additionalData: d));
                 }
             }
 
