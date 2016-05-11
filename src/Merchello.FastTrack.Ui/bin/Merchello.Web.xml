@@ -341,10 +341,10 @@
         </member>
         <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.SaveBillingAddress(`0)">
             <summary>
-            Saves the <see cref="!:TBillingAddress"/> for use in the checkout.
+            Saves the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> for use in the checkout.
             </summary>
             <param name="model">
-            The <see cref="!:TBillingAddress"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </param>
             <returns>
             Redirects or JSON response depending if called Async.
@@ -352,7 +352,7 @@
         </member>
         <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.SaveShippingAddress(`1)">
             <summary>
-            Saves the <see cref="!:TShippingAddress"/> for use in the checkout
+            Saves the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> for use in the checkout
             </summary>
             <param name="model">
             The model.
@@ -5170,7 +5170,7 @@
         </member>
         <member name="T:Merchello.Web.Factories.AddItemModelFactory`1">
             <summary>
-            Responsible for creating <see cref="!:TAddItemModel"/>s.
+            Responsible for creating <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>s.
             </summary>
             <typeparam name="TAddItemModel">
             The type of the add item model
@@ -5187,12 +5187,12 @@
             The quantity.
             </param>
             <returns>
-            The <see cref="!:TAddItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.AddItemModelFactory`1.Create(Merchello.Web.Models.ContentEditing.ProductDisplay,System.Int32)">
             <summary>
-            Creates <see cref="!:TAddItemModel"/> from <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
+            Creates <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/> from <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </summary>
             <param name="display">
             The display.
@@ -5201,35 +5201,35 @@
             The quantity.
             </param>
             <returns>
-            The <see cref="!:TAddItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.AddItemModelFactory`1.OnCreate(`0,Merchello.Web.Models.VirtualContent.IProductContent)">
             <summary>
-            Allows for overriding the creation of <see cref="!:TAddItemModel"/> from <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/> from <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
             </summary>
             <param name="addItem">
-            The <see cref="!:TAddItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>.
             </param>
             <param name="productContent">
             The <see cref="T:Merchello.Web.Models.VirtualContent.IProductContent"/>.
             </param>
             <returns>
-            The modified <see cref="!:TAddItemModel"/>.
+            The modified <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.AddItemModelFactory`1.OnCreate(`0,Merchello.Web.Models.ContentEditing.ProductDisplay)">
             <summary>
-            Allows for overriding the creation of <see cref="!:TAddItemModel"/> from <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/> from <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>
             </summary>
             <param name="addItem">
-            The <see cref="!:AddItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>.
             </param>
             <param name="display">
             The <see cref="T:Merchello.Web.Models.ContentEditing.ProductDisplay"/>.
             </param>
             <returns>
-            The modified <see cref="!:TAddItemModel"/>.
+            The modified <see cref="T:Merchello.Web.Models.Ui.IAddItemModel"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Factories.BasketItemExtendedDataFactory`1">
@@ -5349,7 +5349,7 @@
         </member>
         <member name="M:Merchello.Web.Factories.CheckoutAddressModelFactory`1.Create(`0)">
             <summary>
-            Creates a <see cref="T:Merchello.Core.Models.IAddress"/> from <see cref="!:TAddress"/>.
+            Creates a <see cref="T:Merchello.Core.Models.IAddress"/> from <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </summary>
             <param name="adr">
             The address.
@@ -5360,18 +5360,18 @@
         </member>
         <member name="M:Merchello.Web.Factories.CheckoutAddressModelFactory`1.Create(Merchello.Core.Models.IAddress)">
             <summary>
-            Creates a <see cref="!:TAddress"/> from a <see cref="T:Merchello.Core.Models.IAddress"/>.
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> from a <see cref="T:Merchello.Core.Models.IAddress"/>.
             </summary>
             <param name="adr">
             The <see cref="T:Merchello.Core.Models.IAddress"/>.
             </param>
             <returns>
-            The <see cref="!:TAddress"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.CheckoutAddressModelFactory`1.Create(Merchello.Core.Models.ICustomer,Merchello.Core.Models.ICustomerAddress)">
             <summary>
-            Creates a <see cref="!:TAddress"/> from a <see cref="T:Merchello.Core.Models.ICustomerAddress"/>.
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> from a <see cref="T:Merchello.Core.Models.ICustomerAddress"/>.
             </summary>
             <param name="customer">
             The customer.
@@ -5380,21 +5380,21 @@
             The <see cref="T:Merchello.Core.Models.ICustomerAddress"/>.
             </param>
             <returns>
-            The <see cref="!:TAddress"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Factories.CheckoutAddressModelFactory`1.OnCreate(Merchello.Core.Models.IAddress,`0)">
+        <member name="M:Merchello.Web.Factories.CheckoutAddressModelFactory`1.OnCreate(`0,Merchello.Core.Models.IAddress)">
             <summary>
-            Allows for overriding the address created.
+             Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> from <see cref="T:Merchello.Core.Models.IAddress"/>.
             </summary>
             <param name="address">
-            The <see cref="T:Merchello.Core.Models.IAddress"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </param>
             <param name="adr">
-            The <see cref="!:TAddress"/>.
+            The <see cref="T:Merchello.Core.Models.IAddress"/>.
             </param>
             <returns>
-            The modified <see cref="T:Merchello.Core.Models.IAddress"/>.
+            The modified <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Factories.CheckoutContextSettingsFactory">

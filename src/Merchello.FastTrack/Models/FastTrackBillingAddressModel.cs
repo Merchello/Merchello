@@ -9,7 +9,7 @@
     /// <summary>
     /// The checkout billing address model.
     /// </summary>
-    public class FastTrackBillingAddressModel : FastTrackCheckoutAddressModel, ICustomerMembershipProfile
+    public class FastTrackBillingAddressModel : FastTrackCheckoutAddressModel, ICustomerMembershipProfile, IFastTrackCheckoutAddressModel
     {
         /// <summary>
         /// Gets or sets the first name.
@@ -30,7 +30,7 @@
         /// </summary>
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelEmailAddress")]
         [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredEmailAddress")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "InvalidEmailAddress")]
         public new string Email { get; set; }
 
         /// <summary>
@@ -38,5 +38,16 @@
         /// </summary>
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelUseForShipping")]
         public bool UseForShipping { get; set; }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                return string.Format("{0} {1}", FirstName, LastName);
+            }
+        }
     }
 }

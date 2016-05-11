@@ -5,8 +5,8 @@
     using System.Web.Mvc;
 
     using Merchello.Core.Models;
+    using Merchello.FastTrack.Models;
     using Merchello.Web.Factories;
-    using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Models;
 
     /// <summary>
@@ -16,8 +16,26 @@
     /// The type of <see cref="CheckoutAddressModel"/>
     /// </typeparam>
     public abstract class FastTrackCheckoutAddressModelFactoryBase<TAddress> : CheckoutAddressModelFactory<TAddress>
-        where TAddress : class, ICheckoutAddressModel, new()
+        where TAddress : class, IFastTrackCheckoutAddressModel, new()
     {
+        /// <summary>
+        /// The on create.
+        /// </summary>
+        /// <param name="address">
+        /// The <see cref="TAddress"/>.
+        /// </param>
+        /// <param name="adr">
+        /// The <see cref="IAddress"/>.
+        /// </param>
+        /// <returns>
+        /// The modified <see cref="TAddress"/>.
+        /// </returns>
+        protected override TAddress OnCreate(TAddress address, IAddress adr)
+        {
+            address.Countries = GetCountrySelectListItems();
+            return base.OnCreate(address, adr);
+        }
+
         /// <summary>
         /// Gets a list of available countries for the respective address.
         /// </summary>
@@ -37,7 +55,7 @@
         /// </returns>
         protected IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<ICountry> countries)
         {
-            return countries.Select(x => new SelectListItem { Value = x.CountryCode, Text = x.Name });
+            return countries.OrderBy(x => x.Name).Select(x => new SelectListItem { Value = x.CountryCode, Text = x.Name });
         }
     }
 }

@@ -61,6 +61,15 @@ namespace Merchello.Web.Store.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email address appear to be invalid.
+        /// </summary>
+        public static string InvalidEmailAddress {
+            get {
+                return ResourceManager.GetString("InvalidEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address line 1.
         /// </summary>
         public static string LabelAddress1 {
@@ -84,6 +93,15 @@ namespace Merchello.Web.Store.Localization {
         public static string LabelAddressLabel {
             get {
                 return ResourceManager.GetString("LabelAddressLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string LabelCountry {
+            get {
+                return ResourceManager.GetString("LabelCountry", resourceCulture);
             }
         }
         
@@ -187,6 +205,15 @@ namespace Merchello.Web.Store.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -- Please Select --.
+        /// </summary>
+        public static string PleaseSelect {
+            get {
+                return ResourceManager.GetString("PleaseSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address line is required.
         /// </summary>
         public static string RequiredAddress {
@@ -196,7 +223,7 @@ namespace Merchello.Web.Store.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Country is a required field.
+        ///   Looks up a localized string similar to Country is a required.
         /// </summary>
         public static string RequiredCountry {
             get {
@@ -255,6 +282,15 @@ namespace Merchello.Web.Store.Localization {
         public static string RequiredPostalCode {
             get {
                 return ResourceManager.GetString("RequiredPostalCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State or Provice is required.
+        /// </summary>
+        public static string RequiredRegion {
+            get {
+                return ResourceManager.GetString("RequiredRegion", resourceCulture);
             }
         }
     }

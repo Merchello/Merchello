@@ -57485,6 +57485,17 @@
             The converted value.
             </returns>
         </member>
+        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.TryFixLegacyValue(System.String)">
+            <summary>
+            The try fix legacy value.
+            </summary>
+            <param name="value">
+            The value.
+            </param>
+            <returns>
+            The <see cref="T:System.Object"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Core.ValueConverters.DetachedValuesConverter.DetachedValueCorrector">
             <summary>
             Allows for overriding stored detached values with corrections.

@@ -238,7 +238,7 @@ MUI.AddItem = {
 
                         MUI.emit('AddItem.added', result);
                         
-                        MUI.Notify.success('Successfully added item to basket');
+                        MUI.Notify.info('Successfully added item to basket');
 
                     }, function(err) {
                        MUI.Logger.captureError(err); 

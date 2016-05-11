@@ -13,7 +13,7 @@
     /// The controller responsible for rendering and processing addresses in the default checkout process.
     /// </summary>
     [PluginController("FastTrack")]
-    public class CheckoutAddressController : CheckoutAddressControllerBase<FastTrackBillingAddressModel, CheckoutAddressModel>
+    public class CheckoutAddressController : CheckoutAddressControllerBase<FastTrackBillingAddressModel, FastTrackCheckoutAddressModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutAddressController"/> class.

@@ -1,16 +1,19 @@
 ﻿namespace Merchello.Web.Store.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core;
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Localization;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// A model used for collecting and persisting checkout addresses.
     /// </summary>
-    public class CheckoutAddressModel : ICheckoutAddressModel
+    public class CheckoutAddressModel : ICheckoutAddressModel //, IValidatableObject
     {
         /// <summary>
         /// Gets or sets the customer address key.
@@ -34,7 +37,7 @@
         /// </summary>
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelName")]
         [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredName")]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the address line 1.
@@ -52,7 +55,7 @@
         /// <summary>
         /// Gets or sets the locality.
         /// </summary>
-        [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelRegion")]
+        [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelLocality")]
         [Required(ErrorMessageResourceName = "RequiredLocality", ErrorMessageResourceType = typeof(StoreFormsResource))]
         public string Locality { get; set; }
 
@@ -72,7 +75,8 @@
         /// <summary>
         /// Gets or sets the country code.
         /// </summary>
-        [Required]
+        [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelCountry")]
+        [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredCountry")]
         public string CountryCode { get; set; }
 
         /// <summary>
@@ -100,5 +104,15 @@
         /// This is used to assist in tracking the checkout - generally in single page checkouts
         /// </remarks>
         public ICheckoutWorkflowMarker WorkflowMarker { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets a value indicating whether has provinces.
+        ///// </summary>
+        //internal bool HasProvinces { get; set; }
+
+        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    if (HasProvinces && Region.IsNullOrWhiteSpace()) yield return new ValidationResult(StoreFormsResource.RequiredRegion);
+        //}
     }
 }

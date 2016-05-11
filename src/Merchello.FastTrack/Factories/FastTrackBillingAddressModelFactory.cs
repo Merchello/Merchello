@@ -42,26 +42,6 @@
         }
 
         /// <summary>
-        /// Overrides model creation.
-        /// </summary>
-        /// <param name="address">
-        /// The <see cref="IAddress"/>.
-        /// </param>
-        /// <param name="adr">
-        /// The <see cref="FastTrackBillingAddressModel"/>.
-        /// </param>
-        /// <returns>
-        /// The modified <see cref="IAddress"/>.
-        /// </returns>
-        protected override IAddress OnCreate(IAddress address, FastTrackBillingAddressModel adr)
-        {
-            
-            address.Name = string.Format("{0} {1}", adr.FirstName, adr.Label);
-
-            return base.OnCreate(address, adr);
-        }
-
-        /// <summary>
         /// Gets a list of available countries for the billing address.
         /// </summary>
         /// <returns>

@@ -17,20 +17,9 @@
     public class CheckoutAddressModelFactory<TAddress>
         where TAddress : class, ICheckoutAddressModel, new()
     {
-        private readonly IMerchelloContext _merchelloContext;
-
-        public CheckoutAddressModelFactory()
-            : this(MerchelloContext.Current)
-        {
-        }
-
-        public CheckoutAddressModelFactory(IMerchelloContext merchelloContext)
-        {
-            this._merchelloContext = merchelloContext;
-        }
 
         /// <summary>
-        /// Creates a <see cref="IAddress"/> from <see cref="TAddress"/>.
+        /// Creates a <see cref="IAddress"/> from <see cref="ICheckoutAddressModel"/>.
         /// </summary>
         /// <param name="adr">
         /// The address.
@@ -40,7 +29,7 @@
         /// </returns>
         public IAddress Create(TAddress adr)
         {
-            var address = new Address
+            return new Address
                 {
                     Name = adr.Name,
                     Organization = adr.Organization,
@@ -54,23 +43,20 @@
                     Phone = adr.Phone,
                     AddressType = adr.AddressType,
                 };
-
-            return this.OnCreate(address, adr);
         }
 
         /// <summary>
-        /// Creates a <see cref="TAddress"/> from a <see cref="IAddress"/>.
+        /// Creates a <see cref="ICheckoutAddressModel"/> from a <see cref="IAddress"/>.
         /// </summary>
         /// <param name="adr">
         /// The <see cref="IAddress"/>.
         /// </param>
         /// <returns>
-        /// The <see cref="TAddress"/>.
+        /// The <see cref="ICheckoutAddressModel"/>.
         /// </returns>
         public TAddress Create(IAddress adr)
         {   
-
-            return new TAddress
+            var address = new TAddress
                 {
                     Name = adr.Name,
                     Organization = adr.Organization,
@@ -84,10 +70,12 @@
                     Phone = adr.Phone,
                     AddressType = adr.AddressType,
                 };
+
+            return OnCreate(address, adr);
         }
 
         /// <summary>
-        /// Creates a <see cref="TAddress"/> from a <see cref="ICustomerAddress"/>.
+        /// Creates a <see cref="ICheckoutAddressModel"/> from a <see cref="ICustomerAddress"/>.
         /// </summary>
         /// <param name="customer">
         /// The customer.
@@ -96,7 +84,7 @@
         /// The <see cref="ICustomerAddress"/>.
         /// </param>
         /// <returns>
-        /// The <see cref="TAddress"/>.
+        /// The <see cref="ICheckoutAddressModel"/>.
         /// </returns>
         public TAddress Create(ICustomer customer, ICustomerAddress adr)
         {
@@ -117,20 +105,20 @@
         }
 
         /// <summary>
-        /// Allows for overriding the address created.
+        ///  Allows for overriding the creation of <see cref="ICheckoutAddressModel"/> from <see cref="IAddress"/>.
         /// </summary>
         /// <param name="address">
-        /// The <see cref="IAddress"/>.
+        /// The <see cref="ICheckoutAddressModel"/>.
         /// </param>
         /// <param name="adr">
-        /// The <see cref="TAddress"/>.
+        /// The <see cref="IAddress"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="IAddress"/>.
+        /// The modified <see cref="ICheckoutAddressModel"/>.
         /// </returns>
-        protected virtual IAddress OnCreate(IAddress address, TAddress adr)
+        protected virtual TAddress OnCreate(TAddress address, IAddress adr)
         {
             return address;
-        } 
+        }
     }
 }

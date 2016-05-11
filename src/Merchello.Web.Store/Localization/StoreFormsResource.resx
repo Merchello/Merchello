@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Email address appear to be invalid</value>
+    <comment>Error message for an invalid email address</comment>
+  </data>
   <data name="LabelAddress1" xml:space="preserve">
     <value>Address line 1</value>
     <comment>Label for address line 1</comment>
@@ -128,6 +132,10 @@
   <data name="LabelAddressLabel" xml:space="preserve">
     <value>Address label (ex. My House)</value>
     <comment>Label for an address label field</comment>
+  </data>
+  <data name="LabelCountry" xml:space="preserve">
+    <value>Country</value>
+    <comment>Label for country selection</comment>
   </data>
   <data name="LabelEmailAddress" xml:space="preserve">
     <value>Email address</value>
@@ -171,12 +179,16 @@
   <data name="LabelUseForShipping" xml:space="preserve">
     <value>Use this address as the shipping address</value>
   </data>
+  <data name="PleaseSelect" xml:space="preserve">
+    <value>-- Please Select --</value>
+    <comment>Empty select value</comment>
+  </data>
   <data name="RequiredAddress" xml:space="preserve">
     <value>Address line is required</value>
     <comment>Error message for a required address field</comment>
   </data>
   <data name="RequiredCountry" xml:space="preserve">
-    <value>Country is a required field</value>
+    <value>Country is a required</value>
     <comment>Error message for a required country field</comment>
   </data>
   <data name="RequiredEmailAddress" xml:space="preserve">
@@ -202,5 +214,9 @@
   <data name="RequiredPostalCode" xml:space="preserve">
     <value>Postal code is required</value>
     <comment>Error message for a required postal code field</comment>
+  </data>
+  <data name="RequiredRegion" xml:space="preserve">
+    <value>State or Provice is required</value>
+    <comment>Error message for state or province field</comment>
   </data>
 </root>

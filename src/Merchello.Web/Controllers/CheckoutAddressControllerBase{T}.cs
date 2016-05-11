@@ -107,10 +107,10 @@
         }
 
         /// <summary>
-        /// Saves the <see cref="TBillingAddress"/> for use in the checkout.
+        /// Saves the <see cref="ICheckoutAddressModel"/> for use in the checkout.
         /// </summary>
         /// <param name="model">
-        /// The <see cref="TBillingAddress"/>.
+        /// The <see cref="ICheckoutAddressModel"/>.
         /// </param>
         /// <returns>
         /// Redirects or JSON response depending if called Async.
@@ -120,6 +120,7 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
+            // Temporarily save the address in the checkout manager.
             this.CheckoutManager.Customer.SaveBillToAddress(this._billingAddressFactory.Create(model));
 
             if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
@@ -130,7 +131,7 @@
         }
 
         /// <summary>
-        /// Saves the <see cref="TShippingAddress"/> for use in the checkout
+        /// Saves the <see cref="ICheckoutAddressModel"/> for use in the checkout
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -166,9 +167,9 @@
             {
                 defaultBilling = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Billing);
             }
-
+;
             return defaultBilling == null
-                       ? this.PartialView()
+                       ? this.PartialView(_billingAddressFactory.Create(new Address()))
                        : this.PartialView(this._billingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultBilling));
         }
 
@@ -181,8 +182,6 @@
         [ChildActionOnly]
         public ActionResult ShippingAddressForm()
         {
-            // TODO Country Code and Region
-
             ICustomerAddress defaultShipping = null;
             if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
             {
@@ -190,7 +189,7 @@
             }
 
             return defaultShipping == null
-                   ? this.PartialView()
+                   ? this.PartialView(_shippingAddressFactory.Create(new Address()))
                    : this.PartialView(this._shippingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultShipping));
         }
 

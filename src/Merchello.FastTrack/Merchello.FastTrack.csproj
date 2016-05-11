@@ -261,6 +261,7 @@
     <Compile Include="Models\FastTrackBillingAddressModel.cs" />
     <Compile Include="Models\FastTrackCheckoutAddressModel.cs" />
     <Compile Include="Models\FastTrackCheckoutSummary.cs" />
+    <Compile Include="Models\IFastTrackCheckoutAddressModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
