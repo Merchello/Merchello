@@ -37,6 +37,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
                             args.scope.detachedContent.canBeRendered = _.find(ct.properties, function(r) { return r.alias === 'canBeRendered'}).value === '1' ? true : false;
                         } else {
                             angular.forEach(ct.properties, function (p) {
+                                console.info(p);
                                 if (typeof p.value !== "function") {
                                     args.scope.detachedContent.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
                                 }
