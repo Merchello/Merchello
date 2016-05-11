@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AACA,eAAgB,CAEZ,QAAQ,CAAE,KAAK,CACf,MAAM,CAAE,CAAC,CACT,IAAI,CAAE,CAAC,CACP,KAAK,CAAE,CAAC,CACR,aAAa,CAAE,CAAC",
-"sources": ["../../../../../src/scss/modules/_notify.scss"],
-"names": [],
-"file": "mui.min.css"
-}

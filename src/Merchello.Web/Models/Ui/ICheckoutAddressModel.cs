@@ -79,11 +79,6 @@
         /// </summary>
         string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets the countries valid for the address entry.
-        /// </summary>
-        IEnumerable<CountryDisplay> Countries { get; set; }
-
             /// <summary>
         /// Gets or sets the address type.
         /// </summary>

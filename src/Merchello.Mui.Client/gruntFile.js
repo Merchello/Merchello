@@ -19,8 +19,8 @@
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/App_Plugins/Merchello',
-        vsdir: '../Merchello.QuickMart.UI/App_Plugins/Merchello',
-        appdir: '../Merchello.QuickMart.UI',
+        vsdir: '../Merchello.FastTrack.UI/App_Plugins/Merchello',
+        appdir: '../Merchello.FastTrack.UI',
         pkg: grunt.file.readJSON('package.json'),
 
         // The comment block that is inserted at the top of files during build
