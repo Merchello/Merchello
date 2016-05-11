@@ -373,9 +373,19 @@
 
             if (propEditor.ValueEditor.IsReadOnly) return dcv;
 
-            var rawValue = !JsonHelper.IsJsonObject(dcv.Value) ? 
-                JsonConvert.DeserializeObject(dcv.Value) : 
-                dcv.Value;
+            object rawValue;
+            try
+            {
+                rawValue = !JsonHelper.IsJsonObject(dcv.Value) ?
+                    JsonConvert.DeserializeObject(dcv.Value) :
+                    dcv.Value;
+            }
+            catch (Exception ex)
+            {
+                // try to correct the value 
+                rawValue = TryFixLegacyValue(dcv.Value);
+            }
+
 
             //// Adapted from Nested Content
             // Create a fake property using the property to add the stored value
@@ -399,6 +409,27 @@
 
                 return dcv;
             }
+        }
+
+        /// <summary>
+        /// The try fix legacy value.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="object"/>.
+        /// </returns>
+        private object TryFixLegacyValue(string value)
+        {
+            // Assume this is a value was saved as a string and not 
+            // sent to the db converter.
+            if (value.StartsWith("\"") && value.EndsWith("\""))
+            {
+                value = value.Substring(1, value.Length - 2);
+            }
+
+            return value;
         }
 
         /// <summary>

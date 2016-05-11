@@ -203,3 +203,5 @@ src/Merchello.Core/bin/
 src/Merchello.QuickMart.Ui/App_Data/Logs/
 src/Merchello.QuickMart.Ui/App_Data/NuGetBackup/
 src/Merchello.QuickMart.Ui/App_Data/TEMP/
+src/Merchello.FastTrack.Ui/App_Data/Logs/
+src/Merchello.FastTrack.Ui/App_Data/TEMP/ExamineIndexes/
