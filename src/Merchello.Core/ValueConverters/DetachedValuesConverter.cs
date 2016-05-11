@@ -137,10 +137,13 @@
         /// <param name="conversionType">
         /// The conversion type.
         /// </param>
+        /// <param name="additionalData">
+        /// A dictionary of additional data (only used with DetachedValuesConversionType database).
+        /// </param>
         /// <returns>
         /// The converted values.
         /// </returns>
-        public IEnumerable<KeyValuePair<string, string>> Convert(IContentType contentType, IEnumerable<KeyValuePair<string, string>> detachedContentValues, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        public IEnumerable<KeyValuePair<string, string>> Convert(IContentType contentType, IEnumerable<KeyValuePair<string, string>> detachedContentValues, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db, Dictionary<string, object> additionalData = null)
         {
             switch (conversionType)
             {
@@ -148,12 +151,14 @@
                     return ConvertDbToEditor(contentType, detachedContentValues);
 
                 case DetachedValuesConversionType.Db:
-                    return ConvertEditorToDb(contentType, detachedContentValues);
+                    return ConvertEditorToDb(contentType, detachedContentValues, additionalData);
 
                 default:
                     return ConvertEditorToDb(contentType, detachedContentValues);
             }
         }
+
+
 
         /// <summary>
         /// Converts the detached value collection to property values for various usages depending on type passed.
@@ -167,10 +172,13 @@
         /// <param name="conversionType">
         /// The conversion type.
         /// </param>
+        /// <param name="additionalData">
+        /// A dictionary of additional data (only used with DetachedValuesConversionType database).
+        /// </param>
         /// <returns>
         /// The converted values.
         /// </returns>
-        public KeyValuePair<string, string> Convert(IContentType contentType, KeyValuePair<string, string> dcv, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        public KeyValuePair<string, string> Convert(IContentType contentType, KeyValuePair<string, string> dcv, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db, Dictionary<string, object> additionalData = null)
         {
             switch (conversionType)
             {
@@ -179,10 +187,10 @@
                     return ConvertDbToEditor(contentType, dcv);
 
                 case DetachedValuesConversionType.Db:
-                    return ConvertEditorToDb(contentType, dcv);
+                    return ConvertEditorToDb(contentType, dcv, additionalData);
 
                 default:
-                    return ConvertEditorToDb(contentType, dcv);
+                    return ConvertEditorToDb(contentType, dcv, additionalData);
             }
         }
 
@@ -246,6 +254,9 @@
         /// <param name="detachedContentValues">
         /// The detached content values.
         /// </param>
+        /// <param name="additionalData">
+        /// A dictionary of additional data ex. file uploads (only used with DetachedValuesConversionType database).
+        /// </param>
         /// <returns>
         /// The converted values.
         /// </returns>
@@ -256,11 +267,11 @@
         ///             value to the DB will fail when it tries to validate the value type.
         /// 
         /// </remarks>
-        private IEnumerable<KeyValuePair<string, string>> ConvertEditorToDb(IContentType contentType, IEnumerable<KeyValuePair<string, string>> detachedContentValues)
+        private IEnumerable<KeyValuePair<string, string>> ConvertEditorToDb(IContentType contentType, IEnumerable<KeyValuePair<string, string>> detachedContentValues, IDictionary<string, object> additionalData = null)
         {
             if (contentType == null || !_ready) return detachedContentValues;
 
-            return detachedContentValues.ToArray().Select(dcv => this.ConvertEditorToDb(contentType, dcv)).ToList();
+            return detachedContentValues.ToArray().Select(dcv => this.ConvertEditorToDb(contentType, dcv, additionalData)).ToList();
         }
 
         /// <summary>
@@ -273,10 +284,13 @@
         /// <param name="dcv">
         /// The detached content value.
         /// </param>
+        /// <param name="additionalData">
+        /// The additional Data.
+        /// </param>
         /// <returns>
         /// The converted value.
         /// </returns>
-        private KeyValuePair<string, string> ConvertEditorToDb(IContentType contentType, KeyValuePair<string, string> dcv)
+        private KeyValuePair<string, string> ConvertEditorToDb(IContentType contentType, KeyValuePair<string, string> dcv, IDictionary<string, object> additionalData)
         {
             var propType = contentType.CompositionPropertyTypes.FirstOrDefault(x => x.Alias == dcv.Key);
             if (propType == null)
@@ -294,8 +308,9 @@
 
             var rawValue = JsonConvert.DeserializeObject(dcv.Value.Trim());
 
-            // Create a fake content property data object
-            var contentPropData = new ContentPropertyData(rawValue, propPreValues, new Dictionary<string, object>());
+            //// Create a fake content property data object
+            if (additionalData == null) additionalData = new Dictionary<string, object>();
+            var contentPropData = new ContentPropertyData(rawValue, propPreValues, additionalData);
 
             try
             {
