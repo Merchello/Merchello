@@ -7,7 +7,7 @@
     using Merchello.Web.Workflow;
 
     /// <summary>
-    /// A factory responsible for building <see cref="TBasketModel"/> and <see cref="TBasketItemModel"/>.
+    /// A factory responsible for building <see cref="IBasketModel{TBasketItemModel}"/> and <see cref="ILineItemModel"/>.
     /// </summary>
     /// <typeparam name="TBasketModel">
     /// The type of <see cref="IBasketModel{TBasketItemModel}"/>
@@ -20,13 +20,13 @@
         where TBasketItemModel : class, ILineItemModel, new()
     {
         /// <summary>
-        /// Creates <see cref="TBasketModel"/> from <see cref="IBasket"/>.
+        /// Creates <see cref="IBasketModel{TBasketItemModel}"/> from <see cref="IBasket"/>.
         /// </summary>
         /// <param name="basket">
         /// The <see cref="IBasket"/>.
         /// </param>
         /// <returns>
-        /// The <see cref="TBasketModel"/>.
+        /// The <see cref="IBasketModel{TBasketItemModel}"/>.
         /// </returns>
         public TBasketModel Create(IBasket basket)
         {
@@ -42,13 +42,13 @@
         }
 
         /// <summary>
-        /// Creates <see cref="TBasketItemModel"/> from <see cref="ILineItem"/>.
+        /// Creates <see cref="ILineItemModel"/> from <see cref="ILineItem"/>.
         /// </summary>
         /// <param name="lineItem">
         /// The <see cref="ILineItem"/>.
         /// </param>
         /// <returns>
-        /// The <see cref="TBasketItemModel"/>.
+        /// The <see cref="ILineItemModel"/>.
         /// </returns>
         public TBasketItemModel Create(ILineItem lineItem)
         {
@@ -64,16 +64,16 @@
         }
 
         /// <summary>
-        /// Allows for overriding the creation of <see cref="TBasketModel"/> from <see cref="IBasket"/>.
+        /// Allows for overriding the creation of <see cref="IBasketModel{TBasketItemModel}"/> from <see cref="IBasket"/>.
         /// </summary>
         /// <param name="basketModel">
-        /// The <see cref="TBasketModel"/>.
+        /// The <see cref="IBasketModel{TBasketItemModel}"/>.
         /// </param>
         /// <param name="basket">
         /// The <see cref="IBasket"/>.
         /// </param>
         /// <returns>
-        /// The <see cref="TBasketItemModel"/>.
+        /// The <see cref="ILineItemModel"/>.
         /// </returns>
         protected virtual TBasketModel OnCreate(TBasketModel basketModel, IBasket basket)
         {
@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// Allows for overriding the creation of <see cref="TBasketItemModel"/> from <see cref="ILineItem"/>.
+        /// Allows for overriding the creation of <see cref="ILineItemModel"/> from <see cref="ILineItem"/>.
         /// </summary>
         /// <param name="basketItem">
         /// The basket item.
@@ -90,7 +90,7 @@
         /// The line item.
         /// </param>
         /// <returns>
-        /// The <see cref="TBasketItemModel"/>.
+        /// The <see cref="ILineItemModel"/>.
         /// </returns>
         protected virtual TBasketItemModel OnCreate(TBasketItemModel basketItem, ILineItem lineItem)
         {

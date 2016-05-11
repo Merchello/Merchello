@@ -2,6 +2,7 @@
 {
     using Merchello.FastTrack.Models;
     using Merchello.Web.Controllers;
+    using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Models;
 
     using Umbraco.Web.Mvc;

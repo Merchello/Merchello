@@ -1,7 +1,7 @@
 ﻿@inherits UmbracoViewPage<Merchello.FastTrack.Models.FastTrackBillingAddressModel>
 @using System.Web.Mvc.Html
+@using Merchello.Core.Localization
 @using Merchello.FastTrack.Controllers
-@using Merchello.Web.Store.Localization
 
 <h3>Billing Address</h3>
 @using (Html.BeginUmbracoForm<CheckoutAddressController>("SaveBillingAddress", new { area = "FastTrack" }, new { data_muistage = "BillingAddress" }))

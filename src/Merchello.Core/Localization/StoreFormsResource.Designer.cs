@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Merchello.Web.Store.Localization {
+namespace Merchello.Core.Localization {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Merchello.Web.Store.Localization {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Merchello.Web.Store.Localization.StoreFormsResource", typeof(StoreFormsResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Merchello.Core.Localization.StoreFormsResource", typeof(StoreFormsResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

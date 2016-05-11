@@ -3,6 +3,7 @@
     using Merchello.QuickMart.Factories;
     using Merchello.Web.Controllers;
     using Merchello.Web.Factories;
+    using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Factories;
     using Merchello.Web.Store.Models;
 

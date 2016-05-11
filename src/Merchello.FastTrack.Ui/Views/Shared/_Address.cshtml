@@ -1,0 +1,20 @@
+﻿@model Merchello.Web.Models.Ui.ICheckoutAddressModel
+    
+<div class="h-card">
+    <p class="p-name">@Model.Name</p>
+    <p class="p-adr h-adr">
+        <span class="p-street-address">@Model.Address1</span>
+        @if (!Model.Address2.IsNullOrWhiteSpace())
+        {<span class="p-extended-address">@Model.Address2</span>}
+        <span class="p-locality">@Model.Locality</span>
+        @if (!Model.Region.IsNullOrWhiteSpace())
+        {<span class="p-region">@Model.Region</span>}
+        @if (!Model.PostalCode.IsNullOrWhiteSpace())
+        {<span class="p-postal-code">@Model.PostalCode</span>}
+        <span class="p-country-name">@Model.CountryCode</span>
+    </p>
+    @if (!Model.Phone.IsNullOrWhiteSpace())
+    {<span class="p-tel">@Model.Phone</span>}
+    @if (!Model.Email.IsNullOrWhiteSpace())
+    {<span class="u-email"><a href="mailto:@Model.Email">@Model.Email</a></span>}
+</div>

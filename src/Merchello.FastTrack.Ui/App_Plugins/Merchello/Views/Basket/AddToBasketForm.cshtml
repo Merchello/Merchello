@@ -1,8 +1,11 @@
 ﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Merchello.Web.Store.Models.AddItemModel>
 @using System.Text
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
 @using Merchello.Core
 @using Merchello.Web.Models.VirtualContent
 @using Merchello.Web.Store.Controllers
+@using Umbraco.Web
 @{
     // Get the IProductContent from the Merchello helper which is already instantiated by the MerchelloViewPage reference.
     //// https://merchello.readme.io/docs/view-pages
@@ -39,7 +42,7 @@
                     foreach (var option in Model.ProductOptions)
                     {
 
-                        var choices = option.Choices.OrderBy(x => x.SortOrder).Select(choice => new SelectListItem { Value = choice.Key.ToString(), Text = choice.Name }).ToList();
+                        var choices = option.Choices.OrderBy(x => x.SortOrder).Select(choice => new System.Web.Mvc.SelectListItem { Value = choice.Key.ToString(), Text = choice.Name }).ToList();
                         choices.First().Selected = true;
 
                         @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })

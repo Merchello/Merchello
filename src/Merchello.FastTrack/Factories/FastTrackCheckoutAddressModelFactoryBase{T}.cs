@@ -7,6 +7,7 @@
     using Merchello.Core.Models;
     using Merchello.FastTrack.Models;
     using Merchello.Web.Factories;
+    using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Models;
 
     /// <summary>

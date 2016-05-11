@@ -121,7 +121,10 @@
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
             // Temporarily save the address in the checkout manager.
-            this.CheckoutManager.Customer.SaveBillToAddress(this._billingAddressFactory.Create(model));
+            this.CheckoutManager.Customer.SaveBillToAddress(model);
+
+            // Ensure billing address type is billing
+            if (model.AddressType != AddressType.Billing) model.AddressType = AddressType.Billing;
 
             if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
 
@@ -139,14 +142,22 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [HttpPost]
         public virtual ActionResult SaveShippingAddress(TShippingAddress model)
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            throw new NotImplementedException();
+            // Temporarily save the address in the checkout manager.
+            this.CheckoutManager.Customer.SaveShipToAddress(model);
+
+            // Ensure billing address type is billing
+            if (model.AddressType != AddressType.Shipping) model.AddressType = AddressType.Shipping;
+
+            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
+
+            model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.ShippingAddress);
+
+            return this.RedirectAddressSaveSuccess(model);
         }
 
         #region ChildActions
@@ -154,33 +165,42 @@
         /// <summary>
         /// Renders the billing address form.
         /// </summary>
+        /// <param name="view">
+        /// The view to display.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [ChildActionOnly]
-        public ActionResult BillingAddressForm()
+        public ActionResult BillingAddressForm(string view = "")
         {
-            // TODO Country Code and Region
-
             ICustomerAddress defaultBilling = null;
             if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
             {
                 defaultBilling = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Billing);
             }
-;
-            return defaultBilling == null
+
+            return view.IsNullOrWhiteSpace() ?
+                defaultBilling == null
                        ? this.PartialView(_billingAddressFactory.Create(new Address()))
-                       : this.PartialView(this._billingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultBilling));
+                       : this.PartialView(_billingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultBilling)) 
+                :
+                defaultBilling == null
+                       ? this.PartialView(view, _billingAddressFactory.Create(new Address())) 
+                       : this.PartialView(view, _billingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultBilling));
         }
 
         /// <summary>
         /// Renders the shipping address form.
         /// </summary>
+        /// <param name="view">
+        /// The view to display.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [ChildActionOnly]
-        public ActionResult ShippingAddressForm()
+        public ActionResult ShippingAddressForm(string view = "")
         {
             ICustomerAddress defaultShipping = null;
             if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
@@ -188,9 +208,14 @@
                 defaultShipping = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Shipping);
             }
 
-            return defaultShipping == null
-                   ? this.PartialView(_shippingAddressFactory.Create(new Address()))
-                   : this.PartialView(this._shippingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultShipping));
+            return view.IsNullOrWhiteSpace() ?
+                defaultShipping == null
+                       ? this.PartialView(_shippingAddressFactory.Create(new Address()))
+                       : this.PartialView(_shippingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultShipping))
+                :
+                defaultShipping == null
+                       ? this.PartialView(view, _shippingAddressFactory.Create(new Address()))
+                       : this.PartialView(view, _shippingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultShipping));
         }
 
         #endregion

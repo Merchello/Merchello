@@ -11718,6 +11718,152 @@
             The guess.
             </returns>
         </member>
+        <member name="T:Merchello.Core.Localization.StoreFormsResource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.InvalidEmailAddress">
+            <summary>
+              Looks up a localized string similar to Email address appear to be invalid.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelAddress1">
+            <summary>
+              Looks up a localized string similar to Address line 1.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelAddress2">
+            <summary>
+              Looks up a localized string similar to Address line 2.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelAddressLabel">
+            <summary>
+              Looks up a localized string similar to Address label (ex. My House).
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelCountry">
+            <summary>
+              Looks up a localized string similar to Country.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelEmailAddress">
+            <summary>
+              Looks up a localized string similar to Email address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelFirstName">
+            <summary>
+              Looks up a localized string similar to First name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelLastName">
+            <summary>
+              Looks up a localized string similar to Last name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelLocality">
+            <summary>
+              Looks up a localized string similar to City.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelName">
+            <summary>
+              Looks up a localized string similar to Full name.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelOrganization">
+            <summary>
+              Looks up a localized string similar to Company.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelPhone">
+            <summary>
+              Looks up a localized string similar to Phone.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelPostalCode">
+            <summary>
+              Looks up a localized string similar to Postal code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelRegion">
+            <summary>
+              Looks up a localized string similar to State or Province.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelUseForBilling">
+            <summary>
+              Looks up a localized string similar to Use this address as the billing address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelUseForShipping">
+            <summary>
+              Looks up a localized string similar to Use this address as the shipping address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.PleaseSelect">
+            <summary>
+              Looks up a localized string similar to -- Please Select --.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredAddress">
+            <summary>
+              Looks up a localized string similar to Address line is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredCountry">
+            <summary>
+              Looks up a localized string similar to Country is a required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredEmailAddress">
+            <summary>
+              Looks up a localized string similar to Email address is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredFirstName">
+            <summary>
+              Looks up a localized string similar to First name is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredLastName">
+            <summary>
+              Looks up a localized string similar to Last name is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredLocality">
+            <summary>
+              Looks up a localized string similar to City is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredName">
+            <summary>
+              Looks up a localized string similar to Full name is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredPostalCode">
+            <summary>
+              Looks up a localized string similar to Postal code is required.
+            </summary>
+        </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.RequiredRegion">
+            <summary>
+              Looks up a localized string similar to State or Provice is required.
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Logging.ExtendedLoggerData">
             <summary>
             Represents extra logger data that can be passed to remote loggers.
@@ -20447,6 +20593,31 @@
             <param name="order">The <see cref="T:Merchello.Core.Models.IOrder"/></param>
             <returns>The prefixed order number</returns>
         </member>
+        <member name="M:Merchello.Core.Models.OrderExtensions.Invoice(Merchello.Core.Models.IOrder)">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Models.IInvoice"/> for the <see cref="T:Merchello.Core.Models.IOrder"/>.
+            </summary>
+            <param name="order">
+            The <see cref="T:Merchello.Core.Models.IOrder"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IInvoice"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Models.OrderExtensions.Invoice(Merchello.Core.Models.IOrder,Merchello.Core.IMerchelloContext)">
+            <summary>
+            Gets the <see cref="T:Merchello.Core.Models.IInvoice"/> for the <see cref="T:Merchello.Core.Models.IOrder"/>.
+            </summary>
+            <param name="order">
+            The <see cref="T:Merchello.Core.Models.IOrder"/>.
+            </param>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Core.Models.IInvoice"/>.
+            </returns>
+        </member>
         <member name="M:Merchello.Core.Models.OrderExtensions.UnfulfilledItems(Merchello.Core.Models.IOrder)">
             <summary>
             Gets a collection of unfulfilled (unshipped) line items
@@ -27123,6 +27294,56 @@
             <param name="shipMethodKey">The GUID key of the <see cref="T:Merchello.Core.Models.IShipMethod"/></param>
             <param name="tryGetCached">If set true the value is first attempted to be retrieved from cache</param>
             <returns>The <see cref="T:Merchello.Core.Gateways.Shipping.IShipmentRateQuote"/> for the shipment by the specific <see cref="T:Merchello.Core.Models.IShipMethod"/> specified</returns>
+        </member>
+        <member name="M:Merchello.Core.Models.ShipmentExtensions.Orders(Merchello.Core.Models.IShipment)">
+            <summary>
+            Gets the collection of <see cref="T:Merchello.Core.Models.IOrder"/> for the <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </summary>
+            <param name="shipment">
+            The <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Models.ShipmentExtensions.Invoices(Merchello.Core.Models.IShipment)">
+            <summary>
+            The collection of <see cref="T:Merchello.Core.Models.IInvoice"/> associated with the <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </summary>
+            <param name="shipment">
+            The <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Models.ShipmentExtensions.Orders(Merchello.Core.Models.IShipment,Merchello.Core.IMerchelloContext)">
+            <summary>
+            Gets the collection of <see cref="T:Merchello.Core.Models.IOrder"/> for the <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </summary>
+            <param name="shipment">
+            The <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </param>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Core.Models.ShipmentExtensions.Invoices(Merchello.Core.Models.IShipment,Merchello.Core.IMerchelloContext)">
+            <summary>
+            The collection of <see cref="T:Merchello.Core.Models.IInvoice"/> associated with the <see cref="T:Merchello.Core.Models.IShipment"/>.
+            </summary>
+            <param name="shipment">
+            The <see cref="T:Merchello.Core.Models.IShipment"/>
+            </param>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Core.Models.ShipmentExtensions.ShipmentLineItemName(Merchello.Core.Gateways.Shipping.IShipmentRateQuote)">
             <summary>

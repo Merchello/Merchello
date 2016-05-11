@@ -40,7 +40,8 @@
         /// <param name="contextSettingsFactory">
         /// The <see cref="CheckoutContextSettingsFactory"/>.
         /// </param>
-        protected CheckoutSummaryControllerBase(CheckoutContextSettingsFactory contextSettingsFactory)
+        protected CheckoutSummaryControllerBase(
+            CheckoutContextSettingsFactory contextSettingsFactory)
             : base(contextSettingsFactory)
         {
         }

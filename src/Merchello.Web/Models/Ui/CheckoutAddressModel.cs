@@ -1,19 +1,16 @@
-﻿namespace Merchello.Web.Store.Models
+﻿namespace Merchello.Web.Models.Ui
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core;
-    using Merchello.Web.Models.Ui;
-    using Merchello.Web.Store.Localization;
-
-    using Umbraco.Core;
+    using Merchello.Core.Localization;
+    using Merchello.Core.Models;
 
     /// <summary>
     /// A model used for collecting and persisting checkout addresses.
     /// </summary>
-    public class CheckoutAddressModel : ICheckoutAddressModel //, IValidatableObject
+    public class CheckoutAddressModel : ICheckoutAddressModel
     {
         /// <summary>
         /// Gets or sets the customer address key.
@@ -105,14 +102,14 @@
         /// </remarks>
         public ICheckoutWorkflowMarker WorkflowMarker { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets a value indicating whether has provinces.
-        ///// </summary>
-        //internal bool HasProvinces { get; set; }
-
-        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        //{
-        //    if (HasProvinces && Region.IsNullOrWhiteSpace()) yield return new ValidationResult(StoreFormsResource.RequiredRegion);
-        //}
+        /// <summary>
+        /// Gets or sets a value indicating whether is commercial.
+        /// </summary>
+        /// <remarks>
+        /// This field is currently not directly used by the Merchello Core but is useful for 
+        /// some external shipping providers that may have different rates for delivering to commercial locations.
+        /// It is exposed on IAddress as there may also be nice to designate the reasons a billing address as a commercial location.
+        /// </remarks>
+        public bool IsCommercial { get; set; }
     }
 }

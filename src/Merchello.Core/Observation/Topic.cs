@@ -2,6 +2,7 @@
 {
     public enum Topic
     {
-        Notifications
+        Notifications,
+        Custom
     }
 }

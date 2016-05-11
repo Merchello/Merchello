@@ -335,12 +335,14 @@
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
+    <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
     <Compile Include="Models\Ui\Async\AddItemAsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />
     <Compile Include="Models\Ui\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\UpdateQuantityResponseItem.cs" />
+    <Compile Include="Models\Ui\CheckoutAddressModel.cs" />
     <Compile Include="Models\Ui\CheckoutStage.cs" />
     <Compile Include="Models\Ui\CheckoutWorkflowMarker.cs" />
     <Compile Include="Models\Ui\IAddItemModel.cs" />

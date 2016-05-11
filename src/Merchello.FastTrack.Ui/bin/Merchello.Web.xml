@@ -360,21 +360,25 @@
             <returns>
             The <see cref="T:System.Web.Mvc.ActionResult"/>.
             </returns>
-            <exception cref="T:System.NotImplementedException">
-            </exception>
         </member>
-        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.BillingAddressForm">
+        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.BillingAddressForm(System.String)">
             <summary>
             Renders the billing address form.
             </summary>
+            <param name="view">
+            The view to display.
+            </param>
             <returns>
             The <see cref="T:System.Web.Mvc.ActionResult"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.ShippingAddressForm">
+        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.ShippingAddressForm(System.String)">
             <summary>
             Renders the shipping address form.
             </summary>
+            <param name="view">
+            The view to display.
+            </param>
             <returns>
             The <see cref="T:System.Web.Mvc.ActionResult"/>.
             </returns>
@@ -5276,7 +5280,7 @@
         </member>
         <member name="T:Merchello.Web.Factories.BasketModelFactory`2">
             <summary>
-            A factory responsible for building <see cref="!:TBasketModel"/> and <see cref="!:TBasketItemModel"/>.
+            A factory responsible for building <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/> and <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
             </summary>
             <typeparam name="TBasketModel">
             The type of <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/>
@@ -5287,43 +5291,43 @@
         </member>
         <member name="M:Merchello.Web.Factories.BasketModelFactory`2.Create(Merchello.Web.Workflow.IBasket)">
             <summary>
-            Creates <see cref="!:TBasketModel"/> from <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            Creates <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/> from <see cref="T:Merchello.Web.Workflow.IBasket"/>.
             </summary>
             <param name="basket">
             The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
             </param>
             <returns>
-            The <see cref="!:TBasketModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.BasketModelFactory`2.Create(Merchello.Core.Models.ILineItem)">
             <summary>
-            Creates <see cref="!:TBasketItemModel"/> from <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            Creates <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/> from <see cref="T:Merchello.Core.Models.ILineItem"/>.
             </summary>
             <param name="lineItem">
             The <see cref="T:Merchello.Core.Models.ILineItem"/>.
             </param>
             <returns>
-            The <see cref="!:TBasketItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.BasketModelFactory`2.OnCreate(`0,Merchello.Web.Workflow.IBasket)">
             <summary>
-            Allows for overriding the creation of <see cref="!:TBasketModel"/> from <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/> from <see cref="T:Merchello.Web.Workflow.IBasket"/>.
             </summary>
             <param name="basketModel">
-            The <see cref="!:TBasketModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/>.
             </param>
             <param name="basket">
             The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
             </param>
             <returns>
-            The <see cref="!:TBasketItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
             </returns>
         </member>
         <member name="M:Merchello.Web.Factories.BasketModelFactory`2.OnCreate(`1,Merchello.Core.Models.ILineItem)">
             <summary>
-            Allows for overriding the creation of <see cref="!:TBasketItemModel"/> from <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/> from <see cref="T:Merchello.Core.Models.ILineItem"/>.
             </summary>
             <param name="basketItem">
             The basket item.
@@ -5332,7 +5336,7 @@
             The line item.
             </param>
             <returns>
-            The <see cref="!:TBasketItemModel"/>.
+            The <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Factories.CheckoutAddressModelFactory`1">
@@ -5420,6 +5424,93 @@
             </param>
             <returns>
             The modified <see cref="T:Merchello.Core.Checkout.ICheckoutContextSettings"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Factories.CheckoutSummaryModelFactory`4">
+            <summary>
+            A base factory responsible for building <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>.
+            </summary>
+            <typeparam name="TSummary">
+            The type of <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>
+            </typeparam>
+            <typeparam name="TBillingAddress">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> used for billing
+            </typeparam>
+            <typeparam name="TShippingAddress">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> used for shipping
+            </typeparam>
+            <typeparam name="TLineItem">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/> used in the summary
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.Create(Merchello.Web.Workflow.IBasket,Merchello.Core.Checkout.ICheckoutManagerBase)">
+            <summary>
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>.
+            </summary>
+            <param name="basket">
+            The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </param>
+            <param name="checkoutManager">
+            The <see cref="T:Merchello.Core.Checkout.ICheckoutManagerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.Create``1(Merchello.Core.Models.IAddress)">
+            <summary>
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> from <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </summary>
+            <param name="adr">
+            The <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </param>
+            <typeparam name="TAddress">
+            The type of <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>
+            </typeparam>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.Create(Merchello.Core.Models.ILineItem)">
+            <summary>
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/> from <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </summary>
+            <param name="item">
+            The <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.OnCreate(`3,Merchello.Core.Models.ILineItem)">
+            <summary>
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/> from <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </summary>
+            <param name="lineItem">
+            The <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
+            </param>
+            <param name="item">
+            The <see cref="T:Merchello.Core.Models.ILineItem"/>.
+            </param>
+            <returns>
+            The modified <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.OnCreate``1(``0,Merchello.Core.Models.IAddress)">
+            <summary>
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> from <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </summary>
+            <param name="address">
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
+            </param>
+            <param name="adr">
+            The <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </param>
+            <typeparam name="TAddress">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>
+            </typeparam>
+            <returns>
+            The modified <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
             </returns>
         </member>
         <member name="T:Merchello.Web.Factories.ProductDataTableFactory`2">
@@ -5640,6 +5731,94 @@
             Gets or sets the formatted total.
             </summary>
         </member>
+        <member name="T:Merchello.Web.Models.Ui.CheckoutAddressModel">
+            <summary>
+            A model used for collecting and persisting checkout addresses.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Key">
+            <summary>
+            Gets or sets the customer address key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Label">
+            <summary>
+            Gets or sets a label for a customer address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Organization">
+            <summary>
+            Gets or sets the organization.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Name">
+            <summary>
+            Gets or sets the name (full name) of the contact.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Address1">
+            <summary>
+            Gets or sets the address line 1.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Address2">
+            <summary>
+            Gets or sets the address line 2.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Locality">
+            <summary>
+            Gets or sets the locality.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Region">
+            <summary>
+            Gets or sets the region or province.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.PostalCode">
+            <summary>
+            Gets or sets the postal code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.CountryCode">
+            <summary>
+            Gets or sets the country code.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Phone">
+            <summary>
+            Gets or sets the contact phone.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.Email">
+            <summary>
+            Gets or sets the email address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.AddressType">
+            <summary>
+            Gets or sets the address type.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.WorkflowMarker">
+            <summary>
+            Gets or sets the workflow marker.
+            </summary>
+            <remarks>
+            This is used to assist in tracking the checkout - generally in single page checkouts
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutAddressModel.IsCommercial">
+            <summary>
+            Gets or sets a value indicating whether is commercial.
+            </summary>
+            <remarks>
+            This field is currently not directly used by the Merchello Core but is useful for 
+            some external shipping providers that may have different rates for delivering to commercial locations.
+            It is exposed on IAddress as there may also be nice to designate the reasons a billing address as a commercial location.
+            </remarks>
+        </member>
         <member name="T:Merchello.Web.Models.Ui.CheckoutStage">
             <summary>
             Checkout stages.
@@ -5774,61 +5953,6 @@
             Gets or sets a label for the address (e.g. My House).
             </summary>
         </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Organization">
-            <summary>
-            Gets or sets the organization.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Name">
-            <summary>
-            Gets or sets the name (full name) of the contact.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Address1">
-            <summary>
-            Gets or sets the address line 1.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Address2">
-            <summary>
-            Gets or sets the address line 2.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Locality">
-            <summary>
-            Gets or sets the locality.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Region">
-            <summary>
-            Gets or sets the region or province.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.PostalCode">
-            <summary>
-            Gets or sets the postal code.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.CountryCode">
-            <summary>
-            Gets or sets the country code.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Phone">
-            <summary>
-            Gets or sets the contact phone.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.Email">
-            <summary>
-            Gets or sets the email address.
-            </summary>
-        </member>
-        <member name="P:Merchello.Web.Models.Ui.ICheckoutAddressModel.AddressType">
-            <summary>
-            Gets or sets the address type.
-            </summary>
-        </member>
         <member name="T:Merchello.Web.Models.Ui.ICheckoutModel">
             <summary>
             Defines a checkout model.
@@ -5837,6 +5961,35 @@
         <member name="P:Merchello.Web.Models.Ui.ICheckoutModel.WorkflowMarker">
             <summary>
             Gets or sets the workflow marker.
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3">
+            <summary>
+            Defines a checkout summary.
+            </summary>
+            <typeparam name="TBillingAddress">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> for billing
+            </typeparam>
+            <typeparam name="TShippingAddress">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/> for shipping
+            </typeparam>
+            <typeparam name="TLineItem">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>
+            </typeparam>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3.BillingAddress">
+            <summary>
+            Gets or sets the billing address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3.ShippingAddress">
+            <summary>
+            Gets or sets the shipping address.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3.Items">
+            <summary>
+            Gets or sets the checkout summary items.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.Ui.ICheckoutWorkflowMarker">

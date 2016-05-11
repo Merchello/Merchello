@@ -1,9 +1,13 @@
 ﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
 @using Merchello.FastTrack.Ui
 @using Merchello.Web
+@{
+    var storeRoot = StoreUiHelper.Content.GetStoreRoot();
+    var basketPage = StoreUiHelper.Content.GetBasket();
+}
 <div class="navbar navbar-inverse">
     <div class="container">
-        <a class="navbar-brand navbar-right" href="/">@Umbraco.Field("storeName", recursive: true)</a>
+        <a class="navbar-brand navbar-right" href="@storeRoot.Url">@Umbraco.Field("storeName", recursive: true)</a>
 
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -16,47 +20,23 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="@Url.Content("~/")">Home</a></li>
-                @*@if (collections.Any())
-                {
-                    var rootCategory = collections.FirstOrDefault();
-                    <li class="dropdown">
-                        <a href="@rootCategory.Url" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@rootCategory.Name <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            @foreach (var collection in rootCategory.Children)
-                            {
-                                <li><a href="@collection.Url">@collection.Name</a></li>
-                            }
-                        </ul>
-                    </li>
-                }*@
+                <li@(IsActive(storeRoot.Id))><a href="@Url.Content("~/")">Home</a></li>
 
-                    @if (CurrentCustomer.IsAnonymous)
-                    {
-                        <li><a href="#">Sign Up / Login</a></li>
-                    }
-                    else
-                    {
-                        @*var purchaseHistory = BazaarContentHelper.GetAccountContent().Descendant("BazaarAccountHistory");
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@GetAccountDropDownName(CurrentCustomer) <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="@BazaarContentHelper.GetAccountContent().Url">Account</a></li>
-                                @if (purchaseHistory != null)
-                                {
-                                    <li><a href="@purchaseHistory.Url">Purchase History</a></li>
-                                }
-                                <li>@Html.ActionLink("Logout", "HandleSignOut", "MembershipOperations", new { area = "Bazaar" }, null)</li>
-                            </ul>
-                        </li>*@
-                    }
-
-                @*@if (!CurrentCustomer.IsAnonymous && BazaarContentHelper.ShowWishList())
+                @foreach (var page in storeRoot.Children.Where(x => x.DocumentTypeAlias != "basket" && x.IsVisible()))
                 {
-                    <li><a href="@BazaarContentHelper.GetWishListContent().Url">Wish List (@(((ICustomer)CurrentCustomer).WishList().TotalItemCount))</a></li>
-                }*@
-                <li class="active"><a href="@StoreUiHelper.Content.GetBasket().Url">Basket (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a></li>
+                    <li@(IsActive(page.Id))><a href="@page.Url">@page.Name</a></li>
+                }
+
+                <li@(IsActive(basketPage.Id))><a href="@basketPage.Url">@basketPage.Name (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a></li>
             </ul>
         </div>
     </div>
 </div>
+
+@functions
+{
+    private IHtmlString IsActive(int contentId)
+    {
+        return Model.Content.Id == contentId ? MvcHtmlString.Create(" class=\"active\"") : MvcHtmlString.Empty;
+    }
+}
