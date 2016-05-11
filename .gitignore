@@ -209,3 +209,4 @@ src/Merchello.FastTrack.Ui/bin/amd64/
 src/Merchello.Web.UI/bin/
 src/Merchello.FastTrack.Ui/App_Data/TEMP/
 src/Merchello.FastTrack.Ui/App_Data/cache/
+src/Merchello.FastTrack.Ui/App_Data/Models/

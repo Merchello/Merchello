@@ -587,6 +587,77 @@ namespace Umbraco.Web.PublishedContentModels
 		public static string GetUmbracoUrlname(ICompositionUmbracoFields that) { return that.GetPropertyValue<string>("umbracoURLName"); }
 	}
 
+	/// <summary>Category</summary>
+	[PublishedContentModel("category")]
+	public partial class Category : PublishedContentModel, ICompositionContent, ICompositionMeta
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "category";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Category(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Category, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Products: The product collection that represents this category
+		///</summary>
+		[ImplementPropertyType("products")]
+		public IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent> Products
+		{
+			get { return this.GetPropertyValue<IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent>>("products"); }
+		}
+
+		///<summary>
+		/// Brief: A brief description of the content
+		///</summary>
+		[ImplementPropertyType("brief")]
+		public IHtmlString Brief
+		{
+			get { return CompositionContent.GetBrief(this); }
+		}
+
+		///<summary>
+		/// Headline: The content headline
+		///</summary>
+		[ImplementPropertyType("headline")]
+		public string Headline
+		{
+			get { return CompositionContent.GetHeadline(this); }
+		}
+
+		///<summary>
+		/// Meta Description: The META description content
+		///</summary>
+		[ImplementPropertyType("metaDescription")]
+		public string MetaDescription
+		{
+			get { return CompositionMeta.GetMetaDescription(this); }
+		}
+
+		///<summary>
+		/// Page Title: The HTML Page Title
+		///</summary>
+		[ImplementPropertyType("pageTitle")]
+		public string PageTitle
+		{
+			get { return CompositionMeta.GetPageTitle(this); }
+		}
+	}
+
 	/// <summary>Folder</summary>
 	[PublishedContentModel("Folder")]
 	public partial class Folder : PublishedContentModel

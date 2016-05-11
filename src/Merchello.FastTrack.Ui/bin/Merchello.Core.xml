@@ -28621,6 +28621,21 @@
             The <see cref="T:Merchello.Core.Observation.MonitorForAttribute"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Core.Observation.Topic">
+            <summary>
+            The observable topic.
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Observation.Topic.Notifications">
+            <summary>
+            Designates notifications
+            </summary>
+        </member>
+        <member name="F:Merchello.Core.Observation.Topic.Custom">
+            <summary>
+            Desinates custom observation 
+            </summary>
+        </member>
         <member name="T:Merchello.Core.Observation.TriggerForAttribute">
             <summary>
             Represents the TriggerForAttribute used to decorate <see cref="T:Merchello.Core.Gateways.Notification.Triggering.INotificationTrigger"/>s
