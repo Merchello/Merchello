@@ -436,6 +436,14 @@
             Gets the <see cref="T:Merchello.Core.Checkout.ICheckoutContextManagerBase"/>.
             </summary>
         </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutControllerBase.InvalidCheckoutRedirect">
+            <summary>
+            A redirection for checkout attempts when basket is empty.
+            </summary>
+            <returns>
+            The a redirection <see cref="T:System.Web.Mvc.ActionResult"/> for invalid checkout.
+            </returns>
+        </member>
         <member name="M:Merchello.Web.Controllers.CheckoutControllerBase.GetNextCheckoutWorkflowMarker(Merchello.Web.Models.Ui.CheckoutStage)">
             <summary>
             Gets the next <see cref="T:Merchello.Core.Checkout.ICheckoutCustomerManager"/>.
@@ -464,15 +472,23 @@
             The type of the summary <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>
             </typeparam>
         </member>
+        <member name="F:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4._checkoutSummaryFactory">
+            <summary>
+            The <see cref="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4"/>.
+            </summary>
+        </member>
         <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4"/> class. 
             </summary>
         </member>
-        <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.#ctor(Merchello.Web.Factories.CheckoutContextSettingsFactory)">
+        <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.#ctor(Merchello.Web.Factories.CheckoutSummaryModelFactory{`0,`1,`2,`3},Merchello.Web.Factories.CheckoutContextSettingsFactory)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4"/> class. 
             </summary>
+            <param name="checkoutSummaryFactory">
+            The <see cref="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4"/>.
+            </param>
             <param name="contextSettingsFactory">
             The <see cref="T:Merchello.Web.Factories.CheckoutContextSettingsFactory"/>.
             </param>

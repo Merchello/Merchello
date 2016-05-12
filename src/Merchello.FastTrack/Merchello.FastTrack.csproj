@@ -257,6 +257,7 @@
     <Compile Include="Controllers\CheckoutSummaryController.cs" />
     <Compile Include="Factories\FastTrackBillingAddressModelFactory.cs" />
     <Compile Include="Factories\FastTrackCheckoutAddressModelFactoryBase{T}.cs" />
+    <Compile Include="Factories\FastTrackCheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\FastTrackShippingAddressModelFactory.cs" />
     <Compile Include="Models\FastTrackBillingAddressModel.cs" />
     <Compile Include="Models\FastTrackCheckoutAddressModel.cs" />

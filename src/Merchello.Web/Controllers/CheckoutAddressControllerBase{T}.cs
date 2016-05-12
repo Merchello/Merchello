@@ -120,11 +120,13 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            // Temporarily save the address in the checkout manager.
-            this.CheckoutManager.Customer.SaveBillToAddress(model);
-
             // Ensure billing address type is billing
             if (model.AddressType != AddressType.Billing) model.AddressType = AddressType.Billing;
+
+            var address = _billingAddressFactory.Create(model);
+
+            // Temporarily save the address in the checkout manager.
+            this.CheckoutManager.Customer.SaveBillToAddress(address);
 
             if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
 
@@ -147,11 +149,11 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            // Temporarily save the address in the checkout manager.
-            this.CheckoutManager.Customer.SaveShipToAddress(model);
-
             // Ensure billing address type is billing
             if (model.AddressType != AddressType.Shipping) model.AddressType = AddressType.Shipping;
+
+            // Temporarily save the address in the checkout manager.
+            this.CheckoutManager.Customer.SaveShipToAddress(model);
 
             if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
 

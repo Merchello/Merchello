@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Web.Controllers
 {
+    using System.Linq;
+    using System.Web.Mvc;
+
     using Merchello.Core.Checkout;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
@@ -48,6 +51,17 @@
 
                 return this._checkoutManager;
             }
+        }
+
+        /// <summary>
+        /// A redirection for checkout attempts when basket is empty.
+        /// </summary>
+        /// <returns>
+        /// The a redirection <see cref="ActionResult"/> for invalid checkout.
+        /// </returns>
+        protected virtual ActionResult InvalidCheckoutRedirect()
+        {
+            return Redirect("/");
         }
 
         /// <summary>

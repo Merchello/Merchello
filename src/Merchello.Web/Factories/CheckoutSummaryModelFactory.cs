@@ -23,7 +23,7 @@
     /// <typeparam name="TLineItem">
     /// The type of the <see cref="ILineItemModel"/> used in the summary
     /// </typeparam>
-    public abstract class CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem>
+    public class CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem>
         where TBillingAddress : class, ICheckoutAddressModel, new()
         where TShippingAddress : class, ICheckoutAddressModel, new()
         where TLineItem : class, ILineItemModel, new()
@@ -43,10 +43,13 @@
         /// </returns>
         public TSummary Create(IBasket basket, ICheckoutManagerBase checkoutManager)
         {
+            var billing = checkoutManager.Customer.GetBillToAddress();
+            var shipping = checkoutManager.Customer.GetShipToAddress();
+
             return new TSummary
                 {
-                    BillingAddress = Create<TBillingAddress>(checkoutManager.Customer.GetBillToAddress()),
-                    ShippingAddress = Create<TShippingAddress>(checkoutManager.Customer.GetShipToAddress()),
+                    BillingAddress = Create<TBillingAddress>(billing ?? new Address { AddressType = AddressType.Billing }),
+                    ShippingAddress = Create<TShippingAddress>(shipping ?? new Address { AddressType = AddressType.Shipping }),
                     Items = basket.Items.Select(Create)
                 };
         }
@@ -66,7 +69,8 @@
         protected TAddress Create<TAddress>(IAddress adr) 
             where TAddress : class, ICheckoutAddressModel, new()
         {
-            var address = new CheckoutAddressModel
+            var first = adr.TrySplitFirstName();
+            var address = new TAddress
             {
                 Name = adr.Name, 
                 Organization = adr.Organization,
@@ -80,8 +84,7 @@
                 Phone = adr.Phone,
                 Email = adr.Email,
                 AddressType = adr.AddressType 
-            } 
-            as TAddress;
+            };
 
             return OnCreate(address, adr);
         }

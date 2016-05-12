@@ -1,20 +1,46 @@
-﻿@inherits UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
-
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
+@using System.Web.Mvc.Html
+@using Merchello.Core
+@using Umbraco.Core.Models
+@using Umbraco.Web
 <div class="container">
 
     <div class="row">
         <div class="col-md-4">
             <h4>Billing Address</h4>
-            @Html.Partial("_Address")
+            @Html.Partial("_Address", Model.BillingAddress)
         </div>
         <div class="col-md-4"><h4>Delivery Address</h4></div>
         <div class="col-md-4"></div>
     </div>
-
+    
     <div class="row">
         <div class="col-md-12">
-
             <h4>Items</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@if (item.Product.HasValue("image"))
+                        {
+                            var image = item.Product.GetPropertyValue<IPublishedContent>("image");
+                            <img src="@image.GetCropUrl(100, 100)" alt="@item.Product.Name" />
+                        }
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Amount.AsFormattedCurrency()</td>
+                    </tr>
+                }
+            </table>
 
         </div>
     </div>

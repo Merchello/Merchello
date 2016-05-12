@@ -198,7 +198,7 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// Umbraco URL Alias: This property allows you to give the node multiple URLs using a textstring property. For example if we were to enter fasttrack,test/this-is-a-test this would resolve the following urls to the same page.  /fasttrack/ /test/this-is-a-test/
+		/// Umbraco URL Alias: This property allows you to give the node multiple URLs using a textstring property. For example if we were to enter fasttrack,test/this-is-a-test this would resolve the following urls to the same page.    /fasttrack/  /test/this-is-a-test/
 		///</summary>
 		[ImplementPropertyType("umbracoUrlAlias")]
 		public string UmbracoUrlAlias
@@ -563,7 +563,7 @@ namespace Umbraco.Web.PublishedContentModels
 		public static IPublishedContent GetUmbracoRedirect(ICompositionUmbracoFields that) { return that.GetPropertyValue<IPublishedContent>("umbracoRedirect"); }
 
 		///<summary>
-		/// Umbraco URL Alias: This property allows you to give the node multiple URLs using a textstring property. For example if we were to enter fasttrack,test/this-is-a-test this would resolve the following urls to the same page.  /fasttrack/ /test/this-is-a-test/
+		/// Umbraco URL Alias: This property allows you to give the node multiple URLs using a textstring property. For example if we were to enter fasttrack,test/this-is-a-test this would resolve the following urls to the same page.    /fasttrack/  /test/this-is-a-test/
 		///</summary>
 		[ImplementPropertyType("umbracoUrlAlias")]
 		public string UmbracoUrlAlias

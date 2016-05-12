@@ -12,5 +12,6 @@
     [PluginController("Merchello")]
     public class CheckoutSummaryController : CheckoutSummaryControllerBase<CheckoutSummaryModel, CheckoutAddressModel, CheckoutAddressModel, BasketItemModel>
     {
+
     }
 }

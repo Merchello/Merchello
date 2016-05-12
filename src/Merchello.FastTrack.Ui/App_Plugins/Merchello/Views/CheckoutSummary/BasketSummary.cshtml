@@ -1,11 +1,11 @@
-﻿@inherits UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
-
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
+@using System.Web.Mvc.Html
 <div class="container">
 
     <div class="row">
         <div class="col-md-4">
             <h4>Billing Address</h4>
-            @Html.Partial("_Address")
+            @Html.Partial("_Address", Model.BillingAddress)
         </div>
         <div class="col-md-4"><h4>Delivery Address</h4></div>
         <div class="col-md-4"></div>

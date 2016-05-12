@@ -5,11 +5,18 @@
     using Merchello.Core.Localization;
     using Merchello.Web.Models.Ui;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// The checkout billing address model.
     /// </summary>
-    public class FastTrackBillingAddressModel : FastTrackCheckoutAddressModel, ICustomerMembershipProfile, IFastTrackCheckoutAddressModel
+    public class FastTrackBillingAddressModel : FastTrackCheckoutAddressModel, IFastTrackCheckoutAddressModel
     {
+        /// <summary>
+        /// The split names.
+        /// </summary>
+        private string[] _names;
+
         /// <summary>
         /// Gets or sets the first name.
         /// </summary>
@@ -38,14 +45,25 @@
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelUseForShipping")]
         public bool UseForShipping { get; set; }
 
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
         public override string Name
         {
             get
             {
                 return string.Format("{0} {1}", FirstName, LastName);
+            }
+
+            set
+            {
+                // stored but never used
+                if (_names == null && !value.IsNullOrWhiteSpace())
+                {
+                    _names = value.Split(' ');
+                    if (_names.Length == 2)
+                    {
+                        FirstName = _names[0];
+                        LastName = _names[1];
+                    } 
+                }
             }
         }
     }

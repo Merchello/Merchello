@@ -1,6 +1,12 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+﻿@using Merchello.FastTrack.Ui
+@using Merchello.Web
+@inherits Merchello.Web.Mvc.MerchelloTemplatePage
 @{
-	Layout = "Master.cshtml";
+    Layout = "Master.cshtml";
+    if (CurrentCustomer.Basket().IsEmpty)
+    {
+        Response.Redirect(StoreUiHelper.Content.GetStoreRoot().Url);
+    }
 }
 
 @Html.Partial("_Headline")

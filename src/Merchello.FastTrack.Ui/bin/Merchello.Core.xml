@@ -57581,7 +57581,7 @@
             In cases where the property has been removed, we don't want to store previously saved values.
             </remarks>
         </member>
-        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.Convert(Umbraco.Core.Models.IContentType,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},Merchello.Core.ValueConverters.DetachedValuesConversionType)">
+        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.Convert(Umbraco.Core.Models.IContentType,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},Merchello.Core.ValueConverters.DetachedValuesConversionType,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
             Converts the detached values collection to property values for various usages depending on type passed.
             </summary>
@@ -57594,11 +57594,14 @@
             <param name="conversionType">
             The conversion type.
             </param>
+            <param name="additionalData">
+            A dictionary of additional data (only used with DetachedValuesConversionType database).
+            </param>
             <returns>
             The converted values.
             </returns>
         </member>
-        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.Convert(Umbraco.Core.Models.IContentType,System.Collections.Generic.KeyValuePair{System.String,System.String},Merchello.Core.ValueConverters.DetachedValuesConversionType)">
+        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.Convert(Umbraco.Core.Models.IContentType,System.Collections.Generic.KeyValuePair{System.String,System.String},Merchello.Core.ValueConverters.DetachedValuesConversionType,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
             Converts the detached value collection to property values for various usages depending on type passed.
             </summary>
@@ -57610,6 +57613,9 @@
             </param>
             <param name="conversionType">
             The conversion type.
+            </param>
+            <param name="additionalData">
+            A dictionary of additional data (only used with DetachedValuesConversionType database).
             </param>
             <returns>
             The converted values.
@@ -57651,7 +57657,7 @@
             The <see cref="T:Umbraco.Core.Models.IContentType"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.ConvertEditorToDb(Umbraco.Core.Models.IContentType,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
+        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.ConvertEditorToDb(Umbraco.Core.Models.IContentType,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
             A method to deserialize the values that has been saved by an editor
                         to an object to be stored in the database.
@@ -57661,6 +57667,9 @@
             </param>
             <param name="detachedContentValues">
             The detached content values.
+            </param>
+            <param name="additionalData">
+            A dictionary of additional data ex. file uploads (only used with DetachedValuesConversionType database).
             </param>
             <returns>
             The converted values.
@@ -57673,7 +57682,7 @@
             
             </remarks>
         </member>
-        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.ConvertEditorToDb(Umbraco.Core.Models.IContentType,System.Collections.Generic.KeyValuePair{System.String,System.String})">
+        <member name="M:Merchello.Core.ValueConverters.DetachedValuesConverter.ConvertEditorToDb(Umbraco.Core.Models.IContentType,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
             A method to deserialize the value that has been saved by an editor
                         to an object to be stored in the database.
@@ -57683,6 +57692,9 @@
             </param>
             <param name="dcv">
             The detached content value.
+            </param>
+            <param name="additionalData">
+            The additional Data.
             </param>
             <returns>
             The converted value.
