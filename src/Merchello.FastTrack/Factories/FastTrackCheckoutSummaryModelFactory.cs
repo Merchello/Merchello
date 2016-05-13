@@ -15,9 +15,9 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// A factory responsible for building FastTrack the <see cref="CheckoutSummaryModel"/>.
+    /// A factory responsible for building FastTrack the <see cref="StoreSummaryModel"/>.
     /// </summary>
-    public class FastTrackCheckoutSummaryModelFactory : CheckoutSummaryModelFactory<FastTrackCheckoutSummary, FastTrackBillingAddressModel, CheckoutAddressModel, StoreLineItemModel>
+    public class FastTrackCheckoutSummaryModelFactory : CheckoutSummaryModelFactory<FastTrackCheckoutSummary, FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.

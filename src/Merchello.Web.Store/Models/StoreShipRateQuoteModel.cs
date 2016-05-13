@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models.Ui
+﻿namespace Merchello.Web.Store.Models
 {
     using System;
     using System.Collections.Generic;
@@ -7,11 +7,12 @@
 
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Localization;
+    using Merchello.Web.Models.Ui;
 
     /// <summary>
     /// A model for quoting checkout shipment rate.
     /// </summary>
-    public class CheckoutShipRateQuoteModel : ICheckoutShipRateQuoteModel
+    public class StoreShipRateQuoteModel : ICheckoutShipRateQuoteModel
     {
         /// <summary>
         /// Gets or sets the ship method key.

@@ -157,6 +157,10 @@
     <value>Full name</value>
     <comment>Label for the name field</comment>
   </data>
+  <data name="LabelOfferCode" xml:space="preserve">
+    <value>Offer code</value>
+    <comment>Label for an offer code field</comment>
+  </data>
   <data name="LabelOrganization" xml:space="preserve">
     <value>Company</value>
     <comment>Label for organziation of company field</comment>
@@ -214,6 +218,10 @@
   <data name="RequiredName" xml:space="preserve">
     <value>Full name is required</value>
     <comment>Error message for a required name field</comment>
+  </data>
+  <data name="RequiredOfferCode" xml:space="preserve">
+    <value>Offer code is required</value>
+    <comment>Error message for a required offer code field</comment>
   </data>
   <data name="RequiredPostalCode" xml:space="preserve">
     <value>Postal code is required</value>

@@ -28,16 +28,30 @@
         where TShippingAddress : class, ICheckoutAddressModel, new()
         where TLineItem : class, ILineItemModel, new()
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutSummaryControllerBase{TSummary,TBillingAddress,TShippingAddress,TLineItem}"/> class. 
         /// </summary>
         protected CheckoutSummaryControllerBase()
             : this(
-                  new CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem>(),
+                  new CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckoutSummaryControllerBase{TSummary,TBillingAddress,TShippingAddress,TLineItem}"/> class. 
+        /// </summary>
+        /// <param name="checkoutSummaryModelFactory">
+        /// The <see cref="CheckoutSummaryModelFactory{TSummary, TBillingAddress, TShippingAddress, TLineItem}"/>.
+        /// </param>
+        protected CheckoutSummaryControllerBase(CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem> checkoutSummaryModelFactory)
+            : this(
+                  checkoutSummaryModelFactory,
                   new CheckoutContextSettingsFactory())
         {
         }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutSummaryControllerBase{TSummary,TBillingAddress,TShippingAddress,TLineItem}"/> class. 
         /// </summary>
@@ -55,6 +69,8 @@
             Mandate.ParameterNotNull(checkoutSummaryFactory, "checkoutSummaryFactory");
             this.CheckoutSummaryFactory = checkoutSummaryFactory;
         }
+
+        #endregion
 
         /// <summary>
         /// Gets the <see cref="CheckoutSummaryModelFactory{TSummary, TBillingAddress, TShippingAddress, TLineItem}"/>.

@@ -9,7 +9,7 @@
     /// <summary>
     /// A model used to add items to a basket or cart.
     /// </summary>
-    public class AddItemModel : IAddItemModel
+    public class StoreAddItemModel : IAddItemModel
     {
         /// <summary>
         /// Gets or sets the product key.

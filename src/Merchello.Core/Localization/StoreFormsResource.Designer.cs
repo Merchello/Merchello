@@ -151,6 +151,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Offer code.
+        /// </summary>
+        public static string LabelOfferCode {
+            get {
+                return ResourceManager.GetString("LabelOfferCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string LabelOrganization {
@@ -282,6 +291,15 @@ namespace Merchello.Core.Localization {
         public static string RequiredName {
             get {
                 return ResourceManager.GetString("RequiredName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offer code is required.
+        /// </summary>
+        public static string RequiredOfferCode {
+            get {
+                return ResourceManager.GetString("RequiredOfferCode", resourceCulture);
             }
         }
         

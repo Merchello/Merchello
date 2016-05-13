@@ -210,3 +210,4 @@ src/Merchello.Web.UI/bin/
 src/Merchello.FastTrack.Ui/App_Data/TEMP/
 src/Merchello.FastTrack.Ui/App_Data/cache/
 src/Merchello.FastTrack.Ui/App_Data/Models/
+src/Merchello.FastTrack.Ui/bin/Merchello.*

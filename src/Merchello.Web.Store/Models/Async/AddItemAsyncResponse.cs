@@ -1,5 +1,7 @@
-﻿namespace Merchello.Web.Models.Ui.Async
+﻿namespace Merchello.Web.Store.Models.Async
 {
+    using Merchello.Web.Models.Ui.Async;
+
     /// <summary>
     /// A response object to for an AJAX AddItem operation.
     /// </summary>

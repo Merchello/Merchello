@@ -11,7 +11,7 @@
     /// <summary>
     /// Represents a the FastTrack Checkout Summary.
     /// </summary>
-    public class FastTrackCheckoutSummary : ICheckoutSummaryModel<FastTrackBillingAddressModel, CheckoutAddressModel, StoreLineItemModel>
+    public class FastTrackCheckoutSummary : ICheckoutSummaryModel<FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// Gets or sets the billing address.
@@ -21,7 +21,7 @@
         /// <summary>
         /// Gets or sets the shipping address.
         /// </summary>
-        public CheckoutAddressModel ShippingAddress { get; set; }
+        public StoreAddressModel ShippingAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the checkout summary items.

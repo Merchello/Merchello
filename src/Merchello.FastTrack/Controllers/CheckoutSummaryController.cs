@@ -15,7 +15,7 @@
     /// The default checkout summary controller.
     /// </summary>
     [PluginController("FastTrack")]
-    public class CheckoutSummaryController : CheckoutSummaryControllerBase<FastTrackCheckoutSummary, FastTrackBillingAddressModel, CheckoutAddressModel, StoreLineItemModel>
+    public class CheckoutSummaryController : CheckoutSummaryControllerBase<FastTrackCheckoutSummary, FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutSummaryController"/> class.

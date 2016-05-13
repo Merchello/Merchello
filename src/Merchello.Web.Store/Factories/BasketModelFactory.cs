@@ -17,7 +17,7 @@
     /// <summary>
     /// The basket model factory for the default implementation.
     /// </summary>
-    public class BasketModelFactory : BasketModelFactory<BasketModel, StoreLineItemModel>
+    public class BasketModelFactory : BasketModelFactory<StoreBasketModel, StoreLineItemModel>
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
@@ -48,15 +48,15 @@
         /// Overrides the base basket model creation.
         /// </summary>
         /// <param name="basketModel">
-        /// The <see cref="BasketModel"/>.
+        /// The <see cref="StoreBasketModel"/>.
         /// </param>
         /// <param name="basket">
         /// The <see cref="IBasket"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="BasketModel"/>.
+        /// The modified <see cref="StoreBasketModel"/>.
         /// </returns>
-        protected override BasketModel OnCreate(BasketModel basketModel, IBasket basket)
+        protected override StoreBasketModel OnCreate(StoreBasketModel basketModel, IBasket basket)
         {
             // Ensure to order of the basket items is in alphabetical order.
             basketModel.Items = basketModel.Items.OrderBy(x => x.Name).ToArray();

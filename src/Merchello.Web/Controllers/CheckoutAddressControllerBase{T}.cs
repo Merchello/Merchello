@@ -29,6 +29,8 @@
         /// </summary>
         private readonly bool _useCustomerAddress;
 
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutAddressControllerBase{TBillingAddress,TShippingAddress}"/> class.
         /// </summary>
@@ -38,8 +40,8 @@
         /// </param>
         protected CheckoutAddressControllerBase(bool initializeFromCustomerAddress = true)
             : this(
-                  new CheckoutAddressModelFactory<TBillingAddress>(), 
-                  new CheckoutAddressModelFactory<TShippingAddress>(), 
+                  new CheckoutAddressModelFactory<TBillingAddress>(),
+                  new CheckoutAddressModelFactory<TShippingAddress>(),
                   new CheckoutContextSettingsFactory(),
                   initializeFromCustomerAddress)
         {
@@ -97,6 +99,8 @@
             this._useCustomerAddress = initializeFromCustomerAddress;
         }
 
+        #endregion
+
         /// <summary>
         /// Gets the billing address factory.
         /// </summary>
@@ -122,19 +126,26 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            // Ensure billing address type is billing
-            if (model.AddressType != AddressType.Billing) model.AddressType = AddressType.Billing;
+            try
+            {
+                // Ensure billing address type is billing
+                if (model.AddressType != AddressType.Billing) model.AddressType = AddressType.Billing;
 
-            var address = BillingAddressFactory.Create(model);
+                var address = BillingAddressFactory.Create(model);
 
-            // Temporarily save the address in the checkout manager.
-            this.CheckoutManager.Customer.SaveBillToAddress(address);
+                // Temporarily save the address in the checkout manager.
+                this.CheckoutManager.Customer.SaveBillToAddress(address);
 
-            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerBillingAddress(model);
+                if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerBillingAddress(model);
 
-            model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.BillingAddress);
+                model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.BillingAddress);
 
-            return this.HandleBillingAddressSaveSuccess(model);
+                return this.HandleBillingAddressSaveSuccess(model);
+            }
+            catch (Exception ex)
+            {
+                return this.HandleBillingAddressSaveException(model, ex);
+            }
         }
 
         /// <summary>
@@ -152,19 +163,26 @@
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
 
-            // Ensure billing address type is billing
-            if (model.AddressType != AddressType.Shipping) model.AddressType = AddressType.Shipping;
+            try
+            {
+                // Ensure billing address type is billing
+                if (model.AddressType != AddressType.Shipping) model.AddressType = AddressType.Shipping;
 
-            var address = ShippingAddressFactory.Create(model);
+                var address = ShippingAddressFactory.Create(model);
 
-            // Temporarily save the address in the checkout manager.
-            this.CheckoutManager.Customer.SaveShipToAddress(address);
+                // Temporarily save the address in the checkout manager.
+                this.CheckoutManager.Customer.SaveShipToAddress(address);
 
-            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerShippingAddress(model);
+                if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerShippingAddress(model);
 
-            model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.ShippingAddress);
+                model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.ShippingAddress);
 
-            return this.HandleShippingAddressSaveSuccess(model);
+                return this.HandleShippingAddressSaveSuccess(model);
+            }
+            catch (Exception ex)
+            {
+                return this.HandleShippingAddressSaveException(model, ex);
+            }
         }
 
         #region ChildActions
@@ -289,6 +307,26 @@
         }
 
         /// <summary>
+        /// Handles a billing address save exception.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <param name="ex">
+        /// The <see cref="Exception"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// The <see cref="Exception"/> to be handled
+        /// </exception>
+        protected virtual ActionResult HandleBillingAddressSaveException(TBillingAddress model, Exception ex)
+        {
+            throw ex;
+        }
+
+        /// <summary>
         /// Allows for overriding the action of a successful shipping address save.
         /// </summary>
         /// <param name="model">
@@ -300,6 +338,26 @@
         protected virtual ActionResult HandleShippingAddressSaveSuccess(TShippingAddress model)
         {
             return this.RedirectToCurrentUmbracoPage();
+        }
+
+        /// <summary>
+        /// Handles a shipping address save exception.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <param name="ex">
+        /// The <see cref="Exception"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// The <see cref="Exception"/> to be handled
+        /// </exception>
+        protected virtual ActionResult HandleShippingAddressSaveException(TShippingAddress model, Exception ex)
+        {
+            throw ex;
         }
     }
 }

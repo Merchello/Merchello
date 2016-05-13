@@ -14,7 +14,7 @@
     /// A base class for building FastTrack checkout address models.
     /// </summary>
     /// <typeparam name="TAddress">
-    /// The type of <see cref="CheckoutAddressModel"/>
+    /// The type of <see cref="StoreAddressModel"/>
     /// </typeparam>
     public abstract class FastTrackCheckoutAddressModelFactoryBase<TAddress> : CheckoutAddressModelFactory<TAddress>
         where TAddress : class, IFastTrackCheckoutAddressModel, new()

@@ -21,16 +21,27 @@
     public abstract class CheckoutShipRateQuoteControllerBase<TShipRateQuote> : CheckoutControllerBase
         where TShipRateQuote : class, ICheckoutShipRateQuoteModel, new()
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutShipRateQuoteControllerBase{TShipRateQuote}"/> class.
         /// </summary>
         protected CheckoutShipRateQuoteControllerBase()
-            : this(
-                  new CheckoutShipRateQuoteModelFactory<TShipRateQuote>(),
-                  new CheckoutContextSettingsFactory())
+            : this(new CheckoutShipRateQuoteModelFactory<TShipRateQuote>())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CheckoutShipRateQuoteControllerBase{TShipRateQuote}"/> class.
+        /// </summary>
+        /// <param name="checkoutShipRateQuotFactory">
+        /// The <see cref="CheckoutShipRateQuoteControllerBase{TShipRateQuote}"/>.
+        /// </param>
+        protected CheckoutShipRateQuoteControllerBase(
+            CheckoutShipRateQuoteModelFactory<TShipRateQuote> checkoutShipRateQuotFactory)
+            : this(checkoutShipRateQuotFactory, new CheckoutContextSettingsFactory())
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutShipRateQuoteControllerBase{TShipRateQuote}"/> class.
@@ -50,6 +61,8 @@
             this.CheckoutShipRateQuoteFactory = checkoutShipRateQuoteFactory;
         }
 
+        #endregion
+
         /// <summary>
         /// Gets the <see cref="CheckoutShipRateQuoteModelFactory{TShipRateQuote}"/>.
         /// </summary>
@@ -67,25 +80,32 @@
         [HttpPost]
         public virtual ActionResult SaveShipRateQuote(TShipRateQuote model)
         {
-            var shippingAddress = CheckoutManager.Customer.GetShipToAddress();
-            if (shippingAddress == null) return CurrentUmbracoPage();
+            try
+            {
+                var shippingAddress = CheckoutManager.Customer.GetShipToAddress();
+                if (shippingAddress == null) return CurrentUmbracoPage();
 
-            if (!ModelState.IsValid) return CurrentUmbracoPage();
-            
-            CheckoutManager.Shipping.ClearShipmentRateQuotes();
+                if (!ModelState.IsValid) return CurrentUmbracoPage();
 
-            var quoteModel = CheckoutShipRateQuoteFactory.Create(Basket, shippingAddress);
+                CheckoutManager.Shipping.ClearShipmentRateQuotes();
 
-            // merge the models for return override
-            model.ShippingQuotes = quoteModel.ShippingQuotes;
-            model.ProviderQuotes = quoteModel.ProviderQuotes;
+                var quoteModel = CheckoutShipRateQuoteFactory.Create(Basket, shippingAddress);
 
-            var accepted = quoteModel.ProviderQuotes.FirstOrDefault(x => x.ShipMethod.Key == model.ShipMethodKey);
-            if (accepted == null) return CurrentUmbracoPage();
+                // merge the models for return override
+                model.ShippingQuotes = quoteModel.ShippingQuotes;
+                model.ProviderQuotes = quoteModel.ProviderQuotes;
 
-            CheckoutManager.Shipping.SaveShipmentRateQuote(accepted);
+                var accepted = quoteModel.ProviderQuotes.FirstOrDefault(x => x.ShipMethod.Key == model.ShipMethodKey);
+                if (accepted == null) return CurrentUmbracoPage();
 
-            return HandleShipRateQuoteSaveSuccess(model);
+                CheckoutManager.Shipping.SaveShipmentRateQuote(accepted);
+
+                return HandleShipRateQuoteSaveSuccess(model);
+            }
+            catch (Exception ex)
+            {
+                return this.HandleShipRateQuoteSaveException(model, ex);
+            }
         }
 
         #region ChildActions
@@ -127,5 +147,24 @@
             return this.RedirectToCurrentUmbracoPage();
         }
 
+        /// <summary>
+        /// Allows for overriding the action of a exception durring shipping rate quote save operation.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutShipRateQuoteModel"/>.
+        /// </param>
+        /// <param name="ex">
+        /// The <see cref="Exception"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// The <see cref="Exception"/> to be handled.
+        /// </exception>
+        protected virtual ActionResult HandleShipRateQuoteSaveException(TShipRateQuote model, Exception ex)
+        {
+            throw ex;
+        }
     }
 }

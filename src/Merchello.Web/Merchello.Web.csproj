@@ -113,6 +113,7 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -283,7 +284,8 @@
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutControllerBase.cs" />
-    <Compile Include="Controllers\CheckoutShipRateQuoteControllerBase.cs" />
+    <Compile Include="Controllers\CheckoutDiscountControllerBase{T}.cs" />
+    <Compile Include="Controllers\CheckoutShipRateQuoteControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutSummaryControllerBase{T}.cs" />
     <Compile Include="Controllers\MerchelloUIControllerBase.cs" />
     <Compile Include="DataModifiers\Product\IncludeTaxProductDisplayPriceModifier.cs" />
@@ -337,30 +339,29 @@
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
+    <Compile Include="Factories\CheckoutDiscountModelFactory.cs" />
     <Compile Include="Factories\CheckoutShipRateQuoteModelFactory.cs" />
     <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
-    <Compile Include="Models\Ui\Async\AddItemAsyncResponse.cs" />
-    <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />
-    <Compile Include="Models\Ui\Async\UpdateQuantityAsyncResponse.cs" />
-    <Compile Include="Models\Ui\Async\UpdateQuantityResponseItem.cs" />
-    <Compile Include="Models\Ui\CheckoutAddressModel.cs" />
-    <Compile Include="Models\Ui\CheckoutShipRateQuoteModel.cs" />
     <Compile Include="Models\Ui\CheckoutStage.cs" />
     <Compile Include="Models\Ui\CheckoutWorkflowMarker.cs" />
+    <Compile Include="Models\Ui\DiscountViewData.cs" />
     <Compile Include="Models\Ui\IAddItemModel.cs" />
     <Compile Include="Models\Ui\IBasketModel.cs" />
     <Compile Include="Models\Ui\ICheckoutAddressModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutDiscountModel.cs" />
     <Compile Include="Models\Ui\ICheckoutModel.cs" />
     <Compile Include="Models\Ui\ICheckoutShipRateQuoteModel.cs" />
     <Compile Include="Models\Ui\ICheckoutSummaryModel.cs" />
     <Compile Include="Models\Ui\ICheckoutWorkflowMarker.cs" />
     <Compile Include="Models\Ui\ICustomerMembershipProfile.cs" />
+    <Compile Include="Models\Ui\IDiscountApplicationResult.cs" />
     <Compile Include="Models\Ui\ILineItemModel.cs" />
     <Compile Include="Models\Ui\IUiModel.cs" />
     <Compile Include="Models\Ui\IProductDataTable.cs" />
     <Compile Include="Models\Ui\IProductDataTableRow.cs" />
+    <Compile Include="Models\Ui\IMerchelloViewData.cs" />
     <Compile Include="Models\Ui\UiModelExtensions.cs" />
     <Compile Include="Mvc\CheckAjaxRequestAttribute.cs" />
     <Compile Include="Mvc\MerchelloHelperViewPage.cs" />

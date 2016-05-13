@@ -10,7 +10,7 @@
     /// The default checkout summary controller.
     /// </summary>
     [PluginController("Merchello")]
-    public class CheckoutSummaryController : CheckoutSummaryControllerBase<CheckoutSummaryModel, CheckoutAddressModel, CheckoutAddressModel, StoreLineItemModel>
+    public class CheckoutSummaryController : CheckoutSummaryControllerBase<StoreSummaryModel, StoreAddressModel, StoreAddressModel, StoreLineItemModel>
     {
     }
 }

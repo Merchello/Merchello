@@ -7,9 +7,9 @@
     using Merchello.Web.Store.Models;
 
     /// <summary>
-    /// A base class for FastTrack <see cref="CheckoutAddressModel"/>.
+    /// A base class for FastTrack <see cref="StoreAddressModel"/>.
     /// </summary>
-    public class FastTrackCheckoutAddressModel : CheckoutAddressModel, IFastTrackCheckoutAddressModel
+    public class FastTrackCheckoutAddressModel : StoreAddressModel, IFastTrackCheckoutAddressModel
     {
         /// <summary>
         /// Gets or sets the list of countries for the view drop down list.

@@ -5,7 +5,7 @@
     /// <summary>
     /// A model to represent a basket in the UI.
     /// </summary>
-    public class BasketModel : IBasketModel<StoreLineItemModel>
+    public class StoreBasketModel : IBasketModel<StoreLineItemModel>
     {
         /// <summary>
         /// Gets or sets the basket items.

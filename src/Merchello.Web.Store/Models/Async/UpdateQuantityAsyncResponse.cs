@@ -1,10 +1,11 @@
-﻿namespace Merchello.Web.Models.Ui.Async
+﻿namespace Merchello.Web.Store.Models.Async
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.Ui.Async;
 
     /// <summary>
     /// A response object to for an AJAX UpdateQuantity operation.

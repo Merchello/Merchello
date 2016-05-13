@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models.Ui.Async
+﻿namespace Merchello.Web.Store.Models.Async
 {
     using System.Collections.Generic;
 

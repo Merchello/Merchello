@@ -7,17 +7,17 @@
     /// <summary>
     /// Represents a checkout summary.
     /// </summary>
-    public class CheckoutSummaryModel : ICheckoutSummaryModel<CheckoutAddressModel, CheckoutAddressModel, StoreLineItemModel>
+    public class StoreSummaryModel : ICheckoutSummaryModel<StoreAddressModel, StoreAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// Gets or sets the billing address.
         /// </summary>
-        public CheckoutAddressModel BillingAddress { get; set; }
+        public StoreAddressModel BillingAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the shipping address.
         /// </summary>
-        public CheckoutAddressModel ShippingAddress { get; set; }
+        public StoreAddressModel ShippingAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the checkout summary items.

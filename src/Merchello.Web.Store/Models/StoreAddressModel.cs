@@ -1,10 +1,11 @@
-﻿namespace Merchello.Web.Models.Ui
+﻿namespace Merchello.Web.Store.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core;
     using Merchello.Core.Localization;
+    using Merchello.Web.Models.Ui;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -12,7 +13,7 @@
     /// <summary>
     /// A model used for collecting and persisting checkout addresses.
     /// </summary>
-    public class CheckoutAddressModel : ICheckoutAddressModel
+    public class StoreAddressModel : ICheckoutAddressModel
     {
         /// <summary>
         /// Gets or sets the customer address key.
