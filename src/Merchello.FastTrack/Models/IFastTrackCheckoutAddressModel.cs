@@ -8,7 +8,7 @@
     /// <summary>
     /// A base class for FastTrack <see cref="ICheckoutAddressModel"/>.
     /// </summary>
-    public interface IFastTrackCheckoutAddressModel : ICheckoutAddressModel
+    public interface IFastTrackCheckoutAddressModel : ICheckoutAddressModel, ISuccessRedirectUrl
     {
         /// <summary>
         /// Gets or sets the list of countries for the view drop down list.

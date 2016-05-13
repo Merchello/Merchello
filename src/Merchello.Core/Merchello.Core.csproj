@@ -421,11 +421,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Localization\StoreFormsResource.en-GB.Designer.cs">
-      <DependentUpon>StoreFormsResource.en-GB.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Logging\ExtendedLoggerData.cs" />
     <Compile Include="Logging\IExtendedLoggerData.cs" />
     <Compile Include="Logging\IExtendedLoggerDataLogger.cs" />
@@ -1374,10 +1369,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Localization\StoreFormsResource.en-GB.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>StoreFormsResource.en-GB.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Localization\StoreFormsResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StoreFormsResource.Designer.cs</LastGenOutput>

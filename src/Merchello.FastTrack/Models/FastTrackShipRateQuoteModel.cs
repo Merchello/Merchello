@@ -1,0 +1,15 @@
+﻿namespace Merchello.FastTrack.Models
+{
+    using Merchello.Web.Models.Ui;
+
+    /// <summary>
+    /// A base model for FastTrack ship rate quotes.
+    /// </summary>
+    public class FastTrackShipRateQuoteModel : CheckoutShipRateQuoteModel, ISuccessRedirectUrl
+    {
+        /// <summary>
+        /// Gets or sets the success URL to redirect to the shipping entry stage.
+        /// </summary>
+        public string SuccessRedirectUrl { get; set; }
+    }
+}

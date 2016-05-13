@@ -12,7 +12,7 @@
     /// The default (generic) basket controller.
     /// </summary>
     [PluginController("Merchello")]
-    public class BasketController : BasketControllerBase<BasketModel, BasketItemModel, AddItemModel>
+    public class BasketController : BasketControllerBase<BasketModel, StoreLineItemModel, AddItemModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketController"/> class.

@@ -12,50 +12,73 @@
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Store.Models;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// A factory responsible for building FastTrack the <see cref="CheckoutSummaryModel"/>.
     /// </summary>
-    public class FastTrackCheckoutSummaryModelFactory : CheckoutSummaryModelFactory<FastTrackCheckoutSummary, FastTrackBillingAddressModel, CheckoutAddressModel, BasketItemModel>
+    public class FastTrackCheckoutSummaryModelFactory : CheckoutSummaryModelFactory<FastTrackCheckoutSummary, FastTrackBillingAddressModel, CheckoutAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
         /// </summary>
-        /// <remarks>
-        /// TODO move this to a base factory
-        /// </remarks>
         private readonly MerchelloHelper _merchello;
 
         /// <summary>
-        /// Overrides the creation of <see cref="BasketItemModel"/>.
+        /// Initializes a new instance of the <see cref="FastTrackCheckoutSummaryModelFactory"/> class.
+        /// </summary>
+        public FastTrackCheckoutSummaryModelFactory()
+            : this(new MerchelloHelper())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FastTrackCheckoutSummaryModelFactory"/> class.
+        /// </summary>
+        /// <param name="merchello">
+        /// The <see cref="MerchelloHelper"/>.
+        /// </param>
+        public FastTrackCheckoutSummaryModelFactory(MerchelloHelper merchello)
+        {
+            Mandate.ParameterNotNull(merchello, "merchello");
+            _merchello = merchello;
+        }
+
+        /// <summary>
+        /// Overrides the creation of <see cref="StoreLineItemModel"/>.
         /// </summary>
         /// <param name="lineItem">
-        /// The <see cref="BasketItemModel"/>.
+        /// The <see cref="StoreLineItemModel"/>.
         /// </param>
         /// <param name="item">
         /// The <see cref="ILineItem"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="BasketItemModel"/>.
+        /// The modified <see cref="StoreLineItemModel"/>.
         /// </returns>
-        protected override BasketItemModel OnCreate(BasketItemModel lineItem, ILineItem item)
+        protected override StoreLineItemModel OnCreate(StoreLineItemModel lineItem, ILineItem item)
         {
-            // Get the product key from the extended data collection
-            // This is added internally when the product was added to the basket
-            var productKey = item.ExtendedData.GetProductKey();
 
-            // Get an instantiated IProductContent for use in the basket table design
-            var product = item.LineItemType == LineItemType.Product ?
-                            this.GetProductContent(productKey) :
-                            null;
+            if (item.LineItemType == LineItemType.Product)
+            {
+                // Get the product key from the extended data collection
+                // This is added internally when the product was added to the basket
+                var productKey = item.ExtendedData.GetProductKey();
 
-            // Get a list of choices the customer made.  This can also be done by looking at the variant (Attributes)
-            // but this is a bit quicker and is something commonly done.
-            var customerChoices = item.GetProductOptionChoicePairs();
+                // Get an instantiated IProductContent for use in the basket table design
+                var product = item.LineItemType == LineItemType.Product ?
+                                this.GetProductContent(productKey) :
+                                null;
 
-            // Modifiy the BasketItemModel generated in the base factory
-            lineItem.Product = product;
-            lineItem.ProductKey = productKey;
-            lineItem.CustomerOptionChoices = customerChoices;
+                // Get a list of choices the customer made.  This can also be done by looking at the variant (Attributes)
+                // but this is a bit quicker and is something commonly done.
+                var customerChoices = item.GetProductOptionChoicePairs();
+
+                // Modifiy the BasketItemModel generated in the base factory
+                lineItem.Product = product;
+                lineItem.ProductKey = productKey;
+                lineItem.CustomerOptionChoices = customerChoices;
+            }
 
             return base.OnCreate(lineItem, item);
         }

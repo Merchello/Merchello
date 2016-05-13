@@ -1,5 +1,7 @@
-﻿@inherits UmbracoViewPage<Merchello.Web.Models.Ui.CheckoutAddressModel>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Models.Ui.CheckoutAddressModel>
+@using System.Web.Mvc.Html
 @using Merchello.Web.Store.Controllers
+@using Umbraco.Web
 
 <h2>Shipping Address</h2>
 @using (Html.BeginUmbracoForm<CheckoutAddressController>("SaveBillingAddress", new { area = "Merchello" }, new { data_muistage = "ShippingAddress" }))
@@ -44,13 +46,5 @@
     @Html.HiddenFor(x => x.Key)
     @Html.HiddenFor(x => x.AddressType)
     @Html.AntiForgeryToken()
-    <div class="buttons stage-buttons">
-        <div class="buttons stage-buttons">
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4 pull-right">
-                    <input type="submit" class="btn-silver btn-full-width btn-next" value="Next" />
-                </div>
-            </div>
-        </div>
-    </div>
+
 }

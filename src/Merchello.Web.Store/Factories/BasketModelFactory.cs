@@ -17,7 +17,7 @@
     /// <summary>
     /// The basket model factory for the default implementation.
     /// </summary>
-    public class BasketModelFactory : BasketModelFactory<BasketModel, BasketItemModel>
+    public class BasketModelFactory : BasketModelFactory<BasketModel, StoreLineItemModel>
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
@@ -67,16 +67,16 @@
         /// <summary>
         /// Overrides the base basket item model creation.
         /// </summary>
-        /// <param name="basketItem">
-        /// The <see cref="BasketItemModel"/>.
+        /// <param name="storeLineItem">
+        /// The <see cref="StoreLineItemModel"/>.
         /// </param>
         /// <param name="lineItem">
         /// The <see cref="ILineItem"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="BasketItemModel"/>.
+        /// The modified <see cref="StoreLineItemModel"/>.
         /// </returns>
-        protected override BasketItemModel OnCreate(BasketItemModel basketItem, ILineItem lineItem)
+        protected override StoreLineItemModel OnCreate(StoreLineItemModel storeLineItem, ILineItem lineItem)
         {
             // Get the product key from the extended data collection
             // This is added internally when the product was added to the basket
@@ -92,11 +92,11 @@
             var customerChoices = lineItem.GetProductOptionChoicePairs();
 
             // Modifiy the BasketItemModel generated in the base factory
-            basketItem.Product = product;
-            basketItem.ProductKey = productKey;
-            basketItem.CustomerOptionChoices = customerChoices;
+            storeLineItem.Product = product;
+            storeLineItem.ProductKey = productKey;
+            storeLineItem.CustomerOptionChoices = customerChoices;
 
-            return base.OnCreate(basketItem, lineItem);
+            return base.OnCreate(storeLineItem, lineItem);
         }
 
         /// <summary>

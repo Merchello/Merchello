@@ -9,4 +9,14 @@ form .field-validation-error {
   display: block;
   color: #a94442; }
 
+.h-card .p-name, .h-card .p-org, .h-card .p-street-address, .h-card .p-extended-address, .h-card .p-postal-code, .h-card .p-country-name,
+.h-card .label-contact {
+  display: block;
+  padding-right: 2em; }
+.h-card .p-name {
+  font-weight: bold; }
+
+.basket-summary .h-card {
+  height: 180px; }
+
 /*# sourceMappingURL=mui.css.map */

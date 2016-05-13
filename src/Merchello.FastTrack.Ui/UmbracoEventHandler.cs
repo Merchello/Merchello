@@ -67,7 +67,7 @@
         /// </remarks>
         private static void ProductContentFactoryOnInitializing(ProductContentFactory sender, VirtualContentEventArgs e)
         {
-            var store = StoreUiHelper.Content.GetStoreRoot();
+            var store = ExampleUiHelper.Content.GetStoreRoot();
             e.Parent = store;
         }
     }

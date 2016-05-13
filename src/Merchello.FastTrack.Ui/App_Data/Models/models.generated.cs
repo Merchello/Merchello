@@ -129,7 +129,7 @@ namespace Umbraco.Web.PublishedContentModels
 
 	/// <summary>Checkout</summary>
 	[PublishedContentModel("checkout")]
-	public partial class Checkout : PublishedContentModel, ICompositionMeta, ICompositionUmbracoFields
+	public partial class Checkout : PublishedContentModel, ICompositionContent, ICompositionMeta, ICompositionUmbracoFields
 	{
 #pragma warning disable 0109 // new is redundant
 		public new const string ModelTypeAlias = "checkout";
@@ -150,6 +150,33 @@ namespace Umbraco.Web.PublishedContentModels
 		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Checkout, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Checkout Stage
+		///</summary>
+		[ImplementPropertyType("checkoutStage")]
+		public object CheckoutStage
+		{
+			get { return this.GetPropertyValue("checkoutStage"); }
+		}
+
+		///<summary>
+		/// Brief: A brief description of the content
+		///</summary>
+		[ImplementPropertyType("brief")]
+		public IHtmlString Brief
+		{
+			get { return CompositionContent.GetBrief(this); }
+		}
+
+		///<summary>
+		/// Headline: The content headline
+		///</summary>
+		[ImplementPropertyType("headline")]
+		public string Headline
+		{
+			get { return CompositionContent.GetHeadline(this); }
 		}
 
 		///<summary>

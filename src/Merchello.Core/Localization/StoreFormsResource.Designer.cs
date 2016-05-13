@@ -187,6 +187,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shipping method.
+        /// </summary>
+        public static string LabelShipRateQuote {
+            get {
+                return ResourceManager.GetString("LabelShipRateQuote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use this address as the billing address.
         /// </summary>
         public static string LabelUseForBilling {

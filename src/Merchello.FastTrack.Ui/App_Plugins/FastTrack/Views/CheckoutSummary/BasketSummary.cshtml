@@ -1,48 +1,108 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
 @using System.Web.Mvc.Html
 @using Merchello.Core
+@using Merchello.FastTrack.Models
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui
 @using Umbraco.Core.Models
 @using Umbraco.Web
-<div class="container">
 
-    <div class="row">
-        <div class="col-md-4">
-            <h4>Billing Address</h4>
-            @Html.Partial("_Address", Model.BillingAddress)
-        </div>
-        <div class="col-md-4"><h4>Delivery Address</h4></div>
-        <div class="col-md-4"></div>
-    </div>
-    
+<div class="container-fluid">
+    <h3>Order Summary</h3>
     <div class="row">
         <div class="col-md-12">
-            <h4>Items</h4>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td>@if (item.Product.HasValue("image"))
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>Items</h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th colspan="2">Name</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                        </thead>
+                        @foreach (var item in Model.Items)
                         {
-                            var image = item.Product.GetPropertyValue<IPublishedContent>("image");
-                            <img src="@image.GetCropUrl(100, 100)" alt="@item.Product.Name" />
+                            <tr>
+                                <td>
+                                    @if (item.Product.HasValue("image"))
+                                    {
+                                        var image = item.Product.GetPropertyValue<IPublishedContent>("image");
+                                        <img src="@image.GetCropUrl(50, 50)" alt="@item.Product.Name"/>
+                                    }
+                                </td>
+                                <td>@item.Name</td>
+                                <td class="text-right">@item.Amount.AsFormattedCurrency()</td>
+                                <td>@item.Quantity</td>
+                                <td class="text-right">@item.Total().AsFormattedCurrency()</td>
+                            </tr>
                         }
-                        </td>
-                        <td>@item.Name</td>
-                        <td>@item.Quantity</td>
-                        <td>@item.Amount.AsFormattedCurrency()</td>
-                    </tr>
-                }
-            </table>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right"><strong>Sub Total:</strong></td>
+                            <td class="text-right"><strong>@Model.Total.AsFormattedCurrency()</strong></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
 
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 basket-summary">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Billing Address @RenderEdit(Model, "billing")</h4>
+                </div>
+                <div class="panel-body">
+                    @Html.Partial("_Address", Model.BillingAddress)
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6 basket-summary">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Shipping Address @RenderEdit(Model, "shipping")</h4>
+                </div>
+                <div class="panel-body">
+                    @Html.Partial("_Address", Model.ShippingAddress)
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+@helper RenderEdit(FastTrackCheckoutSummary model, string buttonFor)
+{
+    if (AddEditButton(model, buttonFor))
+    {
+        var url = buttonFor == "billing" ?
+            ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.BillingAddress).Url :
+            ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShippingAddress).Url;
+
+            <a href="@url"><span class="glyphicon glyphicon-edit pull-right"></span></a>
+    }
+}
+
+@functions {
+
+    private bool AddEditButton(FastTrackCheckoutSummary model, string buttonFor)
+    {
+        if (model.CheckoutStage == CheckoutStage.None) return false;
+        if (model.CheckoutStage == CheckoutStage.BillingAddress || (model.CheckoutStage == CheckoutStage.ShippingAddress && buttonFor == "shipping"))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+} 

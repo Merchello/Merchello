@@ -457,6 +457,7 @@
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.multiproductpicker.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.productselector.dialog.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.productselector.html" />
+    <Content Include="App_Plugins\Merchello\Views\CheckoutShipRateQuote\ShipRateQuoteForm.old.cshtml" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\ModelsBuilder\package.manifest" />
     <Content Include="Views\Web.config" />
@@ -495,6 +496,19 @@
     <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\BillingAddressForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\ShippingAddressForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="Views\BillingAddress.cshtml" />
+    <Content Include="Views\Catalog.cshtml" />
+    <Content Include="Views\Category.cshtml" />
+    <Content Include="Views\ShippingAddress.cshtml" />
+    <Content Include="Views\Payment.cshtml" />
+    <Content Include="Views\PaymentMethod.cshtml" />
+    <Content Include="Views\ShipRateQuote.cshtml" />
+    <Content Include="Views\FinalSaleSummary.cshtml" />
+    <Content Include="Views\PreSaleSummary.cshtml" />
+    <Content Include="App_Plugins\Merchello\Views\Partials\InvalidCheckoutStage.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutShipRateQuote\ShipRateQuoteForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\InvoiceSummary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -570,13 +584,8 @@
     <Content Include="Views\Shared\_ProductPricing.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_LocalResources\StoreForms.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreForms.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreUiHelper.cs" />
+    <Compile Include="ExampleUiHelper.cs" />
     <Compile Include="UmbracoEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -608,12 +617,6 @@
       <Project>{81d9e7da-5a5a-444a-823f-1d97d7d5fedf}</Project>
       <Name>Merchello.Web</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_LocalResources\StoreForms.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>StoreForms.Designer.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

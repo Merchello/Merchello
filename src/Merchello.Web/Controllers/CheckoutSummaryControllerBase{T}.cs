@@ -29,11 +29,6 @@
         where TLineItem : class, ILineItemModel, new()
     {
         /// <summary>
-        /// The <see cref="CheckoutSummaryControllerBase{TSummary, TBillingAddress, TShippingAddress, TLineItem}"/>.
-        /// </summary>
-        private readonly CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem> _checkoutSummaryFactory;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutSummaryControllerBase{TSummary,TBillingAddress,TShippingAddress,TLineItem}"/> class. 
         /// </summary>
         protected CheckoutSummaryControllerBase()
@@ -58,20 +53,44 @@
             : base(contextSettingsFactory)
         {
             Mandate.ParameterNotNull(checkoutSummaryFactory, "checkoutSummaryFactory");
-            _checkoutSummaryFactory = checkoutSummaryFactory;
+            this.CheckoutSummaryFactory = checkoutSummaryFactory;
         }
+
+        /// <summary>
+        /// Gets the <see cref="CheckoutSummaryModelFactory{TSummary, TBillingAddress, TShippingAddress, TLineItem}"/>.
+        /// </summary>
+        protected CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem> CheckoutSummaryFactory { get; private set; }
 
         /// <summary>
         /// Renders the Basket Summary.
         /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [ChildActionOnly]
-        public virtual ActionResult BasketSummary()
+        public virtual ActionResult BasketSummary(string view = "")
         {
-            var model = _checkoutSummaryFactory.Create(Basket, CheckoutManager);
-            return this.PartialView(model);
+            var model = CheckoutSummaryFactory.Create(Basket, CheckoutManager);
+            return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
+        }
+
+        /// <summary>
+        /// Renders the Invoice summary.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public virtual ActionResult InvoiceSummary(string view = "")
+        {
+            var model = CheckoutSummaryFactory.Create(CheckoutManager);
+            return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
         }
     }
 }

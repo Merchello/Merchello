@@ -2,3 +2,6 @@
 @import "modules/notify";
 @import "modules/basket";
 @import "modules/forms";
+@import "modules/address";
+// must follow address
+@import "modules/summary";

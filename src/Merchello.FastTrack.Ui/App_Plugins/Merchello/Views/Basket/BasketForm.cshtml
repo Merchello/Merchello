@@ -1,8 +1,11 @@
-﻿@inherits UmbracoViewPage<Merchello.Web.Store.Models.BasketModel>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Store.Models.BasketModel>
+@using System.Web.Mvc.Html
 @using Merchello.Core
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.Ui
 @using Merchello.Web.Store.Controllers
+@using Umbraco.Core.Models
+@using Umbraco.Web
 @{
     var currentPage = Umbraco.TypedContent(UmbracoContext.Current.PageId);
 
@@ -68,8 +71,8 @@
             }
         }
         <tr>
-            <td colspan="3" class="text-right">Sub Total</td>
-            <td colspan="2" data-muivalue="total">@Model.Total().AsFormattedCurrency()</td>
+            <td colspan="3" class="text-right"><strong>Sub Total</strong></td>
+            <td colspan="2" data-muivalue="total"><strong>@Model.Total().AsFormattedCurrency()</strong></td>
         </tr>
         <tr class="hide">
             <td colspan="3">&nbsp;</td>
@@ -80,10 +83,10 @@
 
         <div class="row">
             <div class="col-lg-8">
-                <a href="@StoreUiHelper.Content.GetStoreRoot().Url">Continue Shopping</a>
+                <a href="@ExampleUiHelper.Content.GetStoreRoot().Url">Continue Shopping</a>
             </div>
             <div class="col-lg-4 text-right">
-                <a href="@StoreUiHelper.Content.GetCheckout().Url" class="btn btn-primary">Checkout</a>
+                <a href="@ExampleUiHelper.Content.GetCheckout().Url" class="btn btn-primary">Checkout</a>
             </div>
         </div>
     }

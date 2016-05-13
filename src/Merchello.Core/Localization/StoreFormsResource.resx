@@ -173,6 +173,10 @@
     <value>State or Province</value>
     <comment>Label for the region or province field</comment>
   </data>
+  <data name="LabelShipRateQuote" xml:space="preserve">
+    <value>Shipping method</value>
+    <comment>Label for selecting a shipping method</comment>
+  </data>
   <data name="LabelUseForBilling" xml:space="preserve">
     <value>Use this address as the billing address</value>
   </data>

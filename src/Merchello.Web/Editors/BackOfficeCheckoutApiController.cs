@@ -14,6 +14,7 @@
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Checkout;
     using Merchello.Web.Models.Payments;
+    using Merchello.Web.Models.Ui;
     using Merchello.Web.WebApi;
     using Merchello.Web.Workflow;
     using Merchello.Web.Workflow.CustomerItemCache;
@@ -118,6 +119,27 @@
             }
 
             return rateQuotes;
+        }
+
+        /// <summary>
+        /// Gets a list of checkout stages represented in the default <see cref="CheckoutStage"/> enumeration.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<string> GetCheckoutStages()
+        {
+            return new List<string>
+            {
+                CheckoutStage.None.ToString(),
+                CheckoutStage.BillingAddress.ToString(),
+                CheckoutStage.ShippingAddress.ToString(),
+                CheckoutStage.ShipRateQuote.ToString(),
+                CheckoutStage.PaymentMethod.ToString(),
+                CheckoutStage.Payment.ToString(),
+                CheckoutStage.Custom.ToString()
+            };
         }
 
         #endregion

@@ -11804,6 +11804,11 @@
               Looks up a localized string similar to State or Province.
             </summary>
         </member>
+        <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelShipRateQuote">
+            <summary>
+              Looks up a localized string similar to Shipping method.
+            </summary>
+        </member>
         <member name="P:Merchello.Core.Localization.StoreFormsResource.LabelUseForBilling">
             <summary>
               Looks up a localized string similar to Use this address as the billing address.

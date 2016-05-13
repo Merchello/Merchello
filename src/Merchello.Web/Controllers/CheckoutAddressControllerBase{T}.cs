@@ -2,6 +2,7 @@
 {
     using System;
     using System.Web.Mvc;
+    using System.Web.Routing;
 
     using Merchello.Core;
     using Merchello.Core.Models;
@@ -27,16 +28,6 @@
         /// A value indicating whether or not to use the default customer address (of type) to pre load form values.
         /// </summary>
         private readonly bool _useCustomerAddress;
-
-        /// <summary>
-        /// The <see cref="CheckoutAddressModelFactory{TBillingAddress}"/>.
-        /// </summary>
-        private readonly CheckoutAddressModelFactory<TBillingAddress> _billingAddressFactory;
-
-        /// <summary>
-        /// The <see cref="CheckoutAddressModelFactory{TShippingAddress}"/>.
-        /// </summary>
-        private readonly CheckoutAddressModelFactory<TShippingAddress> _shippingAddressFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutAddressControllerBase{TBillingAddress,TShippingAddress}"/> class.
@@ -101,10 +92,20 @@
             Mandate.ParameterNotNull(billingAddressFactory, "billingAddressFactory");
             Mandate.ParameterNotNull(shippingAddressFactory, "shippingAddressFactory");
 
-            this._billingAddressFactory = billingAddressFactory;
-            this._shippingAddressFactory = shippingAddressFactory;
+            this.BillingAddressFactory = billingAddressFactory;
+            this.ShippingAddressFactory = shippingAddressFactory;
             this._useCustomerAddress = initializeFromCustomerAddress;
         }
+
+        /// <summary>
+        /// Gets the billing address factory.
+        /// </summary>
+        protected CheckoutAddressModelFactory<TBillingAddress> BillingAddressFactory { get; private set; }
+
+        /// <summary>
+        /// Gets the shipping address factory.
+        /// </summary>
+        protected CheckoutAddressModelFactory<TShippingAddress> ShippingAddressFactory { get; private set; }
 
         /// <summary>
         /// Saves the <see cref="ICheckoutAddressModel"/> for use in the checkout.
@@ -116,6 +117,7 @@
         /// Redirects or JSON response depending if called Async.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult SaveBillingAddress(TBillingAddress model)
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
@@ -123,16 +125,16 @@
             // Ensure billing address type is billing
             if (model.AddressType != AddressType.Billing) model.AddressType = AddressType.Billing;
 
-            var address = _billingAddressFactory.Create(model);
+            var address = BillingAddressFactory.Create(model);
 
             // Temporarily save the address in the checkout manager.
             this.CheckoutManager.Customer.SaveBillToAddress(address);
 
-            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
+            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerBillingAddress(model);
 
             model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.BillingAddress);
 
-            return this.RedirectAddressSaveSuccess(model);
+            return this.HandleBillingAddressSaveSuccess(model);
         }
 
         /// <summary>
@@ -145,6 +147,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult SaveShippingAddress(TShippingAddress model)
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
@@ -152,14 +155,16 @@
             // Ensure billing address type is billing
             if (model.AddressType != AddressType.Shipping) model.AddressType = AddressType.Shipping;
 
-            // Temporarily save the address in the checkout manager.
-            this.CheckoutManager.Customer.SaveShipToAddress(model);
+            var address = ShippingAddressFactory.Create(model);
 
-            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerAddress(model);
+            // Temporarily save the address in the checkout manager.
+            this.CheckoutManager.Customer.SaveShipToAddress(address);
+
+            if (!this.CurrentCustomer.IsAnonymous) this.SaveCustomerShippingAddress(model);
 
             model.WorkflowMarker = GetNextCheckoutWorkflowMarker(CheckoutStage.ShippingAddress);
 
-            return this.RedirectAddressSaveSuccess(model);
+            return this.HandleShippingAddressSaveSuccess(model);
         }
 
         #region ChildActions
@@ -176,20 +181,32 @@
         [ChildActionOnly]
         public ActionResult BillingAddressForm(string view = "")
         {
-            ICustomerAddress defaultBilling = null;
-            if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
+            TBillingAddress model = null;
+
+            // Determine if we already have an address saved in the checkout manager
+            var address = CheckoutManager.Customer.GetBillToAddress();
+            if (address != null)
             {
-                defaultBilling = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Billing);
+                model = BillingAddressFactory.Create(address);
+            }
+            else
+            {
+                // If not and the we have the configuration set to use the customer's default customer billing address
+                // This can only be done if the customer is logged in.  e.g. Not an anonymous customer
+                if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
+                {
+                    var defaultBilling = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Billing);
+                    if (defaultBilling != null) model = BillingAddressFactory.Create((ICustomer)CurrentCustomer, defaultBilling);
+                }
             }
 
-            return view.IsNullOrWhiteSpace() ?
-                defaultBilling == null
-                       ? this.PartialView(_billingAddressFactory.Create(new Address()))
-                       : this.PartialView(_billingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultBilling)) 
-                :
-                defaultBilling == null
-                       ? this.PartialView(view, _billingAddressFactory.Create(new Address())) 
-                       : this.PartialView(view, _billingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultBilling));
+            // If the model is still null at this point, we need to generate a default model
+            // for the country drop down list
+            if (model == null) model = BillingAddressFactory.Create(new Address());
+
+            return view.IsNullOrWhiteSpace() 
+                       ? this.PartialView(model)
+                       : this.PartialView(view, model);
         }
 
         /// <summary>
@@ -204,54 +221,85 @@
         [ChildActionOnly]
         public ActionResult ShippingAddressForm(string view = "")
         {
-            ICustomerAddress defaultShipping = null;
-            if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
+            var billingAddress = CheckoutManager.Customer.GetBillToAddress();
+            if (billingAddress == null) return PartialView("InvalidCheckoutStage");
+
+            TShippingAddress model = null;
+
+            // Determine if we already have an address saved in the checkout manager
+            var address = CheckoutManager.Customer.GetShipToAddress();
+            if (address != null)
             {
-                defaultShipping = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Shipping);
+                model = ShippingAddressFactory.Create(address);
+            }
+            else
+            {
+                // If not and the we have the configuration set to use the customer's default customer shipping address
+                // This can only be done if the customer is logged in.  e.g. Not an anonymous customer
+                if (!this.CurrentCustomer.IsAnonymous && this._useCustomerAddress)
+                {
+                    var defaultShipping = ((ICustomer)this.CurrentCustomer).DefaultCustomerAddress(AddressType.Shipping);
+                    if (defaultShipping != null) model = ShippingAddressFactory.Create((ICustomer)CurrentCustomer, defaultShipping);
+                }
             }
 
-            return view.IsNullOrWhiteSpace() ?
-                defaultShipping == null
-                       ? this.PartialView(_shippingAddressFactory.Create(new Address()))
-                       : this.PartialView(_shippingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultShipping))
-                :
-                defaultShipping == null
-                       ? this.PartialView(view, _shippingAddressFactory.Create(new Address()))
-                       : this.PartialView(view, _shippingAddressFactory.Create((ICustomer)this.CurrentCustomer, defaultShipping));
+            // If the model is still null at this point, we need to generate a default model
+            // for the country drop down list
+            if (model == null) model = ShippingAddressFactory.Create(new Address());
+
+            return view.IsNullOrWhiteSpace()
+                       ? this.PartialView(model)
+                       : this.PartialView(view, model);
         }
 
         #endregion
 
         /// <summary>
-        /// Allows for saving the address to the customer.
+        /// Allows for saving the billing address to the customer.
         /// </summary>
         /// <param name="model">
         /// The model.
         /// </param>
-        /// <typeparam name="TAddress">
-        /// The type of address to be saved
-        /// </typeparam>
-        protected virtual void SaveCustomerAddress<TAddress>(TAddress model) where TAddress : ICheckoutAddressModel
+        protected virtual void SaveCustomerBillingAddress(TBillingAddress model)
         {
         }
 
         /// <summary>
-        /// Allows for overriding the redirection of a successful address save.
+        /// Allows for saving the shipping address to the customer.
         /// </summary>
         /// <param name="model">
         /// The model.
         /// </param>
-        /// <typeparam name="TAddress">
-        /// The type of address saved
-        /// </typeparam>
+        protected virtual void SaveCustomerShippingAddress(TShippingAddress model)
+        {
+        }
+
+        /// <summary>
+        /// Allows for overriding the action of a successful billing address save.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected virtual ActionResult RedirectAddressSaveSuccess<TAddress>(TAddress model)
-            where TAddress : ICheckoutAddressModel
+        protected virtual ActionResult HandleBillingAddressSaveSuccess(TBillingAddress model)
         {
             return this.RedirectToCurrentUmbracoPage();
         }
 
+        /// <summary>
+        /// Allows for overriding the action of a successful shipping address save.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        protected virtual ActionResult HandleShippingAddressSaveSuccess(TShippingAddress model)
+        {
+            return this.RedirectToCurrentUmbracoPage();
+        }
     }
 }

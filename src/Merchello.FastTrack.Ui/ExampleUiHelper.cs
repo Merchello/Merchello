@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Merchello.Core.Logging;
+    using Merchello.Web.Models.Ui;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -15,7 +16,7 @@
     /// There are many ways to do these sorts of "site specific" common operations in Umbraco.  This class is not required
     /// for Merchello implementations.  It merely provides some short cuts for the example store implementation.
     /// </remarks>
-    public static class StoreUiHelper
+    public static class ExampleUiHelper
     {
         /// <summary>
         /// Utilities to easily find common store content pages.
@@ -52,7 +53,7 @@
                     if (UmbracoContext.Current == null)
                     {
                         var nullReference = new NullReferenceException("UmbracoContext was null");
-                        MultiLogHelper.Error(typeof(StoreUiHelper), "The StoreUiHelper.Content requires a current UmbracoContext", nullReference);
+                        MultiLogHelper.Error(typeof(ExampleUiHelper), "The StoreUiHelper.Content requires a current UmbracoContext", nullReference);
                         throw nullReference;
                     }
 
@@ -91,6 +92,40 @@
             public static IPublishedContent GetCheckout()
             {
                 return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasCheckout);
+            }
+        }
+
+        /// <summary>
+        /// Assists in mapping URLs for the example store checkout work flow.
+        /// </summary>
+        public static class CheckoutWorkflow
+        {
+            /// <summary>
+            /// Gets a checkout stage <see cref="IPublishedContent"/>.
+            /// </summary>
+            /// <param name="stage">
+            /// The stage.
+            /// </param>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            /// <remarks>
+            /// The checkout stage is referenced on checkout pages as a custom property (Merchello Checkout Stage Picker)
+            /// </remarks>
+            public static IPublishedContent GetPageForStage(CheckoutStage stage)
+            {
+                var checkout = Content.GetCheckout();
+                if (stage == CheckoutStage.Custom || 
+                    stage == CheckoutStage.None ||
+                    !checkout.Children.Any()) return checkout;
+
+                var stagePage =
+                    checkout.Children.FirstOrDefault(
+                        x =>
+                        x.GetPropertyValue<string>("checkoutStage")
+                            .Equals(stage.ToString(), StringComparison.InvariantCultureIgnoreCase));
+
+                return stagePage ?? checkout;
             }
         }
     }

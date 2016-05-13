@@ -14,6 +14,11 @@
         /// <summary>
         /// Gets or sets the list of countries for the view drop down list.
         /// </summary>
-        public IEnumerable<SelectListItem> Countries { get; set; } 
+        public IEnumerable<SelectListItem> Countries { get; set; }
+
+        /// <summary>
+        /// Gets or sets the success URL to redirect to the shipping entry stage.
+        /// </summary>
+        public string SuccessRedirectUrl { get; set; }
     }
 }

@@ -7,7 +7,7 @@
     /// <summary>
     /// Represents a checkout summary.
     /// </summary>
-    public class CheckoutSummaryModel : ICheckoutSummaryModel<CheckoutAddressModel, CheckoutAddressModel, BasketItemModel>
+    public class CheckoutSummaryModel : ICheckoutSummaryModel<CheckoutAddressModel, CheckoutAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// Gets or sets the billing address.
@@ -22,6 +22,11 @@
         /// <summary>
         /// Gets or sets the checkout summary items.
         /// </summary>
-        public IEnumerable<BasketItemModel> Items { get; set; }
+        public IEnumerable<StoreLineItemModel> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sub total.
+        /// </summary>
+        public decimal Total { get; set; }
     }
 }

@@ -12,14 +12,14 @@
     using Newtonsoft.Json.Converters;
 
     /// <summary>
-    /// A model used to represent items in a basket or cart.
+    /// A model used to represent items in a basket or invoice.
     /// </summary>
-    public class BasketItemModel : ILineItemModel
+    public class StoreLineItemModel : ILineItemModel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketItemModel"/> class.
+        /// Initializes a new instance of the <see cref="StoreLineItemModel"/> class.
         /// </summary>
-        public BasketItemModel()
+        public StoreLineItemModel()
         {
             this.CustomerOptionChoices = Enumerable.Empty<KeyValuePair<string, string>>();
         }

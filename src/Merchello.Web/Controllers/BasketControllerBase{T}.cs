@@ -33,7 +33,7 @@
     /// <typeparam name="TAddItem">
     /// The type of <see cref="IAddItemModel"/>
     /// </typeparam>
-    public abstract class BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem> : MerchelloSurfaceController
+    public abstract class BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem> : MerchelloUIControllerBase
         where TBasketItemModel : class, ILineItemModel, new()
         where TBasketModel : class, IBasketModel<TBasketItemModel>, new()
         where TAddItem : class, IAddItemModel, new()
@@ -189,7 +189,7 @@
         /// <summary>
         /// Responsible for updating the quantities of items in the basket
         /// </summary>
-        /// <param name="model">The <see cref="TBasketModel"/></param>
+        /// <param name="model">The <see cref="IBasketModel{TBasketItemModel}"/></param>
         /// <returns>Redirects to the current Umbraco page (generally the basket page)</returns>
         [HttpPost]
         public virtual ActionResult UpdateBasket(TBasketModel model)

@@ -33,5 +33,10 @@
         /// Gets or sets the checkout summary items.
         /// </summary>
         IEnumerable<TLineItem> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the total.
+        /// </summary>
+        decimal Total { get; set; }
     }
 }

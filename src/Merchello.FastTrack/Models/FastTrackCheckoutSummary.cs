@@ -5,10 +5,13 @@
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Models;
 
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// Represents a the FastTrack Checkout Summary.
     /// </summary>
-    public class FastTrackCheckoutSummary : ICheckoutSummaryModel<FastTrackBillingAddressModel, CheckoutAddressModel, BasketItemModel>
+    public class FastTrackCheckoutSummary : ICheckoutSummaryModel<FastTrackBillingAddressModel, CheckoutAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// Gets or sets the billing address.
@@ -23,6 +26,17 @@
         /// <summary>
         /// Gets or sets the checkout summary items.
         /// </summary>
-        public IEnumerable<BasketItemModel> Items { get; set; }
+        public IEnumerable<StoreLineItemModel> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sub total.
+        /// </summary>
+        public decimal Total { get; set; }
+
+        /// <summary>
+        /// Gets or sets the current checkout stage.
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public CheckoutStage CheckoutStage { get; set; }
     }
 }

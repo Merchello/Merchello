@@ -3,7 +3,6 @@
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core.Localization;
-    using Merchello.Web.Models.Ui;
 
     using Umbraco.Core;
 
@@ -66,5 +65,13 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the success URL to redirect to the  ship rate quote stage.
+        /// </summary>
+        /// <remarks>
+        /// Used if customer opts to use the billing address for the shipping address 
+        /// </remarks>
+        public string SuccessUrlShipRateQuote { get; set; }
     }
 }

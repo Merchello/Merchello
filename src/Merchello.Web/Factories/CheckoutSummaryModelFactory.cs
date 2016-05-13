@@ -1,9 +1,11 @@
 ﻿namespace Merchello.Web.Factories
 {
+    using System;
     using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Checkout;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Workflow;
@@ -29,6 +31,41 @@
         where TLineItem : class, ILineItemModel, new()
         where TSummary : class, ICheckoutSummaryModel<TBillingAddress, TShippingAddress, TLineItem>, new()
     {
+
+        /// <summary>
+        /// Creates a <see cref="ICheckoutSummaryModel{TBillingAddress, TShippingAddress, TLineItem}"/>.
+        /// </summary>
+        /// <param name="checkoutManager">
+        /// The <see cref="ICheckoutManagerBase"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICheckoutSummaryModel{TBillingAddress, TShippingAddress, TLineItem}"/>.
+        /// </returns>
+        public TSummary Create(ICheckoutManagerBase checkoutManager)
+        {
+            if (!checkoutManager.Payment.IsReadyToInvoice())
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                var invalidOp = new InvalidOperationException("CheckoutManager is not ready to invoice. Try calling the overloaded Create method passing the IBasket");
+                MultiLogHelper.Error<CheckoutSummaryModelFactory<TSummary, TBillingAddress, TShippingAddress, TLineItem>>("Could not create checkout summary", invalidOp, logData);
+                throw invalidOp;
+            }
+
+            var invoice = checkoutManager.Payment.PrepareInvoice();
+
+            var billing = invoice.GetBillingAddress();
+            var shipping = invoice.GetShippingAddresses().FirstOrDefault();
+
+
+            return new TSummary
+            {
+                BillingAddress = Create<TBillingAddress>(billing ?? new Address { AddressType = AddressType.Billing }),
+                ShippingAddress = Create<TShippingAddress>(shipping ?? new Address { AddressType = AddressType.Shipping }),
+                Items = invoice.Items.Select(Create),
+                Total = invoice.Total
+            };
+        }
+
         /// <summary>
         /// Creates a <see cref="ICheckoutSummaryModel{TBillingAddress, TShippingAddress, TLineItem}"/>.
         /// </summary>
@@ -50,7 +87,8 @@
                 {
                     BillingAddress = Create<TBillingAddress>(billing ?? new Address { AddressType = AddressType.Billing }),
                     ShippingAddress = Create<TShippingAddress>(shipping ?? new Address { AddressType = AddressType.Shipping }),
-                    Items = basket.Items.Select(Create)
+                    Items = basket.Items.Select(Create),
+                    Total = basket.TotalBasketPrice
                 };
         }
 
@@ -69,7 +107,6 @@
         protected TAddress Create<TAddress>(IAddress adr) 
             where TAddress : class, ICheckoutAddressModel, new()
         {
-            var first = adr.TrySplitFirstName();
             var address = new TAddress
             {
                 Name = adr.Name, 

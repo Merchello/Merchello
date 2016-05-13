@@ -1,19 +1,17 @@
 ﻿namespace Merchello.Web.Controllers
 {
-    using System.Linq;
     using System.Web.Mvc;
 
     using Merchello.Core.Checkout;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
-    using Merchello.Web.Mvc;
 
     using Umbraco.Core;
 
     /// <summary>
     /// A base class for Checkout controllers.
     /// </summary>
-    public abstract class CheckoutControllerBase : MerchelloSurfaceController
+    public abstract class CheckoutControllerBase : MerchelloUIControllerBase
     {
         /// <summary>
         /// The <see cref="CheckoutContextSettingsFactory"/>.

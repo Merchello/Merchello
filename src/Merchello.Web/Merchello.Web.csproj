@@ -283,7 +283,9 @@
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutControllerBase.cs" />
+    <Compile Include="Controllers\CheckoutShipRateQuoteControllerBase.cs" />
     <Compile Include="Controllers\CheckoutSummaryControllerBase{T}.cs" />
+    <Compile Include="Controllers\MerchelloUIControllerBase.cs" />
     <Compile Include="DataModifiers\Product\IncludeTaxProductDisplayPriceModifier.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierChain.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierExtensions.cs" />
@@ -335,6 +337,7 @@
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
+    <Compile Include="Factories\CheckoutShipRateQuoteModelFactory.cs" />
     <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
     <Compile Include="Models\Ui\Async\AddItemAsyncResponse.cs" />
@@ -343,12 +346,14 @@
     <Compile Include="Models\Ui\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\UpdateQuantityResponseItem.cs" />
     <Compile Include="Models\Ui\CheckoutAddressModel.cs" />
+    <Compile Include="Models\Ui\CheckoutShipRateQuoteModel.cs" />
     <Compile Include="Models\Ui\CheckoutStage.cs" />
     <Compile Include="Models\Ui\CheckoutWorkflowMarker.cs" />
     <Compile Include="Models\Ui\IAddItemModel.cs" />
     <Compile Include="Models\Ui\IBasketModel.cs" />
     <Compile Include="Models\Ui\ICheckoutAddressModel.cs" />
     <Compile Include="Models\Ui\ICheckoutModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutShipRateQuoteModel.cs" />
     <Compile Include="Models\Ui\ICheckoutSummaryModel.cs" />
     <Compile Include="Models\Ui\ICheckoutWorkflowMarker.cs" />
     <Compile Include="Models\Ui\ICustomerMembershipProfile.cs" />
@@ -495,6 +500,7 @@
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorMonitorBase{T}.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorOrderShippedMonitor.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorPartialOrderShippedMonitor.cs" />

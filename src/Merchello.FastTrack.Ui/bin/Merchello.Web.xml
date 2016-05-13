@@ -141,7 +141,7 @@
             <summary>
             Responsible for updating the quantities of items in the basket
             </summary>
-            <param name="model">The <see cref="!:TBasketModel"/></param>
+            <param name="model">The <see cref="T:Merchello.Web.Models.Ui.IBasketModel`1"/></param>
             <returns>Redirects to the current Umbraco page (generally the basket page)</returns>
         </member>
         <member name="M:Merchello.Web.Controllers.BasketControllerBase`3.RemoveBasketItem(System.Guid,System.Int32)">
@@ -287,16 +287,6 @@
             A value indicating whether or not to use the default customer address (of type) to pre load form values.
             </summary>
         </member>
-        <member name="F:Merchello.Web.Controllers.CheckoutAddressControllerBase`2._billingAddressFactory">
-            <summary>
-            The <see cref="T:Merchello.Web.Factories.CheckoutAddressModelFactory`1"/>.
-            </summary>
-        </member>
-        <member name="F:Merchello.Web.Controllers.CheckoutAddressControllerBase`2._shippingAddressFactory">
-            <summary>
-            The <see cref="T:Merchello.Web.Factories.CheckoutAddressModelFactory`1"/>.
-            </summary>
-        </member>
         <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.#ctor(System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Controllers.CheckoutAddressControllerBase`2"/> class.
@@ -338,6 +328,16 @@
             A value indicating whether or not to attempt to initialize address forms with default customer address
             (if available)
             </param>
+        </member>
+        <member name="P:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.BillingAddressFactory">
+            <summary>
+            Gets the billing address factory.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.ShippingAddressFactory">
+            <summary>
+            Gets the shipping address factory.
+            </summary>
         </member>
         <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.SaveBillingAddress(`0)">
             <summary>
@@ -383,27 +383,40 @@
             The <see cref="T:System.Web.Mvc.ActionResult"/>.
             </returns>
         </member>
-        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.SaveCustomerAddress``1(``0)">
+        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.SaveCustomerBillingAddress(`0)">
             <summary>
-            Allows for saving the address to the customer.
+            Allows for saving the billing address to the customer.
             </summary>
             <param name="model">
             The model.
             </param>
-            <typeparam name="TAddress">
-            The type of address to be saved
-            </typeparam>
         </member>
-        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.RedirectAddressSaveSuccess``1(``0)">
+        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.SaveCustomerShippingAddress(`1)">
             <summary>
-            Allows for overriding the redirection of a successful address save.
+            Allows for saving the shipping address to the customer.
             </summary>
             <param name="model">
             The model.
             </param>
-            <typeparam name="TAddress">
-            The type of address saved
-            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.HandleBillingAddressSaveSuccess(`0)">
+            <summary>
+            Allows for overriding the action of a successful billing address save.
+            </summary>
+            <param name="model">
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutAddressControllerBase`2.HandleShippingAddressSaveSuccess(`1)">
+            <summary>
+            Allows for overriding the action of a successful shipping address save.
+            </summary>
+            <param name="model">
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutAddressModel"/>.
+            </param>
             <returns>
             The <see cref="T:System.Web.Mvc.ActionResult"/>.
             </returns>
@@ -455,6 +468,68 @@
             The <see cref="T:Merchello.Web.Models.Ui.ICheckoutWorkflowMarker"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1">
+            <summary>
+            The checkout ship rate quote controller.
+            </summary>
+            <typeparam name="TShipRateQuote">
+            The type of <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>
+            </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1.#ctor(Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory{`0},Merchello.Web.Factories.CheckoutContextSettingsFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1"/> class.
+            </summary>
+            <param name="checkoutShipRateQuoteFactory">
+            The <see cref="T:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1"/>.
+            </param>
+            <param name="contextSettingsFactory">
+            The <see cref="T:Merchello.Web.Factories.CheckoutContextSettingsFactory"/>.
+            </param>
+        </member>
+        <member name="P:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1.CheckoutShipRateQuoteFactory">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1.SaveShipRateQuote(`0)">
+            <summary>
+            Saves the shipment rate quote.
+            </summary>
+            <param name="model">
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1.ShipRateQuoteForm(System.String)">
+            <summary>
+            Responsible for rendering the shipment rate quote form.
+            </summary>
+            <param name="view">
+            The optional view name.
+            </param>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutShipRateQuoteControllerBase`1.HandleShipRateQuoteSaveSuccess(`0)">
+            <summary>
+            Allows for overriding the action of a successful shipping rate quote save.
+            </summary>
+            <param name="model">
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </param>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4">
             <summary>
             A base controller for checkout summary rendering and operations.
@@ -472,11 +547,6 @@
             The type of the summary <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/>
             </typeparam>
         </member>
-        <member name="F:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4._checkoutSummaryFactory">
-            <summary>
-            The <see cref="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4"/>.
-            </summary>
-        </member>
         <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4"/> class. 
@@ -493,12 +563,47 @@
             The <see cref="T:Merchello.Web.Factories.CheckoutContextSettingsFactory"/>.
             </param>
         </member>
-        <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.BasketSummary">
+        <member name="P:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.CheckoutSummaryFactory">
+            <summary>
+            Gets the <see cref="T:Merchello.Web.Factories.CheckoutSummaryModelFactory`4"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.BasketSummary(System.String)">
             <summary>
             Renders the Basket Summary.
             </summary>
+            <param name="view">
+            The optional view.
+            </param>
             <returns>
             The <see cref="T:System.Web.Mvc.ActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Controllers.CheckoutSummaryControllerBase`4.InvoiceSummary(System.String)">
+            <summary>
+            Renders the Invoice summary.
+            </summary>
+            <param name="view">
+            The optional view.
+            </param>
+            <returns>
+            The <see cref="T:System.Web.Mvc.ActionResult"/>.
+            </returns>
+        </member>
+        <member name="T:Merchello.Web.Controllers.MerchelloUIControllerBase">
+            <summary>
+            A base controller for Merchello UI Controllers.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Controllers.MerchelloUIControllerBase.ValidateModel(Merchello.Web.Models.Ui.ICheckoutModel)">
+            <summary>
+            Validates a model.
+            </summary>
+            <param name="model">
+            The model.
+            </param>
+            <returns>
+            The result of the validation.
             </returns>
         </member>
         <member name="T:Merchello.Web.DataModifiers.Product.IncludeTaxInProductPriceDataModifierTask">
@@ -1949,6 +2054,14 @@
             <remarks>
             Assumes the shipping address is the default shipping address
             </remarks>
+        </member>
+        <member name="M:Merchello.Web.Editors.BackOfficeCheckoutApiController.GetCheckoutStages">
+            <summary>
+            Gets a list of checkout stages represented in the default <see cref="T:Merchello.Web.Models.Ui.CheckoutStage"/> enumeration.
+            </summary>
+            <returns>
+            The <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Editors.BackOfficeCheckoutApiController.AddItemCacheItem(Merchello.Web.Models.ContentEditing.Checkout.AddToItemCacheInstruction)">
             <summary>
@@ -5442,6 +5555,66 @@
             The modified <see cref="T:Merchello.Core.Checkout.ICheckoutContextSettings"/>.
             </returns>
         </member>
+        <member name="T:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1">
+            <summary>
+            A factory responsible for building typed <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/> models.
+            </summary>
+            <typeparam name="TShipRateQuoteModel">
+            The type of the <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/> to be created
+            </typeparam>
+        </member>
+        <member name="F:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1._gatewayContext">
+            <summary>
+            The <see cref="T:Merchello.Core.Gateways.IGatewayContext"/>.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1.#ctor(Merchello.Core.IMerchelloContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1"/> class.
+            </summary>
+            <param name="merchelloContext">
+            The <see cref="T:Merchello.Core.IMerchelloContext"/>.
+            </param>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1.Create(Merchello.Web.Workflow.IBasket,Merchello.Core.Models.IAddress,System.Boolean)">
+            <summary>
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </summary>
+            <param name="basket">
+            The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </param>
+            <param name="destination">
+            The destination <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </param>
+            <param name="tryGetCached">
+            A value to indicate whether or not to get checked shipping provider quotes.
+            </param>
+            <returns>
+            The modified <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </returns>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutShipRateQuoteModelFactory`1.OnCreate(`0,Merchello.Web.Workflow.IBasket,Merchello.Core.Models.IAddress)">
+            <summary>
+            Allows for overriding the creation of <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </summary>
+            <param name="model">
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </param>
+            <param name="basket">
+            The <see cref="T:Merchello.Web.Workflow.IBasket"/>.
+            </param>
+            <param name="address">
+            The destination <see cref="T:Merchello.Core.Models.IAddress"/>.
+            </param>
+            <returns>
+            The modified <see cref="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel"/>.
+            </returns>
+        </member>
         <member name="T:Merchello.Web.Factories.CheckoutSummaryModelFactory`4">
             <summary>
             A base factory responsible for building <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>.
@@ -5458,6 +5631,17 @@
             <typeparam name="TLineItem">
             The type of the <see cref="T:Merchello.Web.Models.Ui.ILineItemModel"/> used in the summary
             </typeparam>
+        </member>
+        <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.Create(Merchello.Core.Checkout.ICheckoutManagerBase)">
+            <summary>
+            Creates a <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>.
+            </summary>
+            <param name="checkoutManager">
+            The <see cref="T:Merchello.Core.Checkout.ICheckoutManagerBase"/>.
+            </param>
+            <returns>
+            The <see cref="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3"/>.
+            </returns>
         </member>
         <member name="M:Merchello.Web.Factories.CheckoutSummaryModelFactory`4.Create(Merchello.Web.Workflow.IBasket,Merchello.Core.Checkout.ICheckoutManagerBase)">
             <summary>
@@ -5835,6 +6019,37 @@
             It is exposed on IAddress as there may also be nice to designate the reasons a billing address as a commercial location.
             </remarks>
         </member>
+        <member name="T:Merchello.Web.Models.Ui.CheckoutShipRateQuoteModel">
+            <summary>
+            A model for quoting checkout shipment rate.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutShipRateQuoteModel.ShipMethodKey">
+            <summary>
+            Gets or sets the ship method key.
+            </summary>
+            <remarks>
+            The key used to save the selected quote in the post back
+            </remarks>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutShipRateQuoteModel.ShippingQuotes">
+            <summary>
+            Gets or sets the shipping quotes.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutShipRateQuoteModel.ProviderQuotes">
+            <summary>
+            Gets or sets the quotes that obtained from the provider.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.CheckoutShipRateQuoteModel.WorkflowMarker">
+            <summary>
+            Gets or sets the workflow marker.
+            </summary>
+            <remarks>
+            This is used to assist in tracking the checkout - generally in single page checkouts
+            </remarks>
+        </member>
         <member name="T:Merchello.Web.Models.Ui.CheckoutStage">
             <summary>
             Checkout stages.
@@ -5978,6 +6193,29 @@
             <summary>
             Gets or sets the workflow marker.
             </summary>
+            <remarks>
+            This is used to assist in tracking the checkout
+            </remarks>
+        </member>
+        <member name="T:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel">
+            <summary>
+            A model for quoting shipments.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel.ShipMethodKey">
+            <summary>
+            Gets or sets the ship method key.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel.ShippingQuotes">
+            <summary>
+            Gets or sets the shipping quotes.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutShipRateQuoteModel.ProviderQuotes">
+            <summary>
+            Gets or sets the collection of quotes from the shipping providers.
+            </summary>
         </member>
         <member name="T:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3">
             <summary>
@@ -6006,6 +6244,11 @@
         <member name="P:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3.Items">
             <summary>
             Gets or sets the checkout summary items.
+            </summary>
+        </member>
+        <member name="P:Merchello.Web.Models.Ui.ICheckoutSummaryModel`3.Total">
+            <summary>
+            Gets or sets the total.
             </summary>
         </member>
         <member name="T:Merchello.Web.Models.Ui.ICheckoutWorkflowMarker">
@@ -13843,6 +14086,16 @@
             A <see cref="T:Merchello.Web.Workflow.IBasketSalePreparation"/>
             </returns>
         </member>
+        <member name="T:Merchello.Web.PropertyEditors.CheckoutWorkflowStagePicker">
+            <summary>
+            A drop down list for .
+            </summary>
+        </member>
+        <member name="T:Merchello.Web.PropertyEditors.MultiProductPicker">
+            <summary>
+            The Multi Product Picker.
+            </summary>
+        </member>
         <member name="T:Merchello.Web.Workflow.Notification.Monitor.RazorMonitorBase`1">
             <summary>
             A base class for razor based monitors.
@@ -16218,11 +16471,6 @@
             <returns>
             The <see cref="T:System.Object"/>.
             </returns>
-        </member>
-        <member name="T:Merchello.Web.PropertyEditors.MultiProductPicker">
-            <summary>
-            The Multi Product Picker.
-            </summary>
         </member>
         <member name="T:Merchello.Web.Providers.DynamicCollection.UnpaidInvoiceCollectionProvider">
             <summary>
