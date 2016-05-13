@@ -65,9 +65,9 @@
         {
             var contactsArray = contacts as string[] ?? contacts.ToArray();
 
-            var triggers = GetTrigger(alias).OfType<INotificationTrigger>();
+            var triggers = GetTrigger(alias, topic);
 
-            foreach (var notificationTrigger in triggers)
+            foreach (var notificationTrigger in triggers.OfType<INotificationTrigger>())
             {                
                 notificationTrigger.Notify(model, contactsArray);
             }
