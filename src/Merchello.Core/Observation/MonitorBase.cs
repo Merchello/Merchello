@@ -2,6 +2,9 @@
 {
     using System;
     using System.Reflection;
+
+    using Merchello.Core.Logging;
+
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -30,12 +33,16 @@
 
         public virtual void OnError(Exception error)
         {
-            LogHelper.Error<MonitorBase<T>>("Monitor error: ", error);
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("Monitors");
+            MultiLogHelper.Error<MonitorBase<T>>("Monitor error: ", error, logData);
         }
 
         public virtual void OnCompleted()
         {
-            LogHelper.Debug<MonitorBase<T>>(string.Format("Completed monitoring {0}", GetType()));
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("Monitors");
+            MultiLogHelper.Debug<MonitorBase<T>>(string.Format("Completed monitoring {0}", GetType()), logData);
         }
 
         #endregion
