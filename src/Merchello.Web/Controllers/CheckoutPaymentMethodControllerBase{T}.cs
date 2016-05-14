@@ -10,7 +10,7 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// A base controller responsible for handling payment method selection operations.
+    /// A base controller responsible for resolving the payment controller and method to be used in payment operations.
     /// </summary>
     /// <typeparam name="TPaymentMethodModel">
     /// The type of <see cref="ICheckoutPaymentMethodModel"/>
@@ -116,6 +116,32 @@
         }
 
         /// <summary>
+        /// Responsible for rendering the results of the payment resolution.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        public virtual ActionResult ResolvePayment(string view = "")
+        {
+            // Get the previously saved payment method
+            // Merchello's PaymentMethod should have been called PaymentMethodSettings but legacy from early version
+            var paymentMethod = this.CheckoutManager.Payment.GetPaymentMethod();
+
+            if (paymentMethod == null)
+            {
+                return this.InvalidCheckoutStagePartial();
+            }
+
+            var att = GetGatewayMethodUiAttribute(paymentMethod);
+
+            return view.IsNullOrWhiteSpace() ? PartialView(att) : PartialView(view, att);
+        }
+
+        /// <summary>
         /// Handles a successful set payment operation.
         /// </summary>
         /// <param name="model">
@@ -126,7 +152,7 @@
         /// </returns>
         protected virtual ActionResult HandleSetPaymentMethodSuccess(TPaymentMethodModel model)
         {
-            return RedirectToCurrentUmbracoPage();
+            return CurrentUmbracoPage();
         }
 
         /// <summary>

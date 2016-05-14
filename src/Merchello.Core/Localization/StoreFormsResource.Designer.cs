@@ -169,6 +169,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Payment methods.
+        /// </summary>
+        public static string LabelPaymentMethods {
+            get {
+                return ResourceManager.GetString("LabelPaymentMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone.
         /// </summary>
         public static string LabelPhone {

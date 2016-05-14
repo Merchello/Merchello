@@ -165,6 +165,10 @@
     <value>Company</value>
     <comment>Label for organziation of company field</comment>
   </data>
+  <data name="LabelPaymentMethods" xml:space="preserve">
+    <value>Payment methods</value>
+    <comment>Label for payment methods</comment>
+  </data>
   <data name="LabelPhone" xml:space="preserve">
     <value>Phone</value>
     <comment>Label for the phone field</comment>

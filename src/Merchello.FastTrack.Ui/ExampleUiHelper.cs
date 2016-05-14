@@ -1,6 +1,7 @@
 ﻿namespace Merchello.FastTrack.Ui
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Logging;
@@ -126,6 +127,21 @@
                             .Equals(stage.ToString(), StringComparison.InvariantCultureIgnoreCase));
 
                 return stagePage ?? checkout;
+            }
+
+            /// <summary>
+            /// Gets the payment pages <see cref="IPublishedContent"/>.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IEnumerable{IPublishedContent}"/>.
+            /// </returns>
+            public static IEnumerable<IPublishedContent> GetPaymentStagePages()
+            {
+                var checkout = Content.GetCheckout();
+                return checkout.Children.Where(
+                           x =>
+                           x.GetPropertyValue<string>("checkoutStage")
+                               .Equals("Payment", StringComparison.InvariantCultureIgnoreCase));
             }
         }
     }

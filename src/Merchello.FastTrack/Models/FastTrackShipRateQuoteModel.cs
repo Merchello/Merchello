@@ -4,7 +4,7 @@
     using Merchello.Web.Store.Models;
 
     /// <summary>
-    /// A base model for FastTrack ship rate quotes.
+    /// A model for FastTrack ship rate quotes.
     /// </summary>
     public class FastTrackShipRateQuoteModel : StoreShipRateQuoteModel, ISuccessRedirectUrl
     {

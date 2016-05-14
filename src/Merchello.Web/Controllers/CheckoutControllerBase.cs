@@ -3,6 +3,8 @@
     using System.Web.Mvc;
 
     using Merchello.Core.Checkout;
+    using Merchello.Core.Gateways;
+    using Merchello.Core.Models;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
 
@@ -61,6 +63,36 @@
         {
             return Redirect("/");
         }
+
+        /// <summary>
+        /// Renders the invalid checkout stage partial view.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        protected virtual ActionResult InvalidCheckoutStagePartial()
+        {
+            return PartialView("InvalidCheckoutStage");
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GatewayMethodUiAttribute"/>.
+        /// </summary>
+        /// <param name="paymentMethod">
+        /// The <see cref="IPaymentMethod"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GatewayMethodUiAttribute"/>.
+        /// </returns>
+        protected virtual GatewayMethodUiAttribute GetGatewayMethodUiAttribute(IPaymentMethod paymentMethod)
+        {
+            // We really need the payment gateway method so we can resolve the attribute
+            var paymentGatewayMethod = this.GatewayContext.Payment.GetPaymentGatewayMethodByKey(paymentMethod.Key);
+
+            // Get the attribute from the method so that we can resolve the controller.
+            return paymentGatewayMethod.GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
+        }
+
 
         /// <summary>
         /// Gets the next <see cref="ICheckoutCustomerManager"/>.

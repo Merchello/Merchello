@@ -168,7 +168,7 @@
         {
             // Discounts must be applied to an invoice (not a basket) due to the various validation options/constraints
             // that can be applied to a discount (some of which cannot be determined with a simple basket).
-            if (!CheckoutManager.Payment.IsReadyToInvoice()) return PartialView("InvalidCheckoutStage");
+            if (!CheckoutManager.Payment.IsReadyToInvoice()) return InvalidCheckoutStagePartial();
 
             var model = CheckoutDiscountModelModelFactory.Create();
 

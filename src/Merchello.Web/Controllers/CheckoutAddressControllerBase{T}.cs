@@ -240,7 +240,7 @@
         public ActionResult ShippingAddressForm(string view = "")
         {
             var billingAddress = CheckoutManager.Customer.GetBillToAddress();
-            if (billingAddress == null) return PartialView("InvalidCheckoutStage");
+            if (billingAddress == null) return InvalidCheckoutStagePartial();
 
             TShippingAddress model = null;
 

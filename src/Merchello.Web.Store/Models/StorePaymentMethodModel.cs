@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Localization;
     using Merchello.Web.Models.Ui;
 
     /// <summary>
@@ -20,6 +22,7 @@
         /// <summary>
         /// Gets or sets the collection of <see cref="SelectListItem"/>.
         /// </summary>
+        [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelPaymentMethods")]
         public IEnumerable<SelectListItem> PaymentMethods { get; set; }
 
         /// <summary>

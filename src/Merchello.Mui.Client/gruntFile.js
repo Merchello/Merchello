@@ -33,6 +33,7 @@
         // file locations
         src: {
             mui: ['src/jquery/**/*.js'],
+            img: ['src/images/**/*.*'],
             lib: ['lib/**/*.js'],
             scss: ['src/scss/mui.scss'],
             prod: ['<%= distdir %>/js/*.js']
@@ -45,7 +46,8 @@
             assets: {
                 // this requires that the scss as been compiled.
                 files: [
-                    { dest: '<%= distdir %>/client/css', src: '*.css', expand: true, cwd: 'src/scss/' }
+                    { dest: '<%= distdir %>/client/css', src: '*.css', expand: true, cwd: 'src/scss/' },
+                    { dest: '<%= distdir %>/client/img', src: '*.*', expand: true, cwd: 'src/images/' }
                 ]
             },
 
@@ -64,16 +66,16 @@
         concat: {
             mui: {
                 src: ['src/jquery/mui/*.js', 'src/jquery/mui/modules/*/*.js', 'src/jquery/mui/modules/*/components/*.js', 'src/jquery/bootstrapper.js'],
-                dest: '<%= distdir %>/client/js/mui.js',
+                dest: '<%= distdir %>/client/js/merchello.ui.js',
                 options: {
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
                 }
-            }
-            ,
+            },
+
             settings: {
                 src: ['src/jquery/mui.settings.js'],
-                dest: '<%= distdir %>/client/js/mui.settings.js',
+                dest: '<%= distdir %>/client/js/merchello.ui.settings.js',
                 options: {
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
@@ -84,13 +86,13 @@
         sass: {
             dev: {
                 files: {
-                    '<%= distdir %>/client/css/mui.css':
+                    '<%= distdir %>/client/css/merchello.ui.css':
                     '<%= src.scss %>'
                 }
             },
             prod: {
                 files: {
-                    '<%= distdir %>/client/css/mui.min.css':
+                    '<%= distdir %>/client/css/merchello.ui.min.css':
                     '<%= src.scss %>'
                 },
                 options: {
@@ -102,12 +104,12 @@
         uglify: {
             build: {
                 files: {
-                    '<%= distdir %>/client/js/mui.min.js': ['<%= distdir %>/client/js/mui.js']
+                    '<%= distdir %>/client/js/merchello.ui.min.js': ['<%= distdir %>/client/js/merchello.ui.js']
                 },
                 options: {
                     mangle: true,
                     sourceMap: true,
-                    sourceMapName: '<%= distdir %>/client/js/mui.js.map',
+                    sourceMapName: '<%= distdir %>/client/js/merchello.ui.js.map',
                     banner: '<%= banner %>\n\n',
                     footer: '\n'
                 }

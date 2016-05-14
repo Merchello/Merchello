@@ -427,11 +427,12 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\settings.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\shippingproviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\taxationproviders.html" />
-    <Content Include="App_Plugins\Merchello\client\css\mui.css" />
-    <Content Include="App_Plugins\Merchello\client\css\mui.min.css" />
-    <Content Include="App_Plugins\Merchello\client\js\mui.js" />
-    <Content Include="App_Plugins\Merchello\client\js\mui.min.js" />
-    <Content Include="App_Plugins\Merchello\client\js\mui.settings.js" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css" />
+    <Content Include="App_Plugins\Merchello\client\img\logo-footer.png" />
+    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js" />
+    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.min.js" />
+    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.settings.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.controllers.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.directives.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.filters.js" />
@@ -488,9 +489,6 @@
     <Content Include="Config\404handlers.config" />
     <Content Include="Views\Shared\_Address.cshtml" />
     <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\mui.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\mui.min.css.map" />
-    <Content Include="App_Plugins\Merchello\client\js\mui.js.map" />
     <Content Include="App_Plugins\Merchello\config\merchello.config" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\BillingAddressForm.cshtml" />
@@ -511,6 +509,14 @@
     <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\InvoiceSummary.cshtml" />
     <Content Include="App_Plugins\Merchello\Views\CheckoutDiscount\DiscountForm.cshtml" />
     <Content Include="App_Plugins\Merchello\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css.map" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css.map" />
+    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\Views\CashPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

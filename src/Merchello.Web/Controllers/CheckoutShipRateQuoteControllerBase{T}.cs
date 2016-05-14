@@ -124,7 +124,7 @@
         public ActionResult ShipRateQuoteForm(string view = "")
         {
             var shippingAddress = CheckoutManager.Customer.GetShipToAddress();
-            if (shippingAddress == null) return PartialView("InvalidCheckoutStage");
+            if (shippingAddress == null) return InvalidCheckoutStagePartial();
 
             var model = CheckoutShipRateQuoteFactory.Create(Basket, shippingAddress);
 

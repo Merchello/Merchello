@@ -2,3 +2,5 @@
 @{
 	Layout = "FinalSaleSummary.cshtml";
 }
+
+@Html.Action("ResolvePayment", "CheckoutPaymentMethod", new { area = "FastTrack" })

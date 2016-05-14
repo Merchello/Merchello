@@ -1,0 +1,21 @@
+﻿@using System.Web.Mvc.Html
+@using Merchello.FastTrack.Ui
+@model Merchello.Core.Gateways.GatewayMethodUiAttribute
+@{
+    var umbName = string.Empty;
+    switch (Model.Alias)
+    {
+        case "CashPaymentMethod":
+            @Html.Action("PaymentForm", "CashPayment", new { area = "Merchello" })
+            break;
+        case "Braintree.StandardTransaction":
+            <h3>Braintree credit card</h3>
+            break;
+        case "BrainTree.PayPal.OneTime":
+            <h3>Braintree PayPal OneTime</h3>
+            break;
+        case "PayPal.ExpressCheckout":
+            <h3>PayPal ExpressCheckout</h3>
+            break;
+    }
+}
