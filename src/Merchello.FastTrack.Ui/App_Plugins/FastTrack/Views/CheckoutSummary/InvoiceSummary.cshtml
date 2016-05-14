@@ -38,7 +38,7 @@
                                 </td>
                                 <td>@item.Name</td>
                                 <td class="text-right">@item.Amount.AsFormattedCurrency()</td>
-                                <td>@item.Quantity</td>
+                                <td class="text-center">@item.Quantity</td>
                                 <td class="text-right">@item.Total().AsFormattedCurrency()</td>
                             </tr>
                         }
@@ -49,21 +49,30 @@
                         @foreach (var item in Model.Items.Where(x => x.LineItemType != LineItemType.Product))
                         {
                             <tr>
-                                <td>
-                                @{
-                                    switch (item.LineItemType)
-                                    {
-                                        case LineItemType.Shipping:
-                                            @("Shipping:")
-                                            break;
-                                        case LineItemType.Tax:
-                                            @("Tax:")
-                                            break;
-                                    }
+                                <td>@switch (item.LineItemType)
+                                {
+                                    case LineItemType.Shipping:
+                                        @("Shipping:")
+                                        break;
+                                    case LineItemType.Discount:
+                                        @("Discount:")
+                                        break;
+                                    case LineItemType.Tax:
+                                        @("Tax:")
+                                        break;
+                                }</td>
+                                <td>@(item.LineItemType != LineItemType.Discount ? item.Name : item.Sku)</td>
+
+                                @if (item.LineItemType != LineItemType.Discount)
+                                {
+                                    <td colspan="3" class="text-right">@item.Total().AsFormattedCurrency()</td>
                                 }
-                                </td>
-                                <td>@item.Name</td>
-                                <td colspan="3" class="text-right">@item.Total().AsFormattedCurrency()</td>
+                                else
+                                {
+                                    <td></td>
+                                    <td class="text-center"><a href="@Url.Action("RemoveDiscount", "CheckoutDiscount", new { area = "Merchello", sku = item.Sku, redirectId = UmbracoContext.PageId })" title="Remove Discount"><span class="glyphicon glyphicon-trash"></span></a></td>
+                                    <td class="text-right">(@item.Total().AsFormattedCurrency())</td>
+                                }
                             </tr>
                         }
                         <tfoot>

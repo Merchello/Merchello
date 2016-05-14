@@ -285,6 +285,7 @@
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutControllerBase.cs" />
     <Compile Include="Controllers\CheckoutDiscountControllerBase{T}.cs" />
+    <Compile Include="Controllers\CheckoutPaymentMethodControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutShipRateQuoteControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutSummaryControllerBase{T}.cs" />
     <Compile Include="Controllers\MerchelloUIControllerBase.cs" />
@@ -340,6 +341,7 @@
     <Compile Include="Factories\CheckoutAddressModelFactory.cs" />
     <Compile Include="Factories\CheckoutContextSettingsFactory.cs" />
     <Compile Include="Factories\CheckoutDiscountModelFactory.cs" />
+    <Compile Include="Factories\CheckoutPaymentMethodModelFactory.cs" />
     <Compile Include="Factories\CheckoutShipRateQuoteModelFactory.cs" />
     <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
@@ -358,6 +360,7 @@
     <Compile Include="Models\Ui\ICustomerMembershipProfile.cs" />
     <Compile Include="Models\Ui\IDiscountApplicationResult.cs" />
     <Compile Include="Models\Ui\ILineItemModel.cs" />
+    <Compile Include="Models\Ui\ICheckoutPaymentMethodModel.cs" />
     <Compile Include="Models\Ui\IUiModel.cs" />
     <Compile Include="Models\Ui\IProductDataTable.cs" />
     <Compile Include="Models\Ui\IProductDataTableRow.cs" />

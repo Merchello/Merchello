@@ -509,6 +509,8 @@
     <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutShipRateQuote\ShipRateQuoteForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\InvoiceSummary.cshtml" />
+    <Content Include="App_Plugins\Merchello\Views\CheckoutDiscount\DiscountForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

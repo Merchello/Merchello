@@ -2,3 +2,7 @@
 @{
 	Layout = "FinalSaleSummary.cshtml";
 }
+
+@Html.Action("PaymentMethodForm", "CheckoutPaymentMethod", new { area = "Merchello" })
+
+@Html.Action("DiscountForm", "CheckoutDiscount", new { area = "Merchello" })

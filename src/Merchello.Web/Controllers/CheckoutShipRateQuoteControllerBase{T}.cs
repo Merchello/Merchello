@@ -78,6 +78,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult SaveShipRateQuote(TShipRateQuote model)
         {
             try

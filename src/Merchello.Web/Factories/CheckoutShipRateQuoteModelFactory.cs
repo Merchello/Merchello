@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Factories
 {
+    using System;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -69,6 +70,8 @@
                             ? _gatewayContext.Shipping.GetShipRateQuotesForShipment(shipment, tryGetCached).OrderBy(x => x.Rate)
                             : Enumerable.Empty<IShipmentRateQuote>()).ToArray();
 
+            var shipMethodKey = quotes.Any() ? quotes.First().ShipMethod.Key : Guid.Empty;
+
             var selectItems = quotes.Select(x => new SelectListItem
                 {
                     Value = x.ShipMethod.Key.ToString(),
@@ -77,6 +80,7 @@
 
             var model = new TShipRateQuoteModel
                 {
+                    ShipMethodKey = shipMethodKey,
                     ShippingQuotes = selectItems,
                     ProviderQuotes = quotes 
                 };

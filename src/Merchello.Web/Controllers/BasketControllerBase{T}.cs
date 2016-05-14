@@ -118,6 +118,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult AddBasketItem(TAddItem model)
         {
             // Instantiating the ExtendedDataCollection in this manner allows for additional values 
@@ -191,6 +192,7 @@
         /// <param name="model">The <see cref="IBasketModel{TBasketItemModel}"/></param>
         /// <returns>Redirects to the current Umbraco page (generally the basket page)</returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult UpdateBasket(TBasketModel model)
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();

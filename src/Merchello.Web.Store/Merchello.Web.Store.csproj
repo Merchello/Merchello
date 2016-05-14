@@ -258,6 +258,7 @@
     <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\CheckoutAddressController.cs" />
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
+    <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
     <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
     <Compile Include="Models\Async\AsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Models\StoreAddressModel.cs" />
     <Compile Include="Models\StoreDiscountModel.cs" />
     <Compile Include="Controllers\CheckoutShipRateQuoteController.cs" />
+    <Compile Include="Models\StorePaymentMethodModel.cs" />
     <Compile Include="Models\StoreShipRateQuoteModel.cs" />
     <Compile Include="Controllers\CheckoutSummaryController.cs" />
     <Compile Include="Factories\AddItemModelFactory.cs" />
