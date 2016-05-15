@@ -685,6 +685,113 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 	}
 
+	/// <summary>Receipt</summary>
+	[PublishedContentModel("receipt")]
+	public partial class Receipt : PublishedContentModel, ICompositionContent, ICompositionMeta, ICompositionUmbracoFields
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "receipt";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Receipt(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Receipt, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Brief: A brief description of the content
+		///</summary>
+		[ImplementPropertyType("brief")]
+		public IHtmlString Brief
+		{
+			get { return CompositionContent.GetBrief(this); }
+		}
+
+		///<summary>
+		/// Headline: The content headline
+		///</summary>
+		[ImplementPropertyType("headline")]
+		public string Headline
+		{
+			get { return CompositionContent.GetHeadline(this); }
+		}
+
+		///<summary>
+		/// Meta Description: The META description content
+		///</summary>
+		[ImplementPropertyType("metaDescription")]
+		public string MetaDescription
+		{
+			get { return CompositionMeta.GetMetaDescription(this); }
+		}
+
+		///<summary>
+		/// Page Title: The HTML Page Title
+		///</summary>
+		[ImplementPropertyType("pageTitle")]
+		public string PageTitle
+		{
+			get { return CompositionMeta.GetPageTitle(this); }
+		}
+
+		///<summary>
+		/// Umbraco Internal Redirect ID: Add the umbracoInternalRedirectId property alias to your document type with a content picker and Umbraco will load the selected page’s content transparently; no url redirection
+		///</summary>
+		[ImplementPropertyType("umbracoInternalRedirectID")]
+		public IPublishedContent UmbracoInternalRedirectID
+		{
+			get { return CompositionUmbracoFields.GetUmbracoInternalRedirectID(this); }
+		}
+
+		///<summary>
+		/// Hide Page: Adds the umbracoNaviHide property alias to your document type with a true/false selector.  The value indicates the whether or not the page should be hidden.
+		///</summary>
+		[ImplementPropertyType("umbracoNaviHide")]
+		public bool UmbracoNaviHide
+		{
+			get { return CompositionUmbracoFields.GetUmbracoNaviHide(this); }
+		}
+
+		///<summary>
+		/// Umbraco Redirect: Add the umbracoRedirect property alias to your document type with a content picker and you can then allow choose a node ID that you want the page to redirect to.
+		///</summary>
+		[ImplementPropertyType("umbracoRedirect")]
+		public IPublishedContent UmbracoRedirect
+		{
+			get { return CompositionUmbracoFields.GetUmbracoRedirect(this); }
+		}
+
+		///<summary>
+		/// Umbraco URL Alias: This property allows you to give the node multiple URLs using a textstring property. For example if we were to enter fasttrack,test/this-is-a-test this would resolve the following urls to the same page.    /fasttrack/  /test/this-is-a-test/
+		///</summary>
+		[ImplementPropertyType("umbracoUrlAlias")]
+		public string UmbracoUrlAlias
+		{
+			get { return CompositionUmbracoFields.GetUmbracoUrlAlias(this); }
+		}
+
+		///<summary>
+		/// Umbraco URL Name: This property allows you to change the URL of the node without changing the name of the node/page you have created.
+		///</summary>
+		[ImplementPropertyType("umbracoURLName")]
+		public string UmbracoUrlname
+		{
+			get { return CompositionUmbracoFields.GetUmbracoUrlname(this); }
+		}
+	}
+
 	/// <summary>Folder</summary>
 	[PublishedContentModel("Folder")]
 	public partial class Folder : PublishedContentModel

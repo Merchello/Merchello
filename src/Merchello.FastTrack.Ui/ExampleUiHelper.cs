@@ -41,6 +41,11 @@
             /// </summary>
             private const string ContentTypeAliasCheckout = "checkout";
 
+            /// <summary>
+            /// The Umbraco ContentTypeAlias for the "receipt" ContentType.
+            /// </summary>
+            private const string ContentTypeAliasReceipt = "receipt";
+
             #endregion
 
 
@@ -93,6 +98,17 @@
             public static IPublishedContent GetCheckout()
             {
                 return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasCheckout);
+            }
+
+            /// <summary>
+            /// Gets the first child of the store root content with content type alias of 'receipt'.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetReceipt()
+            {
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasReceipt);
             }
         }
 

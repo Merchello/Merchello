@@ -517,6 +517,11 @@
     <Content Include="App_Plugins\Merchello\Views\CashPayment\PaymentForm.cshtml" />
     <Content Include="App_Plugins\Merchello\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CashPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\Views\Shared\_RequireJsSubmitBtn.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\SalesReceipt.cshtml" />
+    <Content Include="Views\Receipt.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

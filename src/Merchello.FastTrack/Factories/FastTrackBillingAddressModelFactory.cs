@@ -4,10 +4,9 @@
     using System.Web.Mvc;
 
     using Merchello.Core;
-    using Merchello.Core.Models;
+    using Core.Models;
     using Merchello.Core.Services;
     using Merchello.FastTrack.Models;
-    using Merchello.Web.Factories;
 
     using Umbraco.Core;
 
@@ -51,6 +50,24 @@
         {
             var countries = _storeSettingService.GetAllCountries();
             return GetSelectListItems(countries);
+        }
+
+        /// <summary>
+        /// Overrides the creation of the <see cref="FastTrackBillingAddressModel"/>.
+        /// </summary>
+        /// <param name="address">
+        /// The <see cref="FastTrackBillingAddressModel"/>.
+        /// </param>
+        /// <param name="adr">
+        /// The <see cref="IAddress"/>.
+        /// </param>
+        /// <returns>
+        /// The modified <see cref="FastTrackBillingAddressModel"/>.
+        /// </returns>
+        protected override FastTrackBillingAddressModel OnCreate(FastTrackBillingAddressModel address, IAddress adr)
+        {
+            address.UseForShipping = true;
+            return base.OnCreate(address, adr);
         }
     }
 }

@@ -71,20 +71,42 @@
         protected CheckoutPaymentModelFactory<TPaymentModel> CheckoutPaymentModelFactory { get; private set; }
 
         /// <summary>
+        /// Sets the invoice number prefix.
+        /// </summary>
+        /// <param name="prefix">
+        /// The prefix.
+        /// </param>
+        protected virtual void SetInvoiceNumberPrefix(string prefix)
+        {
+            CheckoutManager.Context.Settings.InvoiceNumberPrefix = prefix;
+        }
+
+        /// <summary>
+        /// Clears invoice number prefix.
+        /// </summary>
+        protected virtual void ClearInvoiceNumberPrefix()
+        {
+            SetInvoiceNumberPrefix(string.Empty);
+        }
+
+        /// <summary>
         /// Handles the successful payment.
         /// </summary>
-        /// <param name="result">
-        /// The <see cref="IPaymentResult"/>.
-        /// </param>
         /// <param name="model">
         /// The <see cref="ICheckoutPaymentModel"/>.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected virtual ActionResult HandlePaymentSuccess(IPaymentResult result, TPaymentModel model)
+        protected virtual ActionResult HandlePaymentSuccess(TPaymentModel model)
         {
-            return CurrentUmbracoPage();
+            if (!model.ViewData.Success)
+            {
+                ViewData["MerchelloViewData"] = model.ViewData; 
+                return CurrentUmbracoPage();
+            }
+
+            return RedirectToCurrentUmbracoPage();
         }
 
         /// <summary>
@@ -119,7 +141,7 @@
         private void EnsureAttribute()
         {
             // Ensure GatewayMethodUiAttribute
-            var att = GetType().GetCustomAttribute<GatewayMethodUiAttribute>(false);
+            var att = GetType().GetCustomAttribute<GatewayMethodUiAttribute>(true);
             if (att == null)
             {
                 var logData = MultiLogger.GetBaseLoggingData();

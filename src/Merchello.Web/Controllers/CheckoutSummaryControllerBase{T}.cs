@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Web.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
+    using Merchello.Core.Logging;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
 
@@ -107,6 +109,46 @@
         {
             var model = CheckoutSummaryFactory.Create(CheckoutManager);
             return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
+        }
+
+        /// <summary>
+        /// Renders a sales receipt.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the "invoiceKey" is not stored in the CustomerContext
+        /// </exception>
+        public virtual ActionResult SalesReceipt(string view = "")
+        {
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("Controllers");
+
+            var invoiceKey = CustomerContext.GetValue("invoiceKey");
+            if (invoiceKey.IsNullOrWhiteSpace())
+            {
+
+                var nullRef = new NullReferenceException("The parameter invoiceKey was not found in the CustomerContext");
+                MultiLogHelper.Error<CheckoutSummaryControllerBase<TSummary, TBillingAddress, TShippingAddress, TLineItem>>("The 'invoiceKey' parameter was not found in the CustomerContext", nullRef, logData);
+                throw nullRef;
+            }
+
+            try
+            {
+                var key = new Guid(invoiceKey);
+                var invoice = MerchelloServices.InvoiceService.GetByKey(key);
+                var model = CheckoutSummaryFactory.Create(invoice);
+                return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<CheckoutSummaryControllerBase<TSummary, TBillingAddress, TShippingAddress, TLineItem>>("Could not render the receipt.", ex, logData);
+                throw;
+            }
         }
     }
 }

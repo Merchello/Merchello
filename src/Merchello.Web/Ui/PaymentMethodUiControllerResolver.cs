@@ -85,8 +85,8 @@
 
             var method = type.GetMethods()
                 .FirstOrDefault(
-                    x => x.GetCustomAttributes(typeof(GatewayMethodUiAttribute), false).Length > 0 &&
-                    x.GetCustomAttribute<GatewayMethodUiAttribute>(false).Alias == alias);
+                    x => x.GetCustomAttributes(typeof(GatewayMethodUiAttribute), true).Length > 0 &&
+                    x.GetCustomAttribute<GatewayMethodUiAttribute>(true).Alias == alias);
 
 
             return BuildUrlActionParams(type, method != null ? method.Name : null);

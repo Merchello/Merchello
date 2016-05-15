@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Models.Ui
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -19,6 +20,30 @@
         where TShippingAddress : class, ICheckoutAddressModel, new()
         where TLineItem : class, ILineItemModel, new()
     {
+        /// <summary>
+        /// Gets or sets the invoice key.
+        /// </summary>
+        /// <remarks>
+        /// Used in receipts
+        /// </remarks>
+        Guid InvoiceKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice number.
+        /// </summary>
+        /// <remarks>
+        /// Used in receipts
+        /// </remarks>
+        string InvoiceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice date.
+        /// </summary>
+        /// <remarks>
+        /// Used in receipts
+        /// </remarks>
+        DateTime InvoiceDate { get; set; }
+
         /// <summary>
         /// Gets or sets the billing address.
         /// </summary>

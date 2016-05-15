@@ -10,6 +10,7 @@
     using System.Web.Routing;
     using System.Xml.Linq;
 
+    using Merchello.Core.Checkout;
     using Merchello.Core.Logging;
 
     using Outline;
@@ -98,6 +99,34 @@
         {
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
+
+        ///// <summary>
+        ///// Gets the configured <see cref="ICheckoutContextSettings"/>.
+        ///// </summary>
+        //public ICheckoutContextSettings CheckoutContextSettings
+        //{
+        //    get
+        //    {
+        //        if (Section.CheckoutContextSettings != null)
+        //        {
+        //            var settings = Section.CheckoutContextSettings;
+        //            return new CheckoutContextSettings
+        //                {
+        //                    InvoiceNumberPrefix = settings.InvoiceNumberPrefix,
+        //                    ApplyTaxesToInvoice = settings.ApplyTaxesToInvoice,
+        //                    RaiseCustomerEvents = settings.RaiseCustomerEvents,
+        //                    ResetCustomerManagerDataOnVersionChange = settings.ResetCustomerManagerDataOnVersionChange,
+        //                    ResetExtendedManagerDataOnVersionChange = settings.ResetExtendedManagerDataOnVersionChange,
+        //                    ResetOfferManagerDataOnVersionChange = settings.ResetOfferManagerDataOnVersionChange,
+        //                    ResetPaymentManagerDataOnVersionChange = settings.ResetPaymentManagerDataOnVersionChange,
+        //                    ResetShippingManagerDataOnVersionChange = settings.ResetShippingManagerDataOnVersionChange,
+        //                    EmptyBasketOnPaymentSuccess = settings.EmptyBasketOnPaymentSuccess
+        //                };
+        //        }
+
+        //        return new CheckoutContextSettings();
+        //    }
+        //}
 
         /// <summary>
         /// Gets the customer member types.

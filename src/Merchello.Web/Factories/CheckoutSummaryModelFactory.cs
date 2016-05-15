@@ -93,6 +93,32 @@
         }
 
         /// <summary>
+        /// Creates a <see cref="ICheckoutSummaryModel{TBillingAddress, TShippingAddress, TLineItem}"/> from an invoice.
+        /// </summary>
+        /// <param name="invoice">
+        /// The <see cref="IInvoice"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICheckoutSummaryModel{TBillingAddress, TShippingAddress, TLineItem}"/>.
+        /// </returns>
+        public TSummary Create(IInvoice invoice)
+        {
+            var billing = invoice.GetBillingAddress();
+            var shipping = invoice.GetShippingAddresses().FirstOrDefault();
+
+            return new TSummary
+                {
+                    InvoiceKey = invoice.Key,
+                    InvoiceNumber = invoice.PrefixedInvoiceNumber(),
+                    InvoiceDate = invoice.InvoiceDate,
+                    BillingAddress = Create<TBillingAddress>(billing ?? new Address { AddressType = AddressType.Billing }),
+                    ShippingAddress = Create<TShippingAddress>(shipping ?? new Address { AddressType = AddressType.Shipping }),
+                    Items = invoice.Items.Select(Create),
+                    Total = invoice.Total
+                };
+        }
+
+        /// <summary>
         /// Creates a <see cref="ICheckoutAddressModel"/> from <see cref="IAddress"/>.
         /// </summary>
         /// <param name="adr">

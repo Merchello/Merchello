@@ -18,5 +18,15 @@
         /// Gets or sets the payment method name.
         /// </summary>
         public string PaymentMethodName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not the payment process requires JavaScript.
+        /// </summary>
+        public bool RequireJs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the view data.
+        /// </summary>
+        public PaymentAttemptViewData ViewData { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.FastTrack.Models
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Web.Models.Ui;
@@ -13,6 +14,30 @@
     /// </summary>
     public class FastTrackCheckoutSummary : ICheckoutSummaryModel<FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
     {
+        /// <summary>
+        /// Gets or sets the invoice key.
+        /// </summary>
+        /// <remarks>
+        /// Used in receipts
+        /// </remarks>
+        public Guid InvoiceKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice number.
+        /// </summary>
+        /// <remarks>
+        /// Used in receipts
+        /// </remarks>
+        public string InvoiceNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invoice date.
+        /// </summary>
+        /// <remarks>
+        /// Used in receipts
+        /// </remarks>
+        public DateTime InvoiceDate { get; set; }
+
         /// <summary>
         /// Gets or sets the billing address.
         /// </summary>

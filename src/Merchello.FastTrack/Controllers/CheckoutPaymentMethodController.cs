@@ -26,7 +26,7 @@
         /// </returns>
         protected override ActionResult HandleSetPaymentMethodSuccess(FastTrackPaymentMethodModel model)
         {
-            return model.SuccessRedirectUrl.IsNullOrWhiteSpace() ?
+            return !model.SuccessRedirectUrl.IsNullOrWhiteSpace() ?
                 Redirect(model.SuccessRedirectUrl) :
                 base.HandleSetPaymentMethodSuccess(model);
         }
