@@ -14,7 +14,7 @@ var MUI = (function() {
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
-        events: false,
+        events: true,
         console: true
     };
 
@@ -28,8 +28,6 @@ var MUI = (function() {
             MUI.Logger.init();
             // intialize the notifications
             MUI.Notify.init();
-            // initialize the providers
-            MUI.Providers.init();
             // initialize the add item module
             MUI.AddItem.init();
             // initialize the basket module
@@ -127,7 +125,7 @@ var MUI = (function() {
             console.info(obj);
         }
     }
-
+    
     // exposed members
     return {
         // ensures the settings object is created
@@ -135,6 +133,8 @@ var MUI = (function() {
             Notifications: {},
             Endpoints: {}
         },
+        // ensures the services object is created
+        Services: {},
         init: init,
         hasLogger: hasLogger,
         createCache: createCache,
@@ -146,6 +146,120 @@ var MUI = (function() {
     }
 
 })();
+
+//// The logger
+// If you have a remove logger you can wire it in here.
+MUI.Logger = {
+
+    hasLogger: false,
+    
+    // Initializes the Sentry (Raven) logger
+    init: function() {
+        return;
+    },
+
+    // Sets the module context
+    setSiteContext: function(siteAlias) {
+        return;
+    },
+
+    setUserContext: function(email) {
+        return;
+    },
+
+    // Captures an error
+    captureError: function(e, args) {
+        var consoleLog = args === undefined ? e : { error: e, args: args };
+        MUI.debugConsole(consoleLog);
+        return;
+    },
+
+    captureMessage: function(msg, args) {
+        var consoleLog = args === undefined ? message : { message: msg, args: args };
+        MUI.debugConsole(consoleLog);
+        return;
+    },
+
+    isReady: function() {
+        return MUI.Logger.hasLogger;
+        // this can be used to test a logger is available ex. getsentry.com -> Raven.isSetup();
+    }
+};
+
+MUI.Services.Braintree = {
+
+    initialized: false,
+
+    acceptCards: [],
+    
+    currentCardType: '',
+
+    events : [
+        { attempt: 'unbindValidation', name: 'Braintree.UnbindValidation' },
+        { attempt: 'cardTypeChanged',  name: 'Braintree.CardTypeChange' },
+        { attempt: 'verified', name: 'Braintree.CardVerified' }
+    ],
+
+    // Load the required assets
+    loadAssets: function(callback) {
+        // load the braintree script and validation for cc with a promise
+        // this also asserts if the customer goes back and changes the method to another
+        // braintree method, that these are only loaded once
+        $.when(
+            MUI.Assets.cachedGetScript('/App_Plugins/Merchello/client/lib/card-validator.min.js'),
+            MUI.Assets.cachedGetScript('//js.braintreegateway.com/v2/braintree.js')
+        ).then(function() {
+                MUI.Services.Braintree.initialized = true;
+                if (callback !== undefined) callback();
+            },
+            function(err) { MUI.Logger.captureError(err); });
+
+    },
+
+    // Validates the entire card
+    validateCard: function(creditCard) {
+        if (typeof creditCard !== 'object') {
+            return false;
+        }
+
+        return MUI.Providers.Braintree.validateCardNumber(creditCard.number) &&
+            MUI.Providers.Braintree.validateExpires(creditCard.expirationDate) &&
+            MUI.Providers.Braintree.validateCvv(creditCard.cvv) &&
+            MUI.Providers.Braintree.validatePostalCode(creditCard.billingAddress.postalCode);
+    },
+
+    // Validates card number
+    validateCardNumber: function(number) {
+        return cardValidator.number(number);
+    },
+
+    // validates the expires date
+    validateExpires: function(expires) {
+        return cardValidator.expirationDate(expires);
+    },
+
+    // validates the cvv (matches the length to the card type)
+    validateCvv: function(cvv) {
+        return cardValidator.cvv(cvv);
+    },
+
+    // validates the postal code (at least 3 digits)
+    validatePostalCode: function(postalCode) {
+        return cardValidator.cvv(postalCode);
+    },
+
+    BraintreeCreditCard: function() {
+        var self = this;
+        self.cardholderName = '';
+        self.number = '';
+        self.cvv = '';
+        self.expirationDate = '';
+        self.billingAddress = {
+            postalCode: ''
+        };
+    }
+    
+};
 
 //// A class to deal with AddItem box JQuery functions
 //// This looks for a form with data attribute "data-muifrm='additem'"
@@ -343,6 +457,17 @@ MUI.AddItem = {
     }
 };
 
+MUI.Assets = {
+
+    // gets a script ensuring it is only ever loaded once.
+    // currently used in loading Braintree scripts
+    // https://learn.jquery.com/code-organization/deferreds/examples/
+    cachedGetScript: MUI.createCache(function(defer, url) {
+        $.getScript( url ).then( defer.resolve, defer.reject );
+    })
+    
+};
+
 //// A class to deal with basket JQuery functions
 //// This looks for a form with data attribute "data-muifrm='basket'"
 MUI.Basket = {
@@ -455,8 +580,7 @@ MUI.Forms = {
     rebind: function(frm) {
         $.validator.unobtrusive.parse(frm);
     },
-
-
+    
     // validates the form
     validate: function(frm) {
 
@@ -490,7 +614,7 @@ MUI.Labels = {
         
         // Event listener
         MUI.on('AddItem.added', MUI.Labels.update.basketItemCount);
-        
+        console.info('bound AddItem.added');
     },
     
     update: {
@@ -504,45 +628,6 @@ MUI.Labels = {
             }
         }
         
-    }
-};
-
-//// The logger
-// If you have a remove logger you can wire it in here.
-MUI.Logger = {
-
-    hasLogger: false,
-    
-    // Initializes the Sentry (Raven) logger
-    init: function() {
-        return;
-    },
-
-    // Sets the module context
-    setSiteContext: function(siteAlias) {
-        return;
-    },
-
-    setUserContext: function(email) {
-        return;
-    },
-
-    // Captures an error
-    captureError: function(e, args) {
-        var consoleLog = args === undefined ? e : { error: e, args: args };
-        MUI.debugConsole(consoleLog);
-        return;
-    },
-
-    captureMessage: function(msg, args) {
-        var consoleLog = args === undefined ? message : { message: msg, args: args };
-        MUI.debugConsole(consoleLog);
-        return;
-    },
-
-    isReady: function() {
-        return MUI.Logger.hasLogger;
-        // this can be used to test a logger is available ex. getsentry.com -> Raven.isSetup();
     }
 };
 
@@ -667,14 +752,156 @@ MUI.Notify = {
     }
 };
 
-MUI.Providers = {
-  
-    init: function() {
-        
-        // initializes Braintree
-        MUI.Providers.Braintree.init();
+MUI.Utilities = {
+    // Ensures a null or undefined value has either a value or a default value
+    // defaultValue itself defaults to an empty string.
+    EnsureNullAsValue: function(value, defaultValue) {
+        if (defaultValue === undefined) {
+            defaultValue = '';
+        }
+
+        return value === null || value === undefined ? defaultValue : value;
+    },
+
+    // Gets a query string parameter value
+    // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+    getQueryStringValue: function(name, url) {
+        if (!url) url = window.location.href;
+        url = url.toLowerCase(); // This is just to avoid case sensitiveness
+        name = name.replace(/[\[\]]/g, "\\$&").toLowerCase();// This is just to avoid case sensitiveness for query parameter name
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return undefined;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    },
+
+
+    // Credit card types
+    // Adapted from https://github.com/braintree/credit-card-type
+    CardTypes : {
+
+        types: [
+            {
+                niceType: 'Visa',
+                type: 'visa',
+                pattern: '^4\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [16],
+                code: {
+                    name: 'CVV',
+                    size: 3
+                }
+            },
+            {
+                niceType: 'MasterCard',
+                type: 'master-card',
+                pattern: '^5[1-5]\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [16],
+                code: {
+                    name: 'CVC',
+                    size: 3
+                }
+            },
+            {
+                niceType: 'American Express',
+                type: 'american-express',
+                pattern: '^3[47]\\d*$',
+                isAmex: true,
+                gaps: [4, 10],
+                lengths: [15],
+                code: {
+                    name: 'CID',
+                    size: 4
+                }
+            },
+            {
+                niceType: 'DinersClub',
+                type: 'diners-club',
+                pattern: '^3(0[0-5]|[689])\\d*$',
+                gaps: [4, 10],
+                lengths: [14],
+                code: {
+                    name: 'CVV',
+                    size: 3
+                }
+            },
+            {
+                niceType: 'Discover',
+                type: 'discover',
+                pattern: '^6(011|5|4[4-9])\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [16],
+                code: {
+                    name: 'CID',
+                    size: 3
+                }
+            },
+            {
+                niceType: 'JCB',
+                type: 'jcb',
+                pattern: '^(2131|1800|35)\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [16],
+                code: {
+                    name: 'CVV',
+                    size: 3
+                }
+            },
+            {
+                niceType: 'UnionPay',
+                type: 'unionpay',
+                pattern: '^62\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [16, 17, 18, 19],
+                code: {
+                    name: 'CVN',
+                    size: 3
+                }
+            },
+            {
+                niceType: 'Maestro',
+                type: 'maestro',
+                pattern: '^(50|5[6-9]|6)\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [12, 13, 14, 15, 16, 17, 18, 19],
+                code: {
+                    name: 'CVC',
+                    size: 3
+                }
+            }
+        ],
+
+        getCardType: function (cardNumber) {
+            var key, value;
+            var noMatch = {};
+
+            if (!isString(cardNumber)) {
+                return noMatch;
+            }
+
+            for (key in types) {
+                if (!MUI.Utilities.CardTypes.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                value = MUI.Utilities.CardTypes.types[key];
+
+                if (RegExp(value.pattern).test(cardNumber)) {
+                    return clone(value);
+                }
+            }
+
+            return noMatch;
+        },
+
+        getCardByType: function (type) {
+            return _.find(FRF.Utilities.CardTypes.types, function (t) {
+                return t.type === type;
+            });
+        }
     }
-    
 };
 
 //// Cart model
@@ -733,19 +960,135 @@ MUI.Checkout.Address = {
 
 //// A class to manage payments
 MUI.Checkout.Payment = {
-    
-    init: function() {
 
-    }
-    
-};
+    invoiceKey: '',
 
-MUI.Providers.Braintree = {
-  
+    token: '',
+
+    events : [
+        { alias: 'btpaypalsuccess', name: 'BraintreePayPal.success' }
+    ],
+
+    // initialize payment form
     init: function() {
+        var btforms = MUI.Checkout.Payment.getBraintreeForm();
+        if ($(btforms).length > 0) {
+            if (!MUI.Services.Braintree.initialized) {
+                MUI.Services.Braintree.loadAssets(function() {
+                    MUI.Checkout.Payment.bind.allForms();
+                });
+            } else {
+                MUI.Checkout.Payment.bind.allForms();
+            }
+        }
+    },
+
+    bind: {
+
+        allForms: function() {
+            // binds the standard transaction
+            MUI.Checkout.Payment.bind.btstandard.init();
+            // binds the PayPal on time transaction
+            MUI.Checkout.Payment.bind.btpaypal.init();
+        },
         
+        btstandard: {
+
+            init: function() {
+
+            }
+        },
+
+        // PayPal payments through Braintree
+        btpaypal: {
+
+            init: function() {
+                console.info('initializing PayPal OneTime Transaction');
+
+                var token = MUI.Checkout.Payment.getBraintreeToken();
+
+                braintree.setup(token, "custom", {
+                    paypal: {
+                        container: "paypal-container"
+                    },
+                    onPaymentMethodReceived: function (obj) {
+
+
+                        var frm = MUI.Checkout.Payment.getBraintreeForm();
+                        $(frm).submit(function(e) {
+                           e.preventDefault();
+                        });
+                        var hidden = $(frm).find('[data-muivalue="btpaypalnonce"]');
+                        MUI.Checkout.Payment.token = hidden.val();
+                        $(hidden).val(obj.nonce);
+
+                        var btn = $(frm).find('.mui-requirejs');
+                        if (MUI.Settings.Endpoints.brainTreeSurface !== '')
+                        {
+                            var method = 'Process';
+                            var data = { nonce: $(hidden).val() };
+                            if (MUI.Checkout.Payment.invoiceKey !== '') {
+                                method = 'Retry';
+                                data.invoiceKey = MUI.Checkout.Payment.invoiceKey;
+                            }
+
+                            // determine whether or not to show the submit button
+                            if (MUI.Settings.Payments.braintreePayPalRequiresBtn !== undefined
+                                && MUI.Settings.Payments.braintreePayPalRequiresBtn)
+                            {
+                                $(btn).show();
+                                $(btn).click(function(e) {
+                                    e.preventDefault();
+                                    MUI.Checkout.Payment.postPayPalForm(method, data);
+                                });
+                            } else {
+                                MUI.Checkout.Payment.postPayPalForm(method, data);
+                            }
+                        }
+                    }
+                });
+            }
+
+        }
+    },
+
+    postPayPalForm: function(method, data) {
+        $.ajax({
+            url: MUI.Settings.Endpoints.brainTreeSurface + method,
+            type: 'POST',
+            data: data
+        }).then(function(result) {
+            MUI.Checkout.Payment.handlePaymentResult(result, 'BraintreePayPal.success');
+        }, function(err) {
+            MUI.Checkout.Payment.handlePaymentException(err);
+        });
+    },
+
+    handlePaymentResult: function(result, evt) {
+        if (result.Success) {
+            MUI.emit('AddItem.added', result);
+            MUI.emit(evt, result);
+            MUI.Notify.success(result.PaymentMethodName + ' Success!');
+        } else {
+            console.info(result);
+            MUI.Notify.warn(result.PaymentMethodName + ' Error!')
+        }
+    },
+
+    handlePaymentException: function(err) {
+        MUI.Notify.error('There was an error');
+        MUI.Logger.captureError(err);
+    },
+
+    getBraintreeToken: function() {
+        var frm = MUI.Checkout.Payment.getBraintreeForm();
+        var token = $(frm).find('#Token');
+        return $(token).val();
+    },
+
+    getBraintreeForm: function() {
+        return $('[data-muiscript="braintree"]');
     }
-    
 };
 
 // put prototype methods there

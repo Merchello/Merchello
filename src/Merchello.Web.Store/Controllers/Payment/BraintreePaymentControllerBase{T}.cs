@@ -76,11 +76,27 @@
         [HttpPost]
         public ActionResult Process(string nonce)
         {
-            var result = ProcessPayment(nonce);
+            // We have to get the paymentMethod from the CheckoutManager BEFORE processing the payment
+            // so we have it for the factory since the checkout manager may be cleared on payment success
+            // depending on CheckoutContextSettings.ResetCheckoutManagerOnPaymentSuccess configuration
+            var paymentMethod = CheckoutManager.Payment.GetPaymentMethod();
 
-            var response = this.BuildPaymentResponse(result);
+            try
+            {
+                
+                var attempt = ProcessPayment(nonce);
 
-            return Json(response);
+                var model = CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod, attempt);
+
+                return HandlePaymentSuccess(model);
+            }
+            catch (Exception ex)
+            {
+                var model = CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod);
+                model.Token = nonce;
+
+                return HandlePaymentException(model, ex);
+            }
         }
 
         /// <summary>
@@ -98,14 +114,26 @@
         [HttpPost]
         public ActionResult Retry(string nonce, Guid invoiceKey)
         {
+            // We have to get the paymentMethod from the CheckoutManager BEFORE processing the payment
+            // so we have it for the factory since the checkout manager may be cleared on payment success
+            // depending on CheckoutContextSettings.ResetCheckoutManagerOnPaymentSuccess configuration
+            var paymentMethod = CheckoutManager.Payment.GetPaymentMethod();
 
-            var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
+            try
+            {
+                var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
+                var attempt = ProcessPayment(nonce, invoice);
+                var model = CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod, attempt);
 
-            var result = ProcessPayment(nonce, invoice);
+                return HandlePaymentSuccess(model);
+            }
+            catch (Exception ex)
+            {
+                var model = CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod);
+                model.Token = nonce;
 
-            var response = this.BuildPaymentResponse(result);
-
-            return Json(response);
+                return HandlePaymentException(model, ex);
+            }
         }
 
         /// <summary>
@@ -137,26 +165,20 @@
         }
 
         /// <summary>
-        /// Builds a response for payment attempts.
+        /// Gets the total basket count.
         /// </summary>
-        /// <param name="result">
-        /// The result.
-        /// </param>
         /// <returns>
-        /// The <see cref="PaymentResultAsyncResponse"/>.
+        /// The <see cref="int"/>.
         /// </returns>
-        protected PaymentResultAsyncResponse BuildPaymentResponse(IPaymentResult result)
+        /// <remarks>
+        /// This is generally used in navigations and labels.  Some implementations show the total number of line items while
+        /// others show the total number of items (total sum of product quantities - default).
+        /// 
+        /// Method is used in Async responses to allow for easier HTML label updates 
+        /// </remarks>
+        protected virtual int GetBasketItemCountForDisplay()
         {
-            var response = new PaymentResultAsyncResponse
-            {
-                Success = result.Payment.Success,
-                InvoiceKey = result.Invoice.Key,
-                PaymentKey = result.Payment.Result.Key
-            };
-
-            if (!result.Payment.Success) response.Messages.Add(result.Payment.Exception.Message);
-
-            return response;
+            return this.Basket.TotalQuantityCount;
         }
     }
 }

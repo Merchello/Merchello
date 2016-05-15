@@ -6,7 +6,7 @@ MUI.Labels = {
         
         // Event listener
         MUI.on('AddItem.added', MUI.Labels.update.basketItemCount);
-        
+        console.info('bound AddItem.added');
     },
     
     update: {

@@ -17,13 +17,6 @@
     [PluginController("FastTrack")]
     public class CashPaymentController : CashPaymentControllerBase<FastTrackPaymentModel>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CashPaymentController"/> class.
-        /// </summary>
-        public CashPaymentController()
-        {
-            this.Initialize();
-        }
 
         /// <summary>
         /// Handles the redirection for the receipt.
@@ -45,14 +38,6 @@
             return model.ViewData.Success && !model.SuccessRedirectUrl.IsNullOrWhiteSpace() ?
                 Redirect(model.SuccessRedirectUrl) :
                 base.HandlePaymentSuccess(model);
-        }
-
-        /// <summary>
-        /// Initializes the controller.
-        /// </summary>
-        private void Initialize()
-        {
-            SetInvoiceNumberPrefix(WebConfigurationManager.AppSettings["FastTrack:InvoiceNumberPrefix"]);
         }
     }
 }

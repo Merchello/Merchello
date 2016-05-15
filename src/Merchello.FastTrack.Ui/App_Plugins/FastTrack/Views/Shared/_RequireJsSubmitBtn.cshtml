@@ -1,5 +1,10 @@
 ﻿@model Merchello.Web.Models.Ui.IRequireJs
+
 @if (Model.RequireJs)
-{<input type="submit" class="btn btn-default pull-right mui-requirejs" value="Save" />}
+{
+    <button class="btn btn-default pull-right mui-requirejs">Save</button>
+}
 else
-{<input type="submit" class="btn btn-default pull-right" value="Save" />}
+{
+    <input type="submit" class="btn btn-default pull-right" value="Save"/>
+}

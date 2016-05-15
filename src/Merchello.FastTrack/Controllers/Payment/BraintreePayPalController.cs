@@ -5,6 +5,7 @@
     using Merchello.Core.Gateways;
     using Merchello.FastTrack.Models.Payment;
     using Merchello.Web.Store.Controllers.Payment;
+    using Merchello.Web.Store.Models.Async;
 
     using Umbraco.Core;
     using Umbraco.Web.Mvc;
@@ -35,6 +36,58 @@
             var model = this.CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod);
 
             return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
+        }
+
+        /// <summary>
+        /// Overrides the payment success.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        protected override ActionResult HandlePaymentSuccess(FastTrackBraintreePaymentModel model)
+        {
+            // Set the invoice key in the customer context (cookie)
+            if (model.ViewData.Success)
+            {
+                CustomerContext.SetValue("invoiceKey", model.ViewData.InvoiceKey.ToString());
+            }
+
+            if (Request.IsAjaxRequest())
+            {
+                var json = Json(GetAsyncResponse(model));
+
+                return json;
+            }
+
+            return base.HandlePaymentSuccess(model);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="PaymentResultAsyncResponse"/> for the model.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="FastTrackBraintreePaymentModel"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PaymentResultAsyncResponse"/>.
+        /// </returns>
+        private PaymentResultAsyncResponse GetAsyncResponse(FastTrackBraintreePaymentModel model)
+        {
+            var resp = new PaymentResultAsyncResponse
+                       {
+                           Success = model.ViewData.Success,
+                           InvoiceKey = model.ViewData.InvoiceKey,
+                           PaymentKey = model.ViewData.PaymentKey,
+                           BasketItemCount = GetBasketItemCountForDisplay(),
+                           PaymentMethodName = model.PaymentMethodName
+                       };
+
+            foreach (var msg in model.ViewData.Messages) resp.Messages.Add(msg);
+
+            return resp;
         }
     }
 }

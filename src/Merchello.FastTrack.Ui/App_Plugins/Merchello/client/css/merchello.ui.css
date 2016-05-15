@@ -36,6 +36,8 @@ html, body {
 form .field-validation-error {
   display: block;
   color: #a94442; }
+form .mui-requirejs {
+  display: none; }
 
 .h-card .p-name, .h-card .p-org, .h-card .p-street-address, .h-card .p-extended-address, .h-card .p-postal-code, .h-card .p-country-name,
 .h-card .label-contact {

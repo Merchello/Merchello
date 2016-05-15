@@ -347,6 +347,7 @@
     <Compile Include="Factories\CheckoutShipRateQuoteModelFactory.cs" />
     <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />
     <Compile Include="Models\Ui\CheckoutStage.cs" />
     <Compile Include="Models\Ui\CheckoutWorkflowMarker.cs" />

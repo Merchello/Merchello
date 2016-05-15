@@ -1,8 +1,13 @@
 ﻿@model Merchello.Web.Store.Models.BraintreePaymentModel
 @using System.Web.Mvc.Html
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui
 
 <h3>PayPal Payment</h3>
 <div id="paypal-container"></div>
-<form data-attempt="payment">
-    @Html.HiddenFor(x => x.Token)
+<form data-muiscript="braintree">
+    @Html.HiddenFor(x => x.Token, new { data_muivalue = "btpaypalnonce" })
+    <a href="@ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url" class="btn btn-default">Back</a>
+    @Html.Partial("_RequireJsSubmitBtn", Model)
+    <input type="hidden" id="braintree-pay-pal-successurl" value="@ExampleUiHelper.Content.GetReceipt().Url"/>
 </form>

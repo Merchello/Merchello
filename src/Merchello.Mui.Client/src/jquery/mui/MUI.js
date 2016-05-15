@@ -7,7 +7,7 @@ var MUI = (function() {
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
-        events: false,
+        events: true,
         console: true
     };
 
@@ -21,8 +21,6 @@ var MUI = (function() {
             MUI.Logger.init();
             // intialize the notifications
             MUI.Notify.init();
-            // initialize the providers
-            MUI.Providers.init();
             // initialize the add item module
             MUI.AddItem.init();
             // initialize the basket module
@@ -120,7 +118,7 @@ var MUI = (function() {
             console.info(obj);
         }
     }
-
+    
     // exposed members
     return {
         // ensures the settings object is created
@@ -128,6 +126,8 @@ var MUI = (function() {
             Notifications: {},
             Endpoints: {}
         },
+        // ensures the services object is created
+        Services: {},
         init: init,
         hasLogger: hasLogger,
         createCache: createCache,

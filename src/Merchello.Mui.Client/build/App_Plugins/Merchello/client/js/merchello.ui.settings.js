@@ -11,6 +11,11 @@ if (MUI !== undefined) {
     // Allows for overriding MUI defaults
     MUI.Settings = {
 
+        eventHandlers: function() {
+            // Braintree
+            MUI.on('BraintreePayPal.success', MUI.Settings.Payments.braintreePayPalSuccess);
+        },
+
         // Notifications - the notification bar
         Notifications: {
             // If true, the notification bar will be appended before the </body> tag and notfication
@@ -33,9 +38,31 @@ if (MUI !== undefined) {
             basketSurface: '/umbraco/Merchello/Basket/',
 
             // the product table api controller end point
-            productTableApi: '/umbraco/Merchello/ProductDataTableApi/'
+            productTableApi: '/umbraco/Merchello/ProductDataTableApi/',
+
+            // the braintree surface controller
+            brainTreeSurface:   '/umbraco/fasttrack/BraintreePayPal/'
+        },
+
+        // Payment handlers
+        Payments: {
+
+            // if true a button to post the payment (nonce) back to the server to complete the payment.
+            // if false, the payment will be submitted as soon as the nonce is received from braintree
+            braintreePayPalRequiresBtn: false,
+            
+            // redirection after a successful braintree paypal payment
+            braintreePayPalSuccess: function() {
+                var successUrl = $('#braintree-pay-pal-successurl').val();
+                window.location = successUrl;
+            }
+
         }
     }
+
+    // bind the event handlers
+    MUI.Settings.eventHandlers();
 };
+
 
 

@@ -34,8 +34,7 @@ MUI.Forms = {
     rebind: function(frm) {
         $.validator.unobtrusive.parse(frm);
     },
-
-
+    
     // validates the form
     validate: function(frm) {
 

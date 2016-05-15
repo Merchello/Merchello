@@ -26,8 +26,8 @@
     /// <summary>
     /// A surface controller for used for accepting PayPal Express Payments.
     /// </summary>
-    [PluginController("MerchelloProviders")]
-    public partial class PayPalExpressController : PayPalSurfaceControllerBase
+    [PluginController("Merchello")]
+    public class PayPalExpressController : PayPalSurfaceControllerBase
     {
         /// <summary>
         /// The <see cref="IPayPalApiPaymentService"/>.

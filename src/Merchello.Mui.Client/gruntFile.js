@@ -47,7 +47,8 @@
                 // this requires that the scss as been compiled.
                 files: [
                     { dest: '<%= distdir %>/client/css', src: '*.css', expand: true, cwd: 'src/scss/' },
-                    { dest: '<%= distdir %>/client/img', src: '*.*', expand: true, cwd: 'src/images/' }
+                    { dest: '<%= distdir %>/client/img', src: '*.*', expand: true, cwd: 'src/images/' },
+                    { dest: '<%= distdir %>/client/lib', src: 'card-validator.min.js', expand: true, cwd: 'lib/' }
                 ]
             },
 
@@ -65,7 +66,7 @@
 
         concat: {
             mui: {
-                src: ['src/jquery/mui/*.js', 'src/jquery/mui/modules/*/*.js', 'src/jquery/mui/modules/*/components/*.js', 'src/jquery/bootstrapper.js'],
+                src: ['src/jquery/mui/*.js', 'src/jquery/mui/logger/**/*.js', 'src/jquery/mui/services/**/*.js', 'src/jquery/mui/modules/*/*.js', 'src/jquery/mui/modules/*/components/*.js', 'src/jquery/bootstrapper.js'],
                 dest: '<%= distdir %>/client/js/merchello.ui.js',
                 options: {
                     banner: '<%= banner %>\n\n',

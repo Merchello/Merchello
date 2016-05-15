@@ -34,7 +34,10 @@
                     RequireJs = false,
                     PaymentMethodKey = paymentMethod.Key,
                     PaymentMethodName = paymentMethod.Name,
-                    ViewData = new PaymentAttemptViewData()
+                    ViewData = new PaymentAttemptViewData
+                        {
+                            Messages = new List<string>()
+                        }
                 };
 
             return OnCreate(model, customer, paymentMethod);

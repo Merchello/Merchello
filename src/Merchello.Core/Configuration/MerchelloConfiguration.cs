@@ -122,7 +122,7 @@
                                 ResetPaymentManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetPaymentManagerDataOnVersionChange", true),
                                 ResetShippingManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetShippingManagerDataOnVersionChange", true),
                                 EmptyBasketOnPaymentSuccess = GetCheckoutManagerSetting("EmptyBasketOnPaymentSuccess", true)
-                            };
+                        };
 
                     }
                     catch (Exception ex)

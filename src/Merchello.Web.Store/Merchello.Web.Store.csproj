@@ -264,7 +264,6 @@
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
-    <Compile Include="Models\Async\AsyncResponse.cs" />
     <Compile Include="Models\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />

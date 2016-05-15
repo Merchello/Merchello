@@ -131,7 +131,7 @@
         /// <returns>
         /// The <see cref="IExtendedLoggerData"/>.
         /// </returns>
-        protected IExtendedLoggerData GetExtendedLoggerData()
+        protected override IExtendedLoggerData GetExtendedLoggerData()
         {
             var logData = MultiLogger.GetBaseLoggingData();
             logData.AddCategory("Controllers");

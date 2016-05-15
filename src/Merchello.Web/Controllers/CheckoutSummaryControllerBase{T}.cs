@@ -107,6 +107,7 @@
         [ChildActionOnly]
         public virtual ActionResult InvoiceSummary(string view = "")
         {
+            if (!CheckoutManager.Payment.IsReadyToInvoice()) return InvalidCheckoutStagePartial();
             var model = CheckoutSummaryFactory.Create(CheckoutManager);
             return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
         }

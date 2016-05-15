@@ -20,7 +20,7 @@
     /// <summary>
     /// The Braintree API controller.
     /// </summary>
-    [PluginController("MerchelloPayments")]
+    [PluginController("Merchello")]
     public class BraintreeApiController : UmbracoApiController
     {
         /// <summary>

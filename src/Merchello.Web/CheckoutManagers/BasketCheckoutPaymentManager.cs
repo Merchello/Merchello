@@ -85,7 +85,6 @@
             var result = invoice.AuthorizePayment(paymentGatewayMethod, args);
 
             if (result.Payment.Success && this.Context.Settings.EmptyBasketOnPaymentSuccess) this.Context.Customer.Basket().Empty();
-
             this.OnFinalizing(result);
 
             return result;

@@ -430,9 +430,11 @@
     <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css" />
     <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css" />
     <Content Include="App_Plugins\Merchello\client\img\logo-footer.png" />
+    <Content Include="App_Plugins\Merchello\client\js\fasttrack.js" />
     <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js" />
     <Content Include="App_Plugins\Merchello\client\js\merchello.ui.min.js" />
     <Content Include="App_Plugins\Merchello\client\js\merchello.ui.settings.js" />
+    <Content Include="App_Plugins\Merchello\client\lib\card-validator.min.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.controllers.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.directives.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.filters.js" />
