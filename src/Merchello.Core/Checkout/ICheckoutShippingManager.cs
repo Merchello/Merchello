@@ -7,7 +7,7 @@
     /// <summary>
     /// Defines a CheckoutShippingManager
     /// </summary>
-    public interface ICheckoutShippingManager
+    public interface ICheckoutShippingManager : ICheckoutContextManagerBase
     {
         /// <summary>
         /// Saves a <see cref="IShipmentRateQuote"/> as a shipment line item

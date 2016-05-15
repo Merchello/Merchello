@@ -34,10 +34,10 @@
         /// <summary>
         /// Removes a previously saved payment method..
         /// </summary>
+        [Obsolete("Use Reset()")]
         public override void ClearPaymentMethod()
         {
-            this.Context.Customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.PaymentMethod);
-            this.SaveCustomer();
+            Reset();
         }
 
         /// <summary>
@@ -181,6 +181,15 @@
         public override IPaymentResult AuthorizeCapturePayment(Guid paymentMethodKey)
         {
             return this.AuthorizeCapturePayment(paymentMethodKey, new ProcessorArgumentCollection());
+        }
+
+        /// <summary>
+        /// Clears the payment method.
+        /// </summary>
+        public override void Reset()
+        {
+            this.Context.Customer.ExtendedData.RemoveValue(Constants.ExtendedDataKeys.PaymentMethod);
+            this.SaveCustomer();
         }
     }
 }

@@ -100,33 +100,42 @@
             get { return (MerchelloSection)ConfigurationManager.GetSection(ConfigurationName); }
         }
 
-        ///// <summary>
-        ///// Gets the configured <see cref="ICheckoutContextSettings"/>.
-        ///// </summary>
-        //public ICheckoutContextSettings CheckoutContextSettings
-        //{
-        //    get
-        //    {
-        //        if (Section.CheckoutContextSettings != null)
-        //        {
-        //            var settings = Section.CheckoutContextSettings;
-        //            return new CheckoutContextSettings
-        //                {
-        //                    InvoiceNumberPrefix = settings.InvoiceNumberPrefix,
-        //                    ApplyTaxesToInvoice = settings.ApplyTaxesToInvoice,
-        //                    RaiseCustomerEvents = settings.RaiseCustomerEvents,
-        //                    ResetCustomerManagerDataOnVersionChange = settings.ResetCustomerManagerDataOnVersionChange,
-        //                    ResetExtendedManagerDataOnVersionChange = settings.ResetExtendedManagerDataOnVersionChange,
-        //                    ResetOfferManagerDataOnVersionChange = settings.ResetOfferManagerDataOnVersionChange,
-        //                    ResetPaymentManagerDataOnVersionChange = settings.ResetPaymentManagerDataOnVersionChange,
-        //                    ResetShippingManagerDataOnVersionChange = settings.ResetShippingManagerDataOnVersionChange,
-        //                    EmptyBasketOnPaymentSuccess = settings.EmptyBasketOnPaymentSuccess
-        //                };
-        //        }
+        /// <summary>
+        /// Gets the configured <see cref="ICheckoutContextSettings"/>.
+        /// </summary>
+        public ICheckoutContextSettings CheckoutContextSettings
+        {
+            get
+            {
+                if (Section.CheckoutContextSettings != null)
+                {
+                    try
+                    {
+                        return new CheckoutContextSettings
+                            {
+                                InvoiceNumberPrefix = GetCheckoutManagerSetting("InvoiceNumberPrefix"),
+                                ApplyTaxesToInvoice = GetCheckoutManagerSetting("ApplyTaxesToInvoice", true),
+                                RaiseCustomerEvents = GetCheckoutManagerSetting("RaiseCustomerEvents", false),
+                                ResetCustomerManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetCustomerManagerDataOnVersionChange", true),
+                                ResetExtendedManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetExtendedManagerDataOnVersionChange", true),
+                                ResetOfferManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetOfferManagerDataOnVersionChange", true),
+                                ResetPaymentManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetPaymentManagerDataOnVersionChange", true),
+                                ResetShippingManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetShippingManagerDataOnVersionChange", true),
+                                EmptyBasketOnPaymentSuccess = GetCheckoutManagerSetting("EmptyBasketOnPaymentSuccess", true)
+                            };
 
-        //        return new CheckoutContextSettings();
-        //    }
-        //}
+                    }
+                    catch (Exception ex)
+                    {
+                        MultiLogHelper.WarnWithException<MerchelloConfiguration>("Failed to instantiate CheckoutContextSettings from configuration.  Returning new CheckoutContextSettings()", ex);
+                        return new CheckoutContextSettings();
+                    }
+
+                }
+
+                return new CheckoutContextSettings();
+            }
+        }
 
         /// <summary>
         /// Gets the customer member types.
@@ -330,6 +339,32 @@
             {
                 MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                 return string.Empty;
+            }
+        }
+
+        internal string GetCheckoutManagerSetting(string alias)
+        {
+            try
+            {
+                return Section.CheckoutContextSettings[alias].Value;
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return string.Empty;
+            }
+        }
+
+        internal bool GetCheckoutManagerSetting(string alias, bool defaultSetting)
+        {
+            try
+            {
+                return bool.Parse(Section.CheckoutContextSettings[alias].Value);
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return defaultSetting;
             }
         }
 

@@ -94,10 +94,10 @@
         /// <summary>
         /// Clears all notes.
         /// </summary>
+        [Obsolete("User Reset()")]
         public void ClearNotes()
         {
-            this._messages.Value.Clear();
-            SaveCustomerTempData(Core.Constants.ExtendedDataKeys.Note, this._messages.Value);
+            Reset();
         }
 
         /// <summary>
@@ -140,6 +140,15 @@
         }
 
         /// <summary>
+        /// Clears the notes.
+        /// </summary>
+        public override void Reset()
+        {
+            this._messages.Value.Clear();
+            SaveCustomerTempData(Core.Constants.ExtendedDataKeys.Note, this._messages.Value);
+        }
+
+        /// <summary>
         /// Initializes the manager.
         /// </summary>
         private void Initialize()
@@ -147,7 +156,7 @@
             this._messages = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.Note));
             if (Context.IsNewVersion && Context.Settings.ResetExtendedManagerDataOnVersionChange)
             {
-                this.ClearNotes();
+                this.Reset();
             }
         } 
     }

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Factories
 {
     using Merchello.Core.Checkout;
+    using Merchello.Core.Configuration;
 
     /// <summary>
     /// A factory for creating <see cref="CheckoutContextSettings"/>.
@@ -15,7 +16,7 @@
         /// </returns>
         public ICheckoutContextSettings Create()
         {
-            return this.OnCreate(new CheckoutContextSettings());
+            return this.OnCreate(MerchelloConfiguration.Current.CheckoutContextSettings);
         }
 
 
