@@ -18,13 +18,16 @@
         /// <summary>
         /// Creates a <see cref="ICheckoutPaymentModel"/>.
         /// </summary>
+        /// <param name="customer">
+        /// The current customer.
+        /// </param>
         /// <param name="paymentMethod">
         /// The <see cref="IPaymentMethod"/>.
         /// </param>
         /// <returns>
         /// The <see cref="ICheckoutPaymentModel"/>.
         /// </returns>
-        public TPaymentModel Create(IPaymentMethod paymentMethod)
+        public TPaymentModel Create(ICustomerBase customer, IPaymentMethod paymentMethod)
         {
             var model = new TPaymentModel
                 {
@@ -34,12 +37,15 @@
                     ViewData = new PaymentAttemptViewData()
                 };
 
-            return OnCreate(model, paymentMethod);
+            return OnCreate(model, customer, paymentMethod);
         }
 
         /// <summary>
         /// Creates a <see cref="ICheckoutPaymentModel"/>.
         /// </summary>
+        /// <param name="customer">
+        /// The current customer.
+        /// </param>
         /// <param name="paymentMethod">
         /// The <see cref="IPaymentMethod"/>.
         /// </param>
@@ -49,9 +55,9 @@
         /// <returns>
         /// The <see cref="ICheckoutPaymentModel"/>.
         /// </returns>
-        public TPaymentModel Create(IPaymentMethod paymentMethod, IPaymentResult attempt)
+        public TPaymentModel Create(ICustomerBase customer, IPaymentMethod paymentMethod, IPaymentResult attempt)
         {
-            var model = Create(paymentMethod);
+            var model = Create(customer, paymentMethod);
 
             model.ViewData.Success = attempt.Payment.Success;
             model.ViewData.InvoiceKey = attempt.Invoice.Key;
@@ -59,14 +65,18 @@
             model.ViewData.Exception = attempt.Payment.Exception;
             if (attempt.Payment.Exception != null) model.ViewData.Messages = new List<string> { attempt.Payment.Exception.Message };
 
-            return OnCreate(model, paymentMethod, attempt);
+            return OnCreate(model, customer, paymentMethod, attempt);
         }
+
 
         /// <summary>
         /// Allows for overriding the creation of <see cref="ICheckoutPaymentModel"/>.
         /// </summary>
         /// <param name="model">
         /// The <see cref="ICheckoutPaymentModel"/>.
+        /// </param>
+        /// <param name="customer">
+        /// The customer.
         /// </param>
         /// <param name="paymentMethod">
         /// The <see cref="IPaymentMethod"/>.
@@ -74,16 +84,20 @@
         /// <returns>
         /// The modified <see cref="ICheckoutPaymentModel"/>.
         /// </returns>
-        protected virtual TPaymentModel OnCreate(TPaymentModel model, IPaymentMethod paymentMethod)
+        protected virtual TPaymentModel OnCreate(TPaymentModel model, ICustomerBase customer, IPaymentMethod paymentMethod)
         {
             return model;
         }
+
 
         /// <summary>
         /// Allows for overriding the creation of <see cref="ICheckoutPaymentModel"/>.
         /// </summary>
         /// <param name="model">
         /// The <see cref="ICheckoutPaymentModel"/>.
+        /// </param>
+        /// <param name="customer">
+        /// The current customer.
         /// </param>
         /// <param name="paymentMethod">
         /// The <see cref="IPaymentMethod"/>.
@@ -94,7 +108,7 @@
         /// <returns>
         /// The modified <see cref="ICheckoutPaymentModel"/>.
         /// </returns>
-        protected virtual TPaymentModel OnCreate(TPaymentModel model, IPaymentMethod paymentMethod, IPaymentResult attempt)
+        protected virtual TPaymentModel OnCreate(TPaymentModel model, ICustomerBase customer, IPaymentMethod paymentMethod, IPaymentResult attempt)
         {
             return model;
         }

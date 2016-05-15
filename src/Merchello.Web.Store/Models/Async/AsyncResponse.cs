@@ -12,7 +12,7 @@
         /// </summary>
         public AsyncResponse()
         {
-            this.ErrorMessages = new List<string>();
+            this.Messages = new List<string>();
         }
 
         /// <summary>
@@ -23,6 +23,6 @@
         /// <summary>
         /// Gets the error messages.
         /// </summary>
-        public IList<string> ErrorMessages { get; private set; }
+        public IList<string> Messages { get; private set; }
     }
 }

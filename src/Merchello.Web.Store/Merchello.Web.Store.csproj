@@ -260,11 +260,16 @@
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
     <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
     <Compile Include="Controllers\CheckoutResolvePaymentController.cs" />
-    <Compile Include="Controllers\Payment\CashPaymentController.cs" />
+    <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
+    <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
+    <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
     <Compile Include="Models\Async\AsyncResponse.cs" />
+    <Compile Include="Models\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
+    <Compile Include="Models\BraintreeCcPaymentModel.cs" />
+    <Compile Include="Models\BraintreePaymentModel.cs" />
     <Compile Include="Models\StorePaymentModel.cs" />
     <Compile Include="Models\StoreAddressModel.cs" />
     <Compile Include="Models\StoreDiscountModel.cs" />
@@ -281,6 +286,7 @@
     <Compile Include="Models\ProductDataTable.cs" />
     <Compile Include="Models\ProductDataTableRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\ValidateExpiresDateAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Merchello.Core\Merchello.Core.csproj">

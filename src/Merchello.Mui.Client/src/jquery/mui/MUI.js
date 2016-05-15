@@ -21,6 +21,8 @@ var MUI = (function() {
             MUI.Logger.init();
             // intialize the notifications
             MUI.Notify.init();
+            // initialize the providers
+            MUI.Providers.init();
             // initialize the add item module
             MUI.AddItem.init();
             // initialize the basket module

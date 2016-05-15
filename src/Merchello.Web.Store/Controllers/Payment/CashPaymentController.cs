@@ -4,7 +4,6 @@
 
     using Merchello.Core.Gateways;
     using Merchello.Web.Controllers;
-    using Merchello.Web.Controllers.Payment;
     using Merchello.Web.Store.Models;
 
     using Umbraco.Core;

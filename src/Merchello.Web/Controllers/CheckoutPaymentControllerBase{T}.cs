@@ -4,7 +4,6 @@
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways;
-    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
@@ -71,6 +70,17 @@
         protected CheckoutPaymentModelFactory<TPaymentModel> CheckoutPaymentModelFactory { get; private set; }
 
         /// <summary>
+        /// Responsible for rendering the payment form.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public abstract ActionResult PaymentForm(string view = "");
+
+        /// <summary>
         /// Sets the invoice number prefix.
         /// </summary>
         /// <param name="prefix">
@@ -131,6 +141,7 @@
             MultiLogHelper.Error<CheckoutPaymentControllerBase<TPaymentModel>>("Failed payment operation.", ex, logData);
             throw ex;
         }
+
 
         /// <summary>
         /// Ensures the class is decorated with a <see cref="GatewayMethodUiAttribute"/>.

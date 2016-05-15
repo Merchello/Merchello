@@ -88,7 +88,7 @@
             if (Request.IsAjaxRequest())
             {
                 // in case of Async call we need to construct the response
-                var resp = new AddItemAsyncResponse { Success = false, ErrorMessages = { ex.Message } };
+                var resp = new AddItemAsyncResponse { Success = false, Messages = { ex.Message } };
                 return this.Json(resp);
             }
 
@@ -123,7 +123,7 @@
                 catch (Exception ex)
                 {
                     resp.Success = false;
-                    resp.ErrorMessages.Add(ex.Message);
+                    resp.Messages.Add(ex.Message);
                     return this.Json(resp);
                 }
             }

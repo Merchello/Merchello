@@ -522,6 +522,7 @@
     <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\SalesReceipt.cshtml" />
     <Content Include="Views\Receipt.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\BraintreePayPal\PaymentForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

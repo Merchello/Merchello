@@ -290,7 +290,6 @@
     <Compile Include="Controllers\CheckoutShipRateQuoteControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutSummaryControllerBase{T}.cs" />
     <Compile Include="Controllers\MerchelloUIControllerBase.cs" />
-    <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
     <Compile Include="DataModifiers\Product\IncludeTaxProductDisplayPriceModifier.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierChain.cs" />
     <Compile Include="DataModifiers\Product\ProductVariantDataModifierExtensions.cs" />

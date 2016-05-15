@@ -1,0 +1,8 @@
+﻿@model Merchello.Web.Store.Models.BraintreePaymentModel
+@using System.Web.Mvc.Html
+
+<h3>PayPal Payment</h3>
+<div id="paypal-container"></div>
+<form data-attempt="payment">
+    @Html.HiddenFor(x => x.Token)
+</form>

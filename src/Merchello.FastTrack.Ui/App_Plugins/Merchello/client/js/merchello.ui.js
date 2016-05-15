@@ -28,6 +28,8 @@ var MUI = (function() {
             MUI.Logger.init();
             // intialize the notifications
             MUI.Notify.init();
+            // initialize the providers
+            MUI.Providers.init();
             // initialize the add item module
             MUI.AddItem.init();
             // initialize the basket module
@@ -409,7 +411,10 @@ MUI.Basket = {
 MUI.Checkout = {
   
     init: function() {
-        
+        // Initialize the address module
+        MUI.Checkout.Address.init();
+        // Initialize the payment module
+        MUI.Checkout.Payment.init();
     }
     
 };
@@ -502,7 +507,7 @@ MUI.Labels = {
     }
 };
 
-//// The logger interface
+//// The logger
 // If you have a remove logger you can wire it in here.
 MUI.Logger = {
 
@@ -662,6 +667,16 @@ MUI.Notify = {
     }
 };
 
+MUI.Providers = {
+  
+    init: function() {
+        
+        // initializes Braintree
+        MUI.Providers.Braintree.init();
+    }
+    
+};
+
 //// Cart model
 MUI.AddItem.ProductDataTable = function() {
     var self = this;
@@ -713,6 +728,23 @@ MUI.Checkout.Address = {
         
     }
     
+    
+};
+
+//// A class to manage payments
+MUI.Checkout.Payment = {
+    
+    init: function() {
+
+    }
+    
+};
+
+MUI.Providers.Braintree = {
+  
+    init: function() {
+        
+    }
     
 };
 

@@ -11,7 +11,7 @@
             <h3>Braintree credit card</h3>
             break;
         case "BrainTree.PayPal.OneTime":
-            <h3>Braintree PayPal OneTime</h3>
+            @Html.Action("PaymentForm", "BraintreePayPal", new { area = "FastTrack" })
             break;
         case "PayPal.ExpressCheckout":
             <h3>PayPal ExpressCheckout</h3>

@@ -6,7 +6,7 @@
     using Merchello.Core.Gateways;
     using Merchello.FastTrack.Models.Payment;
     using Merchello.Web.Controllers;
-    using Merchello.Web.Controllers.Payment;
+    using Merchello.Web.Store.Controllers.Payment;
 
     using Umbraco.Core;
     using Umbraco.Web.Mvc;

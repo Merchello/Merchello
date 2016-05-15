@@ -61,6 +61,24 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The expiration date does not appear to be valid..
+        /// </summary>
+        public static string InvalidCcExpiresDate {
+            get {
+                return ResourceManager.GetString("InvalidCcExpiresDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to cvv does not appear to be valid..
+        /// </summary>
+        public static string InvalidCvv {
+            get {
+                return ResourceManager.GetString("InvalidCvv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email address appear to be invalid.
         /// </summary>
         public static string InvalidEmailAddress {
@@ -97,6 +115,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name on card.
+        /// </summary>
+        public static string LabelCardHolderName {
+            get {
+                return ResourceManager.GetString("LabelCardHolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Country.
         /// </summary>
         public static string LabelCountry {
@@ -106,11 +133,38 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card number.
+        /// </summary>
+        public static string LabelCreditCardNumber {
+            get {
+                return ResourceManager.GetString("LabelCreditCardNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to cvv.
+        /// </summary>
+        public static string LabelCvv {
+            get {
+                return ResourceManager.GetString("LabelCvv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email address.
         /// </summary>
         public static string LabelEmailAddress {
             get {
                 return ResourceManager.GetString("LabelEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration date.
+        /// </summary>
+        public static string LabelExpirationDate {
+            get {
+                return ResourceManager.GetString("LabelExpirationDate", resourceCulture);
             }
         }
         
@@ -250,6 +304,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name or card is required.
+        /// </summary>
+        public static string RequiredCardHolderName {
+            get {
+                return ResourceManager.GetString("RequiredCardHolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Country is a required.
         /// </summary>
         public static string RequiredCountry {
@@ -259,11 +322,38 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card number is required.
+        /// </summary>
+        public static string RequiredCreditCardNumber {
+            get {
+                return ResourceManager.GetString("RequiredCreditCardNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to cvv is required.
+        /// </summary>
+        public static string RequiredCvv {
+            get {
+                return ResourceManager.GetString("RequiredCvv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email address is required.
         /// </summary>
         public static string RequiredEmailAddress {
             get {
                 return ResourceManager.GetString("RequiredEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration date is required.
+        /// </summary>
+        public static string RequiredExpirationDate {
+            get {
+                return ResourceManager.GetString("RequiredExpirationDate", resourceCulture);
             }
         }
         

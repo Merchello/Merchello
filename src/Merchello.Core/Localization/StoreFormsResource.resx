@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InvalidCcExpiresDate" xml:space="preserve">
+    <value>The expiration date does not appear to be valid.</value>
+    <comment>Error message for an invalid credit card expiraton date</comment>
+  </data>
+  <data name="InvalidCvv" xml:space="preserve">
+    <value>cvv does not appear to be valid.</value>
+    <comment>Error message for an invalid credit card cvv</comment>
+  </data>
   <data name="InvalidEmailAddress" xml:space="preserve">
     <value>Email address appear to be invalid</value>
     <comment>Error message for an invalid email address</comment>
@@ -133,13 +141,29 @@
     <value>Address label (ex. My House)</value>
     <comment>Label for an address label field</comment>
   </data>
+  <data name="LabelCardHolderName" xml:space="preserve">
+    <value>Name on card</value>
+    <comment>Label for the name on a credit card field</comment>
+  </data>
   <data name="LabelCountry" xml:space="preserve">
     <value>Country</value>
     <comment>Label for country selection</comment>
   </data>
+  <data name="LabelCreditCardNumber" xml:space="preserve">
+    <value>Card number</value>
+    <comment>Label for a credit card number field</comment>
+  </data>
+  <data name="LabelCvv" xml:space="preserve">
+    <value>cvv</value>
+    <comment>Label for a credit card cvv field</comment>
+  </data>
   <data name="LabelEmailAddress" xml:space="preserve">
     <value>Email address</value>
     <comment>Label for the email address</comment>
+  </data>
+  <data name="LabelExpirationDate" xml:space="preserve">
+    <value>Expiration date</value>
+    <comment>Label for a credit card expiration date</comment>
   </data>
   <data name="LabelFirstName" xml:space="preserve">
     <value>First name</value>
@@ -199,13 +223,29 @@
     <value>Address line is required</value>
     <comment>Error message for a required address field</comment>
   </data>
+  <data name="RequiredCardHolderName" xml:space="preserve">
+    <value>Name or card is required</value>
+    <comment>Error message for a required name on credit card field</comment>
+  </data>
   <data name="RequiredCountry" xml:space="preserve">
     <value>Country is a required</value>
     <comment>Error message for a required country field</comment>
   </data>
+  <data name="RequiredCreditCardNumber" xml:space="preserve">
+    <value>Card number is required</value>
+    <comment>Error message for a required credit card number field</comment>
+  </data>
+  <data name="RequiredCvv" xml:space="preserve">
+    <value>cvv is required</value>
+    <comment>Error message for a required cvv field</comment>
+  </data>
   <data name="RequiredEmailAddress" xml:space="preserve">
     <value>Email address is required</value>
     <comment>Error message for a required email address field</comment>
+  </data>
+  <data name="RequiredExpirationDate" xml:space="preserve">
+    <value>Expiration date is required</value>
+    <comment>Error message for a required credit card expiration date.</comment>
   </data>
   <data name="RequiredFirstName" xml:space="preserve">
     <value>First name is required</value>

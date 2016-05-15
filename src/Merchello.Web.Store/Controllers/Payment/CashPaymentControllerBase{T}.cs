@@ -1,9 +1,10 @@
-﻿namespace Merchello.Web.Controllers.Payment
+﻿namespace Merchello.Web.Store.Controllers.Payment
 {
     using System;
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways;
+    using Merchello.Web.Controllers;
     using Merchello.Web.Models.Ui;
 
     using Umbraco.Core;
@@ -32,21 +33,21 @@
         {
             try
             {
-                var paymentMethod = CheckoutManager.Payment.GetPaymentMethod();
+                var paymentMethod = this.CheckoutManager.Payment.GetPaymentMethod();
 
                 // For cash payments we can only perform an authorize
-                var attempt = CheckoutManager.Payment.AuthorizePayment(paymentMethod.Key);
+                var attempt = this.CheckoutManager.Payment.AuthorizePayment(paymentMethod.Key);
 
-                var resultModel = CheckoutPaymentModelFactory.Create(paymentMethod, attempt);
+                var resultModel = this.CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod, attempt);
 
                 // merge the models so we can be assured that any hidden values are passed on
                 model.ViewData = resultModel.ViewData;
 
-                return HandlePaymentSuccess(model);
+                return this.HandlePaymentSuccess(model);
             }
             catch (Exception ex)
             {
-                return HandlePaymentException(model, ex);
+                return this.HandlePaymentException(model, ex);
             }
         }
 
@@ -61,14 +62,14 @@
         /// </returns>
         [ChildActionOnly]
         [GatewayMethodUi("CashPaymentMethod")]
-        public ActionResult PaymentForm(string view = "")
+        public override ActionResult PaymentForm(string view = "")
         {
-            var paymentMethod = CheckoutManager.Payment.GetPaymentMethod();
-            if (paymentMethod == null) return InvalidCheckoutStagePartial();
+            var paymentMethod = this.CheckoutManager.Payment.GetPaymentMethod();
+            if (paymentMethod == null) return this.InvalidCheckoutStagePartial();
 
-            var model = CheckoutPaymentModelFactory.Create(paymentMethod);
+            var model = this.CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod);
 
-            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+            return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
         }
     }
 }

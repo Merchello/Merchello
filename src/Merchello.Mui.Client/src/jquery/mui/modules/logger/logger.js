@@ -1,4 +1,4 @@
-//// The logger interface
+//// The logger
 // If you have a remove logger you can wire it in here.
 MUI.Logger = {
 
