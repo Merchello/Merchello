@@ -347,6 +347,7 @@
     <Compile Include="Factories\CheckoutShipRateQuoteModelFactory.cs" />
     <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\Ui\ProductCollectionItem.cs" />
     <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />
     <Compile Include="Models\Ui\CheckoutStage.cs" />
@@ -510,7 +511,9 @@
     <Compile Include="Mvc\IPaymentMethodUiController.cs" />
     <Compile Include="Mvc\MerchelloRenderMvcController.cs" />
     <Compile Include="Mvc\MerchelloSurfaceController.cs" />
+    <Compile Include="PropertyConverters\ProductCollectionValueConverter.cs" />
     <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
+    <Compile Include="PropertyEditors\ProductCollectionPicker.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorMonitorBase{T}.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorOrderShippedMonitor.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorPartialOrderShippedMonitor.cs" />

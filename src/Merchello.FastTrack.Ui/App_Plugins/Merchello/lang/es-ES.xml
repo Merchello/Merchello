@@ -79,6 +79,7 @@
     <key alias="fulfilledOrderCollection">Pedidos enviados</key>
   </area>
   <area alias="merchelloCollections">
+    <key alias="selectedCollection">Selected collection</key>
     <key alias="providers">Proveedores de colecciones</key>
     <key alias="newCollection">Nueva colección</key>
     <key alias="manageCollection">Administrar colección</key>

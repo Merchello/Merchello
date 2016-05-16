@@ -1,5 +1,5 @@
-//// A class to manage payments
-MUI.Checkout.Payment = {
+//// A class to manage braintree payments
+MUI.Checkout.Payment.Braintree = {
 
     invoiceKey: '',
 
@@ -11,14 +11,14 @@ MUI.Checkout.Payment = {
 
     // initialize payment form
     init: function() {
-        var btforms = MUI.Checkout.Payment.getBraintreeForm();
+        var btforms = MUI.Checkout.Payment.Braintree.getBraintreeForm();
         if ($(btforms).length > 0) {
             if (!MUI.Services.Braintree.initialized) {
                 MUI.Services.Braintree.loadAssets(function() {
-                    MUI.Checkout.Payment.bind.allForms();
+                    MUI.Checkout.Payment.Braintree.bind.allForms();
                 });
             } else {
-                MUI.Checkout.Payment.bind.allForms();
+                MUI.Checkout.Payment.Braintree.bind.allForms();
             }
         }
     },
@@ -27,11 +27,11 @@ MUI.Checkout.Payment = {
 
         allForms: function() {
             // binds the standard transaction
-            MUI.Checkout.Payment.bind.btstandard.init();
+            MUI.Checkout.Payment.Braintree.bind.btstandard.init();
 
             if($('#paypal-container').length > 0) {
                 // binds the PayPal on time transaction
-                MUI.Checkout.Payment.bind.btpaypal.init();
+                MUI.Checkout.Payment.Braintree.bind.btpaypal.init();
             }
         },
         
@@ -39,7 +39,7 @@ MUI.Checkout.Payment = {
 
             init: function() {
                 MUI.debugConsole('Initializing Braintree CC form');
-                var frm = MUI.Checkout.Payment.getBraintreeForm();
+                var frm = MUI.Checkout.Payment.Braintree.getBraintreeForm();
                 if (frm.length > 0) {
                     var cn = $(frm).find('[data-muivalue="cardnumber"]');
                     if (cn.length > 0) {
@@ -57,9 +57,9 @@ MUI.Checkout.Payment = {
                     $(frm).submit(function(e) {
                         e.preventDefault();
 
-                        var cc = MUI.Checkout.Payment.getBrainTreeCreditCard();
+                        var cc = MUI.Checkout.Payment.Braintree.getBrainTreeCreditCard();
                         if (MUI.Services.Braintree.validateCard(cc)) {
-                            var token = MUI.Checkout.Payment.getBraintreeToken();
+                            var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
                             var setup = {
                                 clientToken: token
                             };
@@ -74,14 +74,14 @@ MUI.Checkout.Payment = {
                                 var data = { nonce: nonce };
                                 var method = 'Process';
 
-                                if (MUI.Checkout.Payment.invoiceKey !== '') {
-                                    data.invoiceKey = MUI.Checkout.Payment.invoiceKey;
+                                if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
+                                    data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
                                     method = 'Retry';
                                 }
 
                                 var url = MUI.Settings.Endpoints.braintreeStandardCcSurface + method;
 
-                                MUI.Checkout.Payment.postBraintreeForm(url, data);
+                                MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
                             });
                         }
                     });
@@ -95,7 +95,7 @@ MUI.Checkout.Payment = {
             init: function() {
                 MUI.debugConsole('initializing PayPal OneTime Transaction');
 
-                var token = MUI.Checkout.Payment.getBraintreeToken();
+                var token = MUI.Checkout.Payment.Braintree.getBraintreeToken();
 
                 braintree.setup(token, "custom", {
                     paypal: {
@@ -104,12 +104,12 @@ MUI.Checkout.Payment = {
                     onPaymentMethodReceived: function (obj) {
 
 
-                        var frm = MUI.Checkout.Payment.getBraintreeForm();
+                        var frm = MUI.Checkout.Payment.Braintree.getBraintreeForm();
                         $(frm).submit(function(e) {
                            e.preventDefault();
                         });
                         var hidden = $(frm).find('[data-muivalue="btpaypalnonce"]');
-                        MUI.Checkout.Payment.token = hidden.val();
+                        MUI.Checkout.Payment.Braintree.token = hidden.val();
                         $(hidden).val(obj.nonce);
 
                         var btn = $(frm).find('.mui-requirejs');
@@ -117,9 +117,9 @@ MUI.Checkout.Payment = {
                         {
                             var method = 'Process';
                             var data = { nonce: $(hidden).val() };
-                            if (MUI.Checkout.Payment.invoiceKey !== '') {
+                            if (MUI.Checkout.Payment.Braintree.invoiceKey !== '') {
                                 method = 'Retry';
-                                data.invoiceKey = MUI.Checkout.Payment.invoiceKey;
+                                data.invoiceKey = MUI.Checkout.Payment.Braintree.invoiceKey;
                             }
 
                             var url = MUI.Settings.Endpoints.braintreePayPalSurface + method;
@@ -131,10 +131,10 @@ MUI.Checkout.Payment = {
                                 $(btn).show();
                                 $(btn).click(function(e) {
                                     e.preventDefault();
-                                    MUI.Checkout.Payment.postBraintreeForm(url, data);
+                                    MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
                                 });
                             } else {
-                                MUI.Checkout.Payment.postBraintreeForm(url, data);
+                                MUI.Checkout.Payment.Braintree.postBraintreeForm(url, data);
                             }
                         }
                     }
@@ -151,9 +151,9 @@ MUI.Checkout.Payment = {
             type: 'POST',
             data: data
         }).then(function(result) {
-            MUI.Checkout.Payment.handlePaymentResult(result, 'Braintree.success');
+            MUI.Checkout.Payment.Braintree.handlePaymentResult(result, 'Braintree.success');
         }, function(err) {
-            MUI.Checkout.Payment.handlePaymentException(err);
+            MUI.Checkout.Payment.Braintree.handlePaymentException(err);
         });
     },
 
@@ -176,7 +176,7 @@ MUI.Checkout.Payment = {
     },
 
     getBraintreeToken: function() {
-        var frm = MUI.Checkout.Payment.getBraintreeForm();
+        var frm = MUI.Checkout.Payment.Braintree.getBraintreeForm();
         var token = $(frm).find('#Token');
         return $(token).val();
     },

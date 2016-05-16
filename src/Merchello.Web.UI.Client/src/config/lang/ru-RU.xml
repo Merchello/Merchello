@@ -135,6 +135,7 @@
     <key alias="addProvider">Добавить провайдер</key>
   </area>
   <area alias="merchelloCollections">
+    <key alias="selectedCollection">Selected collection</key>
     <key alias="providers">Провайдеры списков</key>
     <key alias="newCollection">Новая категория</key>
     <key alias="manageCollection">Управление категорией</key>

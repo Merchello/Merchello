@@ -133,6 +133,7 @@
     <key alias="addProvider">Add provider</key>
   </area>
   <area alias="merchelloCollections">
+    <key alias="selectedCollection">Selected collection</key>
     <key alias="providers">Collection Providers</key>
     <key alias="newCollection">New Collection</key>
     <key alias="manageCollection">Manage Collection</key>

@@ -1,5 +1,29 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Catalog>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Catalog>
+@using Merchello.Web.Models.Ui
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
 	Layout = "Master.cshtml";
+
+    var categories = Model.Categories.Children().ToArray();
 }
+
+@Html.Partial("_Headline")
+
+<h3>@Model.Categories.Name</h3>
+
+@foreach (var cat in categories)
+{
+    <div>
+        <h4>@cat.Name</h4>
+        <div class="row">
+            @foreach (var p in cat.GetProducts())
+            {
+                <div class="col-md-4">
+                    @Html.Partial("_ProductBox", p)
+                </div>
+            }
+        </div>
+    </div>
+} 
+
+

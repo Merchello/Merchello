@@ -68,6 +68,7 @@
     <key alias="fulfilledOrderCollection">Afsluttede ordre</key>
   </area>
   <area alias="merchelloCollections">
+    <key alias="selectedCollection">Selected collection</key>
     <key alias="providers">Samlings udbydere</key>
     <key alias="newCollection">Ny samling</key>
     <key alias="manageCollection">Administrer samling</key>

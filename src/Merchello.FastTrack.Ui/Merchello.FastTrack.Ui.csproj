@@ -498,7 +498,6 @@
     <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\BasketSummary.cshtml" />
     <Content Include="Views\BillingAddress.cshtml" />
     <Content Include="Views\Catalog.cshtml" />
-    <Content Include="Views\Category.cshtml" />
     <Content Include="Views\ShippingAddress.cshtml" />
     <Content Include="Views\Payment.cshtml" />
     <Content Include="Views\PaymentMethod.cshtml" />
