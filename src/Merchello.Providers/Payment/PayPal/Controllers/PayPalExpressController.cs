@@ -9,6 +9,7 @@
     using Merchello.Core;
     using Merchello.Core.Events;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Models;
@@ -74,8 +75,16 @@
         /// <summary>
         /// Occurs before redirecting for a cancel response.
         /// </summary>
-        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForCancel; 
+        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForCancel;
 
+        /// <summary>
+        /// Occurs after the final redirection and before redirecting to the success URL
+        /// </summary>
+        /// <remarks>
+        /// Can be used to send OrderConfirmation notification
+        /// </remarks>
+        public static event TypedEventHandler<PayPalExpressController, PaymentAttemptEventArgs<IPaymentResult>> ProcessingCompleted;
+             
         /// <summary>
         /// Handles the a successful payment response from the PayPal Express checkout
         /// </summary>
@@ -129,6 +138,8 @@
 
                 if (attempt.Payment.Success)
                 {
+                    ProcessingCompleted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
+
                     // raise the event so the redirect URL can be manipulated
                     RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
 
