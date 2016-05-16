@@ -15,7 +15,7 @@
             @Html.Action("PaymentForm", "BraintreePayPal", new { area = "FastTrack" })
             break;
         case "PayPal.ExpressCheckout":
-            <h3>PayPal ExpressCheckout</h3>
+            @Html.Action("PaymentForm", "PayPalExpressPayment", new { area = "Merchello" })
             break;
     }
 }

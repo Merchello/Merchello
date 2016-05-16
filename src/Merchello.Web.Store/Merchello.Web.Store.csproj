@@ -262,9 +262,9 @@
     <Compile Include="Controllers\CheckoutResolvePaymentController.cs" />
     <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
+    <Compile Include="Controllers\Payment\PayPalExpressPaymentController.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
-    <Compile Include="Models\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
     <Compile Include="Models\BraintreeCcPaymentModel.cs" />

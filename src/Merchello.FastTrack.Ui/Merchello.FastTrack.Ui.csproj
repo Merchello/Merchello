@@ -304,6 +304,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.controllers.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.directives.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.models.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.module.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.resources.js" />
+    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.services.js" />
+    <Content Include="App_Plugins\MerchelloProviders\lang\en-GB.xml" />
+    <Content Include="App_Plugins\MerchelloProviders\lang\en-US.xml" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.paypalvault.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.providersettings.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.authorizepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.capturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.vault.authorizecapturepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.vault.authorizepayment.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\refundpayment.confirm.html" />
+    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\voidpayment.confirm.html" />
     <Content Include="App_Plugins\Merchello\assets\css\Merchello.css" />
     <Content Include="App_Plugins\Merchello\assets\images\docs.png" />
     <Content Include="App_Plugins\Merchello\assets\images\heart.png" />
@@ -525,6 +543,9 @@
     <Content Include="Views\Receipt.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\BraintreePayPal\PaymentForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\BraintreeStandardCc\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css.map" />
+    <Content Include="App_Plugins\MerchelloProviders\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\Views\PayPalExpressPayment\PaymentForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

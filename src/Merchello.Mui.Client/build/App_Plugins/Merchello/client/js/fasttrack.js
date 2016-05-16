@@ -18,5 +18,7 @@
             window.location = successUrl;
         }
     }
+    
+
 })();
 

@@ -7,6 +7,7 @@
     using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;

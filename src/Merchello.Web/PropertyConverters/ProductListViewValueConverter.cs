@@ -6,6 +6,8 @@
 
     using Merchello.Core.Logging;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.Ui;
+    using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
@@ -15,7 +17,7 @@
     /// <summary>
     /// The product static collection value converter.
     /// </summary>
-    [PropertyValueType(typeof(IEnumerable<IProductContent>))]
+    [PropertyValueType(typeof(ProductContentListView))]
     [PropertyValueCache(PropertyCacheValue.All, PropertyCacheLevel.Content)]
     public class ProductListViewValueConverter : PropertyValueConverterBase
     {
@@ -65,14 +67,17 @@
 
             if (collectionKey.IsNullOrWhiteSpace())
             {
-                return merchello.Query.Product.Search(1, 10)
+
+                var defaultCollection = merchello.Query.Product.Search(1, 10)
                     .Items.Select(x => merchello.TypedProductContent(((ProductDisplay)x).Key));
+
+                return new ProductContentListView(Guid.Empty, defaultCollection);
             }
 
             try
             {
                 var key = new Guid(collectionKey);
-                return merchello.TypedProductContentFromCollection(key);
+                return new ProductContentListView(key, merchello.TypedProductContentFromCollection(key));
             }
             catch (Exception ex)
             {

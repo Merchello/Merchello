@@ -3,6 +3,7 @@
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways;
+    using Merchello.Web.Models.Ui.Async;
     using Merchello.Web.Store.Controllers.Payment;
     using Merchello.Web.Store.Models;
     using Merchello.Web.Store.Models.Async;

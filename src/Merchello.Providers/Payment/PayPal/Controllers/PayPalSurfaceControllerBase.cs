@@ -13,7 +13,7 @@
     /// <summary>
     /// The pay pal surface controller base.
     /// </summary>
-    public abstract class PayPalSurfaceControllerBase : MerchelloSurfaceController, IPaymentMethodUiController
+    public abstract class PayPalSurfaceControllerBase : MerchelloSurfaceController, IPaymentMethodUiController, IPayPalSurfaceController
     {
         /// <summary>
         /// Gets the <see cref="IInvoiceService"/>.

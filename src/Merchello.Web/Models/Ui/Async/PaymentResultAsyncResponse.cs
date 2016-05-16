@@ -1,8 +1,6 @@
-﻿namespace Merchello.Web.Store.Models.Async
+﻿namespace Merchello.Web.Models.Ui.Async
 {
     using System;
-
-    using Merchello.Web.Models.Ui.Async;
 
     /// <summary>
     /// A model intended to be used to for JSON payment result responses.

@@ -290,6 +290,7 @@
     <Compile Include="Exceptions\PayPalApiException.cs" />
     <Compile Include="Payment\Braintree\Models\BraintreeProviderSettings.cs" />
     <Compile Include="Models\IPaymentProviderSettings.cs" />
+    <Compile Include="Payment\PayPal\Controllers\IPayPalSurfaceController.cs" />
     <Compile Include="Payment\PayPal\Controllers\PayPalExpressController.cs" />
     <Compile Include="Payment\PayPal\Controllers\PayPalSurfaceControllerBase.cs" />
     <Compile Include="Payment\PayPal\Factories\ExpressCheckoutResponseFactory.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="Payment\PayPal\Models\CurrencyCodeTypeDecimal.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettingsExtensions.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalRedirectingUrl.cs" />
+    <Compile Include="Payment\PayPal\Models\ProcessorArgumentCollectionExtensions.cs" />
     <Compile Include="Payment\PayPal\Models\SdkConfig.cs" />
     <Compile Include="Payment\PayPal\PayPalApiHelper.cs" />
     <Compile Include="Payment\PayPal\PayPalMode.cs" />
