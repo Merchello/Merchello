@@ -21,8 +21,9 @@ MUI.Forms = {
 
         });
 
-        $.validator.unobtrusive.adapters.addBool('validateexpiresdate')
+        $.validator.unobtrusive.adapters.addBool('validateexpiresdate');
 
+        console.info('added validation');
     },
 
     // Post a form and return the promise

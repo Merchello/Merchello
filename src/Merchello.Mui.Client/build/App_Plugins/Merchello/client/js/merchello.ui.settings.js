@@ -21,7 +21,8 @@ if (MUI !== undefined) {
             productTableApi: '/umbraco/Merchello/ProductDataTableApi/',
 
             // the braintree surface controller
-            brainTreeSurface:   '/umbraco/fasttrack/BraintreePayPal/'
+            braintreePayPalSurface:   '/umbraco/fasttrack/BraintreePayPal/',
+            braintreeStandardCcSurface: '/umbraco/fasttrack/BraintreeStandardCc/'
         },
 
         // Notifications - the notification bar
@@ -43,6 +44,10 @@ if (MUI !== undefined) {
 
         // Payment handlers
         Payments: {
+
+            cardtemplate: '<span class="pull-right" data-muivalue="cardtype"></span>',
+            okcardtemplate: '[CT] <span class="glyphicon glyphicon-ok"></span>',
+            invalidcardtemplate: '[CT] <span class="glyphicon glyphicon-remove"></span>',
 
             // if true a button to post the payment (nonce) back to the server to complete the payment.
             // if false, the payment will be submitted as soon as the nonce is received from braintree

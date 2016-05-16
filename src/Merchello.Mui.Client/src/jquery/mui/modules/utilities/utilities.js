@@ -143,7 +143,7 @@ MUI.Utilities = {
         },
 
         getCardByType: function (type) {
-            return _.find(FRF.Utilities.CardTypes.types, function (t) {
+            return _.find(MUI.Utilities.CardTypes.types, function (t) {
                 return t.type === type;
             });
         }

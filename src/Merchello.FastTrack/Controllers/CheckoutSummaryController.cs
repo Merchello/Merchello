@@ -41,6 +41,7 @@
         {
             var model = CheckoutSummaryFactory.Create(Basket, CheckoutManager);
 
+            // EDIT ADDRESS BUTTON VISIBILITY
             // FastTrack implementation uses the notion of checkout stages in the UI
             // to determine what to display and the order in which to display them.  We can 
             // determine the stage by validating models at various points

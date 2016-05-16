@@ -9,6 +9,7 @@
             break;
         case "BrainTree.StandardTransaction":
             <h3>Braintree credit card</h3>
+            @Html.Action("PaymentForm", "BraintreeStandardCc", new { area = "FastTrack" })
             break;
         case "BrainTree.PayPal.OneTime":
             @Html.Action("PaymentForm", "BraintreePayPal", new { area = "FastTrack" })

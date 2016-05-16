@@ -4,7 +4,7 @@ MUI.Services.Braintree = {
 
     acceptCards: [],
     
-    currentCardType: '',
+    currentCard: {},
 
     events : [
         { attempt: 'unbindValidation', name: 'Braintree.UnbindValidation' },
@@ -33,33 +33,69 @@ MUI.Services.Braintree = {
         if (typeof creditCard !== 'object') {
             return false;
         }
-
-        return MUI.Providers.Braintree.validateCardNumber(creditCard.number) &&
-            MUI.Providers.Braintree.validateExpires(creditCard.expirationDate) &&
-            MUI.Providers.Braintree.validateCvv(creditCard.cvv) &&
-            MUI.Providers.Braintree.validatePostalCode(creditCard.billingAddress.postalCode);
+        return MUI.Services.Braintree.validateCardNumber(creditCard.number).isValid &&
+            MUI.Services.Braintree.validateExpires(creditCard.expirationDate).isValid &&
+            MUI.Services.Braintree.validateCvv(creditCard.cvv).isValid &&
+            MUI.Services.Braintree.validatePostalCode(creditCard.billingAddress.postalCode);
     },
 
     // Validates card number
     validateCardNumber: function(number) {
-        return cardValidator.number(number);
+        var valid = cardValidator.number(number);
+        if (!valid.isValid) MUI.Notify.warn('Invalid credit card number');
+        return valid;
     },
 
     // validates the expires date
     validateExpires: function(expires) {
-        return cardValidator.expirationDate(expires);
+        var valid = cardValidator.expirationDate(expires);
+        if (!valid.isValid) MUI.Notify.warn('Invalid credit card expiration date');
+        return valid;
     },
 
     // validates the cvv (matches the length to the card type)
     validateCvv: function(cvv) {
-        return cardValidator.cvv(cvv);
+        var valid = cardValidator.cvv(cvv);
+        if (!valid.isValid) MUI.Notify.warn('Invalid credit card cvv');
+        return valid;
     },
 
     // validates the postal code (at least 3 digits)
     validatePostalCode: function(postalCode) {
-        return cardValidator.cvv(postalCode);
+        var valid = cardValidator.postalCode(postalCode)
+        return valid;
     },
 
+    // Sets the card icon
+    setCardLabel: function (el) {
+
+        if (!el.length > 0) return;
+
+        var valid = cardValidator.number($(el).val());
+
+        // remove the previous icon
+        var icon = $(el).next('[data-muivalue="cardtype"]');
+
+        // if the card is not defined in the event from Braintree clear the saved card type
+        if (!valid.card) {
+            MUI.Services.Braintree.currentCard = {};
+            $(icon).empty();
+            return;
+        }
+
+        if (valid.card && valid.isPotentiallyValid) {
+            MUI.Services.Braintree.currentCard = MUI.Utilities.CardTypes.getCardByType(valid.card.type);
+            var rpl = MUI.Services.Braintree.currentCard.niceType;
+            var template = valid.isValid ?
+                MUI.Settings.Payments.okcardtemplate :
+                MUI.Settings.Payments.invalidcardtemplate;
+
+            var template = template.replace('[CT]', rpl);
+            $(icon).html(template);
+
+        }
+    },
+    
     BraintreeCreditCard: function() {
         var self = this;
         self.cardholderName = '';

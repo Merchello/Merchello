@@ -255,11 +255,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\Payment\BraintreePayPalController.cs" />
+    <Compile Include="Controllers\Payment\BraintreeStandardCcController.cs" />
     <Compile Include="Controllers\Payment\CashPaymentController.cs" />
     <Compile Include="Controllers\CheckoutAddressController.cs" />
     <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
     <Compile Include="Controllers\CheckoutShipRateQuoteController.cs" />
     <Compile Include="Controllers\CheckoutSummaryController.cs" />
+    <Compile Include="Controllers\Payment\FastTrackBraintreeControllerBase.cs" />
     <Compile Include="Factories\FastTrackBillingAddressModelFactory.cs" />
     <Compile Include="Factories\FastTrackCheckoutAddressModelFactoryBase{T}.cs" />
     <Compile Include="Factories\FastTrackCheckoutSummaryModelFactory.cs" />
@@ -271,7 +273,6 @@
     <Compile Include="Models\FastTrackShipRateQuoteModel.cs" />
     <Compile Include="Models\IFastTrackCheckoutAddressModel.cs" />
     <Compile Include="Models\ISuccessRedirectUrl.cs" />
-    <Compile Include="Models\Payment\FastTrackBraintreePaymentModel.cs" />
     <Compile Include="Models\Payment\FastTrackPaymentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
