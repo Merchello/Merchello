@@ -81,6 +81,15 @@
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
                 }
+            },
+
+            fasttrack: {
+                src: ['src/jquery/fasttrack.js'],
+                dest: '<%= distdir %>/client/js/fasttrack.js',
+                options: {
+                    banner: '<%= banner %>\n\n',
+                    footer: '\n\n'
+                }
             }
         },
 

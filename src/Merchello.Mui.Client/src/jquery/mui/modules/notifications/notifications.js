@@ -12,10 +12,22 @@ MUI.Notify = {
     
     bar: undefined,
 
+    overlay: undefined,
+
+    hasOverlay: false,
+
     // initializes the Notify class
     init: function() {
         MUI.Notify.appendNotifyBar();
     },
+
+    toggleOverlay: function() {
+      if (MUI.Notify.hasOverlay) {
+          var overlay = MUI.Notify.overlay;
+          $(overlay).toggle();
+      }
+    },
+
 
     // renders an info message
     info: function(msg) {
@@ -114,6 +126,22 @@ MUI.Notify = {
                 MUI.Notify.bar = $('[data-muinotify="notifybar"]');
                 $(MUI.Notify.bar).hide();
                 MUI.Notify.enabled = true;
+            }
+        }
+
+
+        if (MUI.Settings.Notifications.enabled !== undefined &&
+            MUI.Settings.Notifications.enabled === true &&
+            MUI.Settings.Notifications.overlay !== undefined &&
+            MUI.Settings.Notifications.overlay !== '') {
+
+            if($('[data-muinotify="overaly"]').length == 0) {
+                var div = MUI.Settings.Notifications.overlay;
+
+                $('body').append(div);
+                MUI.Notify.overlay = $('[data-muinotify="overlay"]');
+                $(MUI.Notify.overlay).hide();
+                MUI.Notify.hasOverlay = true;
             }
         }
     }

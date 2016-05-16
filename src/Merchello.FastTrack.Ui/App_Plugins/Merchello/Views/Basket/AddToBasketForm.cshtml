@@ -49,7 +49,7 @@
 
                         <div class="form-group" data-muioption="@option.Key">
                             @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), @class = "form-control" })
-                            @Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")
+                            @*@Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")*@
                         </div>
 
                         index = index + 1;

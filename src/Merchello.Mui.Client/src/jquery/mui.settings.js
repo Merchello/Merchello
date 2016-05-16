@@ -4,9 +4,17 @@ if (MUI !== undefined) {
     // Allows for overriding MUI defaults
     MUI.Settings = {
 
-        eventHandlers: function() {
-            // Braintree
-            MUI.on('BraintreePayPal.success', MUI.Settings.Payments.braintreePayPalSuccess);
+        // API endpoints
+        // These can be adjusted to match custom controllers which implement base classes
+        Endpoints: {
+            // the basket surface controller end point
+            basketSurface: '/umbraco/Merchello/Basket/',
+
+            // the product table api controller end point
+            productTableApi: '/umbraco/Merchello/ProductDataTableApi/',
+
+            // the braintree surface controller
+            brainTreeSurface:   '/umbraco/fasttrack/BraintreePayPal/'
         },
 
         // Notifications - the notification bar
@@ -22,19 +30,8 @@ if (MUI !== undefined) {
 
             // the template for the notification bar
             template: '<div class="alert mui-notify-bar" data-muinotify="notifybar"><div class="container" data-muivalue="nofity">Success</div></div>',
-        },
 
-        // API endpoints
-        // These can be adjusted to match custom controllers which implement base classes
-        Endpoints: {
-            // the basket surface controller end point
-            basketSurface: '/umbraco/Merchello/Basket/',
-
-            // the product table api controller end point
-            productTableApi: '/umbraco/Merchello/ProductDataTableApi/',
-
-            // the braintree surface controller
-            brainTreeSurface:   '/umbraco/fasttrack/BraintreePayPal/'
+            overlay: '<div class="mui-overlay" data-muinotify="overlay"></div>'
         },
 
         // Payment handlers
@@ -42,18 +39,9 @@ if (MUI !== undefined) {
 
             // if true a button to post the payment (nonce) back to the server to complete the payment.
             // if false, the payment will be submitted as soon as the nonce is received from braintree
-            braintreePayPalRequiresBtn: false,
-            
-            // redirection after a successful braintree paypal payment
-            braintreePayPalSuccess: function() {
-                var successUrl = $('#braintree-pay-pal-successurl').val();
-                window.location = successUrl;
-            }
+            braintreePayPalRequiresBtn: false
 
         }
     }
-
-    // bind the event handlers
-    MUI.Settings.eventHandlers();
 };
 

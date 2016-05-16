@@ -93,6 +93,7 @@ MUI.Checkout.Payment = {
     },
 
     postPayPalForm: function(method, data) {
+        MUI.Notify.toggleOverlay();
         $.ajax({
             url: MUI.Settings.Endpoints.brainTreeSurface + method,
             type: 'POST',
@@ -105,6 +106,7 @@ MUI.Checkout.Payment = {
     },
 
     handlePaymentResult: function(result, evt) {
+        MUI.Notify.toggleOverlay();
         if (result.Success) {
             MUI.emit('AddItem.added', result);
             MUI.emit(evt, result);
@@ -116,6 +118,7 @@ MUI.Checkout.Payment = {
     },
 
     handlePaymentException: function(err) {
+        MUI.Notify.toggleOverlay();
         MUI.Notify.error('There was an error');
         MUI.Logger.captureError(err);
     },
