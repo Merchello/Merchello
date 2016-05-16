@@ -18,7 +18,7 @@
     var hasVariants = product.ProductVariants.Any();
 }
 
-<div class="well" data-muiproduct="@product.Key">
+<div class="well" data-muivalue="product" data-muikey="@product.Key">
     @if (hasVariants)
     {
         // A container to populate the variant pricing via JavaScript

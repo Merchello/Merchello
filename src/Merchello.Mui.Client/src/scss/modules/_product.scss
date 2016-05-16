@@ -1,3 +1,12 @@
 .product-box {
   clear: both;
 }
+
+.price {
+  font-weight: bold;
+}
+
+.original-price {
+  font-weight: normal;
+  text-decoration: line-through;
+}

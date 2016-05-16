@@ -11,4 +11,6 @@
             window.location = successUrl;
         }
     }
+    
+
 })();

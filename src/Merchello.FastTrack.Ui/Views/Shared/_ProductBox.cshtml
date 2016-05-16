@@ -15,19 +15,6 @@
         {
             <p>@Model.GetPropertyValue("brief")</p>
         }
-
-        <p class="price">
-            @if (Model.OnSale)
-            {
-                <span class="price-sale">
-                    @Model.SalePrice.AsFormattedCurrency() <span class="glyphicon glyphicon glyphicon-fire" aria-hidden="true"></span>
-                </span>
-            }
-            else
-            {
-                @Model.Price.AsFormattedCurrency()
-            }
-        </p>
     </div>
     @Html.Action("AddProductToBasketForm", "Basket", new { area = "Merchello", model = Model })
 </div>

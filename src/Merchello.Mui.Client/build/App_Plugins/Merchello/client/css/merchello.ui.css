@@ -62,4 +62,11 @@ form .mui-requirejs {
 .product-box {
   clear: both; }
 
+.price {
+  font-weight: bold; }
+
+.original-price {
+  font-weight: normal;
+  text-decoration: line-through; }
+
 /*# sourceMappingURL=merchello.ui.css.map */
