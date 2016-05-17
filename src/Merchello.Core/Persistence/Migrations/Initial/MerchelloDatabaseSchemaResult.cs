@@ -90,7 +90,17 @@
             {
                 return new Version(1, 13, 0);
             }
-            
+
+            if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
+                StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey) ||
+                !this.ValidColumns.Contains("merchNote,author") ||
+                this.ValidColumns.Contains("merchCustomer,notes") ||
+                !this.ValidColumns.Contains("merchCustomer,notes") ||
+                this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.PaymentMethod.RedirectKey))
+            {
+                return new Version(1, 14, 1);
+            }
+
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))

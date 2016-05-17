@@ -199,6 +199,7 @@ namespace Merchello.Core.Services
         public static event TypedEventHandler<IOrderService, DeleteEventArgs<IOrder>> Deleted;
 
         #endregion
+
         /// <summary>
         /// Creates a <see cref="IOrder"/> without saving it to the database
         /// </summary>

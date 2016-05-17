@@ -77,9 +77,9 @@
 
                     if (type === 'rendersection') {
                         if (data.required) {
-                            code = "\n@RenderSection(\"" + data.name + "\", true);\n";
+                            code = "\n@RenderSection(\"" + data.name + "\", true)\n";
                         } else {
-                            code = "\n@RenderSection(\"" + data.name + "\" false);\n";
+                            code = "\n@RenderSection(\"" + data.name + "\", false)\n";
                         }
                     }
 
@@ -174,6 +174,9 @@
             }
             if (args.contents) {
                 UmbEditor.SetCode(args.contents);
+            } else if (!this.IsSimpleEditor) {
+                // Restore focuse to text region. SetCode also does this.
+                UmbEditor._editor.focus();
             }
 
             UmbClientMgr.mainTree().setActiveTreeType(this._opts.currentTreeType);

@@ -52,12 +52,32 @@
         function toArray() {
             return this.items;
         }
+        
+        function asDetachedValueArray() {
+            var values = [];
+            angular.forEach(this.items, function(dcv) {
+
+                // ensure there are not null values
+                if (dcv.value === null) {
+                    dcv.value = '';
+                }
+
+                // ensure property did not set an array
+                if (angular.isArray(dcv.value) && dcv.value.length == 0) {
+                    dcv.value = '';
+                }
+                values.push(dcv);
+            });
+            
+            return values;
+        }
 
         return {
             isEmpty: isEmpty,
             getValue: getValue,
             setValue: setValue,
-            toArray: toArray
+            toArray: toArray,
+            asDetachedValueArray: asDetachedValueArray
         };
     }());
 

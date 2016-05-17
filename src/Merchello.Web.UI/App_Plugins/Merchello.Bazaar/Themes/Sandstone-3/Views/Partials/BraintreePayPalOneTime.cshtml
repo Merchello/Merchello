@@ -1,0 +1,25 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<CheckoutConfirmationForm>
+@using Merchello.Bazaar.Models
+@using System.Web.Mvc.Html
+@using Merchello.Bazaar.Controllers
+@using Umbraco.Web
+
+<div id="paypal-container"></div>
+@using (Html.BeginUmbracoForm<BraintreePayPalOneTimeController>("ConfirmSale", null, new { area = "BraintreeBazaar", @id = "braintreeCreditCard" }))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" id="paypal_payment_method_nonce" name="paypal_payment_method_nonce" value=""/>
+    @Html.HiddenFor(x => x.ShipMethodKey, new { @class = "selected-shipmethod-key" })
+    @Html.HiddenFor(x => x.PaymentMethodKey, new { @class = "selected-paymentmethod-key" })
+    @Html.HiddenFor(x => x.CustomerToken, new { @id = "customer-token" })
+    @Html.HiddenFor(x => x.ReceiptPageId)
+
+    <div class="control-group">
+        <button type="submit" id="btpaypal-confirm-sale" class="btn btn-primary">Confirm Sale</button>
+    </div>
+}
+
+
+
+@Html.Action("RenderPayPalSetupJs", "BraintreePayPalOneTime", new { area = "Bazaar" })

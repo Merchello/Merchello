@@ -192,7 +192,7 @@
 
                 var optionChoices = new List<ProductAttributeDisplay>();
 
-                foreach (var choice in option.Choices)
+                foreach (var choice in option.Choices.OrderBy(x => x.SortOrder))
                 {
                     if (ValidateOptionChoice(variants, choice.Key))
                     {

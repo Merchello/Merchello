@@ -10,6 +10,7 @@
     using System.Xml.Linq;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Interfaces;
@@ -247,7 +248,7 @@
 
             if (!provider.EnsureEntityType(EntityType.Product))
             {
-                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");
+                MultiLogHelper.Debug(typeof(ProductExtensions), "Attempted to add a product to a non product collection");
                 return;
             }
 

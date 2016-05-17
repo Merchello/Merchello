@@ -22,4 +22,16 @@
         self.extendedData = {};
     };
 
+    InvoiceLineItemDisplay.prototype = (function() {
+
+        function absPrice() {
+            return Math.abs(this.price);
+        }
+
+        return {
+            absPrice : absPrice
+        };
+
+    }());
+
     angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);

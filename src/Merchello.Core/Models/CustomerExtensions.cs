@@ -9,6 +9,7 @@
     using System.Xml.Linq;
 
     using Merchello.Core.EntityCollections;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
 
     using Newtonsoft.Json;
@@ -189,7 +190,7 @@
 
             if (!provider.EnsureEntityType(EntityType.Customer))
             {
-                LogHelper.Debug(typeof(ProductExtensions), "Attempted to add a customer to a non customer collection");
+                MultiLogHelper.Debug(typeof(CustomerExtensions), "Attempted to add a customer to a non customer collection");
                 return;
             }
 
@@ -462,7 +463,7 @@
                     writer.WriteAttributeString("email", customer.Email);
                     writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
                     writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
-                    writer.WriteAttributeString("notes", customer.Notes);
+                    writer.WriteAttributeString("notes", customer.Notes.ToJsonCollection());
                     writer.WriteAttributeString("addresses", customer.AddressesAsJson());
                     writer.WriteAttributeString("lastActivityDate", customer.LastActivityDate.ToString("s"));
                     writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));

@@ -1931,6 +1931,13 @@
             <value>Configured text for the default document type property</value>
             <remarks>If undefined, 'Textstring' is the default</remarks>
         </member>
+        <member name="P:umbraco.UmbracoSettings.EnableInheritedDocumentTypes">
+            <summary>
+            Enables inherited document types.
+            This feature is not recommended and therefore is not enabled by default in new installations.
+            Inherited document types will not be supported in v8.
+            </summary>
+        </member>
         <member name="P:umbraco.UmbracoSettings.SettingsFilePath">
             <summary>
             Gets the settings file path

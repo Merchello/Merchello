@@ -37,7 +37,7 @@
         banner:
             '/*! <%= pkg.title || pkg.name %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
+            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>.\n' +
             ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
         
         // file locations
@@ -65,6 +65,7 @@
                 files: [
                     { dest: '<%= distdir %>/views', src: ['**/*.html', '!**/*.controller.js'], expand: true, cwd: 'src/views/' },
                     { dest: '<%= distdir %>/views', src: ['**/*.html', '!**/*.js'], expand: true, cwd: 'src/common/' }
+
                 ]
             },
 
@@ -83,7 +84,7 @@
             },
 
             lib: {
-                files: [{ dest: '<%= distdir %>/lib/', src: '../lib/charts/*.*', expand: true, cwd: 'lib/' }]
+                files: [{ dest: '<%= distdir %>/lib/', src: ['../lib/charts/*.*', '../lib/codemirror/*.*'], expand: true, cwd: 'lib/' }]
             },
 
             config: {

@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
+
     using Merchello.Core.Gateways.Taxation;
 
     using Newtonsoft.Json;
@@ -10,6 +12,11 @@
     /// </summary>
     public class SettingDisplay
 	{
+        /// <summary>
+        /// Gets or sets the migration key.
+        /// </summary>
+        public Guid MigrationKey { get; set; }
+
         /// <summary>
         /// Gets or sets the currency code.
         /// </summary>
@@ -69,6 +76,15 @@
         /// Gets or sets the default extended content culture.
         /// </summary>
         public string DefaultExtendedContentCulture { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the current domain is know to have a record.
+        /// </summary>
+        /// <remarks>
+        /// This is used to by Merchello to help further the project by giving the development team (internally)
+        /// an indication of what domains are using Merchello
+        /// </remarks>
+        public bool HasDomainRecord { get; set; }
 
         /// <summary>
         /// Gets or sets the how taxes should be applied globally.

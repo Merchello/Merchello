@@ -3,21 +3,30 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
 
     using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
 
     using Newtonsoft.Json;
 
+    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
-    using Umbraco.Web.Models;
 
     /// <summary>
     /// The product variant detached content display.
     /// </summary>
     public class ProductVariantDetachedContentDisplay
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantDetachedContentDisplay"/> class.
+        /// </summary>
+        public ProductVariantDetachedContentDisplay()
+        {
+            this.ValueConversion = DetachedValuesConversionType.Db;
+        }
 
         /// <summary>
         /// Gets or sets the key.
@@ -70,6 +79,17 @@
         /// Gets or sets the update date.
         /// </summary>
         public DateTime UpdateDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is for back office for editor.
+        /// </summary>
+        /// <remarks>
+        /// We need this due the ability for developers to override the value returned 
+        /// from a property specifically for back office editors and when rendering for the 
+        /// front end content we want to use the raw database value instead.
+        /// </remarks>
+        [JsonIgnore]
+        internal DetachedValuesConversionType ValueConversion { get; set; }
     }
 
     /// <summary>
@@ -153,8 +173,17 @@
             destination.TemplateId = display.TemplateId;
             destination.CanBeRendered = display.CanBeRendered;
 
+            // Find any detached content items that should be removed
+            var validPropertyTypeAliases = display.DetachedDataValues.Select(x => x.Key);
+            var removers = destination.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+            foreach (var remove in removers)
+            {
+                destination.DetachedDataValues.RemoveValue(remove.Key);
+            }
+
             foreach (var item in display.DetachedDataValues)
             {
+                if (!item.Key.IsNullOrWhiteSpace())
                 destination.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
             }
 
@@ -176,17 +205,18 @@
         public static IEnumerable<IPublishedProperty> DataValuesAsPublishedProperties(this ProductVariantDetachedContentDisplay pvd, PublishedContentType contentType)
         {
             var properties = new List<IPublishedProperty>();
-            foreach (var value in pvd.DetachedDataValues)
+
+            foreach (var dcv in pvd.DetachedDataValues)
             {
-                var propType = contentType.GetPropertyType(value.Key);
+                var propType = contentType.GetPropertyType(dcv.Key);
                 object valObj;
                 try
                 {
-                    valObj = JsonConvert.DeserializeObject<object>(value.Value);
+                    valObj = DetachedValuesConverter.Current.ConvertDbForContent(propType, dcv).Value;
                 }
                 catch
-                {                    
-                    valObj = value.Value.Substring(1, value.Value.Length - 1);
+                {
+                    valObj = dcv.Value;
                 }
 
                 if (propType != null)
@@ -196,6 +226,6 @@
             }
 
             return properties;
-        } 
+        }
     }
 }

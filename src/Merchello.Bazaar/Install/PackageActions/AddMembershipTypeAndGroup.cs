@@ -108,15 +108,17 @@
         /// </returns>
         public bool Undo(string packageName, XmlNode xmlData)
         {
-            // remove the MemberType
-            var mt = _services.MemberTypeService.Get(MemberTypeName);
-            if (mt != null) _services.MemberTypeService.Delete(mt);
-
-            // remove the MemberGroup
-            var mg = _services.MemberGroupService.GetByName(MemberGroupName);
-            if (mg != null) _services.MemberGroupService.Delete(mg);
-
+            //// http://issues.merchello.com/youtrack/issue/M-968
             return true;
+            //// remove the MemberType
+            //var mt = _services.MemberTypeService.Get(MemberTypeName);
+            //if (mt != null) _services.MemberTypeService.Delete(mt);
+
+            //// remove the MemberGroup
+            //var mg = _services.MemberGroupService.GetByName(MemberGroupName);
+            //if (mg != null) _services.MemberGroupService.Delete(mg);
+
+            //return true;
         }
 
         /// <summary>

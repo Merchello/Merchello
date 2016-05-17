@@ -5,11 +5,17 @@
     using System.Net;
     using System.Net.Mail;
     using System.Threading.Tasks;
+
+    using Events;
+
+    using Merchello.Core.Logging;
+
     using Models;
+
     using Services;
 
     using Umbraco.Core;
-    using Umbraco.Core.Logging;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// Represents a SmtpNotificationGatewayMethod
@@ -43,6 +49,11 @@
         }
 
         /// <summary>
+        /// Occurs before sending the email message.
+        /// </summary>
+        public static event TypedEventHandler<SmtpNotificationGatewayMethod, ObjectEventArgs<MailMessage>> Sending;
+
+        /// <summary>
         /// Does the actual work of sending the <see cref="IFormattedNotificationMessage"/>
         /// </summary>
         /// <param name="message">The <see cref="IFormattedNotificationMessage"/> to be sent</param>
@@ -58,7 +69,7 @@
                 IsBodyHtml = true
             };
 
-            LogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
+            MultiLogHelper.Info<SmtpNotificationGatewayMethod>("Sending an email to " + string.Join(", ", message.Recipients));
 
             foreach (var to in message.Recipients)
             {
@@ -67,9 +78,9 @@
                     msg.To.Add(new MailAddress(to));
                 }
             }
-            
-            //// We want to send the email async
-            ////Task<bool> sendAsync = this.SendAsync(msg);
+
+            // Event raised to allow further modification to msg (like attachments)
+            Sending.RaiseEvent(new ObjectEventArgs<MailMessage>(msg), this);
 
             this.Send(msg);
         }
@@ -103,7 +114,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
+                MultiLogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
                 return false;
             }
         }
@@ -141,7 +152,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
+                MultiLogHelper.Error<SmtpNotificationGatewayMethod>("Merchello.Core.Gateways.Notification.Smtp.SmtpNotificationGatewayMethod  failed sending email", ex);
                 return false;
             }
         }

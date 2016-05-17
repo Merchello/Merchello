@@ -11,6 +11,7 @@
     using Merchello.Core;
     using Merchello.Core.Chains.CopyEntity.Product;
     using Merchello.Core.Services;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
@@ -70,7 +71,7 @@
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
 
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -89,7 +90,7 @@
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -142,7 +143,22 @@
         [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
-            return _productService.GetByKey(id).ToProductDisplay();
+            return _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not a SKU exists.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The value indicating whether the SKU exists.
+        /// </returns>
+        [HttpGet]
+        public bool GetSkuExists(string sku)
+        {
+            return _productService.SkuExists(sku);
         }
 
         /// <summary>
@@ -157,7 +173,7 @@
         [HttpPost]
         public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
         {
-            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay());
+            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
         }
 
             /// <summary>
@@ -203,17 +219,50 @@
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
         [HttpPost]
+        [Obsolete("AddProduct is being superceded by CreateProduct so we can attach content at time of creation")]
         public ProductDisplay AddProduct(ProductDisplay product)
         {
             var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
 
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
 
+        [HttpPost]
+        public ProductDisplay CreateProduct(ProductDisplay product)
+        {
+            // we need to remove the detached content to generate the product to begin with due to db foreign keys
+            var detachedContents = product.DetachedContents.ToArray();
+            product.DetachedContents = Enumerable.Empty<ProductVariantDetachedContentDisplay>();
 
+            // First create the product record and save it
+            var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
+            merchProduct = product.ToProduct(merchProduct);
+
+            // we don't want to raise events here since we will be saving again and there is no sense
+            // in having examine index it twice. Use the detached contents to determine whether we need to fire event
+            _productService.Save(merchProduct, !detachedContents.Any());
+
+            if (!detachedContents.Any()) return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+
+            // convert the product back so we can reassociate the detached content.
+            product = merchProduct.ToProductDisplay();
+
+            // asscociate the product variant key (master variant) with the detached content
+            foreach (var pvdc in detachedContents)
+            {
+                pvdc.ProductVariantKey = merchProduct.ProductVariantKey;
+            }
+
+            // add the detached contents back
+            product.DetachedContents = detachedContents;
+
+            // this adds the detached content to the product
+            merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -244,7 +293,7 @@
 
             if (!attempt.Success) throw attempt.Exception;
 
-            return attempt.Result.ToProductDisplay();
+            return attempt.Result.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -267,7 +316,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -293,7 +342,7 @@
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -313,7 +362,7 @@
 
             _productVariantService.Save(variant);
 
-            return variant.ToProductVariantDisplay();
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -338,7 +387,7 @@
 
             _productVariantService.Save(variant);
 
-            return variant.ToProductVariantDisplay();
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>

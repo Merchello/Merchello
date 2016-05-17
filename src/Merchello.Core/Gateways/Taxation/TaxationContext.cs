@@ -245,9 +245,10 @@
             if (taxMethod == null)
             {
                 LogHelper.Debug<TaxationContext>("Product based pricing is set in settings, but a TaxMethod has not been assigned.");
-                this._taxMethodNotQueried = false;
+                this._taxMethodNotQueried = true;
                 return null;
             }
+
             var provider = GatewayProviderResolver.GetProviderByKey<TaxationGatewayProviderBase>(taxMethod.ProviderKey);
 
             if (provider == null)
@@ -261,6 +262,7 @@
 
             if (productProvider != null)
             {
+                this._taxMethodNotQueried = false;
                 return productProvider.GetTaxationByProductMethod(taxMethod.Key);
             }
 

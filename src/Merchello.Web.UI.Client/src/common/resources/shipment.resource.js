@@ -4,7 +4,8 @@
      * @description Loads in data and allows modification for shipments
      **/
     angular.module('merchello.resources').factory('shipmentResource',
-        ['$http', 'umbRequestHelper', function($http, umbRequestHelper) {
+        ['$http', '$q', 'umbRequestHelper',
+            function($http, $q, umbRequestHelper) {
         return {
 
             getAllShipmentStatuses: function () {
@@ -96,5 +97,6 @@
                         params: { id: shipment.key }
                     }), 'Failed to delete shipment');
             }
+
         };
     }]);

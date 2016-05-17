@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents and order shipped monitor
     /// </summary>
-    [MonitorFor("1078FE96-6C73-4CC7-A92D-496AFB2FC3CB", typeof(OrderShippedTrigger), "Order Shipped Message (Pattern Replace)")]
+    [MonitorFor("1078FE96-6C73-4CC7-A92D-496AFB2FC3CB", typeof(OrderShippedTrigger), "Order Shipped (Legacy)")]
     public class OrderShippedMonitor : NotificationMonitorBase<IShipmentResultNotifyModel>
     {
         /// <summary>

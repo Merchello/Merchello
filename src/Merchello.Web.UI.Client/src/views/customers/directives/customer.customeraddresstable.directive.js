@@ -24,7 +24,6 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
             $scope.openDeleteAddressDialog = openDeleteAddressDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
 
-            console.info($scope.addressType);
 
             /**
              * @ngdoc method
@@ -64,7 +63,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                 // address to be the primary address
 
                 dialogData.customerAddress.addressType = $scope.addressType;
-                console.info(dialogData);
+
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.customeraddress.addedit.html',
                     show: true,
@@ -122,7 +121,7 @@ angular.module('merchello.directives').directive('customerAddressTable', functio
                     }
                 }
                 $scope.customer.addresses.push(dialogData.customerAddress);
-                console.info($scope.customer);
+
                 save();
             }
 

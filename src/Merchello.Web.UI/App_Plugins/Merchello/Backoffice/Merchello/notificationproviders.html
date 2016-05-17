@@ -35,7 +35,34 @@
                     </label>
 
                     <div class="merchello-controls">
-                            <notification-methods></notification-methods>
+                        <div class="row-fluid">
+
+                            <table class="table table-striped merchello-striped-table form-horizontal">
+                                <thead>
+                                <tr>
+                                    <th><localize key="general_name" /></th>
+                                    <th><localize key="merchelloNotificationsEdit_description" /></th>
+                                    <th>Messages</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr data-ng-repeat="method in provider.notificationMethods">
+                                    <td>{{method.name}}</td>
+                                    <td>{{method.description}}</td>
+                                    <td>
+                                        <div data-ng-repeat="msg in method.notificationMessages">
+                                            <a prevent-default data-ng-click="goToEditor(msg)">{{ msg.name }}</a>
+                                        </div>
+                                        <a prevent-default data-ng-click="addNotificationMessage(method)">Add message</a>
+                                    </td>
+                                    <td class="merchello-icon-container pull-right">
+                                        <merchello-icon-bar show-edit="true" show-delete="true" do-edit="editNotificationMethod(method)" do-delete="deleteNotificationMethod(method)" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 

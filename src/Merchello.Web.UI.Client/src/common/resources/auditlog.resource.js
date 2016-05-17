@@ -13,9 +13,10 @@
              * @description
              **/
             getByEntityKey: function(key) {
+                var url = Umbraco.Sys.ServerVariables["merchelloUrls"]["merchelloAuditLogApiBaseUrl"] + 'GetByEntityKey';
                 return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetByEntityKey'),
+                    url: url,
                     method: "GET",
                     params: { id: key }
                 }),

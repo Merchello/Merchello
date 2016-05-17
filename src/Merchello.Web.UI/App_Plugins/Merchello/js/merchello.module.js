@@ -16,21 +16,9 @@
     angular.module('merchello.resources', ['merchello.models']);
     angular.module('merchello.services', ['merchello.models']);
     angular.module('merchello.plugins', ['chart.js']);
-    //// Assert our dependencies
+    //// Inject our dependencies
     angular.module('umbraco.packages').requires.push('merchello');
 
 }());
 
-// LEGACY NAMESPACES - THESE SHOULD NO LONGER BY USED
-(function (merchello, undefined) {
-
-    // Global namespaces defined
-    merchello.Models = {};
-    merchello.Controllers = {};
-    merchello.Directives = {};
-    merchello.Filters = {};
-    merchello.Services = {};
-    merchello.Helpers = {};
-
-}(window.merchello = window.merchello || {}));
 

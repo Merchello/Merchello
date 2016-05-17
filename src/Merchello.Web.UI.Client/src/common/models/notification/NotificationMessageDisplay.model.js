@@ -19,7 +19,7 @@
         self.monitorKey = '';
         self.methodKey = '';
         self.recipients = '';
-        self.sendToCustomer = '';
+        self.sendToCustomer = true;
         self.disabled = false;
     };
 

@@ -613,11 +613,13 @@
         /// <param name="address">
         /// The address to be saved
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public void Save(ICustomerAddress address)
         {
             _customerAddressService.Save(address);
         }
 
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public void Save(IEnumerable<ICustomerAddress> addresses)
         {
             _customerAddressService.Save(addresses);
@@ -629,6 +631,7 @@
         /// <param name="address">
         /// The address to be deleted
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public void Delete(ICustomerAddress address)
         {
             _customerAddressService.Delete(address);
@@ -643,6 +646,7 @@
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public ICustomerAddress GetAddressByKey(Guid key)
         {
             return _customerAddressService.GetByKey(key);
@@ -657,6 +661,7 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
         {
             return _customerAddressService.GetByCustomerKey(customerKey);
@@ -674,6 +679,7 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType)
         {
             return _customerAddressService.GetByCustomerKey(customerKey, addressType);
@@ -691,6 +697,7 @@
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType)
         {
             return _customerAddressService.GetDefaultCustomerAddress(customerKey, addressType);

@@ -1,6 +1,6 @@
-/*! merchello
+/*! Merchello
  * https://github.com/meritage/Merchello
- * Copyright (c) 2016 Merchello;
+ * Copyright (c) 2016 Across the Pond, LLC.
  * Licensed MIT
  */
 
@@ -82,9 +82,10 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
              * @description
              **/
             getByEntityKey: function(key) {
+                var url = Umbraco.Sys.ServerVariables["merchelloUrls"]["merchelloAuditLogApiBaseUrl"] + 'GetByEntityKey';
                 return umbRequestHelper.resourcePromise(
                 $http({
-                    url: umbRequestHelper.getApiUrl('merchelloAuditLogApiBaseUrl', 'GetByEntityKey'),
+                    url: url,
                     method: "GET",
                     params: { id: key }
                 }),
@@ -107,6 +108,100 @@ angular.module('merchello.resources').factory('abandonedBasketResource',
                     'Failed to retreive sales history log for invoice with following key: ' + key);
             }
         };
+    }]);
+
+angular.module('merchello.resources').factory('backOfficeCheckoutResource',
+    ['$http', '$q', 'umbRequestHelper', 'customerItemCacheDisplayBuilder', 'invoiceDisplayBuilder', 'shipmentRateQuoteDisplayBuilder',
+    function($http, $q, umbRequestHelper, customerItemCacheDisplayBuilder, invoiceDisplayBuilder, shipmentRateQuoteDisplayBuilder) {
+
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloBackOfficeCheckoutApiBaseUrl'];
+
+        return {
+
+            addItemCacheItem : function(instruction) {
+                var url = baseUrl + 'AddItemCacheItem';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        instruction
+                    ),
+                    'Failed to add item to the item cache');
+            },
+
+            removeItemCacheItem : function(instruction) {
+
+                var url = baseUrl + 'RemoveItemCacheItem';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        instruction
+                    ),
+                    'Failed to remove item from the item cache');
+            },
+
+            updateLineItemQuantity : function(instruction) {
+
+                var url = baseUrl + 'UpdateLineItemQuantity';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url, instruction),
+                    'Failed to update item quantity');
+            },
+
+            createCheckoutInvoice: function(model) {
+                var url = baseUrl + 'CreateCheckoutInvoice';
+
+                var defer = $q.defer();
+
+                umbRequestHelper.resourcePromise(
+                    $http.post(url, model),
+                    'Failed to update item quantity')
+                    .then(function(result) {
+                        var invoice = invoiceDisplayBuilder.transform(result);
+                        defer.resolve(invoice);
+                    });
+
+                return defer.promise;
+            },
+
+            moveToWishlist : function(instruction) {
+                var url = baseUrl + 'MoveToWishlist';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        instruction
+                    ),
+                    'Failed to move item to wish list');
+            },
+
+            moveToBasket : function(instruction) {
+                var url = baseUrl + 'MoveToBasket';
+                return umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        instruction
+                    ),
+                    'Failed to move item to basket');
+            },
+
+            getShipmentRateQuotes: function(customerKey) {
+                var url = baseUrl + 'GetShipmentRateQuotes';
+
+                var defer = $q.defer();
+
+                umbRequestHelper.resourcePromise(
+                    $http({
+                        url: url,
+                        method: "GET",
+                        params: { customerKey: customerKey }
+                    }),
+                    'Failed to quote shipments for customer basket')
+                    .then(function(result) {
+                        var quotes = shipmentRateQuoteDisplayBuilder.transform(result);
+                        defer.resolve(quotes);
+                    });
+
+                return defer.promise;
+
+            }
+
+        };
+
     }]);
 
     /**
@@ -688,6 +783,15 @@ angular.module('merchello.resources')
                             'Failed to save invoice');
                     },
 
+                    saveInvoiceAdjustments: function(adjustments) {
+                        var url = baseUrl + 'PutInvoiceAdjustments';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                adjustments
+                            ),
+                            'Failed to save invoice');
+                    },
+
                     saveInvoiceShippingAddress: function (data) {
                         var url = baseUrl + 'PutInvoiceShippingAddress';
                         return umbRequestHelper.resourcePromise(
@@ -838,8 +942,7 @@ angular.module('merchello.resources').factory('noteResource', [
                     params: { id: key }
                 }),
                 'Failed to retrieve notes for entity with following key: ' + key);
-            },
-
+            }
 
         };
     }]);
@@ -894,7 +997,7 @@ angular.module('merchello.resources').factory('noteResource', [
                             'Failed to save data for Notification');
                     },
 
-                    saveNotificationMethod: function (method) {
+                    addNotificationMethod: function (method) {
                         var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'AddNotificationMethod';
                         return umbRequestHelper.resourcePromise(
                             $http.post(
@@ -904,6 +1007,16 @@ angular.module('merchello.resources').factory('noteResource', [
                             'Failed to save data for Notification');
                     },
 
+                    saveNotificationMethod: function(method) {
+                        var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'PutNotificationMethod';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(
+                                url,
+                                angular.toJson(method)
+                            ),
+                            'Failed to save data for Notification');
+                    },
+                    
                     deleteNotificationMethod: function (methodKey) {
                         var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloNotificationApiBaseUrl'] + 'DeleteNotificationMethod';
                         return umbRequestHelper.resourcePromise(
@@ -969,7 +1082,7 @@ angular.module('merchello.resources').factory('noteResource', [
             return {
 
                 getOrder: function (orderKey) {
-                    var url = Umbraco.Sys.ServerVariables['merchello']['merchelloOrderApiBaseUrl'] + 'GetOrder';
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloOrderApiBaseUrl'] + 'GetOrder';
                     return umbRequestHelper.resourcePromise(
                         $http({
                             url: url,
@@ -1278,6 +1391,8 @@ angular.module('merchello.resources').factory('noteResource', [
                  * @name add
                  * @description Creates a new product with an API call to the server
                  **/
+                // TODO this method is obsolete but it is still possible to get here so leave it
+                // Remove in version 3.0.0 or in Angular 2.x refactor
                 add: function (product) {
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'AddProduct';
                     return umbRequestHelper.resourcePromise(
@@ -1287,6 +1402,39 @@ angular.module('merchello.resources').factory('noteResource', [
                         'Failed to create product sku ' + product.sku);
                 },
 
+                /**
+                 * @ngdoc method
+                 * @name add
+                 * @description Creates a new product with an API call to the server
+                 **/
+                create: function(product) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'CreateProduct';
+                    angular.forEach(product.detachedContents, function(dc) {
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+                    });
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            product
+                        ),
+                        'Failed to create product sku ' + product.sku);
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name getByKey
+                 * @description Gets a value indicating whether or not a SKU exists
+                 **/
+                getSkuExists: function(sku) {
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'GetSkuExists';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { sku: sku }
+                        }),
+                        'Failed to test SKU');
+                },
+                
                 /**
                  * @ngdoc method
                  * @name getByKey
@@ -1333,7 +1481,7 @@ angular.module('merchello.resources').factory('noteResource', [
                  **/
                 save: function (product) {
                     angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
@@ -1345,7 +1493,7 @@ angular.module('merchello.resources').factory('noteResource', [
 
                 saveProductContent: function(product, cultureName, files) {
                     angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
 
                     angular.forEach(product.productVariants, function(pv) {
@@ -1388,7 +1536,7 @@ angular.module('merchello.resources').factory('noteResource', [
                  **/
                 saveVariant: function (productVariant) {
                     angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
@@ -1400,7 +1548,7 @@ angular.module('merchello.resources').factory('noteResource', [
 
                 saveVariantContent: function(productVariant, cultureName, files) {
                     angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.toArray();
+                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
 
@@ -1646,6 +1794,16 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
          */
         var settingsServices = {
 
+            recordDomain: function(record) {
+                var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloSettingsApiBaseUrl'] + 'RecordDomain';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            record
+                        ),
+                        'Failed to save data for domain record');
+            },
+
             /**
              * @ngdoc method
              * @name getMerchelloVersion
@@ -1822,7 +1980,8 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
      * @description Loads in data and allows modification for shipments
      **/
     angular.module('merchello.resources').factory('shipmentResource',
-        ['$http', 'umbRequestHelper', function($http, umbRequestHelper) {
+        ['$http', '$q', 'umbRequestHelper',
+            function($http, $q, umbRequestHelper) {
         return {
 
             getAllShipmentStatuses: function () {
@@ -1914,6 +2073,7 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
                         params: { id: shipment.key }
                     }), 'Failed to delete shipment');
             }
+
         };
     }]);
 angular.module('merchello.resources')
@@ -2156,6 +2316,75 @@ angular.module('merchello.resources').factory('taxationGatewayProviderResource',
                 'Failed to delete tax method');
         }
     };
+}]);
+
+angular.module('merchello.resources').factory('vieweditorResource',
+    ['$q', '$http', 'umbRequestHelper', 'pluginViewEditorContentBuilder',
+    function($q, $http, umbRequestHelper, pluginViewEditorContentBuilder) {
+
+        var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloPluginViewEditorApiBaseUrl'];
+
+        return {
+
+            getAllViews: function () {
+                var url = baseUrl + 'GetAllAppPluginsViews';
+                var deferred = $q.defer();
+                $q.all([
+                    umbRequestHelper.resourcePromise($http({ url: url, method: "GET" }), 'Failed to get all views')
+                ]).then(function(data) {
+                    var results = pluginViewEditorContentBuilder.transform(data[0]);
+                    deferred.resolve(results);
+                });
+
+                return deferred.promise;
+            },
+
+            getAllNotificationViews: function() {
+                var url = baseUrl + 'GetAllNotificationViews';
+                var deferred = $q.defer();
+                $q.all([
+                    umbRequestHelper.resourcePromise($http({ url: url, method: "GET" }), 'Failed to get all notification views')
+                ]).then(function(data) {
+                    var results = pluginViewEditorContentBuilder.transform(data[0]);
+                    deferred.resolve(results);
+                });
+
+                return deferred.promise;
+            },
+
+            addNewView: function(viewData) {
+                var url = baseUrl + 'AddNewView'
+                var deferred = $q.defer();
+                
+                $q.all([umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        viewData
+                    ), 'Failed to create a notification view')])
+                    .then(function(data) {
+                        var results = pluginViewEditorContentBuilder.transform(data[0]);
+                        deferred.resolve(results);
+                });
+                
+                return deferred.promise;
+            },
+
+            saveView: function(viewData) {
+                var url = baseUrl + 'SaveView';
+                var deferred = $q.defer();
+
+                $q.all([umbRequestHelper.resourcePromise(
+                    $http.post(url,
+                        viewData
+                    ), 'Failed to save a notification view')])
+                    .then(function(data) {
+                        var results = pluginViewEditorContentBuilder.transform(data[0]);
+                        deferred.resolve(results);
+                    });
+
+                return deferred.promise;
+            }
+
+        };
 }]);
 
     /**

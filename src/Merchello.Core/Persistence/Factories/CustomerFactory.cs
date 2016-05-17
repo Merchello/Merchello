@@ -10,7 +10,6 @@
     /// </summary>
     internal class CustomerFactory : IEntityFactory<ICustomer, CustomerDto>
     {
-        
         /// <summary>
         /// Builds the entity.
         /// </summary>
@@ -22,7 +21,7 @@
         /// </returns>
         public ICustomer BuildEntity(CustomerDto dto)
         {
-            return BuildEntity(dto, null);
+            return BuildEntity(dto, null, null);
         }
 
         /// <summary>
@@ -34,10 +33,13 @@
         /// <param name="addresses">
         /// The addresses.
         /// </param>
+        /// <param name="notes">
+        /// The notes.
+        /// </param>
         /// <returns>
         /// The <see cref="ICustomer"/>.
         /// </returns>
-        public ICustomer BuildEntity(CustomerDto dto, IEnumerable<ICustomerAddress> addresses)
+        public ICustomer BuildEntity(CustomerDto dto, IEnumerable<ICustomerAddress> addresses, IEnumerable<INote> notes)
         {
             var customer = new Customer(dto.LoginName)
             {
@@ -48,7 +50,7 @@
                 TaxExempt = dto.TaxExempt,
                 ExtendedData = new ExtendedDataCollection(dto.ExtendedData),
                 ExamineId = dto.CustomerIndexDto.Id,
-                Notes = dto.Notes,
+                Notes = notes ?? new List<INote>(),
                 Addresses = addresses ?? new List<ICustomerAddress>(),
                 CreateDate = dto.CreateDate,
                 UpdateDate = dto.UpdateDate
@@ -87,7 +89,6 @@
                       UpdateDate = entity.UpdateDate,
                       CreateDate = entity.CreateDate
                     },
-                    Notes = entity.Notes,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

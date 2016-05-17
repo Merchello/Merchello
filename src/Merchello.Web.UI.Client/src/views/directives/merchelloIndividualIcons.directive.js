@@ -76,7 +76,7 @@ angular.module('merchello.directives').directive('merchelloDeleteIcon', function
         '</a></span>',
         link: function(scope, elm, attr) {
             scope.title = '';
-            localizationService.localize('general_edit').then(function(value) {
+            localizationService.localize('general_delete').then(function(value) {
                 scope.title = value;
             });
         }
@@ -101,6 +101,28 @@ angular.module('merchello.directives').directive('merchelloProvincesIcon', funct
             localizationService.localize('merchelloShippingMethod_adjustIndividualRegions').then(function(value) {
                 scope.title = value;
             });
+        }
+    }
+});
+
+// the move icon
+angular.module('merchello.directives').directive('merchelloMoveIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doMove: '&'
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon merchello-icon-edit" ng-click="doMove()" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-width"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('general_move').then(function (value) {
+                scope.title = value;
+            });
+
         }
     }
 });

@@ -125,6 +125,7 @@
                         $scope.context = 'varianteditor';
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(key, productVariantKey);
                     }
+                    
                     $scope.preValuesLoaded = true;
                     $scope.tabs.setActive($scope.context);
                 }, function (reason) {

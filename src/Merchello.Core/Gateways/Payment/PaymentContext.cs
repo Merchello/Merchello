@@ -1,25 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-using Umbraco.Core.ObjectResolution;
-
-namespace Merchello.Core.Gateways.Payment
+﻿namespace Merchello.Core.Gateways.Payment
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Services;
+
     /// <summary>
     /// Represents the Payment Context
     /// </summary>
     internal class PaymentContext : GatewayProviderTypedContextBase<PaymentGatewayProviderBase>, IPaymentContext
     {
-        public PaymentContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver) 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentContext"/> class.
+        /// </summary>
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="resolver">
+        /// The resolver.
+        /// </param>
+        public PaymentContext(IGatewayProviderService gatewayProviderService, IGatewayProviderResolver resolver)
             : base(gatewayProviderService, resolver)
-        { }
+        {
+        }
 
         /// <summary>
-        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (Guid) of the GatewayMethod
+        /// Returns an instance of an 'active' GatewayProvider associated with a GatewayMethod based given the unique Key (GUID) of the GatewayMethod
         /// </summary>
-        /// <param name="gatewayMethodKey">The unique key (Guid) of the <see cref="IGatewayMethod"/></param>
+        /// <param name="gatewayMethodKey">The unique key (GUID) of the <see cref="IGatewayMethod"/></param>
         /// <returns>An instantiated GatewayProvider</returns>
         public override PaymentGatewayProviderBase GetProviderByMethodKey(Guid gatewayMethodKey)
         {

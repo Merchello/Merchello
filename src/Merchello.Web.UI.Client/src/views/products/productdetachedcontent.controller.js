@@ -1,8 +1,10 @@
 angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedContentController',
-    ['$scope', '$q', '$log', '$route', '$routeParams', '$location', 'editorState', 'notificationsService', 'dialogService', 'localizationService', 'merchelloTabsFactory', 'dialogDataFactory',
+    ['$scope', '$q', '$log', '$route', '$routeParams', '$timeout', '$location', 'editorState', 'notificationsService',
+        'dialogService', 'localizationService', 'merchelloTabsFactory', 'dialogDataFactory',
         'contentResource', 'detachedContentResource', 'productResource', 'settingsResource',
         'detachedContentHelper', 'productDisplayBuilder', 'productVariantDetachedContentDisplayBuilder',
-        function($scope, $q, $log, $route, $routeParams, $location, editorState, notificationsService, dialogService, localizationService, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $q, $log, $route, $routeParams, $timeout, $location, editorState, notificationsService,
+                 dialogService, localizationService, merchelloTabsFactory, dialogDataFactory,
                  contentResource, detachedContentResource, productResource, settingsResource,
                  detachedContentHelper, productDisplayBuilder, productVariantDetachedContentDisplayBuilder) {
 
@@ -46,6 +48,14 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 productVariantKey: ''
             };
 
+            var editor = {
+                detachedContentType: null,
+                scaffold: null,
+                ready: function(dtc) {
+                    return this.detachedContentType !== null && dtc !== null && this.detachedContentType.key === dtc.key;
+                }
+            };
+
             // initialize
             function init() {
                 var key = $routeParams.id;
@@ -54,6 +64,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 if (key === '' || key === undefined) {
                     $location.url('/merchello/merchello/productlist/manage', true);
                 }
+
+
                 var productVariantKey = $routeParams.variantid;
                 loadArgs.key = key;
                 loadArgs.productVariantKey = productVariantKey;
@@ -83,14 +95,18 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     slugLabelDescription = data[4];
                     selectTemplateLabel = data[5];
                     canBeRenderedLabel = data[6];
+
                     loadProduct(loadArgs);
+
                 }, function(reason) {
                     notificationsService.error('Failed to load ' + reason);
                 });
+
             }
 
             // loads the product from the resource
             function loadProduct(args) {
+                
                 productResource.getByKey(args.key).then(function(p) {
 
                     product = productDisplayBuilder.transform(p);
@@ -110,12 +126,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                         // this is a product variant edit
                         // in this case we need the specific variant
                         $scope.productVariant = product.getProductVariant(args.productVariantKey);
+
                         $scope.tabs = merchelloTabsFactory.createProductVariantEditorTabs(args.key, args.productVariantKey);
                         $scope.isVariant = true;
                     }
-
-                    //editorState.set($scope.productVariant);
-
+                    
                     $scope.loaded = true;
 
                     if ($scope.productVariant.hasDetachedContent()) {
@@ -124,57 +139,46 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                             var detachedContentType = $scope.productVariant.detachedContentType();
                             createDetachedContent(detachedContentType, missing);
                         }
+                        
                         $scope.detachedContent = $scope.productVariant.getDetachedContent($scope.language.isoCode);
+                        
                         $scope.isConfigured = true;
+
                         loadScaffold();
                     } else {
+                        $scope.tabs.setActive('productcontent');
                         $scope.preValuesLoaded = true;
                     }
-                    $scope.tabs.setActive('productcontent');
+
                 });
             }
 
             // The content type scaffold
             function loadScaffold() {
+                console.info($scope.currentTab);
                 // every detached content associated with a variant MUST share the same content type,
                 var detachedContentType = $scope.productVariant.detachedContentType();
 
-                contentResource.getScaffold(-20, detachedContentType.umbContentType.alias).then(function(scaffold) {
-                    filterTabs(scaffold);
-                    fillValues();
-                    if ($scope.contentTabs.length > 0) {
-                        if ($scope.currentTab === null) {
-                            $scope.currentTab = $scope.contentTabs[0];
-                        }
-                        setTabVisibility();
-                    }
-                    // add the rendering tab
-                    if ($scope.productVariant.master) {
-                        var umbContentType = $scope.detachedContent.detachedContentType.umbContentType;
-                        var args = {
-                            tabId: 'render',
-                            tabAlias: render,
-                            tabLabel: render,
-                            slugLabel: slugLabel,
-                            slugDescription: slugLabelDescription,
-                            templateLabel: selectTemplateLabel,
-                            slug: $scope.detachedContent.slug,
-                            templateId: $scope.detachedContent.templateId,
-                            allowedTemplates: umbContentType.allowedTemplates,
-                            defaultTemplateId: umbContentType.defaultTemplateId,
-                            canBeRenderedLabel: canBeRenderedLabel,
-                            canBeRendered: $scope.detachedContent.canBeRendered
-                        };
+                if (!editor.ready(detachedContentType)) {
 
-                        var rt = detachedContentHelper.buildRenderTab(args);
-                        $scope.contentTabs.push(rt);
-                        umbracoTabs.push(rt.id);
-                        $scope.tabs.addActionTab(rt.id, rt.label, switchTab)
-                    }
+                    contentResource.getScaffold(-20, detachedContentType.umbContentType.alias).then(function(scaffold) {
 
-                    $scope.tabs.setActive($scope.currentTab.id);
+                        editor.detachedContentType = detachedContentType;
+                        editor.scaffold = scaffold;
+                        //currentScaffold.filterTabs($scope.contentTabs, $scope.tabs);
+                        //currentScaffold.fillValues($scope.tabs, $scope.detachedContent);
+                        filterTabs(scaffold);
+                        fillValues();
+
+                        stickTab();
+
+                        $scope.preValuesLoaded = true;
+                    });
+                } else {
+                    filterTabs(editor.scaffold);
+                    stickTab();
                     $scope.preValuesLoaded = true;
-                });
+                }
             }
 
             function save() {
@@ -196,7 +200,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
                         // we have to save here without assigning the scope.detachedContent otherwise we will only save the scaffold for the current language
                         // but the helper is expecting the scope value to be set.
-                        saveWithoutEvents();
+                        createDetachedContentSave();
                     });
                 }
             }
@@ -210,7 +214,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 saveDetachedContent();
             }
 
-            function saveWithoutEvents() {
+
+            function createDetachedContentSave() {
                 var promise;
                 if ($scope.productVariant.master) {
                     promise = productResource.save(product);
@@ -232,13 +237,16 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     promise = detachedContentHelper.detachedContentPerformSave({ saveMethod: productResource.saveVariantContent, content: $scope.productVariant, scope: $scope, statusMessage: 'Saving...' });
                 }
                 promise.then(function(data) {
+                    
                     $scope.loaded = false;
                     $scope.preValuesLoaded = false;
+
                     loadProduct(loadArgs);
                 });
             }
 
 
+            // TODO move this to a service
             function buildProductVariantDetachedContent(cultureName, detachedContent, tabs) {
                 var productVariantContent = productVariantDetachedContentDisplayBuilder.createDefault();
                 productVariantContent.cultureName = cultureName;
@@ -247,12 +255,70 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 productVariantContent.canBeRendered = true;
                 angular.forEach(tabs, function(tab) {
                     angular.forEach(tab.properties, function(prop) {
-                        productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));
+                        //productVariantContent.detachedDataValues.setValue(prop.alias, angular.toJson(prop.value));
+                        productVariantContent.detachedDataValues.setValue(prop.alias, prop.value);
                     })
                 });
                 return productVariantContent;
             }
 
+
+            function fillValues() {
+
+                if ($scope.contentTabs.length > 0) {
+                    angular.forEach($scope.contentTabs, function(ct) {
+                        angular.forEach(ct.properties, function(p) {
+                            var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
+                            if (stored !== '') {
+                                try {
+                                    p.value = angular.fromJson(stored);
+                                }
+                                catch (e) {
+                                    // Hack fix for some property editors
+                                    p.value = '';
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+
+            function stickTab() {
+                if ($scope.contentTabs.length > 0) {
+                    if ($scope.currentTab === null) {
+                        $scope.currentTab = $scope.contentTabs[0];
+                    }
+                    setTabVisibility();
+                }
+                ensureRenderTab();
+                $scope.tabs.setActive($scope.currentTab.id);
+            }
+
+            function ensureRenderTab() {
+                // add the rendering tab
+                if ($scope.productVariant.master) {
+                    var umbContentType = $scope.detachedContent.detachedContentType.umbContentType;
+                    var args = {
+                        tabId: 'render',
+                        tabAlias: render,
+                        tabLabel: render,
+                        slugLabel: slugLabel,
+                        slugDescription: slugLabelDescription,
+                        templateLabel: selectTemplateLabel,
+                        slug: $scope.detachedContent.slug,
+                        templateId: $scope.detachedContent.templateId,
+                        allowedTemplates: umbContentType.allowedTemplates,
+                        defaultTemplateId: umbContentType.defaultTemplateId,
+                        canBeRenderedLabel: canBeRenderedLabel,
+                        canBeRendered: $scope.detachedContent.canBeRendered
+                    };
+
+                    var rt = detachedContentHelper.buildRenderTab(args);
+                    $scope.contentTabs.push(rt);
+                    umbracoTabs.push(rt.id);
+                    $scope.tabs.addActionTab(rt.id, rt.label, switchTab)
+                }
+            }
             function filterTabs(scaffold) {
                 $scope.contentTabs = _.filter(scaffold.tabs, function(t) { return t.id !== 0 });
                 if ($scope.contentTabs.length > 0) {
@@ -281,26 +347,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     });
                     $scope.currentTab = fnd;
                     $scope.tabs.setActive(id);
-                }
-            }
-
-            function fillValues() {
-
-                if ($scope.contentTabs.length > 0) {
-                    angular.forEach($scope.contentTabs, function(ct) {
-                        angular.forEach(ct.properties, function(p) {
-                            var stored = $scope.detachedContent.detachedDataValues.getValue(p.alias);
-                            if (stored !== '') {
-                                try {
-                                    p.value = angular.fromJson(stored);
-                                }
-                                catch (e) {
-                                    // Hack fix for some property editors
-                                    p.value = stored.substring(1, stored.length-1);
-                                }
-                            }
-                        });
-                    });
                 }
             }
 

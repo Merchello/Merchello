@@ -3,7 +3,6 @@
     using System;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
 
     using Cache;
     using Configuration;
@@ -12,17 +11,12 @@
     using Merchello.Core.Chains.OfferConstraints;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Events;
-    using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Persistence;
-    using Merchello.Core.Persistence.Migrations;
-    using Merchello.Core.Persistence.Migrations.Analytics;
-    using Merchello.Core.Persistence.Migrations.Initial;
+    using Merchello.Core.Logging;
+    using Merchello.Core.ValueConverters;
 
     using Observation;
     using Persistence.UnitOfWork;
     using Services;
-
-    using umbraco.BusinessLogic;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -146,15 +140,15 @@
                 throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
 
             OnMerchelloInit();
-
-            //_timer = DisposableTimer.DebugDuration<CoreBootManager>("Merchello starting", "Merchello startup complete");
- 
-            // create the service context for the MerchelloAppContext   
-
-            AutoMapperMappings.CreateMappings();            
             
-            var serviceContext = new ServiceContext(new RepositoryFactory(_logger, _sqlSyntaxProvider), _unitOfWorkProvider, _logger, new TransientMessageFactory());
+            // create the service context for the MerchelloAppContext          
 
+            var logger = GetMultiLogger();
+
+            var serviceContext = new ServiceContext(new RepositoryFactory(logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
+
+
+            InitializeLoggerResolver(logger);
 
             var cache = ApplicationContext.Current == null
                             ? new CacheHelper(
@@ -162,12 +156,16 @@
                                     new StaticCacheProvider(),
                                     new NullCacheProvider())
                             : ApplicationContext.Current.ApplicationCache;
-            
+
             InitializeGatewayResolver(serviceContext, cache);
             
             CreateMerchelloContext(serviceContext, cache);
 
+            InitialCurrencyContext(serviceContext.StoreSettingService);
+
             InitializeResolvers();
+
+            InitializeValueConverters();
 
             InitializeObserverSubscriptions();
 
@@ -241,6 +239,43 @@
         }
 
         /// <summary>
+        /// Initializes the <see cref="CurrencyContext"/>.
+        /// </summary>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        protected virtual void InitialCurrencyContext(IStoreSettingService storeSettingService)
+        {
+            CurrencyContext.Current = new CurrencyContext(storeSettingService);
+        }
+
+        /// <summary>
+        /// Initializes the logger resolver.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        protected virtual void InitializeLoggerResolver(IMultiLogger logger)
+        {
+            if (MultiLogResolver.HasCurrent)
+            MultiLogResolver.Current = new MultiLogResolver(logger);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MultiLogger"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IMultiLogger"/>.
+        /// </returns>
+        /// <remarks>
+        /// We need to do this outside of the resolver due to internal resolution "Freeze"
+        /// </remarks>
+        protected virtual IMultiLogger GetMultiLogger()
+        {
+            return new MultiLogger();
+        }
+
+        /// <summary>
         /// Responsible for initializing resolvers.
         /// </summary>
         protected virtual void InitializeResolvers()
@@ -253,6 +288,16 @@
 
             if (!OfferProcessorFactory.HasCurrent)
             OfferProcessorFactory.Current = new OfferProcessorFactory(PluginManager.Current.ResolveOfferConstraintChains());
+        }
+
+        /// <summary>
+        /// Initializes value converters.
+        /// </summary>
+        protected virtual void InitializeValueConverters()
+        {
+            // initialize the DetachedPublishedPropertyConverter singleton
+            if (!DetachedValuesConverter.HasCurrent)
+                DetachedValuesConverter.Current = new DetachedValuesConverter(ApplicationContext.Current, PluginManager.Current.ResolveDetachedValueOverriders());
         }
 
         /// <summary>

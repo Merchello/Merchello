@@ -49,6 +49,7 @@
         Shipping,
         Tax,
         Discount,
+        Adjustment,
         Custom
     }
 
@@ -60,6 +61,7 @@
     {
         Cash,
         CreditCard,
+        Redirect,
         PurchaseOrder,
         CustomerCredit,
         Custom

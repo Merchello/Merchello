@@ -6,7 +6,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       collectionKey: '=',
       entityType: '='
     },
-    template: '<h2>{{ collection.name }}</h2>',
+    template: '<h4>{{ collection.name }}</h4>',
     link: function(scope, element, attrs) {
 
       scope.collection = {};
@@ -18,7 +18,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
       }
 
       function loadCollection() {
-        if(scope.collectionKey === 'manage' || scope.collectionKey === '') {
+        if(scope.collectionKey === 'manage' || scope.collectionKey === '' || scope.collectionKey === undefined) {
           var key = 'merchelloCollections_all' + scope.entityType;
           localizationService.localize(key).then(function (value) {
             scope.collection.name = value;

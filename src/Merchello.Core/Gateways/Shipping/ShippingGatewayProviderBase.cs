@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Configuration;
+
+    using Merchello.Core.Logging;
+
     using Models;
     using Services;
     using Umbraco.Core.Cache;
@@ -142,7 +145,7 @@
             // quick validation of shipment
             if (!attempt.Success)
             {
-                LogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Attempt message: " + attempt.Exception.Message, new ArgumentException("merchWarehouseCatalogKey"));
+                MultiLogHelper.Error<ShippingGatewayProviderBase>("ShipMethods could not be determined for Shipment passed to GetAvailableShipMethodsForDestination method. Attempt message: " + attempt.Exception.Message, new ArgumentException("merchWarehouseCatalogKey"));
                 return new List<IShippingGatewayMethod>();
             }
             
@@ -161,7 +164,7 @@
                 var province = gwshipmethod.ShipMethod.Provinces.FirstOrDefault(x => x.Code == shipment.ToRegion);
                 if (province == null)
                 {
-                    LogHelper.Debug<ShippingGatewayProviderBase>("Province code '" + shipment.ToRegion + "' was not found in ShipCountry with code : " + shipCountry.CountryCode);
+                    MultiLogHelper.Debug<ShippingGatewayProviderBase>("Province code '" + shipment.ToRegion + "' was not found in ShipCountry with code : " + shipCountry.CountryCode);
                     available.Add(gwshipmethod);
                 }
                 else
@@ -193,7 +196,7 @@
 
             if (!attempt.Success)
             {
-                LogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
+                MultiLogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
                 throw attempt.Exception;
             }
 
@@ -219,7 +222,7 @@
 
             if (!attempt.Success)
             {
-                LogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
+                MultiLogHelper.Error<ShippingGatewayProviderBase>("Failed to instantiate strategy " + typeName, attempt.Exception);
                 throw attempt.Exception;
             }
 

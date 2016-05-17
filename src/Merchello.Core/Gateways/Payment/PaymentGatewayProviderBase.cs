@@ -1,25 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using Merchello.Core.Models;
-using Merchello.Core.Services;
-using Umbraco.Core.Cache;
-
-namespace Merchello.Core.Gateways.Payment
+﻿namespace Merchello.Core.Gateways.Payment
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
+
+    using Umbraco.Core.Cache;
+
     /// <summary>
     /// Represents an abstract PaymentGatewayProvider
     /// </summary>
-    public abstract class PaymentGatewayProviderBase  : GatewayProviderBase, IPaymentGatewayProvider
+    public abstract class PaymentGatewayProviderBase : GatewayProviderBase, IPaymentGatewayProvider
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="PaymentGatewayProviderBase"/> class.
         /// </summary>
-        /// <param name="gatewayProviderService">The <see cref="IGatewayProviderService"/></param>
-        /// <param name="gatewayProviderSettings">The <see cref="IGatewayProviderSettings"/></param>
-        /// <param name="runtimeCacheProvider">Umbraco's <see cref="IRuntimeCacheProvider"/></param>
-        protected PaymentGatewayProviderBase(IGatewayProviderService gatewayProviderService, IGatewayProviderSettings gatewayProviderSettings, IRuntimeCacheProvider runtimeCacheProvider) 
+        /// <param name="gatewayProviderService">
+        /// The gateway provider service.
+        /// </param>
+        /// <param name="gatewayProviderSettings">
+        /// The gateway provider settings.
+        /// </param>
+        /// <param name="runtimeCacheProvider">
+        /// The runtime cache provider.
+        /// </param>
+        protected PaymentGatewayProviderBase(
+            IGatewayProviderService gatewayProviderService,
+            IGatewayProviderSettings gatewayProviderSettings,
+            IRuntimeCacheProvider runtimeCacheProvider)
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
-        { }
+        {
+        }
 
         /// <summary>
         /// Creates a <see cref="IPaymentGatewayMethod"/>

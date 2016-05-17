@@ -103,6 +103,15 @@
                             'Failed to save invoice');
                     },
 
+                    saveInvoiceAdjustments: function(adjustments) {
+                        var url = baseUrl + 'PutInvoiceAdjustments';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                adjustments
+                            ),
+                            'Failed to save invoice');
+                    },
+
                     saveInvoiceShippingAddress: function (data) {
                         var url = baseUrl + 'PutInvoiceShippingAddress';
                         return umbRequestHelper.resourcePromise(

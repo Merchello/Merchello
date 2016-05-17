@@ -6,6 +6,8 @@
     using Merchello.Core.Models;
     using Merchello.Web.Models.ContentEditing.Content;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The product display abstract.
     /// </summary>
@@ -94,6 +96,6 @@
         /// <summary>
         /// Gets or sets the detached content values.
         /// </summary>
-        public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContents { get; set; } 
+        public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContents { get; set; }
     }
 }

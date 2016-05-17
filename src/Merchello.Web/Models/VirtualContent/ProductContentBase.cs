@@ -581,10 +581,13 @@
         /// </exception>
         public override IPublishedProperty GetProperty(string alias, bool recurse)
         {
-            if (recurse)
-                throw new NotSupportedException();
+            if (recurse && Parent == null)
+                throw new NotSupportedException("Parent must be set in order to recurse");
 
-            return GetProperty(alias);
+            var prop = GetProperty(alias);
+            return prop == null && recurse ? 
+                Parent.GetProperty(alias, true) 
+                : prop;
         }
 
         /// <summary>

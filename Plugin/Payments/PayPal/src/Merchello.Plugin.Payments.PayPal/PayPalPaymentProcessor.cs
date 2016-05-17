@@ -27,6 +27,7 @@ namespace Merchello.Plugin.Payments.PayPal
 		public PayPalPaymentProcessor(PayPalProcessorSettings settings)
         {
             _settings = settings;
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
         }
 
 		/// <summary>

@@ -1,55 +1,71 @@
 .merchello-icons {
-  margin: -6px 0;
-  display: inline-block;
-  &.merchello-icons-interactive {
-    opacity: 0;
-    transition: opacity .15s ease-in-out;
-    -moz-transition: opacity .15s ease-in-out;
-    -webkit-transition: opacity .15s ease-in-out;
-  }
-
-  .merchello-icon {
+    margin: -6px 0;
     display: inline-block;
-    padding: 4px 6px;
-    margin: 2px;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid #b6b6b6;
-    border-radius: 200px;
-    text-decoration: none !important;
 
-    .icon {
-      display: block;
-      font-size: 16px !important;
-      color: #5f5f5f;
+    &.merchello-icons-interactive {
+        opacity: 0;
+        transition: opacity .15s ease-in-out;
+        -moz-transition: opacity .15s ease-in-out;
+        -webkit-transition: opacity .15s ease-in-out;
     }
 
-    &:hover {
-      color: white;
-      background: #2e8aea;
-      border-color: #2e8aea;
-      text-decoration: none;
-      > .icon {
-        color: white;
-      }
+    .merchello-icon {
+        display: inline-block;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 4px 0;
+        text-align:center;
+        margin: 2px;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid #b6b6b6;
+        border-radius: 200px;
+        text-decoration: none !important;
+        width: 30px;
+        height: 30px;
+
+        .icon {
+            display: block;
+            font-size: 16px !important;
+            margin:0 auto;
+            color: #5f5f5f;
+        }
+
+        &:hover {
+            color: white;
+            background: #2e8aea;
+            border-color: #2e8aea;
+            text-decoration: none;
+
+            > .icon {
+                color: white;
+            }
+        }
     }
-  }
+}
+
+// This is an overide to stop umbraco hiding the icons on hover
+.umb-listview .table-striped tbody .merchello-icon i:not(.handle):hover{
+    display: inline-block !important;
 }
 
 .merchello-icon-container {
-  text-align: right;
-  &.merchello-icons-interactive {
-    &:hover {
-      cursor: pointer;
-      .merchello-icons {
-        opacity: 1;
-      }
+    text-align: right;
+
+    &.merchello-icons-interactive {
+        &:hover {
+            cursor: pointer;
+
+            .merchello-icons {
+                opacity: 1;
+            }
+        }
     }
-  }
 }
 
 .well {
-  .merchello-icon {
-    background: #F8F8F8;
-  }
+    .merchello-icon {
+        background: #F8F8F8;
+    }
 }

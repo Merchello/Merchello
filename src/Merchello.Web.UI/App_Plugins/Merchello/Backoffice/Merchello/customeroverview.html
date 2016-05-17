@@ -24,26 +24,23 @@
                     <!-- Customer Info -->
                     <div class="span4">
                         <div class="well customer-info flex-col">
-                            <img class="customer-avatar" data-ng-show="avatarUrl != ''" class="photo pull-left" src="{{avatarUrl}}" />
-                            <!-- ACTION: Edit Info -->
-
+                            <img class="customer-avatar photo pull-left" data-ng-show="avatarUrl != ''" src="{{avatarUrl}}" alt="" />
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openEditInfoDialog()"></merchello-edit-icon>
                             </div>
-
-                            <h4 class="span10">{{customer.firstName}} {{customer.lastName}}</h4>
+                            <h4>{{customer.firstName}} {{customer.lastName}}</h4>
                             <div class="span12"><a href="mailto:{{customer.email}}">{{customer.email}}</a></div>
                         </div>
                     </div>
                     <!-- Billing Address -->
                     <div class="span4">
                         <div class="well billing-address-info flex-col">
-                            <h4 class="span10">
-                                <localize key="merchelloSales_billingAddress"></localize>
-                            </h4>
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultBillingAddress)"></merchello-edit-icon>
                             </div>
+                            <h4>
+                                <localize key="merchelloSales_billingAddress"></localize>
+                            </h4>
                             <div class="vcard span12" data-ng-show="!defaultBillingAddress.isEmpty()">
                                 <h5>{{defaultBillingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultBillingAddress.fullName != ''">{{defaultBillingAddress.fullName}}</span>
@@ -64,10 +61,10 @@
                     <!-- Shipping Address -->
                     <div class="span4">
                         <div class="well shipping-address-info flex-col">
-                            <h4 class="span10"><localize key="merchelloSales_shippingAddress"></localize></h4>
                             <div class="pull-right">
                                 <merchello-edit-icon do-edit="openAddressAddEditDialog(defaultShippingAddress)"></merchello-edit-icon>
                             </div>
+                            <h4><localize key="merchelloSales_shippingAddress"></localize></h4>
                             <div class="vcard span12" data-ng-show="!defaultShippingAddress.isEmpty()">
                                 <h5>{{defaultShippingAddress.label}}</h5>
                                 <span class="fn" data-ng-show="defaultShippingAddress.fullName != ''">{{defaultShippingAddress.fullName}}</span>
@@ -91,11 +88,11 @@
 
             <div class="merchello-pane item-cache secondary span12">
                 <div class="row-fluid">
-                    <div class="span5">
-                        <customer-item-cache-table item-cache-type="Basket" customer="customer"></customer-item-cache-table>
+                    <div class="span6 basket">
+                        <customer-item-cache-table item-cache-type="Basket" customer="customer" do-add="addToItemCache" do-move="moveToWishList" do-delete="removeFromItemCache" do-edit="editItemCacheItem"></customer-item-cache-table>
                     </div>
-                    <div class="span5 pull-right">
-                        <customer-item-cache-table item-cache-type="Wishlist" customer="customer"></customer-item-cache-table>
+                    <div class="span6 wishlist pull-right">
+                        <customer-item-cache-table item-cache-type="Wishlist" do-move="moveToBasket" do-add="addToItemCache" do-delete="removeFromItemCache" do-edit="editItemCacheItem" customer="customer"></customer-item-cache-table>
                     </div>
                 </div>
             </div>
@@ -107,17 +104,7 @@
 
             <div class="merchello-pane secondary span12">
                 <div class="control-group umb-control-group">
-                    <label class="merchello-section-label">
-                        <localize key="merchelloCustomers_customerNotes" />
-                    </label>
-                    <div class="merchello-controls">
-                        <div class="well new-note row-fluid">
-                            <div class="form-group col-xs-12 span12">
-                                <textarea name="note-message" name="customer-note" rows="8" class="span12" data-ng-model="customer.notes"></textarea>
-                            </div>
-                            <input type="submit" class="btn btn-primary" value="Save Note" data-ng-click="saveCustomer()" />
-                        </div>
-                    </div>
+                    <merchello-notes-table entity-type="entityType" notes="customer.notes" save="saveCustomer()" delete="deleteNote"></merchello-notes-table>
                 </div>
 
                 <entity-static-collections pre-values-loaded="preValuesLoaded" entity-type="entityType" entity="customer"></entity-static-collections>

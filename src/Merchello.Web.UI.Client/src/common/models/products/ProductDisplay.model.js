@@ -178,6 +178,35 @@
             return true;
         }
 
+        // ensures a catalog is selected if the variant is marked shippable
+        function ensureCatalogInventory(defaultCatalogKey) {
+            if (!this.shippable && !this.trackInventory) {
+                return;
+            }
+            // if this product is not associated with any catalogs we need to add the default catalog
+            // so that we can associate shipping information
+            if (this.catalogInventories.length === 0) {
+                var inv = new CatalogInventoryDisplay();
+                inv.productVariantKey = this.key;
+                inv.catalogKey = defaultCatalogKey;
+                inv.active = true;
+                this.catalogInventories.push(inv);
+            } else {
+                // if there are catalogs and none are selected we need to force the default catalog to be selected.
+                var activeInventories = _.filter(this.catalogInventories, function (ci) {
+                    return ci.active;
+                });
+                if (activeInventories.length === 0) {
+                    var defaultInv = _.find(this.catalogInventories, function (dci) {
+                        return dci.catalogKey === defaultCatalogKey;
+                    });
+                    if (defaultInv !== undefined) {
+                        defaultInv.active = true;
+                    }
+                }
+            }
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -190,7 +219,8 @@
             shippableVariants: shippableVariants,
             getProductVariant: getProductVariant,
             taxableVariants: taxableVariants,
-            canBeRendered: canBeRendered
+            canBeRendered: canBeRendered,
+            ensureCatalogInventory: ensureCatalogInventory
         };
     }());
 

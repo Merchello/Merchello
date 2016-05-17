@@ -23,10 +23,22 @@
         Guid EntityTfKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the author.
+        /// </summary>
+        [DataMember]
+        string Author { get; set; }
+
+        /// <summary>
         /// Gets or sets the message.
         /// </summary>
         [DataMember]
         string Message { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the not is for internal use only.
+        /// </summary>
+        [DataMember]
+        bool InternalOnly { get; set; }
 
     }
 }

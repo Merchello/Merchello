@@ -4,9 +4,12 @@
 	{
 
 		public string AccountId { get; set; }
+
 		public string ApiUsername { get; set; }
-		public string ApiPassword { get; set; }
-		public string ApiSignature { get; set; }
+
+        public string ApiPassword { get; set; }
+
+        public string ApiSignature { get; set; }
 		
 		public bool LiveMode { get; set; }
 

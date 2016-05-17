@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Web
 {
+    using System;
+
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Marketing.Offer;
+    using Merchello.Web.Pluggable;
     using Merchello.Web.Reporting;
     using Merchello.Web.Ui;
 
@@ -89,7 +93,7 @@
             base.InitializeResolvers();
 
             if (!PaymentMethodUiControllerResolver.HasCurrent)
-            PaymentMethodUiControllerResolver.Current = new PaymentMethodUiControllerResolver(PluginManager.Current.ResolveCheckoutOperationControllers());
+            PaymentMethodUiControllerResolver.Current = new PaymentMethodUiControllerResolver(PluginManager.Current.ResolvePaymentMethodUiControllers());
 
             if (!ReportApiControllerResolver.HasCurrent)
             ReportApiControllerResolver.Current = new ReportApiControllerResolver(PluginManager.Current.ResolveReportApiControllers());
@@ -99,6 +103,26 @@
 
             if(!OfferComponentResolver.HasCurrent)
                 OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
+        }
+
+        /// <summary>
+        /// Overrides the base GetMultiLogger.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IMultiLogger"/>.
+        /// </returns>
+        protected override IMultiLogger GetMultiLogger()
+        {
+            try
+            {
+                var remoteLogger = PluggableObjectHelper.GetInstance<RemoteLoggerBase>("RemoteLogger");
+                return new MultiLogger(Logger, remoteLogger);
+            }
+            catch (Exception ex)
+            {
+                Logger.WarnWithException<WebBootManager>("Failed to instantiate remote logger. Returning default logger", ex, () => new object[] { });
+                return new MultiLogger();
+            }
         }
     }
 }

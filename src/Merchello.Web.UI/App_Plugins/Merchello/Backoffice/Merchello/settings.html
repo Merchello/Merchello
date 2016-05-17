@@ -84,14 +84,18 @@
                 <div class="merchello-controls">
                     <div class="row-fluid">
                         <div class="col-xs-6 span6">
-                            <!-- All Digital Goods will be goods will be included in version 2 -->
-                            <!--<label class="label-checkbox"><input name="digital" type="checkbox"> <span>All items have/are digital goods</span></label>-->
-                            <label><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalTaxable" /></span></label>
-                            <label><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" no-dirty-check> <span><localize key="merchelloSettings_globalShippable" /></span></label>
+                            <div class="form-group">
+                                <!-- All Digital Goods will be goods will be included in version 2 -->
+                                <!--<label class="label-checkbox"><input name="digital" type="checkbox"> <span>All items have/are digital goods</span></label>-->
+                                <label><input name="taxable" type="checkbox" data-ng-model="settingsDisplay.globalTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalTaxable" /></span></label>
+                                <label><input name="shippable" type="checkbox" data-ng-model="settingsDisplay.globalShippable" no-dirty-check> <span><localize key="merchelloSettings_globalShippable" /></span></label>
+                            </div>
                         </div>
                         <div class="col-xs-6 span6">
-                            <label><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory" no-dirty-check> <span><localize key="merchelloSettings_globalTrackInventory" /></span></label>
-                            <label><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalShippingIsTaxable" /></span></label>
+                            <div class="form-group">
+                                <label><input name="trackinventory" type="checkbox" data-ng-model="settingsDisplay.globalTrackInventory" no-dirty-check> <span><localize key="merchelloSettings_globalTrackInventory" /></span></label>
+                                <label><input name="taxableshipping" type="checkbox" data-ng-model="settingsDisplay.globalShippingIsTaxable" no-dirty-check> <span><localize key="merchelloSettings_globalShippingIsTaxable" /></span></label>
+                            </div>
                         </div>
 
                         <!-- TODO This needs to be in the header for consistency -->

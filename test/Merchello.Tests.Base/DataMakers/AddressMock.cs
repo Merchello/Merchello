@@ -22,7 +22,7 @@ namespace Merchello.Tests.Base.DataMakers
 
         public bool IsCommercial { get; set; }
 
-        
+        public AddressType AddressType { get; set; }
     }
 
     internal static class AddressTestHelperExtensions

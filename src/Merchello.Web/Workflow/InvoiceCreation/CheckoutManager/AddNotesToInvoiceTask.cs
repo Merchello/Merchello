@@ -43,6 +43,12 @@
 
             var notesList = notes.Select(msg => this.CheckoutManager.Context.Services.NoteService.CreateNote(value.Key, EntityType.Invoice, msg)).ToList();
 
+            foreach (var note in notesList)
+            {
+                note.Author = value.BillToEmail;
+                note.InternalOnly = false;
+            }
+
             value.Notes = notesList;
 
             return Attempt<IInvoice>.Succeed(value);

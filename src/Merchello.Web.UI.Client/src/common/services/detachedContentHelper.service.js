@@ -1,6 +1,6 @@
 angular.module('merchello.services').factory('detachedContentHelper',
-    ['$q', 'fileManager', 'formHelper', 'notificationsService',
-    function($q, fileManager, formHelper, notificationsService) {
+    ['$q', 'fileManager', 'formHelper',
+    function($q, fileManager, formHelper) {
 
         return {
 
@@ -29,7 +29,6 @@ angular.module('merchello.services').factory('detachedContentHelper',
                     // get any files from the fileManager
                     var files = fileManager.getFiles();
 
-
                     // save the current language only
                     angular.forEach(args.scope.contentTabs, function(ct) {
                         if (ct.id === 'render') {
@@ -38,6 +37,7 @@ angular.module('merchello.services').factory('detachedContentHelper',
                             args.scope.detachedContent.canBeRendered = _.find(ct.properties, function(r) { return r.alias === 'canBeRendered'}).value === '1' ? true : false;
                         } else {
                             angular.forEach(ct.properties, function (p) {
+                                console.info(p);
                                 if (typeof p.value !== "function") {
                                     args.scope.detachedContent.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
                                 }
@@ -46,9 +46,11 @@ angular.module('merchello.services').factory('detachedContentHelper',
                     });
 
                     args.saveMethod(args.content, args.scope.language.isoCode, files).then(function(data) {
+                        
                         formHelper.resetForm({ scope: args.scope, notifications: data.notifications });
                         args.scope.preValuesLoaded = true;
                         deferred.resolve(data);
+
                     }, function (err) {
 
                         args.scope.preValuesLoaded = true;

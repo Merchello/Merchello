@@ -6,6 +6,7 @@
     using Gateways;
 
     using Merchello.Core.Cache;
+    using Merchello.Core.Logging;
 
     using Services;
     using Umbraco.Core;
@@ -175,7 +176,7 @@
 
                     if (currentVersion != configVersion)
                     {
-                        LogHelper.Info<ApplicationContext>("CurrentVersion different from configurationStatus: '" + currentVersion + "','" + configVersion + "'");
+                        MultiLogHelper.Info<ApplicationContext>("CurrentVersion different from configurationStatus: '" + currentVersion + "','" + configVersion + "'");
                     }
 
                     return configVersion == currentVersion;

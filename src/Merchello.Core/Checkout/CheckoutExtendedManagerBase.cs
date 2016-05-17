@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Sales;
@@ -70,7 +71,7 @@
                 if (!new LineItemTypeField().CustomTypeFields.Select(x => x.TypeKey).Contains(lineItem.LineItemTfKey))
                 {
                     var argError = new ArgumentException("The LineItemTfKey was not found in merchello.config custom type fields");
-                    LogHelper.Error<SalePreparationBase>("The LineItemTfKey was not found in merchello.config custom type fields", argError);
+                    MultiLogHelper.Error<CheckoutContextManagerBase>("The LineItemTfKey was not found in merchello.config custom type fields", argError);
 
                     throw argError;
                 }

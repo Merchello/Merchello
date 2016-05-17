@@ -1126,6 +1126,18 @@
             against a already resolved object instead of looking the object back up by id. 
             </remarks>
         </member>
+        <member name="T:Umbraco.Core.Cache.IRuntimeCacheProviderWrapper">
+            <summary>
+            Interface describing this cache provider as a wrapper for another
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Cache.DeepCloneRuntimeCacheProvider">
+            <summary>
+            A wrapper for any IRuntimeCacheProvider that ensures that all inserts and returns 
+            are a deep cloned copy of the item when the item is IDeepCloneable and that tracks changes are
+            reset if the object is TracksChangesEntityBase
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.CodeAnnotations.FriendlyNameAttribute">
             <summary>
             Attribute to add a Friendly Name string with an UmbracoObjectType enum value
@@ -1692,6 +1704,41 @@
             The alias of the internal content searcher
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.Icons.ContentType">
+            <summary>
+            System contenttype icon
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Icons.DataType">
+            <summary>
+            System datatype icon
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Icons.PropertyEditor">
+            <summary>
+            System property editor icon
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Icons.Macro">
+            <summary>
+            System macro icon
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Icons.Member">
+            <summary>
+            System member icon
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Icons.MemberType">
+            <summary>
+            System member icon
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Icons.Template">
+            <summary>
+            System member icon
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Constants.Applications">
             <summary>
             Defines the alias identifiers for Umbraco's core application sections.
@@ -1749,7 +1796,7 @@
         </member>
         <member name="F:Umbraco.Core.Constants.Trees.Members">
             <summary>
-            alias for the media tree.
+            alias for the member tree.
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.Trees.Media">
@@ -1765,6 +1812,21 @@
         <member name="F:Umbraco.Core.Constants.Trees.Dictionary">
             <summary>
             alias for the dictionary tree.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Trees.DocumentTypes">
+            <summary>
+            alias for the document type tree.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Trees.MediaTypes">
+            <summary>
+            alias for the media type tree.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Trees.MemberTypes">
+            <summary>
+            alias for the member type tree.
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.Trees.Templates">
@@ -2102,6 +2164,11 @@
             Alias for the Integer datatype.
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.PropertyEditors.DecimalAlias">
+            <summary>
+            Alias for the Decimal datatype.
+            </summary>
+        </member>
         <member name="F:Umbraco.Core.Constants.PropertyEditors.ListViewAlias">
             <summary>
             Alias for the listview datatype.
@@ -2332,6 +2399,31 @@
             Alias for the email address property editor
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Constants.PropertyTypeGroups">
+            <summary>
+            Defines the identifiers for property-type groups conventions that are used within the Umbraco core.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.PropertyTypeGroups.Image">
+            <summary>
+            Guid for a Image PropertyTypeGroup object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.PropertyTypeGroups.File">
+            <summary>
+            Guid for a File PropertyTypeGroup object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.PropertyTypeGroups.Contents">
+            <summary>
+            Guid for a Image PropertyTypeGroup object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.PropertyTypeGroups.Membership">
+            <summary>
+            Guid for a Image PropertyTypeGroup object.
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Constants.Packaging">
             <summary>
                 Defines the constants used for Umbraco packages in the package.config xml
@@ -2340,6 +2432,21 @@
         <member name="T:Umbraco.Core.Constants.ObjectTypes">
             <summary>
             Defines the identifiers for Umbraco object types as constants for easy centralized access/management.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DataTypeContainer">
+            <summary>
+            Guid for a data type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DocumentTypeContainer">
+            <summary>
+            Guid for a doc type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.MediaTypeContainer">
+            <summary>
+            Guid for a doc type container
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.ObjectTypes.ContentItem">
@@ -2420,6 +2527,41 @@
         <member name="F:Umbraco.Core.Constants.ObjectTypes.LockObject">
             <summary>
             Guid for a Lock object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DataTypeContainerGuid">
+            <summary>
+            Guid for a data type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DocumentTypeContainerGuid">
+            <summary>
+            Guid for a doc type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.MediaTypeContainerGuid">
+            <summary>
+            Guid for a doc type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DataTypeGuid">
+            <summary>
+            Guid for a DataType object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.DocumentTypeGuid">
+            <summary>
+            Guid for a Document Type object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.MediaTypeGuid">
+            <summary>
+            Guid for a Media Type object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.MemberTypeGuid">
+            <summary>
+            Guid for a Member Type object.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Constants.System">
@@ -3051,6 +3193,25 @@
             Returns the ICultureDictionaryFactory
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Dynamics.CaseInsensitiveDynamicObject`1">
+            <summary>
+            This will check enable dynamic access to properties and methods in a case insensitive manner
+            </summary>
+            <typeparam name="T"></typeparam>
+            <remarks>
+            This works by using reflection on the type - the reflection lookup is lazy so it will not execute unless a dynamic method needs to be accessed
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Dynamics.CaseInsensitiveDynamicObject`1.CaseInsensitivePropertyAccess">
+            <summary>
+            Used for dynamic access for case insensitive property access
+            </summary>`
+        </member>
+        <member name="F:Umbraco.Core.Dynamics.CaseInsensitiveDynamicObject`1.CaseInsensitiveMethodAccess">
+            <summary>
+            Used for dynamic access for case insensitive property access
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Dynamics.DynamicInstanceHelper">
             <summary>
             A helper class to try invoke members, find properties, etc...
@@ -3150,6 +3311,15 @@
             <summary>
             Returns the EventMessages object which is used to add messages to the message collection for this event
             </summary>
+        </member>
+        <member name="P:Umbraco.Core.Events.CancellableEventArgs.AdditionalData">
+            <summary>
+            In some cases raised evens might need to contain additional arbitrary readonly data which can be read by event subscribers
+            </summary>
+            <remarks>
+            This allows for a bit of flexibility in our event raising - it's not pretty but we need to maintain backwards compatibility 
+            so we cannot change the strongly typed nature for some events.
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.Events.CancellableObjectEventArgs`1">
             <summary>
@@ -3362,12 +3532,33 @@
             The type of event message
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion,System.String,System.Boolean)">
+            <summary>
+            Constructor accepting multiple migrations that are used in the migration runner
+            </summary>
+            <param name="eventObject"></param>
+            <param name="targetVersion"></param>
+            <param name="productName"></param>
+            <param name="canCancel"></param>
+            <param name="configuredVersion"></param>
+        </member>
         <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion,System.Boolean)">
             <summary>
             Constructor accepting multiple migrations that are used in the migration runner
             </summary>
             <param name="eventObject"></param>
             <param name="targetVersion"></param>
+            <param name="canCancel"></param>
+            <param name="configuredVersion"></param>
+        </member>
+        <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Umbraco.Core.Persistence.Migrations.MigrationContext,Semver.SemVersion,Semver.SemVersion,System.String,System.Boolean)">
+            <summary>
+            Constructor accepting multiple migrations that are used in the migration runner
+            </summary>
+            <param name="eventObject"></param>
+            <param name="migrationContext"></param>
+            <param name="targetVersion"></param>
+            <param name="productName"></param>
             <param name="canCancel"></param>
             <param name="configuredVersion"></param>
         </member>
@@ -3380,6 +3571,15 @@
             <param name="targetVersion"></param>
             <param name="canCancel"></param>
             <param name="configuredVersion"></param>
+        </member>
+        <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion,System.String)">
+            <summary>
+            Constructor accepting multiple migrations that are used in the migration runner
+            </summary>
+            <param name="eventObject"></param>
+            <param name="configuredVersion"></param>
+            <param name="targetVersion"></param>
+            <param name="productName"></param>
         </member>
         <member name="M:Umbraco.Core.Events.MigrationEventArgs.#ctor(System.Collections.Generic.IList{Umbraco.Core.Persistence.Migrations.IMigration},Semver.SemVersion,Semver.SemVersion)">
             <summary>
@@ -3597,6 +3797,15 @@
             The entity being rolledback
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Events.SaveEventArgs`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Boolean,Umbraco.Core.Events.EventMessages,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Constructor accepting multiple entities that are used in the saving operation
+            </summary>
+            <param name="eventObject"></param>
+            <param name="canCancel"></param>
+            <param name="messages"></param>
+            <param name="additionalData"></param>
+        </member>
         <member name="M:Umbraco.Core.Events.SaveEventArgs`1.#ctor(System.Collections.Generic.IEnumerable{`0},System.Boolean,Umbraco.Core.Events.EventMessages)">
             <summary>
             Constructor accepting multiple entities that are used in the saving operation
@@ -3611,6 +3820,15 @@
             </summary>
             <param name="eventObject"></param>
             <param name="eventMessages"></param>
+        </member>
+        <member name="M:Umbraco.Core.Events.SaveEventArgs`1.#ctor(`0,System.Boolean,Umbraco.Core.Events.EventMessages,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Constructor accepting a single entity instance
+            </summary>
+            <param name="eventObject"></param>
+            <param name="canCancel"></param>
+            <param name="messages"></param>
+            <param name="additionalData"></param>
         </member>
         <member name="M:Umbraco.Core.Events.SaveEventArgs`1.#ctor(`0,Umbraco.Core.Events.EventMessages)">
             <summary>
@@ -4089,6 +4307,111 @@
             Use this log action for custom log messages that should be shown in the audit trail
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Models.ContentTypeAvailableCompositionsResult">
+            <summary>
+            Used when determining available compositions for a given content type
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.ContentTypeAvailableCompositionsResults">
+            <summary>
+            Used when determining available compositions for a given content type
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.EntityContainer">
+            <summary>
+            Represents a folder for organizing entities such as content types and data types.
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.UmbracoEntity">
+            <summary>
+            Implementation of the <see cref="T:Umbraco.Core.Models.EntityBase.IUmbracoEntity"/> for internal use.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.CreatorId">
+            <summary>
+            Profile of the user who created this Entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Level">
+            <summary>
+            Gets or sets the level of the Entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Name">
+            <summary>
+            Gets or Sets the Name of the Entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.ParentId">
+            <summary>
+            Gets or sets the Id of the Parent Entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Path">
+            <summary>
+            Gets or sets the path to the Entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.SortOrder">
+            <summary>
+            Gets or sets the sort order of the Entity
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Trashed">
+            <summary>
+            Boolean indicating whether this Entity is Trashed or not.
+            If an Entity is Trashed it will be located in the Recyclebin.
+            </summary>
+            <remarks>
+            When content is trashed it should be unpublished.
+            Not all entities support being trashed, they'll always return false.
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.AdditionalData">
+            <summary>
+            Some entities may expose additional data that other's might not, this custom data will be available in this collection
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Models.UmbracoEntity.EntityProperty">
+            <summary>
+            A struction that can be contained in the additional data of an UmbracoEntity representing 
+            a user defined property
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.EntityContainer.#ctor(System.Guid)">
+            <summary>
+            Initializes a new instance of an <see cref="T:Umbraco.Core.Models.EntityContainer"/> class.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.EntityContainer.#ctor(System.Int32,System.Guid,System.Int32,System.String,System.Int32,System.Int32,System.Guid,System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of an <see cref="T:Umbraco.Core.Models.EntityContainer"/> class.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.EntityContainer.GetContainerObjectType(System.Guid)">
+            <summary>
+            Gets the container object type corresponding to a contained object type.
+            </summary>
+            <param name="containedObjectType">The contained object type.</param>
+            <returns>The object type of containers containing objects of the contained object type.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.EntityContainer.GetContainedObjectType(System.Guid)">
+            <summary>
+            Gets the contained object type corresponding to a container object type.
+            </summary>
+            <param name="containerObjectType">The container object type.</param>
+            <returns>The object type of objects that containers of the container object type can contain.</returns>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityContainer.ContainedObjectType">
+            <summary>
+            Gets or sets the node object type of the contained objects.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.EntityContainer.ContainerObjectType">
+            <summary>
+            Gets the node object type of the container objects.
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Models.Mapping.MapperConfiguration">
             <summary>
             Used to declare a mapper configuration
@@ -4487,15 +4810,14 @@
             Gets the date and time the registration was last accessed.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Models.PublicAccessEntry.AddingEntity">
+        <member name="M:Umbraco.Core.Models.Mapping.MappingExpressionExtensions.IgnoreAllUnmapped``2(AutoMapper.IMappingExpression{``0,``1})">
             <summary>
-            Method to call on entity saved when first added
+            Ignores all unmapped members by default - Use with caution!
             </summary>
-        </member>
-        <member name="M:Umbraco.Core.Models.PublicAccessRule.AddingEntity">
-            <summary>
-            Method to call on entity saved when first added
-            </summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TDest"></typeparam>
+            <param name="expression"></param>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Models.PublishedContent.PublishedContentWrapped">
             <summary>
@@ -5599,6 +5921,11 @@
             Creates the model mappings for Tasks
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
+            <summary>
+            Marker interface for database migrations
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Persistence.Mappers.TaskTypeMapper">
             <summary>
             Represents a <see cref="T:Umbraco.Core.Models.TaskType"/> to DTO mapper used to translate the properties of the public api 
@@ -5611,9 +5938,11 @@
             on creation without identity enabled.
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenFourZero.EnsureContentTypeUniqueIdsAreConsistent">
             <summary>
-            Marker interface for database migrations
+            Courier on v. 7.4+ will handle ContentTypes using GUIDs instead of
+            alias, so we need to ensure that these are initially consistent on
+            all environments (based on the alias).
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenThreeZero.CleanUpCorruptedPublishedFlags">
@@ -6806,11 +7135,14 @@
             Returns the database Unit of Work added to the repository
             </summary>
         </member>
-        <member name="T:Umbraco.Core.Cache.DeepCloneRuntimeCacheProvider">
+        <member name="T:Umbraco.Core.Persistence.Repositories.EntityContainerRepository">
             <summary>
-            A wrapper for any IRuntimeCacheProvider that ensures that all inserts and returns 
-            are a deep cloned copy of the item when the item is IDeepCloneable and that tracks changes are
-            reset if the object is TracksChangesEntityBase
+            An internal repository for managing entity containers such as doc type, media type, data type containers.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Persistence.Repositories.EntityContainerRepository.RuntimeCache">
+            <summary>
+            Do not cache anything
             </summary>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IDeleteMediaFilesRepository.DeleteMediaFiles(System.Collections.Generic.IEnumerable{System.String})">
@@ -6819,6 +7151,63 @@
             </summary>
             <param name="files"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.DecimalValidator">
+            <summary>
+            A validator that validates that the value is a valid decimal
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ManifestValueValidator">
+            <summary>
+            A validator used to validate a value based on a validator name defined in a package manifest
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.ManifestValueValidator.Validate(System.Object,System.String,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
+            <summary>
+            Performs the validation against the value
+            </summary>
+            <param name="value">
+            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
+            string representing an editor's model.
+            </param>
+            <param name="config">
+            An object that is used to configure the validator. An example could be a regex 
+            expression if the validator was a regex validator. This is defined in the manifest along with
+            the definition of the validator.
+            </param>
+            <param name="preValues">The current pre-values stored for the data type</param>
+            <param name="editor">The property editor instance that is being validated</param>
+            <returns>
+            Returns a list of validation results. If a result does not have a field name applied to it then then we assume that 
+            the validation message applies to the entire property type being validated. If there is a field name applied to a 
+            validation result we will try to match that field name up with a field name on the item itself.
+            </returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.IPropertyValidator">
+            <summary>
+            An interface defining a validator
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValidator.Validate(System.Object,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
+            <summary>
+            Validates the object with the resolved ValueValidator found for this type
+            </summary>
+            <param name="value">
+            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
+            string representing an editor's model, this class structure is also used to validate pre-values and in that case this value
+            could be a json structure or a single value representing a pre-value field.
+            </param>
+            <param name="preValues">
+            When validating a property editor value (not a pre-value), this is the current pre-values stored for the data type.
+            When validating a pre-value field this will be null.
+            </param>
+            <param name="editor">The property editor instance that we are validating for</param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.GridValueConverter">
+            <summary>
+            This ensures that the grid config is merged in with the front-end value
+            </summary>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.JsonValueConverter">
             <summary>
@@ -6902,6 +7291,22 @@
             </summary>
             <param name="propertyType"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.LabelValueConverter">
+            <summary>
+            We need this property converter so that we always force the value of a label to be a string
+            </summary>
+            <remarks>
+            Without a property converter defined for the label type, the value will be converted with
+            the `ConvertUsingDarkMagic` method which will try to parse the value into it's correct type, but this
+            can cause issues if the string is detected as a number and then strips leading zeros. 
+            Example: http://issues.umbraco.org/issue/U4-7929
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Core.PropertyEditors.ValueConverters.ImageCropperValueConverter">
+            <summary>
+            This ensures that the cropper config (pre-values/crops) are merged in with the front-end value.
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Publishing.UnPublishedStatusType">
             <summary>
@@ -7289,6 +7694,20 @@
             A custom password hasher that conforms to the current password hashing done in Umbraco
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Serialization.NoTypeConverterJsonConverter`1">
+            <summary>
+            This is required if we want to force JSON.Net to not use .Net TypeConverters during serialization/deserialization
+            </summary>
+            <typeparam name="T"></typeparam>
+            <remarks>
+            In some cases thsi is required if your model has an explicit type converter, see: http://stackoverflow.com/a/31328131/694494
+            
+            NOTE: I was going to use this for the ImageCropDataSetConverter to convert to String, which would have worked by putting this attribute:
+            [JsonConverter(typeof(NoTypeConverterJsonConverter{ImageCropDataSet}))] on top of the ImageCropDataSet class, however it turns out we 
+            don't require this because to convert to string, we just override ToString().
+            I'll leave this class here for the future though.
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.ServiceProviderExtensions.CreateInstances``1(System.IServiceProvider,System.Collections.Generic.IEnumerable{System.Type},Umbraco.Core.Logging.ILogger,System.Boolean)">
             <summary>
             Used to create instances of the specified type based on the resolved/cached plugin types
@@ -7420,6 +7839,31 @@
             <summary>
             Marker interface for services, which is used to store difference services in a list or dictionary
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentTypeServiceExtensions.GetAvailableCompositeContentTypes(Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Models.IContentTypeComposition,Umbraco.Core.Models.IContentTypeComposition[],System.String[],System.String[])">
+            <summary>
+            Returns the available composite content types for a given content type
+            </summary>
+            <param name="allContentTypes"></param>
+            <param name="filterContentTypes">
+            This is normally an empty list but if additional content type aliases are passed in, any content types containing those aliases will be filtered out
+            along with any content types that have matching property types that are included in the filtered content types
+            </param>
+            <param name="ctService"></param>
+            <param name="source"></param>
+            <param name="filterPropertyTypes">
+            This is normally an empty list but if additional property type aliases are passed in, any content types that have these aliases will be filtered out.
+            This is required because in the case of creating/modifying a content type because new property types being added to it are not yet persisted so cannot
+            be looked up via the db, they need to be passed in.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentTypeServiceExtensions.GetDirectOrIndirect(Umbraco.Core.Models.IContentTypeComposition)">
+            <summary>
+            Get those that we use directly
+            </summary>
+            <param name="ctype"></param>
+            <returns></returns>
         </member>
         <member name="E:Umbraco.Core.Services.DomainService.Deleting">
             <summary>
@@ -7631,6 +8075,18 @@
             </summary>
             <param name="task"></param>
         </member>
+        <member name="M:Umbraco.Core.Models.MediaExtensions.GetUrl(Umbraco.Core.Models.IMedia,System.String,Umbraco.Core.Logging.ILogger)">
+            <summary>
+            Hack: we need to put this in a real place, this is currently just used to render the urls for a media item in the back office
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Models.MediaExtensions.GetUrls(Umbraco.Core.Models.IMedia,Umbraco.Core.Configuration.UmbracoSettings.IContentSection,Umbraco.Core.Logging.ILogger)">
+            <summary>
+            Hack: we need to put this in a real place, this is currently just used to render the urls for a media item in the back office
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Core.Services.MigrationEntryService">
             <summary>
             Manages migration entries in the database
@@ -7658,6 +8114,34 @@
             </summary>
             <param name="migrationName"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Services.MoveOperationStatusType">
+            <summary>
+            A status type of the result of moving an item
+            </summary>
+            <remarks>
+            Anything less than 10 = Success!
+            </remarks>
+        </member>
+        <member name="F:Umbraco.Core.Services.MoveOperationStatusType.Success">
+            <summary>
+            The move was successful.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Services.MoveOperationStatusType.FailedParentNotFound">
+            <summary>
+            The parent being moved to doesn't exist
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Services.MoveOperationStatusType.FailedCancelledByEvent">
+            <summary>
+            The move action has been cancelled by an event handler
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Services.MoveOperationStatusType.FailedNotAllowedByPath">
+            <summary>
+            Trying to move an item to an invalid path (i.e. a child of itself)
+            </summary>
         </member>
         <member name="M:Umbraco.Core.Services.PublicAccessService.GetAll">
             <summary>
@@ -7771,6 +8255,16 @@
         <member name="F:Umbraco.Core.Services.OperationStatusType.FailedCancelledByEvent">
             <summary>
             The saving has been cancelled by a 3rd party add-in
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Services.OperationStatusType.FailedExceptionThrown">
+            <summary>
+            Failed, an exception was thrown/handled
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Services.OperationStatusType.NoOperation">
+            <summary>
+            When no operation is executed because it was not needed (i.e. deleting an item that doesn't exist)
             </summary>
         </member>
         <member name="M:Umbraco.Core.Services.TaskService.Save(Umbraco.Core.Models.Task)">
@@ -8719,51 +9213,6 @@
             are shared between Content and Media.
             </summary>
         </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.CreatorId">
-            <summary>
-            Profile of the user who created this Entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Level">
-            <summary>
-            Gets or sets the level of the Entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Name">
-            <summary>
-            Gets or Sets the Name of the Entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.ParentId">
-            <summary>
-            Gets or sets the Id of the Parent Entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Path">
-            <summary>
-            Gets or sets the path to the Entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.SortOrder">
-            <summary>
-            Gets or sets the sort order of the Entity
-            </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.Trashed">
-            <summary>
-            Boolean indicating whether this Entity is Trashed or not.
-            If an Entity is Trashed it will be located in the Recyclebin.
-            </summary>
-            <remarks>
-            When content is trashed it should be unpublished.
-            Not all entities support being trashed, they'll always return false.
-            </remarks>
-        </member>
-        <member name="P:Umbraco.Core.Models.EntityBase.IUmbracoEntity.AdditionalData">
-            <summary>
-            Some entities may expose additional data that other's might not, this custom data will be available in this collection
-            </summary>
-        </member>
         <member name="M:Umbraco.Core.Models.IContentBase.HasProperty(System.String)">
             <summary>
             Indicates whether the content object has a property with the supplied alias
@@ -8898,6 +9347,20 @@
         <member name="M:Umbraco.Core.Models.ContentBase.SetPropertyValue(System.String,System.Int64)">
             <summary>
             Sets the <see cref="T:System.Int64"/> value of a Property
+            </summary>
+            <param name="propertyTypeAlias">Alias of the PropertyType</param>
+            <param name="value">Value to set for the Property</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.SetPropertyValue(System.String,System.Decimal)">
+            <summary>
+            Sets the <see cref="T:System.Decimal"/> value of a Property
+            </summary>
+            <param name="propertyTypeAlias">Alias of the PropertyType</param>
+            <param name="value">Value to set for the Property</param>
+        </member>
+        <member name="M:Umbraco.Core.Models.ContentBase.SetPropertyValue(System.String,System.Double)">
+            <summary>
+            Sets the <see cref="T:System.Double"/> value of a Property
             </summary>
             <param name="propertyTypeAlias">Alias of the PropertyType</param>
             <param name="value">Value to set for the Property</param>
@@ -9699,7 +10162,12 @@
         </member>
         <member name="P:Umbraco.Core.Models.IContentTypeBase.PropertyTypes">
             <summary>
-            Gets an enumerable list of Property Types aggregated for all groups
+            Gets all property types, across all property groups.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IContentTypeBase.NoGroupPropertyTypes">
+            <summary>
+            Gets or sets the property types that are not in a group.
             </summary>
         </member>
         <member name="M:Umbraco.Core.Models.ContentTypeBase.PropertyTypeExists(System.String)">
@@ -9739,6 +10207,8 @@
             <param name="propertyTypeAlias">Alias of the PropertyType to move</param>
             <param name="propertyGroupName">Name of the PropertyGroup to move the PropertyType to</param>
             <returns></returns>
+            <remarks>If <paramref name="propertyGroupName"/> is null then the property is moved back to 
+            "generic properties" ie does not have a tab anymore.</remarks>
         </member>
         <member name="M:Umbraco.Core.Models.ContentTypeBase.RemovePropertyType(System.String)">
             <summary>
@@ -9870,21 +10340,12 @@
         </member>
         <member name="P:Umbraco.Core.Models.ContentTypeBase.PropertyTypes">
             <summary>
-            List of PropertyTypes available on this ContentType.
-            This list aggregates PropertyTypes across the PropertyGroups.
+            Gets all property types, across all property groups.
             </summary>
-            <remarks>
-            
-            The setter is used purely to set the property types that DO NOT belong to a group!
-            
-            Marked as DoNotClone because the result of this property is not the natural result of the data, it is 
-            a union of data so when auto-cloning if the setter is used it will be setting the unnatural result of the 
-            data. We manually clone this instead. 
-            </remarks>
         </member>
-        <member name="P:Umbraco.Core.Models.ContentTypeBase.NonGroupedPropertyTypes">
+        <member name="P:Umbraco.Core.Models.ContentTypeBase.NoGroupPropertyTypes">
             <summary>
-            Returns the property type collection containing types that are non-groups - used for tests
+            Gets or sets the property types that are not in a group.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.ContentTypeBase.HasPropertyTypeBeenRemoved">
@@ -9946,32 +10407,32 @@
         </member>
         <member name="P:Umbraco.Core.Models.IContentTypeComposition.ContentTypeComposition">
             <summary>
-            Gets a list of ContentTypes that make up a composition of PropertyGroups and PropertyTypes for the current ContentType
+            Gets or sets the content types that compose this content type.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.IContentTypeComposition.CompositionPropertyGroups">
             <summary>
-            Gets a list of <see cref="T:Umbraco.Core.Models.PropertyGroup"/> objects from the composition
+            Gets the property groups for the entire composition.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.IContentTypeComposition.CompositionPropertyTypes">
             <summary>
-            Gets a list of <see cref="T:Umbraco.Core.Models.PropertyType"/> objects from the composition
+            Gets the property types for the entire composition.
             </summary>
         </member>
         <member name="M:Umbraco.Core.Models.ContentTypeCompositionBase.AddContentType(Umbraco.Core.Models.IContentTypeComposition)">
             <summary>
-            Adds a new ContentType to the list of composite ContentTypes
+            Adds a content type to the composition.
             </summary>
-            <param name="contentType"><see cref="T:Umbraco.Core.Models.ContentType"/> to add</param>
-            <returns>True if ContentType was added, otherwise returns False</returns>
+            <param name="contentType">The content type to add.</param>
+            <returns>True if the content type was added, otherwise false.</returns>
         </member>
         <member name="M:Umbraco.Core.Models.ContentTypeCompositionBase.RemoveContentType(System.String)">
             <summary>
-            Removes a ContentType with the supplied alias from the the list of composite ContentTypes
+            Removes a content type with a specified alias from the composition.
             </summary>
-            <param name="alias">Alias of a <see cref="T:Umbraco.Core.Models.ContentType"/></param>
-            <returns>True if ContentType was removed, otherwise returns False</returns>
+            <param name="alias">The alias of the content type to remove.</param>
+            <returns>True if the content type was removed, otherwise false.</returns>
         </member>
         <member name="M:Umbraco.Core.Models.ContentTypeCompositionBase.ContentTypeCompositionExists(System.String)">
             <summary>
@@ -9990,7 +10451,6 @@
         <member name="M:Umbraco.Core.Models.ContentTypeCompositionBase.AddPropertyGroup(System.String)">
             <summary>
             Adds a PropertyGroup.
-            This method will also check if a group already exists with the same name and link it to the parent.
             </summary>
             <param name="groupName">Name of the PropertyGroup to add</param>
             <returns>Returns <c>True</c> if a PropertyGroup with the passed in name was added, otherwise <c>False</c></returns>
@@ -10019,17 +10479,17 @@
         </member>
         <member name="P:Umbraco.Core.Models.ContentTypeCompositionBase.ContentTypeComposition">
             <summary>
-            List of ContentTypes that make up a composition of PropertyGroups and PropertyTypes for the current ContentType
+            Gets or sets the content types that compose this content type.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.ContentTypeCompositionBase.CompositionPropertyGroups">
             <summary>
-            Returns a list of <see cref="T:Umbraco.Core.Models.PropertyGroup"/> objects from the composition
+            Gets the property groups for the entire composition.
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.ContentTypeCompositionBase.CompositionPropertyTypes">
             <summary>
-            Returns a list of <see cref="T:Umbraco.Core.Models.PropertyType"/> objects from the composition
+            Gets the property types for the entire composition.
             </summary>
         </member>
         <member name="M:Umbraco.Core.Models.ContentTypeExtensions.Descendants(Umbraco.Core.Models.IContentTypeBase)">
@@ -10275,12 +10735,6 @@
             <summary>
             Represents a member type
             </summary>
-        </member>
-        <member name="M:Umbraco.Core.Models.MemberGroup.AddingEntity">
-            <summary>
-            Method to call when Entity is being saved
-            </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
         </member>
         <member name="T:Umbraco.Core.Models.MemberTypePropertyProfileAccess">
             <summary>
@@ -11111,11 +11565,6 @@
         <member name="P:Umbraco.Core.Models.IDictionaryItem.Translations">
             <summary>
             Gets or sets a list of translations for the Dictionary Item
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Models.DictionaryItem.AddingEntity">
-            <summary>
-            Method to call before inserting a new entity in the db
             </summary>
         </member>
         <member name="P:Umbraco.Core.Models.DictionaryItem.ParentId">
@@ -12069,18 +12518,6 @@
             <param name="propertyTypeAlias">PropertyType Alias of the Property to set</param>
             <param name="value">Boolean value, true or false</param>
         </member>
-        <member name="M:Umbraco.Core.Models.MemberType.AddingEntity">
-            <summary>
-            Method to call when Entity is being saved
-            </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
-        </member>
-        <member name="M:Umbraco.Core.Models.MemberType.UpdatingEntity">
-            <summary>
-            Method to call when Entity is being updated
-            </summary>
-            <remarks>Modified Date is set and a new Version guid is set</remarks>
-        </member>
         <member name="P:Umbraco.Core.Models.MemberType.Alias">
             <summary>
             The Alias of the ContentType
@@ -12341,12 +12778,6 @@
             <param name="isTrashed">Boolean indicating whether content is trashed (true) or not trashed (false)</param>
             <param name="parentId"> </param>
         </member>
-        <member name="M:Umbraco.Core.Models.Media.AddingEntity">
-            <summary>
-            Method to call when Entity is being saved
-            </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
-        </member>
         <member name="P:Umbraco.Core.Models.Media.ContentType">
             <summary>
             Gets the ContentType used by this Media object
@@ -12358,6 +12789,13 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Umbraco.Core.Models.IMediaType" -->
+        <member name="M:Umbraco.Core.Models.IMediaType.DeepCloneWithResetIdentities(System.String)">
+            <summary>
+            Creates a deep clone of the current entity with its identity/alias and it's property identities reset
+            </summary>
+            <param name="newAlias"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Models.MediaType.#ctor(System.Int32)">
             <summary>
             Constuctor for creating a MediaType with the parent's id.
@@ -12380,17 +12818,11 @@
             <param name="parent"></param>
             <param name="alias"></param>
         </member>
-        <member name="M:Umbraco.Core.Models.MediaType.AddingEntity">
+        <member name="M:Umbraco.Core.Models.MediaType.DeepCloneWithResetIdentities(System.String)">
             <summary>
-            Method to call when Entity is being saved
+            Creates a deep clone of the current entity with its identity/alias and it's property identities reset
             </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
-        </member>
-        <member name="M:Umbraco.Core.Models.MediaType.UpdatingEntity">
-            <summary>
-            Method to call when Entity is being updated
-            </summary>
-            <remarks>Modified Date is set and a new Version guid is set</remarks>
+            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.Models.Membership.IProfile">
             <summary>
@@ -12756,26 +13188,9 @@
             Represents a Template file
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Models.Template.AddingEntity">
-            <summary>
-            Method to call when Entity is being saved
-            </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
-        </member>
         <member name="P:Umbraco.Core.Models.Template.IsMasterTemplate">
             <summary>
             Returns true if the template is used as a layout for other templates (i.e. it has 'children')
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.UmbracoEntity">
-            <summary>
-            Implementation of the <see cref="T:Umbraco.Core.Models.EntityBase.IUmbracoEntity"/> for internal use.
-            </summary>
-        </member>
-        <member name="T:Umbraco.Core.Models.UmbracoEntity.EntityProperty">
-            <summary>
-            A struction that can be contained in the additional data of an UmbracoEntity representing 
-            a user defined property
             </summary>
         </member>
         <member name="T:Umbraco.Core.Models.UmbracoObjectTypes">
@@ -12856,6 +13271,21 @@
         <member name="F:Umbraco.Core.Models.UmbracoObjectTypes.DataType">
             <summary>
             Data Type
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Models.UmbracoObjectTypes.DocumentTypeContainer">
+            <summary>
+            Document type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Models.UmbracoObjectTypes.MediaTypeContainer">
+            <summary>
+            Media type container
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Models.UmbracoObjectTypes.DataTypeContainer">
+            <summary>
+            Media type container
             </summary>
         </member>
         <member name="T:Umbraco.Core.Models.UmbracoObjectTypesExtensions">
@@ -13916,53 +14346,6 @@
             <summary>
             A validator that validates an email address
             </summary>
-        </member>
-        <member name="T:Umbraco.Core.PropertyEditors.ManifestValueValidator">
-            <summary>
-            A validator used to validate a value based on a validator name defined in a package manifest
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PropertyEditors.ManifestValueValidator.Validate(System.Object,System.String,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
-            <summary>
-            Performs the validation against the value
-            </summary>
-            <param name="value">
-            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
-            string representing an editor's model.
-            </param>
-            <param name="config">
-            An object that is used to configure the validator. An example could be a regex 
-            expression if the validator was a regex validator. This is defined in the manifest along with
-            the definition of the validator.
-            </param>
-            <param name="preValues">The current pre-values stored for the data type</param>
-            <param name="editor">The property editor instance that is being validated</param>
-            <returns>
-            Returns a list of validation results. If a result does not have a field name applied to it then then we assume that 
-            the validation message applies to the entire property type being validated. If there is a field name applied to a 
-            validation result we will try to match that field name up with a field name on the item itself.
-            </returns>
-        </member>
-        <member name="T:Umbraco.Core.PropertyEditors.IPropertyValidator">
-            <summary>
-            An interface defining a validator
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.PropertyEditors.IPropertyValidator.Validate(System.Object,Umbraco.Core.Models.PreValueCollection,Umbraco.Core.PropertyEditors.PropertyEditor)">
-            <summary>
-            Validates the object with the resolved ValueValidator found for this type
-            </summary>
-            <param name="value">
-            Depending on what is being validated, this value can be a json structure (JObject, JArray, etc...) representing an editor's model, it could be a single
-            string representing an editor's model, this class structure is also used to validate pre-values and in that case this value
-            could be a json structure or a single value representing a pre-value field.
-            </param>
-            <param name="preValues">
-            When validating a property editor value (not a pre-value), this is the current pre-values stored for the data type.
-            When validating a pre-value field this will be null.
-            </param>
-            <param name="editor">The property editor instance that we are validating for</param>
-            <returns></returns>
         </member>
         <member name="P:Umbraco.Core.PropertyEditors.IParameterEditor.Alias">
             <summary>
@@ -15232,6 +15615,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IContentTypeRepository.GetAllContentTypeAliases(System.Guid[])">
+            <summary>
+            Gets all content type aliases
+            </summary>
+            <param name="objectTypes">
+            If this list is empty, it will return all content type aliases for media, members and content, otherwise
+            it will only return content type aliases for the object types specified
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IContentTypeRepository.GetUniqueAlias(System.String)">
+            <summary>
+            Derives a unique alias from an existing alias.
+            </summary>
+            <param name="alias">The original alias.</param>
+            <returns>The original alias with a number appended to it, so that it is unique.</returns>
+            /// <remarks>Unique accross all content, media and member types.</remarks>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeRepository.GetByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.PropertyType})">
             <summary>
             Gets all entities of the specified <see cref="T:Umbraco.Core.Models.PropertyType"/> query
@@ -15243,6 +15644,16 @@
             <summary>
             Gets all property type aliases.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeRepository.GetAllContentTypeAliases(System.Guid[])">
+            <summary>
+            Gets all content type aliases
+            </summary>
+            <param name="objectTypes">
+            If this list is empty, it will return all content type aliases for media, members and content, otherwise
+            it will only return content type aliases for the object types specified
+            </param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentTypeRepository.PersistDeletedItem(Umbraco.Core.Models.IContentType)">
@@ -15364,6 +15775,14 @@
             </summary>
             <param name="query"></param>
             <returns>An enumerable list of <see cref="T:Umbraco.Core.Models.IContentType"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IMediaTypeRepository.GetUniqueAlias(System.String)">
+            <summary>
+            Derives a unique alias from an existing alias.
+            </summary>
+            <param name="alias">The original alias.</param>
+            <returns>The original alias with a number appended to it, so that it is unique.</returns>
+            <remarks>Unique accross all content, media and member types.</remarks>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IMemberRepository.FindMembersInRole(System.String,System.String,Umbraco.Core.Persistence.Querying.StringPropertyMatchType)">
             <summary>
@@ -16001,9 +16420,9 @@
             Represents the Umbraco implementation of the PetaPoco Database object
             </summary>
             <remarks>
-            Currently this object exists for 'future proofing' our implementation. By having our own inheritied implementation we 
+            Currently this object exists for 'future proofing' our implementation. By having our own inheritied implementation we
             can then override any additional execution (such as additional loggging, functionality, etc...) that we need to without breaking compatibility since we'll always be exposing
-            this object instead of the base PetaPoco database object.	
+            this object instead of the base PetaPoco database object.
             </remarks>
         </member>
         <member name="M:Umbraco.Core.Persistence.Database.MultiPocoFactory.CallDelegate(System.Int32,System.Data.IDataReader)">
@@ -16765,6 +17184,16 @@
             The name of the property editor
             </summary>
         </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyEditor.Icon">
+            <summary>
+            The icon of the property editor - if not set it uses a default icon
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyEditor.Group">
+            <summary>
+            The group of the property editor - if not set the editor will list as a generic editor
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.PropertyEditors.PropertyEditorAttribute">
             <summary>
             An attribute used to define all of the basic properties of a property editor
@@ -16774,6 +17203,17 @@
         <member name="P:Umbraco.Core.PropertyEditors.PropertyEditorAttribute.HideLabel">
             <summary>
             If this is is true than the editor will be displayed full width without a label
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyEditorAttribute.Icon">
+            <summary>
+            Optional, If this is set, datatypes using the editor will display this icon instead of the default system one.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.PropertyEditors.PropertyEditorAttribute.Group">
+            <summary>
+            Optional - if this is set, the datatype ui will display the editor in this group instead of the default one, by default an editor does not have a group.
+            The group has no effect on how a property editor is stored or referenced.
             </summary>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.PropertyEditorResolver">
@@ -17172,7 +17612,7 @@
             Returns all extension methods found matching the definition
             </summary>
             <param name="runtimeCache">
-            The runtime cache is used to temporarily cache all extension methods found in the app domain so that 
+            The runtime cache is used to temporarily cache all extension methods found in the app domain so that
             while we search for individual extension methods, the process will be reasonably 'quick'. We then statically
             cache the MethodInfo's that we are looking for and then the runtime cache will expire and give back all that memory.
             </param>
@@ -17483,12 +17923,6 @@
             <param name="isTrashed">Boolean indicating whether content is trashed (true) or not trashed (false)</param>
             <param name="parentId"> </param>
         </member>
-        <member name="M:Umbraco.Core.Models.Content.AddingEntity">
-            <summary>
-            Method to call when Entity is being saved
-            </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
-        </member>
         <member name="M:Umbraco.Core.Models.Content.UpdatingEntity">
             <summary>
             Method to call when Entity is being updated
@@ -17658,12 +18092,6 @@
             </summary>
             <param name="template"><see cref="T:Umbraco.Core.Models.ITemplate"/> to remove</param>
             <returns>True if template was removed, otherwise False</returns>
-        </member>
-        <member name="M:Umbraco.Core.Models.ContentType.AddingEntity">
-            <summary>
-            Method to call when Entity is being saved
-            </summary>
-            <remarks>Created date is set and a Unique key is assigned</remarks>
         </member>
         <member name="M:Umbraco.Core.Models.ContentType.Clone(System.String)">
             <summary>
@@ -17897,25 +18325,10 @@
             A group of property types, which corresponds to the properties grouped under a Tab.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Models.PropertyGroup.SetLazyParentId(System.Lazy{System.Nullable{System.Int32}})">
-            <summary>
-            Sets the ParentId from the lazy integer id
-            </summary>
-            <param name="id">Id of the Parent</param>
-        </member>
         <member name="P:Umbraco.Core.Models.PropertyGroup.Name">
             <summary>
             Gets or sets the Name of the Group, which corresponds to the Tab-name in the UI
             </summary>
-        </member>
-        <member name="P:Umbraco.Core.Models.PropertyGroup.ParentId">
-            <summary>
-            Gets or sets the Id of the Parent PropertyGroup.
-            </summary>
-            <remarks>
-            A Parent PropertyGroup corresponds to an inherited PropertyGroup from a composition.
-            If a PropertyType is inserted into an inherited group then a new group will be created with an Id reference to the parent.
-            </remarks>
         </member>
         <member name="P:Umbraco.Core.Models.PropertyGroup.SortOrder">
             <summary>
@@ -18044,8 +18457,9 @@
         </member>
         <member name="P:Umbraco.Core.Models.PropertyType.PropertyGroupId">
             <summary>
-            Gets or Sets the PropertyGroup's Id for which this PropertyType belongs
+            Gets or sets the identifier of the PropertyGroup this PropertyType belongs to.
             </summary>
+            <remarks>For generic properties, the value is <c>null</c>.</remarks>
         </member>
         <member name="P:Umbraco.Core.Models.PropertyType.Mandatory">
             <summary>
@@ -21479,10 +21893,27 @@
             Defines the ContentTypeService, which is an easy access to operations involving <see cref="T:Umbraco.Core.Models.IContentType"/>
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Services.IContentTypeService.ValidateComposition(Umbraco.Core.Models.IContentTypeComposition)">
+            <summary>
+            Validates the composition, if its invalid a list of property type aliases that were duplicated is returned
+            </summary>
+            <param name="compo"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IContentTypeService.GetAllPropertyTypeAliases">
             <summary>
             Gets all property type aliases.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentTypeService.GetAllContentTypeAliases(System.Guid[])">
+            <summary>
+            Gets all content type aliases
+            </summary>
+            <param name="objectTypes">
+            If this list is empty, it will return all content type aliases for media, members and content, otherwise
+            it will only return content type aliases for the object types specified
+            </param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.IContentTypeService.Copy(Umbraco.Core.Models.IContentType,System.String,System.String,System.Int32)">
@@ -21725,6 +22156,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ContentTypeService.GetAllContentTypeAliases(System.Guid[])">
+            <summary>
+            Gets all content type aliases
+            </summary>
+            <param name="objectTypes">
+            If this list is empty, it will return all content type aliases for media, members and content, otherwise
+            it will only return content type aliases for the object types specified
+            </param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ContentTypeService.Copy(Umbraco.Core.Models.IContentType,System.String,System.String,System.Int32)">
             <summary>
             Copies a content type as a child under the specified parent if specified (otherwise to the root)
@@ -21830,6 +22271,13 @@
             if they are required to be updated.
             </summary>
             <param name="contentTypes">A tuple of a content type and a boolean indicating if it is new (HasIdentity was false before committing)</param>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentTypeService.ValidateComposition(Umbraco.Core.Models.IContentTypeComposition)">
+            <summary>
+            Validates the composition, if its invalid a list of property type aliases that were duplicated is returned
+            </summary>
+            <param name="compo"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentTypeService.Save(Umbraco.Core.Models.IContentType,System.Int32)">
             <summary>
@@ -22006,6 +22454,26 @@
         <member name="E:Umbraco.Core.Services.ContentTypeService.SavedMediaType">
             <summary>
             Occurs after Save
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.ContentTypeService.MovingMediaType">
+            <summary>
+            Occurs before Move
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.ContentTypeService.MovedMediaType">
+            <summary>
+            Occurs after Move
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.ContentTypeService.MovingContentType">
+            <summary>
+            Occurs before Move
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.ContentTypeService.MovedContentType">
+            <summary>
+            Occurs after Move
             </summary>
         </member>
         <member name="T:Umbraco.Core.Services.DataTypeService">
@@ -22320,6 +22788,16 @@
         <member name="E:Umbraco.Core.Services.DataTypeService.Saved">
             <summary>
             Occurs after Save
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.DataTypeService.Moving">
+            <summary>
+            Occurs before Move
+            </summary>
+        </member>
+        <member name="E:Umbraco.Core.Services.DataTypeService.Moved">
+            <summary>
+            Occurs after Move
             </summary>
         </member>
         <member name="M:Umbraco.Core.Services.IEntityService.GetIdForKey(System.Guid,Umbraco.Core.Models.UmbracoObjectTypes)">
@@ -22723,11 +23201,12 @@
             <param name="dataTypeDefinition">IDataTypeDefinition type to export</param>
             <returns><see cref="T:System.Xml.Linq.XElement"/> containing the xml representation of the IDataTypeDefinition object</returns>
         </member>
-        <member name="M:Umbraco.Core.Services.EntityXmlSerializer.Serialize(Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Models.IContentType)">
+        <member name="M:Umbraco.Core.Services.EntityXmlSerializer.Serialize(Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Models.IContentType)">
             <summary>
             Exports an <see cref="T:Umbraco.Core.Models.IContentType"/> item to xml as an <see cref="T:System.Xml.Linq.XElement"/>
             </summary>
             <param name="dataTypeService"></param>
+            <param name="contentTypeService"></param>
             <param name="contentType">Content type to export</param>
             <returns><see cref="T:System.Xml.Linq.XElement"/> containing the xml representation of the IContentType object</returns>
         </member>
@@ -22867,17 +23346,24 @@
         </member>
         <member name="M:Umbraco.Core.Services.IFileService.GetTemplate(System.String)">
             <summary>
-            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its alias
+            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its alias.
             </summary>
-            <param name="alias">Alias of the template</param>
-            <returns>A <see cref="T:Umbraco.Core.Models.ITemplate"/> object</returns>
+            <param name="alias">The alias of the template.</param>
+            <returns>The <see cref="T:Umbraco.Core.Models.ITemplate"/> object matching the alias, or null.</returns>
         </member>
         <member name="M:Umbraco.Core.Services.IFileService.GetTemplate(System.Int32)">
             <summary>
-            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its alias
+            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its identifier.
             </summary>
-            <param name="id">Id of the template</param>
-            <returns>A <see cref="T:Umbraco.Core.Models.ITemplate"/> object</returns>
+            <param name="id">The identifer of the template.</param>
+            <returns>The <see cref="T:Umbraco.Core.Models.ITemplate"/> object matching the identifier, or null.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IFileService.GetTemplate(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its guid identifier.
+            </summary>
+            <param name="id">The guid identifier of the template.</param>
+            <returns>The <see cref="T:Umbraco.Core.Models.ITemplate"/> object matching the identifier, or null.</returns>
         </member>
         <member name="M:Umbraco.Core.Services.IFileService.GetTemplateDescendants(System.String)">
             <summary>
@@ -22928,6 +23414,17 @@
             </summary>
             <param name="template"><see cref="T:Umbraco.Core.Models.ITemplate"/> to save</param>
             <param name="userId">Optional id of the user saving the template</param>
+        </member>
+        <member name="M:Umbraco.Core.Services.IFileService.CreateTemplateForContentType(System.String,System.String,System.Int32)">
+            <summary>
+            Creates a template for a content type
+            </summary>
+            <param name="contentTypeAlias"></param>
+            <param name="contentTypeName"></param>
+            <param name="userId"></param>
+            <returns>
+            The template created
+            </returns>
         </member>
         <member name="M:Umbraco.Core.Services.IFileService.DeleteTemplate(System.String,System.Int32)">
             <summary>
@@ -23033,6 +23530,17 @@
             <param name="script"><see cref="T:Umbraco.Core.Models.Script"/> to validate</param>
             <returns>True if Script is valid, otherwise false</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.FileService.CreateTemplateForContentType(System.String,System.String,System.Int32)">
+            <summary>
+            Creates a template for a content type
+            </summary>
+            <param name="contentTypeAlias"></param>
+            <param name="contentTypeName"></param>
+            <param name="userId"></param>
+            <returns>
+            The template created
+            </returns>
+        </member>
         <member name="M:Umbraco.Core.Services.FileService.GetTemplates(System.String[])">
             <summary>
             Gets a list of all <see cref="T:Umbraco.Core.Models.ITemplate"/> objects
@@ -23047,17 +23555,24 @@
         </member>
         <member name="M:Umbraco.Core.Services.FileService.GetTemplate(System.String)">
             <summary>
-            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its alias
+            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its alias.
             </summary>
-            <param name="alias">Alias of the template</param>
-            <returns>A <see cref="T:Umbraco.Core.Models.Template"/> object</returns>
+            <param name="alias">The alias of the template.</param>
+            <returns>The <see cref="T:Umbraco.Core.Models.ITemplate"/> object matching the alias, or null.</returns>
         </member>
         <member name="M:Umbraco.Core.Services.FileService.GetTemplate(System.Int32)">
             <summary>
-            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its alias
+            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its identifier.
             </summary>
-            <param name="id">Id of the template</param>
-            <returns>A <see cref="T:Umbraco.Core.Models.ITemplate"/> object</returns>
+            <param name="id">The identifer of the template.</param>
+            <returns>The <see cref="T:Umbraco.Core.Models.ITemplate"/> object matching the identifier, or null.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.FileService.GetTemplate(System.Guid)">
+            <summary>
+            Gets a <see cref="T:Umbraco.Core.Models.ITemplate"/> object by its guid identifier.
+            </summary>
+            <param name="id">The guid identifier of the template.</param>
+            <returns>The <see cref="T:Umbraco.Core.Models.ITemplate"/> object matching the identifier, or null.</returns>
         </member>
         <member name="M:Umbraco.Core.Services.FileService.GetTemplateDescendants(System.Int32)">
             <summary>
@@ -29560,7 +30075,7 @@
         <member name="T:Umbraco.Core.TypeFinder">
             <summary>
             A utility class to find all classes of a certain type by reflection in the current bin folder
-            of the web application. 
+            of the web application.
             </summary>
         </member>
         <member name="M:Umbraco.Core.TypeFinder.GetAllAssemblies">
@@ -29569,7 +30084,7 @@
             This is a modified version of: http://www.dominicpettifer.co.uk/Blog/44/how-to-get-a-reference-to-all-assemblies-in-the--bin-folder
             </summary>
             <remarks>
-            We do this because we cannot use AppDomain.Current.GetAssemblies() as this will return only assemblies that have been 
+            We do this because we cannot use AppDomain.Current.GetAssemblies() as this will return only assemblies that have been
             loaded in the CLR, not all assemblies.
             See these threads:
             http://issues.umbraco.org/issue/U5-198
@@ -29579,7 +30094,7 @@
         </member>
         <member name="M:Umbraco.Core.TypeFinder.GetAssembliesWithKnownExclusions(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">
             <summary>
-            Return a list of found local Assemblies excluding the known assemblies we don't want to scan 
+            Return a list of found local Assemblies excluding the known assemblies we don't want to scan
             and exluding the ones passed in and excluding the exclusion list filter, the results of this are
             cached for perforance reasons.
             </summary>
@@ -29600,6 +30115,7 @@
             </summary>
             <remarks>
             NOTE the comma vs period... comma delimits the name in an Assembly FullName property so if it ends with comma then its an exact name match
+            NOTE this means that "foo." will NOT exclude "foo.dll" but only "foo.*.dll"
             </remarks>
         </member>
         <member name="M:Umbraco.Core.TypeFinder.FindClassesOfTypeWithAttribute``2">
@@ -29699,7 +30215,7 @@
         <member name="M:Umbraco.Core.TypeFinder.GetClasses(System.Type,System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Boolean,System.Func{System.Type,System.Boolean})">
             <summary>
             Finds types that are assignable from the assignTypeFrom parameter and will scan for these types in the assembly
-            list passed in, however we will only scan assemblies that have a reference to the assignTypeFrom Type or any type 
+            list passed in, however we will only scan assemblies that have a reference to the assignTypeFrom Type or any type
             deriving from the base type.
             </summary>
             <param name="assignTypeFrom"></param>
@@ -29863,6 +30379,11 @@
             <summary>
             Override init and raise the event
             </summary>
+            <remarks>
+            DID YOU KNOW? The Global.asax Init call is the thing that initializes all of the httpmodules, ties up a bunch of stuff with IIS, etc...
+            Therefore, since OWIN is an HttpModule when running in IIS/ASP.Net the OWIN startup is not executed until this method fires and by that
+            time, Umbraco has performed it's bootup sequence.
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.UmbracoApplicationBase.OnApplicationStarting(System.Object,System.EventArgs)">
             <summary>
@@ -30520,6 +31041,13 @@
             <summary>
              String extension methods
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.StringExtensions.StripWhitespace(System.String)">
+            <summary>
+            Removes new lines and tabs
+            </summary>
+            <param name="txt"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.StringExtensions.DetectIsJavaScriptPath(System.String)">
             <summary>
