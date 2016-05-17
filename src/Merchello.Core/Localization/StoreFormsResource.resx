@@ -121,6 +121,10 @@
     <value>The expiration date does not appear to be valid.</value>
     <comment>Error message for an invalid credit card expiraton date</comment>
   </data>
+  <data name="InvalidConfirmPassword" xml:space="preserve">
+    <value>Password and confirm password fields do not match</value>
+    <comment>Error message for password and confirm password comparison</comment>
+  </data>
   <data name="InvalidCvv" xml:space="preserve">
     <value>cvv does not appear to be valid.</value>
     <comment>Error message for an invalid credit card cvv</comment>
@@ -144,6 +148,10 @@
   <data name="LabelCardHolderName" xml:space="preserve">
     <value>Name on card</value>
     <comment>Label for the name on a credit card field</comment>
+  </data>
+  <data name="LabelConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+    <comment>Label for the confirm password field</comment>
   </data>
   <data name="LabelCountry" xml:space="preserve">
     <value>Country</value>
@@ -189,6 +197,10 @@
     <value>Company</value>
     <comment>Label for organziation of company field</comment>
   </data>
+  <data name="LabelPassword" xml:space="preserve">
+    <value>Password</value>
+    <comment>Label for the password field</comment>
+  </data>
   <data name="LabelPaymentMethods" xml:space="preserve">
     <value>Payment methods</value>
     <comment>Label for payment methods</comment>
@@ -205,6 +217,10 @@
     <value>State or Province</value>
     <comment>Label for the region or province field</comment>
   </data>
+  <data name="LabelRememberMe" xml:space="preserve">
+    <value>Remember me</value>
+    <comment>Label for remember me checkbox</comment>
+  </data>
   <data name="LabelShipRateQuote" xml:space="preserve">
     <value>Shipping method</value>
     <comment>Label for selecting a shipping method</comment>
@@ -214,6 +230,10 @@
   </data>
   <data name="LabelUseForShipping" xml:space="preserve">
     <value>Use this address as the shipping address</value>
+  </data>
+  <data name="LabelUsername" xml:space="preserve">
+    <value>Username</value>
+    <comment>Label for the user name field</comment>
   </data>
   <data name="PleaseSelect" xml:space="preserve">
     <value>-- Please Select --</value>
@@ -226,6 +246,10 @@
   <data name="RequiredCardHolderName" xml:space="preserve">
     <value>Name or card is required</value>
     <comment>Error message for a required name on credit card field</comment>
+  </data>
+  <data name="RequiredConfirmPassword" xml:space="preserve">
+    <value>Confirm password is required</value>
+    <comment>Error message for a required confirm password field</comment>
   </data>
   <data name="RequiredCountry" xml:space="preserve">
     <value>Country is a required</value>
@@ -267,6 +291,10 @@
     <value>Offer code is required</value>
     <comment>Error message for a required offer code field</comment>
   </data>
+  <data name="RequiredPassword" xml:space="preserve">
+    <value>Password is required</value>
+    <comment>Error message for a required password field</comment>
+  </data>
   <data name="RequiredPostalCode" xml:space="preserve">
     <value>Postal code is required</value>
     <comment>Error message for a required postal code field</comment>
@@ -274,5 +302,9 @@
   <data name="RequiredRegion" xml:space="preserve">
     <value>State or Provice is required</value>
     <comment>Error message for state or province field</comment>
+  </data>
+  <data name="RequiredUsername" xml:space="preserve">
+    <value>Username is required</value>
+    <comment>Error message for a required username field</comment>
   </data>
 </root>

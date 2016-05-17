@@ -3,7 +3,9 @@
     using System;
     using System.Web.Mvc;
 
+    using Merchello.Core;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Web.Factories;
@@ -112,7 +114,7 @@
         protected virtual ActionResult HandlePaymentSuccess(TPaymentModel model)
         {
             if (!model.ViewData.Success)
-            {
+            { 
                 ViewData["MerchelloViewData"] = model.ViewData; 
                 return CurrentUmbracoPage();
             }
@@ -141,6 +143,25 @@
             logData.AddCategory("Controllers");
             MultiLogHelper.Error<CheckoutPaymentControllerBase<TPaymentModel>>("Failed payment operation.", ex, logData);
             throw ex;
+        }
+
+        /// <summary>
+        /// Handles the order confirmation.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutPaymentModel"/>.
+        /// </param>
+        /// <param name="attempt">
+        /// The <see cref="IPaymentResult"/>.
+        /// </param>
+        protected virtual void HandleNotificiation(TPaymentModel model, IPaymentResult attempt)
+        {
+            if (!attempt.Payment.Success) return;
+
+            var billing = attempt.Invoice.GetBillingAddress();
+            if (billing.Email.IsNullOrWhiteSpace()) return;
+
+            Notification.Trigger("OrderConfirmation", attempt, new[] { billing.Email });
         }
 
         /// <summary>

@@ -43,6 +43,9 @@
                 // merge the models so we can be assured that any hidden values are passed on
                 model.ViewData = resultModel.ViewData;
 
+                // Send the notification
+                HandleNotificiation(model, attempt);
+
                 return this.HandlePaymentSuccess(model);
             }
             catch (Exception ex)

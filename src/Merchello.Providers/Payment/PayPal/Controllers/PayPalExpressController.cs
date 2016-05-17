@@ -83,7 +83,7 @@
         /// <remarks>
         /// Can be used to send OrderConfirmation notification
         /// </remarks>
-        public static event TypedEventHandler<PayPalExpressController, PaymentAttemptEventArgs<IPaymentResult>> ProcessingCompleted;
+        public static event TypedEventHandler<PayPalExpressController, PaymentAttemptEventArgs<IPaymentResult>> Processed;
              
         /// <summary>
         /// Handles the a successful payment response from the PayPal Express checkout
@@ -138,7 +138,7 @@
 
                 if (attempt.Payment.Success)
                 {
-                    ProcessingCompleted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
+                    Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
 
                     // raise the event so the redirect URL can be manipulated
                     RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);

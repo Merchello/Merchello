@@ -268,11 +268,13 @@
     <Compile Include="Factories\FastTrackShippingAddressModelFactory.cs" />
     <Compile Include="Models\FastTrackBillingAddressModel.cs" />
     <Compile Include="Models\FastTrackCheckoutAddressModel.cs" />
-    <Compile Include="Models\FastTrackCheckoutSummary.cs" />
+    <Compile Include="Models\FastTrackCheckoutSummaryModel.cs" />
     <Compile Include="Models\FastTrackPaymentMethodModel.cs" />
     <Compile Include="Models\FastTrackShipRateQuoteModel.cs" />
     <Compile Include="Models\IFastTrackCheckoutAddressModel.cs" />
     <Compile Include="Models\ISuccessRedirectUrl.cs" />
+    <Compile Include="Models\Membership\LoginModel.cs" />
+    <Compile Include="Models\Membership\NewMemberModel.cs" />
     <Compile Include="Models\Payment\FastTrackPaymentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -302,6 +304,7 @@
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

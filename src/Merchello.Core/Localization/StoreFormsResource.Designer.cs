@@ -70,6 +70,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password and confirm password fields do not match.
+        /// </summary>
+        public static string InvalidConfirmPassword {
+            get {
+                return ResourceManager.GetString("InvalidConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to cvv does not appear to be valid..
         /// </summary>
         public static string InvalidCvv {
@@ -120,6 +129,15 @@ namespace Merchello.Core.Localization {
         public static string LabelCardHolderName {
             get {
                 return ResourceManager.GetString("LabelCardHolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string LabelConfirmPassword {
+            get {
+                return ResourceManager.GetString("LabelConfirmPassword", resourceCulture);
             }
         }
         
@@ -223,6 +241,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string LabelPassword {
+            get {
+                return ResourceManager.GetString("LabelPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payment methods.
         /// </summary>
         public static string LabelPaymentMethods {
@@ -259,6 +286,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remember me.
+        /// </summary>
+        public static string LabelRememberMe {
+            get {
+                return ResourceManager.GetString("LabelRememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shipping method.
         /// </summary>
         public static string LabelShipRateQuote {
@@ -286,6 +322,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string LabelUsername {
+            get {
+                return ResourceManager.GetString("LabelUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to -- Please Select --.
         /// </summary>
         public static string PleaseSelect {
@@ -309,6 +354,15 @@ namespace Merchello.Core.Localization {
         public static string RequiredCardHolderName {
             get {
                 return ResourceManager.GetString("RequiredCardHolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password is required.
+        /// </summary>
+        public static string RequiredConfirmPassword {
+            get {
+                return ResourceManager.GetString("RequiredConfirmPassword", resourceCulture);
             }
         }
         
@@ -403,6 +457,15 @@ namespace Merchello.Core.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password is required.
+        /// </summary>
+        public static string RequiredPassword {
+            get {
+                return ResourceManager.GetString("RequiredPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Postal code is required.
         /// </summary>
         public static string RequiredPostalCode {
@@ -417,6 +480,15 @@ namespace Merchello.Core.Localization {
         public static string RequiredRegion {
             get {
                 return ResourceManager.GetString("RequiredRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username is required.
+        /// </summary>
+        public static string RequiredUsername {
+            get {
+                return ResourceManager.GetString("RequiredUsername", resourceCulture);
             }
         }
     }

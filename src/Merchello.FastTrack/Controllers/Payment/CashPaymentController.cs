@@ -1,11 +1,8 @@
 ﻿namespace Merchello.FastTrack.Controllers.Payment
 {
-    using System.Web.Configuration;
     using System.Web.Mvc;
 
-    using Merchello.Core.Gateways;
     using Merchello.FastTrack.Models.Payment;
-    using Merchello.Web.Controllers;
     using Merchello.Web.Store.Controllers.Payment;
 
     using Umbraco.Core;

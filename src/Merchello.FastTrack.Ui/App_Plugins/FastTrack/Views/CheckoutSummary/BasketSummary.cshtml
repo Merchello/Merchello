@@ -1,4 +1,4 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummaryModel>
 @using System.Web.Mvc.Html
 @using Merchello.Core
 @using Merchello.FastTrack.Models
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-@helper RenderEdit(FastTrackCheckoutSummary model, string buttonFor)
+@helper RenderEdit(FastTrackCheckoutSummaryModel model, string buttonFor)
 {
     if (AddEditButton(model, buttonFor))
     {
@@ -94,7 +94,7 @@
 
 @functions {
 
-    private bool AddEditButton(FastTrackCheckoutSummary model, string buttonFor)
+    private bool AddEditButton(FastTrackCheckoutSummaryModel model, string buttonFor)
     {
         if (model.CheckoutStage == CheckoutStage.None) return false;
         if (model.CheckoutStage == CheckoutStage.BillingAddress || (model.CheckoutStage == CheckoutStage.ShippingAddress && buttonFor == "shipping"))

@@ -12,7 +12,7 @@
     /// <summary>
     /// Represents a the FastTrack Checkout Summary.
     /// </summary>
-    public class FastTrackCheckoutSummary : ICheckoutSummaryModel<FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
+    public class FastTrackCheckoutSummaryModel : ICheckoutSummaryModel<FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// Gets or sets the invoice key.

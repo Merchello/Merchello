@@ -5,7 +5,7 @@
     /// <summary>
     /// Defines an Umbraco Membership Profile.
     /// </summary>
-    public interface ICustomerMembershipProfile : IUiModel
+    public interface IMerchelloCustomerMembershipProfile : IUiModel
     {
         /// <summary>
         /// Gets or sets the email address.

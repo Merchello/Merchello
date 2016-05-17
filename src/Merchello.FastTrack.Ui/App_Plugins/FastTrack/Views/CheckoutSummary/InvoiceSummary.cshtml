@@ -1,4 +1,4 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummary>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummaryModel>
 @using System.Web.Mvc.Html
 @using Merchello.Core
 @using Merchello.FastTrack.Models
@@ -115,7 +115,7 @@
     </div>
 </div>
 
-@helper RenderEdit(FastTrackCheckoutSummary model, string buttonFor)
+@helper RenderEdit(FastTrackCheckoutSummaryModel model, string buttonFor)
 {
     // We are far along in process that we can display the edit buttons for both billing and shipping
     var url = buttonFor == "billing" ?

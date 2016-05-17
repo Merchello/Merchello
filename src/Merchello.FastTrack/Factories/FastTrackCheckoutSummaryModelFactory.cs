@@ -17,7 +17,7 @@
     /// <summary>
     /// A factory responsible for building FastTrack the <see cref="StoreSummaryModel"/>.
     /// </summary>
-    public class FastTrackCheckoutSummaryModelFactory : CheckoutSummaryModelFactory<FastTrackCheckoutSummary, FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
+    public class FastTrackCheckoutSummaryModelFactory : CheckoutSummaryModelFactory<FastTrackCheckoutSummaryModel, FastTrackBillingAddressModel, StoreAddressModel, StoreLineItemModel>
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.

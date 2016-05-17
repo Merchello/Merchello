@@ -83,10 +83,12 @@
 
             try
             {
-                
                 var attempt = ProcessPayment(nonce);
 
                 var model = CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod, attempt);
+
+                // Send the notification
+                HandleNotificiation(model, attempt);
 
                 return HandlePaymentSuccess(model);
             }
