@@ -9,8 +9,8 @@
     /// <summary>
     /// The checkout billing address model.
     /// </summary>
-    public class FastTrackBillingAddressModel : FastTrackCheckoutAddressModel, IFastTrackCheckoutAddressModel
-    {
+    public class FastTrackBillingAddressModel : FastTrackCheckoutAddressModel
+    { 
         /// <summary>
         /// The split names.
         /// </summary>
