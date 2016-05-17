@@ -1,9 +1,0 @@
-﻿{       
-    javascript: [
-        '~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/EditController.js',
-		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/ng-table/ng-table.min.js'
-    ],
-	css: [
-		'~/App_Plugins/DiploTraceLogViewer/backoffice/diplotracelog/tracelog.css',
-	]
-}
