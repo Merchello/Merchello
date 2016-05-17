@@ -33,7 +33,7 @@
     /// <typeparam name="TAddItem">
     /// The type of <see cref="IAddItemModel"/>
     /// </typeparam>
-    public abstract class BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem> : MerchelloSurfaceController
+    public abstract class BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem> : MerchelloUIControllerBase
         where TBasketItemModel : class, ILineItemModel, new()
         where TBasketModel : class, IBasketModel<TBasketItemModel>, new()
         where TAddItem : class, IAddItemModel, new()
@@ -52,7 +52,9 @@
         /// The factory responsible for building <see cref="ExtendedDataCollection"/>s when adding items to the basket.
         /// </summary>
         private readonly BasketItemExtendedDataFactory<TAddItem> _addItemExtendedDataFactory;
-        
+
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketControllerBase{TBasketModel,TBasketItemModel,TAddItem}"/> class. 
         /// </summary>
@@ -61,6 +63,20 @@
                   new BasketModelFactory<TBasketModel, TBasketItemModel>(),
                   new AddItemModelFactory<TAddItem>(),
                   new BasketItemExtendedDataFactory<TAddItem>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasketControllerBase{TBasketModel,TBasketItemModel,TAddItem}"/> class.
+        /// </summary>
+        /// <param name="addItemExtendedDataFactory">
+        /// The <see cref="BasketItemExtendedDataFactory{TAddItemModel}"/>.
+        /// </param>
+        protected BasketControllerBase(BasketItemExtendedDataFactory<TAddItem> addItemExtendedDataFactory)
+            : this(
+                    new BasketModelFactory<TBasketModel, TBasketItemModel>(),
+                    new AddItemModelFactory<TAddItem>(),
+                    addItemExtendedDataFactory)
         {
         }
 
@@ -90,6 +106,8 @@
             this._addItemExtendedDataFactory = addItemExtendedDataFactory;
         }
 
+        #endregion
+
         /// <summary>
         /// Responsible for adding a product to the basket.
         /// </summary>
@@ -100,6 +118,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult AddBasketItem(TAddItem model)
         {
             // Instantiating the ExtendedDataCollection in this manner allows for additional values 
@@ -155,33 +174,14 @@
                 this.Basket.Save();
 
                 // If this request is not an AJAX request return the redirect
-                if (!this.Request.IsAjaxRequest())
-                {
-                    return this.RedirectAddItemSuccess(model);
-                }
-
-                // Construct the response object to return
-                var resp = new AddItemAsyncResponse
-                    {
-                        Success = true,
-                        BasketItemCount = this.GetBasketItemCountForDisplay()
-                    };
-
-                return this.Json(resp);
+                return this.HandleAddItemSuccess(model);
             }
             catch (Exception ex)
             {
                 var logData = MultiLogger.GetBaseLoggingData();
                 logData.AddCategory("Controllers");
-
                 MultiLogHelper.Error<BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem>>("Failed to add item to basket", ex, logData);
-
-                // If the request is not an AJAX request throw the error
-                if (!this.Request.IsAjaxRequest()) throw;
-
-                var resp = new AddItemAsyncResponse { Success = false, ErrorMessages = { ex.Message } };
-
-                return this.Json(resp);
+                return this.HandleAddItemException(model, ex);
             }
         }
 
@@ -189,9 +189,10 @@
         /// <summary>
         /// Responsible for updating the quantities of items in the basket
         /// </summary>
-        /// <param name="model">The <see cref="TBasketModel"/></param>
+        /// <param name="model">The <see cref="IBasketModel{TBasketItemModel}"/></param>
         /// <returns>Redirects to the current Umbraco page (generally the basket page)</returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult UpdateBasket(TBasketModel model)
         {
             if (!this.ModelState.IsValid) return this.CurrentUmbracoPage();
@@ -204,27 +205,7 @@
 
             this.Basket.Save();
 
-            if (this.Request.IsAjaxRequest())
-            {
-                // in case of Async call we need to construct the response
-                var resp = new UpdateQuantityAsyncResponse { Success = true };
-                try
-                {
-                    resp.AddUpdatedItems(this.Basket.Items);
-                    resp.FormattedTotal = this.Basket.TotalBasketPrice.AsFormattedCurrency();
-                    resp.BasketItemCount = this.GetBasketItemCountForDisplay();
-                    return this.Json(resp);
-                }
-                catch (Exception ex)
-                {
-                    resp.Success = false;
-                    resp.ErrorMessages.Add(ex.Message);
-                    return this.Json(resp);
-                }
-               
-            }
-
-            return this.RedirectUpdateBasketSuccess(model);
+            return this.HandleUpdateBasketSuccess(model);
         }
 
         /// <summary>
@@ -342,7 +323,6 @@
             return this.AddToBasketForm(addItem, view);
         }
 
-
         /// <summary>
         /// Renders the add to basket form.
         /// </summary>
@@ -363,13 +343,13 @@
 
         #endregion
 
-        #region Success Redirects
+        #region Operation Handlers
 
         /// <summary>
-        /// Handles the redirection after a successful basket update.
+        /// Handles the successful basket update.
         /// </summary>
         /// <param name="model">
-        /// The model.
+        /// The <see cref="IBasketModel{TBasketItemModel}"/>.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -377,23 +357,60 @@
         /// <remarks>
         /// Allows for customization of the redirection after a custom update basket operation
         /// </remarks>
-        protected virtual ActionResult RedirectUpdateBasketSuccess(TBasketModel model)
+        protected virtual ActionResult HandleUpdateBasketSuccess(TBasketModel model)
         {
             return this.RedirectToCurrentUmbracoPage();
         }
 
         /// <summary>
-        /// The redirect add item success.
+        /// Handles a basket update exception
         /// </summary>
         /// <param name="model">
         /// The model.
         /// </param>
+        /// <param name="ex">
+        /// The ex.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected virtual ActionResult RedirectAddItemSuccess(TAddItem model)
+        /// <remarks>
+        /// Allows for customization of the redirection after a custom update basket operation
+        /// </remarks>
+        protected virtual ActionResult HandleUpdateBasketException(TBasketModel model, Exception ex)
+        {
+            throw ex;
+        }
+
+        /// <summary>
+        /// Handles a successful add item operation.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="IAddItemModel"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        protected virtual ActionResult HandleAddItemSuccess(TAddItem model)
         {
             return this.CurrentUmbracoPage();
+        }
+
+        /// <summary>
+        /// Handles an add item operation exception.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="IAddItemModel"/>.
+        /// </param>
+        /// <param name="ex">
+        /// The <see cref="Exception"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        protected virtual ActionResult HandleAddItemException(TAddItem model, Exception ex)
+        {
+            throw ex;
         }
 
         #endregion

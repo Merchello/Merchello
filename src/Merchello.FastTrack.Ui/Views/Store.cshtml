@@ -1,0 +1,27 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Store>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>@Model.Headline</h1>
+    @Html.Raw(Model.Brief)
+</div>
+
+@if (Model.FeaturedProducts.Any())
+{
+    <section id="categories">
+        <div class="page-header">
+            <h1>Featured Products</h1>
+        </div>
+        <div class="row">
+        @foreach (var fp in Model.FeaturedProducts)
+        {
+            <div class="col-xs-4">
+                @Html.Partial("_ProductBox", fp)
+            </div>
+        }
+        </div>
+    </section>
+}

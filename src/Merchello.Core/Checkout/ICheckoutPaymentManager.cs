@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines a manager that is responsible for the payment aspects of the checkout process.
     /// </summary>
-    public interface ICheckoutPaymentManager
+    public interface ICheckoutPaymentManager : ICheckoutContextManagerBase
     {
         /// <summary>
         /// True/false indicating whether or not the <see cref="ICheckoutPaymentManager"/> is ready to prepare an <see cref="IInvoice"/>

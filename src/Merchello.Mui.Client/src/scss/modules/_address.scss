@@ -1,0 +1,10 @@
+.h-card {
+  .p-name, .p-org, .p-street-address, .p-extended-address, .p-postal-code, .p-country-name,
+  .label-contact
+  {
+    display: block;
+    padding-right: 2em;
+  }
+
+  .p-name { font-weight: bold; }
+}

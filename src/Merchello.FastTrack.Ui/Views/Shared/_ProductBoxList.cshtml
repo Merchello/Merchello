@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent>
+    
+
+<section class="product-box-list">
+    <div class="page-header">
+        <h1>Related Products</h1>
+    </div>
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4">
+                    @Html.Partial("_ProductBox", product)
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No recently viewed products
+        </div>
+    }
+</section>

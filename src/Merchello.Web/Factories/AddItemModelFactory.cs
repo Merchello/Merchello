@@ -5,7 +5,7 @@
     using Merchello.Web.Models.VirtualContent;
 
     /// <summary>
-    /// Responsible for creating <see cref="TAddItemModel"/>s.
+    /// Responsible for creating <see cref="IAddItemModel"/>s.
     /// </summary>
     /// <typeparam name="TAddItemModel">
     /// The type of the add item model
@@ -23,7 +23,7 @@
         /// The quantity.
         /// </param>
         /// <returns>
-        /// The <see cref="TAddItemModel"/>.
+        /// The <see cref="IAddItemModel"/>.
         /// </returns>
         public TAddItemModel Create(IProductContent productContent, int quantity = 1)
         {
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Creates <see cref="TAddItemModel"/> from <see cref="ProductDisplay"/>.
+        /// Creates <see cref="IAddItemModel"/> from <see cref="ProductDisplay"/>.
         /// </summary>
         /// <param name="display">
         /// The display.
@@ -41,7 +41,7 @@
         /// The quantity.
         /// </param>
         /// <returns>
-        /// The <see cref="TAddItemModel"/>.
+        /// The <see cref="IAddItemModel"/>.
         /// </returns>
         public TAddItemModel Create(ProductDisplay display, int quantity = 1)
         {
@@ -56,16 +56,16 @@
         }
 
         /// <summary>
-        /// Allows for overriding the creation of <see cref="TAddItemModel"/> from <see cref="IProductContent"/>.
+        /// Allows for overriding the creation of <see cref="IAddItemModel"/> from <see cref="IProductContent"/>.
         /// </summary>
         /// <param name="addItem">
-        /// The <see cref="TAddItemModel"/>.
+        /// The <see cref="IAddItemModel"/>.
         /// </param>
         /// <param name="productContent">
         /// The <see cref="IProductContent"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="TAddItemModel"/>.
+        /// The modified <see cref="IAddItemModel"/>.
         /// </returns>
         protected virtual TAddItemModel OnCreate(TAddItemModel addItem, IProductContent productContent)
         {
@@ -73,16 +73,16 @@
         }
 
         /// <summary>
-        /// Allows for overriding the creation of <see cref="TAddItemModel"/> from <see cref="ProductDisplay"/>
+        /// Allows for overriding the creation of <see cref="IAddItemModel"/> from <see cref="ProductDisplay"/>
         /// </summary>
         /// <param name="addItem">
-        /// The <see cref="AddItemModel"/>.
+        /// The <see cref="IAddItemModel"/>.
         /// </param>
         /// <param name="display">
         /// The <see cref="ProductDisplay"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="TAddItemModel"/>.
+        /// The modified <see cref="IAddItemModel"/>.
         /// </returns>
         protected virtual TAddItemModel OnCreate(TAddItemModel addItem, ProductDisplay display)
         {

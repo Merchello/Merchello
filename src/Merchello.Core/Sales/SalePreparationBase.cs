@@ -24,7 +24,7 @@
     /// Represents an abstract SalesPreparation class responsible for temporarily persisting invoice and order information
     /// while it's being collected
     /// </summary>
-    [Obsolete("Use CheckoutManagerBase")]
+    [Obsolete("Use CheckoutManagerBase.  SalesPreparationBase will be removed in version 3.0.0")]
     public abstract class SalePreparationBase : ISalePreparationBase
     {
         /// <summary>

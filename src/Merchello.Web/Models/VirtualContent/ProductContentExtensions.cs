@@ -1,8 +1,15 @@
 ﻿namespace Merchello.Web.Models.VirtualContent
 {
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Linq;
 
+    using Merchello.Core;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Collections;
 
     /// <summary>
     /// Extension methods for <see cref="IProductContent"/>.
@@ -63,6 +70,23 @@
         public static decimal PriceOrSalePrice(this IProductContentBase content)
         {
             return content.OnSale ? content.SalePrice : content.Price;
+        }
+
+        /// <summary>
+        /// Returns static collections containing the product.
+        /// </summary>
+        /// <param name="product">
+        /// The <see cref="IProductContent"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionDisplay}"/>.
+        /// </returns>
+        public static IEnumerable<EntityCollectionDisplay> GetCollectionsContaining(this IProductContent product)
+        {
+            if (!MerchelloContext.HasCurrent) return Enumerable.Empty<EntityCollectionDisplay>();
+            return
+                ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
+                    .GetEntityCollectionsByProductKey(product.Key).Select(x => x.ToEntityCollectionDisplay());
         }
     }
 }

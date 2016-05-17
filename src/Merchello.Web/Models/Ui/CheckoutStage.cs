@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Web.Models.Ui
 {
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
+
     /// <summary>
     /// Checkout stages.
     /// </summary>

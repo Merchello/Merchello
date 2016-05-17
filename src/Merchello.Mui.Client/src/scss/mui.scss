@@ -1,3 +1,10 @@
 // load the modules
+@import "modules/overlay";
+@import "modules/template";
 @import "modules/notify";
 @import "modules/basket";
+@import "modules/forms";
+@import "modules/address";
+// must follow address
+@import "modules/summary";
+@import "modules/product";

@@ -21,8 +21,8 @@ MUI.Forms = {
 
         });
 
-        $.validator.unobtrusive.adapters.addBool('validateexpiresdate')
-
+        $.validator.unobtrusive.adapters.addBool('validateexpiresdate');
+        
     },
 
     // Post a form and return the promise
@@ -34,8 +34,7 @@ MUI.Forms = {
     rebind: function(frm) {
         $.validator.unobtrusive.parse(frm);
     },
-
-
+    
     // validates the form
     validate: function(frm) {
 

@@ -9,12 +9,14 @@
     using Merchello.Core;
     using Merchello.Core.Events;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Provider;
     using Merchello.Providers.Payment.PayPal.Services;
+    using Merchello.Web.Models.Ui.Async;
     using Merchello.Web.Mvc;
 
     using Umbraco.Core;
@@ -26,8 +28,8 @@
     /// <summary>
     /// A surface controller for used for accepting PayPal Express Payments.
     /// </summary>
-    [PluginController("MerchelloProviders")]
-    public partial class PayPalExpressController : PayPalSurfaceControllerBase
+    [PluginController("Merchello")]
+    public class PayPalExpressController : PayPalSurfaceControllerBase
     {
         /// <summary>
         /// The <see cref="IPayPalApiPaymentService"/>.
@@ -73,8 +75,16 @@
         /// <summary>
         /// Occurs before redirecting for a cancel response.
         /// </summary>
-        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForCancel; 
+        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForCancel;
 
+        /// <summary>
+        /// Occurs after the final redirection and before redirecting to the success URL
+        /// </summary>
+        /// <remarks>
+        /// Can be used to send OrderConfirmation notification
+        /// </remarks>
+        public static event TypedEventHandler<PayPalExpressController, PaymentAttemptEventArgs<IPaymentResult>> Processed;
+             
         /// <summary>
         /// Handles the a successful payment response from the PayPal Express checkout
         /// </summary>
@@ -109,16 +119,41 @@
                 // data so that we can refund the payment later through the back office if needed.
                 var attempt = invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
 
+                // If this is an AJAX request return the JSON
+                if (payment.ExtendedData.GetPayPalRequestIsAjaxRequest())
+                {
+                    var resp = new PaymentResultAsyncResponse
+                    {
+                        Success = attempt.Payment.Success,
+                        InvoiceKey = attempt.Invoice.Key,
+                        PaymentKey = attempt.Payment.Result.Key,
+                        PaymentMethodName = "PayPal Express Checkout"
+                    };
+
+                    if (attempt.Payment.Exception != null)
+                        resp.Messages.Add(attempt.Payment.Exception.Message);
+
+                    return Json(resp);
+                }
+
                 if (attempt.Payment.Success)
                 {
+                    Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
+
                     // raise the event so the redirect URL can be manipulated
                     RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
 
                     return Redirect(redirecting.RedirectingToUrl);
                 }
 
+                var retrying = new PayPalRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
+                var qs = string.Format("?invoicekey={0}&paymentkey={1}", invoiceKey, paymentKey);
+                if (!retrying.RedirectingToUrl.IsNullOrWhiteSpace()) return Redirect(retrying.RedirectingToUrl + qs);
 
-                throw new NotImplementedException("TODO error handling result");
+                var invalidOp = new InvalidOperationException("Retry url was not specified");
+
+                MultiLogHelper.Error<PayPalExpressController>("Could not redirect to retry", invalidOp);
+                throw invalidOp;
             }
             catch (Exception ex)
             {
@@ -168,7 +203,6 @@
                 }
                 else
                 {
-                    // TODO add invoice note
                     payment.VoidPayment(invoice, _paymentMethod.PaymentMethod.Key);
                 }
                

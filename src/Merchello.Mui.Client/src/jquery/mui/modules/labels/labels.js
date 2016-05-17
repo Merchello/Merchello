@@ -3,10 +3,8 @@
 MUI.Labels = {
     
     init: function() {
-        
         // Event listener
         MUI.on('AddItem.added', MUI.Labels.update.basketItemCount);
-        
     },
     
     update: {

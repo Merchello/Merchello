@@ -10,6 +10,8 @@ MUI.AddItem = {
 
     postUrl: '',
 
+    forms: [],
+
     // Initializes the AddItem object
     init: function() {
 
@@ -17,14 +19,26 @@ MUI.AddItem = {
             MUI.AddItem.postUrl = MUI.Settings.Endpoints.basketSurface + 'AddBasketItem';
         }
 
-        // find all of the AddItem forms
-        var frms = $('[data-muifrm="additem"]');
-        if (frms.length > 0) {
-            $.each(frms, function(idx, frm) {
-               MUI.AddItem.bind.form(frm);
+        // find all the product keys to load the data tables
+        var containers = $('[data-muivalue="product"]');
+
+        if (containers.length > 0) {
+            $.each(containers, function(idx, c) {
+                var key = '';
+                key = $(c).data('muikey');
+                if (key !== undefined && key !== '') {
+                    // verify the key does not already exist
+                    // this can happen if the product exists on the page more than once
+                    var found = _.find(MUI.AddItem.bind.keys, function(k) { return k === key });
+                    if (found === undefined) {
+                        MUI.AddItem.bind.keys.push(key);
+                    }
+                }
             });
-            loadData();
         }
+
+        // keys are all loaded now get the data tables
+        loadData();
 
         // loads the product data tables after the keys have been acquired
         function loadData() {
@@ -49,9 +63,12 @@ MUI.AddItem = {
                                 pdt.rows.push($.extend(new MUI.AddItem.ProductDataTableRow(), dataRow));
                             });
                             MUI.AddItem.dataTables.push(pdt);
-                            MUI.AddItem.bind.controls(pdt);
+                            //MUI.AddItem.bind.controls(pdt);
                         });
                     }
+
+                    // find all of the AddItem forms
+                    MUI.AddItem.bind.forms();
 
                 }, function (err) {
                     MUI.Notify.error(err);
@@ -69,35 +86,41 @@ MUI.AddItem = {
         // An array of product keys that should be bound
         keys : [],
 
+        forms: function() {
+             var frms = $('[data-muifrm="additem"]');
+             if (frms.length > 0) {
+                MUI.AddItem.Forms = frms;
+                $.each(frms, function(idx, frm) {
+                    MUI.AddItem.bind.form(frm);
+                });
+             }
+        },
+
         // Bind the form;
         form: function(frm) {
-            var container = $(frm).closest('[data-muiproduct]');
-            var key = '';
-            if (container.length > 0) {
-                key = $(container).data('muiproduct');
-                if (key !== undefined && key !== '') {
-                    MUI.AddItem.bind.keys.push(key);
-                }
-            }
 
             // If the endpoint is set, override the form to do AJAX posts
             if (MUI.AddItem.postUrl !== '') {
+
                 $(frm).submit(function () {
                     $.ajax({
                         type: 'POST',
                         url: MUI.AddItem.postUrl,
                         data: $(this).serialize()
                     }).then(function(result) {
-
                         MUI.emit('AddItem.added', result);
-                        
-                        MUI.Notify.success('Successfully added item to basket');
-
+                        MUI.Notify.info('Successfully added item to basket');
                     }, function(err) {
                        MUI.Logger.captureError(err); 
                     });
                     return false;
                 });
+            }
+
+            var key = $(frm).closest('[data-muivalue="product"]').data('muikey');
+
+            if (key !== undefined) {
+                MUI.AddItem.bind.controls(frm, key);
             }
         },
 
@@ -106,20 +129,20 @@ MUI.AddItem = {
         // parameter: pdt - Product Data Table object
         // TODO - this will need to change in 2.1.0
         // TODO - when we can designate which sort of form element to use for option choice selction
-        controls: function(pdt) {
+        controls: function(frm, key) {
+            var options = MUI.AddItem.getOptionsForProduct(frm, key);
 
-            var options = MUI.AddItem.getOptionsForProduct(pdt.productKey);
             if (options.length > 0) {
                 $.each(options, function(idx, o) {
                    $(o).change(function() {
                        // TODO filter lists to ensure all choices are available
-                       MUI.AddItem.updateVariantPricing(pdt);
+                       MUI.AddItem.updateVariantPricing(frm, key);
                    });
                 });
-
-                // initial pricing (on load)
-                MUI.AddItem.updateVariantPricing(pdt);
             }
+            // initial pricing (on load)
+            MUI.AddItem.updateVariantPricing(frm, key);
+
         }
     },
 
@@ -130,24 +153,22 @@ MUI.AddItem = {
     dataTables : [],
 
     // updates the variant pricing from the product data table data
-    updateVariantPricing: function(pdt) {
+    updateVariantPricing: function(frm, key) {
         // find the append point
-
-        var appendTo = undefined;
-        var container = $('[data-muiproduct="' + pdt.productKey + '"]');
-        if (container.length > 0) {
-            appendTo = $(container).find('[data-muivalue="variantprice"]');
-            if (appendTo.length > 0) {
-                appendTo = appendTo[0];
-            } else {
-                // There is not reason to continue if the append point cannot be found
-                return;
-            }
+        var well = $(frm).closest('[data-muivalue="product"]');
+        if (well.length === 0) return;
+        var appendTo = $(well).find('[data-muivalue="variantprice"]');
+        if (appendTo.length > 0) {
+            appendTo = appendTo[0];
+        } else {
+            // There is not reason to continue if the append point cannot be found
+            return;
         }
 
         // get all of the options associated with this product so we can
         // find the matching data row in the product data table
-        var options = MUI.AddItem.getOptionsForProduct(pdt.productKey);
+        var options = MUI.AddItem.getOptionsForProduct(frm, key);
+
         if (options.length > 0) {
             // get the current selections
             var keys = [];
@@ -155,27 +176,30 @@ MUI.AddItem = {
                keys.push($(o).val());
             });
 
-            if (keys.length > 0) {
-                var row = pdt.getRowByMatchKeys(keys);
-                if (row !== undefined) {
-                    // update the price
-                    var html = '';
-                    if (row.onSale) {
-                        html = "<span class='sale-price'>" + row.formattedSalePrice + "</span><span class='original-price'>" + row.formattedPrice + "</span>";
-                    } else {
-                        html = "<span>" + row.formattedPrice + "</span>";
-                    }
+            var pdt = MUI.AddItem.getProductDataTable(key);
+            if (pdt !== undefined) {
+                if (keys.length > 0) {
+                    var row = pdt.getRowByMatchKeys(keys);
+                    if (row !== undefined) {
+                        // update the price
+                        var html = '';
+                        if (row.onSale) {
+                            html = "<span class='sale-price'>" + row.formattedSalePrice + "</span> <span class='original-price'>" + row.formattedPrice + "</span>";
+                        } else {
+                            html = "<span>" + row.formattedPrice + "</span>";
+                        }
 
-                    $(appendTo).html(html);
+                        $(appendTo).html(html);
+                    }
                 }
             }
         }
     },
 
-    getOptionsForProduct: function(key) {
-        var container = $('[data-muiproduct="' + key + '"]');
+    getOptionsForProduct: function(frm, key) {
+        var container = $('[data-muikey="' + key + '"]');
         if (container.length > 0) {
-            var parents = $(container).find('[data-muioption]');
+            var parents = $(frm).find('[data-muioption]');
             var options = [];
             $.each(parents, function(idx, p) {
                 // find the select

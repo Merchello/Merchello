@@ -8,6 +8,9 @@
         /// <summary>
         /// Gets or sets the workflow marker.
         /// </summary>
+        /// <remarks>
+        /// This is used to assist in tracking the checkout
+        /// </remarks>
         ICheckoutWorkflowMarker WorkflowMarker { get; set; }  
     }
 }

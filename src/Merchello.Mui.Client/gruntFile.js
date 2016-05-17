@@ -19,8 +19,8 @@
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/App_Plugins/Merchello',
-        vsdir: '../Merchello.Implementation.UI/App_Plugins/Merchello',
-        appdir: '../Merchello.Implementation.UI',
+        vsdir: '../Merchello.FastTrack.UI/App_Plugins/Merchello',
+        appdir: '../Merchello.FastTrack.UI',
         pkg: grunt.file.readJSON('package.json'),
 
         // The comment block that is inserted at the top of files during build
@@ -33,6 +33,7 @@
         // file locations
         src: {
             mui: ['src/jquery/**/*.js'],
+            img: ['src/images/**/*.*'],
             lib: ['lib/**/*.js'],
             scss: ['src/scss/mui.scss'],
             prod: ['<%= distdir %>/js/*.js']
@@ -45,7 +46,9 @@
             assets: {
                 // this requires that the scss as been compiled.
                 files: [
-                    { dest: '<%= distdir %>/client/css', src: '*.css', expand: true, cwd: 'src/scss/' }
+                    { dest: '<%= distdir %>/client/css', src: '*.css', expand: true, cwd: 'src/scss/' },
+                    { dest: '<%= distdir %>/client/img', src: '*.*', expand: true, cwd: 'src/images/' },
+                    { dest: '<%= distdir %>/client/lib', src: 'card-validator.min.js', expand: true, cwd: 'lib/' }
                 ]
             },
 
@@ -63,17 +66,26 @@
 
         concat: {
             mui: {
-                src: ['src/jquery/mui/*.js', 'src/jquery/mui/modules/*/*.js', 'src/jquery/mui/modules/*/components/*.js', 'src/jquery/bootstrapper.js'],
-                dest: '<%= distdir %>/client/js/mui.js',
+                src: ['src/jquery/mui/*.js', 'src/jquery/mui/logger/**/*.js', 'src/jquery/mui/services/**/*.js', 'src/jquery/mui/modules/*/*.js', 'src/jquery/mui/modules/*/components/*.js', 'src/jquery/bootstrapper.js'],
+                dest: '<%= distdir %>/client/js/merchello.ui.js',
                 options: {
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
                 }
-            }
-            ,
+            },
+
             settings: {
                 src: ['src/jquery/mui.settings.js'],
-                dest: '<%= distdir %>/client/js/mui.settings.js',
+                dest: '<%= distdir %>/client/js/merchello.ui.settings.js',
+                options: {
+                    banner: '<%= banner %>\n\n',
+                    footer: '\n\n'
+                }
+            },
+
+            fasttrack: {
+                src: ['src/jquery/fasttrack.js'],
+                dest: '<%= distdir %>/client/js/fasttrack.js',
                 options: {
                     banner: '<%= banner %>\n\n',
                     footer: '\n\n'
@@ -84,13 +96,13 @@
         sass: {
             dev: {
                 files: {
-                    '<%= distdir %>/client/css/default/mui.css':
+                    '<%= distdir %>/client/css/merchello.ui.css':
                     '<%= src.scss %>'
                 }
             },
             prod: {
                 files: {
-                    '<%= distdir %>/client/css/default/mui.min.css':
+                    '<%= distdir %>/client/css/merchello.ui.min.css':
                     '<%= src.scss %>'
                 },
                 options: {
@@ -102,12 +114,12 @@
         uglify: {
             build: {
                 files: {
-                    '<%= distdir %>/client/js/mui.min.js': ['<%= distdir %>/client/js/mui.js']
+                    '<%= distdir %>/client/js/merchello.ui.min.js': ['<%= distdir %>/client/js/merchello.ui.js']
                 },
                 options: {
                     mangle: true,
                     sourceMap: true,
-                    sourceMapName: '<%= distdir %>/client/js/mui.js.map',
+                    sourceMapName: '<%= distdir %>/client/js/merchello.ui.js.map',
                     banner: '<%= banner %>\n\n',
                     footer: '\n'
                 }

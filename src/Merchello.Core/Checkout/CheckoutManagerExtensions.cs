@@ -5,11 +5,17 @@
 
     using Merchello.Core.Models;
 
+    /// <summary>
+    /// Extension methods for the CheckoutManager.
+    /// </summary>
     internal static class CheckoutManagerExtensions
     {
         /// <summary>
         /// Gets a clone of the ItemCache
         /// </summary>
+        /// <param name="checkoutManager">
+        /// The <see cref="ICheckoutManagerBase"/>.
+        /// </param>
         /// <returns>
         /// The <see cref="IItemCache"/>.
         /// </returns>
