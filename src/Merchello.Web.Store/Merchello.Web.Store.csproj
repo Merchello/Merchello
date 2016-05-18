@@ -284,6 +284,7 @@
     <Compile Include="Models\StoreSummaryModel.cs" />
     <Compile Include="Models\ProductDataTable.cs" />
     <Compile Include="Models\ProductDataTableRow.cs" />
+    <Compile Include="Models\StoreViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\ValidateExpiresDateAttribute.cs" />
   </ItemGroup>

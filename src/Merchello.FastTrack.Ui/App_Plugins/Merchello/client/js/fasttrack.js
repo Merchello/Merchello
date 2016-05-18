@@ -19,6 +19,11 @@
         }
     }
     
+    // membership
+    function openOverlay() {
+    }
+    
+    
 
 })();
 

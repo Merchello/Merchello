@@ -1,18 +1,21 @@
 .mui-overlay {
-  background: #cccccc;
   width: 100%;
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
+  background: #cccccc;
   opacity: .5;
-  z-index: 9999; }
+  z-index: 99; }
 
 * {
   margin: 0; }
 
 html, body {
   height: 100%; }
+
+.mui-nav-right {
+  margin-right: 20px; }
 
 .wrapper {
   min-height: 100%;

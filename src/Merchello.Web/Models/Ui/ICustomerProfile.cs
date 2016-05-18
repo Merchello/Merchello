@@ -1,11 +1,9 @@
 ﻿namespace Merchello.Web.Models.Ui
 {
-    using System.ComponentModel.DataAnnotations;
-
     /// <summary>
     /// Defines an Umbraco Membership Profile.
     /// </summary>
-    public interface IMerchelloCustomerMembershipProfile : IUiModel
+    public interface ICustomerProfile : IUiModel
     {
         /// <summary>
         /// Gets or sets the email address.
@@ -13,20 +11,16 @@
         /// <remarks>
         /// This is the login / username
         /// </remarks>
-        [Required]
-        [EmailAddress]
         string Email { get; set; }
 
         /// <summary>
         /// Gets or sets the Umbraco member first name.
         /// </summary>
-        [Required]
         string FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the Umbraco member last name.
         /// </summary>
-        [Required, Display(Name = "Last Name *")]
         string LastName { get; set; }
     }
 }

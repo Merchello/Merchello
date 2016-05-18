@@ -1,13 +1,16 @@
 ﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.Core.Models
 @using Merchello.FastTrack.Ui
 @using Merchello.Web
 @{
     var storeRoot = ExampleUiHelper.Content.GetStoreRoot();
     var basketPage = ExampleUiHelper.Content.GetBasket();
+    var accountPage = ExampleUiHelper.Content.GetAccount();
 }
 <div class="navbar navbar-inverse">
     <div class="container">
-        <a class="navbar-brand navbar-right" href="@storeRoot.Url">@Umbraco.Field("storeName", recursive: true)</a>
+
+        <a class="navbar-brand navbar-right mui-store-name" href="@storeRoot.Url">@Umbraco.Field("storeName", recursive: true)</a>
 
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -18,6 +21,8 @@
             </button>
         </div>
 
+
+
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li@(IsActive(storeRoot.Id))><a href="@Url.Content("~/")">Home</a></li>
@@ -26,9 +31,28 @@
                 {
                     <li@(IsActive(page.Id))><a href="@page.Url">@page.Name</a></li>
                 }
-
-                <li@(IsActive(basketPage.Id))><a href="@basketPage.Url">@basketPage.Name (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a></li>
             </ul>
+
+            <ul class="nav navbar-nav navbar-right mui-nav-right">
+                <li@(IsActive(basketPage.Id))>
+                    <a href="@basketPage.Url"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> @basketPage.Name (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a>
+                    </li>
+                    <li@(IsActive(accountPage.Id))>
+                        <a href="@accountPage.Url">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            @if (CurrentCustomer.IsAnonymous)
+                            {
+                                <span>Login</span>
+                            }
+                            else
+                            {
+                                var customer = (ICustomer)CurrentCustomer;
+                                <span>@customer.FirstName @customer.LastName</span>
+                            }
+                        </a>
+                    </li>
+            </ul>
+
         </div>
     </div>
 </div>
