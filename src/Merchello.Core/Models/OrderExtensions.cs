@@ -30,6 +30,37 @@
                 : string.Format("{0}-{1}", order.OrderNumberPrefix, order.OrderNumber);
         }
 
+        /// <summary>
+        /// Gets the <see cref="IInvoice"/> for the <see cref="IOrder"/>.
+        /// </summary>
+        /// <param name="order">
+        /// The <see cref="IOrder"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoice"/>.
+        /// </returns>
+        public static IInvoice Invoice(this IOrder order)
+        {
+            return order.Invoice(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IInvoice"/> for the <see cref="IOrder"/>.
+        /// </summary>
+        /// <param name="order">
+        /// The <see cref="IOrder"/>.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IInvoice"/>.
+        /// </returns>
+        internal static IInvoice Invoice(this IOrder order, IMerchelloContext merchelloContext)
+        {
+            return merchelloContext.Services.InvoiceService.GetByKey(order.InvoiceKey);
+        }
+
 #region Fulfillment
 
 

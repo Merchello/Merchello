@@ -128,6 +128,72 @@ namespace Merchello.Core.Models
         }
 
         /// <summary>
+        /// Gets the collection of <see cref="IOrder"/> for the <see cref="IShipment"/>.
+        /// </summary>
+        /// <param name="shipment">
+        /// The <see cref="IShipment"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOrder}"/>.
+        /// </returns>
+        public static IEnumerable<IOrder> Orders(this IShipment shipment)
+        {
+            return shipment.Orders(MerchelloContext.Current);
+        }
+
+        /// <summary>
+        /// The collection of <see cref="IInvoice"/> associated with the <see cref="IShipment"/>.
+        /// </summary>
+        /// <param name="shipment">
+        /// The <see cref="IShipment"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IInvoice}"/>.
+        /// </returns>
+        public static IEnumerable<IInvoice> Invoices(this IShipment shipment)
+        {
+            return shipment.Invoices(MerchelloContext.Current);
+        }
+
+
+        /// <summary>
+        /// Gets the collection of <see cref="IOrder"/> for the <see cref="IShipment"/>.
+        /// </summary>
+        /// <param name="shipment">
+        /// The <see cref="IShipment"/>.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IOrder}"/>.
+        /// </returns>
+        internal static IEnumerable<IOrder> Orders(this IShipment shipment, IMerchelloContext merchelloContext)
+        {
+            var orderKeys = shipment.Items.Select(x => x.ContainerKey);
+            return merchelloContext.Services.OrderService.GetByKeys(orderKeys).OrderBy(x => x.CreateDate);
+        }
+
+
+        /// <summary>
+        /// The collection of <see cref="IInvoice"/> associated with the <see cref="IShipment"/>.
+        /// </summary>
+        /// <param name="shipment">
+        /// The <see cref="IShipment"/>
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IInvoice}"/>.
+        /// </returns>
+        internal static IEnumerable<IInvoice> Invoices(this IShipment shipment, IMerchelloContext merchelloContext)
+        {
+            return shipment.Orders(merchelloContext)
+                .Select(x => x.Invoice(merchelloContext)).OrderBy(x => x.CreateDate);
+        }
+
+        /// <summary>
         /// Returns a string intended to be used as a 'Shipment Line Item' title or name
         /// </summary>
         /// <param name="shipmentRateQuote">
@@ -140,6 +206,7 @@ namespace Merchello.Core.Models
         {
             return string.Format("Shipment - {0} - {1} items", shipmentRateQuote.ShipMethod.Name, shipmentRateQuote.Shipment.Items.Count);
         }
+
 
         /// <summary>
         /// The shipment rate quotes.

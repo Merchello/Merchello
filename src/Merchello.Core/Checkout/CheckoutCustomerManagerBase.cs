@@ -57,7 +57,7 @@
         /// <summary>
         /// Clears the customer data on context reset.
         /// </summary>
-        protected virtual void Reset()
+        public override void Reset()
         {
             Context.Customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.ShippingDestinationAddress);
             Context.Customer.ExtendedData.RemoveValue(Core.Constants.ExtendedDataKeys.BillingAddress);

@@ -1,0 +1,15 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Checkout.cshtml";
+}
+<div class="row">
+
+    <div class="col-md-6" data-muitarget="checkoutaddresses">
+       @RenderBody()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Action("InvoiceSummary", "CheckoutSummary", new { area = "FastTrack" })
+    </div>
+
+</div>

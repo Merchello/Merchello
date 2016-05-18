@@ -67,6 +67,19 @@
         }
 
         /// <summary>
+        /// Resets the checkout manager by removing persisted information.
+        /// </summary>
+        public override void Reset()
+        {
+            Customer.Reset();
+            Offer.Reset();
+            Extended.Reset();
+            Payment.Reset();
+            Shipping.Reset();
+        }
+
+
+        /// <summary>
         /// Initializes the manager.
         /// </summary>
         private void Initialize()

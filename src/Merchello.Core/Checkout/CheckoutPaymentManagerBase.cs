@@ -22,7 +22,7 @@
         /// <summary>
         /// A function to instantiate an invoice BuilderChain.
         /// </summary>
-        private IBuilderChain<IInvoice> _invoiceBuilder; 
+        private readonly IBuilderChain<IInvoice> _invoiceBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CheckoutPaymentManagerBase"/> class.
@@ -38,7 +38,6 @@
         {
             Mandate.ParameterNotNull(invoiceBuilder, "invoiceBuilder");
             this._invoiceBuilder = invoiceBuilder;
-
             this.Initialize();
         }
 
@@ -206,6 +205,7 @@
         /// </param>
         protected void OnFinalizing(IPaymentResult result)
         {
+
             if (Finalizing != null)
             {
                 Finalizing.RaiseEvent(new CheckoutEventArgs<IPaymentResult>(Context.Customer, result), this);
