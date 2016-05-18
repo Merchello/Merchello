@@ -1,24 +1,33 @@
 .merchello-controls, .merchello-list {
 
-  //.list-icons {
-      .hover-hide {
+    .hover-hide {
         cursor: pointer;
-      }
-      .hover-show {
+    }
+
+    .hover-show {
         cursor: pointer;
         visibility: hidden;
-      }
+    }
 
-      li {
+    li {
         &:hover {
-          .hover-show {
-            visibility: visible;
-          }
-          .hover-hide {
-            visibility: hidden;
-          }
-        }
-      }
+            .hover-show {
+                visibility: visible;
+            }
 
-  //}
+            .hover-hide {
+                visibility: hidden;
+            }
+        }
+    }
+
+    .dropdown-menu-right {
+        right: 0;
+        left: auto;
+    }
+
+    .dropdown-menu-left {
+        right: auto;
+        left: 0;
+    }
 }
