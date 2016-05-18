@@ -77,11 +77,16 @@
             var success = true;
             if (isExpress)
             {
+                //success =
+                //    !(settings.ApiUsername.IsNullOrWhiteSpace() || 
+                //    settings.ApiPassword.IsNullOrWhiteSpace() || 
+                //    settings.ApiSignature.IsNullOrWhiteSpace() ||
+                //    settings.ApplicationId.IsNullOrWhiteSpace());
+
                 success =
-                    !(settings.ApiUsername.IsNullOrWhiteSpace() || 
-                    settings.ApiPassword.IsNullOrWhiteSpace() || 
-                    settings.ApiSignature.IsNullOrWhiteSpace() ||
-                    settings.ApplicationId.IsNullOrWhiteSpace());
+                !(settings.ApiUsername.IsNullOrWhiteSpace() ||
+                settings.ApiPassword.IsNullOrWhiteSpace() ||
+                settings.ApiSignature.IsNullOrWhiteSpace());
             }
             else
             {

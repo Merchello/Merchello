@@ -52,9 +52,6 @@
         /// <summary>
         /// Gets or sets a value indicating whether to empty the basket on payment success.
         /// </summary>
-        /// <remarks>
-        /// TODO RSS - the basket is defined in .Web so this setting should probably be moved
-        /// </remarks>
         bool EmptyBasketOnPaymentSuccess { get; set; }
     }
 }

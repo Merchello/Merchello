@@ -1,5 +1,5 @@
 # version format
-version: 2.0.0.{build}
+version: 2.1.0.{build}
 
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX if a rtm release build this should be blank, otherwise if empty will default to alpha
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
@@ -64,16 +64,6 @@ deploy:
     artifact: /.*\.nupkg/
     on:
       branch: merchello-dev
-
-  # MyGet Deployment for builds & releases
-  - provider: NuGet
-    server: https://www.myget.org/F/merchello/api/v2/
-    symbol_server: https://www.myget.org/F/merchello/api/v2/package
-    api_key:
-      secure: 34B4mXhAYW6XOw8H9ZVh+KhbKKjXnb8QIp8bpoIKrkx5Uivcg0D4cRbu/pvdI65o
-    artifact: /.*\.nupkg/
-    on:
-      branch: mdev-1150
 
   # GitHub Deployment for releases
   - provider: GitHub

@@ -68,6 +68,18 @@
         }
 
         /// <summary>
+        /// Gets the checkout context settings collection
+        /// </summary>
+        [ConfigurationProperty("checkoutContextSettings", IsRequired = false), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
+        public SettingsCollection CheckoutContextSettings
+        {
+            get
+            {
+                return (SettingsCollection)this["checkoutContextSettings"];
+            }
+        }
+
+        /// <summary>
         /// Gets the customer element.
         /// </summary>
         [ConfigurationProperty("customer", IsRequired = true)]

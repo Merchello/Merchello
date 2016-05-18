@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Examine", "Merche
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers", "Merchello.Providers\Merchello.Providers.csproj", "{6AB9B56E-91D1-400C-8977-B343F59702BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web.Store", "Merchello.Web.Store\Merchello.Web.Store.csproj", "{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,22 @@ Global
 		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x64.Build.0 = Release|Any CPU
 		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x86.ActiveCfg = Release|Any CPU
 		{6AB9B56E-91D1-400C-8977-B343F59702BE}.Release|x86.Build.0 = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|x64.Build.0 = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x64.Build.0 = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

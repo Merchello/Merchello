@@ -396,6 +396,9 @@
 
             if (result.Payment.Success)
             {
+                // Reset the Customer's CheckoutManager
+                e.Customer.Basket().GetCheckoutManager().Reset();
+
                 if (result.Invoice.InvoiceStatusKey == Core.Constants.DefaultKeys.InvoiceStatus.Paid)
                 {
                     result.Payment.Result.AuditPaymentCaptured(result.Payment.Result.Amount);

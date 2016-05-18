@@ -1,7 +1,7 @@
 <div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Providers.Dialogs.PayPalProviderSettingsController">
 
     <div class="umb-modalcolumn-header">
-        <h4><strong>BrainTree Payments Provider Configuration</strong></h4>
+        <h4><strong>PayPal Payments Provider Configuration</strong></h4>
     </div>
 
     <div class="umb-panel-body with-header with-footer">
@@ -55,10 +55,11 @@
             </div>
         </div>
         <div class="control-group row-fluid">
-            <p>Redirect URL (Success)<br /></p>
+            <p>Retry URL (Failure)<br /></p>
             <div class="input-prepend col-xs-12 span12">
-                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.cancelUrl" placeholder="/retry/">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.cancelUrl" placeholder="/umbraco/area/route/retry/" />
             </div>
+            <small class="warning">Note: <b>invoiceKey=[InvoiceKey]&amp;payementkey=[PaymentKey]</b> will be passed for retry attempt.</small>
         </div>
 
         <div class="control-group row-fluid">

@@ -706,8 +706,6 @@
             _shipMethodService.Save(shipMethodList);
         }
 
-        
-
         /// <summary>
         /// Deletes a <see cref="IShipMethod"/>
         /// </summary>
@@ -745,6 +743,16 @@
             return _shipMethodService.GetByKey(shipMethodKey);
         }
 
+        /// <summary>
+        /// Gets all <see cref="IShipMethod"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipMethod}"/>.
+        /// </returns>
+        public IEnumerable<IShipMethod> GetAllShipMethods()
+        {
+            return _shipMethodService.GetAll();
+        }
 
         #endregion
 

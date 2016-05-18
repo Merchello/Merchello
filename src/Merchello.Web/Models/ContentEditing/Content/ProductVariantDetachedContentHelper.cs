@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.ValueConverters;
 
     using Umbraco.Core;
@@ -53,7 +54,8 @@
 
             if (contentType == null)
             {
-                LogHelper.Debug(typeof(ProductVariantDetachedContentHelper<TSaveModel, TDisplay>), "ContentType could not be found");
+                var logData = MultiLogger.GetBaseLoggingData();
+                MultiLogHelper.Debug(typeof(ProductVariantDetachedContentHelper<TSaveModel, TDisplay>), "ContentType could not be found", logData);
                 return;
             }
 

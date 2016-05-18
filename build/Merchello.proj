@@ -152,6 +152,10 @@
       OutputFile="$(ProjectDir)\Merchello.Providers\Properties\AssemblyInfo.cs"
       AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
       AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Web.Store\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
 	</Target>
 
 	<!-- COMPILE -->
@@ -166,18 +170,18 @@
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
     <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
     <ItemGroup>
-      <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
+      <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;$(ProjectDir)\Merchello.Web.Store\bin\$(BuildConfig)\Merchello.Web.Store.dll;" />
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
       <ProviderFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Merchello.Providers.dll;" />
       <ProviderDependencyFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Braintree-*.dll;$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\PayPal*.dll" />
       
-      <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
-      <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*;" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss;" />
-      <AppPluginPaymentFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.scss" />
+      <AppTrayIcon Include="$(ProjectDir)\Merchello.FastTrack.UI\Umbraco\images\tray\*.*" />
+      <AppPluginFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\**\*.*;" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss;" />
+      <AppPluginPaymentFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\MerchelloProviders\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.scss" />
       
-      <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
-      <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\Config\*.xdt.config" />
-			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
+      <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\*.xdt.config" />
+      <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\Config\*.xdt.config" />
+			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;$(ProjectDir)\Merchello.Web.Store\bin\$(BuildConfig)\Merchello.Web.Store.pdb;" />
       <TestPdbFiles Include="@(PdbFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.pdb" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
@@ -203,7 +207,6 @@
     <Copy SourceFiles="@(UaaSWebTransformFiles)" DestinationFiles="@(UaaSWebTransformFiles -> '$(BuildTransformsDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
     <Copy SourceFiles="@(UaaSConfigTransformFiles)" DestinationFiles="@(UaaSConfigTransformFiles -> '$(BuildTransformsDir)\Config\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
-    
     
 		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)\Core" />
     <Copy SourceFiles="@(TestNuSpecFile)" DestinationFolder="$(BuildNuGetDir)\TestBase" />

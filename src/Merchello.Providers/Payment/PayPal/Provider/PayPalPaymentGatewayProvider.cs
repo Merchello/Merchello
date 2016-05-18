@@ -166,8 +166,6 @@
             throw nullRef;
         }
 
-       
-
         /// <summary>
         /// Gets the <see cref="IPayPalApiService"/>.
         /// </summary>
