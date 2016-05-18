@@ -471,8 +471,10 @@
     <Content Include="App_Plugins\Merchello\lib\charts\angular-chart.min.css" />
     <Content Include="App_Plugins\Merchello\lib\charts\angular-chart.min.js" />
     <Content Include="App_Plugins\Merchello\lib\charts\Chart.min.js" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\checkoutworkflowstagepicker\merchello.checkoutworkflowstagepicker.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\multiproductpicker\merchello.multiproductpicker.dialog.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\multiproductpicker\merchello.multiproductpicker.html" />
+    <Content Include="App_Plugins\Merchello\propertyeditors\productcollectionpicker\merchello.productcollectionpicker.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productlistview\merchello.productlistview.dialog.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productlistview\merchello.productlistview.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.multiproductpicker.html" />

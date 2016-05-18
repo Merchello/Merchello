@@ -39,6 +39,12 @@ install:
   - ps: grunt build
   - cmd: ECHO Changing directory back to Merchello
   - ps: cd  ..\..
+  - cmd: ECHO Changing directory to Merchello.Mui.Client
+  - ps: cd src\Merchello.Mui.Client
+  - npm install
+  - ps: grunt build
+  - cmd: ECHO Changing directory back to Merchello
+  - ps: cd  ..\..
 
 build_script:
 - build-appveyor.cmd

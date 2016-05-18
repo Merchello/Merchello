@@ -229,6 +229,15 @@
             return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
+        /// <summary>
+        /// Creates a new product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
         [HttpPost]
         public ProductDisplay CreateProduct(ProductDisplay product)
         {
@@ -310,8 +319,17 @@
         [HttpPost, HttpPut]
         public ProductDisplay PutProduct(ProductDisplay product)
         {            
-            var merchProduct = _productService.GetByKey(product.Key);  
-       
+            var merchProduct = _productService.GetByKey(product.Key);
+
+            if (product.DetachedContents.Any())
+            {
+                foreach (var c in product.DetachedContents.Select(x => x.CultureName))
+                {
+                    var pcs = new ProductContentSave { CultureName = c, Display = product };
+                    ProductVariantDetachedContentHelper<ProductContentSave, ProductDisplay>.MapDetachedProperties(pcs);
+                }
+            }
+
             merchProduct = product.ToProduct(merchProduct);
 
             _productService.Save(merchProduct);
@@ -358,6 +376,16 @@
         public ProductVariantDisplay PutProductVariant(ProductVariantDisplay productVariant)
         {
             var variant = _productVariantService.GetByKey(productVariant.Key);
+
+            if (productVariant.DetachedContents.Any())
+            {
+                foreach (var c in productVariant.DetachedContents.Select(x => x.CultureName))
+                {
+                    var pcs = new ProductVariantContentSave { CultureName = c, Display = productVariant };
+                    ProductVariantDetachedContentHelper<ProductVariantContentSave, ProductVariantDisplay>.MapDetachedProperties(pcs);
+                }
+            }
+
             variant = productVariant.ToProductVariant(variant);
 
             _productVariantService.Save(variant);
