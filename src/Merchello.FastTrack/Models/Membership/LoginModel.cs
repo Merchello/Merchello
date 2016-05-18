@@ -7,7 +7,7 @@
     /// <summary>
     /// A model used for authentication.
     /// </summary>
-    public class LoginModel
+    public class LoginModel : ISuccessRedirectUrl
     {
         /// <summary>
         /// Gets or sets the username.
@@ -28,5 +28,10 @@
         /// </summary>
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelRememberMe")]
         public bool RememberMe { get; set; }
+
+        /// <summary>
+        /// Gets or sets the success redirect url.
+        /// </summary>
+        public string SuccessRedirectUrl { get; set; }
     }
 }

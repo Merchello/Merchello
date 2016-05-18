@@ -8,7 +8,7 @@
     /// <summary>
     /// A model for creating a new Umbraco Membership account that has all properties to populate a Merchello Customer.
     /// </summary>
-    public class NewMemberModel : ICustomerProfile
+    public class NewMemberModel : ICustomerProfile, ISuccessRedirectUrl
     {
         /// <summary>
         /// Gets or sets the email.
@@ -61,5 +61,15 @@
         /// Gets or sets a value indicating whether to persist login after registration.
         /// </summary>
         public bool PersistLogin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the success redirect url.
+        /// </summary>
+        public string SuccessRedirectUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IMerchelloViewData"/>.
+        /// </summary>
+        public IMerchelloViewData ViewData { get; set; }
     }
 }

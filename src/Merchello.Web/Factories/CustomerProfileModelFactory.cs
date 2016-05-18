@@ -16,12 +16,12 @@
         /// Creates a <see cref="ICustomerProfile"/>.
         /// </summary>
         /// <param name="customer">
-        /// The <see cref="CustomerBase"/>.
+        /// The <see cref="ICustomerBase"/>.
         /// </param>
         /// <returns>
-        /// The <see cref="TProfile"/>.
+        /// The <see cref="ICustomerProfile"/>.
         /// </returns>
-        public TProfile Create(CustomerBase customer)
+        public TProfile Create(ICustomerBase customer)
         {
             var profile = new TProfile();
 
@@ -48,7 +48,7 @@
         /// <returns>
         /// The modified <see cref="ICustomerProfile"/>.
         /// </returns>
-        protected virtual TProfile OnCreate(TProfile model, CustomerBase customer)
+        protected virtual TProfile OnCreate(TProfile model, ICustomerBase customer)
         {
             return model;
         }

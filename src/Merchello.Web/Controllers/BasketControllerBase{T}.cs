@@ -410,6 +410,7 @@
         /// </returns>
         protected virtual ActionResult HandleAddItemException(TAddItem model, Exception ex)
         {
+            var logData = MultiLogger.GetBaseLoggingData();
             throw ex;
         }
 
