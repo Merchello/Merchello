@@ -302,6 +302,14 @@
         /// <returns>A <see cref="IShipMethod"/></returns>
         IShipMethod GetShipMethodByKey(Guid shipMethodKey);
 
+        /// <summary>
+        /// Gets all <see cref="IShipMethod"/>s.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipMethod}"/>s.
+        /// </returns>
+        IEnumerable<IShipMethod> GetAllShipMethods();
+
         #endregion
 
         #region ShipRateTier

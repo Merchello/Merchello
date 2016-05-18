@@ -60,9 +60,9 @@
         /// </summary>
         protected BasketControllerBase()
             : this(
-                  new BasketModelFactory<TBasketModel, TBasketItemModel>(),
+                  new BasketItemExtendedDataFactory<TAddItem>(),
                   new AddItemModelFactory<TAddItem>(),
-                  new BasketItemExtendedDataFactory<TAddItem>())
+                  new BasketModelFactory<TBasketModel, TBasketItemModel>())
         {
         }
 
@@ -74,28 +74,28 @@
         /// </param>
         protected BasketControllerBase(BasketItemExtendedDataFactory<TAddItem> addItemExtendedDataFactory)
             : this(
-                    new BasketModelFactory<TBasketModel, TBasketItemModel>(),
+                    addItemExtendedDataFactory,
                     new AddItemModelFactory<TAddItem>(),
-                    addItemExtendedDataFactory)
+                    new BasketModelFactory<TBasketModel, TBasketItemModel>())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasketControllerBase{TBasketModel,TBasketItemModel,TAddItem}"/> class. 
         /// </summary>
-        /// <param name="basketModelFactory">
-        /// The <see cref="BasketModelFactory{TBasketModel, TBasketItemModel}"/>.
+        /// <param name="addItemExtendedDataFactory">
+        /// The <see cref="BasketItemExtendedDataFactory{TAddItemModel}"/>.
         /// </param>
         /// <param name="addItemFactory">
         /// The <see cref="AddItemModelFactory{TAddItemModel}"/>
         /// </param>
-        /// <param name="addItemExtendedDataFactory">
-        /// The <see cref="BasketItemExtendedDataFactory{TAddItemModel}"/>.
+        /// <param name="basketModelFactory">
+        /// The <see cref="BasketModelFactory{TBasketModel, TBasketItemModel}"/>.
         /// </param>
         protected BasketControllerBase(
-            BasketModelFactory<TBasketModel, TBasketItemModel> basketModelFactory,
+            BasketItemExtendedDataFactory<TAddItem> addItemExtendedDataFactory,
             AddItemModelFactory<TAddItem> addItemFactory,
-            BasketItemExtendedDataFactory<TAddItem> addItemExtendedDataFactory)
+            BasketModelFactory<TBasketModel, TBasketItemModel> basketModelFactory)
         {
             Mandate.ParameterNotNull(basketModelFactory, "basketModelFactory");
             Mandate.ParameterNotNull(addItemFactory, "addItemFactory");
