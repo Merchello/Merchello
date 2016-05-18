@@ -221,7 +221,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpGet]
-        public ActionResult RemoveBasketItem(Guid lineItemKey, int redirectId)
+        public virtual ActionResult RemoveBasketItem(Guid lineItemKey, int redirectId)
         {
             this.EnsureOwner(this.Basket.Items, lineItemKey);
 

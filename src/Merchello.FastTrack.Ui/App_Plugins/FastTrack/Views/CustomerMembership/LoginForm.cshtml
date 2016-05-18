@@ -1,0 +1,27 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.Membership.LoginModel>
+@using System.Web.Mvc.Html
+@using Merchello.FastTrack.Controllers.Membership
+@using Umbraco.Web
+
+@using (Html.BeginUmbracoForm<CustomerMembershipController>("Login", new { area = "FastTrack" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(x => x.Username)
+        @Html.ValidationMessageFor(x => x.Username)
+        @Html.TextBoxFor(x => x.Username, new { @placeholder = "Your email address", @class = "form-control"  })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Password)
+        @Html.ValidationMessageFor(x => x.Password)
+        @Html.PasswordFor(x => x.Password, new { @placeholder = "Your password", @class = "form-control"  })
+    </div>
+    <div class="form-group">
+        <label class="checkbox">
+            @Html.CheckBoxFor(x => x.RememberMe) Remember Me
+        </label>
+    </div>
+    <div>
+        <input type="submit" value="Login" class="pull-right"/>
+    </div>
+}

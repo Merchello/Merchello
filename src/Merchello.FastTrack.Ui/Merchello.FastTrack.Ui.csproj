@@ -548,6 +548,7 @@
     <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css.map" />
     <Content Include="App_Plugins\MerchelloProviders\Package.manifest" />
     <Content Include="App_Plugins\Merchello\Views\PayPalExpressPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\LoginForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

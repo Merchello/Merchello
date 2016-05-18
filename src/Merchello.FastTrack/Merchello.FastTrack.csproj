@@ -254,6 +254,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Membership\CustomerMembershipController.cs" />
     <Compile Include="Controllers\Payment\BraintreePayPalController.cs" />
     <Compile Include="Controllers\Payment\BraintreeStandardCcController.cs" />
     <Compile Include="Controllers\Payment\CashPaymentController.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Factories\FastTrackCheckoutAddressModelFactoryBase{T}.cs" />
     <Compile Include="Factories\FastTrackCheckoutSummaryModelFactory.cs" />
     <Compile Include="Factories\FastTrackShippingAddressModelFactory.cs" />
+    <Compile Include="Factories\NewMemberModelFactory.cs" />
     <Compile Include="Models\FastTrackBillingAddressModel.cs" />
     <Compile Include="Models\FastTrackCheckoutAddressModel.cs" />
     <Compile Include="Models\FastTrackCheckoutSummaryModel.cs" />

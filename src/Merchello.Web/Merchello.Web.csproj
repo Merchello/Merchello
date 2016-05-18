@@ -346,6 +346,7 @@
     <Compile Include="Factories\CheckoutPaymentModelFactory.cs" />
     <Compile Include="Factories\CheckoutShipRateQuoteModelFactory.cs" />
     <Compile Include="Factories\CheckoutSummaryModelFactory.cs" />
+    <Compile Include="Factories\CustomerProfileModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\Rendering\ProductCollection.cs" />
@@ -363,7 +364,7 @@
     <Compile Include="Models\Ui\ICheckoutShipRateQuoteModel.cs" />
     <Compile Include="Models\Ui\ICheckoutSummaryModel.cs" />
     <Compile Include="Models\Ui\ICheckoutWorkflowMarker.cs" />
-    <Compile Include="Models\Ui\ICustomerMembershipProfile.cs" />
+    <Compile Include="Models\Ui\ICustomerProfile.cs" />
     <Compile Include="Models\Ui\IDiscountApplicationResult.cs" />
     <Compile Include="Models\Ui\ILineItemModel.cs" />
     <Compile Include="Models\Ui\ICheckoutPaymentMethodModel.cs" />

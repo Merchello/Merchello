@@ -8,7 +8,7 @@
     /// <summary>
     /// A model for creating a new Umbraco Membership account that has all properties to populate a Merchello Customer.
     /// </summary>
-    public class NewMemberModel : IMerchelloCustomerMembershipProfile
+    public class NewMemberModel : ICustomerProfile
     {
         /// <summary>
         /// Gets or sets the email.
@@ -54,7 +54,7 @@
         /// Not displayed but required for membership creation
         /// </remarks>
         [Required]
-        public string MemberTypeName { get; set; }
+        public string MemberTypeAlias { get; set; }
 
 
         /// <summary>
