@@ -35,10 +35,18 @@
         /// This is just an generic MVC pattern and nothing to do with Umbraco
         /// </remarks>
         public BasketController()
-            : base(
-                  new BasketModelFactory(),
-                  new AddItemModelFactory(),
-                  new BasketItemExtendedDataFactory<StoreAddItemModel>())
+            : this(new BasketItemExtendedDataFactory<StoreAddItemModel>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasketController"/> class.
+        /// </summary>
+        /// <param name="addItemExtendedDataFactory">
+        /// The <see cref="BasketItemExtendedDataFactory{StoreAddItemModel}"/>.
+        /// </param>
+        public BasketController(BasketItemExtendedDataFactory<StoreAddItemModel> addItemExtendedDataFactory)
+            : base(addItemExtendedDataFactory, new AddItemModelFactory(), new BasketModelFactory())
         {
         }
 
