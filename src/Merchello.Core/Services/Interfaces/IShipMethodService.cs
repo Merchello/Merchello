@@ -86,7 +86,14 @@
         /// <returns>
         /// A collection of <see cref="IShipMethod"/>
         /// </returns>
-        IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey); 
+        IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey);
 
+        /// <summary>
+        /// Gets all the <see cref="IShipMethod"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipMethod}"/>.
+        /// </returns>
+        IEnumerable<IShipMethod> GetAll();
     }
 }

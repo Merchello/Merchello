@@ -21,6 +21,9 @@
     /// </summary>
     internal class ShipMethodService : MerchelloRepositoryService, IShipMethodService
     {
+        /// <summary>
+        /// The locker.
+        /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         #region Constructors
@@ -97,67 +100,40 @@
 
         #endregion
 
+        #region Event Handlers
 
         /// <summary>
-        /// Creates a <see cref="IShipMethod"/>.  This is useful due to the data constraint
-        /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
+        /// Occurs after Create
         /// </summary>
-        /// <param name="providerKey">The unique gateway provider key (Guid)</param>
-        /// <param name="shipCountry">The <see cref="IShipCountry"/> this ship method is to be associated with</param>
-        /// <param name="name">The required name of the <see cref="IShipMethod"/></param>
-        /// <param name="serviceCode">The ShipMethods service code</param>
-        /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
-        internal Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode, bool raiseEvents = true)
-        {
-            Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
-            Mandate.ParameterNotNull(shipCountry, "shipCountry");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
-            Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
+        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Creating;
 
-            if (ShipMethodExists(providerKey, shipCountry.Key, serviceCode)) 
-                return Attempt<IShipMethod>.Fail(new ConstraintException("A Shipmethod already exists for this ShipCountry with this ServiceCode"));
 
-            var shipMethod = new ShipMethod(providerKey, shipCountry.Key)
-                {
-                    Name = name,
-                    ServiceCode = serviceCode,
-                    Provinces = shipCountry.Provinces.ToShipProvinceCollection()
-                };
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Created;
 
-            if(raiseEvents)
-            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IShipMethod>(shipMethod), this))
-            {
-                shipMethod.WasCancelled = true;
-                return Attempt<IShipMethod>.Fail(shipMethod);
-            }
-            
-            using (new WriteLock(Locker))
-            {
-                var uow = UowProvider.GetUnitOfWork();
-                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
-                {
-                    repository.AddOrUpdate(shipMethod);
-                    uow.Commit();
-                }
-            }
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IShipMethodService, SaveEventArgs<IShipMethod>> Saving;
 
-            if(raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IShipMethod>(shipMethod), this);
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IShipMethodService, SaveEventArgs<IShipMethod>> Saved;
 
-            return Attempt<IShipMethod>.Succeed(shipMethod);
-        }
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IShipMethodService, DeleteEventArgs<IShipMethod>> Deleting;
 
-        private bool ShipMethodExists(Guid providerKey, Guid shipCountryKey, string serviceCode)
-        {
-            using(var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
-            {
-            var query =
-               Query<IShipMethod>.Builder.Where(
-                   x => x.ShipCountryKey == shipCountryKey && x.ServiceCode == serviceCode && x.ProviderKey == providerKey);
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IShipMethodService, DeleteEventArgs<IShipMethod>> Deleted;
 
-                return repository.GetByQuery(query).Any();
-
-            }
-        }
+        #endregion
 
         /// <summary>
         /// Saves a single <see cref="IShipMethod"/>
@@ -270,10 +246,10 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="IShipMethod"/> given it's unique 'key' (Guid)
+        /// Gets a <see cref="IShipMethod"/> given it's unique 'key' (GUID)
         /// </summary>
-        /// <param name="key">The <see cref="IShipMethod"/>'s unique 'key' (Guid)</param>
-        /// <returns><see cref="IShipMethod"/></returns>
+        /// <param name="key">The <see cref="IShipMethod"/>'s unique 'key' (GUID)</param>
+        /// <returns>The <see cref="IShipMethod"/></returns>
         public IShipMethod GetByKey(Guid key)
         {
             using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
@@ -285,7 +261,15 @@
         /// <summary>
         /// Gets a list of <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key and a <see cref="IShipCountry"/> key
         /// </summary>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        /// <param name="providerKey">
+        /// The provider Key.
+        /// </param>
+        /// <param name="shipCountryKey">
+        /// The ship Country Key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipMethod"/>
+        /// </returns>
         public IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey, Guid shipCountryKey)
         {
             using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
@@ -301,7 +285,12 @@
         /// <summary>
         /// Gets a list of all <see cref="IShipMethod"/> objects given a <see cref="IGatewayProviderSettings"/> key
         /// </summary>
-        /// <returns>A collection of <see cref="IShipMethod"/></returns>
+        /// <param name="providerKey">
+        /// The provider Key.
+        /// </param>
+        /// <returns>
+        /// A collection of <see cref="IShipMethod"/>
+        /// </returns>
         public IEnumerable<IShipMethod> GetShipMethodsByProviderKey(Guid providerKey)
         {
             using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
@@ -314,39 +303,107 @@
             }
         }
 
-        #region Event Handlers
-
         /// <summary>
-        /// Occurs after Create
+        /// Gets all <see cref="IShipMethod"/>s.
         /// </summary>
-        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Creating;
-
+        /// <returns>
+        /// The <see cref="IEnumerable{IShipMethod}"/>.
+        /// </returns>
+        public IEnumerable<IShipMethod> GetAll()
+        {
+            using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
+        }
 
         /// <summary>
-        /// Occurs after Create
+        /// Creates a <see cref="IShipMethod"/>.  This is useful due to the data constraint
+        /// preventing two ShipMethods being created with the same ShipCountry and ServiceCode for any provider.
         /// </summary>
-        public static event TypedEventHandler<IShipMethodService, Events.NewEventArgs<IShipMethod>> Created;
+        /// <param name="providerKey">
+        /// The unique gateway provider key (GUID)
+        /// </param>
+        /// <param name="shipCountry">
+        /// The <see cref="IShipCountry"/> this ship method is to be associated with
+        /// </param>
+        /// <param name="name">
+        /// The required name of the <see cref="IShipMethod"/>
+        /// </param>
+        /// <param name="serviceCode">
+        /// The ShipMethods service code
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        internal Attempt<IShipMethod> CreateShipMethodWithKey(Guid providerKey, IShipCountry shipCountry, string name, string serviceCode, bool raiseEvents = true)
+        {
+            Mandate.ParameterCondition(providerKey != Guid.Empty, "providerKey");
+            Mandate.ParameterNotNull(shipCountry, "shipCountry");
+            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Mandate.ParameterNotNullOrEmpty(serviceCode, "serviceCode");
+
+            if (ShipMethodExists(providerKey, shipCountry.Key, serviceCode))
+                return Attempt<IShipMethod>.Fail(new ConstraintException("A Shipmethod already exists for this ShipCountry with this ServiceCode"));
+
+            var shipMethod = new ShipMethod(providerKey, shipCountry.Key)
+            {
+                Name = name,
+                ServiceCode = serviceCode,
+                Provinces = shipCountry.Provinces.ToShipProvinceCollection()
+            };
+
+            if (raiseEvents)
+                if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IShipMethod>(shipMethod), this))
+                {
+                    shipMethod.WasCancelled = true;
+                    return Attempt<IShipMethod>.Fail(shipMethod);
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateShipMethodRepository(uow))
+                {
+                    repository.AddOrUpdate(shipMethod);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IShipMethod>(shipMethod), this);
+
+            return Attempt<IShipMethod>.Succeed(shipMethod);
+        }
 
         /// <summary>
-        /// Occurs before Save
+        /// The ship method exists.
         /// </summary>
-        public static event TypedEventHandler<IShipMethodService, SaveEventArgs<IShipMethod>> Saving;
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <param name="shipCountryKey">
+        /// The ship country key.
+        /// </param>
+        /// <param name="serviceCode">
+        /// The service code.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool ShipMethodExists(Guid providerKey, Guid shipCountryKey, string serviceCode)
+        {
+            using (var repository = RepositoryFactory.CreateShipMethodRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query =
+                   Query<IShipMethod>.Builder.Where(
+                       x => x.ShipCountryKey == shipCountryKey && x.ServiceCode == serviceCode && x.ProviderKey == providerKey);
 
-        /// <summary>
-        /// Occurs after Save
-        /// </summary>
-        public static event TypedEventHandler<IShipMethodService, SaveEventArgs<IShipMethod>> Saved;
+                return repository.GetByQuery(query).Any();
 
-        /// <summary>
-        /// Occurs before Delete
-        /// </summary>		
-        public static event TypedEventHandler<IShipMethodService, DeleteEventArgs<IShipMethod>> Deleting;
-
-        /// <summary>
-        /// Occurs after Delete
-        /// </summary>
-        public static event TypedEventHandler<IShipMethodService, DeleteEventArgs<IShipMethod>> Deleted;
-
-        #endregion
+            }
+        }
     }
 }
