@@ -1,6 +1,7 @@
 ﻿namespace Merchello.FastTrack.Controllers.Membership
 {
     using System;
+    using System.Collections.Generic;
     using System.Web.Mvc;
     using System.Web.Security;
 
@@ -8,11 +9,16 @@
     using Merchello.FastTrack.Factories;
     using Merchello.FastTrack.Models.Membership;
     using Merchello.Web.Controllers;
+    using Merchello.Web.Store.Models;
 
     using Umbraco.Core;
     using Umbraco.Core.Services;
+    using Umbraco.Web;
+    using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
     using Umbraco.Web.Security;
+
+    using LoginModel = Merchello.FastTrack.Models.Membership.LoginModel;
 
     /// <summary>
     /// A controller responsible for rendering and handling membership operations.
@@ -56,15 +62,46 @@
         /// Handles the membership login operation.
         /// </summary>
         /// <param name="model">
-        /// The <see cref="LoginModel"/>.
+        /// The <see cref="Models.Membership.LoginModel"/>.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult Login(LoginModel model)
         {
-            return Redirect("/");
+            if (!ModelState.IsValid) return CurrentUmbracoPage();
+
+            if (!Members.Login(model.Username, model.Password))
+            {
+                var member = Members.GetByUsername(model.Username);
+
+                var viewData = new StoreViewData { Success = false };
+
+                if (member == null)
+                {
+                    viewData.Messages = new[] { "Account does not exist for this email address." };
+                }
+                else
+                {
+                    var messages = new List<string>
+                    {
+                        "Login was unsuccessful with the email address and password entered."
+                    };
+
+                    if (!member.GetPropertyValue<bool>("umbracoMemberApproved")) messages.Add("This account has not been approved.");
+                    if (member.GetPropertyValue<bool>("umbracoMemberLockedOut")) messages.Add("This account has been locked due to too many unsucessful login attempts.");
+
+                    viewData.Messages = messages;
+                }
+
+                ViewData["MerchelloViewData"] = viewData;
+                return CurrentUmbracoPage();
+            }
+
+            return model.SuccessRedirectUrl.IsNullOrWhiteSpace() ?
+                Redirect("/") : Redirect(model.SuccessRedirectUrl);
         }
 
         /// <summary>
@@ -77,8 +114,11 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public virtual ActionResult Register(NewMemberModel model)
         {
+            if (!ModelState.IsValid) return CurrentUmbracoPage();
+
             var logData = new ExtendedLoggerData();
             logData.AddCategory("Merchello");
             logData.AddCategory("FastTrack");
@@ -90,26 +130,29 @@
             registerModel.Username = model.Email;
             registerModel.UsernameIsEmail = true;
 
+            var fn = new UmbracoProperty { Alias = "firstName", Name = "First Name", Value = model.FirstName };
+            var ln = new UmbracoProperty { Alias = "lastName", Name = "Last Name", Value = model.LastName };
+            registerModel.MemberProperties.Add(fn);
+            registerModel.MemberProperties.Add(ln);
+
             MembershipCreateStatus status;
 
             //// Add a message for the attempt
             MultiLogHelper.Info<CustomerMembershipController>("Registering a new member", logData);
 
-            Members.RegisterMember(registerModel, out status, model.PersistLogin);
+            var member = Members.RegisterMember(registerModel, out status, model.PersistLogin);
+
 
             var registration = NewMemberModelFactory.Create(model, status);
 
             if (registration.ViewData.Success)
             {
-                var member = _memberService.GetByEmail(model.Email);
+                var membership = _memberService.GetByEmail(model.Email);
+
                 if (member != null)
                 {
-                    if (member.HasProperty("firstName")) member.SetValue("firstName", model.FirstName);
-                    if (member.HasProperty("lastName")) member.SetValue("lastName", model.LastName);
-
-                    _memberService.Save(member);
-                    _memberService.AssignRole(member.Id, "Customers");
-                    _memberService.Save(member);
+                    _memberService.AssignRole(membership.Id, "Customers");
+                    _memberService.Save(membership);
                 }
 
                 return model.SuccessRedirectUrl.IsNullOrWhiteSpace()
@@ -121,6 +164,22 @@
                 ViewData["MerchelloViewData"] = model.ViewData;
                 return CurrentUmbracoPage();
             }
+        }
+
+        /// <summary>
+        /// Logs out the current member.
+        /// </summary>
+        /// <param name="redirectId">
+        /// The Umbraco Id of the page to redirect to after successful logout.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public virtual ActionResult Logout(int redirectId)
+        {
+            Members.Logout();
+            return RedirectToUmbracoPage(redirectId);
         }
 
         /// <summary>

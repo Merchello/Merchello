@@ -36,21 +36,28 @@
             <ul class="nav navbar-nav navbar-right mui-nav-right">
                 <li@(IsActive(basketPage.Id))>
                     <a href="@basketPage.Url"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> @basketPage.Name (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a>
-                    </li>
-                    <li@(IsActive(accountPage.Id))>
-                        <a href="@accountPage.Url">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                            @if (CurrentCustomer.IsAnonymous)
-                            {
-                                <span>Login</span>
-                            }
-                            else
-                            {
-                                var customer = (ICustomer)CurrentCustomer;
-                                <span>@customer.FirstName @customer.LastName</span>
-                            }
-                        </a>
-                    </li>
+                </li>
+
+                <li@(IsActive(accountPage.Id, !CurrentCustomer.IsAnonymous))>
+                    <a href="@accountPage.Url">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        @if (CurrentCustomer.IsAnonymous)
+                        {
+                            <span>Login</span>
+                        }
+                        else
+                        {
+                            var customer = (ICustomer)CurrentCustomer;
+                            <span>@customer.FirstName @customer.LastName</span>
+                        }
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Logout", "Logout", "CustomerMembership", new { area = "FastTrack", redirectId = Model.Content.Id }, null)</li>
+                    </ul>
+                </li>
             </ul>
 
         </div>
@@ -59,8 +66,15 @@
 
 @functions
 {
-    private IHtmlString IsActive(int contentId)
+    private IHtmlString IsActive(int contentId, bool isDropdown = false)
     {
-        return Model.Content.Id == contentId ? MvcHtmlString.Create(" class=\"active\"") : MvcHtmlString.Empty;
+        var css = isDropdown ? "dropdown" : string.Empty;
+        if (Model.Content.Id == contentId)
+        {
+            css += " active";
+        }
+        css = css.Trim();
+
+        return !css.IsNullOrWhiteSpace() ? MvcHtmlString.Create(string.Format(" class=\"{0}\"", css)) : MvcHtmlString.Empty;
     }
-}
+};
