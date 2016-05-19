@@ -1,0 +1,11 @@
+﻿@model Merchello.FastTrack.Models.FastTrackBillingAddressModel
+@using System.Web.Mvc.Html
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Billing Address <a href="#"><span class="glyphicon glyphicon-edit pull-right"></span></a></h4>
+    </div>
+    <div class="panel-body">
+        @Html.Partial("_Address", Model)
+    </div>
+</div>

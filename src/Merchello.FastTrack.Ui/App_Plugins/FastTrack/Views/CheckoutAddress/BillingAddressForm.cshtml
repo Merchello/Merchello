@@ -1,9 +1,9 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackBillingAddressModel>
 @using System.Web.Mvc.Html
-@using Merchello.Core.Localization
 @using Merchello.FastTrack.Controllers
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.Ui
+@using Merchello.Web.Store.Localization
 @using Umbraco.Web
 @{
     Model.SuccessRedirectUrl = ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShippingAddress).Url;

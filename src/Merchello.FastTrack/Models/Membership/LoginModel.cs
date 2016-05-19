@@ -2,11 +2,14 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using Merchello.Core.Localization;
+    using Merchello.Web.Store.Localization;
 
     /// <summary>
     /// A model used for authentication.
     /// </summary>
+    /// <remarks>
+    /// Could probably just use Umbraco's LoginModel here 
+    /// </remarks>
     public class LoginModel : ISuccessRedirectUrl
     {
         /// <summary>

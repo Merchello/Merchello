@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using Merchello.Web.Models.Ui;
     using Merchello.Web.Store.Models;
 
     /// <summary>

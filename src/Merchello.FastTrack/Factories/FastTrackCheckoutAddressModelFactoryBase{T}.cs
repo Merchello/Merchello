@@ -21,7 +21,7 @@
         /// <summary>
         /// The on create.
         /// </summary>
-        /// <param name="address">
+        /// <param name="model">
         /// The <see cref="TAddress"/>.
         /// </param>
         /// <param name="adr">
@@ -30,10 +30,17 @@
         /// <returns>
         /// The modified <see cref="TAddress"/>.
         /// </returns>
-        protected override TAddress OnCreate(TAddress address, IAddress adr)
+        protected override TAddress OnCreate(TAddress model, IAddress adr)
         {
-            address.Countries = GetCountrySelectListItems();
-            return base.OnCreate(address, adr);
+            model.Countries = GetCountrySelectListItems();
+            return base.OnCreate(model, adr);
+        }
+
+        protected override TAddress OnCreate(TAddress model, ICustomer customer, ICustomerAddress adr)
+        {
+            model.Email = customer.Email;
+            model.Countries = GetCountrySelectListItems();
+            return base.OnCreate(model, customer, adr);
         }
 
         /// <summary>

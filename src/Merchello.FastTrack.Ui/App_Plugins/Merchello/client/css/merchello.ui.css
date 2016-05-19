@@ -39,6 +39,9 @@ html, body {
   height: 255px;
   /* .push must be the same height as .footer */ }
 
+.nav > li.mui-quickcheckout {
+  display: none; }
+
 .mui-notify-bar {
   position: fixed;
   bottom: 0;

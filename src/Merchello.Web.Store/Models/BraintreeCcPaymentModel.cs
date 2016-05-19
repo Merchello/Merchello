@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using Merchello.Core.Localization;
+    using Merchello.Web.Store.Localization;
     using Merchello.Web.Store.Validation;
 
     /// <summary>

@@ -552,6 +552,9 @@
     <Content Include="Views\Account.cshtml" />
     <Content Include="Views\AccountAuth.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\RegisterForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerBillingAddress.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerShippingAddress.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerSalesHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

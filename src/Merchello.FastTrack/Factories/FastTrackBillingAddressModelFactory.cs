@@ -55,7 +55,7 @@
         /// <summary>
         /// Overrides the creation of the <see cref="FastTrackBillingAddressModel"/>.
         /// </summary>
-        /// <param name="address">
+        /// <param name="model">
         /// The <see cref="FastTrackBillingAddressModel"/>.
         /// </param>
         /// <param name="adr">
@@ -64,10 +64,39 @@
         /// <returns>
         /// The modified <see cref="FastTrackBillingAddressModel"/>.
         /// </returns>
-        protected override FastTrackBillingAddressModel OnCreate(FastTrackBillingAddressModel address, IAddress adr)
+        protected override FastTrackBillingAddressModel OnCreate(FastTrackBillingAddressModel model, IAddress adr)
         {
-            address.UseForShipping = true;
-            return base.OnCreate(address, adr);
+            model.UseForShipping = true;
+            return base.OnCreate(model, adr);
+        }
+
+        /// <summary>
+        /// Overrides the creation of <see cref="ICustomerAddress"/>.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICustomerAddress"/>.
+        /// </param>
+        /// <param name="adr">
+        /// The <see cref="FastTrackBillingAddressModel"/>.
+        /// </param>
+        /// <param name="customer">
+        /// The <see cref="ICustomer"/>.
+        /// </param>
+        /// <param name="label">
+        /// The customer address label (e.g. Billing Address).
+        /// </param>
+        /// <param name="addressType">
+        /// The <see cref="AddressType"/>.
+        /// </param>
+        /// <returns>
+        /// The modified <see cref="ICustomerAddress"/>.
+        /// </returns>
+        protected override ICustomerAddress OnCreate(ICustomerAddress model, FastTrackBillingAddressModel adr, ICustomer customer, string label, AddressType addressType)
+        {
+            // Set the address to the default address
+            model.IsDefault = true;
+
+            return base.OnCreate(model, adr, customer, label, addressType);
         }
     }
 }

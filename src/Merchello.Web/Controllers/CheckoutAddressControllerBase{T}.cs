@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
@@ -323,6 +325,9 @@
         /// </exception>
         protected virtual ActionResult HandleBillingAddressSaveException(TBillingAddress model, Exception ex)
         {
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("Controller");
+            MultiLogHelper.Error<CheckoutAddressControllerBase<TBillingAddress, TShippingAddress>>("Failed to save billing address", ex, logData);
             throw ex;
         }
 
@@ -357,7 +362,25 @@
         /// </exception>
         protected virtual ActionResult HandleShippingAddressSaveException(TShippingAddress model, Exception ex)
         {
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("Controller");
+            MultiLogHelper.Error<CheckoutAddressControllerBase<TBillingAddress, TShippingAddress>>("Failed to save shipping address", ex, logData);
             throw ex;
+        }
+
+        /// <summary>
+        /// Ensures a billing address can be used as a shipping address.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the billing address is valid for use for a shipping address.
+        /// </returns>
+        protected virtual bool EnsureBillingAddressIsValidAsShippingAddress(TBillingAddress model)
+        {
+            var validCountries = GatewayContext.Shipping.GetAllowedShipmentDestinationCountries();
+            return validCountries.Any(x => x.CountryCode == model.CountryCode);
         }
     }
 }
