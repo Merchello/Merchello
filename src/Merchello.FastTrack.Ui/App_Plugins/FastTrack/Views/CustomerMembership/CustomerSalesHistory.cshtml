@@ -1,8 +1,8 @@
-﻿@using System.Web.Mvc.Html
+﻿@model Merchello.Web.Models.Ui.Rendering.ICustomerSalesHistory
+@using System.Web.Mvc.Html
 @using Merchello.Core
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.ContentEditing
-@model Merchello.Web.Models.Ui.Rendering.ICustomerSalesHistory
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -13,16 +13,18 @@
             <thead>
             <tr>
                 <th>Invoice</th>
+                <th>Date</th>
                 <th>Invoice Status</th>
                 <th>Order Status</th>
                 <th>Total</th>
             </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.OrderByDescending(x => x.InvoiceDate))
             {
                 <tr>
                     <td>@Html.ActionLink(item.PrefixedInvoiceNumber(), "ViewReceipt", "CustomerMembership", new { key = item.Key, redirectId = ExampleUiHelper.Content.GetReceipt().Id }, null)</td>
+                    <td>@item.InvoiceDate.ToString("dd-MM-yyyy")</td>
                     <td>@item.InvoiceStatus.Name</td>
                     <td>@GetOrderStatus(item)</td>
                     <td class="text-right">@item.Total.AsFormattedCurrency()</td>
@@ -31,22 +33,22 @@
             </tbody>
             <tfoot>
             <tr>
-                <td colspan="3" class="text-right">
+                <td colspan="4" class="text-right">
                     Total Purchases:
                 </td>
                 <td class="text-right"><strong>@Model.TotalPurchases.AsFormattedCurrency()</strong></td>
             </tr>
-@if (Model.TotalOutstanding > 0)
-{
+            @if (Model.TotalOutstanding > 0)
+            {
             <tr>
-                <td colspan="3" class="text-right">
+                <td colspan="4" class="text-right">
                     Total Paid:
                 </td>
                 <td class="text-right">@Model.TotalPaid.AsFormattedCurrency()</td>
             </tr>
 
                     <tr>
-                        <td colspan="3" class="text-right">
+                        <td colspan="4" class="text-right">
                             Outstanding Balance:
                         </td>
                         <td class="text-right"><strong>@Model.TotalOutstanding.AsFormattedCurrency()</strong></td>

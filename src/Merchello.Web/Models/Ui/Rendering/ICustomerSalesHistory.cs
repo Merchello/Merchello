@@ -8,7 +8,7 @@
     /// <summary>
     /// Defines a customer sales history.
     /// </summary>
-    public interface ICustomerSalesHistory
+    public interface ICustomerSalesHistory : IEnumerable<InvoiceDisplay>
     {
         /// <summary>
         /// Gets or sets the customer key.
@@ -29,13 +29,5 @@
         /// Gets the total purchases.
         /// </summary>
         decimal TotalPurchases { get; }
-
-        /// <summary>
-        /// The get enumerator.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerator{InvoiceDisplay}"/>.
-        /// </returns>
-        IEnumerator<InvoiceDisplay> GetEnumerator();
     }
 }
