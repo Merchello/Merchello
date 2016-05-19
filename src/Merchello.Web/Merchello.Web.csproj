@@ -349,6 +349,8 @@
     <Compile Include="Factories\CustomerProfileModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
+    <Compile Include="Models\Ui\Rendering\CustomerSalesHistory.cs" />
+    <Compile Include="Models\Ui\Rendering\ICustomerSalesHistory.cs" />
     <Compile Include="Models\Ui\Rendering\ProductCollection.cs" />
     <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />

@@ -17,7 +17,6 @@
     public class CheckoutAddressModelFactory<TAddress>
         where TAddress : class, ICheckoutAddressModel, new()
     {
-
         /// <summary>
         /// Creates a <see cref="IAddress"/> from <see cref="ICheckoutAddressModel"/>.
         /// </summary>
@@ -46,6 +45,31 @@
         }
 
         /// <summary>
+        /// Creates <see cref="ICustomerAddress"/> from <see cref="ICheckoutAddressModel"/>.
+        /// </summary>
+        /// <param name="adr">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <param name="customer">
+        /// The <see cref="ICustomer"/>.
+        /// </param>
+        /// <param name="label">
+        /// The customer address label (e.g. My House).
+        /// </param>
+        /// <param name="addressType">
+        /// The <see cref="AddressType"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICustomerAddress"/>.
+        /// </returns>
+        public ICustomerAddress Create(TAddress adr, ICustomer customer, string label, AddressType addressType)
+        {
+            var model = Create(adr).ToCustomerAddress(customer, label, addressType);
+
+            return OnCreate(model, adr, customer, label, addressType);
+        }
+
+        /// <summary>
         /// Creates a <see cref="ICheckoutAddressModel"/> from a <see cref="IAddress"/>.
         /// </summary>
         /// <param name="adr">
@@ -56,7 +80,7 @@
         /// </returns>
         public TAddress Create(IAddress adr)
         {   
-            var address = new TAddress
+            var model = new TAddress
                 {
                     Name = adr.Name,
                     Organization = adr.Organization,
@@ -71,7 +95,7 @@
                     AddressType = adr.AddressType,
                 };
 
-            return OnCreate(address, adr);
+            return OnCreate(model, adr);
         }
 
         /// <summary>
@@ -88,7 +112,7 @@
         /// </returns>
         public TAddress Create(ICustomer customer, ICustomerAddress adr)
         {
-            return new TAddress
+            var model = new TAddress
             {
                 Name = adr.FullName,
                 Organization = adr.Company,
@@ -102,12 +126,60 @@
                 Phone = adr.Phone,
                 AddressType = adr.AddressType,
             };
+
+            return OnCreate(model, customer, adr);
+        }
+
+        /// <summary>
+        /// Allows for overriding the creation of <see cref="ICheckoutAddressModel"/> from <see cref="ICustomerAddress"/>.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <param name="customer">
+        /// The <see cref="ICustomer"/>.
+        /// </param>
+        /// <param name="adr">
+        /// The <see cref="ICustomerAddress"/>.
+        /// </param>
+        /// <returns>
+        /// The modified <see cref="ICheckoutAddressModel"/>.
+        /// </returns>
+        protected virtual TAddress OnCreate(TAddress model, ICustomer customer, ICustomerAddress adr)
+        {
+            return model;
+        }
+
+        /// <summary>
+        /// Allows for overriding the creation of <see cref="ICustomerAddress"/> from <see cref="ICheckoutAddressModel"/>.
+        /// </summary>
+        /// <param name="model">
+        /// The <see cref="ICustomerAddress"/>.
+        /// </param>
+        /// <param name="adr">
+        /// The <see cref="ICheckoutAddressModel"/>.
+        /// </param>
+        /// <param name="customer">
+        /// The <see cref="ICustomer"/>.
+        /// </param>
+        /// <param name="label">
+        /// The customer address label (e.g. My House).
+        /// </param>
+        /// <param name="addressType">
+        /// The <see cref="AddressType"/>.
+        /// </param>
+        /// <returns>
+        /// The modified <see cref="ICustomerAddress"/>.
+        /// </returns>
+        protected virtual ICustomerAddress OnCreate(ICustomerAddress model, TAddress adr, ICustomer customer, string label, AddressType addressType)
+        {
+            return model;
         }
 
         /// <summary>
         ///  Allows for overriding the creation of <see cref="ICheckoutAddressModel"/> from <see cref="IAddress"/>.
         /// </summary>
-        /// <param name="address">
+        /// <param name="model">
         /// The <see cref="ICheckoutAddressModel"/>.
         /// </param>
         /// <param name="adr">
@@ -116,9 +188,9 @@
         /// <returns>
         /// The modified <see cref="ICheckoutAddressModel"/>.
         /// </returns>
-        protected virtual TAddress OnCreate(TAddress address, IAddress adr)
+        protected virtual TAddress OnCreate(TAddress model, IAddress adr)
         {
-            return address;
+            return model;
         }
     }
 }

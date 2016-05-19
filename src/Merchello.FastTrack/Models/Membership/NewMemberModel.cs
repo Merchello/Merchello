@@ -2,8 +2,8 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using Merchello.Core.Localization;
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Store.Localization;
 
     /// <summary>
     /// A model for creating a new Umbraco Membership account that has all properties to populate a Merchello Customer.

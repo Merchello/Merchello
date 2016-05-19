@@ -2,11 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways.Shipping;
-    using Merchello.Core.Localization;
 
     /// <summary>
     /// A model for quoting shipments.
@@ -21,7 +19,6 @@
         /// <summary>
         /// Gets or sets the shipping quotes.
         /// </summary>
-        [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelShipRateQuote")]
         IEnumerable<SelectListItem> ShippingQuotes { get; set; }
 
         /// <summary>

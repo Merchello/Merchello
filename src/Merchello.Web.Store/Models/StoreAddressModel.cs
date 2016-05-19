@@ -4,8 +4,8 @@
     using System.ComponentModel.DataAnnotations;
 
     using Merchello.Core;
-    using Merchello.Core.Localization;
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Store.Localization;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -90,7 +90,7 @@
         /// </summary>
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelEmailAddress")]
         [EmailAddress]
-        public string Email { get; set; }
+        public virtual string Email { get; set; }
 
         /// <summary>
         /// Gets or sets the address type.

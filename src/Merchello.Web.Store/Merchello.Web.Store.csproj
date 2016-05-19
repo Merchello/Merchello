@@ -260,10 +260,16 @@
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
     <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
     <Compile Include="Controllers\CheckoutResolvePaymentController.cs" />
+    <Compile Include="Controllers\CustomerMembershipController.cs" />
     <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\PayPalExpressPaymentController.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
+    <Compile Include="Localization\StoreFormsResource.Designer.cs">
+      <DependentUpon>StoreFormsResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Models\Async\AddItemAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityAsyncResponse.cs" />
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
@@ -309,6 +315,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\StoreFormsResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StoreFormsResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

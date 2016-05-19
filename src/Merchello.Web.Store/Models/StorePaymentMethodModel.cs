@@ -6,8 +6,8 @@
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways.Payment;
-    using Merchello.Core.Localization;
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Store.Localization;
 
     /// <summary>
     /// Represents a PaymentMethodModel.

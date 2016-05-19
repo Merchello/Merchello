@@ -6,8 +6,8 @@
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways.Shipping;
-    using Merchello.Core.Localization;
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Store.Localization;
 
     /// <summary>
     /// A model for quoting checkout shipment rate.

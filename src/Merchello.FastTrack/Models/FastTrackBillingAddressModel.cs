@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using Merchello.Core.Localization;
+    using Merchello.Web.Store.Localization;
 
     using Umbraco.Core;
 
@@ -36,7 +36,7 @@
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelEmailAddress")]
         [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredEmailAddress")]
         [EmailAddress(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "InvalidEmailAddress")]
-        public new string Email { get; set; }
+        public override string Email { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use billing address for the shipping address.

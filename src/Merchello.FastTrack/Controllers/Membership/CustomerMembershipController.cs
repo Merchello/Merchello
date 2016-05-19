@@ -5,10 +5,14 @@
     using System.Web.Mvc;
     using System.Web.Security;
 
+    using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Core.Models;
     using Merchello.FastTrack.Factories;
+    using Merchello.FastTrack.Models;
     using Merchello.FastTrack.Models.Membership;
     using Merchello.Web.Controllers;
+    using Merchello.Web.Store.Controllers;
     using Merchello.Web.Store.Models;
 
     using Umbraco.Core;
@@ -16,20 +20,24 @@
     using Umbraco.Web;
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
-    using Umbraco.Web.Security;
 
     using LoginModel = Merchello.FastTrack.Models.Membership.LoginModel;
 
     /// <summary>
     /// A controller responsible for rendering and handling membership operations.
     /// </summary>
+    /// <remarks>
+    /// This controller is included for example purposes.  It is very likely that membership requirements
+    /// for store implementations will vary.
+    /// </remarks>
     [PluginController("FastTrack")]
-    public class CustomerMembershipController : MerchelloUIControllerBase
+    public class CustomerMembershipController : CustomerMembershipControllerBase
     {
         /// <summary>
         /// The <see cref="IMemberService"/>.
         /// </summary>
         private readonly IMemberService _memberService;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerMembershipController"/> class.
@@ -40,7 +48,7 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomerMembershipController"/> class.
+        /// Initializes a new instance of the <see cref="CustomerMembershipController"/> class. 
         /// </summary>
         /// <param name="newMemberModelFactory">
         /// The new member model factory.
@@ -51,7 +59,20 @@
             NewMemberModelFactory = newMemberModelFactory;
 
             _memberService = ApplicationContext.Current.Services.MemberService;
+
+            this.BillingAddressFactory = new FastTrackBillingAddressModelFactory();
+            this.ShippingAddressFactory = new FastTrackShippingAddressModelFactory();
         }
+
+        /// <summary>
+        /// Gets the <see cref="FastTrackBillingAddressModelFactory"/>.
+        /// </summary>
+        protected FastTrackBillingAddressModelFactory BillingAddressFactory { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="FastTrackShippingAddressModelFactory"/>.
+        /// </summary>
+        protected FastTrackShippingAddressModelFactory ShippingAddressFactory { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="NewMemberModelFactory{TModel}"/>.
@@ -183,6 +204,30 @@
         }
 
         /// <summary>
+        /// Responsible for redirecting to the receipt page.
+        /// </summary>
+        /// <param name="key">
+        /// The <see cref="IInvoice"/> Key.
+        /// </param>
+        /// <param name="redirectId">
+        /// The Umbraco page id for the receipt page.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        [Authorize]
+        public virtual ActionResult ViewReceipt(Guid key, int redirectId)
+        {
+            if (key.Equals(Guid.Empty)) return Redirect("/");
+
+            // set the invoice key in the cookie (Merchello CustomerContext)
+            CustomerContext.SetValue("invoiceKey", key.ToString());
+
+            return RedirectToUmbracoPage(redirectId);
+        }
+
+        /// <summary>
         /// Renders the login form.
         /// </summary>
         /// <param name="view">
@@ -211,6 +256,52 @@
         public virtual ActionResult RegisterForm(string view = "")
         {
             var model = NewMemberModelFactory.Create(CurrentCustomer);
+            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+        }
+
+        /// <summary>
+        /// Responsible for rendering the Billing Address form.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        [Authorize]
+        public virtual ActionResult CustomerBillingAddress(string view = "")
+        {
+            var customer = (ICustomer)CurrentCustomer;
+            var caddress = customer.DefaultCustomerAddress(AddressType.Billing);
+
+            var model = caddress != null ? 
+                this.BillingAddressFactory.Create(customer, caddress) : 
+                this.BillingAddressFactory.Create(new Address { AddressType = AddressType.Billing });
+
+            return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+        }
+
+        /// <summary>
+        /// Responsible for rendering the Shipping Address form.
+        /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [ChildActionOnly]
+        [Authorize]
+        public virtual ActionResult CustomerShippingAddress(string view = "")
+        {
+            var customer = (ICustomer)CurrentCustomer;
+            var caddress = customer.DefaultCustomerAddress(AddressType.Billing);
+
+            var model = caddress != null ? 
+                this.ShippingAddressFactory.Create(customer, caddress) : 
+                this.ShippingAddressFactory.Create(new Address { AddressType = AddressType.Shipping });
+
             return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
         }
     }

@@ -1,9 +1,9 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutAddressModel>
 @using System.Web.Mvc.Html
-@using Merchello.Core.Localization
 @using Merchello.FastTrack.Controllers
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.Ui
+@using Merchello.Web.Store.Localization
 @using Umbraco.Web
 @{
     Model.SuccessRedirectUrl = ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShipRateQuote).Url;
@@ -61,7 +61,12 @@
             @Html.ValidationMessageFor(x => x.CountryCode)
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-md-12 form-group">
+            @Html.LabelFor(x => x.Phone)
+            @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
+        </div>
+    </div>
 
     @Html.HiddenFor(x => x.Key)
     @Html.HiddenFor(x => x.SuccessRedirectUrl)
