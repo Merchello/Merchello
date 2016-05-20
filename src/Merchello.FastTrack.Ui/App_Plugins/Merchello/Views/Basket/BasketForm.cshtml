@@ -57,7 +57,7 @@
 
                     </td>
                     <td>@Model.Items[i].Amount.AsFormattedCurrency()</td>
-                    <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min="1" })</td>
+                    <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min="1", data_muiaction="updatequantity" })</td>
                     <td data-muivalue="linetotal">@Model.Items[i].Total().AsFormattedCurrency()</td>
                     <td class="text-right">
                         @if (Model.WishListEnabled)
