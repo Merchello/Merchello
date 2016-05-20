@@ -195,20 +195,20 @@
       <HintPath>..\packages\Markdown.1.14.4\lib\net45\MarkdownSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Core, Version=2.0.5981.16966, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0\lib\net45\Merchello.Core.dll</HintPath>
+    <Reference Include="Merchello.Core, Version=2.0.5984.25319, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.1\lib\net45\Merchello.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Examine, Version=2.0.5981.16969, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0\lib\net45\Merchello.Examine.dll</HintPath>
+    <Reference Include="Merchello.Examine, Version=2.0.5984.25327, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.1\lib\net45\Merchello.Examine.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Providers, Version=2.0.5981.16977, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0\lib\net45\Merchello.Providers.dll</HintPath>
+    <Reference Include="Merchello.Providers, Version=2.0.5984.25358, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.1\lib\net45\Merchello.Providers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Merchello.Web, Version=2.0.5981.16970, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Merchello.Core.2.0.0\lib\net45\Merchello.Web.dll</HintPath>
+    <Reference Include="Merchello.Web, Version=2.0.5984.25332, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Merchello.Core.2.0.1\lib\net45\Merchello.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=1.0.1559.20655, Culture=neutral">
@@ -395,7 +395,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetDir)Merchello.Bazaar.*" "$(SolutionDir)Merchello.Web.UI\bin\Merchello.*"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(TargetDir)Merchello.*" "$(SolutionDir)Merchello.Web.UI\bin\Merchello.*"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
