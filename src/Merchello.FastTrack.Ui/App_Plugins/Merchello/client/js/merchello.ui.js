@@ -549,7 +549,7 @@ MUI.Basket = {
         form: function(frm) {
 
             // Watch for changes in the input fields
-            $(frm).find(':input').change(function() {
+            $(frm).find(':input[data-muiaction="updatequantity"]').change(function() {
                 var frmRef = $(this).closest('form');
 
                 // post the form to update the basket quantities
