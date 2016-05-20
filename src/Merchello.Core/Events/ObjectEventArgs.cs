@@ -24,7 +24,7 @@
         /// <summary>
         /// Gets the event object.
         /// </summary>
-        protected T EventObject { get; private set; }
+        public T EventObject { get; private set; }
 
     }
 }
