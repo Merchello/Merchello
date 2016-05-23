@@ -154,9 +154,7 @@
                 return new PaymentResult(Attempt<IPayment>.Succeed(payment), invoice, CalculateTotalOwed(invoice).CompareTo(amount) <= 0);
             }
 
-
-            throw new NotImplementedException();
-
+            return new PaymentResult(Attempt<IPayment>.Fail(payment), invoice, false);
         }
 
         /// <summary>
