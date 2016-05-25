@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers", "Merc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web.Store", "Merchello.Web.Store\Merchello.Web.Store.csproj", "{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack", "Merchello.FastTrack\Merchello.FastTrack.csproj", "{2C3261C5-6999-4372-9B2A-11E8C3296540}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -148,6 +150,22 @@ Global
 		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x64.Build.0 = Release|Any CPU
 		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x86.ActiveCfg = Release|Any CPU
 		{FD39D1AA-8F6E-474F-AF2D-24219E1934FE}.Release|x86.Build.0 = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|x64.Build.0 = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Debug|x86.Build.0 = Debug|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|x64.ActiveCfg = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|x64.Build.0 = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C3261C5-6999-4372-9B2A-11E8C3296540}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -54,7 +54,7 @@
             #endregion
 
 
-            /// <summary>
+            /// <summary>c
             /// Gets the <see cref="UmbracoContext"/>.
             /// </summary>
             private static UmbracoContext UmbracoContext
