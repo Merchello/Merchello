@@ -52,12 +52,15 @@
                         }
                     </a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Logout", "Logout", "CustomerMembership", new { area = "FastTrack", redirectId = Model.Content.Id }, null)</li>
-                    </ul>
-                </li>
+                @if (!CurrentCustomer.IsAnonymous)
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Logout", "Logout", "CustomerMembership", new { area = "FastTrack", redirectId = Model.Content.Id }, null)</li>
+                        </ul>
+                    </li>
+                }
                 <li @(!CurrentCustomer.Basket().Items.Any() ? MvcHtmlString.Create("class=\"mui-quickcheckout\"") : MvcHtmlString.Empty) data-value="quickcheckout"><a href="@ExampleUiHelper.Content.GetCheckout().Url" class="success">Quick Checkout</a></li>
             </ul>
 
