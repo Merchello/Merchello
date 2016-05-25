@@ -1,15 +1,17 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Catalog>
+@using System.Web.Mvc.Html
 @using Merchello.Web.Models.Ui.Rendering
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
-	Layout = "Master.cshtml";
+    Layout = "Master.cshtml";
 
-    var categories = Model.Categories.Children().ToArray();
+    var title = Model.Categories == null ? Model.Name : Model.Categories.Name;
+    var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<ProductCollection>();
 }
 
 @Html.Partial("_Headline")
 
-<h3>@Model.Categories.Name</h3>
+<h3>@title</h3>
 
 @foreach (var cat in categories)
 {
@@ -24,6 +26,6 @@
             }
         </div>
     </div>
-} 
+}
 
 

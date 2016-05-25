@@ -16,7 +16,7 @@
 		<language></language>
 		<tags></tags>
 		<dependencies>
-			<dependency id="UmbracoCms.Core" version="7.3.0" />
+      <!--dependency id="Merchello.Core" version="2.1.0" /-->
 		</dependencies>
 	</metadata>
 </package>
