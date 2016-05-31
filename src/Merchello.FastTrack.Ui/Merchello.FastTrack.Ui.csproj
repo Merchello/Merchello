@@ -304,6 +304,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\FastTrack\Backoffice\Installer.ascx" />
     <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css" />
     <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.controllers.js" />
     <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.directives.js" />
