@@ -26,7 +26,7 @@
     /// The ship country service.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
-    internal class ShipCountryService : MerchelloRepositoryService, IShipCountryService
+    public class ShipCountryService : MerchelloRepositoryService, IShipCountryService
     {
         /// <summary>
         /// The locker.

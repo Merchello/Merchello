@@ -335,6 +335,14 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="IShipCountryService"/>
+        /// </summary>
+        public IShipCountryService ShipCountryService
+        {
+            get { return _shipCountryService.Value; }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IShipmentService"/>
         /// </summary>
         public IShipmentService ShipmentService
@@ -427,13 +435,6 @@
             get { return _paymentMethodService.Value; }    
         }
 
-        /// <summary>
-        /// Gets the <see cref="IShipCountryService"/>
-        /// </summary>
-        internal IShipCountryService ShipCountryService
-        {
-            get { return _shipCountryService.Value; }
-        }
 
         /// <summary>
         /// Gets the <see cref="IShipMethodService"/>

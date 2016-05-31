@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.Serialization;
+
     using Umbraco.Core;
 
     /// <summary>
     /// Represents a country associated with a warehouse
     /// </summary>
-    internal class ShipCountry : CountryBase, IShipCountry
+    public class ShipCountry : CountryBase, IShipCountry
     {
         private Guid _catalogKey;
 
