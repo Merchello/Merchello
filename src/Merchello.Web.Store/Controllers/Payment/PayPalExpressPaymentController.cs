@@ -53,6 +53,8 @@
                 
                 if (attempt.Payment.Success)
                 {
+                    HandleNotificiation(model, attempt);
+
                     CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
                     return Redirect(attempt.RedirectUrl);
                 }

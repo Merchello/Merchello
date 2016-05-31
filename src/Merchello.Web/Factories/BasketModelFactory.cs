@@ -57,7 +57,8 @@
                     Key = lineItem.Key,
                     Name = lineItem.Name,
                     Amount = lineItem.Price,
-                    Quantity = lineItem.Quantity
+                    Quantity = lineItem.Quantity,
+                    ExtendedData = lineItem.ExtendedData.AsEnumerable()
                 };
 
             return this.OnCreate(basketItem, lineItem);

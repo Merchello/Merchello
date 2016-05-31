@@ -60,6 +60,11 @@
         public decimal Amount { get; set; }
 
         /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
+        public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="LineItemType"/>.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]

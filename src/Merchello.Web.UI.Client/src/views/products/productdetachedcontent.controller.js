@@ -176,6 +176,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                     });
                 } else {
                     filterTabs(editor.scaffold);
+                    fillValues();
                     stickTab();
                     $scope.preValuesLoaded = true;
                 }
