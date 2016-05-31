@@ -170,7 +170,8 @@
                         Sku = item.Sku,
                         Quantity = item.Quantity,
                         Amount = item.Price,
-                        LineItemType = item.LineItemType
+                        LineItemType = item.LineItemType,
+                        ExtendedData = item.ExtendedData.AsEnumerable()
                     };
 
             return OnCreate(lineItem, item);

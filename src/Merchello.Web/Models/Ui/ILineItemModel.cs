@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Models.Ui
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core;
 
@@ -39,6 +40,11 @@
         /// This could either by the price or the sale price of a product
         /// </remarks>
         decimal Amount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
+        IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="LineItemType"/>.

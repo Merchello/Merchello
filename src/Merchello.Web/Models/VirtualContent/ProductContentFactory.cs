@@ -1,9 +1,11 @@
 ﻿namespace Merchello.Web.Models.VirtualContent
 {
     using System;
+    using System.Globalization;
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
 
@@ -13,6 +15,8 @@
     using Umbraco.Core.Events;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
+    using Umbraco.Web;
+    using Umbraco.Web.Routing;
 
     using Constants = Merchello.Core.Constants;
 
@@ -30,6 +34,8 @@
         /// The parent.
         /// </summary>
         private IPublishedContent _parent;
+
+        private string _parentCulture;
 
         /// <summary>
         /// The collection of all languages.
@@ -86,7 +92,7 @@
             if (detachedContent == null) return null;
 
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
-            
+
             return new ProductContent(publishedContentType, display, _parent, _defaultStoreLanguage);
         }
 
@@ -102,8 +108,11 @@
             //// http://issues.merchello.com/youtrack/issue/M-878
             _allLanguages = ApplicationContext.Current.Services.LocalizationService.GetAllLanguages().ToArray();
 
-            _defaultStoreLanguage =
-                _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value;
+            _parentCulture = _parent != null ? _parent.GetCulture().Name : string.Empty;
+
+            _defaultStoreLanguage = _parentCulture.IsNullOrWhiteSpace() ?
+                _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value :
+                _parentCulture;
 
             if (_allLanguages.Any())
             {
