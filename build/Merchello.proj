@@ -191,11 +191,11 @@
       <AppPluginPaymentFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\MerchelloProviders\**\*.*" 
         Exclude="$(RootDir)\src\Merchello.FastTrack.UI\App_Plugins\MerchelloProviders\**\*.scss" />
       <AppPluginFTMerchelloViews Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\**\*.*;" 
-        Exclude="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CashPayment\*.*;
-        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutAddress\*.*;
-        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutPaymentMethod\*.*;
-        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutShipRateQuote\*.*;
-        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutSummary\*.*;" />
+        Exclude="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CashPayment\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutAddress\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutPaymentMethod\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutShipRateQuote\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutSummary\*.cshtml;" />
       
       <AppPluginFTFastTrackViews Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\FastTrack\Views\**\*.*;" />
       
