@@ -30,11 +30,6 @@
         private const string CollectionFeaturedProducts = "collectionFeaturedProducts";
 
         /// <summary>
-        /// The collection home page.
-        /// </summary>
-        private const string CollectionHomePage = "collectionHomePage";
-
-        /// <summary>
         /// The collection main categories.
         /// </summary>
         private const string CollectionMainCategories = "collectionMainCategories";
@@ -59,6 +54,11 @@
         /// </summary>
         private readonly ServiceContext _services;
 
+        /// <summary>
+        /// The templates.
+        /// </summary>
+        private readonly IEnumerable<ITemplate> _templates;
+
         #endregion
 
         /// <summary>
@@ -75,6 +75,10 @@
         public FastTrackDataInstaller()
         {
             _services = ApplicationContext.Current.Services;
+
+            var templates = new[] { "Checkout", "Payment", "PaymentMethod", "BillingAddress", "ShipRateQuote", "ShippingAddress" };
+
+            _templates = ApplicationContext.Current.Services.FileService.GetTemplates(templates);
         }
 
         /// <summary>
@@ -87,7 +91,7 @@
         {
             // Adds the Merchello Data
             MultiLogHelper.Info<FastTrackDataInstaller>("Starting to add example FastTrack data");
-            
+            this.AddMerchelloData();
 
             // Adds the example Umbraco data
             MultiLogHelper.Info<FastTrackDataInstaller>("Starting to add example Merchello Umbraco data");
@@ -102,7 +106,89 @@
         /// </returns>
         private IContent AddUmbracoData()
         {
-            throw new NotImplementedException();
+
+            // Create the store root and add the initial data
+
+            MultiLogHelper.Info<FastTrackDataInstaller>("Installing store root node");
+
+            var storeRoot = _services.ContentService.CreateContent("Store", -1, "store");
+
+            storeRoot.SetValue("storeName", "FastTrack Store");
+            storeRoot.SetValue("overview", @"<p>Example store which has been developed to help get you up and running quickly with Merchello. 
+                                            It's designed to show you how to implement common features, and you can grab the source code from here, just fork/clone/download and open up Merchello.sln</p>");
+            storeRoot.SetValue("featuredProducts", _collections["collectionFeaturedProducts"].ToString());
+
+            _services.ContentService.SaveAndPublishWithStatus(storeRoot);
+
+
+            // Add the example categories
+            LogHelper.Info<FastTrackDataInstaller>("Adding example category page");
+
+            // Create the root T-Shirt category
+            var catalog = _services.ContentService.CreateContent("Catalog", storeRoot.Id, "catalog");
+
+            catalog.SetValue("categories", string.Empty);
+            _services.ContentService.SaveAndPublishWithStatus(catalog);
+
+            // Create the sun categories
+            var funnyTShirts = _services.ContentService.CreateContent("Funny T-Shirts", catalog.Id, "category");
+            funnyTShirts.SetValue("products", _collections[CollectionFunny].ToString());
+            _services.ContentService.SaveAndPublishWithStatus(funnyTShirts);
+
+            var geekyTShirts = _services.ContentService.CreateContent("Geeky T-Shirts", catalog.Id, "category");
+            geekyTShirts.SetValue("products", _collections[CollectionGeeky].ToString());
+            _services.ContentService.SaveAndPublishWithStatus(geekyTShirts);
+
+            var sadTShirts = _services.ContentService.CreateContent("Sad T-Shirts", catalog.Id, "BazaarProductCollection");
+            sadTShirts.SetValue("products", _collections[CollectionSad].ToString());
+            _services.ContentService.SaveAndPublishWithStatus(sadTShirts);
+
+
+
+            MultiLogHelper.Info<FastTrackDataInstaller>("Adding example eCommerce workflow pages");
+
+            var basket = _services.ContentService.CreateContent("Basket", storeRoot.Id, "basket");
+            _services.ContentService.SaveAndPublishWithStatus(basket);
+
+            var checkout = _services.ContentService.CreateContent("Checkout", storeRoot.Id, "checkout");
+            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "Checkout");
+            _services.ContentService.SaveAndPublishWithStatus(checkout);
+
+            //var checkoutConfirm = _services.ContentService.CreateContent("Confirm Sale", checkout.Id, "BazaarCheckoutConfirm");
+            //_services.ContentService.SaveAndPublishWithStatus(checkoutConfirm);
+
+            //var receipt = _services.ContentService.CreateContent("Receipt", checkout.Id, "BazaarReceipt");
+            //_services.ContentService.SaveAndPublishWithStatus(receipt);
+
+            //var registration = _services.ContentService.CreateContent("Registration / Login", storeRoot.Id, "BazaarRegistration");
+            //_services.ContentService.SaveAndPublishWithStatus(registration);
+
+            //var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "BazaarAccount");
+            //_services.ContentService.SaveAndPublishWithStatus(account);
+
+            //var wishList = _services.ContentService.CreateContent("Wish List", account.Id, "BazaarWishList");
+            //_services.ContentService.SaveAndPublishWithStatus(wishList);
+
+            //var purchaseHistory = _services.ContentService.CreateContent("Purchase History", account.Id, "BazaarAccountHistory");
+            //_services.ContentService.SaveAndPublishWithStatus(purchaseHistory);
+
+
+            //// Protect the page
+            //// OLD > Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
+            //var entry = new PublicAccessEntry(account, registration, registration, new List<PublicAccessRule>());
+            //ApplicationContext.Current.Services.PublicAccessService.Save(entry);
+
+            //// Add the role to the document
+            ////Old > Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
+            //ApplicationContext.Current.Services.PublicAccessService.AddRule(account,
+            //    Umbraco.Core.Constants.Conventions.PublicAccess.MemberRoleRuleType,
+            //    "MerchelloCustomers");
+
+            //// TODO figure out why the index does not build on load
+            //LogHelper.Info<BazaarDataInstaller>("Rebuilding Product Index");
+            //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
+
+            return storeRoot;
         }
 
 
@@ -131,7 +217,7 @@
             merchelloServices.WarehouseService.Save(warehouse);
 
 
-            LogHelper.Info<FastTrackDataInstaller>("Adding example shipping data");
+            MultiLogHelper.Info<FastTrackDataInstaller>("Adding example shipping data");
             var catalog =
                 warehouse.WarehouseCatalogs.FirstOrDefault(
                     x => x.Key == Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey);
@@ -184,11 +270,6 @@
                     Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
                     "Featured Products");
 
-            var homePage = merchelloServices.EntityCollectionService.CreateEntityCollectionWithKey(
-                    EntityType.Product,
-                    Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
-                    "Home Page");
-            homePage.ParentKey = featuredProducts.Key;
 
             // Create a main categories collection with Funny, Geeky and Sad under it
 
@@ -196,24 +277,24 @@
                 merchelloServices.EntityCollectionService.CreateEntityCollectionWithKey(
                     EntityType.Product,
                     Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
-                    "Main Categories");
+                    "T-Shirts");
 
             var funny = merchelloServices.EntityCollectionService.CreateEntityCollection(
                 EntityType.Product,
                 Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
-                "Funny");
+                "Funny T-Shirts");
             funny.ParentKey = mainCategories.Key;
 
             var geeky = merchelloServices.EntityCollectionService.CreateEntityCollection(
                     EntityType.Product,
                     Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
-                    "Geeky");
+                    "Geeky T-Shirts");
             geeky.ParentKey = mainCategories.Key;
 
             var sad = merchelloServices.EntityCollectionService.CreateEntityCollection(
                         EntityType.Product,
                         Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey,
-                        "Geeky");
+                        "Sad T-Shirts");
             sad.ParentKey = mainCategories.Key;
 
             // Save the collections
@@ -221,7 +302,6 @@
 
             // Add the collections to the collections dictionary
             _collections.Add(CollectionFeaturedProducts, featuredProducts.Key);
-            _collections.Add(CollectionHomePage, homePage.Key);
             _collections.Add(CollectionMainCategories, mainCategories.Key);
             _collections.Add(CollectionFunny, funny.Key);
             _collections.Add(CollectionGeeky, geeky.Key);
@@ -232,16 +312,16 @@
             // Add the detached content type
             LogHelper.Info<FastTrackDataInstaller>("Getting information for detached content");
 
-            var contentType = _services.ContentTypeService.GetContentType("BazaarProductContent");
+            var contentType = _services.ContentTypeService.GetContentType("product");
             var detachedContentTypeService =
                 ((Core.Services.ServiceContext)merchelloServices).DetachedContentTypeService;
             var detachedContentType = detachedContentTypeService.CreateDetachedContentType(
                 EntityType.Product,
                 contentType.Key,
-                "Bazaar Product");
+                "Product");
 
             // Detached Content
-            detachedContentType.Description = "Default Bazaar Product Content";
+            detachedContentType.Description = "Default Product Content";
             detachedContentTypeService.Save(detachedContentType);
 
 
@@ -287,7 +367,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1066/despite.jpg\" }")
+                                new KeyValuePair<string, string>("image", "1101")
                             }))
                 {
                     CanBeRendered = true
@@ -327,7 +407,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1067/element.jpg\" }")
+                                new KeyValuePair<string, string>("image", "")
                             }))
                {
                    CanBeRendered = true
@@ -355,7 +435,7 @@
             // add to collections
             evolutionShirt.AddToCollection(funny);
             evolutionShirt.AddToCollection(geeky);
-            evolutionShirt.AddToCollection(homePage);
+            evolutionShirt.AddToCollection(featuredProducts);
             evolutionShirt.AddToCollection(sad);
 
             evolutionShirt.DetachedContents.Add(
@@ -368,7 +448,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1063/evolution.jpg\" }")
+                                new KeyValuePair<string, string>("image", "")
                             }))
                {
                    CanBeRendered = true
@@ -392,7 +472,7 @@
 
             // add to collections
             fleaShirt.AddToCollection(funny);
-            fleaShirt.AddToCollection(homePage);
+            fleaShirt.AddToCollection(featuredProducts);
 
             fleaShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
@@ -404,7 +484,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1068/dog-fleas.jpg\" }")
+                                new KeyValuePair<string, string>("image", "")
                             }))
                {
                    CanBeRendered = true
@@ -429,7 +509,7 @@
 
             // add to collections
             paranormalShirt.AddToCollection(geeky);
-            paranormalShirt.AddToCollection(homePage);
+            paranormalShirt.AddToCollection(featuredProducts);
 
             paranormalShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
@@ -441,7 +521,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1065/paranormal.jpg\" }")
+                                new KeyValuePair<string, string>("image", "")
                             }))
                {
                    CanBeRendered = true
@@ -478,7 +558,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "{ \"focalPoint\": { \"left\": 0.5, \"top\": 0.5 }, \"src\": \"/media/1069/planahead.jpg\" }"),
+                                new KeyValuePair<string, string>("image", ""),
                                 new KeyValuePair<string, string>("relatedProucts", string.Format("[ \"{0}\", \"{1}\"]", paranormalShirt.Key, elementMehShirt.Key))
                             }))
                {
