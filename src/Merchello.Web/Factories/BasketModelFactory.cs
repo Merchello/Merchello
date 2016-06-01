@@ -34,7 +34,7 @@
 
             var basketModel = new TBasketModel
             {
-                WishListEnabled = false,
+                WishListEnabled = !basket.Customer.IsAnonymous,
                 Items = basketItems
             };
 

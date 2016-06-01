@@ -270,14 +270,19 @@
         /// <summary>
         /// Renders the basket partial view.
         /// </summary>
+        /// <param name="view">
+        /// The optional view.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public virtual ActionResult BasketForm()
+        [ChildActionOnly]
+        public virtual ActionResult BasketForm(string view = "")
         {
             var model = this._basketModelFactory.Create(this.Basket);
-            return this.PartialView(model);
+            return view.IsNullOrWhiteSpace() ? this.PartialView(model) : this.PartialView(view, model);
         }
+
 
         /// <summary>
         /// Responsible for rendering the Add Item Form.
@@ -411,6 +416,7 @@
         protected virtual ActionResult HandleAddItemException(TAddItem model, Exception ex)
         {
             var logData = MultiLogger.GetBaseLoggingData();
+            MultiLogHelper.Error<BasketControllerBase<TBasketModel, TBasketItemModel, TAddItem>>("Failed to add item to the basket", ex, logData);
             throw ex;
         }
 

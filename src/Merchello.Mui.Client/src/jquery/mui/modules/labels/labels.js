@@ -13,7 +13,7 @@ MUI.Labels = {
             if (args.Success) {
                 var label = $('[data-muilabel="basketcount"]');
                 if (label.length > 0) {
-                    $(label).html(args.BasketItemCount);
+                    $(label).html(args.ItemCount);
                 }
             }
         }

@@ -27,6 +27,8 @@ var MUI = (function() {
             MUI.AddItem.init();
             // initialize the basket module
             MUI.Basket.init();
+            // initialize the wish list module
+            MUI.WishList.init();
             // initialize the checkout module
             MUI.Checkout.init();
             // initialize the labels

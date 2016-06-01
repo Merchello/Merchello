@@ -25,21 +25,21 @@
         }
 
         /// <summary>
-        /// Gets the total price of the basket.
+        /// Gets the total price of an Item Cache (basket or wish list).
         /// </summary>
-        /// <typeparam name="TBasketItemModel">
-        /// The type of basket item
-        /// </typeparam>
-        /// <param name="basket">
-        /// The basket.
+        /// <param name="itemCache">
+        /// The item cache.
         /// </param>
+        /// <typeparam name="TLineItemModel">
+        /// The type of the line item
+        /// </typeparam>
         /// <returns>
         /// The total price.
         /// </returns>
-        public static decimal Total<TBasketItemModel>(this IBasketModel<TBasketItemModel> basket)
-            where TBasketItemModel : class, ILineItemModel, new()
+        public static decimal Total<TLineItemModel>(this IItemCacheModel<TLineItemModel> itemCache)
+            where TLineItemModel : class, ILineItemModel, new()
         {
-            return basket.Items.Sum(x => x.Total());
+            return itemCache.Items.Sum(x => x.Total());
         }
 
         /// <summary>

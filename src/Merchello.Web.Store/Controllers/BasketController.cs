@@ -4,10 +4,8 @@
     using System.Web.Mvc;
 
     using Merchello.Core;
-    using Merchello.QuickMart.Factories;
     using Merchello.Web.Controllers;
     using Merchello.Web.Factories;
-    using Merchello.Web.Models.Ui.Async;
     using Merchello.Web.Store.Factories;
     using Merchello.Web.Store.Models;
     using Merchello.Web.Store.Models.Async;
@@ -70,7 +68,7 @@
                 var resp = new AddItemAsyncResponse
                     {
                         Success = true,
-                        BasketItemCount = this.GetBasketItemCountForDisplay()
+                        ItemCount = this.GetBasketItemCountForDisplay()
                     };
 
                 return this.Json(resp);
@@ -125,7 +123,7 @@
                 {
                     resp.AddUpdatedItems(this.Basket.Items);
                     resp.FormattedTotal = this.Basket.TotalBasketPrice.AsFormattedCurrency();
-                    resp.BasketItemCount = this.GetBasketItemCountForDisplay();
+                    resp.ItemCount = this.GetBasketItemCountForDisplay();
                     return this.Json(resp);
                 }
                 catch (Exception ex)

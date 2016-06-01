@@ -3,21 +3,20 @@
     using System;
     using System.Linq;
 
+    using Core.Models;
+
     using Merchello.Core;
-    using Merchello.Core.Models;
-    using Merchello.Web;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Store.Models;
-    using Merchello.Web.Workflow;
 
     using Umbraco.Core;
 
     /// <summary>
-    /// The basket model factory for the default implementation.
+    /// A factory responsible for creating <see cref="StoreItemCacheModel"/>s.
     /// </summary>
-    public class BasketModelFactory : BasketModelFactory<StoreBasketModel, StoreLineItemModel>
+    public class ItemCacheModelFactory : ItemCacheModelFactory<StoreItemCacheModel, StoreLineItemModel>
     {
         /// <summary>
         /// The <see cref="MerchelloHelper"/>.
@@ -25,49 +24,49 @@
         private readonly MerchelloHelper _merchello;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketModelFactory"/> class.
+        /// Initializes a new instance of the <see cref="ItemCacheModelFactory"/> class.
         /// </summary>
-        public BasketModelFactory()
+        public ItemCacheModelFactory()
             : this(new MerchelloHelper())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketModelFactory"/> class.
+        /// Initializes a new instance of the <see cref="ItemCacheModelFactory"/> class.
         /// </summary>
         /// <param name="merchello">
-        /// The <see cref="MerchelloHelper"/>.
+        /// The merchello.
         /// </param>
-        public BasketModelFactory(MerchelloHelper merchello)
+        public ItemCacheModelFactory(MerchelloHelper merchello)
         {
             Mandate.ParameterNotNull(merchello, "merchello");
-            this._merchello = merchello;
+            _merchello = merchello;
         }
 
         /// <summary>
-        /// Overrides the base basket model creation.
+        /// Overrides the creation of the <see cref="StoreItemCacheModel"/>.
         /// </summary>
-        /// <param name="basketModel">
-        /// The <see cref="StoreBasketModel"/>.
+        /// <param name="model">
+        /// The <see cref="StoreItemCacheModel"/>.
         /// </param>
-        /// <param name="basket">
-        /// The <see cref="IBasket"/>.
+        /// <param name="itemCache">
+        /// The original <see cref="IItemCache"/>.
         /// </param>
         /// <returns>
-        /// The modified <see cref="StoreBasketModel"/>.
+        /// The modified <see cref="StoreItemCacheModel"/>.
         /// </returns>
-        protected override StoreBasketModel OnCreate(StoreBasketModel basketModel, IBasket basket)
+        protected override StoreItemCacheModel OnCreate(StoreItemCacheModel model, IItemCache itemCache)
         {
-            // Ensure to order of the basket items is in alphabetical order.
-            basketModel.Items = basketModel.Items.OrderBy(x => x.Name).ToArray();
+            // Ensure to order of the item cache items is in alphabetical order.
+            model.Items = model.Items.OrderBy(x => x.Name).ToArray();
 
-            return base.OnCreate(basketModel, basket);
+            return base.OnCreate(model, itemCache);
         }
 
         /// <summary>
-        /// Overrides the base basket item model creation.
+        /// Overrides the base item cache item model creation.
         /// </summary>
-        /// <param name="storeLineItem">
+        /// <param name="item">
         /// The <see cref="StoreLineItemModel"/>.
         /// </param>
         /// <param name="lineItem">
@@ -76,7 +75,7 @@
         /// <returns>
         /// The modified <see cref="StoreLineItemModel"/>.
         /// </returns>
-        protected override StoreLineItemModel OnCreate(StoreLineItemModel storeLineItem, ILineItem lineItem)
+        protected override StoreLineItemModel OnCreate(StoreLineItemModel item, ILineItem lineItem)
         {
             // Get the product key from the extended data collection
             // This is added internally when the product was added to the basket
@@ -92,11 +91,11 @@
             var customerChoices = lineItem.GetProductOptionChoicePairs();
 
             // Modifiy the BasketItemModel generated in the base factory
-            storeLineItem.Product = product;
-            storeLineItem.ProductKey = productKey;
-            storeLineItem.CustomerOptionChoices = customerChoices;
+            item.Product = product;
+            item.ProductKey = productKey;
+            item.CustomerOptionChoices = customerChoices;
 
-            return base.OnCreate(storeLineItem, lineItem);
+            return base.OnCreate(item, lineItem);
         }
 
         /// <summary>

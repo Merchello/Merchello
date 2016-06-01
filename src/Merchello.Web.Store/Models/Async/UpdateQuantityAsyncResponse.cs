@@ -31,9 +31,9 @@
         public List<UpdateQuantityResponseItem> UpdatedItems { get; set; }
 
         /// <summary>
-        /// Gets or sets the basket item count.
+        /// Gets or sets the item count.
         /// </summary>
-        public int BasketItemCount { get; set; }
+        public int ItemCount { get; set; }
     }
 
     /// <summary>

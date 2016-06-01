@@ -115,6 +115,15 @@ namespace Merchello.Web.Store.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Addresses.
+        /// </summary>
+        public static string LabelAddresses {
+            get {
+                return ResourceManager.GetString("LabelAddresses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address label (ex. My House).
         /// </summary>
         public static string LabelAddressLabel {
@@ -327,6 +336,15 @@ namespace Merchello.Web.Store.Localization {
         public static string LabelUsername {
             get {
                 return ResourceManager.GetString("LabelUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wish List.
+        /// </summary>
+        public static string LabelWishList {
+            get {
+                return ResourceManager.GetString("LabelWishList", resourceCulture);
             }
         }
         

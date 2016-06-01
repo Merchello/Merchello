@@ -85,7 +85,7 @@
                 Success = model.ViewData.Success,
                 InvoiceKey = model.ViewData.InvoiceKey,
                 PaymentKey = model.ViewData.PaymentKey,
-                BasketItemCount = GetBasketItemCountForDisplay(),
+                ItemCount = GetBasketItemCountForDisplay(),
                 PaymentMethodName = model.PaymentMethodName
             };
 
