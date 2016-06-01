@@ -1,4 +1,5 @@
 ﻿@using Merchello.Core.Models
+@using Merchello.Web.Store.Localization
 @inherits Merchello.Web.Mvc.MerchelloViewPage<IPublishedContent>
 @{
 	Layout = "Master.cshtml";
@@ -19,10 +20,14 @@
 <div class="row">
 
     <div class="col-md-9">
+        <h3>@StoreFormsResource.LabelWishList</h3>
+        @Html.Action("WishListForm", "WishList", new { area = "Merchello" })
+
         @Html.Action("CustomerSalesHistory", "CustomerMembership", new { area = "FastTrack" })
     </div>
 
     <div class="col-md-3">
+        <h3>@StoreFormsResource.LabelAddresses</h3>
         @Html.Action("CustomerBillingAddress", "CustomerMembership", new { area = "FastTrack" })
 
         @Html.Action("CustomerShippingAddress", "CustomerMembership", new { area = "FastTrack" })

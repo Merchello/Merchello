@@ -264,7 +264,9 @@
     <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\PayPalExpressPaymentController.cs" />
+    <Compile Include="Controllers\WishListController.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
+    <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Localization\StoreFormsResource.Designer.cs">
       <DependentUpon>StoreFormsResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -275,6 +277,7 @@
     <Compile Include="Models\Async\UpdateQuantityResponseItem.cs" />
     <Compile Include="Models\BraintreeCcPaymentModel.cs" />
     <Compile Include="Models\BraintreePaymentModel.cs" />
+    <Compile Include="Models\StoreItemCacheModel.cs" />
     <Compile Include="Models\StorePaymentModel.cs" />
     <Compile Include="Models\StoreAddressModel.cs" />
     <Compile Include="Models\StoreDiscountModel.cs" />

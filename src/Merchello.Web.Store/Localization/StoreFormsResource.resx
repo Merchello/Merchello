@@ -141,6 +141,10 @@
     <value>Address line 2</value>
     <comment>Label for address line 2</comment>
   </data>
+  <data name="LabelAddresses" xml:space="preserve">
+    <value>Addresses</value>
+    <comment>Label for addresses</comment>
+  </data>
   <data name="LabelAddressLabel" xml:space="preserve">
     <value>Address label (ex. My House)</value>
     <comment>Label for an address label field</comment>
@@ -234,6 +238,10 @@
   <data name="LabelUsername" xml:space="preserve">
     <value>Username</value>
     <comment>Label for the user name field</comment>
+  </data>
+  <data name="LabelWishList" xml:space="preserve">
+    <value>Wish List</value>
+    <comment>Label for the wish list</comment>
   </data>
   <data name="PleaseSelect" xml:space="preserve">
     <value>-- Please Select --</value>

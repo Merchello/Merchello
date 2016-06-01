@@ -8,6 +8,6 @@
         /// <summary>
         /// Gets or sets the current basket item count.
         /// </summary>
-        int BasketItemCount { get; set; }
+        int ItemCount { get; set; }
     }
 }

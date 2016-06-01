@@ -10,6 +10,9 @@ if (MUI !== undefined) {
             // the basket surface controller end point
             basketSurface: '/umbraco/Merchello/Basket/',
 
+            // the wish list surface controller end point
+            wishListSurface: '/umbraco/Merchello/WishList/',
+
             // the product table api controller end point
             productTableApi: '/umbraco/Merchello/ProductDataTableApi/',
 

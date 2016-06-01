@@ -6,14 +6,9 @@
     /// <typeparam name="TBasketItemModel">
     /// The type of the basket item.
     /// </typeparam>
-    public interface IBasketModel<TBasketItemModel> : IUiModel
+    public interface IBasketModel<TBasketItemModel> : IItemCacheModel<TBasketItemModel>
         where TBasketItemModel : class, ILineItemModel, new()
     {
-        /// <summary>
-        /// Gets or sets the basket items.
-        /// </summary>
-        TBasketItemModel[] Items { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether the wish list is enabled.
         /// </summary>

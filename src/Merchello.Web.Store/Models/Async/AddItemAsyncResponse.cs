@@ -10,6 +10,6 @@
         /// <summary>
         /// Gets or sets the basket item count.
         /// </summary>
-        public int BasketItemCount { get; set; }
+        public int ItemCount { get; set; }
     }
 }
