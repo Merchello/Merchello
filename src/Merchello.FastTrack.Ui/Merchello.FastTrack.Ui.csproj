@@ -557,6 +557,7 @@
     <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerShippingAddress.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerSalesHistory.cshtml" />
     <Content Include="App_Plugins\Merchello\Views\WishList\WishListForm.cshtml" />
+    <Content Include="Views\Category.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,6 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Models.VirtualContent.IProductContent>
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui.Rendering
 @using Merchello.Web.Models.VirtualContent
-@using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
 	Layout = "Master.cshtml";
 
@@ -12,6 +13,7 @@
 
 <div class="page-header">
     <h1>@Model.Name</h1>
+    @Categories(Model)
 </div>
 
 <div class="row">
@@ -33,13 +35,43 @@
             </div>
 
         </div>
-        <hr />
-        @Html.Raw(Model.GetPropertyValue<string>("description"))
+        <hr/>
+        <div class="row">
+            @Html.Raw(Model.GetPropertyValue<string>("description"))
+        </div>
+        @if (Model.HasProperty("relatedProducts") && Model.HasValue("relatedProducts"))
+        {
+            <div class="row related-products">
+                <h3>Related Products</h3>
+                @Html.Partial("_ProductBoxList", Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts"))
+            </div>
+
+        }
     </div>
-    @if (Model.HasProperty("relatedProducts") && Model.HasValue("relatedProducts"))
-    {
-        @Html.Partial("_ProductBoxList", Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts"))
-    }
 
 </div>
 
+@helper Categories(IProductContent product)
+{ 
+    var collections = product.Collections().ToArray();
+    if (collections.Any())
+    {
+        var pages = new List<Tuple<ProductCollection, IPublishedContent>>();
+        foreach (var col in collections)
+        {
+            var page = ExampleUiHelper.Content.GetCategoryPageForCollection(col.CollectionKey);
+            if (page != null)
+            {
+                pages.Add(new Tuple<ProductCollection, IPublishedContent>(col, page));
+            }
+        }
+        var needsComma = false;
+        <small>Categories: 
+            @foreach (var pc in pages)
+            {
+                @Umbraco.If(needsComma, ",") <a href="@pc.Item2.Url">@pc.Item1.Name</a> 
+                needsComma = true;
+            }
+        </small>
+    }
+}

@@ -4,6 +4,7 @@
 @using Merchello.Web
 @{
     var storeRoot = ExampleUiHelper.Content.GetStoreRoot();
+    var catalogRoot = storeRoot.FirstChild(x => x.DocumentTypeAlias == "catalog" && x.IsVisible());
     var basketPage = ExampleUiHelper.Content.GetBasket();
     var accountPage = ExampleUiHelper.Content.GetAccount();
 }
@@ -27,10 +28,13 @@
             <ul class="nav navbar-nav">
                 <li@(IsActive(storeRoot.Id))><a href="@Url.Content("~/")">Home</a></li>
 
-                @foreach (var page in storeRoot.Children.Where(x => x.DocumentTypeAlias != "basket" && x.IsVisible()))
+                @if (catalogRoot != null)
                 {
-                    <li@(IsActive(page.Id))><a href="@page.Url">@page.Name</a></li>
+                    <li@(IsActive(catalogRoot.Id))>
+                        <a href="@catalogRoot.Url">@catalogRoot.Name</a>
+                    </li>
                 }
+
             </ul>
 
             <ul class="nav navbar-nav navbar-right mui-nav-right">

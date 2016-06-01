@@ -91,6 +91,20 @@ namespace Merchello.Web.Models.Ui.Rendering
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="ProductCollection"/> that contain the product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductCollection}"/>.
+        /// </returns>
+        public static IEnumerable<ProductCollection> Collections(this IProductContent product)
+        {
+            return product.Collections(MerchelloContext.Current);
+        }
+
+        /// <summary>
         /// Gets the collection of all products in the collection.
         /// </summary>
         /// <param name="value">
@@ -128,6 +142,25 @@ namespace Merchello.Web.Models.Ui.Rendering
                 itemsPerPage,
                 sortBy,
                 sortDirection);
+        }
+
+        /// <summary>
+        /// Returns a collection of ProductCollection for a given product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductCollection}"/>.
+        /// </returns>
+        internal static IEnumerable<ProductCollection> Collections(this IProductContent product, IMerchelloContext merchelloContext)
+        {
+            var collections = ((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey(product.Key);
+
+            return collections.Select(col => new ProductCollection(col));
         }
 
         /// <summary>

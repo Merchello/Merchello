@@ -6,6 +6,7 @@
 
     using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
+    using Merchello.Web.Models.Ui.Rendering;
 
     using Umbraco.Core.Models;
     using Umbraco.Web;
@@ -35,6 +36,11 @@
             /// The Umbraco ContentTypeAlias for the "basket" ContentType.
             /// </summary>
             private const string ContentTypeAliasBasket = "basket";
+
+            /// <summary>
+            /// The Umbraco ContentTypeAlias for the "catalog" ContentType.
+            /// </summary>
+            private const string ContentTypeAliasCatalog = "catalog";
 
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "checkout" ContentTypes
@@ -95,6 +101,17 @@
             }
 
             /// <summary>
+            /// Gets the first child of the store root content with content type alias of 'catalog'.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetCatalog()
+            {
+                return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasCatalog);
+            }
+
+            /// <summary>
             /// Gets the first child of the store root content with content type alias of 'checkout'.
             /// </summary>
             /// <returns>
@@ -125,6 +142,22 @@
             public static IPublishedContent GetAccount()
             {
                 return GetStoreRoot().FirstChild(x => x.ContentType.Alias == ContentTypeAliasAccount);
+            }
+
+            /// <summary>
+            /// Gets a category page by a collection key.
+            /// </summary>
+            /// <param name="collectionKey">
+            /// The collection key.
+            /// </param>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetCategoryPageForCollection(Guid collectionKey)
+            {
+                var catalog = GetCatalog();
+
+                return catalog.FirstChild(x => x.GetPropertyValue<ProductContentListView>("products").CollectionKey == collectionKey);
             }
         }
 
