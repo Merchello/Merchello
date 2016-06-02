@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Web;
 
     using Merchello.Core;
     using Merchello.Core.Gateways.Shipping.FixedRate;
@@ -59,6 +61,11 @@
         /// </summary>
         private readonly IEnumerable<ITemplate> _templates;
 
+        /// <summary>
+        /// The member type.
+        /// </summary>
+        private IMemberType _memberType;
+
         #endregion
 
         /// <summary>
@@ -70,13 +77,18 @@
         private readonly IDictionary<string, Guid> _collections = new Dictionary<string, Guid>();
 
         /// <summary>
+        /// The example media.
+        /// </summary>
+        private readonly IDictionary<string, int> _media = new Dictionary<string, int>();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="FastTrackDataInstaller"/> class.
         /// </summary>
         public FastTrackDataInstaller()
         {
             _services = ApplicationContext.Current.Services;
 
-            var templates = new[] { "Checkout", "Payment", "PaymentMethod", "BillingAddress", "ShipRateQuote", "ShippingAddress" };
+            var templates = new[] { "Payment", "PaymentMethod", "BillingAddress", "ShipRateQuote", "ShippingAddress" };
 
             _templates = ApplicationContext.Current.Services.FileService.GetTemplates(templates);
         }
@@ -89,6 +101,12 @@
         /// </returns>
         public IContent Execute()
         {
+            MultiLogHelper.Info<FastTrackDataInstaller>("Adding MemberType");
+            _memberType = this.AddMemberType();
+
+            MultiLogHelper.Info<FastTrackDataInstaller>("Adding example media");
+            this.AddExampleMedia();
+
             // Adds the Merchello Data
             MultiLogHelper.Info<FastTrackDataInstaller>("Starting to add example FastTrack data");
             this.AddMerchelloData();
@@ -96,6 +114,60 @@
             // Adds the example Umbraco data
             MultiLogHelper.Info<FastTrackDataInstaller>("Starting to add example Merchello Umbraco data");
             return this.AddUmbracoData();
+        }
+
+        /// <summary>
+        /// Adds the Merchello MemberType.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IMemberType"/>.
+        /// </returns>
+        private IMemberType AddMemberType()
+        {
+            var dtd = _services.DataTypeService.GetDataTypeDefinitionById(-88);
+
+            // Create the MerchelloCustomer MemberType
+            var mt = new MemberType(-1)
+            {
+                Alias = "merchelloCustomer",
+                Name = "Merchello Customer",
+                AllowedAsRoot = true
+            };
+
+            var fn = new PropertyType(dtd) { Alias = "firstName", Name = "First name" };
+            var ln = new PropertyType(dtd) { Alias = "lastName", Name = "Last name" };
+
+            mt.AddPropertyType(fn);
+            mt.AddPropertyType(ln);
+
+            mt.SetMemberCanEditProperty("firstName", true);
+            mt.SetMemberCanEditProperty("lastName", true);
+            mt.SetMemberCanViewProperty("firstName", true);
+            mt.SetMemberCanViewProperty("lastName", true);
+
+            _services.MemberTypeService.Save(mt);
+
+
+            // Add the MemberGroup
+            var mg = new MemberGroup() { Name = "Customers" };
+
+            _services.MemberGroupService.Save(mg);
+
+            return mt;
+        }
+
+        private void AddExampleMedia()
+        {
+            var folderType = Umbraco.Core.Constants.Conventions.MediaTypes.Folder;
+            var fileType = Umbraco.Core.Constants.Conventions.MediaTypes.File;
+
+            var exampleDir = HttpContext.Current.Server.MapPath("~/App_Plugins/FastTrack/Install/images");
+
+            var files = Directory.GetFiles(exampleDir);
+
+            var root = _services.MediaService.CreateMediaWithIdentity("Example", -1, folderType);
+
+
         }
 
         /// <summary>
@@ -107,6 +179,10 @@
         private IContent AddUmbracoData()
         {
 
+            MultiLogHelper.Info<FastTrackDataInstaller>("Install MemberType");
+
+
+
             // Create the store root and add the initial data
 
             MultiLogHelper.Info<FastTrackDataInstaller>("Installing store root node");
@@ -114,7 +190,7 @@
             var storeRoot = _services.ContentService.CreateContent("Store", -1, "store");
 
             storeRoot.SetValue("storeName", "FastTrack Store");
-            storeRoot.SetValue("overview", @"<p>Example store which has been developed to help get you up and running quickly with Merchello. 
+            storeRoot.SetValue("brief", @"<p>Example store which has been developed to help get you up and running quickly with Merchello. 
                                             It's designed to show you how to implement common features, and you can grab the source code from here, just fork/clone/download and open up Merchello.sln</p>");
             storeRoot.SetValue("featuredProducts", _collections["collectionFeaturedProducts"].ToString());
 
@@ -139,7 +215,7 @@
             geekyTShirts.SetValue("products", _collections[CollectionGeeky].ToString());
             _services.ContentService.SaveAndPublishWithStatus(geekyTShirts);
 
-            var sadTShirts = _services.ContentService.CreateContent("Sad T-Shirts", catalog.Id, "BazaarProductCollection");
+            var sadTShirts = _services.ContentService.CreateContent("Sad T-Shirts", catalog.Id, "category");
             sadTShirts.SetValue("products", _collections[CollectionSad].ToString());
             _services.ContentService.SaveAndPublishWithStatus(sadTShirts);
 
@@ -151,42 +227,41 @@
             _services.ContentService.SaveAndPublishWithStatus(basket);
 
             var checkout = _services.ContentService.CreateContent("Checkout", storeRoot.Id, "checkout");
-            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "Checkout");
+            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "BillingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkout);
 
-            //var checkoutConfirm = _services.ContentService.CreateContent("Confirm Sale", checkout.Id, "BazaarCheckoutConfirm");
-            //_services.ContentService.SaveAndPublishWithStatus(checkoutConfirm);
+            var checkoutShipping = _services.ContentService.CreateContent("Shipping Address", checkout.Id, "checkout");
+            checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ShippingAddress");
+            _services.ContentService.SaveAndPublishWithStatus(checkoutShipping);
 
-            //var receipt = _services.ContentService.CreateContent("Receipt", checkout.Id, "BazaarReceipt");
-            //_services.ContentService.SaveAndPublishWithStatus(receipt);
+            var checkoutShipRateQuote = _services.ContentService.CreateContent("Ship Rate Quote", checkout.Id, "checkout");
+            checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ShipRateQuote");
+            _services.ContentService.SaveAndPublishWithStatus(checkoutShipRateQuote);
 
-            //var registration = _services.ContentService.CreateContent("Registration / Login", storeRoot.Id, "BazaarRegistration");
-            //_services.ContentService.SaveAndPublishWithStatus(registration);
+            var checkoutPaymentMethod = _services.ContentService.CreateContent("Payment Method", checkout.Id, "checkout");
+            checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "PaymentMethod");
+            _services.ContentService.SaveAndPublishWithStatus(checkoutPaymentMethod);
 
-            //var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "BazaarAccount");
-            //_services.ContentService.SaveAndPublishWithStatus(account);
+            var checkoutPayment = _services.ContentService.CreateContent("Payment", checkout.Id, "checkout");
+            checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "Payment");
+            _services.ContentService.SaveAndPublishWithStatus(checkoutPayment);
 
-            //var wishList = _services.ContentService.CreateContent("Wish List", account.Id, "BazaarWishList");
-            //_services.ContentService.SaveAndPublishWithStatus(wishList);
+            var receipt = _services.ContentService.CreateContent("Receipt", storeRoot.Id, "receipt");
+            _services.ContentService.SaveAndPublishWithStatus(receipt);
 
-            //var purchaseHistory = _services.ContentService.CreateContent("Purchase History", account.Id, "BazaarAccountHistory");
-            //_services.ContentService.SaveAndPublishWithStatus(purchaseHistory);
+            var login = _services.ContentService.CreateContent("Login", storeRoot.Id, "login");
+            _services.ContentService.SaveAndPublishWithStatus(login);
+
+            var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "account");
+            _services.ContentService.SaveAndPublishWithStatus(account);
 
 
             //// Protect the page
-            //// OLD > Access.ProtectPage(false, account.Id, registration.Id, registration.Id);
-            //var entry = new PublicAccessEntry(account, registration, registration, new List<PublicAccessRule>());
-            //ApplicationContext.Current.Services.PublicAccessService.Save(entry);
+            var entry = new PublicAccessEntry(account, login, login, new List<PublicAccessRule>());
+            ApplicationContext.Current.Services.PublicAccessService.Save(entry);
 
             //// Add the role to the document
-            ////Old > Access.AddMembershipRoleToDocument(account.Id, "MerchelloCustomers");
-            //ApplicationContext.Current.Services.PublicAccessService.AddRule(account,
-            //    Umbraco.Core.Constants.Conventions.PublicAccess.MemberRoleRuleType,
-            //    "MerchelloCustomers");
-
-            //// TODO figure out why the index does not build on load
-            //LogHelper.Info<BazaarDataInstaller>("Rebuilding Product Index");
-            //ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"].RebuildIndex();
+            ApplicationContext.Current.Services.PublicAccessService.AddRule(account, Umbraco.Core.Constants.Conventions.PublicAccess.MemberRoleRuleType, "Customers");
 
             return storeRoot;
         }
@@ -366,8 +441,8 @@
                         new[]
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
-                                new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "1101")
+                                new KeyValuePair<string, string>("brief", productOverview),
+                                new KeyValuePair<string, string>("image", "\"\"")
                             }))
                 {
                     CanBeRendered = true
@@ -406,8 +481,8 @@
                        new[]
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
-                                new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "")
+                                new KeyValuePair<string, string>("brief", productOverview),
+                                new KeyValuePair<string, string>("image", "\"\"")
                             }))
                {
                    CanBeRendered = true
@@ -447,8 +522,8 @@
                        new[]
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
-                                new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "")
+                                new KeyValuePair<string, string>("brief", productOverview),
+                                new KeyValuePair<string, string>("image", "\"\"")
                             }))
                {
                    CanBeRendered = true
@@ -483,8 +558,8 @@
                        new[]
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
-                                new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "")
+                                new KeyValuePair<string, string>("brief", productOverview),
+                                new KeyValuePair<string, string>("image", "\"\"")
                             }))
                {
                    CanBeRendered = true
@@ -520,8 +595,8 @@
                        new[]
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
-                                new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", "")
+                                new KeyValuePair<string, string>("brief", productOverview),
+                                new KeyValuePair<string, string>("image", "\"\"")
                             }))
                {
                    CanBeRendered = true
@@ -557,8 +632,8 @@
                        new[]
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
-                                new KeyValuePair<string, string>("overview", productOverview),
-                                new KeyValuePair<string, string>("image", ""),
+                                new KeyValuePair<string, string>("brief", productOverview),
+                                new KeyValuePair<string, string>("image", "\"\""),
                                 new KeyValuePair<string, string>("relatedProucts", string.Format("[ \"{0}\", \"{1}\"]", paranormalShirt.Key, elementMehShirt.Key))
                             }))
                {

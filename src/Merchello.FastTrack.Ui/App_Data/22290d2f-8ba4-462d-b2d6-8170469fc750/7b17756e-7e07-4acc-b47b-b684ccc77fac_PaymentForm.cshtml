@@ -1,0 +1,52 @@
+﻿@model Merchello.Web.Store.Models.BraintreeCcPaymentModel
+@using System.Web.Mvc.Html
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui
+<form data-muiscript="braintree">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(x => x.CardHolder)
+                @Html.TextBoxFor(x => x.CardHolder, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.CardHolder)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.CardNumber)
+                @Html.TextBoxFor(x => x.CardNumber, new { placeholder = "0000 0000 0000 0000", style = "cursor: auto", maxlength = "16", @class = "form-control", data_muivalue="cardnumber" })
+                @Html.ValidationMessageFor(x => x.CardNumber)
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.LabelFor(x => x.ExpiresMonthYear)
+                @Html.TextBoxFor(x => x.ExpiresMonthYear, new { placeholder = "mm/yy", maxlength = "5", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.ExpiresMonthYear)
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Cvv)
+                @Html.TextBoxFor(x => x.Cvv, new { maxlength = "3", placeholder = "123", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Cvv)
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(x => x.PostalCode)
+                @Html.TextBoxFor(x => x.PostalCode, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.PostalCode)
+            </div>
+        </div>
+    </div>
+
+        <div>
+            <a href="@ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url" class="btn btn-default">Back</a>
+            <input type="hidden" id="braintree-successurl" value="@ExampleUiHelper.Content.GetReceipt().Url"/>
+            <button class="btn btn-default pull-right">Finish &amp; Pay</button>
+        </div>
+
+        @Html.HiddenFor(x => x.Token, new { data_muivalue = "btnonce" })
+
+</form>
