@@ -63,12 +63,13 @@
     <key alias="totals">Итого</key>
     <key alias="quantity">Количество</key>
     <key alias="subTotal">Всего</key>
-    <key alias="author">Author</key>
-    <key alias="visibility">Visibility</key>
-    <key alias="public">Public</key>
-    <key alias="private">Private</key>
-    <key alias="increase">Increase</key>
-    <key alias="decrease">Decrease</key>
+    <key alias="checkout">Расчет</key>
+    <key alias="author">Автор</key>
+    <key alias="visibility">Видимость</key>
+    <key alias="public">Публичный</key>
+    <key alias="private">Приватный</key>
+    <key alias="increase">Увеличить</key>
+    <key alias="decrease">Уменьшить</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -135,7 +136,6 @@
     <key alias="addProvider">Добавить провайдер</key>
   </area>
   <area alias="merchelloCollections">
-    <key alias="selectedCollection">Selected collection</key>
     <key alias="providers">Провайдеры списков</key>
     <key alias="newCollection">Новая категория</key>
     <key alias="manageCollection">Управление категорией</key>
@@ -250,21 +250,21 @@
     <key alias="paid">Оплачен</key>
     <key alias="unpaid">Не оплачен</key>
     <key alias="partial">Частично</key>
-    <key alias="balanceDue">Balance due</key>
-    <key alias="manageAdjustments">Manage adjustments</key>
-    <key alias="addAdjustment">Add adjustment</key>
-    <key alias="adjustments">Adjustments</key>
-    <key alias="adjustmentAssignedBy">Assigned by</key>
+    <key alias="balanceDue">Задолженность</key>
+    <key alias="manageAdjustments">Управление корректировками</key>
+    <key alias="addAdjustment">Добавить корректировку</key>
+    <key alias="adjustments">Корректировки</key>
+    <key alias="adjustmentAssignedBy">Кем сделана</key>
   </area>
   <area alias="merchelloNotes">
-    <key alias="notes">Notes</key>
-    <key alias="note">Note</key>
-    <key alias="saleNotes">Notes about this sale</key>
-    <key alias="customerNotes">Notes relating to this customer</key>
-    <key alias="paymentNotes">Notes relating to this payment</key>
+    <key alias="notes">Заметки</key>
+    <key alias="note">Заметка</key>
+    <key alias="saleNotes">Заметки об этой покупке</key>
+    <key alias="customerNotes">Заметки по этому покупателю</key>
+    <key alias="paymentNotes">Заметки по этому платежу</key>
     <key alias="addNote">Добавить заметку</key>
     <key alias="editNote">Изменить заметку</key>
-    <key alias="internalOnly">This note is for internal use only.</key>
+    <key alias="internalOnly">Эта заметка только для внутреннего пользования.</key>
   </area>
   <area alias="merchelloCustomers">
     <key alias="loginName">Логин</key>
