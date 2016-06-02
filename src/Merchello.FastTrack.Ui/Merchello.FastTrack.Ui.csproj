@@ -304,7 +304,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\FastTrack\Backoffice\Installer.ascx" />
+    <Content Include="App_Plugins\FastTrack\Install\Installer.ascx" />
+    <Content Include="App_Plugins\FastTrack\Install\images\despite.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\dog-fleas.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\element.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\evolution.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\paranormal.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\planahead.jpg" />
     <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css" />
     <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.controllers.js" />
     <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.directives.js" />

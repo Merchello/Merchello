@@ -1,0 +1,11 @@
+﻿@inherits UmbracoTemplatePage
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>@(Model.Content.HasProperty("headline") && Model.Content.HasValue("headline") ? Umbraco.Field("headline") : MvcHtmlString.Create(Model.Content.Name))</h2>
+    </div>
+</div>
+@if (Model.Content.HasProperty("brief") && Model.Content.HasValue("brief"))
+{
+    @Umbraco.Field("brief")
+}
