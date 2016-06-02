@@ -62,24 +62,23 @@
         private readonly IEnumerable<ITemplate> _templates;
 
         /// <summary>
+        /// The collections.
+        /// </summary>
+        private readonly IDictionary<string, Guid> _collections = new Dictionary<string, Guid>();
+
+        /// <summary>
+        /// The example media.
+        /// </summary>
+        private readonly IDictionary<string, string> _media = new Dictionary<string, string>();
+
+        /// <summary>
         /// The member type.
         /// </summary>
         private IMemberType _memberType;
 
         #endregion
 
-        /// <summary>
-        /// The collections.
-        /// </summary>
-        /// <remarks>
-        /// Introduced in 1.12.0
-        /// </remarks>
-        private readonly IDictionary<string, Guid> _collections = new Dictionary<string, Guid>();
 
-        /// <summary>
-        /// The example media.
-        /// </summary>
-        private readonly IDictionary<string, int> _media = new Dictionary<string, int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastTrackDataInstaller"/> class.
@@ -156,18 +155,27 @@
             return mt;
         }
 
+        /// <summary>
+        /// The add example media.
+        /// </summary>
         private void AddExampleMedia()
         {
             var folderType = Umbraco.Core.Constants.Conventions.MediaTypes.Folder;
-            var fileType = Umbraco.Core.Constants.Conventions.MediaTypes.File;
-
+           
             var exampleDir = HttpContext.Current.Server.MapPath("~/App_Plugins/FastTrack/Install/images");
+            var dir = new DirectoryInfo(exampleDir);
+            var files = dir.GetFiles("*.jpg", SearchOption.TopDirectoryOnly);
 
-            var files = Directory.GetFiles(exampleDir);
-
-            var root = _services.MediaService.CreateMediaWithIdentity("Example", -1, folderType);
-
-
+            if (files.Any())
+            {
+                var root = _services.MediaService.CreateMediaWithIdentity("Example", -1, folderType);
+                AddMediaFile(files, root, "despite.jpg", "despite");
+                AddMediaFile(files, root, "dog-fleas.jpg", "fleas");
+                AddMediaFile(files, root, "element.jpg", "element");
+                AddMediaFile(files, root, "evolution.jpg", "evolution");
+                AddMediaFile(files, root, "paranormal.jpg", "paranormal");
+                AddMediaFile(files, root, "planahead.jpg", "planahead");
+            }
         }
 
         /// <summary>
@@ -228,22 +236,27 @@
 
             var checkout = _services.ContentService.CreateContent("Checkout", storeRoot.Id, "checkout");
             checkout.Template = _templates.FirstOrDefault(x => x.Alias == "BillingAddress");
+            checkout.SetValue("checkoutStage", "BillingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkout);
 
             var checkoutShipping = _services.ContentService.CreateContent("Shipping Address", checkout.Id, "checkout");
             checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ShippingAddress");
+            checkout.SetValue("checkoutStage", "ShippingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipping);
 
             var checkoutShipRateQuote = _services.ContentService.CreateContent("Ship Rate Quote", checkout.Id, "checkout");
             checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ShipRateQuote");
+            checkout.SetValue("checkoutStage", "ShipRateQuote");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipRateQuote);
 
             var checkoutPaymentMethod = _services.ContentService.CreateContent("Payment Method", checkout.Id, "checkout");
             checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "PaymentMethod");
+            checkout.SetValue("checkoutStage", "PaymentMethod");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPaymentMethod);
 
             var checkoutPayment = _services.ContentService.CreateContent("Payment", checkout.Id, "checkout");
             checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "Payment");
+            checkout.SetValue("checkoutStage", "Payment");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPayment);
 
             var receipt = _services.ContentService.CreateContent("Receipt", storeRoot.Id, "receipt");
@@ -431,6 +444,7 @@
             despiteShirt.AddToCollection(geeky);
 
 
+            var despiteImg = _media.ContainsKey("despite") ? _media["despite"] : string.Empty;
 
             despiteShirt.DetachedContents.Add(
                 new ProductVariantDetachedContent(
@@ -442,7 +456,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"\"")
+                                new KeyValuePair<string, string>("image", "\"" + despiteImg + "\"")
                             }))
                 {
                     CanBeRendered = true
@@ -472,6 +486,8 @@
             elementMehShirt.AddToCollection(featuredProducts);
             elementMehShirt.AddToCollection(geeky);
 
+            var elementImg = _media.ContainsKey("element") ? _media["element"] : string.Empty;
+
             elementMehShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
                    elementMehShirt.ProductVariantKey,
@@ -482,7 +498,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"\"")
+                                new KeyValuePair<string, string>("image", "\"" + elementImg + "\"")
                             }))
                {
                    CanBeRendered = true
@@ -507,6 +523,8 @@
             AddOptionsToProduct(evolutionShirt);
             merchelloServices.ProductService.Save(evolutionShirt, false);
 
+            var evolutionImg = _media.ContainsKey("evolution") ? _media["evolution"] : string.Empty;
+
             // add to collections
             evolutionShirt.AddToCollection(funny);
             evolutionShirt.AddToCollection(geeky);
@@ -523,7 +541,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"\"")
+                                new KeyValuePair<string, string>("image", "\"" + evolutionImg + "\"")
                             }))
                {
                    CanBeRendered = true
@@ -549,6 +567,8 @@
             fleaShirt.AddToCollection(funny);
             fleaShirt.AddToCollection(featuredProducts);
 
+            var fleasImg = _media.ContainsKey("fleas") ? _media["fleas"] : string.Empty;
+
             fleaShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
                    fleaShirt.ProductVariantKey,
@@ -559,7 +579,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"\"")
+                                new KeyValuePair<string, string>("image", "\"" + fleasImg + "\"")
                             }))
                {
                    CanBeRendered = true
@@ -586,6 +606,8 @@
             paranormalShirt.AddToCollection(geeky);
             paranormalShirt.AddToCollection(featuredProducts);
 
+            var paraImg = _media.ContainsKey("paranormal") ? _media["paranormal"] : string.Empty;
+
             paranormalShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
                    paranormalShirt.ProductVariantKey,
@@ -596,7 +618,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"\"")
+                                new KeyValuePair<string, string>("image", "\"" + paraImg + "\"")
                             }))
                {
                    CanBeRendered = true
@@ -623,6 +645,8 @@
 
             //// {"Key":"relatedProducts","Value":"[\r\n  \"a2d7c2c0-ebfa-4b8b-b7cb-eb398a24c83d\",\r\n  \"86e3c576-3f6f-45b8-88eb-e7b90c7c7074\"\r\n]"}
 
+            var planImg = _media.ContainsKey("planahead") ? _media["planahead"] : string.Empty;
+
             planAheadShirt.DetachedContents.Add(
                new ProductVariantDetachedContent(
                    planAheadShirt.ProductVariantKey,
@@ -633,7 +657,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"\""),
+                                new KeyValuePair<string, string>("image", "\"" + planImg + "\""),
                                 new KeyValuePair<string, string>("relatedProucts", string.Format("[ \"{0}\", \"{1}\"]", paranormalShirt.Key, elementMehShirt.Key))
                             }))
                {
@@ -659,6 +683,34 @@
             product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Small"));
             product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Medium"));
             product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Large"));
+        }
+
+        /// <summary>
+        /// Adds the example media files.
+        /// </summary>
+        /// <param name="files">
+        /// The files.
+        /// </param>
+        /// <param name="root">
+        /// The root (example folder).
+        /// </param>
+        /// <param name="fileName">
+        /// The file name.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        private void AddMediaFile(FileInfo[] files, IMedia root, string fileName, string alias)
+        {
+            var fileType = Umbraco.Core.Constants.Conventions.MediaTypes.Image;
+            var f = files.FirstOrDefault(x => x.Name == fileName);
+            if (f != null)
+            {
+                var m = _services.MediaService.CreateMedia(fileName, root, fileType);
+                m.SetValue("umbracoFile", fileName, f.Open(FileMode.Open));
+                _services.MediaService.Save(m);
+                _media.Add(alias, m.Id.ToString());
+            }
         }
     }
 }
