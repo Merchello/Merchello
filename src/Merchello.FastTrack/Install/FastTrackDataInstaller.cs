@@ -241,22 +241,22 @@
 
             var checkoutShipping = _services.ContentService.CreateContent("Shipping Address", checkout.Id, "checkout");
             checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ShippingAddress");
-            checkout.SetValue("checkoutStage", "ShippingAddress");
+            checkoutShipping.SetValue("checkoutStage", "ShippingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipping);
 
             var checkoutShipRateQuote = _services.ContentService.CreateContent("Ship Rate Quote", checkout.Id, "checkout");
             checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ShipRateQuote");
-            checkout.SetValue("checkoutStage", "ShipRateQuote");
+            checkoutShipRateQuote.SetValue("checkoutStage", "ShipRateQuote");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipRateQuote);
 
             var checkoutPaymentMethod = _services.ContentService.CreateContent("Payment Method", checkout.Id, "checkout");
             checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "PaymentMethod");
-            checkout.SetValue("checkoutStage", "PaymentMethod");
+            checkoutPaymentMethod.SetValue("checkoutStage", "PaymentMethod");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPaymentMethod);
 
             var checkoutPayment = _services.ContentService.CreateContent("Payment", checkout.Id, "checkout");
             checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "Payment");
-            checkout.SetValue("checkoutStage", "Payment");
+            checkoutPayment.SetValue("checkoutStage", "Payment");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPayment);
 
             var receipt = _services.ContentService.CreateContent("Receipt", storeRoot.Id, "receipt");
@@ -456,7 +456,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"" + despiteImg + "\"")
+                                new KeyValuePair<string, string>("image", despiteImg)
                             }))
                 {
                     CanBeRendered = true
@@ -498,7 +498,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"" + elementImg + "\"")
+                                new KeyValuePair<string, string>("image", elementImg)
                             }))
                {
                    CanBeRendered = true
@@ -541,7 +541,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"" + evolutionImg + "\"")
+                                new KeyValuePair<string, string>("image", evolutionImg)
                             }))
                {
                    CanBeRendered = true
@@ -579,7 +579,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"" + fleasImg + "\"")
+                                new KeyValuePair<string, string>("image", fleasImg)
                             }))
                {
                    CanBeRendered = true
@@ -618,7 +618,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"" + paraImg + "\"")
+                                new KeyValuePair<string, string>("image", paraImg)
                             }))
                {
                    CanBeRendered = true
@@ -657,7 +657,7 @@
                             {
                                 new KeyValuePair<string, string>("description", productDescription),
                                 new KeyValuePair<string, string>("brief", productOverview),
-                                new KeyValuePair<string, string>("image", "\"" + planImg + "\""),
+                                new KeyValuePair<string, string>("image", planImg),
                                 new KeyValuePair<string, string>("relatedProucts", string.Format("[ \"{0}\", \"{1}\"]", paranormalShirt.Key, elementMehShirt.Key))
                             }))
                {
