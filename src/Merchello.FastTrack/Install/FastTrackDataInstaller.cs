@@ -87,7 +87,7 @@
         {
             _services = ApplicationContext.Current.Services;
 
-            var templates = new[] { "Payment", "PaymentMethod", "BillingAddress", "ShipRateQuote", "ShippingAddress" };
+            var templates = new[] { "Product", "Payment", "PaymentMethod", "BillingAddress", "ShipRateQuote", "ShippingAddress" };
 
             _templates = ApplicationContext.Current.Services.FileService.GetTemplates(templates);
         }
@@ -424,6 +424,8 @@
                                                 <p>Ham hock spare ribs cow turducken porchetta corned beef, pastrami leberkas biltong meatloaf bacon shankle ribeye beef ribs. Picanha ham hock chicken 
                                                         biltong, ground round jowl meatloaf bacon short ribs tongue shoulder.</p>""";
 
+            var template = _templates.FirstOrDefault(x => x.Alias == "Product");
+            var templateId = template != null ? template.Id : 0;
 
             LogHelper.Info<FastTrackDataInstaller>("Adding an example product - Despite Shirt");
 
@@ -462,7 +464,7 @@
                     CanBeRendered = true
                 });
 
-            merchelloServices.ProductService.Save(despiteShirt, false);
+            SetTemplateAndSave(despiteShirt, templateId);
 
 
 
@@ -504,7 +506,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(elementMehShirt, false);
+            SetTemplateAndSave(elementMehShirt, templateId);
 
 
             LogHelper.Info<FastTrackDataInstaller>("Adding an example product  - Evolution Shirt");
@@ -547,7 +549,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(evolutionShirt, false);
+            SetTemplateAndSave(evolutionShirt, templateId);
 
 
             LogHelper.Info<FastTrackDataInstaller>("Adding an example product  - Flea Shirt");
@@ -585,7 +587,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(fleaShirt, false);
+            SetTemplateAndSave(fleaShirt, templateId);
 
 
 
@@ -624,7 +626,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(paranormalShirt, false);
+            SetTemplateAndSave(paranormalShirt, templateId);
 
 
             LogHelper.Info<FastTrackDataInstaller>("Adding an example product  - Plan Ahead Shirt");
@@ -664,7 +666,7 @@
                    CanBeRendered = true
                });
 
-            merchelloServices.ProductService.Save(planAheadShirt, false);
+            SetTemplateAndSave(planAheadShirt, templateId);
         }
 
         /// <summary>
@@ -711,6 +713,19 @@
                 _services.MediaService.Save(m);
                 _media.Add(alias, m.Id.ToString());
             }
+        }
+
+        private void SetTemplateAndSave(IProduct product, int templateId)
+        {
+            if (templateId > 0)
+            {
+                foreach (var dc in product.DetachedContents)
+                {
+                    dc.TemplateId = templateId;
+                }
+            }
+
+            MerchelloContext.Current.Services.ProductService.Save(product, false);
         }
     }
 }
