@@ -18,6 +18,7 @@
     <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
     <BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
     <BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
+    <BuildResxDir>$(BuildDir)\_resx</BuildResxDir>
     <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
     <BuildTransformsDir>$(BuildDir)\_transforms</BuildTransformsDir>
     <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
@@ -165,11 +166,32 @@
       AssemblyInformationalVersion="$(ProductVersion)"/>
 	</Target>
 
+  <Target Name="CompileResources" DependsOnTargets="SetVersionNumber">
+   <ItemGroup>
+    <Res Include="$(ProjectDir)\Merchello.Web.Store\Localization\StoreFormsResource.en-GB.resx">
+      <Culture>en-GB</Culture>
+    </Res>
+    <!--<Res Include = "SatelliteAssembly.en-GB.resx">
+      <Culture>en-GB</Culture>
+    </Res>-->
+  </ItemGroup>
+    
+    <GenerateResource Sources="@(Res)" PublicClass="true" >
+      <Output ItemName="Resources" TaskParameter="OutputResources"/>
+    </GenerateResource>
+  
+      <MakeDir Directories="$(BuildResxDir)\%(Res.Culture)"/>
+    
+    <AL OutputAssembly="$(BuildResxDir)\StoreFormsResource.resources.dll"
+        Version="1.0.0.0"
+        Culture="%(Culture)"
+        EmbedResources="@(Resources)"/>
+  </Target>
+  
 	<!-- COMPILE -->
-	<Target Name="Compile" DependsOnTargets="SetVersionNumber">
+	<Target Name="Compile" DependsOnTargets="CompileResources">
     <Message Text="Build config $(ProjectDir)" Importance="high" />
 		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
-    <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
 	</Target>
 
 

@@ -1325,27 +1325,33 @@
             if (numbers.Any() && terms.Any())
             {
                 sql.Where(
-                    "billToName LIKE @term OR billToEmail LIKE @email OR invoiceNumber IN (@invNo)",
+                    "billToName LIKE @term OR billToEmail LIKE @email OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal)",
                     new
                         {
                             @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
                             @email = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
-                            @invNo = numbers.ToArray()
-                        });
+                            @adr1 = string.Format("%{0}%", string.Join("%", terms)).Trim(),
+                            @loc = string.Format("%{0}%", string.Join("%", terms)).Trim(),
+                            @invNo = numbers.ToArray(),
+                            @postal = string.Format("%{0}%", string.Join("%", terms)).Trim()
+                    });
             }
             else if (numbers.Any())
             {
-                sql.Where("invoiceNumber IN (@invNo)", new { @invNo = numbers.ToArray() });
+                sql.Where("invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal) ", new { @invNo = numbers.ToArray(), @postal = numbers.ToArray() });
             }
             else
             {
                 sql.Where(
-                    "billToName LIKE @term OR billToEmail LIKE @term",
+                    "billToName LIKE @term OR billToEmail LIKE @term OR billToAddress1 LIKE @adr1 OR billToLocality LIKE @loc OR billToPostalCode IN (@postal)",
                     new
                         {
                             @term = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
-                            @email = string.Format("%{0}%", string.Join("% ", terms)).Trim()
-                        });
+                            @email = string.Format("%{0}%", string.Join("% ", terms)).Trim(),
+                            @adr1 = string.Format("%{0}%", string.Join("%", terms)).Trim(),
+                            @loc = string.Format("%{0}%", string.Join("%", terms)).Trim(),
+                            @postal = string.Format("%{0}%", string.Join("%", terms)).Trim()
+                    });
             }
 
             return sql;
