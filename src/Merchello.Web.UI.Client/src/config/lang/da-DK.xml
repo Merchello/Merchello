@@ -103,6 +103,8 @@
       ]]></key>
     <key alias="emptySalesCollection">Der er ingen salg i denne samling</key>
     <key alias="invoiceNumber">Faktura #</key>
+    <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
+    <key alias="poNumber">PO Number</key>
     <key alias="paymentStatus">Betalingsstatus</key>
     <key alias="fulfillmentStatus">Ordrestatus</key>
     <key alias="balanceDue">Balance due</key>

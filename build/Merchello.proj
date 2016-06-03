@@ -167,13 +167,16 @@
 	</Target>
 
   <Target Name="CompileResources" DependsOnTargets="SetVersionNumber">
-   <ItemGroup>
+    
+    <!-- THIS WORKS ON APPVEYOR but not Windows 10 Need to fix the local SDK path -->
+    
+   <!--<ItemGroup>
     <Res Include="$(ProjectDir)\Merchello.Web.Store\Localization\StoreFormsResource.en-GB.resx">
       <Culture>en-GB</Culture>
     </Res>
-    <!--<Res Include = "SatelliteAssembly.en-GB.resx">
+    --><!--<Res Include = "SatelliteAssembly.en-GB.resx">
       <Culture>en-GB</Culture>
-    </Res>-->
+    </Res>--><!--
   </ItemGroup>
     
     <GenerateResource Sources="@(Res)" PublicClass="true" >
@@ -185,7 +188,7 @@
     <AL OutputAssembly="$(BuildResxDir)\StoreFormsResource.resources.dll"
         Version="1.0.0.0"
         Culture="%(Culture)"
-        EmbedResources="@(Resources)"/>
+        EmbedResources="@(Resources)"/>-->
   </Target>
   
 	<!-- COMPILE -->

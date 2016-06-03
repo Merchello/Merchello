@@ -225,6 +225,8 @@
   <area alias="merchelloSales">
     <key alias="invoice">Счет</key>
     <key alias="invoiceNumber">Счет #</key>
+    <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
+    <key alias="poNumber">PO Number</key>
     <key alias="paymentStatus">Сост. оплаты</key>
     <key alias="sales">Продаж</key>
     <key alias="capturePayment">Получить платеж</key>
