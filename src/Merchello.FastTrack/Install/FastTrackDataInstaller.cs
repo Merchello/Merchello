@@ -211,7 +211,7 @@
             // Create the root T-Shirt category
             var catalog = _services.ContentService.CreateContent("Catalog", storeRoot.Id, "catalog");
 
-            catalog.SetValue("categories", string.Empty);
+            catalog.SetValue("categories", _collections[CollectionMainCategories].ToString());
             _services.ContentService.SaveAndPublishWithStatus(catalog);
 
             // Create the sun categories

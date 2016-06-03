@@ -14,7 +14,7 @@
 
 <h3>@title</h3>
 
-@foreach (var cat in categories)
+@foreach (var cat in categories.OrderBy(x => x.Name))
 {
     <div>
         @CategoryLink(cat)
