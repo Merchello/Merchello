@@ -1806,7 +1806,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
 
 
         function setTitle() {
-            var key = 'merchelloCollections_' + $scope.dialogData.entityType + 'Collections';
+            var key = 'merchelloCollections_' + $scope.dialogData.entityType.toLowerCase() + 'Collections';
             localizationService.localize(key).then(function (value) {
                 $scope.pickerTitle = value;
                 setTree();
