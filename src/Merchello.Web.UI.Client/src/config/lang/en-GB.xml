@@ -239,6 +239,8 @@
   <area alias="merchelloSales">
     <key alias="invoice">Invoice</key>
     <key alias="invoiceNumber">Invoice #</key>
+    <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
+    <key alias="poNumber">PO Number</key>
     <key alias="paymentStatus">Payment Status</key>
     <key alias="sales">Sales</key>
     <key alias="capturePayment">Capture Payment</key>

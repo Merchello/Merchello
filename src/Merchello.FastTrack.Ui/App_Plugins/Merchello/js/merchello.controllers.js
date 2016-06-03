@@ -9263,6 +9263,18 @@ angular.module('merchello').controller('Merchello.Backoffice.Reports.SalesOverTi
 
         }]);
 
+angular.module('merchello').controller('Merchello.Sales.Dialogs.InvoiceHeaderController',
+    ['$scope',
+    function($scope) {
+
+        function init() {
+            console.info($scope.dialogData);
+           $scope.loaded = true;
+        }
+
+        init();
+}]);
+
 'use strict';
 /**
  * @ngdoc controller
@@ -10013,6 +10025,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
 
+            $scope.refresh = refresh;
+
 
             var countries = [];
 
@@ -10510,11 +10524,14 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
             
             function saveInvoice() {
                 invoiceResource.saveInvoice($scope.invoice).then(function(data) {
-                    $timeout(function () {
-                        console.info($scope.invoice);
-                        loadInvoice($scope.invoice.key);
-                    }, 400);
+                    refresh();
                 });
+            }
+
+            function refresh() {
+                $timeout(function () {
+                    loadInvoice($scope.invoice.key);
+                }, 400);
             }
 
             // initialize the controller

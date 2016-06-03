@@ -114,6 +114,8 @@
       ]]></key>
     <key alias="emptySalesCollection">No hay ventas en esta colección</key>
     <key alias="invoiceNumber">Pedido #</key>
+    <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
+    <key alias="poNumber">PO Number</key>
     <key alias="paymentStatus">Estado del pago</key>
     <key alias="fulfillmentStatus">Estado del envío</key>
     <key alias="balanceDue">Balance due</key>
