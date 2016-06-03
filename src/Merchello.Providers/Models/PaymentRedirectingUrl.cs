@@ -1,19 +1,19 @@
-﻿namespace Merchello.Providers.Payment.PayPal.Models
+﻿namespace Merchello.Providers.Models
 {
     using Umbraco.Core;
 
     /// <summary>
-    /// Allows for overriding default redirections for Success and Cancel responses for PayPal API returns.
+    /// Allows for overriding default redirections for Success and Cancel responses for API returns.
     /// </summary>
-    public class PayPalRedirectingUrl
+    public class PaymentRedirectingUrl
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PayPalRedirectingUrl"/> class.
+        /// Initializes a new instance of the <see cref="PaymentRedirectingUrl"/> class.
         /// </summary>
         /// <param name="responseFor">
         /// The response for.
         /// </param>
-        public PayPalRedirectingUrl(string responseFor)
+        public PaymentRedirectingUrl(string responseFor)
         {
             Mandate.ParameterNotNullOrEmpty(responseFor, "responseFor");
             this.ResponseFor = responseFor;

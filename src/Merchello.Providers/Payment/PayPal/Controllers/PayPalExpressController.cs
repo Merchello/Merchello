@@ -70,12 +70,12 @@
         /// <summary>
         /// Occurs before redirecting for a successful response.
         /// </summary>
-        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForSuccess;
+        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PaymentRedirectingUrl>> RedirectingForSuccess;
 
         /// <summary>
         /// Occurs before redirecting for a cancel response.
         /// </summary>
-        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForCancel;
+        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PaymentRedirectingUrl>> RedirectingForCancel;
 
         /// <summary>
         /// Occurs after the final redirection and before redirecting to the success URL
@@ -105,7 +105,7 @@
         /// </returns>
         public override ActionResult Success(Guid invoiceKey, Guid paymentKey, string token, string payerId)
         {
-            var redirecting = new PayPalRedirectingUrl("Success") { RedirectingToUrl = _successUrl };
+            var redirecting = new PaymentRedirectingUrl("Success") { RedirectingToUrl = _successUrl };
 
             var logData = GetExtendedLoggerData();
 
@@ -141,12 +141,12 @@
                     Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
 
                     // raise the event so the redirect URL can be manipulated
-                    RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
+                    RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PaymentRedirectingUrl>(redirecting), this);
 
                     return Redirect(redirecting.RedirectingToUrl);
                 }
 
-                var retrying = new PayPalRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
+                var retrying = new PaymentRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
                 var qs = string.Format("?invoicekey={0}&paymentkey={1}", invoiceKey, paymentKey);
                 if (!retrying.RedirectingToUrl.IsNullOrWhiteSpace()) return Redirect(retrying.RedirectingToUrl + qs);
 
@@ -190,7 +190,7 @@
         /// </returns>
         public override ActionResult Cancel(Guid invoiceKey, Guid paymentKey, string token, string payerId = null)
         {
-            var redirecting = new PayPalRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
+            var redirecting = new PaymentRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
 
             try
             {
@@ -207,7 +207,7 @@
                 }
                
                 // raise the event so the redirect URL can be manipulated
-                RedirectingForCancel.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
+                RedirectingForCancel.RaiseEvent(new ObjectEventArgs<PaymentRedirectingUrl>(redirecting), this);
                 return Redirect(redirecting.RedirectingToUrl);
             }
             catch (Exception ex)
