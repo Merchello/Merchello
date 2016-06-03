@@ -265,6 +265,11 @@
     <Compile Include="Controllers\WishListController.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
+    <Compile Include="Localization\StoreFormsResource.en-GB.Designer.cs">
+      <DependentUpon>StoreFormsResource.en-GB.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Localization\StoreFormsResource.Designer.cs">
       <DependentUpon>StoreFormsResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -316,6 +321,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Localization\StoreFormsResource.en-GB.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StoreFormsResource.en-GB.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Localization\StoreFormsResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StoreFormsResource.Designer.cs</LastGenOutput>
