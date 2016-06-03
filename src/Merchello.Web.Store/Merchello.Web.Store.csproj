@@ -256,9 +256,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Api\ProductDataTableApiController.cs" />
     <Compile Include="Controllers\BasketController.cs" />
-    <Compile Include="Controllers\CheckoutAddressController.cs" />
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
-    <Compile Include="Controllers\CheckoutPaymentMethodController.cs" />
     <Compile Include="Controllers\CheckoutResolvePaymentController.cs" />
     <Compile Include="Controllers\CustomerMembershipController.cs" />
     <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
@@ -281,10 +279,8 @@
     <Compile Include="Models\StorePaymentModel.cs" />
     <Compile Include="Models\StoreAddressModel.cs" />
     <Compile Include="Models\StoreDiscountModel.cs" />
-    <Compile Include="Controllers\CheckoutShipRateQuoteController.cs" />
     <Compile Include="Models\StorePaymentMethodModel.cs" />
     <Compile Include="Models\StoreShipRateQuoteModel.cs" />
-    <Compile Include="Controllers\CheckoutSummaryController.cs" />
     <Compile Include="Factories\AddItemModelFactory.cs" />
     <Compile Include="Factories\BasketModelFactory.cs" />
     <Compile Include="Models\StoreAddItemModel.cs" />

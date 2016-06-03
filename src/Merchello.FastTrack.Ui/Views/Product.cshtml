@@ -24,8 +24,8 @@
         <div class="row">
             @if (Model.HasValue("image"))
             {
-                // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
-                var image = Model.GetPropertyValue<IPublishedContent>("image");
+                var mediaId = Model.GetPropertyValue<string>("image");
+                var image = Umbraco.TypedMedia(mediaId);
                 <div class="col-xs-8">
                     <img class="img-responsive" src="@image.GetCropUrl(height: 450)" alt="@Model.Name">
                 </div>
