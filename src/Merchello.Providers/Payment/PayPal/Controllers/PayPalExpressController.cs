@@ -119,6 +119,8 @@
                 // data so that we can refund the payment later through the back office if needed.
                 var attempt = invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
 
+                Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
+
                 // If this is an AJAX request return the JSON
                 if (payment.ExtendedData.GetPayPalRequestIsAjaxRequest())
                 {
@@ -138,7 +140,8 @@
 
                 if (attempt.Payment.Success)
                 {
-                    Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
+                    // we need to empty the basket here
+                    Basket.Empty();
 
                     // raise the event so the redirect URL can be manipulated
                     RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PaymentRedirectingUrl>(redirecting), this);

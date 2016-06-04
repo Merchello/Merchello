@@ -1,15 +1,12 @@
 ﻿namespace Merchello.Providers.Payment.PayPal
 {
     using System;
-    using System.Web;
 
-    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Services;
 
     using Umbraco.Core;
-    using Umbraco.Core.Events;
 
     /// <summary>
 	/// The PayPal payment processor
@@ -33,6 +30,18 @@
             this._service = (PayPalExpressCheckoutService)service.ExpressCheckout;
         }
 
+        /// <summary>
+        /// Verifies the authorization of a success return.
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PayPalExpressTransactionRecord"/>.
+        /// </returns>
         public PayPalExpressTransactionRecord VerifySuccessAuthorziation(IInvoice invoice, IPayment payment)
         {
             // We need to process several transactions in a row to get all the data we need to record the
@@ -53,6 +62,18 @@
             return record;
         }
 
+        /// <summary>
+        /// Processes the payment.
+        /// </summary>
+        /// <param name="payment">
+        /// The payment.
+        /// </param>
+        /// <param name="record">
+        /// The record.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PayPalExpressTransactionRecord"/>.
+        /// </returns>
         private PayPalExpressTransactionRecord Process(IPayment payment, PayPalExpressTransactionRecord record)
         {
             payment.SavePayPalTransactionRecord(record);

@@ -55,7 +55,14 @@
             </div>
         </div>
         <div class="control-group row-fluid">
-            <p>Retry URL (Failure)<br /></p>
+            <p>Retry Url</p>
+            <div class="input=prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.retryUrl" placeholder="/checkout/" />
+            </div>
+            <small class="warning">Note: <b>invoiceKey=[InvoiceKey]&amp;payementkey=[PaymentKey]</b> will be passed for retry attempt.</small>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Retry Method Endpoint<br /></p>
             <div class="input-prepend col-xs-12 span12">
                 <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.cancelUrl" placeholder="/umbraco/area/route/retry/" />
             </div>

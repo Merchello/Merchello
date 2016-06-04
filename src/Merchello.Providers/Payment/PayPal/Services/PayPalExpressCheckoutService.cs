@@ -19,7 +19,7 @@
     /// <summary>
     /// Represents a PayPalExpressCheckoutService.
     /// </summary>
-    internal class PayPalExpressCheckoutService : PayPalApiServiceBase, IPayPalExpressCheckoutService
+    public class PayPalExpressCheckoutService : PayPalApiServiceBase, IPayPalExpressCheckoutService
     {
         /// <summary>
         /// The default return URL.
