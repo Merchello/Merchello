@@ -350,7 +350,7 @@
     <Compile Include="Payment\Braintree\Services\IBraintreeWebhooksApiService.cs" />
     <Compile Include="Payment\PayPal\Models\CurrencyCodeTypeDecimal.cs" />
     <Compile Include="Payment\PayPal\Models\PayPalProviderSettingsExtensions.cs" />
-    <Compile Include="Payment\PayPal\Models\PayPalRedirectingUrl.cs" />
+    <Compile Include="Models\PaymentRedirectingUrl.cs" />
     <Compile Include="Payment\PayPal\Models\ProcessorArgumentCollectionExtensions.cs" />
     <Compile Include="Payment\PayPal\Models\SdkConfig.cs" />
     <Compile Include="Payment\PayPal\PayPalApiHelper.cs" />

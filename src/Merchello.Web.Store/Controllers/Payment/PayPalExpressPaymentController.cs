@@ -5,7 +5,10 @@
 
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Logging;
+    using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
+    using Merchello.Providers.Payment.PayPal.Services;
     using Merchello.Web.Controllers;
     using Merchello.Web.Store.Models;
 
@@ -32,6 +35,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Process(StorePaymentModel model)
         {
+
             try
             {
                 var paymentMethod = CheckoutManager.Payment.GetPaymentMethod();
@@ -47,14 +51,15 @@
                     args.SetPayPalExpressAjaxRequest(true);
                 }
 
+                // Don't empty the basket here.
+                CheckoutManager.Payment.Context.Settings.EmptyBasketOnPaymentSuccess = false;
+
                 var attempt = CheckoutManager.Payment.AuthorizePayment(paymentMethod.Key, args);
 
                 var resultModel = CheckoutPaymentModelFactory.Create(CurrentCustomer, paymentMethod, attempt);
-                
+
                 if (attempt.Payment.Success)
                 {
-                    HandleNotificiation(model, attempt);
-
                     CustomerContext.SetValue("invoiceKey", attempt.Invoice.Key.ToString());
                     return Redirect(attempt.RedirectUrl);
                 }
@@ -64,6 +69,45 @@
             catch (Exception ex)
             {
                 return HandlePaymentException(model, ex);
+            }
+        }
+
+        /// <summary>
+        /// The retry.
+        /// </summary>
+        /// <param name="invoiceKey">
+        /// The key for the invoice created.
+        /// </param>
+        /// <param name="paymentKey">
+        /// The payment key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
+        public virtual ActionResult Retry(Guid invoiceKey, Guid paymentKey)
+        {
+            try
+            {
+                var provider = GatewayContext.Payment.GetProviderByKey(Merchello.Providers.Constants.PayPal.GatewayProviderSettingsKey);
+
+                var settings = provider.ExtendedData.GetPayPalProviderSettings();
+
+                var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
+                if (settings.DeleteInvoiceOnCancel)
+                {
+                    MerchelloServices.InvoiceService.Delete(invoice);
+                }
+
+                return Redirect(!settings.RetryUrl.IsNullOrWhiteSpace() ? 
+                    settings.RetryUrl :
+                    "/");
+            }
+            catch (Exception ex)
+            {
+                var logData = GetExtendedLoggerData();
+                MultiLogHelper.Error<PayPalExpressPaymentController>("PayPal Express checkout retry failed.", ex, logData);
+                throw;
             }
         }
 

@@ -68,6 +68,11 @@
         public string SuccessUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the retry url.
+        /// </summary>
+        public string RetryUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the cancel url.
         /// </summary>
         public string CancelUrl { get; set; }

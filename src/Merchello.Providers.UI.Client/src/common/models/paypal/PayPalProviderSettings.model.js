@@ -8,6 +8,7 @@ var PayPalProviderSettings = function() {
     self.apiSignature = '';
     self.applicationId = '';
     self.successUrl = '';
+    self.retryUrl = '';
     self.cancelUrl = '';
     self.deleteInvoiceOnCancel = false;
 };
