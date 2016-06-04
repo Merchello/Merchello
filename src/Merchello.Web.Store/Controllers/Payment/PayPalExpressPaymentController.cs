@@ -1,11 +1,13 @@
 ﻿namespace Merchello.Web.Store.Controllers.Payment
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
 
     using Merchello.Core.Gateways;
     using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
+    using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Services;
@@ -52,7 +54,7 @@
                 }
 
                 // Don't empty the basket here.
-                CheckoutManager.Payment.Context.Settings.EmptyBasketOnPaymentSuccess = false;
+                CheckoutManager.Context.Settings.EmptyBasketOnPaymentSuccess = false;
 
                 var attempt = CheckoutManager.Payment.AuthorizePayment(paymentMethod.Key, args);
 
@@ -93,10 +95,24 @@
 
                 var settings = provider.ExtendedData.GetPayPalProviderSettings();
 
-                var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
                 if (settings.DeleteInvoiceOnCancel)
                 {
-                    MerchelloServices.InvoiceService.Delete(invoice);
+                    // validate that this invoice should be deleted
+                    var invoice = MerchelloServices.InvoiceService.GetByKey(invoiceKey);
+
+                    var payments = invoice.Payments().ToArray();
+
+                    // we don't want to delete if there is more than one payment
+                    if (payments.Count() == 1)
+                    {
+                        // Assert the payment key matches - this is to ensure that the 
+                        // payment matches the invoice
+                        var payment = payments.FirstOrDefault(x => x.Key == paymentKey);
+                        if (payment != null && invoice.InvoiceStatus.Key == Core.Constants.DefaultKeys.InvoiceStatus.Unpaid)
+                        {
+                            MerchelloServices.InvoiceService.Delete(invoice);
+                        }
+                    }
                 }
 
                 return Redirect(!settings.RetryUrl.IsNullOrWhiteSpace() ? 
