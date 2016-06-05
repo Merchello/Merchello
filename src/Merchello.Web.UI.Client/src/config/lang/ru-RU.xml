@@ -224,9 +224,9 @@
   </area>
   <area alias="merchelloSales">
     <key alias="invoice">Счет</key>
-    <key alias="invoiceNumber">Счет #</key>
-    <key alias="invoiceNumberPrefix">Invoice Number Prefix</key>
-    <key alias="poNumber">PO Number</key>
+    <key alias="invoiceNumber">Счет №</key>
+    <key alias="invoiceNumberPrefix">Префикс № счета</key>
+    <key alias="poNumber">Номер</key>
     <key alias="paymentStatus">Сост. оплаты</key>
     <key alias="sales">Продаж</key>
     <key alias="capturePayment">Получить платеж</key>
@@ -242,7 +242,7 @@
         <p>Но вскоре обязательно будут!</p>
       ]]></key>
     <key alias="emptySalesCollection">В списке нет продаж</key>
-    <key alias="invoiceNumber">Счет #</key>
+    <key alias="invoiceNumber">Счет №</key>
     <key alias="paymentStatus">Сост. оплаты</key>
     <key alias="fulfillmentStatus">Завершение</key>
     <key alias="billingAddress">Платежный адрес</key>
@@ -346,7 +346,7 @@
     <key alias="baseSku">Базовый артикул</key>
     <key alias="barcode">Штрихкод</key>
     <key alias="manufacturer">Производитель</key>
-    <key alias="manufacturerModel"># по каталогу производителя</key>
+    <key alias="manufacturerModel">Модель по каталогу производителя</key>
     <key alias="variantInfo">Информация о варианте</key>
     <key alias="variantOptions">Свойства варианта</key>
     <key alias="downloads">Цифровой загружаемый товар</key>
@@ -394,7 +394,7 @@
   <area alias="merchelloOrder">
     <!-- moved to sales -->
     <key alias="invoice">Счет</key>
-    <key alias="invoiceNumber">Счет #</key>
+    <key alias="invoiceNumber">Счет №</key>
     <key alias="sales">Продажи</key>
     <key alias="saleInformation">Информация по продажам</key>
     <key alias="paymentStatus">Состояние платежа</key>
@@ -412,7 +412,7 @@
 
     <key alias="order">Заказ</key>
     <key alias="orders">Заказы</key>
-    <key alias="orderNumber">Заказ #</key>
+    <key alias="orderNumber">Заказ №</key>
 
     <key alias="fulfillmentStatus">Статус исполнения</key>
     <key alias="orderName">[Наименование заказа]</key>
@@ -438,7 +438,7 @@
   </area>
   <area alias="merchelloOrderView">
     <!-- things -->
-    <key alias="invoiceNumber">Счет #</key>
+    <key alias="invoiceNumber">Счет №</key>
     <key alias="customerInformation">Данные покупателя</key>
     <key alias="shippingAddress">Адрес доставки</key>
     <key alias="billingAddress">Платежный адрес</key>
