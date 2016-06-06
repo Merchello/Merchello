@@ -203,6 +203,17 @@
         /// </param>
         protected override void PersistUpdatedItem(IShipment entity)
         {
+            var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ShipmentKey == entity.Key);
+            var existing = _orderLineItemRepository.GetByQuery(query);
+
+            var removers = existing.Where(x => entity.Items.All(y => y.Key != x.Key));
+                
+            foreach (var remove in removers)
+            {
+                ((IOrderLineItem)remove).ShipmentKey = null;
+                _orderLineItemRepository.SaveLineItem((IOrderLineItem)remove);
+            }
+
             ((Entity)entity).UpdatingEntity();
 
             var factory = new ShipmentFactory();

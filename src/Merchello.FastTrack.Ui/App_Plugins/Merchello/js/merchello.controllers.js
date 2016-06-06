@@ -10123,6 +10123,8 @@ angular.module('merchello').controller('Merchello.Backoffice.OrderShipmentsContr
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
 
+                    console.info($scope.invoice);
+
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
                 });
