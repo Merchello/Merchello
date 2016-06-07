@@ -134,11 +134,11 @@
     <comment>Error message for an invalid email address</comment>
   </data>
   <data name="LabelAddress1" xml:space="preserve">
-    <value>Adresse </value>
+    <value>Adresse</value>
     <comment>Label for address line 1</comment>
   </data>
   <data name="LabelAddress2" xml:space="preserve">
-    <value>Adresse 2B</value>
+    <value>Adresse 2</value>
     <comment>Label for address line 2</comment>
   </data>
   <data name="LabelAddresses" xml:space="preserve">
