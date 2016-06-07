@@ -43,9 +43,8 @@
                                     // and may need to change for site specific implementations.  Example!
                                     if (product.HasValue("image"))
                                     {
-                                        // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
-                                        var image = product.GetPropertyValue<IPublishedContent>
-                                            ("image");
+                                        var mediaId = product.GetPropertyValue<string>("image");
+                                        var image = Umbraco.TypedMedia(mediaId);
 
                                         <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20" /></a>
                                     }
