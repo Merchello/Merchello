@@ -224,6 +224,7 @@
 			destination.BillToCompany = invoiceDisplay.BillToCompany;
 			destination.Exported = invoiceDisplay.Exported;
 			destination.Archived = invoiceDisplay.Archived;
+		    destination.PoNumber = invoiceDisplay.PoNumber;
 
             // set the note type field key
 		    var invoiceTfKey = Constants.TypeFieldKeys.Entity.InvoiceKey;

@@ -19,17 +19,17 @@
     /// <summary>
     /// Represents a PayPalExpressCheckoutService.
     /// </summary>
-    internal class PayPalExpressCheckoutService : PayPalApiServiceBase, IPayPalExpressCheckoutService
+    public class PayPalExpressCheckoutService : PayPalApiServiceBase, IPayPalExpressCheckoutService
     {
         /// <summary>
         /// The default return URL.
         /// </summary>
-        private const string DefaultReturnUrl = "{0}/umbraco/merchelloproviders/paypalexpress/success?invoiceKey={1}&paymentKey={2}";
+        private const string DefaultReturnUrl = "{0}/umbraco/merchello/paypalexpress/success?invoiceKey={1}&paymentKey={2}";
 
         /// <summary>
         /// The default cancel URL.
         /// </summary>
-        private const string DefaultCancelUrl = "{0}/umbraco/merchelloproviders/paypalexpress/success?invoiceKey={1}&paymentKey={2}";
+        private const string DefaultCancelUrl = "{0}/umbraco/merchello/paypalexpress/success?invoiceKey={1}&paymentKey={2}";
 
         /// <summary>
         /// The version.

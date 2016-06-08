@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Core
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Merchello ExtendedData constants
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public partial class Constants
     {
         /// <summary>
@@ -67,7 +69,8 @@
                     "merchBaseTax",
                     "merchProvinceTaxRate",
                     "merchTaxTransactionResults",
-                    "merchSmtpProviderSettings"
+                    "merchSmtpProviderSettings",
+                    "merchBasketItemChoices"
                 }; 
             }
         }
@@ -571,6 +574,21 @@
                     return "merchOfferCodeTempData";
                 }
             }
+
+            //// UI ----------------------------------------------------------------
+
+
+            /// <summary>
+            /// Gets the key for storing the customer choices when adding an item to a basket.
+            /// </summary>
+            public static string BasketItemCustomerChoice
+            {
+                get
+                {
+                    return "merchBasketItemChoices";
+                }
+            }
+
         }
     }
 }

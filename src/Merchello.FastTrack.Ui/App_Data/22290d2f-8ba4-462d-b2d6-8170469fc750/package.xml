@@ -1,0 +1,1338 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+  <files>
+    <file>
+      <guid>Installer.ascx</guid>
+      <orgPath>/App_Plugins/FastTrack/Backoffice</orgPath>
+      <orgName>Installer.ascx</orgName>
+    </file>
+    <file>
+      <guid>web.config</guid>
+      <orgPath>/App_Plugins/FastTrack/Views</orgPath>
+      <orgName>web.config</orgName>
+    </file>
+    <file>
+      <guid>PaymentForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/BraintreePayPal</orgPath>
+      <orgName>PaymentForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>7b17756e-7e07-4acc-b47b-b684ccc77fac_PaymentForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/BraintreeStandardCc</orgPath>
+      <orgName>PaymentForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>e9ce162e-66ab-4942-a714-cd2b6e16d9e6_PaymentForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CashPayment</orgPath>
+      <orgName>PaymentForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>BillingAddressForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutAddress</orgPath>
+      <orgName>BillingAddressForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>ShippingAddressForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutAddress</orgPath>
+      <orgName>ShippingAddressForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>PaymentMethodForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutPaymentMethod</orgPath>
+      <orgName>PaymentMethodForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>ResolvePayment.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutPaymentMethod</orgPath>
+      <orgName>ResolvePayment.cshtml</orgName>
+    </file>
+    <file>
+      <guid>ShipRateQuoteForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutShipRateQuote</orgPath>
+      <orgName>ShipRateQuoteForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>BasketSummary.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutSummary</orgPath>
+      <orgName>BasketSummary.cshtml</orgName>
+    </file>
+    <file>
+      <guid>InvoiceSummary.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutSummary</orgPath>
+      <orgName>InvoiceSummary.cshtml</orgName>
+    </file>
+    <file>
+      <guid>SalesReceipt.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CheckoutSummary</orgPath>
+      <orgName>SalesReceipt.cshtml</orgName>
+    </file>
+    <file>
+      <guid>CustomerBillingAddress.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CustomerMembership</orgPath>
+      <orgName>CustomerBillingAddress.cshtml</orgName>
+    </file>
+    <file>
+      <guid>CustomerSalesHistory.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CustomerMembership</orgPath>
+      <orgName>CustomerSalesHistory.cshtml</orgName>
+    </file>
+    <file>
+      <guid>CustomerShippingAddress.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CustomerMembership</orgPath>
+      <orgName>CustomerShippingAddress.cshtml</orgName>
+    </file>
+    <file>
+      <guid>LoginForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CustomerMembership</orgPath>
+      <orgName>LoginForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>RegisterForm.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/CustomerMembership</orgPath>
+      <orgName>RegisterForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>InvalidCheckoutStage.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/Partials</orgPath>
+      <orgName>InvalidCheckoutStage.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_RequireJsSubmitBtn.cshtml</guid>
+      <orgPath>/App_Plugins/FastTrack/Views/Shared</orgPath>
+      <orgName>_RequireJsSubmitBtn.cshtml</orgName>
+    </file>
+    <file>
+      <guid>Merchello.FastTrack.Ui.dll</guid>
+      <orgPath>/bin</orgPath>
+      <orgName>Merchello.FastTrack.Ui.dll</orgName>
+    </file>
+    <file>
+      <guid>Merchello.FastTrack.dll</guid>
+      <orgPath>/bin</orgPath>
+      <orgName>Merchello.FastTrack.dll</orgName>
+    </file>
+    <file>
+      <guid>_Address.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_Address.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_Footer.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_Footer.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_Header.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_Header.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_Headline.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_Headline.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_ProductBox.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_ProductBox.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_ProductBoxList.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_ProductBoxList.cshtml</orgName>
+    </file>
+    <file>
+      <guid>_ProductPricing.cshtml</guid>
+      <orgPath>/Views/Shared</orgPath>
+      <orgName>_ProductPricing.cshtml</orgName>
+    </file>
+    <file>
+      <guid>bootstrap.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>bootstrap.js</orgName>
+    </file>
+    <file>
+      <guid>bootstrap.min.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>bootstrap.min.js</orgName>
+    </file>
+    <file>
+      <guid>jquery-1.10.2.intellisense.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery-1.10.2.intellisense.js</orgName>
+    </file>
+    <file>
+      <guid>jquery-1.10.2.min.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery-1.10.2.min.js</orgName>
+    </file>
+    <file>
+      <guid>jquery.creditCardValidator.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery.creditCardValidator.js</orgName>
+    </file>
+    <file>
+      <guid>jquery.unobtrusive-ajax.min.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery.unobtrusive-ajax.min.js</orgName>
+    </file>
+    <file>
+      <guid>jquery.validate-vsdoc.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery.validate-vsdoc.js</orgName>
+    </file>
+    <file>
+      <guid>jquery.validate.min.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery.validate.min.js</orgName>
+    </file>
+    <file>
+      <guid>jquery.validate.unobtrusive.min.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>jquery.validate.unobtrusive.min.js</orgName>
+    </file>
+    <file>
+      <guid>underscore.min.js</guid>
+      <orgPath>/Scripts</orgPath>
+      <orgName>underscore.min.js</orgName>
+    </file>
+    <file>
+      <guid>bootstrap-theme.css</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap-theme.css</orgName>
+    </file>
+    <file>
+      <guid>bootstrap-theme.css.map</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap-theme.css.map</orgName>
+    </file>
+    <file>
+      <guid>bootstrap-theme.min.css</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap-theme.min.css</orgName>
+    </file>
+    <file>
+      <guid>bootstrap-theme.min.css.map</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap-theme.min.css.map</orgName>
+    </file>
+    <file>
+      <guid>bootstrap.css</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap.css</orgName>
+    </file>
+    <file>
+      <guid>bootstrap.css.map</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap.css.map</orgName>
+    </file>
+    <file>
+      <guid>bootstrap.min.css</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap.min.css</orgName>
+    </file>
+    <file>
+      <guid>bootstrap.min.css.map</guid>
+      <orgPath>/Styles/css</orgPath>
+      <orgName>bootstrap.min.css.map</orgName>
+    </file>
+    <file>
+      <guid>glyphicons-halflings-regular.eot</guid>
+      <orgPath>/Styles/fonts</orgPath>
+      <orgName>glyphicons-halflings-regular.eot</orgName>
+    </file>
+    <file>
+      <guid>glyphicons-halflings-regular.svg</guid>
+      <orgPath>/Styles/fonts</orgPath>
+      <orgName>glyphicons-halflings-regular.svg</orgName>
+    </file>
+    <file>
+      <guid>glyphicons-halflings-regular.ttf</guid>
+      <orgPath>/Styles/fonts</orgPath>
+      <orgName>glyphicons-halflings-regular.ttf</orgName>
+    </file>
+    <file>
+      <guid>glyphicons-halflings-regular.woff</guid>
+      <orgPath>/Styles/fonts</orgPath>
+      <orgName>glyphicons-halflings-regular.woff</orgName>
+    </file>
+    <file>
+      <guid>glyphicons-halflings-regular.woff2</guid>
+      <orgPath>/Styles/fonts</orgPath>
+      <orgName>glyphicons-halflings-regular.woff2</orgName>
+    </file>
+    <file>
+      <guid>despite.jpg</guid>
+      <orgPath>/media/1001</orgPath>
+      <orgName>despite.jpg</orgName>
+    </file>
+    <file>
+      <guid>element.jpg</guid>
+      <orgPath>/media/1002</orgPath>
+      <orgName>element.jpg</orgName>
+    </file>
+    <file>
+      <guid>planahead.jpg</guid>
+      <orgPath>/media/1003</orgPath>
+      <orgName>planahead.jpg</orgName>
+    </file>
+    <file>
+      <guid>dog-fleas.jpg</guid>
+      <orgPath>/media/1004</orgPath>
+      <orgName>dog-fleas.jpg</orgName>
+    </file>
+    <file>
+      <guid>paranormal.jpg</guid>
+      <orgPath>/media/1005</orgPath>
+      <orgName>paranormal.jpg</orgName>
+    </file>
+    <file>
+      <guid>evolution.jpg</guid>
+      <orgPath>/media/1006</orgPath>
+      <orgName>evolution.jpg</orgName>
+    </file>
+    <file>
+      <guid>AddToBasketForm.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/Basket</orgPath>
+      <orgName>AddToBasketForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>BasketForm.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/Basket</orgPath>
+      <orgName>BasketForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>DiscountForm.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/CheckoutDiscount</orgPath>
+      <orgName>DiscountForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>9d60e85f-345c-4ce5-9758-76c2bd537470_InvalidCheckoutStage.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/Partials</orgPath>
+      <orgName>InvalidCheckoutStage.cshtml</orgName>
+    </file>
+    <file>
+      <guid>e408a245-67bc-4488-887d-bdb6046e520f_PaymentForm.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/PayPalExpressPayment</orgPath>
+      <orgName>PaymentForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>405d46d0-c29b-4c80-ad61-1e9737b3380b__RequireJsSubmitBtn.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/Shared</orgPath>
+      <orgName>_RequireJsSubmitBtn.cshtml</orgName>
+    </file>
+    <file>
+      <guid>8ac2158d-d0bd-4bf7-acc1-a971d72b4aa2_web.config</guid>
+      <orgPath>/App_Plugins/Merchello/Views</orgPath>
+      <orgName>web.config</orgName>
+    </file>
+    <file>
+      <guid>WishListForm.cshtml</guid>
+      <orgPath>/App_Plugins/Merchello/Views/WishList</orgPath>
+      <orgName>WishListForm.cshtml</orgName>
+    </file>
+    <file>
+      <guid>70aab789-5fa1-4275-ae9a-ea6d91dd18d6_Installer.ascx</guid>
+      <orgPath>/App_Plugins/FastTrack/Backoffice</orgPath>
+      <orgName>Installer.ascx</orgName>
+    </file>
+  </files>
+  <info>
+    <package>
+      <name>Merchello FastTrack Alpha</name>
+      <version>2.1.0</version>
+      <license url="https://github.com/Merchello/Merchello/blob/merchello-dev/License.md">MIT</license>
+      <url>http://merchello.com</url>
+      <requirements>
+        <major>3</major>
+        <minor>0</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>Rusty Swayne</name>
+      <website>http://merchello.com</website>
+    </author>
+    <readme><![CDATA[Merchello FastTrack is provides an example for implementing a store using the Merchello eCommerce Package for Umbraco.]]></readme>
+  </info>
+  <DocumentTypes>
+    <DocumentType>
+      <Info>
+        <Name>Account</Name>
+        <Alias>account</Alias>
+        <Icon>icon-lock</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+          <Composition>compositionContent</Composition>
+          <Composition>CompositionUmbracoFields</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Account</Template>
+          <Template>AccountAuth</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Account</DefaultTemplate>
+      </Info>
+      <Structure />
+      <GenericProperties />
+      <Tabs />
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Basket</Name>
+        <Alias>basket</Alias>
+        <Icon>icon-shopping-basket</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Basket</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Basket</DefaultTemplate>
+      </Info>
+      <Structure />
+      <GenericProperties />
+      <Tabs />
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Catalog</Name>
+        <Alias>catalog</Alias>
+        <Icon>icon-book-alt</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+          <Composition>compositionContent</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Catalog</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Catalog</DefaultTemplate>
+      </Info>
+      <Structure>
+        <DocumentType>category</DocumentType>
+      </Structure>
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Categories</Name>
+          <Alias>categories</Alias>
+          <Type>Merchello.ProductCollectionPicker</Type>
+          <Definition>1f5b76f7-260a-4a0a-a0ef-7711de10bcd5</Definition>
+          <Tab>Content</Tab>
+          <SortOrder>2</SortOrder>
+          <Mandatory>False</Mandatory>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>35</Id>
+          <Caption>Content</Caption>
+          <SortOrder>0</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Category</Name>
+        <Alias>category</Alias>
+        <Icon>icon-thumbnail-list</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+          <Composition>compositionContent</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Category</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Category</DefaultTemplate>
+      </Info>
+      <Structure />
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Products</Name>
+          <Alias>products</Alias>
+          <Type>Merchello.ProductListView</Type>
+          <Definition>e2fc66f3-d628-4081-a218-abca25ae2cca</Definition>
+          <Tab>Content</Tab>
+          <SortOrder>2</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[The product collection that represents this category]]></Description>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>30</Id>
+          <Caption>Content</Caption>
+          <SortOrder>0</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Checkout</Name>
+        <Alias>checkout</Alias>
+        <Icon>icon-multiple-credit-cards</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+          <Composition>compositionContent</Composition>
+          <Composition>CompositionUmbracoFields</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>BillingAddress</Template>
+          <Template>ShippingAddress</Template>
+          <Template>ShipRateQuote</Template>
+          <Template>PaymentMethod</Template>
+          <Template>Payment</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>BillingAddress</DefaultTemplate>
+      </Info>
+      <Structure>
+        <DocumentType>checkout</DocumentType>
+      </Structure>
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Checkout Stage</Name>
+          <Alias>checkoutStage</Alias>
+          <Type>Merchello.CheckoutWorkflowStagePicker</Type>
+          <Definition>73694d17-457b-4142-8f0d-d7ffdf6a977a</Definition>
+          <Tab>Content</Tab>
+          <SortOrder>2</SortOrder>
+          <Mandatory>True</Mandatory>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>34</Id>
+          <Caption>Content</Caption>
+          <SortOrder>0</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Composition - Content</Name>
+        <Alias>compositionContent</Alias>
+        <Icon>icon-document</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions />
+        <AllowedTemplates />
+        <DefaultTemplate />
+      </Info>
+      <Structure />
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Headline</Name>
+          <Alias>headline</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>Content</Tab>
+          <SortOrder>0</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[The content headline]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Brief</Name>
+          <Alias>brief</Alias>
+          <Type>Umbraco.TinyMCEv3</Type>
+          <Definition>0831e56b-a359-4876-8375-fbe53f118deb</Definition>
+          <Tab>Content</Tab>
+          <SortOrder>1</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[A brief description of the content]]></Description>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>27</Id>
+          <Caption>Content</Caption>
+          <SortOrder>0</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Composition - Meta</Name>
+        <Alias>compositionMeta</Alias>
+        <Icon>icon-document</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions />
+        <AllowedTemplates />
+        <DefaultTemplate />
+      </Info>
+      <Structure />
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Page Title</Name>
+          <Alias>pageTitle</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>SEO</Tab>
+          <SortOrder>0</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[The HTML Page Title]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Meta Description</Name>
+          <Alias>metaDescription</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>SEO</Tab>
+          <SortOrder>1</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[The META description content]]></Description>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>22</Id>
+          <Caption>SEO</Caption>
+          <SortOrder>10</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Composition - Umbraco Fields</Name>
+        <Alias>CompositionUmbracoFields</Alias>
+        <Icon>icon-document-dashed-line</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions />
+        <AllowedTemplates />
+        <DefaultTemplate />
+      </Info>
+      <Structure />
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Umbraco Redirect</Name>
+          <Alias>umbracoRedirect</Alias>
+          <Type>Umbraco.ContentPickerAlias</Type>
+          <Definition>a6857c73-d6e9-480c-b6e6-f15f6ad11125</Definition>
+          <Tab>Umbraco Fields</Tab>
+          <SortOrder>3</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Validation />
+          <Description><![CDATA[Add the umbracoRedirect property alias to your document type with a content picker and you can then allow choose a node ID that you want the page to redirect to.]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Umbraco URL Name</Name>
+          <Alias>umbracoURLName</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>Umbraco Fields</Tab>
+          <SortOrder>1</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Validation />
+          <Description><![CDATA[This property allows you to change the URL of the node without changing the name of the node/page you have created.]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Hide Page</Name>
+          <Alias>umbracoNaviHide</Alias>
+          <Type>Umbraco.TrueFalse</Type>
+          <Definition>92897bc6-a5f3-4ffe-ae27-f2e7e33dda49</Definition>
+          <Tab>Umbraco Fields</Tab>
+          <SortOrder>0</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[Adds the umbracoNaviHide property alias to your document type with a true/false selector.  The value indicates the whether or not the page should be hidden.]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Umbraco Internal Redirect ID</Name>
+          <Alias>umbracoInternalRedirectID</Alias>
+          <Type>Umbraco.ContentPickerAlias</Type>
+          <Definition>a6857c73-d6e9-480c-b6e6-f15f6ad11125</Definition>
+          <Tab>Umbraco Fields</Tab>
+          <SortOrder>4</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Validation />
+          <Description><![CDATA[Add the umbracoInternalRedirectId property alias to your document type with a content picker and Umbraco will load the selected page’s content transparently; no url redirection]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Umbraco URL Alias</Name>
+          <Alias>umbracoUrlAlias</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>Umbraco Fields</Tab>
+          <SortOrder>2</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Validation />
+          <Description><![CDATA[This property allows you to give the node multiple URLs using a textstring property. For example if we were to enter fasttrack,test/this-is-a-test this would resolve the following urls to the same page.
+
+/fasttrack/
+/test/this-is-a-test/]]></Description>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>29</Id>
+          <Caption>Umbraco Fields</Caption>
+          <SortOrder>999</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Login</Name>
+        <Alias>login</Alias>
+        <Icon>icon-user</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+          <Composition>compositionContent</Composition>
+          <Composition>CompositionUmbracoFields</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>AccountAuth</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>AccountAuth</DefaultTemplate>
+      </Info>
+      <Structure />
+      <GenericProperties />
+      <Tabs />
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Product</Name>
+        <Alias>product</Alias>
+        <Icon>icon-box</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Product</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Product</DefaultTemplate>
+      </Info>
+      <Structure />
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Related Products</Name>
+          <Alias>relatedProducts</Alias>
+          <Type>Merchello.MultiProductPicker</Type>
+          <Definition>51acc9c4-809a-45b3-8b02-bcb4c960589c</Definition>
+          <Tab>Info</Tab>
+          <SortOrder>2</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[Allows for relating products to this product.]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Brief</Name>
+          <Alias>brief</Alias>
+          <Type>Umbraco.TinyMCEv3</Type>
+          <Definition>0831e56b-a359-4876-8375-fbe53f118deb</Definition>
+          <Tab>Info</Tab>
+          <SortOrder>0</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[A short description of the product.  Used in listings and info boxes.]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Description</Name>
+          <Alias>description</Alias>
+          <Type>Umbraco.TinyMCEv3</Type>
+          <Definition>ca90c950-0aff-4e72-b976-a30b1ac57dad</Definition>
+          <Tab>Info</Tab>
+          <SortOrder>1</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[The full description of the product.]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Image</Name>
+          <Alias>image</Alias>
+          <Type>Umbraco.MediaPicker</Type>
+          <Definition>93929b9a-93a2-4e2a-b239-d99334440a59</Definition>
+          <Tab>Images</Tab>
+          <SortOrder>0</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[An image or photo representation of the product]]></Description>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>23</Id>
+          <Caption>Info</Caption>
+          <SortOrder>0</SortOrder>
+        </Tab>
+        <Tab>
+          <Id>24</Id>
+          <Caption>Images</Caption>
+          <SortOrder>1</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Receipt</Name>
+        <Alias>receipt</Alias>
+        <Icon>icon-calculator</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>False</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionMeta</Composition>
+          <Composition>compositionContent</Composition>
+          <Composition>CompositionUmbracoFields</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Receipt</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Receipt</DefaultTemplate>
+      </Info>
+      <Structure />
+      <GenericProperties />
+      <Tabs />
+    </DocumentType>
+    <DocumentType>
+      <Info>
+        <Name>Store</Name>
+        <Alias>store</Alias>
+        <Icon>icon-store</Icon>
+        <Thumbnail>folder.png</Thumbnail>
+        <Description />
+        <AllowAtRoot>True</AllowAtRoot>
+        <IsListView>False</IsListView>
+        <Compositions>
+          <Composition>compositionContent</Composition>
+        </Compositions>
+        <AllowedTemplates>
+          <Template>Store</Template>
+        </AllowedTemplates>
+        <DefaultTemplate>Store</DefaultTemplate>
+      </Info>
+      <Structure>
+        <DocumentType>basket</DocumentType>
+        <DocumentType>checkout</DocumentType>
+        <DocumentType>catalog</DocumentType>
+        <DocumentType>receipt</DocumentType>
+        <DocumentType>account</DocumentType>
+        <DocumentType>login</DocumentType>
+      </Structure>
+      <GenericProperties>
+        <GenericProperty>
+          <Name>Store Name</Name>
+          <Alias>storeName</Alias>
+          <Type>Umbraco.Textbox</Type>
+          <Definition>0cc0eba1-9960-42c9-bf9b-60e150b429ae</Definition>
+          <Tab>Store Info</Tab>
+          <SortOrder>0</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[The name of the store]]></Description>
+        </GenericProperty>
+        <GenericProperty>
+          <Name>Featured Products</Name>
+          <Alias>featuredProducts</Alias>
+          <Type>Merchello.ProductListView</Type>
+          <Definition>e2fc66f3-d628-4081-a218-abca25ae2cca</Definition>
+          <Tab>Content</Tab>
+          <SortOrder>2</SortOrder>
+          <Mandatory>False</Mandatory>
+          <Description><![CDATA[Renders products from the Featured Products collection]]></Description>
+        </GenericProperty>
+      </GenericProperties>
+      <Tabs>
+        <Tab>
+          <Id>26</Id>
+          <Caption>Store Info</Caption>
+          <SortOrder>1</SortOrder>
+        </Tab>
+        <Tab>
+          <Id>28</Id>
+          <Caption>Content</Caption>
+          <SortOrder>0</SortOrder>
+        </Tab>
+      </Tabs>
+    </DocumentType>
+  </DocumentTypes>
+  <Templates>
+    <Template>
+      <Name>Account</Name>
+      <Alias>Account</Alias>
+      <Design><![CDATA[@inherits Merchello.Web.Mvc.MerchelloViewPage<IPublishedContent>
+@using Merchello.Core.Models
+@using Merchello.Web
+@using Merchello.Web.Store.Localization
+
+@{
+	Layout = "Master.cshtml";
+
+    var customer = (ICustomer)CurrentCustomer;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>@string.Format("{0} {1}", customer.FirstName, customer.LastName)</h2>
+    </div>
+</div>
+@if (Model.HasProperty("brief") && Model.HasValue("brief"))
+{
+    @Umbraco.Field("brief")
+}
+
+<div class="row">
+
+    <div class="col-md-9">
+        @if (!((ICustomer)CurrentCustomer).WishList().IsEmpty)
+        {
+            <h3>@StoreFormsResource.LabelWishList</h3>
+            @Html.Action("WishListForm", "WishList", new { area = "Merchello" })
+        }
+
+        @Html.Action("CustomerSalesHistory", "CustomerMembership", new { area = "FastTrack" })
+    </div>
+
+    <div class="col-md-3">
+        <h3>@StoreFormsResource.LabelAddresses</h3>
+        @Html.Action("CustomerBillingAddress", "CustomerMembership", new { area = "FastTrack" })
+
+        @Html.Action("CustomerShippingAddress", "CustomerMembership", new { area = "FastTrack" })
+    </div>
+</div>]]></Design>
+    </Template>
+    <Template>
+      <Name>AccountAuth</Name>
+      <Alias>AccountAuth</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Master.cshtml";
+}
+@Html.Partial("_Headline")
+<div class="row">
+    <div class="col-md-6">
+        @Html.Action("LoginForm", "CustomerMembership", new { area = "FastTrack" })
+    </div>
+    <div class="col-md-6">
+        @Html.Action("RegisterForm", "CustomerMembership", new { area = "FastTrack" })
+    </div>
+</div>]]></Design>
+    </Template>
+    <Template>
+      <Name>Basket</Name>
+      <Alias>Basket</Alias>
+      <Design><![CDATA[@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+@{
+	Layout = "Master.cshtml";
+}
+
+@Html.Partial("_Headline")
+
+@if (CurrentCustomer.Basket().Items.Any())
+{
+    @Html.Action("BasketForm", "Basket", new { area = "Merchello" })
+}
+else
+{
+    <p>
+        <a href="@ExampleUiHelper.Content.GetStoreRoot().Url">There's nothing in your shopping cart, start shopping!</a>
+    </p>
+}
+]]></Design>
+    </Template>
+    <Template>
+      <Name>Billing Address</Name>
+      <Alias>BillingAddress</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PreSaleSummary.cshtml";
+}
+
+@Html.Action("BillingAddressForm", "CheckoutAddress", new { area = "FastTrack" });]]></Design>
+    </Template>
+    <Template>
+      <Name>Catalog</Name>
+      <Alias>Catalog</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Catalog>
+@using System.Web.Mvc.Html
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui.Rendering
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+    Layout = "Master.cshtml";
+
+    var title = Model.Categories == null ? Model.Name : Model.Categories.Name;
+    var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<ProductCollection>();
+}
+
+@Html.Partial("_Headline")
+
+<h3>@title</h3>
+
+@foreach (var cat in categories)
+{
+    <div>
+        @CategoryLink(cat)
+        <div class="row">
+            @foreach (var p in cat.GetProducts(1, 3))
+            {
+                <div class="col-md-4">
+                    @Html.Partial("_ProductBox", p)
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@helper CategoryLink(ProductCollection category)
+{
+if (category.CollectionKey != Guid.Empty)
+{
+    var page = ExampleUiHelper.Content.GetCategoryPageForCollection(category.CollectionKey);
+    if (page != null)
+    {
+        <h4><a href="@page.Url">@category.Name</a></h4>
+    }
+    else
+    {
+        <h4>@category.Name</h4>
+    }
+
+    }
+    else
+    {
+        <h4>@category.Name</h4>
+    }
+}
+
+]]></Design>
+    </Template>
+    <Template>
+      <Name>Category</Name>
+      <Alias>Category</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Category>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+@Html.Partial("_Headline")
+
+@Html.Partial("_ProductBoxList", Model.Products)]]></Design>
+    </Template>
+    <Template>
+      <Name>Checkout</Name>
+      <Alias>Checkout</Alias>
+      <Design><![CDATA[@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+
+@{
+    Layout = "Master.cshtml";
+    if (CurrentCustomer.Basket().IsEmpty)
+    {
+        Response.Redirect(ExampleUiHelper.Content.GetStoreRoot().Url);
+    }
+}
+
+@Html.Partial("_Headline")
+
+@RenderBody()]]></Design>
+    </Template>
+    <Template>
+      <Name>ConfirmCheckout</Name>
+      <Alias>ConfirmCheckout</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Master.cshtml";
+}]]></Design>
+    </Template>
+    <Template>
+      <Name>Final Sale Summary</Name>
+      <Alias>FinalSaleSummary</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Checkout.cshtml";
+}
+<div class="row">
+
+    <div class="col-md-6" data-muitarget="checkoutaddresses">
+       @RenderBody()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Action("InvoiceSummary", "CheckoutSummary", new { area = "FastTrack" })
+    </div>
+
+</div>]]></Design>
+    </Template>
+    <Template>
+      <Name>Master</Name>
+      <Alias>Master</Alias>
+      <Design><![CDATA[@inherits UmbracoTemplatePage
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Content.Name</title>
+    <link rel="stylesheet" href="~/Styles/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Styles/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="~/App_Plugins/Merchello/client/css/merchello.ui.min.css" />
+</head>
+<body>
+<div class="wrapper">
+    @Html.Partial("_Header")
+    <div class="container">
+        @RenderBody()
+    </div>
+    <div class="push"></div>
+</div>
+<div class="footer">
+    @Html.Partial("_Footer")
+</div>
+
+
+<!-- MUI dependencies -->
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/underscore.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<!-- new Merchello UI scripts -->
+<script src="~/App_Plugins/Merchello/client/js/merchello.ui.min.js"></script>
+<script src="~/App_Plugins/Merchello/client/js/merchello.ui.settings.js"></script>
+<script src="~/App_Plugins/Merchello/client/js/fasttrack.js"></script>
+</body>
+</html>
+]]></Design>
+    </Template>
+    <Template>
+      <Name>Payment</Name>
+      <Alias>Payment</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "FinalSaleSummary.cshtml";
+}
+
+@Html.Action("ResolvePayment", "CheckoutPaymentMethod", new { area = "FastTrack" })]]></Design>
+    </Template>
+    <Template>
+      <Name>Payment Method</Name>
+      <Alias>PaymentMethod</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "FinalSaleSummary.cshtml";
+}
+
+@Html.Action("PaymentMethodForm", "CheckoutPaymentMethod", new { area = "FastTrack" })
+
+@Html.Action("DiscountForm", "CheckoutDiscount", new { area = "Merchello" })]]></Design>
+    </Template>
+    <Template>
+      <Name>Pre Sale Summary</Name>
+      <Alias>PreSaleSummary</Alias>
+      <Design><![CDATA[@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@{
+	Layout = "Checkout.cshtml";
+}
+<div class="row">
+
+    <div class="col-md-6" data-muitarget="checkoutaddresses">
+       @RenderBody()
+    </div>
+
+    <div class="col-md-6">
+        @Html.Action("BasketSummary", "CheckoutSummary", new { area = "FastTrack"})
+    </div>
+
+</div>]]></Design>
+    </Template>
+    <Template>
+      <Name>Product</Name>
+      <Alias>Product</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Models.VirtualContent.IProductContent>
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui.Rendering
+@using Merchello.Web.Models.VirtualContent
+@{
+	Layout = "Master.cshtml";
+
+    // the Model passed here is IProductContent (virtual content) that is not generated by the Models Builder.
+    // However, it is a Typed IPublishedContent model that exposes product properties such as Price, SalePrice, etc.
+    // and the properties from the ContentType that was attached to the product in Merchello's back office.
+    // These can be accessed in the same way as any normal IPublishedContent property e.g. GetPropertyValue
+}
+
+<div class="page-header">
+    <h1>@Model.Name</h1>
+    @Categories(Model)
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-md-push-8">
+        @Html.Action("AddProductToBasketForm", "Basket", new { area = "Merchello", model = Model })
+    </div>
+    <div class="col-md-8 col-md-pull-4">
+        <div class="row">
+            @if (Model.HasValue("image"))
+            {
+                // This is using https://our.umbraco.org/projects/developer-tools/umbraco-core-property-value-converters/
+                var image = Model.GetPropertyValue<IPublishedContent>("image");
+                <div class="col-xs-8">
+                    <img class="img-responsive" src="@image.GetCropUrl(height: 450)" alt="@Model.Name">
+                </div>
+            }
+            <div class="col-xs-4">
+                @Html.Raw(Model.GetPropertyValue<string>("brief"))
+            </div>
+
+        </div>
+        <hr/>
+        <div class="row">
+            @Html.Raw(Model.GetPropertyValue<string>("description"))
+        </div>
+        @if (Model.HasProperty("relatedProducts") && Model.HasValue("relatedProducts"))
+        {
+            <div class="row related-products">
+                <h3>Related Products</h3>
+                @Html.Partial("_ProductBoxList", Model.GetPropertyValue<IEnumerable<IProductContent>>("relatedProducts"))
+            </div>
+
+        }
+    </div>
+
+</div>
+
+@helper Categories(IProductContent product)
+{ 
+    var collections = product.Collections().ToArray();
+    if (collections.Any())
+    {
+        var pages = new List<Tuple<ProductCollection, IPublishedContent>>();
+        foreach (var col in collections)
+        {
+            var page = ExampleUiHelper.Content.GetCategoryPageForCollection(col.CollectionKey);
+            if (page != null)
+            {
+                pages.Add(new Tuple<ProductCollection, IPublishedContent>(col, page));
+            }
+        }
+        var needsComma = false;
+        <small>Categories: 
+            @foreach (var pc in pages)
+            {
+                @Umbraco.If(needsComma, ",") <a href="@pc.Item2.Url">@pc.Item1.Name</a> 
+                needsComma = true;
+            }
+        </small>
+    }
+}]]></Design>
+    </Template>
+    <Template>
+      <Name>Receipt</Name>
+      <Alias>Receipt</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Receipt>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+@Html.Action("SalesReceipt", "CheckoutSummary", new { area = "FastTrack" })]]></Design>
+    </Template>
+    <Template>
+      <Name>Ship Rate Quote</Name>
+      <Alias>ShipRateQuote</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PreSaleSummary.cshtml";
+}
+
+@Html.Action("ShipRateQuoteForm", "CheckoutShipRateQuote", new { area = "FastTrack" })]]></Design>
+    </Template>
+    <Template>
+      <Name>Shipping Address</Name>
+      <Alias>ShippingAddress</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PreSaleSummary.cshtml";
+}
+
+@Html.Action("ShippingAddressForm", "CheckoutAddress", new { area = "FastTrack" })]]></Design>
+    </Template>
+    <Template>
+      <Name>Store</Name>
+      <Alias>Store</Alias>
+      <Design><![CDATA[@inherits Umbraco.Web.Mvc.UmbracoViewPage<Store>
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>@Model.Headline</h1>
+    @Html.Raw(Model.Brief)
+</div>
+
+@if (Model.FeaturedProducts.Any())
+{
+    <section id="categories">
+        <div class="page-header">
+            <h1>Featured Products</h1>
+        </div>
+        <div class="row">
+        @foreach (var fp in Model.FeaturedProducts)
+        {
+            <div class="col-xs-4">
+                @Html.Partial("_ProductBox", fp)
+            </div>
+        }
+        </div>
+    </section>
+}]]></Design>
+    </Template>
+  </Templates>
+  <Stylesheets />
+  <Macros />
+  <DictionaryItems />
+  <Languages />
+  <DataTypes>
+    <DataType Name="Product Collection" Id="Merchello.ProductListView" Definition="e2fc66f3-d628-4081-a218-abca25ae2cca" DatabaseType="Nvarchar" Folders="Merchello">
+      <PreValues />
+    </DataType>
+    <DataType Name="Richtext editor - short" Id="Umbraco.TinyMCEv3" Definition="0831e56b-a359-4876-8375-fbe53f118deb" DatabaseType="Ntext" Folders="RTE">
+      <PreValues>
+        <PreValue Id="10" Value="{&#xD;&#xA;  &quot;toolbar&quot;: [&#xD;&#xA;    &quot;code&quot;,&#xD;&#xA;    &quot;bold&quot;,&#xD;&#xA;    &quot;italic&quot;,&#xD;&#xA;    &quot;bullist&quot;,&#xD;&#xA;    &quot;numlist&quot;,&#xD;&#xA;    &quot;link&quot;&#xD;&#xA;  ],&#xD;&#xA;  &quot;stylesheets&quot;: [],&#xD;&#xA;  &quot;dimensions&quot;: {&#xD;&#xA;    &quot;height&quot;: 250&#xD;&#xA;  },&#xD;&#xA;  &quot;maxImageSize&quot;: 500&#xD;&#xA;}" Alias="editor" SortOrder="0" />
+        <PreValue Id="11" Value="" Alias="hideLabel" SortOrder="1" />
+      </PreValues>
+    </DataType>
+    <DataType Name="Merchello Checkout Stage" Id="Merchello.CheckoutWorkflowStagePicker" Definition="73694d17-457b-4142-8f0d-d7ffdf6a977a" DatabaseType="Nvarchar" Folders="Merchello">
+      <PreValues />
+    </DataType>
+    <DataType Name="Product Collection Tree" Id="Merchello.ProductCollectionPicker" Definition="1f5b76f7-260a-4a0a-a0ef-7711de10bcd5" DatabaseType="Nvarchar" Folders="Merchello">
+      <PreValues />
+    </DataType>
+  </DataTypes>
+  <control>/App_Plugins/FastTrack/Backoffice/Installer.ascx</control>
+</umbPackage>

@@ -18,6 +18,7 @@
     <RootDir>$(MSBuildProjectDirectory)\..</RootDir>
     <BuildDir>$(MSBuildProjectDirectory)\_core</BuildDir>
     <BuildUmbDir>$(BuildDir)\_umbraco</BuildUmbDir>
+    <BuildResxDir>$(BuildDir)\_resx</BuildResxDir>
     <BuildNuGetDir>$(BuildDir)\_nuget</BuildNuGetDir>
     <BuildTransformsDir>$(BuildDir)\_transforms</BuildTransformsDir>
     <ArtifactsDir>$(RootDir)\artifacts</ArtifactsDir>
@@ -39,9 +40,11 @@
 	<PropertyGroup>
 		<PackageName>Merchello</PackageName>
     <TestPackageName>Merchello Test Helpers</TestPackageName>
-		<MinUmbracoVersion>7.3.0</MinUmbracoVersion>
+    <FastTrackPackageName>Merchello FastTrack</FastTrackPackageName>
+		<MinUmbracoVersion>7.4.0</MinUmbracoVersion>
 		<Readme>Merchello - Open source eCommerce package for Umbraco</Readme>
     <TestReadme>Merchello - Provides testing base classes for extending Merchello</TestReadme>
+    <FastTrackReadme>Merchello FastTrack - Base UI components for implementing Merchello Stores</FastTrackReadme>
 		<AuthorName>Rusty Swayne and community contributors</AuthorName>
 		<AuthorUrl>https://github.com/rustyswayne/Merchello/graphs/contributors</AuthorUrl>
 		<PackageLicenseName>MIT license</PackageLicenseName>
@@ -53,6 +56,7 @@
 	<PropertyGroup>
 		<PackageId>Merchello.Core</PackageId>
     <TestPackageId>Merchello.TestsBase</TestPackageId>
+    <FastTrackPackageId>Merchello.FastTrack</FastTrackPackageId>
 		<Copyright>Copyright &#169; 2015 - 2016 Across the Pond, LLC, Our Umbraco and other contributors</Copyright>
 		<Owners>Across the Pond, LLC</Owners>
 		<IconUrl>https://github.com/rustyswayne/Merchello/tree/appveyor/build/icon40x40-transparent.png</IconUrl>
@@ -152,13 +156,45 @@
       OutputFile="$(ProjectDir)\Merchello.Providers\Properties\AssemblyInfo.cs"
       AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
       AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.Web.Store\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(ProjectDir)\Merchello.FastTrack\Properties\AssemblyInfo.cs"
+      AssemblyVersion="@(VersionMajor).@(VersionMinor).*"
+      AssemblyInformationalVersion="$(ProductVersion)"/>
 	</Target>
 
+  <Target Name="CompileResources" DependsOnTargets="SetVersionNumber">
+    
+    <!-- THIS WORKS ON APPVEYOR but not Windows 10 Need to fix the local SDK path -->
+    
+   <!--<ItemGroup>
+    <Res Include="$(ProjectDir)\Merchello.Web.Store\Localization\StoreFormsResource.en-GB.resx">
+      <Culture>en-GB</Culture>
+    </Res>
+    --><!--<Res Include = "SatelliteAssembly.en-GB.resx">
+      <Culture>en-GB</Culture>
+    </Res>--><!--
+  </ItemGroup>
+    
+    <GenerateResource Sources="@(Res)" PublicClass="true" >
+      <Output ItemName="Resources" TaskParameter="OutputResources"/>
+    </GenerateResource>
+  
+      <MakeDir Directories="$(BuildResxDir)\%(Res.Culture)"/>
+    
+    <AL OutputAssembly="$(BuildResxDir)\StoreFormsResource.resources.dll"
+        Version="1.0.0.0"
+        Culture="%(Culture)"
+        EmbedResources="@(Resources)"/>-->
+  </Target>
+  
 	<!-- COMPILE -->
-	<Target Name="Compile" DependsOnTargets="SetVersionNumber">
+	<Target Name="Compile" DependsOnTargets="CompileResources">
     <Message Text="Build config $(ProjectDir)" Importance="high" />
 		<MSBuild Projects="$(ProjectDir)\Merchello.build.sln" Properties="Configuration=$(BuildConfig);Platform=Any CPU;" />
-    <!--MSBuild Projects="$(RootDir)\tests\Our.Umbraco.Ditto.Tests\Our.Umbraco.Ditto.Tests.csproj" Properties="Configuration=$(BuildConfig)" /-->
 	</Target>
 
 
@@ -166,23 +202,37 @@
 	<Target Name="PrepareFiles" DependsOnTargets="Compile">
     <Message Text="NuSpeck $(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
     <ItemGroup>
-      <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;" />
+      <BinFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.dll;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.dll;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.dll;$(ProjectDir)\Merchello.Web.Store\bin\$(BuildConfig)\Merchello.Web.Store.dll;" />
       <TestBaseFiles Include="@(BinFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.dll" />
       <ProviderFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Merchello.Providers.dll;" />
       <ProviderDependencyFiles Include="$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\Braintree-*.dll;$(ProjectDir)\Merchello.Providers\bin\$(BuildConfig)\PayPal*.dll" />
+      <FastTrackBinFiles Include="$(ProjectDir)\Merchello.FastTrack\bin\$(BuildConfig)\Merchello.FastTrack.dll;" />
       
-      <AppTrayIcon Include="$(ProjectDir)\Merchello.Web.UI\Umbraco\images\tray\*.*" />
-      <AppPluginFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\Merchello\**\*.*;" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\Merchello\**\*.scss;" />
-      <AppPluginPaymentFiles Include="$(ProjectDir)\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.*" Exclude="$(RootDir)\src\Merchello.Web.UI\App_Plugins\MerchelloProviders\**\*.scss" />
+      <AppTrayIcon Include="$(ProjectDir)\Merchello.FastTrack.UI\Umbraco\images\tray\*.*" />
+      <AppPluginFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\**\*.*;" 
+        Exclude="$(RootDir)\src\Merchello.FastTrack.UI\App_Plugins\Merchello\**\*.scss;
+        $(RootDir)\src\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\**\*.cshtml;
+        $(RootDir)\src\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\**\*.config;" />
+      <AppPluginPaymentFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\MerchelloProviders\**\*.*" 
+        Exclude="$(RootDir)\src\Merchello.FastTrack.UI\App_Plugins\MerchelloProviders\**\*.scss" />
+      <AppPluginFTMerchelloViews Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\**\*.*;" 
+        Exclude="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CashPayment\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutAddress\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutPaymentMethod\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutShipRateQuote\*.cshtml;
+        $(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\Merchello\Views\CheckoutSummary\*.cshtml;" />
       
-      <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\*.xdt.config" />
-      <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.Web.UI\Config\*.xdt.config" />
-			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;" />
+      <AppPluginFTFastTrackViews Include="$(ProjectDir)\Merchello.FastTrack.UI\App_Plugins\FastTrack\Views\**\*.*;" />
+      
+      <UaaSWebTransformFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\*.xdt.config" />
+      <UaaSConfigTransformFiles Include="$(ProjectDir)\Merchello.FastTrack.UI\Config\*.xdt.config" />
+			<PdbFiles Include="$(ProjectDir)\Merchello.Core\bin\$(BuildConfig)\Merchello.Core.pdb;$(ProjectDir)\Merchello.Web\bin\$(BuildConfig)\Merchello.Web.pdb;$(ProjectDir)\Merchello.Examine\bin\$(BuildConfig)\Merchello.Examine.pdb;$(ProjectDir)\Merchello.Web.Store\bin\$(BuildConfig)\Merchello.Web.Store.pdb;" />
       <TestPdbFiles Include="@(PdbFiles);$(TestDir)\Merchello.Tests.Base\bin\$(BuildConfig)\Merchello.Tests.Base.pdb" />
 			<SrcFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**"/>
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 			<NuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.Core.nuspec" />
       <TestNuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.TestsBase.nuspec" />
+      <FastTrackNuSpecFile Include="$(MSBuildProjectDirectory)\NuSpec\Merchello.FastTrack.nuspec" />
 		</ItemGroup>
 		
     <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
@@ -193,6 +243,10 @@
     <Copy SourceFiles="@(TestBaseFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
     <Copy SourceFiles="@(TestPdbFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
     <Copy SourceFiles="@(ProviderFiles)" DestinationFolder="$(BuildNuGetDir)\TestBase\lib\net45" />
+
+    <Copy SourceFiles="@(FastTrackBinFiles)" DestinationFolder="$(BuildNuGetDir)\FastTrack\lib\net45" />
+    <Copy SourceFiles="@(AppPluginFTMerchelloViews)" DestinationFiles="@(AppPluginFTMerchelloViews -> '$(BuildNuGetDir)\FastTrack\content\App_Plugins\Merchello\Views\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Copy SourceFiles="@(AppPluginFTFastTrackViews)" DestinationFiles="@(AppPluginFTFastTrackViews -> '$(BuildNuGetDir)\FastTrack\content\App_Plugins\FastTrack\Views\%(RecursiveDir)%(Filename)%(Extension)')" />
     
     <!-- now add the payment provider dependencies for umbraco package generation -->
     <Copy SourceFiles="@(ProviderFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
@@ -204,9 +258,9 @@
     <Copy SourceFiles="@(UaaSConfigTransformFiles)" DestinationFiles="@(UaaSConfigTransformFiles -> '$(BuildTransformsDir)\Config\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
     
-    
 		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)\Core" />
     <Copy SourceFiles="@(TestNuSpecFile)" DestinationFolder="$(BuildNuGetDir)\TestBase" />
+    <Copy SourceFiles="@(FastTrackNuSpecFile)" DestinationFolder="$(BuildNuGetDir)\FastTrack" />
 	</Target>
 
 	<!-- MANIFEST UMBRACO -->
@@ -236,6 +290,7 @@
 			<ManifestFiles Include="$(BuildNuGetDir)\Core\**\*" Exclude="$(BuildNuGetDir)\Core\Merchello.Core.nuspec" />
       <TestManifestFiles Include="$(BuildNuGetDir)\TestBase\**\*" Exclude="$(BuildNuGetDir)\TestBase\Merchello.TestsBase.nuspec" />
 		</ItemGroup>
+    
 		<MSBuild.NuGet.Tasks.ManifestUpdate
 			ManifestFile="$(BuildNuGetDir)\Core\Merchello.Core.nuspec"
 			WorkingDirectory="$(BuildNuGetDir)\Core"
@@ -275,6 +330,26 @@
 			RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
 			Tags="$(Tags) testing"
 			Files="@(TestManifestFiles)" />
+
+  <MSBuild.NuGet.Tasks.ManifestUpdate
+      ManifestFile="$(BuildNuGetDir)\FastTrack\Merchello.FastTrack.nuspec"
+      WorkingDirectory="$(BuildNuGetDir)\FastTrack"
+      Title="$(FastTrackPackageName)"
+      Description="$(FastTrackReadme)"
+      Summary="$(FastTrackReadme)"
+      Version="$(ProductVersion)"
+      MinimumRequiredUmbracoVersion ="$(MinUmbracoVersion)"
+      Authors="$(AuthorName)"
+      Owners="$(Owners)"
+      Copyright="$(Copyright)"
+      LicenseUrl="$(PackageLicenseUrl)"
+      ProjectUrl="$(ProjectUrl)"
+      Id="$(FastTrackPackageId)"
+      IconUrl="$(IconUrl)"
+      Language="$(Language)"
+      RequireLicenseAcceptance="$(RequireLicenseAcceptance)"
+      Tags="$(Tags) fasttrack"
+      Files="@(FastTrackManifestFiles)" />
 	</Target>
 
   
@@ -306,6 +381,13 @@
 			Version="$(ProductVersion)"
 			OutputDirectory="$(ArtifactsDir)"
 			Symbols="true" />
+
+    <MSBuild.NuGet.Tasks.Pack NuGetExePath="$(RootDir)\src\.nuget\NuGet.exe"
+      ManifestFile="$(BuildNuGetDir)\FastTrack\Merchello.FastTrack.nuspec"
+      BasePath="$(BuildNuGetDir)\FastTrack"
+      Version="$(ProductVersion)"
+      OutputDirectory="$(ArtifactsDir)"
+      Symbols="true" />
 
     <Message Text="Starting to zip to $(UaaSTransformZipFile)" Importance="high" />
 

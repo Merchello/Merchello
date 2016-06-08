@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+}
+html, body {
+  height: 100%;
+}
+
+.mui-nav-right {
+  margin-right: 20px;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -255px; /* the bottom margin is the negative value of the footer's height */
+}
+.footer {
+  background-color: #000000;
+  color: #9d9d9d;
+  padding-top: 20px;
+
+  .merchello-version {
+    clear: both;
+    margin-top: 1em;
+    padding-right: 1em;
+    display: block;
+    text-align: right;
+  }
+}
+.footer, .push {
+  height: 255px; /* .push must be the same height as .footer */
+}

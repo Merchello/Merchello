@@ -6,6 +6,8 @@
 
     using Merchello.Core.Logging;
 
+    using Umbraco.Core;
+
     /// <summary>
     /// Class that renders MVC views to a string using the
     /// standard MVC View Engine to render the view. 
@@ -78,6 +80,8 @@
         /// <returns>String of the rendered view</returns>
         public string RenderViewToStringInternal(string viewPath, object model, bool partial = false)
         {
+            if (viewPath.IsNullOrWhiteSpace()) throw new FileNotFoundException("View not assigned");
+
             var viewEngineResult = partial ? 
                 ViewEngines.Engines.FindPartialView(this.Context, viewPath) : 
                 ViewEngines.Engines.FindView(this.Context, viewPath, null);

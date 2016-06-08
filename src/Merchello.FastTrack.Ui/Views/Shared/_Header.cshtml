@@ -1,0 +1,88 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.Core.Models
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+@{
+    var storeRoot = ExampleUiHelper.Content.GetStoreRoot();
+    var catalogRoot = storeRoot.FirstChild(x => x.DocumentTypeAlias == "catalog" && x.IsVisible());
+    var basketPage = ExampleUiHelper.Content.GetBasket();
+    var accountPage = ExampleUiHelper.Content.GetAccount();
+}
+<div class="navbar navbar-inverse">
+    <div class="container">
+
+        <a class="navbar-brand navbar-right mui-store-name" href="@storeRoot.Url">@Umbraco.Field("storeName", recursive: true)</a>
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li@(IsActive(storeRoot.Id))><a href="@Url.Content("~/")">Home</a></li>
+
+                @if (catalogRoot != null)
+                {
+                    <li@(IsActive(catalogRoot.Id))>
+                        <a href="@catalogRoot.Url">@catalogRoot.Name</a>
+                    </li>
+                }
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right mui-nav-right">
+                <li@(IsActive(basketPage.Id))>
+                    <a href="@basketPage.Url"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> @basketPage.Name (<span data-muilabel="basketcount">@CurrentCustomer.Basket().TotalQuantityCount</span>)</a>
+                </li>
+
+                <li@(IsActive(accountPage.Id, !CurrentCustomer.IsAnonymous))>
+                    <a href="@accountPage.Url">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        @if (CurrentCustomer.IsAnonymous)
+                        {
+                            <span>Login</span>
+                        }
+                        else
+                        {
+                            var customer = (ICustomer)CurrentCustomer;
+                            <span>@customer.FirstName @customer.LastName</span>
+                        }
+                    </a>
+                </li>
+                @if (!CurrentCustomer.IsAnonymous)
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Logout", "Logout", "CustomerMembership", new { area = "FastTrack", redirectId = Model.Content.Id }, null)</li>
+                        </ul>
+                    </li>
+                }
+                <li @(!CurrentCustomer.Basket().Items.Any() ? MvcHtmlString.Create("class=\"mui-quickcheckout\"") : MvcHtmlString.Empty) data-value="quickcheckout"><a href="@ExampleUiHelper.Content.GetCheckout().Url" class="success">Quick Checkout</a></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+@functions
+{
+    private IHtmlString IsActive(int contentId, bool isDropdown = false)
+    {
+        var css = isDropdown ? "dropdown" : string.Empty;
+        if (Model.Content.Id == contentId)
+        {
+            css += " active";
+        }
+        css = css.Trim();
+
+        return !css.IsNullOrWhiteSpace() ? MvcHtmlString.Create(string.Format(" class=\"{0}\"", css)) : MvcHtmlString.Empty;
+    }
+};

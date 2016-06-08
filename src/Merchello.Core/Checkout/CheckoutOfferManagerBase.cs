@@ -64,7 +64,16 @@
         /// <summary>
         /// Clears the offer codes collection.
         /// </summary>
+        [Obsolete("Use Reset()")]
         public void ClearOfferCodes()
+        {
+            Reset();
+        }
+
+        /// <summary>
+        /// Clears the offer codes.
+        /// </summary>
+        public override void Reset()
         {
             _offerCodeTempData.Value.Clear();
             this.SaveCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData, this._offerCodeTempData.Value);
@@ -135,7 +144,7 @@
         {
             this._offerCodeTempData = new Lazy<List<string>>(() => BuildVersionedCustomerTempData(Core.Constants.ExtendedDataKeys.OfferCodeTempData));
 
-            if (Context.IsNewVersion && Context.Settings.ResetOfferManagerDataOnVersionChange) this.ClearOfferCodes();
+            if (Context.IsNewVersion && Context.Settings.ResetOfferManagerDataOnVersionChange) this.Reset();
         }
     }
 }

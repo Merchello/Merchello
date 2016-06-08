@@ -1,0 +1,35 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.Membership.LoginModel>
+@using System.Web.Mvc.Html
+@using Merchello.FastTrack.Controllers.Membership
+@using Merchello.FastTrack.Ui
+@using Umbraco.Web
+@{
+    Model.SuccessRedirectUrl = ExampleUiHelper.Content.GetAccount().Url;
+}
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Login to existing account</strong></div>
+    <div class="panel-body">
+
+        @using (Html.BeginUmbracoForm<CustomerMembershipController>("Login", new { area = "FastTrack" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(x => x.Username)
+                @Html.TextBoxFor(x => x.Username, new { @placeholder = "Your email address", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Username)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Password)
+                @Html.PasswordFor(x => x.Password, new { @placeholder = "Your password", @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Password)
+            </div>
+            <div class="form-group checkbox">
+                <label>
+                    @Html.CheckBoxFor(x => x.RememberMe) Remember Me
+                </label>
+                @Html.HiddenFor(x => x.SuccessRedirectUrl)
+                <input type="submit" value="Login" class="btn btn-default pull-right"/>
+            </div>
+        }
+    </div>
+</div>

@@ -85,7 +85,15 @@ angular.module('merchello.resources').factory('backOfficeCheckoutResource',
                     });
 
                 return defer.promise;
+            },
 
+            getCheckoutStages: function() {
+                return umbRequestHelper.resourcePromise(
+                    $http({
+                        url: baseUrl + 'GetCheckoutStages',
+                        method: "GET"
+                    }),
+                    'Failed to get checkout stages');
             }
 
         };

@@ -57,6 +57,8 @@
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
 
+            $scope.refresh = refresh;
+
 
             var countries = [];
 
@@ -152,6 +154,8 @@
                     }
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
+                    console.info($scope.invoice);
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
@@ -554,11 +558,14 @@
             
             function saveInvoice() {
                 invoiceResource.saveInvoice($scope.invoice).then(function(data) {
-                    $timeout(function () {
-                        console.info($scope.invoice);
-                        loadInvoice($scope.invoice.key);
-                    }, 400);
+                    refresh();
                 });
+            }
+
+            function refresh() {
+                $timeout(function () {
+                    loadInvoice($scope.invoice.key);
+                }, 400);
             }
 
             // initialize the controller

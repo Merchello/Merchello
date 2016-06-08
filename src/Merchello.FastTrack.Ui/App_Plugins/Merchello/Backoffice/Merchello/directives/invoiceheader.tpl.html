@@ -1,0 +1,15 @@
+<table class="table" data-ng-show="loaded">
+    <tr>
+        <th>{{ invoice.prefixedInvoiceNumber() }}</th>
+        <td class="text-right"><merchello-edit-icon do-edit="openHeaderEdit()" /></td>
+    </tr>
+    <tr>
+        <td>Prefix:</td>
+        <td>{{ invoice.invoiceNumberPrefix }}</td>
+
+    </tr>
+    <tr>
+        <td>PO Number:</td>
+        <td>{{ invoice.poNumber }}</td>
+    </tr>
+</table>

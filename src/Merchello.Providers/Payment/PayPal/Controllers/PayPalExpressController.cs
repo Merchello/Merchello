@@ -9,12 +9,14 @@
     using Merchello.Core;
     using Merchello.Core.Events;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Models;
     using Merchello.Providers.Payment.PayPal.Models;
     using Merchello.Providers.Payment.PayPal.Provider;
     using Merchello.Providers.Payment.PayPal.Services;
+    using Merchello.Web.Models.Ui.Async;
     using Merchello.Web.Mvc;
 
     using Umbraco.Core;
@@ -26,8 +28,8 @@
     /// <summary>
     /// A surface controller for used for accepting PayPal Express Payments.
     /// </summary>
-    [PluginController("MerchelloProviders")]
-    public partial class PayPalExpressController : PayPalSurfaceControllerBase
+    [PluginController("Merchello")]
+    public class PayPalExpressController : PayPalSurfaceControllerBase
     {
         /// <summary>
         /// The <see cref="IPayPalApiPaymentService"/>.
@@ -68,13 +70,21 @@
         /// <summary>
         /// Occurs before redirecting for a successful response.
         /// </summary>
-        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForSuccess;
+        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PaymentRedirectingUrl>> RedirectingForSuccess;
 
         /// <summary>
         /// Occurs before redirecting for a cancel response.
         /// </summary>
-        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PayPalRedirectingUrl>> RedirectingForCancel; 
+        public static event TypedEventHandler<PayPalExpressController, ObjectEventArgs<PaymentRedirectingUrl>> RedirectingForCancel;
 
+        /// <summary>
+        /// Occurs after the final redirection and before redirecting to the success URL
+        /// </summary>
+        /// <remarks>
+        /// Can be used to send OrderConfirmation notification
+        /// </remarks>
+        public static event TypedEventHandler<PayPalExpressController, PaymentAttemptEventArgs<IPaymentResult>> Processed;
+             
         /// <summary>
         /// Handles the a successful payment response from the PayPal Express checkout
         /// </summary>
@@ -95,7 +105,7 @@
         /// </returns>
         public override ActionResult Success(Guid invoiceKey, Guid paymentKey, string token, string payerId)
         {
-            var redirecting = new PayPalRedirectingUrl("Success") { RedirectingToUrl = _successUrl };
+            var redirecting = new PaymentRedirectingUrl("Success") { RedirectingToUrl = _successUrl };
 
             var logData = GetExtendedLoggerData();
 
@@ -109,16 +119,44 @@
                 // data so that we can refund the payment later through the back office if needed.
                 var attempt = invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
 
+                Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
+
+                // If this is an AJAX request return the JSON
+                if (payment.ExtendedData.GetPayPalRequestIsAjaxRequest())
+                {
+                    var resp = new PaymentResultAsyncResponse
+                    {
+                        Success = attempt.Payment.Success,
+                        InvoiceKey = attempt.Invoice.Key,
+                        PaymentKey = attempt.Payment.Result.Key,
+                        PaymentMethodName = "PayPal Express Checkout"
+                    };
+
+                    if (attempt.Payment.Exception != null)
+                        resp.Messages.Add(attempt.Payment.Exception.Message);
+
+                    return Json(resp);
+                }
+
                 if (attempt.Payment.Success)
                 {
+                    // we need to empty the basket here
+                    Basket.Empty();
+
                     // raise the event so the redirect URL can be manipulated
-                    RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
+                    RedirectingForSuccess.RaiseEvent(new ObjectEventArgs<PaymentRedirectingUrl>(redirecting), this);
 
                     return Redirect(redirecting.RedirectingToUrl);
                 }
 
+                var retrying = new PaymentRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
+                var qs = string.Format("?invoicekey={0}&paymentkey={1}", invoiceKey, paymentKey);
+                if (!retrying.RedirectingToUrl.IsNullOrWhiteSpace()) return Redirect(retrying.RedirectingToUrl + qs);
 
-                throw new NotImplementedException("TODO error handling result");
+                var invalidOp = new InvalidOperationException("Retry url was not specified");
+
+                MultiLogHelper.Error<PayPalExpressController>("Could not redirect to retry", invalidOp);
+                throw invalidOp;
             }
             catch (Exception ex)
             {
@@ -155,7 +193,7 @@
         /// </returns>
         public override ActionResult Cancel(Guid invoiceKey, Guid paymentKey, string token, string payerId = null)
         {
-            var redirecting = new PayPalRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
+            var redirecting = new PaymentRedirectingUrl("Cancel") { RedirectingToUrl = _cancelUrl };
 
             try
             {
@@ -168,12 +206,11 @@
                 }
                 else
                 {
-                    // TODO add invoice note
                     payment.VoidPayment(invoice, _paymentMethod.PaymentMethod.Key);
                 }
                
                 // raise the event so the redirect URL can be manipulated
-                RedirectingForCancel.RaiseEvent(new ObjectEventArgs<PayPalRedirectingUrl>(redirecting), this);
+                RedirectingForCancel.RaiseEvent(new ObjectEventArgs<PaymentRedirectingUrl>(redirecting), this);
                 return Redirect(redirecting.RedirectingToUrl);
             }
             catch (Exception ex)

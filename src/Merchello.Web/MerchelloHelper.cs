@@ -9,6 +9,7 @@
     
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Validation;
@@ -199,8 +200,37 @@
         /// </returns>
         public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey)
         {
-            var products = Query.Product.GetFromCollection(collectionKey, 1, long.MaxValue).Items
-                    .Select(x => (ProductDisplay)x)
+            return TypedProductContentFromCollection(collectionKey, 1, long.MaxValue);
+        }
+
+        /// <summary>
+        /// The typed product content from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The current page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items Per Page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field (valid values are "sku", "name", "price").
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
+        {
+            if (page <= 0) page = 1;
+
+            var products =
+                Query.Product.GetFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection)
+                    .Items.Select(x => (ProductDisplay)x)
                     .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
 
             var factory = new ProductContentFactory();

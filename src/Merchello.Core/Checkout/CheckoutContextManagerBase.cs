@@ -27,5 +27,10 @@
         /// Gets the <see cref="ICheckoutContext"/>.
         /// </summary>
         public ICheckoutContext Context { get; private set; }
+
+        /// <summary>
+        /// Resets (removes) data.
+        /// </summary>
+        public abstract void Reset();
     }
 }

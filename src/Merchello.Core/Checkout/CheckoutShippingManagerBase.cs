@@ -64,6 +64,14 @@
         public abstract void ClearShipmentRateQuotes();
 
         /// <summary>
+        /// Clears the shipment rate quotes.
+        /// </summary>
+        public override void Reset()
+        {
+            ClearShipmentRateQuotes();
+        }
+
+        /// <summary>
         /// Maps the <see cref="IShipmentRateQuote"/> to a <see cref="ILineItem"/> 
         /// </summary>
         /// <param name="shipmentRateQuote">The <see cref="IShipmentRateQuote"/> to be added as a <see cref="ILineItem"/></param>

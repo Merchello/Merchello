@@ -25,7 +25,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
 
 
         function setTitle() {
-            var key = 'merchelloCollections_' + $scope.dialogData.entityType + 'Collections';
+            var key = 'merchelloCollections_' + $scope.dialogData.entityType.toLowerCase() + 'Collections';
             localizationService.localize(key).then(function (value) {
                 $scope.pickerTitle = value;
                 setTree();
@@ -36,6 +36,8 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
             treeService.getTree({section: 'merchello'}).then(function(tree) {
                 var root = tree.root;
                 var treeId = getTreeId();
+                
+                console.info(treeId);
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });

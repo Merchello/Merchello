@@ -1,0 +1,19 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+@{
+	Layout = "Master.cshtml";
+}
+
+@Html.Partial("_Headline")
+
+@if (CurrentCustomer.Basket().Items.Any())
+{
+    @Html.Action("BasketForm", "Basket", new { area = "Merchello" })
+}
+else
+{
+    <p>
+        <a href="@ExampleUiHelper.Content.GetStoreRoot().Url">There's nothing in your shopping cart, start shopping!</a>
+    </p>
+}
