@@ -1817,6 +1817,8 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
             treeService.getTree({section: 'merchello'}).then(function(tree) {
                 var root = tree.root;
                 var treeId = getTreeId();
+                
+                console.info(treeId);
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });
@@ -2004,7 +2006,7 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
 
         function openStaticEntityCollectionPicker() {
             var dialogData = dialogDataFactory.createAddEditEntityStaticCollectionDialog();
-            dialogData.entityType = $scope.entityType;
+            dialogData.entityType = $scope.entityType.toLocaleLowerCase();
             dialogData.collectionKeys = [];
 
             dialogService.open({
