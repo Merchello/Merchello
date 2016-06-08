@@ -26,7 +26,7 @@ angular.module('merchello').controller('Merchello.Directives.EntityStaticCollect
 
         function openStaticEntityCollectionPicker() {
             var dialogData = dialogDataFactory.createAddEditEntityStaticCollectionDialog();
-            dialogData.entityType = $scope.entityType;
+            dialogData.entityType = $scope.entityType.toLocaleLowerCase();
             dialogData.collectionKeys = [];
 
             dialogService.open({
