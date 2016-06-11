@@ -1,0 +1,125 @@
+<div data-ng-controller="Merchello.PropertyEditors.MerchelloProductListViewController" class="umb-listview merchello-product-collection-picker">
+    <entity-collection-title-bar collection-key="model.value" entity-type="entityTypeName"></entity-collection-title-bar>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>
+                <a href="#" data-ng-click="sort('name', true)" prevent-default class="sortable">
+                    <localize key="merchelloVariant_product"/>
+                    <i class="icon" ng-class="{'icon-navigation-up': isSortDirection('name', 'asc'), 'icon-navigation-down': isSortDirection('name', 'desc')}"></i>
+                </a>
+            </td>
+            <td>
+                <a href="#" data-ng-click="sort('sku', true)" prevent-default class="sortable">
+                    <localize key="merchelloVariant_sku"/>
+                    <i class="icon" ng-class="{'icon-navigation-up': isSortDirection('sku', 'asc'), 'icon-navigation-down': isSortDirection('sku', 'desc')}"></i>
+                </a>
+            </td>
+            <td>
+                <a href="#" data-ng-click="sort('totalInventoryCount', true)" prevent-default class="sortable">
+                    <localize key="merchelloGeneral_total" /> <localize key="merchelloGeneral_quantity" />
+                    <i data-ng-class="{'icon-navigation-up': isSortDirection('totalInventoryCount', 'asc'), 'icon-navigation-down': isSortDirection('totalInventoryCount', 'desc')}"></i>
+                </a>
+            </td>
+            <td>
+                <a href="#" data-ng-click="sort('onSale', true)" prevent-default class="sortable">
+                    <localize key="merchelloVariant_productOnSale" />
+                    <i data-ng-class="{'icon-navigation-up': isSortDirection('onSale', 'asc'), 'icon-navigation-down': isSortDirection('onSale', 'desc')}"></i>
+                </a>
+            </td>
+            <td>
+                <a href="#" data-ng-click="sort('price', true)" prevent-default class="sortable">
+                    <localize key="merchelloGeneral_price"/>
+                    <i data-ng-class="{'icon-navigation-down': isSortDirection('price', 'desc'), 'icon-navigation-up': isSortDirection('price', 'acs')}"></i>
+                </a>
+            </td>
+            <td>
+                <localize key="merchelloTabs_render"></localize>
+            </td>
+            <td>
+                <form class="pull-right ng-pristine ng-valid" novalidate>
+                    <i class="icon-search" data-ng-click="enterSearch($event)"></i>
+                    <input type="text" data-ng-model="options.filter" on-keyup="loadProducts()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
+                </form>
+            </td>
+            <td class="pull-right">
+                <a href="#" data-ng-click="openCollectionSelectionDialog()" class="gear" prevent-default>
+                    <i class="icon icon-settings-alt-2 large"></i>
+                </a>
+            </td>
+        </tr>
+        </thead>
+
+        <tbody data-ng-show="!preValuesLoaded">
+        <tr>
+            <td colspan="8">
+                <div class="umb-loader-wrapper">
+                    <div class="umb-loader"></div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+
+        <tbody ng-show="listViewResultSet.totalItems === 0 && preValuesLoaded">
+        <tr>
+            <td colspan="8">
+                <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+            </td>
+        </tr>
+        </tbody>
+
+
+        <tbody ng-show="listViewResultSet.totalItems > 0">
+        <tr ng-repeat="result in listViewResultSet.items" data-ng-class="{selected:result.selected}">
+
+            <td><a href="#" data-ng-click="goToEditor(result)" data-ng-bind="result.name" prevent-default></a></td>
+            <td>{{result.sku}}</td>
+            <td>{{ result.totalInventory() }}</td>
+            <!-- inventory -->
+            <td data-ng-show="result.hasVariants() && !result.anyVariantsOnSale()"><localize key="general_no" /></td>
+            <td data-ng-show="result.hasVariants() && result.anyVariantsOnSale()">{{product.variantsMinimumPrice(true) | currency : currencySymbol}} - {{result.variantsMaximumPrice(true) | currency : currencySymbol}}</td>
+            <td data-ng-show="!result.hasVariants() && !result.onSale"><localize key="general_no" /></td>
+            <td data-ng-show="!result.hasVariants() && result.onSale">{{product.salePrice | currency : currencySymbol}}</td>
+            <!-- price -->
+            <td data-ng-hide="result.hasVariants()">{{result.price | currency : currencySymbol}}</td>
+            <td data-ng-show="result.hasVariants()">{{result.variantsMinimumPrice() | currency : currencySymbol}} - {{result.variantsMaximumPrice() | currency : currencySymbol}}</td>
+            <td><i class="icon-check" data-ng-show="result.canBeRendered()" /></td>
+            <td colspan="2"></td>
+        </tr>
+        </tbody>
+
+        <tfoot ng-show="pagination.length > 1">
+        <tr>
+            <th colspan="7">
+                <div class="pull-left">
+                </div>
+                <div class="pagination pagination-right">
+                    <ul>
+                        <li ng-class="{disabled:options.pageNumber <= 1}">
+                            <a href="#" ng-click="prev()" prevent-default>
+                                <localize key="general_previous">Previous</localize>
+                            </a>
+                        </li>
+
+                        <li ng-repeat="pgn in pagination"
+                            ng-class="{active:pgn.isActive}">
+
+                            <a href="#" ng-click="goToPage(pgn.val - 1)" prevent-default
+                               ng-bind="pgn.name ? pgn.name : pgn.val"
+                               ng-if="pgn.val != '...'"></a>
+                            <span ng-bind="pgn.val" ng-if="pgn.val == '...'"></span>
+                        </li>
+
+                        <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages}">
+                            <a href="#" ng-click="next()" prevent-default>
+                                <localize key="general_next">Next</localize>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+
+</div>

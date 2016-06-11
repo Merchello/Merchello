@@ -18,6 +18,11 @@ using WebBootManager = Merchello.Web.WebBootManager;
 
 namespace Merchello.Tests.Base.TestHelpers
 {
+    using global::Umbraco.Core.Logging;
+
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Models.Interfaces;
+
     public abstract class MerchelloAllInTestBase
     {
         protected ICustomerBase CurrentCustomer;
@@ -37,8 +42,9 @@ namespace Merchello.Tests.Base.TestHelpers
             DbPreTestDataWorker.ValidateDatabaseSetup();
             DbPreTestDataWorker.DeleteAllAnonymousCustomers();
 
+
             // Merchello CoreBootStrap
-            var bootManager = new WebBootManager();
+            var bootManager = new WebBootManager(DbPreTestDataWorker.TestLogger, DbPreTestDataWorker.SqlSyntaxProvider);
             bootManager.Initialize();    
             
 
@@ -60,8 +66,29 @@ namespace Merchello.Tests.Base.TestHelpers
 
             SalePreparationBase.Finalizing += SalePreparationBaseOnFinalizing;
 
+            EntityCollectionService.Created += EntityCollectionServiceOnCreated;
+            EntityCollectionService.Deleted += EntityCollectionServiceOnDeleted;
+
 
         }
+
+        private void EntityCollectionServiceOnCreated(IEntityCollectionService sender, Core.Events.NewEventArgs<IEntityCollection> e)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent) return;
+
+            EntityCollectionProviderResolver.Current.AddOrUpdateCache(e.Entity);
+        }
+
+        private void EntityCollectionServiceOnDeleted(IEntityCollectionService sender, DeleteEventArgs<IEntityCollection> e)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent) return;
+            foreach (var collection in e.DeletedEntities)
+            {
+                EntityCollectionProviderResolver.Current.RemoveFromCache(collection.Key);
+            }
+        }
+
+        
 
         [TestFixtureTearDown]
         public virtual void FixtureTearDown()

@@ -13,8 +13,30 @@
     /// <summary>
     /// Marker interface for the address repository
     /// </summary>
-    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>
+    public interface IProductRepository : IPagedRepository<IProduct, ProductDto>, IStaticEntityCollectionRepository<IProduct>
     {
+        /// <summary>
+        /// Gets a collection of <see cref="IProduct"/> that has detached content of type.
+        /// </summary>
+        /// <param name="detachedContentTypeKey">
+        /// The detached content type key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
+        IEnumerable<IProduct> GetByDetachedContentType(Guid detachedContentTypeKey);
+
+        /// <summary>
+        /// The get key for slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        Guid GetKeyForSlug(string slug);
+
         /// <summary>
         /// Gets or sets a value Indicating whether or not a SKU is already exists in the database
         /// </summary>

@@ -39,6 +39,17 @@
         }
 
         /// <summary>
+        /// Gets a value indicating the payment method is based off a redirect.
+        /// </summary>
+        public ITypeField Redirect
+        {
+            get
+            {
+                return GetTypeField(PaymentMethodType.Redirect);
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating the payment method is credit card
         /// </summary>
         public ITypeField CreditCard
@@ -79,6 +90,7 @@
         internal override void BuildCache()
         {
             AddUpdateCache(PaymentMethodType.Cash, new TypeField("Cash", "Cash", Constants.TypeFieldKeys.PaymentMethod.CashKey));
+            AddUpdateCache(PaymentMethodType.Redirect, new TypeField("Redirect", "Redirect", Constants.TypeFieldKeys.PaymentMethod.RedirectKey));
             AddUpdateCache(PaymentMethodType.CreditCard, new TypeField("CreditCard", "Credit Card", Constants.TypeFieldKeys.PaymentMethod.CreditCardKey));
             AddUpdateCache(PaymentMethodType.PurchaseOrder, new TypeField("PurchaseOrder", "Purchase Order", Constants.TypeFieldKeys.PaymentMethod.PurchaseOrderKey));
             AddUpdateCache(PaymentMethodType.CustomerCredit, new TypeField("CustomerCreditKey", "Customer Credit", Constants.TypeFieldKeys.PaymentMethod.CustomerCreditKey));

@@ -1,0 +1,103 @@
+<div class="umb-panel merchello-side-panel" data-ng-controller="Merchello.Providers.Dialogs.PayPalProviderSettingsController">
+
+    <div class="umb-modalcolumn-header">
+        <h4><strong>PayPal Payments Provider Configuration</strong></h4>
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="mode">Mode</label>
+                <select name="mode" class="col-xs-12 span12" id="mode" data-ng-model="providerSettings.mode">
+                    <option value="Sandbox">Sandbox</option>
+                    <option value="Live">Live</option>
+                </select>
+            </div>
+        </div>
+        <!--h3>API Checkout</h3>
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="clientId">Client Id</label>
+                <input class="col-xs-12 span12" name="clientId" id="clientId" type="text" data-ng-model="providerSettings.clientId">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <div class="col-xs-12 span12">
+                <label for="clientSecret">Client Secret</label>
+                <input class="col-xs-12 span12" name="clientSecret" id="clientSecret" type="text" data-ng-model="providerSettings.clientSecret">
+            </div>
+        </div-->
+
+        <h3>PayPal Express Checkout</h3>
+        <div class="control-group row-fluid">
+            <p>API Username<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiUsername" placeholder="paypal_api_account_com">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>API Password<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiPassword">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>API Signature<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.apiSignature">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Redirect URL (Success)<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.successUrl" placeholder="/receipt/">
+            </div>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Retry Url</p>
+            <div class="input=prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.retryUrl" placeholder="/checkout/" />
+            </div>
+            <small class="warning">Note: <b>invoiceKey=[InvoiceKey]&amp;payementkey=[PaymentKey]</b> will be passed for retry attempt.</small>
+        </div>
+        <div class="control-group row-fluid">
+            <p>Retry Method Endpoint<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.cancelUrl" placeholder="/umbraco/area/route/retry/" />
+            </div>
+            <small class="warning">Note: <b>invoiceKey=[InvoiceKey]&amp;payementkey=[PaymentKey]</b> will be passed for retry attempt.</small>
+        </div>
+
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="providerSettings.deleteInvoiceOnCancel"> Delete invoice on cancel
+            </label>
+        </div>
+        <!--div class="control-group row-fluid">
+            <p>Application Id<br /></p>
+            <div class="input-prepend col-xs-12 span12">
+                <input class="col-xs-8 span8" type="text" data-ng-model="providerSettings.applicationId">
+            </div>
+        </div-->
+        <div class="control-group row-fluid">
+            <label class="checkbox col-xs-12 span12">
+                <input type="checkbox" data-ng-model="dialogData.provider.encryptExtendedData"> Encrypt Provider Configuration
+            </label>
+        </div>
+
+    </div>
+</div>
+
+<div class="umb-panel-footer">
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <a href data-ng-click="close()" class="btn btn-link">
+                <localize key="general_cancel">Cancel</localize>
+            </a>
+            <button class="btn btn-primary" data-ng-click="submit(dialogData)">
+                <localize key="buttons_save"></localize>
+            </button>
+        </div>
+    </div>
+</div>

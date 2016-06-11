@@ -1,10 +1,22 @@
-﻿using Merchello.Core.Models;
-using Merchello.Core.Models.Rdbms;
-
-namespace Merchello.Core.Persistence.Factories
+﻿namespace Merchello.Core.Persistence.Factories
 {
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+
+    /// <summary>
+    /// The line item factory.
+    /// </summary>
     internal class LineItemFactory 
-    {       
+    {
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ItemCacheItemDto"/>.
+        /// </returns>
         public ItemCacheItemDto BuildDto(IItemCacheLineItem entity)
         {
             var dto = new ItemCacheItemDto()
@@ -25,6 +37,15 @@ namespace Merchello.Core.Persistence.Factories
             return dto;
         }
 
+        /// <summary>
+        /// The build dto.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="InvoiceItemDto"/>.
+        /// </returns>
         public InvoiceItemDto BuildDto(IInvoiceLineItem entity)
         {
             var dto = new InvoiceItemDto()

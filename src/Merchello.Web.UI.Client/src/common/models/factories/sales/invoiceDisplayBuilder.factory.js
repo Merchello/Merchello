@@ -8,9 +8,9 @@
     angular.module('merchello.models')
         .factory('invoiceDisplayBuilder',
         ['genericModelBuilder', 'invoiceStatusDisplayBuilder', 'invoiceLineItemDisplayBuilder',
-            'orderDisplayBuilder', 'currencyDisplayBuilder', 'InvoiceDisplay',
+            'orderDisplayBuilder', 'currencyDisplayBuilder', 'noteDisplayBuilder', 'InvoiceDisplay',
             function(genericModelBuilder, invoiceStatusDisplayBuilder, invoiceLineItemDisplayBuilder,
-                     orderDisplayBuilder, currencyDisplayBuilder, InvoiceDisplay) {
+                     orderDisplayBuilder, currencyDisplayBuilder, noteDisplayBuilder, InvoiceDisplay) {
                 var Constructor = InvoiceDisplay;
 
                 return {
@@ -28,6 +28,7 @@
                                 invoices[ i ].items = invoiceLineItemDisplayBuilder.transform(jsonResult[ i ].items);
                                 invoices[ i ].orders = orderDisplayBuilder.transform(jsonResult[ i ].orders);
                                 invoices[ i ].currency = currencyDisplayBuilder.transform(jsonResult[ i ].currency);
+                                invoices[ i ].notes = noteDisplayBuilder.transform(jsonResult[i].notes);
                             }
                         } else {
                             //jsonResult = JSON.stringify(jsonResult);
@@ -35,6 +36,7 @@
                             invoices.items = invoiceLineItemDisplayBuilder.transform(jsonResult.items);
                             invoices.orders = orderDisplayBuilder.transform(jsonResult.orders);
                             invoices.currency = currencyDisplayBuilder.transform(jsonResult.currency);
+                            invoices.notes = noteDisplayBuilder.transform(jsonResult.notes);
                         }
                         return invoices;
                     }

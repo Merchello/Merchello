@@ -1,27 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Merchello.Core.Models;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Rdbms;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.Factories;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.Querying;
-
-namespace Merchello.Core.Persistence.Repositories
+﻿namespace Merchello.Core.Persistence.Repositories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
+    using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     /// <summary>
     /// Represents the NotificationMessageRepository
     /// </summary>
     internal class NotificationMessageRepository : MerchelloPetaPocoRepositoryBase<INotificationMessage>, INotificationMessageRepository
     {
-        public NotificationMessageRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
-            : base(work, cache)
-        { }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotificationMessageRepository"/> class.
+        /// </summary>
+        /// <param name="work">
+        /// The work.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public NotificationMessageRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
+        {            
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is cached repository.
+        /// </summary>
+        /// <remarks>
+        /// This will be removed when we refactor the NotificationContext.  
+        /// 
+        /// TODO The workflow in Notification Monitors updates cached models (which is by reference).  
+        /// The triggers and monitors should be moved to use business layer models in Merchello.Web rather than Core models directly.
+        /// </remarks>
+        /// <seealso cref="http://issues.merchello.com/youtrack/issue/M-859"/>
+        protected override bool IsCachedRepository
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         protected override INotificationMessage PerformGet(Guid key)
         {
@@ -57,6 +95,15 @@ namespace Merchello.Core.Persistence.Repositories
             }
         }
 
+        /// <summary>
+        /// Gets a collection of <see cref="INotificationMessage"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{INotificationMessage}"/>.
+        /// </returns>
         protected override IEnumerable<INotificationMessage> PerformGetByQuery(IQuery<INotificationMessage> query)
         {
             var sqlClause = GetBaseQuery(false);
@@ -68,20 +115,41 @@ namespace Merchello.Core.Persistence.Repositories
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
+        /// <summary>
+        /// Gets the base query.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<NotificationMessageDto>();
+                .From<NotificationMessageDto>(SqlSyntax);
 
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchNotificationMessage.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets a list of delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {
             var list = new List<string>
@@ -92,6 +160,12 @@ namespace Merchello.Core.Persistence.Repositories
             return list;
         }
 
+        /// <summary>
+        /// Adds a new item to the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(INotificationMessage entity)
         {
             ((Entity)entity).AddingEntity();
@@ -104,8 +178,16 @@ namespace Merchello.Core.Persistence.Repositories
             entity.Key = dto.Key;
 
             entity.ResetDirtyProperties();
+
+            //RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
 
+        /// <summary>
+        /// Updates an existing item in the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(INotificationMessage entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -116,6 +198,7 @@ namespace Merchello.Core.Persistence.Repositories
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+           // RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<INotificationMethod>(entity.MethodKey));
         }
     }
 }

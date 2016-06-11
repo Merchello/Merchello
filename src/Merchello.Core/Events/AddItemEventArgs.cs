@@ -21,9 +21,8 @@
         }
 
         /// <summary>
-        /// Gets or sets the product.
+        /// Gets or sets the <see cref="ILineItem"/>.
         /// </summary>
         public ILineItem LineItem { get; set; }
-
     }
 }

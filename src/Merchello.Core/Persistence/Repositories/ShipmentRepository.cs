@@ -10,8 +10,11 @@
     using Querying;    
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using UnitOfWork;
 
     /// <summary>
@@ -36,8 +39,14 @@
         /// <param name="orderLineItemRepository">
         /// The order Line Item Repository.
         /// </param>
-        public ShipmentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IOrderLineItemRepository orderLineItemRepository)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public ShipmentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IOrderLineItemRepository orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "orderLineItemRepository");
             _orderLineItemRepository = orderLineItemRepository;
@@ -125,9 +134,9 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<ShipmentDto>()
-                .InnerJoin<ShipmentStatusDto>()
-                .On<ShipmentDto, ShipmentStatusDto>(left => left.ShipmentStatusKey, right => right.Key);
+                .From<ShipmentDto>(SqlSyntax)
+                .InnerJoin<ShipmentStatusDto>(SqlSyntax)
+                .On<ShipmentDto, ShipmentStatusDto>(SqlSyntax, left => left.ShipmentStatusKey, right => right.Key);
 
             return sql;
         }
@@ -194,6 +203,17 @@
         /// </param>
         protected override void PersistUpdatedItem(IShipment entity)
         {
+            var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ShipmentKey == entity.Key);
+            var existing = _orderLineItemRepository.GetByQuery(query);
+
+            var removers = existing.Where(x => entity.Items.All(y => y.Key != x.Key));
+                
+            foreach (var remove in removers)
+            {
+                ((IOrderLineItem)remove).ShipmentKey = null;
+                _orderLineItemRepository.SaveLineItem((IOrderLineItem)remove);
+            }
+
             ((Entity)entity).UpdatingEntity();
 
             var factory = new ShipmentFactory();
@@ -239,6 +259,15 @@
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
         }
 
+        /// <summary>
+        /// Gets a collection of line items for a shipment.
+        /// </summary>
+        /// <param name="shipmentKey">
+        /// The shipment key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="LineItemCollection"/>.
+        /// </returns>
         private LineItemCollection GetLineItems(Guid shipmentKey)
         {
             var query = Querying.Query<IOrderLineItem>.Builder.Where(x => x.ShipmentKey == shipmentKey);

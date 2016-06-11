@@ -6,6 +6,7 @@ namespace Merchello.Core.Persistence.Mappers
     using System.Collections.Concurrent;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
@@ -46,6 +47,7 @@ namespace Merchello.Core.Persistence.Mappers
         private MerchelloMapper()
         {
             CacheMapper(typeof(IAuditLog), typeof(AuditLogMapper));
+            CacheMapper(typeof(INote), typeof(NoteMapper));
             CacheMapper(typeof(ITaxMethod), typeof(TaxMethodMapper));
             CacheMapper(typeof(ICustomerAddress), typeof(CustomerAddressMapper));
             CacheMapper(typeof(IAnonymousCustomer), typeof(AnonymousCustomerMapper));
@@ -78,6 +80,8 @@ namespace Merchello.Core.Persistence.Mappers
             CacheMapper(typeof(IWarehouse), typeof(WarehouseMapper));
             CacheMapper(typeof(IWarehouseCatalog), typeof(WarehouseCatalogMapper));
             CacheMapper(typeof(IDigitalMedia), typeof(DigitalMediaMapper));
+            CacheMapper(typeof(IEntityCollection), typeof(EntityCollectionMapper));
+            CacheMapper(typeof(IDetachedContentType), typeof(DetachedContentTypeMapper));
         }
 
 

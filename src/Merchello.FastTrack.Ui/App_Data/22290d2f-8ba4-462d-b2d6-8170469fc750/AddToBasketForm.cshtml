@@ -1,0 +1,112 @@
+﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Merchello.Web.Store.Models.StoreAddItemModel>
+@using System.Text
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+@using Merchello.Core
+@using Merchello.Web.Models.VirtualContent
+@using Merchello.Web.Store.Controllers
+@using Umbraco.Web
+@{
+    // Get the IProductContent from the Merchello helper which is already instantiated by the MerchelloViewPage reference.
+    //// https://merchello.readme.io/docs/view-pages
+    //
+    // This is in most cases retrieved from the Examine index (so really fast) but it does have a fallback to query the database
+    // in cases where the product has not been indexed.
+    var product = Merchello.TypedProductContent(Model.ProductKey);
+
+    // Local variable for partial view conditionals
+    var hasVariants = product.ProductVariants.Any();
+}
+
+<div class="well" data-muivalue="product" data-muikey="@product.Key">
+    @if (hasVariants)
+    {
+        // A container to populate the variant pricing via JavaScript
+        <div class="price @(product.OnSale ? "price-onsale" : "") text-center variant-pricing" data-muivalue="variantprice"></div>
+    }
+    else
+    {<div class="price text-center">@GetSingleProductPrice(product)</div>}
+
+    <div class="form-group add-button">
+        @{
+            using (Html.BeginUmbracoForm<BasketController>("AddBasketItem", new { area = "Merchello" }, new { role = "form", data_muifrm="additem" }))
+            {
+                // If the product has variants, we MUST determine which variant the customer intends to purchase
+                // so we need to give them a selection of options so that they make choices.  The collection of choices (one per options)
+                // is used to determine which variant they intend to purchase.
+                if (hasVariants)
+                {
+                    var index = 0;
+
+                    // Generate the drop down boxes to select choices for each option
+                    foreach (var option in Model.ProductOptions)
+                    {
+
+                        var choices = option.Choices.OrderBy(x => x.SortOrder).Select(choice => new System.Web.Mvc.SelectListItem { Value = choice.Key.ToString(), Text = choice.Name }).ToList();
+                        choices.First().Selected = true;
+
+                        @Html.LabelFor(x => x.OptionChoices[index], option.Name, new { @class = "control-label" })
+
+                        <div class="form-group" data-muioption="@option.Key">
+                            @Html.DropDownListFor(x => x.OptionChoices[index], choices, new { name = option.Name.ToLower().Replace(" ", "-"), @class = "form-control" })
+                            @*@Html.ValidationMessageFor(x => x.OptionChoices, "Please select one")*@
+                        </div>
+
+                        index = index + 1;
+                    }
+
+                }
+
+                // Inventory display
+                if (hasVariants || product.TrackInventory)
+                {
+                    <div data-muiinv="@product.Key">
+                        @if (!hasVariants && product.TrackInventory)
+                        {
+                            if (product.TotalInventoryCount > 0)
+                            {
+                                <span>In Stock (@product.TotalInventoryCount)</span>
+                            }
+                            else
+                            {
+                                <span>Out of stock</span>
+                            }
+                        }
+                    </div>
+                }
+
+                @Html.HiddenFor(x => x.ProductKey)
+                @Html.HiddenFor(x => x.SuccessRedirectUrl)
+                @Html.AntiForgeryToken()
+                // Determine if the add to cart button should be displayed in case item is out of stock
+                if (product.ProductVariants.Any() || (!product.ProductVariants.Any() && product.TrackInventory && product.TotalInventoryCount > 0) || !product.TrackInventory)
+                {
+                    <div class="control-group text-center">
+                        <input type="submit" value="Add to Basket" class="btn btn-default" />
+                    </div>
+                }
+            }
+
+        }
+    </div>
+</div>
+
+@functions
+{
+
+    private static IHtmlString GetSingleProductPrice(IProductContent product)
+    {
+        var sb = new StringBuilder();
+        if (product.OnSale)
+        {
+            sb.AppendFormat("<span class='sale-price'>{0}</span>", product.SalePrice.AsFormattedCurrency());
+            sb.AppendFormat("<span class='original-price'>{0}</span>", product.Price.AsFormattedCurrency());
+        }
+        else
+        {
+            sb.AppendFormat("<span>{0}</span>", product.Price.AsFormattedCurrency());
+        }
+
+        return MvcHtmlString.Create(sb.ToString());
+    }
+}

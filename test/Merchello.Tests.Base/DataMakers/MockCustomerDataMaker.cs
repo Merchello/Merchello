@@ -13,11 +13,12 @@ namespace Merchello.Tests.Base.DataMakers
     public class MockCustomerDataMaker : MockDataMakerBase
     {       
 
-        public static ICustomer CustomerForInserting()
+        public static ICustomer CustomerForInserting(string loginName = "")
         {
+            loginName = string.IsNullOrEmpty(loginName) ? FirstNames() : loginName;
             var first = FirstNames();
             var last = LastNames();
-            var customer = new Customer(FirstNames())
+            var customer = new Customer(loginName)
                 {
                     FirstName = first,
                     LastName = last,

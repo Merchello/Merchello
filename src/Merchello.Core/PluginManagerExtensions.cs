@@ -2,18 +2,39 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+
     using Gateways;
 
     using Merchello.Core.Chains.OfferConstraints;
+    using Merchello.Core.Configuration;
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Persistence.Migrations;
+    using Merchello.Core.ValueConverters.ValueCorrections;
 
     using Observation;
     using Umbraco.Core;
+    using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
     /// Extension methods for the <see cref="PluginManager"/>
     /// </summary>
     internal static class PluginManagerExtensions
     {
+        /// <summary>
+        /// Resolves the <see cref="DetachedValueCorrectionBase"/>.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IDetachedValueCorrection"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveDetachedValueOverriders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<DetachedValueCorrectionBase, DetachedValueCorrectionAttribute>();
+        }
+
         /// <summary>
         /// Returns all available GatewayProvider
         /// </summary>
@@ -68,6 +89,35 @@
         internal static IEnumerable<Type> ResolveOfferConstraintChains(this PluginManager pluginManager)
         {
             return pluginManager.ResolveTypesWithAttribute<IOfferProcessor, OfferConstraintChainForAttribute>();
+        }
+
+        /// <summary>
+        /// The resolve entity collection providers.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Type}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveEnityCollectionProviders(this PluginManager pluginManager)
+        {
+            return pluginManager.ResolveTypesWithAttribute<IEntityCollectionProvider, EntityCollectionProviderAttribute>();
+        }
+
+        /// <summary>
+        /// Resolves Merchello specific migrations.
+        /// </summary>
+        /// <param name="pluginManager">
+        /// The plugin manager.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Type}"/>.
+        /// </returns>
+        internal static IEnumerable<Type> ResolveMerchelloMigrations(this PluginManager pluginManager)
+        {
+            return
+                pluginManager.ResolveTypesWithAttribute<IMerchelloMigration, MigrationAttribute>();
         } 
     }
 }

@@ -13,8 +13,10 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The customer repository.
@@ -25,6 +27,11 @@
         /// The _customer address repository.
         /// </summary>
         private readonly ICustomerAddressRepository _customerAddressRepository;
+
+        /// <summary>
+        /// The note repository.
+        /// </summary>
+        private readonly INoteRepository _noteRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerRepository"/> class.
@@ -38,11 +45,28 @@
         /// <param name="customerAddressRepository">
         /// The customer Address Repository.
         /// </param>
-        public CustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ICustomerAddressRepository customerAddressRepository) 
-            : base(work, cache)
+        /// <param name="noteRepository">
+        /// The note Repository.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public CustomerRepository(
+            IDatabaseUnitOfWork work, 
+            IRuntimeCacheProvider cache, 
+            ICustomerAddressRepository customerAddressRepository, 
+            INoteRepository noteRepository,
+            ILogger logger, 
+            ISqlSyntaxProvider sqlSyntax) 
+            : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(customerAddressRepository, "customerAddressRepository");
+            Mandate.ParameterNotNull(noteRepository, "noteRepository");
 
+            _noteRepository = noteRepository;
             _customerAddressRepository = customerAddressRepository;
         }
 
@@ -74,21 +98,320 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var invidualTerms = searchTerm.Split(' ');
-
-            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();            
-
-            var sql = new Sql();
-            sql.Select("*").From<CustomerDto>();
-
-            if (terms.Any())
-            {
-                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
-
-                sql.Where("lastName LIKE @ln OR firstName LIKE @fn OR email LIKE @email", new { @ln = preparedTerms, @fn = preparedTerms, @email = preparedTerms });
-            }
+            var sql = this.BuildCustomerSearchSql(searchTerm);
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not the entity exists in a collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchCustomer2EntityCollection]")
+                .Append(
+                    "WHERE [merchCustomer2EntityCollection].[customerKey] = @ekey AND [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey",
+                    new { @ekey = entityKey, @eckey = collectionKey });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
+        /// <summary>
+        /// Adds a entity to a static invoice collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
+        {
+            if (this.ExistsInCollection(entityKey, collectionKey)) return;
+
+            var dto = new Customer2EntityCollectionDto()
+            {
+                CustomerKey = entityKey,
+                EntityCollectionKey = collectionKey,
+                CreateDate = DateTime.Now,
+                UpdateDate = DateTime.Now
+            };
+
+            Database.Insert(dto);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The invoice key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
+        {
+            Database.Execute(
+            "DELETE [merchCustomer2EntityCollection] WHERE [merchCustomer2EntityCollection].[customerKey] = @ekey AND [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey",
+            new { @ekey = entityKey, @eckey = collectionKey });
+        }
+
+        /// <summary>
+        /// The get entity keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchCustomer]")
+               .Append("WHERE [merchCustomer].[pk] IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildCustomerSearchSql(term);
+            sql.Append("AND [merchCustomer].[pk] IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchCustomer]")
+               .Append("WHERE [merchCustomer].[pk] NOT IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildCustomerSearchSql(term);
+            sql.Append("AND [merchCustomer].[pk] NOT IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] = @eckey", new { @eckey = collectionKey })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets entity from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysFromCollection(collectionKey, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<ICustomer>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollection(
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysFromCollection(collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
+            return new Page<ICustomer>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
         }
 
         /// <summary>
@@ -112,8 +435,7 @@
                 return null;
 
             var factory = new CustomerFactory();
-
-            var customer = factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(key));
+            var customer = factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(key), GetNotes(key));
 
             return customer;
         }
@@ -142,7 +464,7 @@
                 var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {                    
-                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key));
+                    yield return factory.BuildEntity(dto, _customerAddressRepository.GetByCustomerKey(dto.Key), GetNotes(dto.Key));
                 }
             }
         }
@@ -160,9 +482,9 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<CustomerDto>()
-                .InnerJoin<CustomerIndexDto>()
-                .On<CustomerDto, CustomerIndexDto>(left => left.Key, right => right.CustomerKey);
+                .From<CustomerDto>(SqlSyntax)
+                .InnerJoin<CustomerIndexDto>(SqlSyntax)
+                .On<CustomerDto, CustomerIndexDto>(SqlSyntax, left => left.Key, right => right.CustomerKey);
 
             return sql;
         }
@@ -188,9 +510,11 @@
         {
             var list = new List<string>
                 {
+                    "DELETE FROM merchNote WHERE entityKey = @Key",
                     "DELETE FROM merchItemCacheItem WHERE ItemCacheKey IN (SELECT pk FROM merchItemCache WHERE entityKey = @Key)",
                     "DELETE FROM merchItemCache WHERE entityKey = @Key",
                     "DELETE FROM merchCustomerAddress WHERE customerKey = @Key",
+                    "DELETE FROM merchCustomer2EntityCollection WHERE customerKey = @Key",
                     "DELETE FROM merchCustomerIndex WHERE customerKey = @Key",
                     "DELETE FROM merchCustomer WHERE pk = @Key"
                 };
@@ -217,6 +541,8 @@
             Database.Insert(dto.CustomerIndexDto);
             ((Customer)entity).ExamineId = dto.CustomerIndexDto.Id;
 
+            SaveNotes(entity);
+
             entity.ResetDirtyProperties();
 
             // customer context cache
@@ -231,6 +557,8 @@
         /// </param>
         protected override void PersistUpdatedItem(ICustomer entity)
         {
+            SaveNotes(entity);
+
             ((Entity)entity).UpdatingEntity();
 
             var factory = new CustomerFactory();
@@ -280,6 +608,100 @@
             var dtos = Database.Fetch<CustomerDto, CustomerIndexDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(dto => Get(dto.Key));
+        }
+
+        /// <summary>
+        /// Builds customer search SQL.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql BuildCustomerSearchSql(string searchTerm)
+        {
+            var invidualTerms = searchTerm.Split(' ');
+
+            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+            var sql = new Sql();
+            sql.Select("*").From<CustomerDto>(SqlSyntax);
+
+            if (terms.Any())
+            {
+                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
+
+                sql.Where("lastName LIKE @ln OR firstName LIKE @fn OR email LIKE @email", new { @ln = preparedTerms, @fn = preparedTerms, @email = preparedTerms });
+            }
+
+            return sql;
+        }
+
+        /// <summary>
+        /// Saves the notes.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        private void SaveNotes(ICustomer entity)
+        {
+            var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == entity.Key && x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.CustomerKey);
+            var existing = _noteRepository.GetByQuery(query);
+
+            var removers = existing.Where(x => !Guid.Empty.Equals(x.Key) && entity.Notes.All(y => y.Key != x.Key)).ToArray();
+
+            foreach (var remover in removers) _noteRepository.Delete(remover);
+
+            var updates = entity.Notes.Where(x => removers.All(y => y.Key != x.Key));
+
+            var factory = new NoteFactory();
+            foreach (var u in updates)
+            {
+                u.EntityKey = entity.Key;
+
+                if (u.HasIdentity)
+                {
+                    ((Note)u).UpdatingEntity();
+                    var dto = factory.BuildDto(u);
+                    Database.Update(dto);
+                }
+                else
+                {
+                    ((Note)u).AddingEntity();
+                    var dto = factory.BuildDto(u);
+                    Database.Insert(dto);
+                    u.Key = dto.Key;
+                }
+
+                var cacheKey = Cache.CacheKeys.GetEntityCacheKey<INote>(u.Key);
+                RuntimeCache.ClearCacheItem(cacheKey);
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the notes collection for an invoice.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{INote}"/>.
+        /// </returns>
+        private IEnumerable<INote> GetNotes(Guid customerKey)
+        {
+            var query = Querying.Query<INote>.Builder.Where(x => x.EntityKey == customerKey && x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.CustomerKey);
+            var notes = _noteRepository.GetByQuery(query);
+
+            var collection = new List<INote>();
+
+            foreach (var note in notes.OrderByDescending(x => x.CreateDate))
+            {
+                collection.Add(note);
+            }
+
+            return collection;
         }
     }
 }

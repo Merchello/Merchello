@@ -8,6 +8,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Merchello.Core.Models.DetachedContent;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -25,7 +27,7 @@
         /// <summary>
         /// The product variants changed selector.
         /// </summary>
-        private static readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);
+        private static readonly PropertyInfo ProductVariantsChangedSelector = ExpressionHelper.GetPropertyInfo<Product, ProductVariantCollection>(x => x.ProductVariants);        
 
         /// <summary>
         /// The master product variant.
@@ -65,7 +67,10 @@
         /// <param name="productVariants">
         /// The product variants.
         /// </param>
-        public Product(IProductVariant variant, ProductOptionCollection productOptions, ProductVariantCollection productVariants)
+        public Product(
+            IProductVariant variant,
+            ProductOptionCollection productOptions,
+            ProductVariantCollection productVariants)
         {
             Mandate.ParameterNotNull(variant, "variantMaster");
             Mandate.ParameterNotNull(productOptions, "optionCollection");
@@ -80,7 +85,7 @@
         
 
         /// <summary>
-        /// True/false indicating whether or not this group defines options
+        /// Gets a value indicating whether or not this group defines options
         /// </summary>
         [IgnoreDataMember]
         public bool DefinesOptions
@@ -89,25 +94,34 @@
         }
 
         /// <summary>
-        /// The options that define the product attributes which 
+        /// Gets or sets the options that define the product attributes which 
         /// </summary>
         [DataMember]
         public ProductOptionCollection ProductOptions 
         {
-            get { return _productOptions; }
-            set { 
+            get
+            {
+                return _productOptions;
+            }
+
+            set 
+            { 
                 _productOptions = value;
                 _productOptions.CollectionChanged += ProductOptionsChanged;
             }
         }
 
         /// <summary>
-        /// Product variants available for this product
+        /// Gets or sets the Product variants available for this product
         /// </summary>
         [DataMember]
         public ProductVariantCollection ProductVariants
         {
-            get { return _productVariants; }
+            get
+            {
+                return _productVariants;
+            }
+
             set
             {
                 _productVariants = value;
@@ -115,24 +129,12 @@
             }
         }
 
-
-        //public static bool OptionContainsAttribute(IProductOption option, IProductAttribute attribute)
-        //{
-        //    return option.Choices.Any(choice => choice.Id == attribute.Id);
-        //}
-
-
         #endregion
 
         #region Overrides IProductBase
 
-        internal IProductVariant MasterVariant
-        {
-            get { return _variant; }
-        }
-
         /// <summary>
-        /// Exposes the product variant template's key
+        /// Gets the product variant template's key
         /// </summary>
         [DataMember]
         public Guid ProductVariantKey
@@ -142,7 +144,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's name
+        /// Gets or sets the product variant template's name
         /// </summary>
         [DataMember]
         public string Name
@@ -152,7 +154,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's sku
+        /// Gets or sets the product variant template's SKU
         /// </summary>
         [DataMember]
         public string Sku
@@ -162,7 +164,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's price
+        /// Gets or sets the product variant template's price
         /// </summary>
         [DataMember]
         public decimal Price
@@ -172,7 +174,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's cost of goods
+        /// Gets or sets the product variant template's cost of goods
         /// </summary>
         [DataMember]
         public decimal? CostOfGoods
@@ -182,7 +184,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's sale price
+        /// Gets or sets the product variant template's sale price
         /// </summary>
         [DataMember]
         public decimal? SalePrice
@@ -192,7 +194,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's on sale value
+        /// Gets or sets a value indicating whether or not the product variant template's on sale value
         /// </summary>
         [DataMember]
         public bool OnSale
@@ -202,7 +204,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's manufacturer
+        /// Gets or sets the product variant template's manufacturer
         /// </summary>
         [DataMember]
         public string Manufacturer
@@ -212,7 +214,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's manufacturer
+        /// Gets or sets the product variant template's manufacturer
         /// </summary>
         [DataMember]
         public string ManufacturerModelNumber
@@ -222,7 +224,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's weight
+        /// Gets or sets the product variant template's weight
         /// </summary>
         [DataMember]
         public decimal? Weight
@@ -232,7 +234,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's length
+        /// Gets or sets the product variant template's length
         /// </summary>
         [DataMember]
         public decimal? Length
@@ -242,7 +244,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's width
+        /// Gets or sets the product variant template's width
         /// </summary>
         [DataMember]
         public decimal? Width
@@ -252,7 +254,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's height
+        /// Gets or sets the product variant template's height
         /// </summary>
         [DataMember]
         public decimal? Height
@@ -262,7 +264,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's barcode
+        /// Gets or sets the product variant template's barcode
         /// </summary>
         [DataMember]
         public string Barcode
@@ -272,7 +274,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's available value
+        /// Gets or sets a value indicating whether or not the product variant template's available value is true
         /// </summary>
         [DataMember]
         public bool Available
@@ -282,7 +284,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's trackinventory value
+        /// Gets or sets a value indicating whether the product variant template's tracks inventory value is true
         /// </summary>
         [DataMember]
         public bool TrackInventory
@@ -292,7 +294,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's outofstockpurchase value
+        /// Gets or sets a value indicating whether the product variant template's out of stock purchase value is true
         /// </summary>
         [DataMember]
         public bool OutOfStockPurchase
@@ -302,7 +304,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's taxable value
+        /// Gets or sets a value indicating whether the product variant template's taxable value is true
         /// </summary>
         [DataMember]
         public bool Taxable
@@ -312,7 +314,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's shippable value
+        /// Gets or sets a value indicating whether the product variant template's shippable value is true
         /// </summary>
         [DataMember]
         public bool Shippable
@@ -322,7 +324,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's download value
+        /// Gets or sets a value indicating whether the product variant template's download value is true
         /// </summary>
         [DataMember]
         public bool Download
@@ -332,7 +334,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's downloadmediaid value
+        /// Gets or sets the product variant template's download media id value
         /// </summary>
         [DataMember]
         public int? DownloadMediaId
@@ -341,6 +343,9 @@
             set { _variant.DownloadMediaId = value; }
         }
 
+        /// <summary>
+        /// Gets the version key.
+        /// </summary>
         [DataMember]
         public Guid VersionKey
         {
@@ -348,7 +353,7 @@
         }
 
         /// <summary>
-        /// Exposes the product variant template's inventory collection
+        /// Gets the product variant template's inventory collection
         /// </summary>
         [DataMember]
         public IEnumerable<ICatalogInventory> CatalogInventories
@@ -356,36 +361,82 @@
             get { return _variant.CatalogInventories; }
         }
 
+        /// <summary>
+        /// Gets the detached contents.
+        /// </summary>
+        [DataMember]
+        public DetachedContentCollection<IProductVariantDetachedContent> DetachedContents
+        {
+            get
+            {
+                return _variant.DetachedContents;
+            }
+        }
+
+        /// <summary>
+        /// Gets the master variant.
+        /// </summary>
+        internal IProductVariant MasterVariant
+        {
+            get { return _variant; }
+        }
+
         #endregion
 
+        /// <summary>
+        /// The reset dirty properties.
+        /// </summary>
         public override void ResetDirtyProperties()
         {
             base.ResetDirtyProperties();
             _variant.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// The adding entity.
+        /// </summary>
         internal override void AddingEntity()
         {
             base.AddingEntity();
-            ((ProductVariant) _variant).Master = true;
-            ((ProductVariant) _variant).AddingEntity();
+            ((ProductVariant)_variant).Master = true;
+            ((ProductVariant)_variant).AddingEntity();
         }
 
+        /// <summary>
+        /// The updating entity.
+        /// </summary>
         internal override void UpdatingEntity()
         {
             base.UpdatingEntity();
             ((ProductVariant)_variant).UpdatingEntity();
         }
 
+        /// <summary>
+        /// The product options changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void ProductOptionsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(ProductOptionsChangedSelector);
         }
 
+        /// <summary>
+        /// The product variants changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void ProductVariantsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged(ProductVariantsChangedSelector);
         }
-
     }
 }

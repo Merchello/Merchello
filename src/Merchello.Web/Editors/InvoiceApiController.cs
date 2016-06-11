@@ -8,9 +8,11 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Sales;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
 
@@ -38,6 +40,11 @@
         private readonly IInvoiceService _invoiceService;
 
         /// <summary>
+        /// The note service.
+        /// </summary>
+        private readonly INoteService _noteService;
+
+        /// <summary>
         /// The <see cref="MerchelloHelper"/>
         /// </summary>
         private readonly MerchelloHelper _merchello;
@@ -61,7 +68,7 @@
         {
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
             _invoiceService = merchelloContext.Services.InvoiceService;
-
+            _noteService = merchelloContext.Services.NoteService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -115,8 +122,9 @@
             var invoiceDateStart = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateStart");
             var invoiceDateEnd = query.Parameters.FirstOrDefault(x => x.FieldName == "invoiceDateEnd");
 
-            var isTermSearch = term != null && !String.IsNullOrEmpty(term.Value);
-            var isDateSearch = invoiceDateStart != null && !String.IsNullOrEmpty(invoiceDateStart.Value);
+            var isTermSearch = term != null && !string.IsNullOrEmpty(term.Value);
+
+            var isDateSearch = invoiceDateStart != null && !string.IsNullOrEmpty(invoiceDateStart.Value);
 
             var startDate = DateTime.MinValue;
             var endDate = DateTime.MaxValue;
@@ -129,14 +137,14 @@
                 {
                     if (!DateTime.TryParse(invoiceDateStart.Value, out startDate))
                     {
-                        LogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
+                        MultiLogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
                         startDate = DateTime.MinValue;
                     }
                     
                 }
                 else if (!DateTime.TryParseExact(invoiceDateStart.Value, dateFormat.Value, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDate))
                 {
-                    LogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
+                    MultiLogHelper.Warn<InvoiceApiController>(string.Format("Was unable to parse startDate: {0}", invoiceDateStart.Value));
                     startDate = DateTime.MinValue;
                 }
 
@@ -159,19 +167,20 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            else if(isTermSearch)
+            
+            if (isTermSearch)
             {
-                return _merchello.Query.Invoice.Search(
+                return this._merchello.Query.Invoice.Search(
                     term.Value,
                     query.CurrentPage + 1,
                     query.ItemsPerPage,
                     query.SortBy,
                     query.SortDirection);
             }
-            else if (isDateSearch)
+            
+            if (isDateSearch)
             {
-
-                return _merchello.Query.Invoice.Search(
+                return this._merchello.Query.Invoice.Search(
                     startDate,
                     endDate,
                     query.CurrentPage + 1,
@@ -179,15 +188,13 @@
                     query.SortBy,
                     query.SortDirection);
             }
-            else
-            {
-                return _merchello.Query.Invoice.Search(
-                    query.CurrentPage + 1,
-                    query.ItemsPerPage,
-                    query.SortBy,
-                    query.SortDirection);
-            }
-        }
+            
+            return this._merchello.Query.Invoice.Search(
+                query.CurrentPage + 1,
+                query.ItemsPerPage,
+                query.SortBy,
+                query.SortDirection);
+        }    
 
         /// <summary>
         /// Gets a collection of invoices associated with a customer.
@@ -283,14 +290,57 @@
             try
             {
                 var merchInvoice = _invoiceService.GetByKey(invoice.Key);
+
                 merchInvoice = invoice.ToInvoice(merchInvoice);
 
                 _invoiceService.Save(merchInvoice);
             }
             catch (Exception ex)
             {
+                MultiLogHelper.Error<InvoiceApiController>("Failed to save invoice", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Updates an invoice with adjustments.
+        /// </summary>
+        /// <param name="adjustments">
+        /// The adjustments.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost]
+        public HttpResponseMessage PutInvoiceAdjustments(InvoiceAdjustmentDisplay adjustments)
+        {
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+
+            try
+            {
+                var invoice = _invoiceService.GetByKey(adjustments.InvoiceKey);
+
+                if (invoice != null)
+                {
+                    var invoiceItems = adjustments.Items.Select(x => x.ToInvoiceLineItem());
+
+                    var success = ((InvoiceService)_invoiceService).AdjustInvoice(invoice, invoiceItems.ToArray());
+
+                    if (success) return response;
+
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, "Did not successfully adjust invoice");
+                }
+
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "Invoice not found");
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error<InvoiceApiController>("Failed to adjust invoice", ex);
+                response = Request.CreateResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message));
+            }
+            
 
             return response;
         }
@@ -322,6 +372,7 @@
             }
             catch (Exception ex)
             {
+                MultiLogHelper.Error<InvoiceApiController>("Failed to save shipping address", ex);
                 response = Request.CreateResponse(HttpStatusCode.NotFound, string.Format("{0}", ex.Message));
             }
 

@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines the CustomerService, which provides access to operations involving <see cref="ICustomer"/>
     /// </summary>
-    public interface ICustomerService : IPageCachedService<ICustomer>
+    public interface ICustomerService : IPageCachedService<ICustomer>, IStaticCollectionService<ICustomer>
     {
         /// <summary>
         /// Creates a customer without saving to the database
@@ -166,6 +166,7 @@
         /// <param name="address">
         /// The address.
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         void Save(ICustomerAddress address);
 
 
@@ -175,6 +176,7 @@
         /// <param name="addresses">
         /// The collection of addresses to be saved.
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         void Save(IEnumerable<ICustomerAddress> addresses);
 
         /// <summary>
@@ -183,6 +185,7 @@
         /// <param name="address">
         /// The address to be deleted
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         void Delete(ICustomerAddress address);
 
 
@@ -195,6 +198,7 @@
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         ICustomerAddress GetAddressByKey(Guid key);
 
         /// <summary>
@@ -206,6 +210,7 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey);
 
         /// <summary>
@@ -220,6 +225,7 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType);
 
         /// <summary>
@@ -234,6 +240,7 @@
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType);
 
         #endregion

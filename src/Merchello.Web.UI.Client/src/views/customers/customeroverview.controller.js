@@ -7,10 +7,12 @@
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$routeParams', '$timeout', 'dialogService', 'notificationsService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
-            'customerResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder',
-        function($scope, $routeParams, $timeout, dialogService, notificationsService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
-                 customerResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder) {
+        ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+            'customerResource', 'backOfficeCheckoutResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder', 'customerAddressDisplayBuilder',
+            'itemCacheInstructionBuilder', 'addToItemCacheInstructionBuilder',
+        function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+                 customerResource, backOfficeCheckoutResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder, customerAddressDisplayBuilder,
+                 itemCacheInstructionBuilder, addToItemCacheInstructionBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
@@ -20,19 +22,42 @@
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
             $scope.invoiceTotals = [];
-            $scope.settings = {}
+            $scope.settings = {};
+            $scope.entityType = 'Customer';
+            $scope.listViewEntityType = 'SalesHistory';
 
             // exposed methods
+            $scope.moveToWishList = moveToWishList;
+            $scope.moveToBasket = moveToBasket;
+            $scope.removeFromItemCache = removeFromItemCache;
+            $scope.editItemCacheItem = editItemCacheItem;
+            $scope.addToItemCache = addToItemCache;
+
             $scope.getCurrency = getCurrency;
             $scope.openEditInfoDialog = openEditInfoDialog;
             $scope.openDeleteCustomerDialog = openDeleteCustomerDialog;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
             $scope.saveCustomer = saveCustomer;
+            $scope.deleteNote = deleteNote;
+
+            $scope.load = load;
+            $scope.getColumnValue = getColumnValue;
+            $scope.invoiceDisplayBuilder = invoiceDisplayBuilder;
 
             // private properties
             var defaultCurrency = {};
             var countries = [];
             var currencies = [];
+            const baseUrl = '#/merchello/merchello/saleoverview/';
+
+            var paid = '';
+            var unpaid = '';
+            var partial = '';
+            var unfulfilled = '';
+            var fulfilled = '';
+            var open = '';
+
+            const label = '<i class="%0"></i> %1';
 
             /**
              * @ngdoc method
@@ -45,7 +70,26 @@
             function init() {
                 var key = $routeParams.id;
                 loadSettings();
+                localizationService.localize('merchelloSales_paid').then(function(value) {
+                    paid = value;
+                });
+                localizationService.localize('merchelloSales_unpaid').then(function(value) {
+                    unpaid = value;
+                });
+                localizationService.localize('merchelloSales_partial').then(function(value) {
+                    partial = value;
+                });
+                localizationService.localize('merchelloOrder_fulfilled').then(function(value) {
+                    fulfilled = value;
+                });
+                localizationService.localize('merchelloOrder_unfulfilled').then(function(value) {
+                    unfulfilled = value;
+                });
+                localizationService.localize('merchelloOrder_open').then(function(value) {
+                    open = value;
+                });
                 loadCustomer(key);
+
             }
 
             /**
@@ -107,6 +151,195 @@
                 });
             }
 
+            function addToItemCache(items, itemCacheType) {
+                var instruction = addToItemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.items = items;
+                instruction.itemCacheType = itemCacheType;
+                backOfficeCheckoutResource.addItemCacheItem(instruction).then(function() {
+                    loadCustomer($scope.customer.key);
+                });
+            }
+
+            function removeFromItemCache(lineItem, itemCacheType) {
+                var dialogData = {};
+                dialogData.name = lineItem.name;
+                dialogData.lineItem = lineItem;
+                dialogData.itemCacheType = itemCacheType;
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processRemoveFromItemCache,
+                    dialogData: dialogData
+                });
+
+            }
+
+            function processRemoveFromItemCache(dialogData) {
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = dialogData.lineItem.key;
+                instruction.itemCacheType = dialogData.itemCacheType;
+                backOfficeCheckoutResource.removeItemCacheItem(instruction).then(function() {
+                    loadCustomer($scope.customer.key);
+                });
+            }
+
+            function editItemCacheItem(lineItem, itemCacheType) {
+                var dialogData = {};
+                dialogData.name = lineItem.name;
+                dialogData.lineItem = lineItem;
+                dialogData.itemCacheType = itemCacheType;
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.itemcachelineitem.quantity.html',
+                    show: true,
+                    callback: processEditItemCacheItem,
+                    dialogData: dialogData
+                });
+            }
+
+            function processEditItemCacheItem(dialogData) {
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = dialogData.lineItem.key;
+                instruction.quantity = dialogData.lineItem.quantity;
+                instruction.itemCacheType = dialogData.itemCacheType;
+                console.info(instruction);
+                backOfficeCheckoutResource.updateLineItemQuantity(instruction).then(function() {
+                    loadCustomer($scope.customer.key);
+                });
+
+            }
+
+            function moveToWishList(lineItem) {
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = lineItem.key;
+                instruction.itemCacheType = 'Basket';
+                backOfficeCheckoutResource.moveToWishlist(instruction).then(function() {
+                    loadCustomer($scope.customer.key);
+                });
+
+            }
+
+            function moveToBasket(lineItem) {
+                var instruction = itemCacheInstructionBuilder.createDefault();
+                instruction.customerKey = $scope.customer.key;
+                instruction.entityKey = lineItem.key;
+                instruction.itemCacheType = 'Wishlist';
+
+                backOfficeCheckoutResource.moveToBasket(instruction).then(function() {
+                    loadCustomer($scope.customer.key);
+                });
+            }
+
+            function load(query) {
+                var deferred = $q.defer();
+                query.addCustomerKeyParam($scope.customer.key);
+                invoiceResource.searchByCustomer(query).then(function(results) {
+                    deferred.resolve(results);
+                });
+                return deferred.promise;
+            }
+
+
+            function getColumnValue(result, col) {
+                switch(col.name) {
+                    case 'invoiceNumber':
+                        if (result.invoiceNumberPrefix !== '') {
+                            return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumberPrefix + '-' + result.invoiceNumber + '</a>';
+                        } else {
+                            return '<a href="' + getEditUrl(result) + '">' + result.invoiceNumber + '</a>';
+                        }
+                    case 'invoiceDate':
+                        return $filter('date')(result.invoiceDate, $scope.settings.dateFormat);
+                    case 'paymentStatus':
+                        return getPaymentStatus(result);
+                    case 'fulfillmentStatus':
+                        return getFulfillmentStatus(result);
+                    case 'total':
+                        return $filter('currency')(result.total, getCurrencySymbol(result));
+                    default:
+                        return result[col.name];
+                }
+            }
+
+            function getPaymentStatus(invoice) {
+                var paymentStatus = invoice.getPaymentStatus();
+                var cssClass, icon, text;
+                switch(paymentStatus) {
+                    case 'Paid':
+                        //cssClass = 'label-success';
+                        icon = 'icon-thumb-up';
+                        text = paid;
+                        break;
+                    case 'Partial':
+                        //cssClass = 'label-default';
+                        icon = 'icon-handprint';
+                        text = partial;
+                        break;
+                    default:
+                        //cssClass = 'label-info';
+                        icon = 'icon-thumb-down';
+                        text = unpaid;
+                        break;
+                }
+                return label.replace('%0', icon).replace('%1', text);
+            }
+
+            function getFulfillmentStatus(invoice) {
+                var fulfillmentStatus = invoice.getFulfillmentStatus();
+                var cssClass, icon, text;
+                switch(fulfillmentStatus) {
+                    case 'Fulfilled':
+                        //cssClass = 'label-success';
+                        icon = 'icon-truck';
+                        text = fulfilled;
+                        break;
+                    case 'Open':
+                        //cssClass = 'label-default';
+                        icon = 'icon-loading';
+                        text = open;
+                        break;
+                    default:
+                        //cssClass = 'label-info';
+                        icon = 'icon-box-open';
+                        text = unfulfilled;
+                        break;
+                }
+                return label.replace('%0', icon).replace('%1', text);
+            }
+
+            /**
+             * @ngdoc method
+             * @name getCurrencySymbol
+             * @function
+             *
+             * @description
+             * Utility method to get the currency symbol for an invoice
+             */
+            function getCurrencySymbol(invoice) {
+
+                if (invoice.currency.symbol !== '') {
+                    return invoice.currency.symbol;
+                }
+
+                var currencyCode = invoice.getCurrencyCode();
+                var currency = _.find(currencies, function(currency) {
+                    return currency.currencyCode === currencyCode;
+                });
+                if(currency === null || currency === undefined) {
+                    return defaultCurrency;
+                } else {
+                    return currency.symbol;
+                }
+            }
+
+            function getEditUrl(invoice) {
+                return baseUrl + invoice.key;
+            }
+
             /**
              * @ngdoc method
              * @name openAddressEditDialog
@@ -122,7 +355,7 @@
                     dialogData.customerAddress = customerAddressDisplayBuilder.createDefault();
                     dialogData.selectedCountry = countries[0];
                 } else {
-                    dialogData.customerAddress = address;
+                    dialogData.customerAddress = angular.extend(customerAddressDisplayBuilder.createDefault(), address);
                     dialogData.selectedCountry = address.countryCode === '' ? countries[0] :
                         _.find(countries, function(country) {
                         return country.countryCode === address.countryCode;
@@ -255,6 +488,15 @@
                 $scope.customer.email = dialogData.email;
                 saveCustomer();
             }
+
+            function deleteNote(note) {
+                $scope.customer.notes = _.reject($scope.customer.notes, function(n) {
+                    return n.key === note.key;
+                });
+
+                saveCustomer();
+            }
+
 
             /**
              * @ngdoc method

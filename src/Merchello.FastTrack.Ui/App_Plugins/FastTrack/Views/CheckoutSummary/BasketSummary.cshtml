@@ -1,0 +1,109 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutSummaryModel>
+@using System.Web.Mvc.Html
+@using Merchello.Core
+@using Merchello.FastTrack.Models
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui
+@using Umbraco.Core.Models
+@using Umbraco.Web
+
+<div class="container-fluid">
+    <h3>Order Summary</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>Items</h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th colspan="2">Name</th>
+                            <th>Unit Price</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                        </thead>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Product.HasValue("image"))
+                                    {
+                                        var mediaId = item.Product.GetPropertyValue<string>("image");
+                                        var image = Umbraco.TypedMedia(mediaId);
+                                        <img src="@image.GetCropUrl(50, 50)" alt="@item.Product.Name"/>
+                                    }
+                                </td>
+                                <td>@item.Name</td>
+                                <td class="text-right">@item.Amount.AsFormattedCurrency()</td>
+                                <td class="text-center">@item.Quantity</td>
+                                <td class="text-right">@item.Total().AsFormattedCurrency()</td>
+                            </tr>
+                        }
+                        <tfoot>
+                        <tr>
+                            <td colspan="4" class="text-right"><strong>Sub Total:</strong></td>
+                            <td class="text-right"><strong>@Model.Total.AsFormattedCurrency()</strong></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 basket-summary">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Billing Address @RenderEdit(Model, "billing")</h4>
+                </div>
+                <div class="panel-body">
+                    @Html.Partial("_Address", Model.BillingAddress)
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6 basket-summary">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Shipping Address @RenderEdit(Model, "shipping")</h4>
+                </div>
+                <div class="panel-body">
+                    @Html.Partial("_Address", Model.ShippingAddress)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@helper RenderEdit(FastTrackCheckoutSummaryModel model, string buttonFor)
+{
+    if (AddEditButton(model, buttonFor))
+    {
+        var url = buttonFor == "billing" ?
+            ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.BillingAddress).Url :
+            ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShippingAddress).Url;
+
+            <a href="@url"><span class="glyphicon glyphicon-edit pull-right"></span></a>
+    }
+}
+
+@functions {
+
+    private bool AddEditButton(FastTrackCheckoutSummaryModel model, string buttonFor)
+    {
+        if (model.CheckoutStage == CheckoutStage.None) return false;
+        if (model.CheckoutStage == CheckoutStage.BillingAddress || (model.CheckoutStage == CheckoutStage.ShippingAddress && buttonFor == "shipping"))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+} 

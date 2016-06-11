@@ -143,6 +143,7 @@ angular.module('merchello').controller('Merchello.Backoffice.OfferEditController
 
         function createTabs(key) {
             $scope.tabs = merchelloTabsFactory.createMarketingTabs();
+            //$scope.tabs.appendOfferTab(key, $scope.offerProvider.backOfficeTree);
             $scope.tabs.appendOfferTab(key, $scope.offerProvider.backOfficeTree);
             $scope.tabs.setActive('offer');
         }

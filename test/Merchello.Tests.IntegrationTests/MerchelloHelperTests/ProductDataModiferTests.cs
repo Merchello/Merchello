@@ -11,6 +11,7 @@
     using Merchello.Tests.Base.TestHelpers;
     using Merchello.Web;
     using Merchello.Web.DataModifiers;
+    using Merchello.Web.DataModifiers.Product;
 
     using NUnit.Framework;
 

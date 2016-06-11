@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.Base.Services
 {
+    using global::Umbraco.Core.Persistence.SqlSyntax;
+
     public abstract class ServiceTestsBase<T>
     {
         protected T Before;
@@ -12,10 +14,14 @@ namespace Merchello.Tests.Base.Services
         protected bool AfterTriggered;
         protected bool CommitCalled;
 
+        protected ISqlSyntaxProvider SqlSyntaxProvider;
+
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax();
+
+            SqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider();
 
             // General tests
             MockDatabaseUnitOfWork.Committed += Comitted;

@@ -12,27 +12,29 @@
     using global::Examine;
     using global::Examine.Providers;
 
-    using log4net.Util;
-
     using Merchello.Core.Chains;
+    using Merchello.Core.ValueConverters;
     using Merchello.Examine.Providers;
     using Merchello.Web.DataModifiers;
+    using Merchello.Web.DataModifiers.Product;
 
     using Models.ContentEditing;
     using Models.Querying;
 
-    using umbraco;
-    using umbraco.cms.presentation;
-
     /// <summary>
     /// Represents a CachedProductQuery
     /// </summary>
-    internal class CachedProductQuery : CachedQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
+    internal class CachedProductQuery : CachedQueryableCollectionQueryBase<IProduct, ProductDisplay>, ICachedProductQuery
     {
         /// <summary>
         /// The product service.
         /// </summary>
         private readonly ProductService _productService;
+
+        /// <summary>
+        /// A value indicating whether or not this is being used for back office editors.
+        /// </summary>
+        private readonly DetachedValuesConversionType _conversionType;
 
         /// <summary>
         /// The data modifier.
@@ -57,11 +59,7 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         public CachedProductQuery(IProductService productService, bool enableDataModifiers)
-            : this(
-            productService,
-            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"],
-            ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"],
-            enableDataModifiers)
+            : this(productService, enableDataModifiers, DetachedValuesConversionType.Db)
         {            
         }
 
@@ -81,9 +79,55 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         public CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers) 
+            : this(service, indexProvider, searchProvider, enableDataModifiers, DetachedValuesConversionType.Db)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
+        /// </summary>
+        /// <param name="productService">
+        /// The product service.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The detached value conversion type.
+        /// </param>
+        internal CachedProductQuery(IProductService productService, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+            : this(
+            productService,
+            ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"],
+            ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"],
+            enableDataModifiers,
+            conversionType)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        /// <param name="indexProvider">
+        /// The index provider.
+        /// </param>
+        /// <param name="searchProvider">
+        /// The search provider.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The is for back office editors.
+        /// </param>
+        internal CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers, DetachedValuesConversionType conversionType)
             : base(service, indexProvider, searchProvider, enableDataModifiers)
         {
             _productService = (ProductService)service;
+            this._conversionType = conversionType;
             this.Initialize();
         }
 
@@ -106,7 +150,8 @@
         /// </returns>
         public override ProductDisplay GetByKey(Guid key)
         {
-            return this.ModifyData(GetDisplayObject(key));
+            //// modify data is handled in GetDisplayObject!
+            return GetDisplayObject(key);
         }
 
         /// <summary>
@@ -133,7 +178,31 @@
 
             ReindexEntity(entity);
 
-            return this.ModifyData(AutoMapper.Mapper.Map<ProductDisplay>(entity));
+            return this.ModifyData(entity.ToProductDisplay(this._conversionType));
+        }
+
+        /// <summary>
+        /// Gets a product by it's slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public ProductDisplay GetBySlug(string slug)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field("slugs", slug).And().Field("master", "True");
+
+            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            // Don't modifiy the data here as it would have been modified in the PerformMapSearchResultToDisplayObject
+            if (display != null) return display;
+
+            var key = _productService.GetKeyForSlug(slug);
+
+            return Guid.Empty.Equals(key) ? null : this.GetByKey(key);
         }
 
         /// <summary>
@@ -151,6 +220,7 @@
             criteria.Field("productVariantKey", key.ToString());
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
+            result.EnsureValueConversion(this._conversionType);
 
             if (result != null) return this.ModifyData(result);
 
@@ -158,7 +228,7 @@
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay());
+            return this.ModifyData(variant.ToProductVariantDisplay(this._conversionType));
         }
 
         /// <summary>
@@ -177,13 +247,17 @@
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
 
-            if (result != null) return this.ModifyData(result);
+            if (result != null)
+            {
+                result.EnsureValueConversion(this._conversionType);
+                return this.ModifyData(result);
+            }
 
             var variant = _productService.GetProductVariantBySku(sku);
 
             if (variant != null) this.ReindexEntity(variant);
 
-            return this.ModifyData(variant.ToProductVariantDisplay());
+            return this.ModifyData(variant.ToProductVariantDisplay(this._conversionType));
         }
 
         /// <summary>
@@ -234,7 +308,7 @@
         {
             return GetQueryResultDisplay(_productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
         }
-
+        
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names
         /// </summary>
@@ -716,24 +790,7 @@
         internal void ReindexEntity(IProductVariant entity)
         {
             IndexProvider.ReIndexNode(entity.SerializeToXml().Root, IndexTypes.ProductVariant);
-        }
-
-        ///// <summary>
-        ///// Modifies Product Data with configured DataModifier Chain.
-        ///// </summary>
-        ///// <param name="product">
-        ///// The product.
-        ///// </param>
-        ///// <returns>
-        ///// The <see cref="ProductDisplay"/>.
-        ///// </returns>
-        //internal ProductDisplay ModifyProductData(ProductDisplay product)
-        //{
-        //    if (!EnableDataModifiers) return product;
-        //    var modified = this.ModifyData(product);
-        //    modified.ProductVariants = product.ProductVariants.Select(x => this.ModifyData(x));
-        //    return modified;
-        //}
+        }        
 
         /// <summary>
         /// The modify data.
@@ -758,6 +815,36 @@
             return modified ?? data;
         }
 
+        /// <summary>
+        /// Gets a display object from the Examine cache or falls back the the database if not found
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        protected override ProductDisplay GetDisplayObject(Guid key)
+        {
+            var criteria = SearchProvider.CreateSearchCriteria();
+            criteria.Field(KeyFieldInIndex, key.ToString()).And().Field("master", "True");
+
+            var display = SearchProvider.Search(criteria).Select(PerformMapSearchResultToDisplayObject).FirstOrDefault();
+
+            if (display != null)
+            {
+                display.EnsureValueConversion(this._conversionType);
+                return display;
+            }
+
+            var entity = Service.GetByKey(key);
+
+            if (entity == null) return null;
+
+            ReindexEntity(entity);
+
+            return this.ModifyData(entity.ToProductDisplay(this._conversionType));
+        }
 
         /// <summary>
         /// Maps a <see cref="SearchResult"/> to <see cref="ProductDisplay"/>
@@ -770,9 +857,9 @@
         /// </returns>
         protected override ProductDisplay PerformMapSearchResultToDisplayObject(SearchResult result)
         {
-            return result.ToProductDisplay(GetVariantsByProduct);
+            return this.ModifyData(result.ToProductDisplay(GetVariantsByProduct, this._conversionType));
         }
-
+     
 
         /// <summary>
         /// Initializes the lazy

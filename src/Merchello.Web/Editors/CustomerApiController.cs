@@ -7,13 +7,16 @@
     using System.Web.Http;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
+    using Merchello.Web.Workflow;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Services;
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -120,7 +123,56 @@
         public CustomerDisplay GetCustomer(Guid id)
         {
             return _merchello.Query.Customer.GetByKey(id);
-        }        
+        }
+
+        /// <summary>
+        /// Gets a customer item cache for baskets and wish lists.
+        /// </summary>
+        /// <param name="customerKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="itemCacheType">
+        /// The item cache type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CustomerItemCacheDisplay"/>.
+        /// </returns>
+        /// <exception cref="NotSupportedException">
+        /// Throws an exception if itemCacheType is not Basket or Wish list
+        /// </exception>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if a customer cannot be found for the key passed
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Throws and invalid operation exception if when a wish list is attempted to be retrieved from an anonymous customer.
+        /// </exception>
+        [HttpGet]
+        public CustomerItemCacheDisplay GetCustomerItemCache(Guid customerKey, ItemCacheType itemCacheType)
+        {
+            if (itemCacheType != ItemCacheType.Basket && itemCacheType != ItemCacheType.Wishlist)
+            {
+                var notSupported = new NotSupportedException("Basket and Wishlist are the only supported item caches");
+                LogHelper.Error<CustomerApiController>("Unsupported item cache type", notSupported);
+                throw notSupported;
+            }
+            
+            var customer = _customerService.GetAnyByKey(customerKey);
+
+            if (customer == null) throw new NullReferenceException("customer for customer key was null");
+
+            if (itemCacheType == ItemCacheType.Wishlist && customer.IsAnonymous)
+            {
+                var invalid =
+                    new InvalidOperationException(
+                        "Wishlists are not supported with anonymous customers.  The customer key passed returned an anonymous customer.");
+                MultiLogHelper.Error<CustomerApiController>("Could not retrieve customer wish list", invalid);
+                throw invalid;
+            }
+
+            return itemCacheType == ItemCacheType.Basket ? 
+                ((Basket)customer.Basket()).ItemCache.ToCustomerItemCacheDisplay() : 
+                ((WishList)((Customer)customer).WishList()).ItemCache.ToCustomerItemCacheDisplay();
+        }  
 
         /// <summary>
         /// Returns a filtered list of customers
@@ -152,7 +204,7 @@
                   query.ItemsPerPage,
                   query.SortBy,
                   query.SortDirection);
-        }
+        }       
 
         /// <summary>
         /// The search by date range.
@@ -209,8 +261,6 @@
                 customer.FirstName,
                 customer.LastName,
                 customer.Email);
-
-            newCustomer.Notes = customer.Notes;
             newCustomer.LastActivityDate = DateTime.Today;
 
             ////((Customer)newCustomer).Addresses = customer.Addresses.Select(x => x.ToCustomerAddress(new CustomerAddress(customer.Key)));

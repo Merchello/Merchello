@@ -1,0 +1,31 @@
+<div class="umb-panel merchello-side-panel">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloOrder_voidPayment" /></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="control-group row-fluid">
+            <h4><localize key="merchelloOrder_voidPaymentConfirmMessage" /></h4>
+            <p class="text-warning"><localize key="merchelloProviders_paymentVoidWarning" /></p>
+        </div>
+
+    </div>
+
+    <div class="umb-panel-footer" >
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button
+                        class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="merchelloOrder_voidPayment" />
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

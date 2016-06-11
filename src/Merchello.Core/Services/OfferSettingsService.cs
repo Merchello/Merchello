@@ -5,15 +5,18 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
+    using umbraco.BusinessLogic;
     using umbraco.cms.presentation;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
@@ -21,22 +24,12 @@
     /// <summary>
     /// Represents the OfferSettingsService.
     /// </summary>
-    internal class OfferSettingsService : IOfferSettingsService
+    internal class OfferSettingsService : MerchelloRepositoryService, IOfferSettingsService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-
-        /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
 
         #region Constructors
 
@@ -44,8 +37,19 @@
         /// Initializes a new instance of the <see cref="OfferSettingsService"/> class.
         /// </summary>
         public OfferSettingsService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfferSettingsService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OfferSettingsService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
         }
 
         /// <summary>
@@ -54,9 +58,12 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public OfferSettingsService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OfferSettingsService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
         }
 
         /// <summary>
@@ -68,13 +75,32 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public OfferSettingsService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OfferSettingsService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfferSettingsService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public OfferSettingsService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
         }
 
         #endregion
@@ -247,8 +273,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferSettingsRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferSettingsRepository(uow))
                 {
                     repository.AddOrUpdate(offerSettings);
                     uow.Commit();
@@ -280,8 +306,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferSettingsRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferSettingsRepository(uow))
                 {
                     repository.AddOrUpdate(offerSettings);
                     uow.Commit();
@@ -310,8 +336,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferSettingsRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferSettingsRepository(uow))
                 {
                     foreach (var setting in settingsArray)
                     {
@@ -343,8 +369,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferSettingsRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferSettingsRepository(uow))
                 {
                     repository.Delete(offerSettings);
                     uow.Commit();
@@ -373,8 +399,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferSettingsRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferSettingsRepository(uow))
                 {
                     foreach (var setting in settingsArray)
                     {
@@ -400,7 +426,7 @@
         /// </returns>
         public IOfferSettings GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -417,7 +443,7 @@
         /// </returns>
         public IEnumerable<IOfferSettings> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
@@ -443,7 +469,7 @@
         /// </returns>
         public Page<IOfferSettings> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                var query = Query<IOfferSettings>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -477,7 +503,7 @@
         /// </returns>
         public IEnumerable<IOfferSettings> GetByOfferProviderKey(Guid offerProviderKey, bool activeOnly = true)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = activeOnly ? 
                     Query<IOfferSettings>.Builder.Where(x => x.OfferProviderKey == offerProviderKey && x.Active) :
@@ -498,7 +524,7 @@
         /// </returns>
         public IOfferSettings GetByOfferCode(string offerCode)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferSettings>.Builder.Where(x => x.OfferCode == offerCode);
                 return repository.GetByQuery(query).FirstOrDefault();
@@ -516,7 +542,7 @@
         /// </returns>
         public IEnumerable<IOfferSettings> GetAllActive(bool excludeExpired = true)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = excludeExpired
                                 ? Query<IOfferSettings>.Builder.Where(x => x.Active && x.OfferEndsDate <= DateTime.Now)
@@ -537,7 +563,7 @@
         /// </returns>
         public bool OfferCodeIsUnique(string offerCode)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferSettings>.Builder.Where(x => x.OfferCode == offerCode);
                 var result = repository.GetByQuery(query);
@@ -573,7 +599,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateOfferSettingsRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferSettingsRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Search(filterTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }

@@ -12,14 +12,29 @@
         IAuditLogService AuditLogService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IAuditLogService"/>
+        /// </summary>
+        INoteService NoteService { get; }
+
+        /// <summary>
         /// Gets the <see cref="ICustomerService"/>
         /// </summary>
         ICustomerService CustomerService { get; }
 
         /// <summary>
+        /// Gets the <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        IDetachedContentTypeService DetachedContentTypeService { get; }
+
+        /// <summary>
         /// Gets the <see cref="IDigitalMediaService"/>.
         /// </summary>
         IDigitalMediaService DigitalMediaService { get;  }
+
+        /// <summary>
+        /// Gets the <see cref="IEntityCollectionService"/>.
+        /// </summary>
+        IEntityCollectionService EntityCollectionService { get; }
 
         /// <summary>
         /// Gets the <see cref="IGatewayProviderService"/>
@@ -61,10 +76,10 @@
         /// </summary>
         IProductVariantService ProductVariantService { get; }
 
-        ///// <summary>
-        ///// Gets the <see cref="IShipCountryService"/>
-        ///// </summary>
-        //IShipCountryService ShipCountryService { get; }
+        /// <summary>
+        /// Gets the <see cref="IShipCountryService"/>
+        /// </summary>
+        IShipCountryService ShipCountryService { get; }
 
         /// <summary>
         /// Gets the <see cref="IStoreSettingService"/>

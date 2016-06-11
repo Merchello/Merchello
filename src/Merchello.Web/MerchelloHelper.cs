@@ -8,7 +8,10 @@
     using Core.Services;
     
     using global::Examine.SearchCriteria;
-    
+
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.ValueConverters;
+    using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Validation;
 
     using Models.ContentEditing;
@@ -17,10 +20,7 @@
 
     /// <summary>
     /// A helper class that provides many useful methods and functionality for using Merchello in templates
-    /// </summary> 
-    /// <remarks>
-    /// TODO Refactor the MerchelloHelper in version 2 to take MerchelloContext rather than the ServiceContext
-    /// </remarks>
+    /// </summary>
     public class MerchelloHelper
     {
         /// <summary>
@@ -83,6 +83,23 @@
         /// A value indicating whether or not to enable data modifiers
         /// </param>
         public MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers)
+            : this(serviceContext, enableDataModifiers, DetachedValuesConversionType.Db)
+        { 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="serviceContext">
+        /// The service context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type for detached values.
+        /// </param>
+        internal MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
             Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
 
@@ -109,241 +126,129 @@
                 return _validationHelper.Value;
             }
         }
-        
-        #region Product
 
         /// <summary>
-        /// Retrieves a <see cref="ProductDisplay"/> from the Merchello Product index.
+        /// Gets a <see cref="IProductContent"/> by it's key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="ProductDisplay"/>.
+        /// The <see cref="IProductContent"/>.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
-        public ProductDisplay Product(string key)
+        public IProductContent TypedProductContent(string key)
         {
-            return Product(new Guid(key));
+            return this.TypedProductContent(new Guid(key));
         }
 
         /// <summary>
-        /// Retrieves a <see cref="ProductDisplay"/> from the Merchello Product index.
+        /// Gets a <see cref="IProductContent"/> by it's key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="ProductDisplay"/>.
+        /// The <see cref="IProductContent"/>.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
-        public ProductDisplay Product(Guid key)
+        public IProductContent TypedProductContent(Guid key)
         {
-            return Query.Product.GetByKey(key);
+            var display = Query.Product.GetByKey(key);
+            return display == null ? null : 
+                display.AsProductContent();
         }
 
-
         /// <summary>
-        /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.
+        /// Gets a <see cref="IProductContent"/> by it's slug.
         /// </summary>
-        /// <param name="key">
-        /// The key.
+        /// <param name="slug">
+        /// The slug.
         /// </param>
         /// <returns>
-        /// The <see cref="ProductVariantDisplay"/>.
+        /// The <see cref="IProductContent"/>.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
-        public ProductVariantDisplay ProductVariant(string key)
+        public IProductContent TypedProductContentBySlug(string slug)
         {
-            return ProductVariant(new Guid(key));
+            var display = Query.Product.GetBySlug(slug);
+            return display == null ? null : 
+                display.AsProductContent();
         }
 
         /// <summary>
-        /// Retrieves a <see cref="ProductVariantDisplay"/> from the Merchello Product index.
+        /// Gets a <see cref="IProductContent"/> by it's SKU.
         /// </summary>
-        /// <param name="key">
-        /// The key.
+        /// <param name="sku">
+        /// The SKU.
         /// </param>
         /// <returns>
-        /// The <see cref="ProductVariantDisplay"/>.
+        /// The <see cref="IProductContent"/>.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Product.GetProductVariantByKey")]
-        public ProductVariantDisplay ProductVariant(Guid key)
+        public IProductContent TypeProductContentBySku(string sku)
         {
-            return Query.Product.GetProductVariantByKey(key);
-        }
-
-
-        /// <summary>
-        /// Get a product variant from a product by it's collection of attributes
-        /// </summary>
-        /// <param name="productKey">The product key</param>
-        /// <param name="attributeKeys">The option choices (attributeKeys)</param>
-        /// <returns>The <see cref="ProductVariantDisplay"/></returns>
-        public ProductVariantDisplay GetProductVariantWithAttributes(Guid productKey, Guid[] attributeKeys)
-        {
-            var product = Query.Product.GetByKey(productKey);
-            return product.ProductVariants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
+            var display = Query.Product.GetBySku(sku);
+            return display == null ? null :
+                display.AsProductContent();
         }
 
         /// <summary>
-        /// Gets a list of valid variants based on partial attribute selection
+        /// The typed product content from collection.
         /// </summary>
-        /// <param name="productKey">The product key</param>
-        /// <param name="attributeKeys">The selected option choices</param>
-        /// <returns>A collection of <see cref="ProductVariantDisplay"/></returns>
-        /// <remarks>
-        /// Intended to assist in product variant selection 
-        /// </remarks>
-        public IEnumerable<ProductVariantDisplay> GetValidProductVariants(Guid productKey, Guid[] attributeKeys)
-        {
-            var product = Query.Product.GetByKey(productKey);
-            if (product == null) throw new InvalidOperationException("Product is null");
-            if (!attributeKeys.Any()) return product.ProductVariants;
-
-            var variants = product.ProductVariants.Where(x => attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
-
-            return variants;
-        }
-
-        /// <summary>
-        /// Searches the Merchello Product index.  NOTE:  This returns a ProductDisplay and is not a Content search.  Use the the UmbracoHelper.Search for content searches.
-        /// </summary>
-        /// <param name="term">The search term</param>
-        /// <returns>The collection of <see cref="ProductDisplay"/></returns>
-        [Obsolete("Use MerchelloHelper.Query.Product.Search")]
-        public IEnumerable<ProductDisplay> SearchProducts(string term)
-        {
-            return Query.Product.Search(term, 0, int.MaxValue).Items.Select(x => (ProductDisplay)x);
-        }
-
-        #endregion
-
-        #region Invoice
-
-        /// <summary>
-        /// Retrieves a <see cref="InvoiceDisplay"/> from the Merchello Invoice index.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
+        /// <param name="collectionKey">
+        /// The collection key.
         /// </param>
         /// <returns>
-        /// The <see cref="InvoiceDisplay"/>.
+        /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByKey")]
-        public InvoiceDisplay Invoice(Guid key)
+        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey)
         {
-            return Query.Invoice.GetByKey(key);
+            return TypedProductContentFromCollection(collectionKey, 1, long.MaxValue);
         }
 
         /// <summary>
-        /// Retrieves a <see cref="InvoiceDisplay"/> from the Merchello Invoice index.
+        /// The typed product content from collection.
         /// </summary>
-        /// <param name="key">
-        /// The key.
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The current page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items Per Page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field (valid values are "sku", "name", "price").
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="InvoiceDisplay"/>.
+        /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByKey")]
-        public InvoiceDisplay Invoice(string key)
+        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return Query.Invoice.GetByKey(key.EncodeAsGuid());
+            if (page <= 0) page = 1;
+
+            var products =
+                Query.Product.GetFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection)
+                    .Items.Select(x => (ProductDisplay)x)
+                    .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
+
+            var factory = new ProductContentFactory();
+            return products.Select(factory.BuildContent);
         }
 
         /// <summary>
-        /// The invoices by customer.
+        /// Formats an amount based on Merchello store settings.
         /// </summary>
-        /// <param name="customerKey">
-        /// The customer key.
+        /// <param name="amount">
+        /// The amount.
         /// </param>
         /// <returns>
-        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
+        /// The formatted currency.
         /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByCustomerKey")]
-        public IEnumerable<InvoiceDisplay> InvoicesByCustomer(Guid customerKey)
+        public string FormatCurrency(decimal amount)
         {
-            return Query.Invoice.GetByCustomerKey(customerKey);
+            return CurrencyHelper.FormatCurrency(amount);
         }
-
-        /// <summary>
-        /// The invoices by customer.
-        /// </summary>
-        /// <param name="customerKey">
-        /// The customer key.
-        /// </param>
-        /// <returns>
-        /// A collection of <see cref="InvoiceDisplay"/> associated with the customer.
-        /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.GetByCustomerKey")]
-        public IEnumerable<InvoiceDisplay> InvoicesByCustomer(string customerKey)
-        {
-            return Query.Invoice.GetByCustomerKey(customerKey.EncodeAsGuid());
-        }
-        /// <summary>
-        /// Searches the Merchello Invoice index. 
-        /// </summary>
-        /// <param name="term">
-        /// The term.
-        /// </param>
-        /// <returns>
-        /// The collection of <see cref="InvoiceDisplay"/>.
-        /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Invoice.Search.  This may no longer return all valid results")]
-        public IEnumerable<InvoiceDisplay> SearchInvoices(string term)
-        {
-            return InvoiceQuery.Search(term);
-        }
-
-        /// <summary>
-        /// Searches the Merchello Invoice index. 
-        /// </summary>
-        /// <param name="criteria">
-        /// The criteria.
-        /// </param>
-        /// <returns>
-        /// The collection of all <see cref="InvoiceDisplay"/> matching the criteria.
-        /// </returns>
-         [Obsolete("Use MerchelloHelper.Query.Invoice.Search.  This may no longer return all valid results")]
-        public IEnumerable<InvoiceDisplay> SearchInvoices(ISearchCriteria criteria)
-        {
-            return InvoiceQuery.Search(criteria);
-        }
-
-        #endregion
-
-        #region Customers
-
-        /// <summary>
-        /// The customer.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CustomerDisplay"/>.
-        /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Customer.GetByKey")]
-        public CustomerDisplay Customer(string key)
-        {
-            return Query.Customer.GetByKey(key.EncodeAsGuid());
-        }
-
-        /// <summary>
-        /// The customer.
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CustomerDisplay"/>.
-        /// </returns>
-        [Obsolete("Use MerchelloHelper.Query.Customer.GetByKey")]
-        public CustomerDisplay Customer(Guid key)
-        {
-            return Query.Customer.GetByKey(key);
-        }
-
-        #endregion
     }
 }

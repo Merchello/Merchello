@@ -100,7 +100,7 @@
                 new StaticField("sku", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("price", FieldIndexTypes.ANALYZED, true, string.Empty),
                 new StaticField("onSale", FieldIndexTypes.ANALYZED, true, string.Empty),
-                new StaticField("manufacturer", FieldIndexTypes.ANALYZED,false, string.Empty),
+                new StaticField("manufacturer", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("modelNumber", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("salePrice", FieldIndexTypes.NOT_ANALYZED, true, string.Empty),
                 new StaticField("costOfGoods", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
@@ -121,8 +121,11 @@
                 new StaticField("totalInventoryCount", FieldIndexTypes.NOT_ANALYZED, false, "NUMBER"),
                 new StaticField("attributes", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("catalogInventories", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("detachedContents", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("productOptions", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
                 new StaticField("versionKey", FieldIndexTypes.NOT_ANALYZED, false, string.Empty),
+                new StaticField("staticCollectionKeys", FieldIndexTypes.ANALYZED, false, string.Empty),
+                new StaticField("slugs", FieldIndexTypes.ANALYZED, false, string.Empty),
                 new StaticField("createDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("updateDate", FieldIndexTypes.NOT_ANALYZED, false, "DATETIME"),
                 new StaticField("allDocs", FieldIndexTypes.ANALYZED, false, string.Empty)
@@ -148,6 +151,8 @@
 
             PerformIndexAll(IndexTypes.ProductVariant);
         }
+
+
 
         /// <summary>
         /// Adds all variants for a given product to the index

@@ -1,0 +1,18 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.DeleteEntityCollectionController">
+    <div class="row-fluid" style="padding: 1em">
+            <h4><localize key="merchelloDelete_deleteConfirmMessage" /> '{{dialogData.name}}'? </h4>
+    </div>
+
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link">
+                <localize key="general_cancel"></localize>
+            </a>
+
+            <button class="btn btn-danger"
+                    data-ng-click="confirmDelete()">
+                <localize key="general_delete"></localize>
+            </button>
+        </div>
+    </div>
+</div>

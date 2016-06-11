@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Events;
+    using Merchello.Core.Logging;
 
     using Models;
     using Observation;
@@ -42,6 +43,17 @@
             _notificationContext = notificationContext;
 
             Initialize();
+        }
+
+        /// <summary>
+        /// Gets the message model type.
+        /// </summary>
+        public Type MessageModelType
+        {
+            get
+            {
+                return typeof(T);
+            }
         }
 
         /// <summary>
@@ -139,7 +151,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<NotificationMonitorBase<T>>("Failed Building Cache", ex);
+                MultiLogHelper.Error<NotificationMonitorBase<T>>("Failed Building Cache", ex);
                 throw;
             }
         }

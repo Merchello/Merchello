@@ -1,0 +1,16 @@
+@inherits Merchello.Web.Mvc.MerchelloHelperViewPage<Merchello.Core.Models.MonitorModels.IPaymentResultMonitorModel>
+@using Merchello.Core
+@using Merchello.Core.Models
+
+
+Dear @Model.Invoice.BillToName
+
+<p>Thank you for your order.</p>
+<ul>
+    @foreach (var item in Model.Invoice.Items)
+    {
+        <li>@item.Name + @item.Price.AsFormattedCurrency()</li>
+    }
+</ul>
+
+<p>Thanks!</p>

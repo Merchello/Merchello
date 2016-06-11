@@ -1,0 +1,10 @@
+.merchello-settings {
+
+  // hacky fix for global style override
+  label {
+    vertical-align: middle;
+    span {
+      display: inline-block;
+    }
+  }
+}

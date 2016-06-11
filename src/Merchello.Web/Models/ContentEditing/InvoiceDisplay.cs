@@ -3,8 +3,15 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Web.Models.Interfaces;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
     /// The invoice display.
@@ -107,6 +114,11 @@
         public string BillToCompany { get; set; }
 
         /// <summary>
+        /// Gets or sets the currency code.
+        /// </summary>
+        public string CurrencyCode { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether exported.
         /// </summary>
         public bool Exported { get; set; }
@@ -130,6 +142,11 @@
         /// Gets or sets the items.
         /// </summary>
         public override IEnumerable<InvoiceLineItemDisplay> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets the notes.
+        /// </summary>
+        public IEnumerable<NoteDisplay> Notes { get; set; }
 
         /// <summary>
         /// Gets or sets the currency.
@@ -185,6 +202,22 @@
                 Phone = invoice.BillToPhone,
                 Email = invoice.BillToEmail
             };
+        }
+
+        /// <summary>
+        /// Gets an invoice number with a prefix (if any).
+        /// </summary>
+        /// <param name="invoice">
+        /// The invoice.
+        /// </param>
+        /// <returns>
+        /// The prefixed invoice number.
+        /// </returns>
+        public static string PrefixedInvoiceNumber(this InvoiceDisplay invoice)
+        {
+            return string.IsNullOrEmpty(invoice.InvoiceNumberPrefix)
+                ? invoice.InvoiceNumber.ToString(CultureInfo.InvariantCulture)
+                : string.Format("{0}-{1}", invoice.InvoiceNumberPrefix, invoice.InvoiceNumber);
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿namespace Merchello.Core
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Merchello ExtendedData constants
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public partial class Constants
     {
         /// <summary>
@@ -29,6 +31,7 @@
                     "merchProductPriceTaxAmount",
                     "merchProductSalePriceTaxAmount",
                     "merchTaxIncludedInProductPrice",
+                    "merchLineItemAllowsValidation",
                     "merchName",
                     "merchSku",
                     "merchExported",
@@ -66,7 +69,8 @@
                     "merchBaseTax",
                     "merchProvinceTaxRate",
                     "merchTaxTransactionResults",
-                    "merchSmtpProviderSettings"
+                    "merchSmtpProviderSettings",
+                    "merchBasketItemChoices"
                 }; 
             }
         }
@@ -118,6 +122,17 @@
                 get { return "merchCurrencyCode";  } 
             }
 
+            /// <summary>
+            /// Gets the version key.
+            /// </summary>
+            public static string VersionKey
+            {
+                get
+                {
+                    return "merchVersionKey";
+                }
+            }
+
             //// Common -------------------------------------------------------------------------
 
             /// <summary>
@@ -152,6 +167,7 @@
                 get { return "merchExported"; }
             }
 
+
             /// <summary>
             /// Gets the quantity reserved extended data key.
             /// </summary>
@@ -159,6 +175,7 @@
             {
                 get { return "merchQuantity"; }
             }
+
 
             //// Payment ------------------------------------------------------------------------
 
@@ -367,7 +384,26 @@
                 get { return "merchBillingAddress"; }
             }
 
+            /// <summary>
+            /// Gets the note reserved extended data key.
+            /// </summary>
+            public static string Note
+            {
+                get { return "merchNote"; }
+            }
+
             //// LineItem -----------------------------------------------------------------------
+
+            /// <summary>
+            /// Gets the validate line item.
+            /// </summary>
+            public static string LineItemAllowsValidation
+            {
+                get
+                {
+                    return "merchLineItemAllowsValidation";
+                }
+            }
 
             /// <summary>
             /// Gets the container key reserved extended data key.
@@ -538,6 +574,21 @@
                     return "merchOfferCodeTempData";
                 }
             }
+
+            //// UI ----------------------------------------------------------------
+
+
+            /// <summary>
+            /// Gets the key for storing the customer choices when adding an item to a basket.
+            /// </summary>
+            public static string BasketItemCustomerChoice
+            {
+                get
+                {
+                    return "merchBasketItemChoices";
+                }
+            }
+
         }
     }
 }

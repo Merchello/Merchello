@@ -22,7 +22,7 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
 
             function init() {
                 container.hide();
-                eventsService.on(eventOfferSavingName, onOfferSaving)
+                eventsService.on(eventOfferSavingName, onOfferSaving);
                 input.bind("keyup keypress", function (event) {
                     var code = event.which;
                     // alpha , numbers, ! and backspace
@@ -76,6 +76,7 @@ angular.module('merchello.directives').directive('uniqueOfferCode', function() {
                 }
                 frm.offerCode.$setValidity('offerCode', valid);
             }
+            
             // Initialize
             init();
         }

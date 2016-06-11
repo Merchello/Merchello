@@ -1,11 +1,14 @@
-﻿using System.Configuration;
-
-namespace Merchello.Core.Configuration.Outline
+﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System.Configuration;
+
+    /// <summary>
+    /// The settings element.
+    /// </summary>
     public class SettingsElement : ConfigurationElement
     {
         /// <summary>
-        /// Gets/sets the alias (key) value for the settings collection element.  Presumably this is an enum value.
+        /// Gets or sets the alias (key) value for the settings collection element.  Presumably this is an enumerated value.
         /// </summary>
         [ConfigurationProperty("alias", IsKey = true)]
         public string Alias
@@ -15,7 +18,7 @@ namespace Merchello.Core.Configuration.Outline
         }
 
         /// <summary>
-        /// Gets/sets the value associated with the setting.
+        /// Gets or sets the value associated with the setting.
         /// </summary>
         [ConfigurationProperty("value", IsRequired = true)]
         public string Value

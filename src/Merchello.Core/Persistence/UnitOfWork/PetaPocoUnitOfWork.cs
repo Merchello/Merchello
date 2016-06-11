@@ -7,7 +7,9 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Core.Persistence.UnitOfWork
 {
-	/// <summary>
+    using Umbraco.Core.Persistence.UnitOfWork;
+
+    /// <summary>
 	/// Represents the Unit of Work implementation for PetaPoco
 	/// </summary>
 	internal class PetaPocoUnitOfWork : DisposableObject, IDatabaseUnitOfWork

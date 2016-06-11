@@ -1,0 +1,18 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.CreateStaticCollectionController" data-ng-show="loaded">
+    <form name="collectionForm" id="collectionForm">
+        <div class="form-group row-fluid" style="padding: 1em">
+            <label for="name"><localize key="general_name" />:</label>
+            <input name="name" type="text" class="span11" data-ng-model="name" required />
+            <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+        </div>
+    </form>
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <!-- ACTION: Cancel -->
+            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+            <!-- ACTION: Submit DialogData -->
+            <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
+
+        </div>
+    </div>
+</div>

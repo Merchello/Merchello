@@ -80,7 +80,7 @@ namespace Merchello.Tests.IntegrationTests.Examine
         /// <summary>
         /// Test verifies that a new product can be added to an existing index
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_Add_A_New_Product_To_The_Index()
         {
             PreTestDataWorker.DeleteAllProducts();

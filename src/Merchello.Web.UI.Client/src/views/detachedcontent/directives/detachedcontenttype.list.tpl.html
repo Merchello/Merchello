@@ -1,0 +1,33 @@
+<div class="merchello-pane row-fluid" data-ng-show="loaded">
+
+    <div data-ng-repeat="contentType in detachedContentTypes">
+        <label class="merchello-control-label">
+            {{contentType.name}}
+            <small data-ng-show="contentType.description.length > 0">{{contentType.description}}</small>
+        </label>
+        <div class="control-group umb-control-group">
+
+        <table class="table table-striped merchello-striped-table detached-content-type-table" data-ng-show="preValuesLoaded">
+            <thead>
+            <tr>
+                <th><localize key="merchelloDetachedContent_umbracoContentTypeName" /></th>
+                <th><localize key="merchelloDetachedContent_umbracoContentTypeAlias" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="merchello-icon-container">
+                <td><i class="icon {{contentType.umbContentType.icon}}" data-ng-hide="contentType.umbContentType.icon===''"></i> {{contentType.umbContentType.name}}</td>
+                <td>{{contentType.umbContentType.alias}}</td>
+                <td class="edit">
+                    <merchello-icon-bar show-add="false" show-edit="true" show-delete="debugAllowDelete" do-edit="edit(contentType)" do-delete="delete(contentType)"></merchello-icon-bar>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <div class="pager well" data-ng-hide="detachedContentTypes.length > 0 && entityType === 'Product'">
+        <localize key="merchelloDetachedContent_noDetachedContentTypes" />
+    </div>
+
+</div>

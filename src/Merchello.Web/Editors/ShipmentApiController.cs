@@ -1,11 +1,8 @@
-﻿using Merchello.Web.Models.SaleHistory;
-
-namespace Merchello.Web.Editors
+﻿namespace Merchello.Web.Editors
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Management.Instrumentation;
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
@@ -13,10 +10,9 @@ namespace Merchello.Web.Editors
     using Merchello.Core;
     using Merchello.Core.Builders;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
-    using Merchello.Web.Models.Querying;
+    using Merchello.Web.Models.ContentEditing.Checkout;
     using Merchello.Web.Models.Shipping;
     using Merchello.Web.WebApi;
 
@@ -50,6 +46,11 @@ namespace Merchello.Web.Editors
         private readonly IShipMethodService _shipMethodService;
 
         /// <summary>
+        /// The customer service.
+        /// </summary>
+        private readonly ICustomerService _customerService;
+
+        /// <summary>
         /// The <see cref="MerchelloHelper"/>.
         /// </summary>
         private readonly MerchelloHelper _merchello;
@@ -75,11 +76,13 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _customerService = merchelloContext.Services.CustomerService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
         /// <summary>
-        /// This is a helper contructor for unit testing
+        /// Initializes a new instance of the <see cref="ShipmentApiController"/> class. 
+        /// This is a helper constructor for unit testing
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello Context.
@@ -94,6 +97,7 @@ namespace Merchello.Web.Editors
             _invoiceService = merchelloContext.Services.InvoiceService;
             _orderService = merchelloContext.Services.OrderService;
             _shipMethodService = ((ServiceContext)merchelloContext.Services).ShipMethodService;
+            _customerService = merchelloContext.Services.CustomerService;
             _merchello = new MerchelloHelper(merchelloContext.Services, false);
         }
 
@@ -102,7 +106,12 @@ namespace Merchello.Web.Editors
         /// 
         /// GET /umbraco/Merchello/ShipmentApi/GetShipment/{guid}
         /// </summary>
-        /// <param name="id">The shipment key</param>
+        /// <param name="id">
+        /// The shipment key
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipmentDisplay"/>.
+        /// </returns>
         [HttpGet]
         public ShipmentDisplay GetShipment(Guid id)
         {
@@ -115,12 +124,17 @@ namespace Merchello.Web.Editors
             return shipment.ToShipmentDisplay();
         }
 
+
 		/// <summary>
 		/// Returns a list of shipments by their ids
-		/// GET /umbraco/Merchello/ShipmentApi/GetShipments?ids={guid}&ids={guid}
+		/// GET /umbraco/Merchello/ShipmentApi/GetShipments?ids={guid}={guid}
 		/// </summary>
-		/// <param name="ids"></param>
-		/// <returns></returns>
+		/// <param name="ids">
+		/// The ids.
+		/// </param>
+		/// <returns>
+        /// The <see cref="IEnumerable{ShipmentDisplay}"/>.
+		/// </returns>
 		[HttpGet]
         public IEnumerable<ShipmentDisplay> GetShipments([FromUri]IEnumerable<Guid> ids)
 		{
@@ -138,10 +152,14 @@ namespace Merchello.Web.Editors
 		}
 
         /// <summary>
-        /// Gets the Shipmethod that was quoted for an order
+        /// Gets the Ship method that was quoted for an order
         /// </summary>
-        /// <param name="order"></param>
-        /// <returns></returns>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ShipMethodDisplay"/>.
+        /// </returns>
         [HttpPost]
         public ShipMethodDisplay GetShipMethod(OrderDisplay order)
         {
@@ -215,10 +233,12 @@ namespace Merchello.Web.Editors
 
         /// <summary>
         /// Adds a shipment
-        ///
+        /// 
         /// POST /umbraco/Merchello/ShipmentApi/CreateShipment
         /// </summary>
-        /// <param name="shipmentRequest">POSTed <see cref="ShipmentRequestDisplay"/> object</param>
+        /// <param name="shipmentRequest">
+        /// POSTed <see cref="ShipmentRequestDisplay"/> object
+        /// </param>
         /// <remarks>
         /// 
         /// Note:  This is a modified order that very likely has not been persisted.  The UI 
@@ -227,6 +247,9 @@ namespace Merchello.Web.Editors
         /// other order data, such as the invoiceKey are important for this process.
         /// 
         /// </remarks>
+        /// <returns>
+        /// The <see cref="ShipmentDisplay"/>.
+        /// </returns>
         [HttpPost]
         public ShipmentDisplay NewShipment(ShipmentRequestDisplay shipmentRequest)
         {
@@ -241,15 +264,14 @@ namespace Merchello.Web.Editors
                 var attempt = builder.Build();
                 
                 if (!attempt.Success)
-                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));
-                
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, attempt.Exception));                
                                   
                 return attempt.Result.ToShipmentDisplay();
 
             }
             catch (Exception ex)
             {
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("{0}", ex.Message)));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, string.Format("{0}", ex.Message)));
             }
         }
 
@@ -420,5 +442,6 @@ namespace Merchello.Web.Editors
             order.OrderStatus = orderStatus;
             _orderService.Save(order);
         }
+
     }
 }

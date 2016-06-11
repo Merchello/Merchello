@@ -43,6 +43,13 @@
                             'Failed to retreive invoices');
                     },
 
+                    searchByCustomer : function(query) {
+                        var url = baseUrl + 'SearchByCustomer';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url, query),
+                            'Failed to retreive invoices');
+                    },
+
                     /**
                      * @ngdoc method
                      * @name searchInvoices
@@ -92,6 +99,15 @@
                         return umbRequestHelper.resourcePromise(
                             $http.post(url,
                                 invoice
+                            ),
+                            'Failed to save invoice');
+                    },
+
+                    saveInvoiceAdjustments: function(adjustments) {
+                        var url = baseUrl + 'PutInvoiceAdjustments';
+                        return umbRequestHelper.resourcePromise(
+                            $http.post(url,
+                                adjustments
                             ),
                             'Failed to save invoice');
                     },

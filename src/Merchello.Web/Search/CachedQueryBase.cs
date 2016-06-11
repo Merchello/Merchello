@@ -116,6 +116,16 @@
             get { return _searchProvider; }
         }
 
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        protected IPageCachedService<TEntity> Service
+        {
+            get
+            {
+                return _service;
+            }
+        }
 
         /// <summary>
         /// Gets the key field in index.
@@ -206,7 +216,7 @@
         /// <returns>
         /// The <see cref="TDisplay"/>.
         /// </returns>
-        protected TDisplay GetDisplayObject(Guid key)
+        protected virtual TDisplay GetDisplayObject(Guid key)
         {
             var criteria = _searchProvider.CreateSearchCriteria();
             criteria.Field(KeyFieldInIndex, key.ToString());

@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Models.TypeFields;
     using Persistence;
@@ -11,32 +14,51 @@
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The customer address service.
     /// </summary>
-    internal class CustomerAddressService : ICustomerAddressService
+    internal class CustomerAddressService : MerchelloRepositoryService, ICustomerAddressService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
+        #region Constructos
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerAddressService"/> class.
         /// </summary>
         public CustomerAddressService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddressService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public CustomerAddressService(ILogger logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddressService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public CustomerAddressService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
         {
         }
 
@@ -46,8 +68,11 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public CustomerAddressService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public CustomerAddressService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
         {
         }
 
@@ -60,15 +85,35 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public CustomerAddressService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public CustomerAddressService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerAddressService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public CustomerAddressService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         #region Event Handlers
 
@@ -132,8 +177,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerAddressRepository(uow))
                 {
                     repository.AddOrUpdate(address);
                     uow.Commit();
@@ -162,8 +207,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerAddressRepository(uow))
                 {
                     foreach (var address in addressArray)
                     {
@@ -192,8 +237,8 @@
            
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerAddressRepository(uow))
                 {
                     repository.Delete(address);
                     uow.Commit();
@@ -224,7 +269,7 @@
         /// </returns>
         public ICustomerAddress GetByKey(Guid key)
         {
-            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostitory = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 return repostitory.Get(key);
             }
@@ -244,7 +289,7 @@
         /// </returns>
         public ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType)
         {
-            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostitory = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 var typeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(addressType).TypeKey;
 
@@ -268,7 +313,7 @@
         /// </remarks>
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
         {
-            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostitory = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 return repostitory.GetByCustomerKey(customerKey);
             }
@@ -288,7 +333,7 @@
         /// </returns>
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType)
         {
-            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostitory = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 var typeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(addressType).TypeKey;
 
@@ -306,7 +351,7 @@
         /// </returns>
         public IEnumerable<ICustomerAddress> GetAll()
         {
-            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostitory = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 return repostitory.GetAll();
             }
@@ -323,7 +368,7 @@
         /// </returns>
         public int Count(Guid customerKey)
         {
-            using (var repository = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetCountByCustomerKey(customerKey);
             }
@@ -340,7 +385,7 @@
         /// </returns>
         internal int GetCustomerAddressCount(Guid customerKey)
         {
-            using (var repository = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<ICustomerAddress>.Builder.Where(x => x.CustomerKey == customerKey);
                 
@@ -362,7 +407,7 @@
         /// </returns>
         internal int GetCustomerAddressCount(Guid customerKey, AddressType addressType)
         {
-            using (var repostitory = _repositoryFactory.CreateCustomerAddressRepository(_uowProvider.GetUnitOfWork()))
+            using (var repostitory = RepositoryFactory.CreateCustomerAddressRepository(UowProvider.GetUnitOfWork()))
             {
                 var typeFieldKey = EnumTypeFieldConverter.Address.GetTypeField(addressType).TypeKey;
 
@@ -391,8 +436,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerAddressRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerAddressRepository(uow))
                 {
                     foreach (var address in addressArray)
                     {

@@ -3,18 +3,23 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Configuration;
     using DatabaseModelDefinitions;
     using Events;
     using Models.Rdbms;
+
+    using umbraco;
+
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
 
-    // TODO Generate SQL SCRIPT and follow the order of table creation
+
 
     /// <summary>
-    /// Represents the initial database schema creation by running CreateTable for all DTOs against the db.
+    /// Represents the initial database schema creation by running CreateTable for all DTOs against the database.
     /// </summary>
     internal class DatabaseSchemaCreation
     {
@@ -65,31 +70,92 @@
             { 37, typeof(NotificationMessageDto) },
             { 38, typeof(AuditLogDto) },
             { 39, typeof(OfferSettingsDto) },
-            { 40, typeof(OfferRedeemedDto) }
+            { 40, typeof(OfferRedeemedDto) },
+            { 41, typeof(EntityCollectionDto) },
+            { 42, typeof(Product2EntityCollectionDto) },
+            { 43, typeof(Invoice2EntityCollectionDto) },
+            { 44, typeof(Customer2EntityCollectionDto) },
+            { 45, typeof(DetachedContentTypeDto) },
+            { 46, typeof(ProductVariantDetachedContentDto) },
+            { 47, typeof(NoteDto) }
         };
 
         /// <summary>
         /// The database.
         /// </summary>
-        private readonly Database _database;        
+        private readonly Database _database;
+
+        /// <summary>
+        /// The Umbraco's <see cref="DatabaseSchemaHelper"/>.
+        /// </summary>
+        private readonly DatabaseSchemaHelper _umbSchemaHelper;
+
+        /// <summary>
+        /// The <see cref="ILogger"/>.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// The <see cref="ISqlSyntaxProvider"/>.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntax;
+
 
         #endregion
 
         /// <summary>
-        /// Drops all Merchello tables in the db
+        /// Initializes a new instance of the <see cref="DatabaseSchemaCreation"/> class.
+        /// </summary>
+        /// <param name="database">
+        /// The database.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="databaseSchemaHelper">
+        /// The database Schema Helper.
+        /// </param>
+        public DatabaseSchemaCreation(Database database, ILogger logger, DatabaseSchemaHelper databaseSchemaHelper, ISqlSyntaxProvider sqlSyntax)
+        {
+            _database = database;
+            _logger = logger;
+            _umbSchemaHelper = databaseSchemaHelper;
+            _sqlSyntax = sqlSyntax;
+        }
+
+
+        /// <summary>
+        /// Drops all Merchello tables in the database
         /// </summary>
         internal void UninstallDatabaseSchema()
         {
-            DatabaseSchemaHelper.UninstallDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
+            _logger.Info<DatabaseSchemaCreation>("Start UninstallDatabaseSchema");
+
+            foreach (var item in OrderedTables.OrderByDescending(x => x.Key))
+            {
+                var tableNameAttribute = item.Value.FirstAttribute<TableNameAttribute>();
+
+                string tableName = tableNameAttribute == null ? item.Value.Name : tableNameAttribute.Value;
+
+                _logger.Info<DatabaseSchemaCreation>("Uninstall" + tableName);
+
+                try
+                {
+                    if (_umbSchemaHelper.TableExist(tableName))
+                    {
+                        _umbSchemaHelper.DropTable(tableName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error<DatabaseSchemaCreation>("Could not drop table " + tableName, ex);
+                }
+            }
         }
 
-        public DatabaseSchemaCreation(Database database)
-        {
-            _database = database;
-        }
 
         /// <summary>
-        /// Initialize the database by creating the umbraco db schema
+        /// Initialize the database by creating the umbraco database schema
         /// </summary>
         public void InitializeDatabaseSchema()
         {
@@ -98,7 +164,10 @@
 
             if (!e.Cancel)
             {
-                DatabaseSchemaHelper.InitializeDatabaseSchema(_database, OrderedTables, MerchelloVersion.Current.ToString());
+                foreach (var item in OrderedTables.OrderBy(x => x.Key))
+                {
+                    _umbSchemaHelper.CreateTable(false, item.Value);   
+                }
             }
 
             FireAfterCreation(e);
@@ -107,6 +176,9 @@
         /// <summary>
         /// Validates the schema of the current database
         /// </summary>
+        /// <returns>
+        /// The <see cref="MerchelloDatabaseSchemaResult"/>.
+        /// </returns>
         public MerchelloDatabaseSchemaResult ValidateSchema()
         {
             var result = new MerchelloDatabaseSchemaResult
@@ -137,11 +209,19 @@
 
             ValidateDbConstraints(result);
 
-            if (!result.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
+            if (
+                !result.MerchelloErrors.Any(
+                    x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
             {
                 // catch this so it doesn't kick off on an install
-                LoadMerchelloData(result);   
+                LoadMerchelloData(result);
             }
+            else
+            {
+                result.StoreSettings = Enumerable.Empty<StoreSettingDto>();
+                result.TypeFields = Enumerable.Empty<TypeFieldDto>();
+            }
+
 
             return result;
         }
@@ -156,13 +236,13 @@
         {
             var sqlSettings = new Sql();
             sqlSettings.Select("*")
-                .From<StoreSettingDto>();
+                .From<StoreSettingDto>(_sqlSyntax);
 
             result.StoreSettings = _database.Fetch<StoreSettingDto>(sqlSettings);
 
             var sqlTypeFields = new Sql();
             sqlSettings.Select("*")
-                .From<TypeFieldDto>();
+                .From<TypeFieldDto>(_sqlSyntax);
 
             result.TypeFields = _database.Fetch<TypeFieldDto>(sqlTypeFields);
         }
@@ -172,11 +252,11 @@
             //MySql doesn't conform to the "normal" naming of constraints, so there is currently no point in doing these checks.
             //TODO: At a later point we do other checks for MySql, but ideally it should be necessary to do special checks for different providers.
             // ALso note that to get the constraints for MySql we have to open a connection which we currently have not.
-            if (SqlSyntaxContext.SqlSyntaxProvider is MySqlSyntaxProvider)
+            if (_sqlSyntax is MySqlSyntaxProvider)
                 return;
 
             //Check constraints in configured database against constraints in schema
-            var constraintsInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetConstraintsPerColumn(_database).DistinctBy(x => x.Item3).ToList();
+            var constraintsInDatabase = _sqlSyntax.GetConstraintsPerColumn(_database).DistinctBy(x => x.Item3).ToList();
             var foreignKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("FK_")).Select(x => x.Item3).ToList();
             var primaryKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("PK_")).Select(x => x.Item3).ToList();
             var indexesInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("IX_")).Select(x => x.Item3).ToList();

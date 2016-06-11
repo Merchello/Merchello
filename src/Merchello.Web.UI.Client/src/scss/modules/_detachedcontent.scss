@@ -1,0 +1,25 @@
+// The Merchello Language drop down
+.merch-language-select {
+    position: absolute;
+    top: 2px;
+    right: 20px;
+
+    .dropdown-menu {
+        width: inherit;
+    }
+}
+
+// The UI for selecting a content type
+.detached-content-select {
+    display: inline-block;
+    text-align: left;
+
+    label {
+        font-weight: bold;
+        margin-right:6px;
+    }
+
+    .merchello-icons {
+        margin:-2px 0;
+    }
+}

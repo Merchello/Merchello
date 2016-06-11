@@ -1,12 +1,15 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
+
+    using umbraco.webservices;
 
     /// <summary>
     /// Defines an invoice.
     /// </summary>
-    public interface IInvoice : ILineItemContainer
+    public interface IInvoice : ILineItemContainer, IHasNotes
     {
         /// <summary>
         /// Gets or sets the unique customer 'key' to associated with the invoice
@@ -57,7 +60,7 @@
         string BillToName { get; set; }
 
         /// <summary>
-        /// Gets or sets the adress line 1 to use for billing.  Generally copied from customer address.
+        /// Gets or sets the address line 1 to use for billing.  Generally copied from customer address.
         /// </summary>
         [DataMember]
         string BillToAddress1 { get; set; }
@@ -111,13 +114,22 @@
         string BillToCompany { get; set; }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether or not this invoice has been exported to an external system
+        /// Gets or sets the currency code.
+        /// </summary>
+        /// <remarks>
+        /// Introduced in 1.14.0
+        /// </remarks>
+        [DataMember]
+        string CurrencyCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not this invoice has been exported to an external system
         /// </summary>
         [DataMember]
         bool Exported { get; set; }
 
         /// <summary>
-        /// Gets or sets a value that indicates whether or not this invoice has been archived
+        /// Gets or sets a value indicating whether or not this invoice has been archived
         /// </summary>
         [DataMember]
         bool Archived { get; set; }
@@ -133,5 +145,11 @@
         /// </summary>
         [DataMember]
         OrderCollection Orders { get; set; }
+
+        /// <summary>
+        /// Accepts visitor class to visit invoice line items
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        void Accept(ILineItemVisitor visitor);  
     }
 }

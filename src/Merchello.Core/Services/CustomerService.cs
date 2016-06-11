@@ -6,14 +6,18 @@
     using System.Threading;
     using System.Web.UI;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -33,16 +37,6 @@
         /// The valid sort fields.
         /// </summary>
         private static readonly string[] ValidSortFields = { "firstname", "lastname", "loginname", "email", "lastactivitydate" };
-
-        /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
 
         /// <summary>
         /// The anonymous customer service.
@@ -70,12 +64,32 @@
         /// Initializes a new instance of the <see cref="CustomerService"/> class.
         /// </summary>
         public CustomerService()
-            : this(
-            new RepositoryFactory(), 
-            new AnonymousCustomerService(), 
-            new CustomerAddressService(),
-            new InvoiceService(), 
-            new PaymentService())
+            : this(LoggerResolver.Current.Logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public CustomerService(ILogger logger)
+            : this(new RepositoryFactory(), logger, new AnonymousCustomerService(logger), new CustomerAddressService(logger), new InvoiceService(logger), new PaymentService(logger)) 
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public CustomerService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger, new AnonymousCustomerService(logger, sqlSyntax), new CustomerAddressService(logger, sqlSyntax), new InvoiceService(logger, sqlSyntax), new PaymentService(logger, sqlSyntax))
         {
         }
 
@@ -84,6 +98,9 @@
         /// </summary>
         /// <param name="repositoryFactory">
         /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
         /// </param>
         /// <param name="anonymousCustomerService">
         /// The anonymous Customer Service.
@@ -98,15 +115,17 @@
         /// The payment Service.
         /// </param>
         public CustomerService(
-            RepositoryFactory repositoryFactory, 
-            IAnonymousCustomerService anonymousCustomerService, 
+            RepositoryFactory repositoryFactory,
+            ILogger logger,
+            IAnonymousCustomerService anonymousCustomerService,
             ICustomerAddressService customerAddressService,
             IInvoiceService invoiceService,
             IPaymentService paymentService)
             : this(
-            new PetaPocoUnitOfWorkProvider(), 
-            repositoryFactory, 
-            anonymousCustomerService, 
+            new PetaPocoUnitOfWorkProvider(logger),
+            repositoryFactory,
+            logger,
+            anonymousCustomerService,
             customerAddressService,
             invoiceService,
             paymentService)
@@ -122,6 +141,9 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="anonymousCustomerService">
         /// The anonymous Customer Service.
         /// </param>
@@ -135,30 +157,68 @@
         /// The payment Service.
         /// </param>
         public CustomerService(
-            IDatabaseUnitOfWorkProvider provider, 
-            RepositoryFactory repositoryFactory, 
-            IAnonymousCustomerService anonymousCustomerService, 
-            ICustomerAddressService customerAddressService, 
+            IDatabaseUnitOfWorkProvider provider,
+            RepositoryFactory repositoryFactory,
+            ILogger logger,
+            IAnonymousCustomerService anonymousCustomerService,
+            ICustomerAddressService customerAddressService,
             IInvoiceService invoiceService,
             IPaymentService paymentService)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory(), anonymousCustomerService, customerAddressService, invoiceService, paymentService)
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomerService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        /// <param name="anonymousCustomerService">
+        /// The anonymous customer service.
+        /// </param>
+        /// <param name="customerAddressService">
+        /// The customer address service.
+        /// </param>
+        /// <param name="invoiceService">
+        /// The invoice service.
+        /// </param>
+        /// <param name="paymentService">
+        /// The payment service.
+        /// </param>
+        public CustomerService(
+            IDatabaseUnitOfWorkProvider provider,
+            RepositoryFactory repositoryFactory,
+            ILogger logger,
+            IEventMessagesFactory eventMessagesFactory,
+            IAnonymousCustomerService anonymousCustomerService,
+            ICustomerAddressService customerAddressService,
+            IInvoiceService invoiceService,
+            IPaymentService paymentService)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
             Mandate.ParameterNotNull(anonymousCustomerService, "anonymousCustomerService");
             Mandate.ParameterNotNull(customerAddressService, "customerAddressService");
             Mandate.ParameterNotNull(invoiceService, "invoiceServie");
             Mandate.ParameterNotNull(paymentService, "paymentService");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
             _anonymousCustomerService = anonymousCustomerService;
             _customerAddressService = customerAddressService;
             _invoiceService = invoiceService;
             _paymentService = paymentService;
         }
 
-
         #region Event Handlers
+
+
 
         /// <summary>
         /// Occurs before Create
@@ -262,8 +322,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerRepository(uow))
                 {
                     repository.AddOrUpdate(customer);
                     uow.Commit();
@@ -302,8 +362,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerRepository(uow))
                 {
                     repository.AddOrUpdate(customer);
                     uow.Commit();
@@ -328,9 +388,9 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
+                var uow = UowProvider.GetUnitOfWork();
                 
-                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                using (var repository = RepositoryFactory.CreateCustomerRepository(uow))
                 {
                     foreach (var customer in customerArray)
                     {
@@ -362,8 +422,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerRepository(uow))
                 {
                     repository.Delete(customer);
                     uow.Commit();
@@ -388,8 +448,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateCustomerRepository(uow))
                 {
                     foreach (var customer in customerArray)
                     {
@@ -410,7 +470,7 @@
         /// <returns><see cref="ICustomer"/></returns>
         public override ICustomer GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -436,7 +496,7 @@
         /// </returns>
         public override Page<ICustomer> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -454,7 +514,7 @@
             ICustomerBase customer;
 
             // try retrieving an anonymous customer first as in most situations this will be what is being queried
-            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 customer = repository.Get(entityKey);
             }
@@ -462,7 +522,7 @@
             if (customer != null) return customer;
 
             // try retrieving an existing customer
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(entityKey);
             }
@@ -479,7 +539,7 @@
         /// </returns>
         public ICustomer GetByLoginName(string loginName)
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.LoginName == loginName);
 
@@ -495,7 +555,7 @@
         /// </returns>
         public int CustomerCount()
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -553,11 +613,13 @@
         /// <param name="address">
         /// The address to be saved
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public void Save(ICustomerAddress address)
         {
             _customerAddressService.Save(address);
         }
 
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public void Save(IEnumerable<ICustomerAddress> addresses)
         {
             _customerAddressService.Save(addresses);
@@ -569,6 +631,7 @@
         /// <param name="address">
         /// The address to be deleted
         /// </param>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public void Delete(ICustomerAddress address)
         {
             _customerAddressService.Delete(address);
@@ -583,6 +646,7 @@
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public ICustomerAddress GetAddressByKey(Guid key)
         {
             return _customerAddressService.GetByKey(key);
@@ -597,6 +661,7 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey)
         {
             return _customerAddressService.GetByCustomerKey(customerKey);
@@ -614,6 +679,7 @@
         /// <returns>
         /// A collection of <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public IEnumerable<ICustomerAddress> GetByCustomerKey(Guid customerKey, AddressType addressType)
         {
             return _customerAddressService.GetByCustomerKey(customerKey, addressType);
@@ -631,6 +697,7 @@
         /// <returns>
         /// The <see cref="ICustomerAddress"/>.
         /// </returns>
+        [Obsolete("Addresses should be managed directly through the customer.  This method will be removed in future versions")]
         public ICustomerAddress GetDefaultCustomerAddress(Guid customerKey, AddressType addressType)
         {
             return _customerAddressService.GetDefaultCustomerAddress(customerKey, addressType);
@@ -645,12 +712,372 @@
         /// <returns>A collection of <see cref="ICustomer"/></returns>
         public IEnumerable<ICustomer> GetByKeys(IEnumerable<Guid> keys)
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll(keys.ToArray());
             }
         }
-        
+
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void AddToCollection(ICustomer entity, IEntityCollection collection)
+        {
+            AddToCollection(entity, collection.Key);
+        }
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(ICustomer entity, Guid collectionKey)
+        {
+            AddToCollection(entity.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The add invoice to collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void AddToCollection(Guid entityKey, Guid collectionKey)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.AddToCollection(entityKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public void RemoveFromCollection(ICustomer entity, IEntityCollection collection)
+        {
+            RemoveFromCollection(entity, collection.Key);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entity">
+        /// The customer.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(ICustomer entity, Guid collectionKey)
+        {
+            RemoveFromCollection(entity.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove invoice from collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public void RemoveFromCollection(Guid entityKey, Guid collectionKey)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                repository.RemoveFromCollection(entityKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// Determines if an customer exists in a collection.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The customer key.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid collectionKey)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(entityKey, collectionKey);
+            }
+        }
+
+        /// <summary>
+        /// The get invoices from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(
+                    collectionKey,
+                    searchTerm,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get customer keys from static collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysFromCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get keys from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysFromCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysFromCollection(
+                    collectionKey,
+                    searchTerm,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysNotInCollection(
+                    collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        internal Page<Guid> GetKeysNotInCollection(
+            Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysNotInCollection(
+                    collectionKey,
+                    searchTerm,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -661,7 +1088,7 @@
         /// </returns>
         internal IEnumerable<IAnonymousCustomer> GetAllAnonymousCustomers()
         {
-            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -676,7 +1103,7 @@
         /// </returns>
         internal IEnumerable<ICustomer> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -693,7 +1120,7 @@
         /// </returns>
         internal override int Count(IQuery<ICustomer> query)
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }
@@ -719,7 +1146,7 @@
         /// </returns>
         internal override Page<Guid> GetPagedKeys(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repositoy = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repositoy = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<ICustomer>.Builder.Where(x => x.Key != Guid.Empty);
 
@@ -758,7 +1185,7 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.SearchKeys(searchTerm, page, itemsPerPage, ValidateSortByField(sortBy));
             }
@@ -793,7 +1220,7 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             return GetPagedKeys(
-                _repositoryFactory.CreateCustomerRepository(_uowProvider.GetUnitOfWork()),
+                RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()),
                 query,
                 page,
                 itemsPerPage,

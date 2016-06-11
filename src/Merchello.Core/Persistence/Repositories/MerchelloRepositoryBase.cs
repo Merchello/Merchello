@@ -26,6 +26,11 @@
         private readonly IUnitOfWork _work;
 
         /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
         /// The runtime cache provider.
         /// </summary>
         private readonly IRuntimeCacheProvider _cache;
@@ -39,14 +44,19 @@
         /// <param name="cache">
         /// The runtime cache provider.
         /// </param>
-        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache)
-		{
+        /// <param name="logger">
+        /// The <see cref="ILogger"/>.
+        /// </param>
+        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger)
+        {
             Mandate.ParameterNotNull(work, "work");
             Mandate.ParameterNotNull(cache, "cache");
-		    
+            Mandate.ParameterNotNull(logger, "logger");
+
             _work = work;
-			_cache = cache;
-		}
+            _cache = cache;
+            _logger = logger;
+        }
 
         /// <summary>
         /// Gets the unit of work key. Used for testing purposes
@@ -65,11 +75,36 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether is cached repository.
+        /// </summary>
+        /// <remarks>
+        /// This is a fix for certain caching issues where we've introduced a repository
+        /// that returns items cached in other objects.  
+        /// 
+        /// TODO we need to look at this again when we refactor the repositories
+        /// </remarks>
+        protected virtual bool IsCachedRepository
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Gets the runtime cache.
         /// </summary>
         protected IRuntimeCacheProvider RuntimeCache
         {
             get { return _cache; }
+        }
+
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        protected ILogger Logger
+        {
+            get { return _logger; }
         }
 
         #region IUnitOfWorkRepository Members
@@ -172,11 +207,14 @@
 		/// </returns>
 		public TEntity Get(Guid key)
 		{
-			var fromCache = TryGetFromCache(key);
-			if (fromCache.Success)
-			{
-				return fromCache.Result;
-			}
+		    if (IsCachedRepository)
+		    {
+                var fromCache = TryGetFromCache(key);
+                if (fromCache.Success)
+                {
+                    return fromCache.Result;
+                }  
+		    }
 
 			var entity = PerformGet(key);
 			if (entity != null)

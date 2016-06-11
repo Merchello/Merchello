@@ -25,7 +25,7 @@ namespace Merchello.Web
         /// <returns>
         /// The collection of checkout operation controllers
         /// </returns>
-        internal static IEnumerable<Type> ResolveCheckoutOperationControllers(this PluginManager pluginManager)
+        internal static IEnumerable<Type> ResolvePaymentMethodUiControllers(this PluginManager pluginManager)
         {
             return pluginManager.ResolveTypes<IPaymentMethodUiController>();
         }
@@ -55,7 +55,7 @@ namespace Merchello.Web
         /// </returns>
         internal static IEnumerable<Type> ResolveReportApiControllers(this PluginManager pluginManger)
         {
-            return pluginManger.ResolveTypesWithAttribute<ReportController, BackOfficeTreeAttribute>();
+            return pluginManger.ResolveTypes<ReportController>();
         }
 
 

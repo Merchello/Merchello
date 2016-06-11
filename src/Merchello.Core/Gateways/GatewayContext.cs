@@ -146,6 +146,9 @@
         /// <summary>
         /// For testing
         /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
         internal void DeactivateProvider(GatewayProviderBase provider)
         {
             if (!provider.Activated) return;

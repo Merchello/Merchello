@@ -13,7 +13,7 @@
         self.containerKey = '';
         self.lineItemTfKey = '';
         self.lineItemType = '';
-        self.lineItemTypeField = {};  // TODO why is this here
+        self.lineItemTypeField = {};
         self.sku = '';
         self.name = '';
         self.quantity = '';
@@ -21,5 +21,17 @@
         self.exported = false;
         self.extendedData = {};
     };
+
+    InvoiceLineItemDisplay.prototype = (function() {
+
+        function absPrice() {
+            return Math.abs(this.price);
+        }
+
+        return {
+            absPrice : absPrice
+        };
+
+    }());
 
     angular.module('merchello.models').constant('InvoiceLineItemDisplay', InvoiceLineItemDisplay);

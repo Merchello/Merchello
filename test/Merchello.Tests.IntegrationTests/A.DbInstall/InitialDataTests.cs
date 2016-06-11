@@ -7,18 +7,22 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Tests.IntegrationTests.A.DbInstall
 {
+    using Merchello.Core.Persistence.Migrations;
+
     [TestFixture]
     public class InitialDataTests
     {
-        private BaseDataCreation _creation;
         private UmbracoDatabase _database;
+
+        private BaseDataCreation _creation;
+        private MerchelloDatabaseSchemaHelper _schemaHelper;
 
         [TestFixtureSetUp]
         public void Init()
         {
             var worker = new DbPreTestDataWorker();
             _database = worker.Database;
-            _creation = new BaseDataCreation(_database);
+            _creation = new BaseDataCreation(worker.Database, worker.TestLogger);
         }
 
         [TestFixtureTearDown]
@@ -34,7 +38,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_typeFieldData_Into_merchTypeField()
         {
             //// Arrange
-            const int expected = 32;
+            const int expected = 34;
 
             //// Act
             _creation.InitializeBaseData("merchTypeField");
@@ -114,7 +118,7 @@ namespace Merchello.Tests.IntegrationTests.A.DbInstall
         public void Can_Populate_StoreSettings()
         {
             //// Arrange
-            const int expected = 13;
+            const int expected = 15;
 
             //// Act
             _creation.InitializeBaseData("merchStoreSetting");

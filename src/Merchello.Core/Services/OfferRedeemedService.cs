@@ -7,6 +7,7 @@
 
     using Lucene.Net.Search;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence;
@@ -15,26 +16,17 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
 
     /// <summary>
     /// The offer redeemed service.
     /// </summary>
-    internal class OfferRedeemedService : IOfferRedeemedService
+    internal class OfferRedeemedService : MerchelloRepositoryService, IOfferRedeemedService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-
-        /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
 
         #region Constructors
 
@@ -42,8 +34,19 @@
         /// Initializes a new instance of the <see cref="OfferRedeemedService"/> class.
         /// </summary>
         public OfferRedeemedService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
         {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfferRedeemedService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OfferRedeemedService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
         }
 
         /// <summary>
@@ -52,9 +55,12 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public OfferRedeemedService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OfferRedeemedService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
         }
 
         /// <summary>
@@ -66,13 +72,32 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public OfferRedeemedService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public OfferRedeemedService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfferRedeemedService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public OfferRedeemedService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
         }
 
         #endregion
@@ -143,8 +168,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(uow))
                 {
                     repository.AddOrUpdate(redemption);
                     uow.Commit();
@@ -177,8 +202,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(uow))
                 {
                     repository.AddOrUpdate(offerRedeemed);
                     uow.Commit();
@@ -206,8 +231,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(uow))
                 {
                     foreach (var redemption in redemptionsArray)
                     {
@@ -243,8 +268,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(uow))
                 {                   
                     repository.Delete(offerRedeemed);                
                     uow.Commit();
@@ -274,8 +299,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(uow))
                 {
                     foreach (var redemption in redemptionsArray)
                     {
@@ -301,7 +326,7 @@
         /// </returns>
         public IOfferRedeemed GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -318,7 +343,7 @@
         /// </returns>
         public IEnumerable<IOfferRedeemed> GetByInvoiceKey(Guid invoiceKey)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.InvoiceKey == invoiceKey);
                 return repository.GetByQuery(query);
@@ -336,7 +361,7 @@
         /// </returns>
         public IEnumerable<IOfferRedeemed> GetByCustomerKey(Guid customerKey)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.CustomerKey == customerKey);
                 return repository.GetByQuery(query);
@@ -354,7 +379,7 @@
         /// </returns>
         public IEnumerable<IOfferRedeemed> GetByOfferSettingsKey(Guid offerSettingsKey)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.OfferSettingsKey == offerSettingsKey);
                 return repository.GetByQuery(query);
@@ -375,7 +400,7 @@
         /// </returns>
         public IEnumerable<IOfferRedeemed> GetByOfferSettingsKeyAndCustomerKey(Guid offerSettingsKey, Guid customerKey)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.OfferSettingsKey == offerSettingsKey && x.CustomerKey == customerKey);
                 return repository.GetByQuery(query);
@@ -393,7 +418,7 @@
         /// </returns>
         public IEnumerable<IOfferRedeemed> GetByOfferProviderKey(Guid offerProviderKey)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.OfferProviderKey == offerProviderKey);
                 return repository.GetByQuery(query);
@@ -411,7 +436,7 @@
         /// </returns>
         public int GetOfferRedeemedCount(Guid offerSettingsKey)
         {
-            using (var repository = _repositoryFactory.CreateOfferRedeemedRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateOfferRedeemedRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IOfferRedeemed>.Builder.Where(x => x.OfferSettingsKey == offerSettingsKey);
                 return repository.Count(query);

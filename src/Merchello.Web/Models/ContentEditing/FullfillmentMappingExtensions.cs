@@ -1,18 +1,20 @@
-﻿using System;
-using System.Linq;
-using Merchello.Core.Gateways;
-using Merchello.Core.Gateways.Notification;
-using Merchello.Core.Gateways.Payment;
-using Merchello.Core.Gateways.Shipping.FixedRate;
-using Merchello.Core.Gateways.Taxation;
-using Merchello.Core.Models;
-using Merchello.Core.Models.Interfaces;
-using Merchello.Core.Gateways.Shipping;
-using Merchello.Web.Models.Payments;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
-	internal static class FullfillmentMappingExtensions
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Merchello.Core;
+    using Merchello.Core.Gateways;
+    using Merchello.Core.Gateways.Notification;
+    using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Gateways.Shipping.FixedRate;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.Payments;
+
+    internal static class FullfillmentMappingExtensions
 	{
 
 
@@ -222,7 +224,39 @@ namespace Merchello.Web.Models.ContentEditing
 			destination.BillToCompany = invoiceDisplay.BillToCompany;
 			destination.Exported = invoiceDisplay.Exported;
 			destination.Archived = invoiceDisplay.Archived;
-			return destination;
+		    destination.PoNumber = invoiceDisplay.PoNumber;
+
+            // set the note type field key
+		    var invoiceTfKey = Constants.TypeFieldKeys.Entity.InvoiceKey;
+		    foreach (var idn in invoiceDisplay.Notes)
+		    {
+		        idn.EntityTfKey = invoiceTfKey;
+		    }
+
+            // remove or update any notes that were previously saved and/or removed through the back office
+		    var updateNotes = invoiceDisplay.Notes.Where(x => x.Key != Guid.Empty).ToArray();
+
+		    var notes = destination.Notes.ToList();
+		    var removeKeys = new List<Guid>();
+		    foreach (var n in notes)
+		    {
+		        var update = updateNotes.FirstOrDefault(x => x.Key == n.Key);
+		        if (update == null)
+		        {
+		            removeKeys.Add(n.Key);
+		        }
+		        else
+		        {
+		            n.Message = update.Message;
+		            n.InternalOnly = update.InternalOnly;
+		        }
+		    }
+
+		    notes.AddRange(invoiceDisplay.Notes.Where(x => x.Key == Guid.Empty).Select(x => x.ToNote()));
+
+		    destination.Notes = notes.Where(x => removeKeys.All(y => y != x.Key));
+
+            return destination;
 		}
 
 		internal static IInvoiceStatus ToInvoiceStatus(this InvoiceStatusDisplay invoiceStatusDisplay)
@@ -254,6 +288,7 @@ namespace Merchello.Web.Models.ContentEditing
 			destination.Description = notificationMessageDisplay.Description;
 			destination.BodyText = notificationMessageDisplay.BodyText;
 			destination.MaxLength = notificationMessageDisplay.MaxLength;
+		    destination.BodyTextIsFilePath = notificationMessageDisplay.BodyTextIsFilePath;
 		    ((NotificationMessage)destination).FromAddress = notificationMessageDisplay.FromAddress;
 			destination.BodyTextIsFilePath = notificationMessageDisplay.BodyTextIsFilePath;
             destination.MonitorKey = notificationMessageDisplay.MonitorKey;

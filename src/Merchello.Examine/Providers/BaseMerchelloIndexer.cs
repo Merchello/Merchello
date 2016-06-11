@@ -7,18 +7,40 @@
     using System.Linq;
     using System.Security;
     using System.Xml.Linq;
-    using DataServices;
-    using global::Examine;
-    using global::Examine.LuceneEngine.Providers;
-    using Lucene.Net.Analysis;
 
+    using global::Examine;
+
+    using global::Examine.LuceneEngine.Config;
+
+    using global::Examine.LuceneEngine.Providers;
+
+    using global::Examine.Providers;
+
+    using Lucene.Net.Analysis;
+    using Lucene.Net.Index;
+    using Lucene.Net.Store;
+
+    using Merchello.Examine.DataServices;
+    using Merchello.Examine.LocalStorage;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// The base merchello indexer.
     /// </summary>
     public abstract class BaseMerchelloIndexer : LuceneIndexer
     {
+        /// <summary>
+        /// The <see cref="ILogger"/>.
+        /// </summary>
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// The <see cref="ISqlSyntaxProvider"/>.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
 
         #region Constructors
 
@@ -26,11 +48,8 @@
         /// Initializes a new instance of the <see cref="BaseMerchelloIndexer"/> class.
         /// </summary>
         protected BaseMerchelloIndexer()
-            : base()
         {            
         }
-
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseMerchelloIndexer"/> class. 
@@ -86,7 +105,10 @@
         #endregion
 
         #region Properties
-        
+
+        private readonly LocalTempStorageIndexer _localTempStorageIndexer = new LocalTempStorageIndexer();
+        private BaseLuceneSearcher _internalTempStorageSearcher = null;
+
         /// <summary>
         /// Gets or sets a value indicating whether the IndexingActionHandler will be run to keep the default index up to date.
         /// </summary>
@@ -101,6 +123,20 @@
         /// Gets the supported indexable types
         /// </summary>
         protected abstract IEnumerable<string> SupportedTypes { get; }
+
+        public bool UseTempStorage
+        {
+            get { return _localTempStorageIndexer.LuceneDirectory != null; }
+        }
+
+        public string TempStorageLocation
+        {
+            get
+            {
+                if (UseTempStorage == false) return string.Empty;
+                return _localTempStorageIndexer.TempPath;
+            }
+        }
 
         #endregion
 
@@ -145,6 +181,24 @@
             DataService.LogService.AddVerboseLog(-1, string.Format("{0} indexer initializing", name));
 
             base.Initialize(name, config);
+
+            if (config["useTempStorage"] != null)
+            {
+                var fsDir = base.GetLuceneDirectory() as FSDirectory;
+                if (fsDir != null)
+                {
+                    //Use the temp storage directory which will store the index in the local/codegen folder, this is useful
+                    // for websites that are running from a remove file server and file IO latency becomes an issue
+                    var attemptUseTempStorage = config["useTempStorage"].TryConvertTo<LocalStorageType>();
+                    if (attemptUseTempStorage)
+                    {
+                        var indexSet = IndexSets.Instance.Sets[IndexSetName];
+                        var configuredPath = indexSet.IndexPath;
+
+                        _localTempStorageIndexer.Initialize(config, configuredPath, fsDir, IndexingAnalyzer, attemptUseTempStorage.Result);
+                    }
+                }
+            }
         }
 
         #endregion
@@ -251,5 +305,63 @@
 
             DataService.LogService.AddInfoLog(nodeId, "Field \"" + fieldName + "\" is listed multiple times in the index set \"" + indexSetName + "\". Please ensure all names are unique");
         }
+
+        #region UseTempStorage
+
+        /// <summary>
+        /// Used to aquire the internal searcher
+        /// </summary>
+        private readonly object _internalSearcherLocker = new object();
+
+        protected override BaseSearchProvider InternalSearcher
+        {
+            get
+            {
+                //if temp local storage is configured use that, otherwise return the default
+                if (UseTempStorage)
+                {
+                    if (_internalTempStorageSearcher == null)
+                    {
+                        lock (_internalSearcherLocker)
+                        {
+                            if (_internalTempStorageSearcher == null)
+                            {
+                                _internalTempStorageSearcher = new LuceneSearcher(GetIndexWriter(), IndexingAnalyzer);
+                            }
+                        }
+                    }
+                    return _internalTempStorageSearcher;
+                }
+
+                return base.InternalSearcher;
+            }
+        }
+
+        public override Lucene.Net.Store.Directory GetLuceneDirectory()
+        {
+            //if temp local storage is configured use that, otherwise return the default
+            if (UseTempStorage)
+            {
+                return _localTempStorageIndexer.LuceneDirectory;
+            }
+
+            return base.GetLuceneDirectory();
+        }
+
+        protected override IndexWriter CreateIndexWriter()
+        {
+            //if temp local storage is configured use that, otherwise return the default
+            if (UseTempStorage)
+            {
+                var directory = GetLuceneDirectory();
+                return new IndexWriter(GetLuceneDirectory(), IndexingAnalyzer,
+                    DeletePolicyTracker.Current.GetPolicy(directory),
+                    IndexWriter.MaxFieldLength.UNLIMITED);
+            }
+
+            return base.CreateIndexWriter();
+        }
+
+        #endregion
     }
 }

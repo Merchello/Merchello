@@ -4,9 +4,14 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Web.WebPages;
+
     using Formatters;
     using Gateways.Shipping;
     using Gateways.Taxation;
+
+    using Merchello.Core.Logging;
+
     using TypeFields;
     using Umbraco.Core.Logging;
 
@@ -207,6 +212,20 @@
         #endregion
 
         /// <summary>
+        /// The allows validation.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool AllowsValidation(this ILineItem lineItem)
+        {
+            return lineItem.ExtendedData.GetAllowsValidationValue();
+        }
+
+        /// <summary>
         /// Converts a line item of one type to a line item of another type
         /// </summary>
         /// <typeparam name="T">The specific type of <see cref="ILineItem"/></typeparam>
@@ -264,7 +283,7 @@
 
             if (attempt.Success) return attempt.Result as T;
 
-            LogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
+            MultiLogHelper.Error<ILineItem>("Failed instiating a line item from shipmentRateQuote", attempt.Exception);
             
             throw attempt.Exception;
         }
@@ -291,7 +310,7 @@
 
             if (attempt.Success) return attempt.Result as T;
             
-            LogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
+            MultiLogHelper.Error<ILineItem>("Failed instiating a line item from invoiceTaxResult", attempt.Exception);
             
             throw attempt.Exception;
         }
@@ -324,6 +343,15 @@
                    lineItem.ExtendedData.ContainsWarehouseCatalogKey();
         }
 
+        /// <summary>
+        /// The get type field.
+        /// </summary>
+        /// <param name="lineItem">
+        /// The line item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ITypeField"/>.
+        /// </returns>
         public static ITypeField GetTypeField(this ILineItem lineItem)
         {
             var type = EnumTypeFieldConverter.LineItemType.GetTypeField(lineItem.LineItemTfKey);
@@ -334,6 +362,9 @@
                     typeField =
                         EnumTypeFieldConverter.LineItemType.CustomTypeFields.FirstOrDefault(
                             x => x.TypeKey.Equals(lineItem.LineItemTfKey));
+                    break;
+                case LineItemType.Adjustment:
+                    typeField = EnumTypeFieldConverter.LineItemType.Adjustment;
                     break;
                 case LineItemType.Discount:
                     typeField = EnumTypeFieldConverter.LineItemType.Discount;

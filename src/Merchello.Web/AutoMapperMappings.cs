@@ -3,9 +3,7 @@
     using Core.Gateways;
     using Core.Models;
 
-    using Merchello.Core.Marketing.Offer;
     using Merchello.Core.Models.Interfaces;
-    using Merchello.Web.Models.MapperResolvers.Offers;
     using Merchello.Web.Models.SaleHistory;
 
     using Models.ContentEditing;
@@ -37,6 +35,8 @@
                     dest => dest.EntityType,
                     opt => opt.ResolveUsing<EntityTypeResolver>().ConstructedBy(() => new EntityTypeResolver()));
 
+            AutoMapper.Mapper.CreateMap<ICurrency, CurrencyDisplay>();
+
             // Country and provinces
             AutoMapper.Mapper.CreateMap<ICountry, CountryDisplay>();
 
@@ -51,8 +51,17 @@
                     dest => dest.Invoices,
                     opt => opt.ResolveUsing<CustomerInvoicesResolver>().ConstructedBy(() => new CustomerInvoicesResolver()));
 
-            AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
+            // Customer Basket
+            AutoMapper.Mapper.CreateMap<IItemCacheLineItem, ItemCacheLineItemDisplay>()
+               .ForMember(dest => dest.ExtendedData, opt => opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+               .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
 
+            AutoMapper.Mapper.CreateMap<IItemCache, CustomerItemCacheDisplay>()
+                .ForMember(
+                dest => dest.Customer,
+                opt => opt.ResolveUsing<ItemCacheCustomerResolver>().ConstructedBy(() => new ItemCacheCustomerResolver()));
+
+            AutoMapper.Mapper.CreateMap<ICustomerAddress, CustomerAddressDisplay>();
 
             // Gateway Provider    
             AutoMapper.Mapper.CreateMap<IGatewayProviderSettings, GatewayProviderDisplay>()
@@ -61,6 +70,14 @@
 
             AutoMapper.Mapper.CreateMap<IGatewayResource, GatewayResourceDisplay>();
            
+            // Note
+            AutoMapper.Mapper.CreateMap<INote, NoteDisplay>()
+                .ForMember(
+                    dest => dest.EntityType,
+                    opt => opt.ResolveUsing<NoteEntityTypeResolver>().ConstructedBy(() => new NoteEntityTypeResolver()))
+                .ForMember(
+                    dest => dest.NoteTypeField,
+                    opt => opt.ResolveUsing<NoteTypeFieldResolver>().ConstructedBy(() => new NoteTypeFieldResolver()));
 
             // Invoice
             AutoMapper.Mapper.CreateMap<IInvoiceStatus, InvoiceStatusDisplay>();
@@ -77,63 +94,14 @@
                 .ForMember(dest => dest.LineItemTypeField, opt => opt.ResolveUsing<LineItemTypeFieldResolver>().ConstructedBy(() => new LineItemTypeFieldResolver()));
 
             AutoMapper.Mapper.CreateMap<IOrder, OrderDisplay>();
-            
-            // Offer
-            AutoMapper.Mapper.CreateMap<IOfferSettings, OfferSettingsDisplay>()
-                .ForMember(
-                    dest => dest.OfferExpires,
-                    opt =>
-                    opt.ResolveUsing<OfferSettingsOfferExpiresResolver>()
-                        .ConstructedBy(() => new OfferSettingsOfferExpiresResolver()))
-                .ForMember(
-                    dest => dest.ComponentDefinitions,
-                    opt =>
-                    opt.ResolveUsing<OfferSettingsComponentDefinitionsValueResolver>()
-                        .ConstructedBy(() => new OfferSettingsComponentDefinitionsValueResolver()));
-
-            AutoMapper.Mapper.CreateMap<OfferComponentBase, OfferComponentDefinitionDisplay>()
-                .ForMember(
-                    dest => dest.ExtendedData,
-                    opt => opt.ResolveUsing<OfferComponentExtendedDataResolver>().ConstructedBy(() => new OfferComponentExtendedDataResolver()))
-                .ForMember(
-                    dest => dest.Name,
-                    opt =>
-                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("name")))
-                .ForMember(
-                    dest => dest.Description,
-                    opt =>
-                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("description")))
-                .ForMember(
-                    dest => dest.ComponentKey,
-                    opt =>
-                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("key")))
-                .ForMember(
-                    dest => dest.DialogEditorView,
-                    opt =>
-                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("editorView")))
-                .ForMember(
-                    dest => dest.RestrictToType,
-                    opt =>
-                    opt.ResolveUsing<OfferComponentAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferComponentAttributeValueResolver("restrictToType")))
-                 .ForMember(
-                    dest => dest.TypeGrouping,
-                    opt =>
-                    opt.ResolveUsing<OfferComponentTypeGroupingResolver>()
-                       .ConstructedBy(() => new OfferComponentTypeGroupingResolver()));
-
-            AutoMapper.Mapper.CreateMap<IOfferProvider, OfferProviderDisplay>()
-                .ForMember(
-                    dest => dest.BackOfficeTree,
-                    opt =>
-                    opt.ResolveUsing<OfferProviderBackOfficeAttributeValueResolver>()
-                        .ConstructedBy(() => new OfferProviderBackOfficeAttributeValueResolver()));
-
+                      
             // setup the other mappings
+            CreateDetachedContentMappings();
+
+            CreateEntityCollectionMappings();
+
+            CreateMarketingMappings();
+
             CreateShippingMappings();
 
             CreateTaxationMappings();

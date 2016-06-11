@@ -6,12 +6,18 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
+
     using Merchello.Core;
-    using Merchello.Core.Models;
+    using Merchello.Core.Chains.CopyEntity.Product;
     using Merchello.Core.Services;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
+    using Merchello.Web.WebApi.Binders;
+    using Merchello.Web.WebApi.Filters;
 
     using Umbraco.Web;
     using Umbraco.Web.Mvc;
@@ -65,7 +71,7 @@
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
 
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -84,7 +90,7 @@
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -98,6 +104,7 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductDisplay GetProduct(Guid id)
         {            
             var product = _merchello.Query.Product.GetByKey(id);
@@ -115,6 +122,7 @@
         /// <returns>
         /// The <see cref="ProductVariantDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductVariantDisplay GetProductVariant(Guid id)
         {
             var variant = _merchello.Query.Product.GetProductVariantByKey(id);
@@ -132,9 +140,25 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
+        [HttpGet]
         public ProductDisplay GetProductFromService(Guid id)
         {
-            return _productService.GetByKey(id).ToProductDisplay();
+            return _productService.GetByKey(id).ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not a SKU exists.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The value indicating whether the SKU exists.
+        /// </returns>
+        [HttpGet]
+        public bool GetSkuExists(string sku)
+        {
+            return _productService.SkuExists(sku);
         }
 
         /// <summary>
@@ -149,7 +173,7 @@
         [HttpPost]
         public IEnumerable<ProductDisplay> GetByKeys(IEnumerable<Guid> keys)
         {
-            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay());
+            return _productService.GetByKeys(keys).Select(x => x.ToProductDisplay(DetachedValuesConversionType.Editor));
         }
 
             /// <summary>
@@ -162,7 +186,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         /// <remarks>
-        /// Valid sortBy parameters  "sku", "name", "price" 
+        /// Valid sortBy parameters  "SKU", "name", "price" 
         /// </remarks>
         [HttpPost]
         public QueryResultDisplay SearchProducts(QueryDisplay query)
@@ -183,8 +207,7 @@
                   query.ItemsPerPage,
                   query.SortBy,
                   query.SortDirection);
-        }
-
+        }        
 
         /// <summary>
         /// Creates a new product with variants
@@ -196,17 +219,90 @@
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
         [HttpPost]
+        [Obsolete("AddProduct is being superceded by CreateProduct so we can attach content at time of creation")]
         public ProductDisplay AddProduct(ProductDisplay product)
         {
             var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
 
             merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
 
+        /// <summary>
+        /// Creates a new product.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public ProductDisplay CreateProduct(ProductDisplay product)
+        {
+            // we need to remove the detached content to generate the product to begin with due to db foreign keys
+            var detachedContents = product.DetachedContents.ToArray();
+            product.DetachedContents = Enumerable.Empty<ProductVariantDetachedContentDisplay>();
 
+            // First create the product record and save it
+            var merchProduct = _productService.CreateProduct(product.Name, product.Sku, product.Price);
+            merchProduct = product.ToProduct(merchProduct);
+
+            // we don't want to raise events here since we will be saving again and there is no sense
+            // in having examine index it twice. Use the detached contents to determine whether we need to fire event
+            _productService.Save(merchProduct, !detachedContents.Any());
+
+            if (!detachedContents.Any()) return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+
+            // convert the product back so we can reassociate the detached content.
+            product = merchProduct.ToProductDisplay();
+
+            // asscociate the product variant key (master variant) with the detached content
+            foreach (var pvdc in detachedContents)
+            {
+                pvdc.ProductVariantKey = merchProduct.ProductVariantKey;
+            }
+
+            // add the detached contents back
+            product.DetachedContents = detachedContents;
+
+            // this adds the detached content to the product
+            merchProduct = product.ToProduct(merchProduct);
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// The post copy product.
+        /// </summary>
+        /// <param name="productCopySave">
+        /// The product copy save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the original product is not found
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Throws an exception if the copy attempt failed.
+        /// </exception>
+        [HttpPost]
+        public ProductDisplay PostCopyProduct(ProductCopySave productCopySave)
+        {
+            var original = _productService.GetByKey(productCopySave.Product.Key);
+            
+            if (original == null) throw new NullReferenceException("Product was not found");
+
+            var taskChain = new CopyProductTaskChain(original, productCopySave.Name, productCopySave.Sku);
+
+            var attempt = taskChain.Copy();
+
+            if (!attempt.Success) throw attempt.Exception;
+
+            return attempt.Result.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -223,13 +319,48 @@
         [HttpPost, HttpPut]
         public ProductDisplay PutProduct(ProductDisplay product)
         {            
-            var merchProduct = _productService.GetByKey(product.Key);  
-       
+            var merchProduct = _productService.GetByKey(product.Key);
+
+            if (product.DetachedContents.Any())
+            {
+                foreach (var c in product.DetachedContents.Select(x => x.CultureName))
+                {
+                    var pcs = new ProductContentSave { CultureName = c, Display = product };
+                    ProductVariantDetachedContentHelper<ProductContentSave, ProductDisplay>.MapDetachedProperties(pcs);
+                }
+            }
+
             merchProduct = product.ToProduct(merchProduct);
 
             _productService.Save(merchProduct);
 
-            return merchProduct.ToProductDisplay();
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// The put product with detached content.
+        /// </summary>
+        /// <param name="detachedContentItem">
+        /// The product save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductDisplay PutProductWithDetachedContent(
+            [ModelBinder(typeof(ProductContentSaveBinder))]
+            ProductContentSave detachedContentItem)
+        {
+            ProductVariantDetachedContentHelper<ProductContentSave, ProductDisplay>.MapDetachedProperties(detachedContentItem);
+
+            var merchProduct = _productService.GetByKey(detachedContentItem.Display.Key);
+
+            merchProduct = detachedContentItem.Display.ToProduct(merchProduct);
+
+            _productService.Save(merchProduct);
+
+            return merchProduct.ToProductDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -245,11 +376,46 @@
         public ProductVariantDisplay PutProductVariant(ProductVariantDisplay productVariant)
         {
             var variant = _productVariantService.GetByKey(productVariant.Key);
+
+            if (productVariant.DetachedContents.Any())
+            {
+                foreach (var c in productVariant.DetachedContents.Select(x => x.CultureName))
+                {
+                    var pcs = new ProductVariantContentSave { CultureName = c, Display = productVariant };
+                    ProductVariantDetachedContentHelper<ProductVariantContentSave, ProductVariantDisplay>.MapDetachedProperties(pcs);
+                }
+            }
+
             variant = productVariant.ToProductVariant(variant);
 
             _productVariantService.Save(variant);
 
-            return variant.ToProductVariantDisplay();
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// The put product variant content.
+        /// </summary>
+        /// <param name="detachedContentItem">
+        /// The product variant save.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductVariantDisplay PutProductVariantWithDetachedContent(
+            [ModelBinder(typeof(ProductVariantContentSaveBinder))]
+            ProductVariantContentSave detachedContentItem)
+        {
+            ProductVariantDetachedContentHelper<ProductVariantContentSave, ProductVariantDisplay>.MapDetachedProperties(detachedContentItem);
+
+            var variant = _productVariantService.GetByKey(detachedContentItem.Display.Key);
+            variant = detachedContentItem.Display.ToProductVariant(variant);
+
+            _productVariantService.Save(variant);
+
+            return variant.ToProductVariantDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -277,10 +443,40 @@
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        //[HttpPost, HttpDelete]
-        //public HttpResponseMessage DeleteProductVariant(Guid id)
-        //{
+        /// <summary>
+        /// Removes detached content from a product variant
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpPost, HttpDelete]
+        public HttpResponseMessage DeleteDetachedContent(ProductVariantDisplay productVariant)
+        {
+            var product = _productService.GetByKey(productVariant.ProductKey);
+            if (product == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
-        //}
+            if (product.ProductVariants.Any() && product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key) != null)
+            {
+                var variant = product.ProductVariants.FirstOrDefault(x => x.Key == productVariant.Key);
+                if (variant != null) variant.DetachedContents.Clear();
+                //// TODO need to walk this through better, we should not need to save the variant and then the product  
+                //// as the product save should take care of it, but somewhere in the service the runtime cache is resetting
+                //// the variant's detached content in the productvariant collection.  Probably just need to rearrange some of the
+                //// calls in the service - suspect EnsureProductVariants.
+                _productVariantService.Save(variant);
+            }
+            else
+            {
+                product.DetachedContents.Clear();
+            }
+
+            _productService.Save(product);
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
     }
 }

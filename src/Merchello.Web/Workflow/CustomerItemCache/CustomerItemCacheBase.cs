@@ -1,18 +1,19 @@
 ﻿namespace Merchello.Web.Workflow.CustomerItemCache
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Chains;
     using Merchello.Core.Events;
     using Merchello.Core.Models;
-    using Merchello.Web.DataModifiers;
+    using Merchello.Web.DataModifiers.Product;
     using Merchello.Web.Models.ContentEditing;
-
-    using umbraco.cms.businesslogic.language;
+    using Merchello.Web.Validation;
 
     using Umbraco.Core;
+    using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
 
     /// <summary>
@@ -32,19 +33,29 @@
             };
 
         /// <summary>
-        /// The item cache responsible for persisting the customer item cache contents.
-        /// </summary>
-        private readonly IItemCache _itemCache;
-
-        /// <summary>
         /// The customer.
         /// </summary>
         private readonly ICustomerBase _customer;
 
         /// <summary>
+        /// The validation messages.
+        /// </summary>
+        private readonly List<string> _validationMessages = new List<string>(); 
+
+        /// <summary>
+        /// The item cache responsible for persisting the customer item cache contents.
+        /// </summary>
+        private IItemCache _itemCache;
+
+        /// <summary>
         /// The product data modifier.
         /// </summary>
-        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _productDataModifier; 
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _productDataModifier;
+
+        /// <summary>
+        /// The validation chain.
+        /// </summary>
+        private Lazy<CustomerItemCacheValidationChain> _validator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerItemCacheBase"/> class.
@@ -65,6 +76,50 @@
 
             this.Initialize();
         }
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when adding an item.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, Core.Events.NewEventArgs<ILineItem>> AddingItem;
+
+        /// <summary>
+        /// Occurs after an item is added.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, Core.Events.NewEventArgs<ILineItem>> AddedItem;
+
+        /// <summary>
+        /// Occurs before an item quantity is updated.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, Core.Events.UpdateItemEventArgs<ILineItem>> UpdatingItem;
+
+        /// <summary>
+        /// Occurs after an item quantity is updated.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, Core.Events.UpdateItemEventArgs<ILineItem>> UpdatedItem;
+
+        /// <summary>
+        /// Occurs before removing an item.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, DeleteEventArgs<ILineItem>> RemovingItem;
+
+        /// <summary>
+        /// Occurs after an item is removed.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, DeleteEventArgs<ILineItem>> RemovedItem;
+
+        /// <summary>
+        /// Occurs when validation is starting.
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, ValidationEventArgs<CustomerItemCacheBase>> Validating; 
+
+        /// <summary>
+        /// Occurs after validation has completed
+        /// </summary>
+        public event TypedEventHandler<CustomerItemCacheBase, ValidationEventArgs<ValidationResult<CustomerItemCacheBase>>> Validated;
+
+        #endregion
 
         /// <summary>
         /// Gets or sets a value indicating whether enable data modifiers.
@@ -139,6 +194,17 @@
         internal IItemCache ItemCache
         {
             get { return _itemCache; }
+        }
+
+        /// <summary>
+        /// Gets the validation messages.
+        /// </summary>
+        internal IEnumerable<string> ValidationMessages
+        {
+            get
+            {
+                return _validationMessages;
+            }
         }
 
         #region IProduct
@@ -480,10 +546,8 @@
         /// </param>
         public void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData)
         {
-            if (quantity <= 0) quantity = 1;
-            if (price < 0) price = 0;
             var lineItem = new ItemCacheLineItem(LineItemType.Product, name, sku, quantity, price, extendedData);                        
-            _itemCache.AddItem(lineItem);
+            AddItem(lineItem);
         }
 
         /// <summary>
@@ -495,8 +559,16 @@
         public void AddItem(IItemCacheLineItem lineItem)
         {
             if (lineItem.Quantity <= 0) lineItem.Quantity = 1;
-            if (lineItem.Price < 0) lineItem.Price = 0;            
+            if (lineItem.Price < 0) lineItem.Price = 0;
+
+            if (AddingItem.IsRaisedEventCancelled(new Core.Events.NewEventArgs<ILineItem>(lineItem), this))
+            {
+                return;
+            }
+
             _itemCache.AddItem(lineItem);
+
+            AddedItem.RaiseEvent(new Core.Events.NewEventArgs<ILineItem>(lineItem), this);
         }
 
         /// <summary>
@@ -548,7 +620,11 @@
                 return;
             }
 
+            UpdatingItem.RaiseEvent(new UpdateItemEventArgs<ILineItem>(_itemCache.Items[sku]), this);
+
             _itemCache.Items[sku].Quantity = quantity;
+
+            UpdatedItem.RaiseEvent(new UpdateItemEventArgs<ILineItem>(_itemCache.Items[sku]), this);
         }
 
         /// <summary>
@@ -583,9 +659,20 @@
         /// </param>
         public void RemoveItem(string sku)
         {
+            var lineItem = _itemCache.Items[sku];
+            if (lineItem == null) return;
+            
+            if (RemovingItem.IsRaisedEventCancelled(new DeleteEventArgs<ILineItem>(lineItem), this))
+            {
+                return;
+            }
+
             LogHelper.Debug<CustomerItemCacheBase>("Before Attempting to remove - count: " + _itemCache.Items.Count);
             LogHelper.Debug<CustomerItemCacheBase>("Attempting to remove sku: " + sku);
+          
             _itemCache.Items.RemoveItem(sku);
+
+            RemovedItem.RaiseEvent(new DeleteEventArgs<ILineItem>(lineItem), this);
             LogHelper.Debug<CustomerItemCacheBase>("After Attempting to remove - count: " + _itemCache.Items.Count);
         }
 
@@ -604,7 +691,36 @@
         /// Saves the customer item cache
         /// </summary>
         public abstract void Save();
-        
+
+        /// <summary>
+        /// The validate.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Validate()
+        {
+            if (Validating.IsRaisedEventCancelled(new ValidationEventArgs<CustomerItemCacheBase>(this), this))
+            {
+                return true;
+            }
+
+            _validator.Value.EnableDataModifiers = this.EnableDataModifiers;
+            var attempt = _validator.Value.Validate(this);
+            Validated.RaiseEvent(new ValidationEventArgs<ValidationResult<CustomerItemCacheBase>>(attempt.Result), this);
+            if (attempt.Success)
+            {
+                _itemCache = attempt.Result.Validated.ItemCache;
+            }
+            else
+            {
+                LogHelper.Debug<CustomerItemCacheBase>(attempt.Exception.Message);
+                throw attempt.Exception;
+            }
+
+            return attempt.Success;
+        }
+
         /// <summary>
         /// Accepts visitor class to visit customer item cache items
         /// </summary>
@@ -633,13 +749,32 @@
         }
 
         /// <summary>
+        /// The on validated.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void OnValidated(CustomerItemCacheBase sender, ValidationEventArgs<ValidationResult<CustomerItemCacheBase>> e)
+        {
+            if (!e.Result.Messages.Any()) return;
+            
+            LogHelper.Info<CustomerItemCacheBase>(this.GetType().Name + " validation returned messages -> " + string.Join(" | ", e.Result.Messages));               
+        }
+
+        /// <summary>
         /// Initializes the Lazy data modifiers
         /// </summary>
         private void Initialize()
         {
             _productDataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));
+            _validator = new Lazy<CustomerItemCacheValidationChain>(() => new CustomerItemCacheValidationChain(MerchelloContext.Current));
             _itemCache.Items.AddingItem += ItemsOnAddingItem;
+            Validated += OnValidated;
         }
+
 
     }
 }

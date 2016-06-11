@@ -8,13 +8,13 @@
 
     using global::Examine;
 
-    using Merchello.Core;
     using Merchello.Core.Models;
-    using Merchello.Core.Models.TypeFields;
-    using Merchello.Examine;
-    using Merchello.Web.Search;
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Extension methods to map examine (Lucene) documents to respective "Display" object classes
@@ -34,14 +34,14 @@
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
-        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants)
+        internal static ProductDisplay ToProductDisplay(this SearchResult result, Func<Guid, IEnumerable<ProductVariantDisplay>> getProductVariants, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
             // this should be the master variant
             var productDisplay = new ProductDisplay(result.ToProductVariantDisplay());
 
             productDisplay.ProductVariants = getProductVariants(productDisplay.Key);
             productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
-
+            productDisplay.EnsureValueConversion(conversionType);
             return productDisplay;
         }
 
@@ -83,9 +83,9 @@
                 DownloadMediaId = FieldAsInteger(result, "downloadMediaId"),
                 VersionKey = FieldAsGuid(result, "versionKey"),
                 Attributes = RawJsonFieldAsCollection<ProductAttributeDisplay>(result, "attributes"),
-                CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories")
+                CatalogInventories = RawJsonFieldAsCollection<CatalogInventoryDisplay>(result, "catalogInventories"),
+                DetachedContents = GetProductVariantDetachedContentDisplayCollection(result, "detachedContents")
             };
-  
             return pvd;
         }
 
@@ -122,13 +122,15 @@
                     BillToCompany = FieldAsString(result, "billToCompany"),
                     BillToPhone = FieldAsString(result, "billToPhone"),
                     BillToEmail = FieldAsString(result, "billToEmail"),
+                    CurrencyCode = FieldAsString(result, "currencyCode"),
                     PoNumber = FieldAsString(result, "poNumber"),
                     Exported = FieldAsBoolean(result.Fields["exported"]),
                     Archived = FieldAsBoolean(result.Fields["archived"]),
                     Total = FieldAsDecimal(result, "total"),
                     InvoiceStatus = JsonFieldAs<InvoiceStatusDisplay>(result, "invoiceStatus"),
                     Currency = JsonFieldAs<CurrencyDisplay>(result, "currency"),
-                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems"),                    
+                    Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
+                    Items = RawJsonFieldAsCollection<InvoiceLineItemDisplay>(result, "invoiceItems")                  
                 };
 
 
@@ -184,7 +186,7 @@
                 FirstName = FieldAsString(result, "firstName"),
                 LastName = FieldAsString(result, "lastName"),
                 Email = FieldAsString(result, "email"),
-                Notes = FieldAsString(result, "notes"),
+                Notes = RawJsonFieldAsCollection<NoteDisplay>(result, "notes"),
                 TaxExempt = FieldAsBoolean(result.Fields["taxExempt"]),
                 ExtendedData =
                     RawJsonFieldAsCollection<KeyValuePair<string, string>>(result, "extendedData")
@@ -221,6 +223,49 @@
             return !result.Fields.ContainsKey(alias)
                 ? new List<T>()
                 : JsonConvert.DeserializeObject<IEnumerable<T>>(result.Fields[alias]);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="ProductVariantDetachedContent"/> from examine result.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ProductVariantDetachedContentDispaly}"/>.
+        /// </returns>
+        private static IEnumerable<ProductVariantDetachedContentDisplay> GetProductVariantDetachedContentDisplayCollection(SearchResult result, string alias)
+        {
+            if (!result.Fields.ContainsKey(alias)) return Enumerable.Empty<ProductVariantDetachedContentDisplay>();
+
+            var jarray = JArray.Parse(result.Fields[alias]);
+            
+            var contents = new List<ProductVariantDetachedContentDisplay>();
+            
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var j in jarray)
+            {
+                var jtoken = JObject.Parse(j.ToString());
+                var contentType = jtoken.GetValue("DetachedContentType").ToObject<DetachedContentType>();
+
+                var dataValues = jtoken.GetValue("DetachedDataValues").ToObject<IEnumerable<KeyValuePair<string, string>>>();
+                var pvdc = new ProductVariantDetachedContent(jtoken.GetValue("ProductVariantKey").ToObject<Guid>(), contentType, j.Value<string>("CultureName"), new DetachedDataValuesCollection(dataValues))
+                        {
+                            Key = jtoken.GetValue("Key").ToObject<Guid>(),
+                            Slug = jtoken.SelectToken("Slug").ToString(),
+                            TemplateId = (int)j.SelectToken("TemplateId"),
+                            CanBeRendered = bool.Parse(jtoken.SelectToken("CanBeRendered").ToString()),
+                            CreateDate = contentType.CreateDate,
+                            UpdateDate = contentType.UpdateDate
+                        };
+
+                contents.Add(pvdc.ToProductVariantDetachedContentDisplay());
+            }
+
+            return contents;
         }
 
         /// <summary>

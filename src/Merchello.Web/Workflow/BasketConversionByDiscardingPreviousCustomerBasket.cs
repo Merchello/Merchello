@@ -31,12 +31,20 @@
         /// </returns>
         public override IBasket Merge()
         {
-            if (AnonymousBasket.IsEmpty) return CustomerBasket;
+            OnConverting();
+
+            if (AnonymousBasket.IsEmpty)
+            {
+                OnConverted();
+                return CustomerBasket;
+            }
 
             CustomerBasket.Empty();
 
             CustomerBasket.Items.Add(AnonymousBasket.Items.Select(x => x.AsLineItemOf<ItemCacheLineItem>()));
             CustomerBasket.Save();
+
+            OnConverted();
 
             return CustomerBasket;
         }

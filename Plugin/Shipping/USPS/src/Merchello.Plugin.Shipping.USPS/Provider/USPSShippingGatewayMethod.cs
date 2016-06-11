@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration.Provider;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Web;
 using System.Xml;
@@ -169,21 +171,23 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
             //int packageWeightOunces = tOz % 16;
 
             var sb = new StringBuilder();
-            sb.AppendFormat(shipment.ToCountryCode == "US"
-                    ? "<RateV4Request USERID=\"{0}\" PASSWORD=\"{1}\">"
-                    : "<IntlRateV2Response  USERID=\"{0}\" PASSWORD=\"{1}\">", _processorSettings.UspsUsername, _processorSettings.UspsPassword);
-            sb.Append("<Revision/>");
-            string packageStr = BuildRatePackage(shipment, visitor);
-            sb.Append(packageStr);
-            sb.Append("</RateV4Request>");
-            return "API=RateV4&XML=" + sb;
+            using (var writer = XmlWriter.Create(sb, new XmlWriterSettings() { OmitXmlDeclaration = true }))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement(shipment.ToCountryCode == "US" ? "RateV4Request" : "IntlRateV2Response");
+                writer.WriteAttributeString("USERID", _processorSettings.UspsUsername);
+                writer.WriteAttributeString("PASSWORD", _processorSettings.UspsPassword);
+                writer.WriteElementString("Revision", null);
+                BuildRatePackage(writer, shipment, visitor);
+                writer.WriteEndDocument();
+            }
+            return "API=RateV4&XML=" + ApplicationXWwwFormUrlencodedEncode(sb.ToString());
         }
 
-        private string BuildRatePackage(IShipment shipment, UspsShipmentLineItemVisitor visitor)
+        private void BuildRatePackage(XmlWriter writer, IShipment shipment, UspsShipmentLineItemVisitor visitor)
         {
             var count = 0;
-            var sb = new StringBuilder();        
-             
+
             var productWeight = (int)Math.Ceiling(visitor.TotalWeight);
             int tOz = (int)Math.Ceiling(productWeight * 16.0m);
             int packageWeightPounds = tOz / 16;
@@ -193,22 +197,93 @@ namespace Merchello.Plugin.Shipping.USPS.Provider
             var productLength = (int)Math.Ceiling(visitor.TotalLength);
             var productHeight = (int)Math.Ceiling(visitor.TotalHeight);
             string packageSize = GetPackageSize(productLength, productHeight, productWidth);
-           
-            sb.AppendFormat("<Package ID=\"{0}\">", count);
-            sb.Append("<Service>ALL</Service>");
-            sb.AppendFormat("<ZipOrigination>{0}</ZipOrigination>", shipment.FromPostalCode);
-            sb.AppendFormat("<ZipDestination>{0}</ZipDestination>", shipment.ToPostalCode);
-            sb.AppendFormat("<Pounds>{0}</Pounds>", packageWeightPounds);
-            sb.AppendFormat("<Ounces>{0}</Ounces>", packageWeightOunces);
-            sb.Append("<Container>Variable</Container>");
-            sb.AppendFormat("<Size>{0}</Size>", packageSize);
-            sb.AppendFormat("<Width>{0}</Width>", productWidth);
-            sb.AppendFormat("<Length>{0}</Length>", productLength);
-            sb.AppendFormat("<Height>{0}</Height>", productHeight);
-            sb.Append("<Machinable>FALSE</Machinable>"); // Packages are not machinable
-            sb.Append("</Package>");
-                                               
-            return sb.ToString();
+
+            writer.WriteStartElement("Package");
+            writer.WriteAttributeString("ID", count.ToString());
+            writer.WriteElementString("Service", "ALL");
+            writer.WriteElementString("ZipOrigination", shipment.FromPostalCode);
+            writer.WriteElementString("ZipDestination", shipment.ToPostalCode);
+            writer.WriteElementString("Pounds", packageWeightPounds.ToString());
+            writer.WriteElementString("Ounces", packageWeightOunces.ToString());
+            writer.WriteElementString("Container", "Variable");
+            writer.WriteElementString("Size", packageSize);
+            writer.WriteElementString("Width", productWidth.ToString());
+            writer.WriteElementString("Length", productLength.ToString());
+            writer.WriteElementString("Height", productHeight.ToString());
+            writer.WriteElementString("Machinable", "FALSE");  // Packages are not machinable
+            writer.WriteEndElement();
+        }
+
+        private string ApplicationXWwwFormUrlencodedEncode(string nameOrValue)
+        {
+            return
+                Encoding.ASCII.GetString(
+                    Encoding.GetEncoding("ISO-8859-1", new ApplicationXWwwFormUrlencodedFallback(), new DecoderExceptionFallback())
+                        .GetBytes(nameOrValue)
+                        .Select(b =>
+                        {
+                            if (b == 0x20)
+                                return new byte[] {0x2B};
+                            if (b == 0x2A || b == 0x2D || b == 0x2E || (b >= 0x30 && b <= 0x39) ||
+                                (b >= 0x41 && b <= 0x5A) ||
+                                b == 0x5F || (b >= 0x61 && b <= 0x7A))
+                                return new[] {b};
+                            return Encoding.ASCII.GetBytes("%" + b.ToString("X2"));
+                        }).SelectMany(bytes => bytes).ToArray());
+        }
+
+        private class ApplicationXWwwFormUrlencodedFallback : EncoderFallback
+        {
+            public override EncoderFallbackBuffer CreateFallbackBuffer()
+            {
+                return new ApplicationXWwwFormUrlencodedFallbackBuffer();
+            }
+
+            public override int MaxCharCount
+            {
+                get { return 10; }
+            }
+        }
+
+        private class ApplicationXWwwFormUrlencodedFallbackBuffer : EncoderFallbackBuffer
+        {
+            private string _buffer;
+            private int _position;
+
+            public override bool Fallback(char charUnknown, int index)
+            {
+                _buffer = "&#" + (int)charUnknown + ";";
+                return true;
+            }
+
+            public override bool Fallback(char charUnknownHigh, char charUnknownLow, int index)
+            {
+                _buffer = "&#" + char.ConvertToUtf32(charUnknownHigh, charUnknownLow) + ";";
+                return true;
+            }
+
+            public override char GetNextChar()
+            {
+                return _buffer != null && _position < _buffer.Length ? _buffer[_position++] : '\u0000';
+            }
+
+            public override bool MovePrevious()
+            {
+                if (_buffer == null || _position <= 0) return false;
+                _position++;
+                return true;
+            }
+
+            public override int Remaining
+            {
+                get { return _buffer != null ? _buffer.Length - _position : 0; }
+            }
+
+            public override void Reset()
+            {
+                _buffer = null;
+                _position = 0;
+            }
         }
 
         private bool IsPackageTooLarge(int length, int height, int width)

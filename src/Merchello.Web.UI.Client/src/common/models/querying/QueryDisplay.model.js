@@ -39,6 +39,26 @@
             addParameter.call(this, param);
         }
 
+        function addCollectionKeyParam(collectionKey) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'collectionKey';
+            param.value = collectionKey;
+            addParameter.call(this, param);
+        }
+
+        function hasCollectionKeyParam() {
+            var fnd = _.find(this.parameters, function(p) {
+                return p.fieldName === 'collectionKey';
+            });
+            return fnd !== undefined;
+        }
+
+        function addEntityTypeParam(entityType) {
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'entityType';
+            param.value = entityType;
+            addParameter.call(this, param);
+        }
 
         function addFilterTermParam(term) {
             if(term === undefined || term.length <= 0) {
@@ -59,9 +79,12 @@
         return {
             addParameter: addParameter,
             addCustomerKeyParam: addCustomerKeyParam,
+            addCollectionKeyParam: addCollectionKeyParam,
+            addEntityTypeParam: addEntityTypeParam,
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,
-            addFilterTermParam: addFilterTermParam
+            addFilterTermParam: addFilterTermParam,
+            hasCollectionKeyParam: hasCollectionKeyParam
         };
     }());
 

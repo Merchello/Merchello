@@ -13,8 +13,17 @@ using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
+    using System.Configuration;
+
+    using Merchello.Core.Events;
+    using Merchello.Core.Persistence;
+    using Merchello.Tests.Base.SqlSyntax;
+
     using Moq;
 
+    using umbraco.BusinessLogic;
+
+    using Umbraco.Core.Logging;
     using Umbraco.Web;
 
     public abstract class DatabaseIntegrationTestBase
@@ -25,9 +34,16 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
         [TestFixtureSetUp]
         public virtual void FixtureSetup()
         {
-            //AutoMapperMappings.CreateMappings();
+            var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
 
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            // sets up the Umbraco SqlSyntaxProvider Singleton OBSOLETE
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
+
+            var sqlSyntax = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
+
+            //AutoMapperMappings.CreateMappings();
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            var serviceContext = new ServiceContext(new RepositoryFactory(logger, sqlSyntax), new PetaPocoUnitOfWorkProvider(logger), logger, new TransientMessageFactory());
 
             _dbPreTestDataWorker = new DbPreTestDataWorker(serviceContext);
 
@@ -35,7 +51,7 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             var applicationMock = new Mock<UmbracoApplication>();
 
             // Merchello CoreBootStrap
-            var bootManager = new Web.WebBootManager();
+            var bootManager = new Web.WebBootManager(logger, _dbPreTestDataWorker.SqlSyntaxProvider);
             bootManager.Initialize();
 
 

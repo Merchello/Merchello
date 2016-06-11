@@ -27,6 +27,7 @@ namespace Merchello.Plugin.Payments.PayPal
 		public PayPalPaymentProcessor(PayPalProcessorSettings settings)
         {
             _settings = settings;
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
         }
 
 		/// <summary>
@@ -112,16 +113,19 @@ namespace Merchello.Plugin.Payments.PayPal
 			var currencyDecimals = CurrencyDecimals(currencyCodeType);
 
 			decimal itemTotal = 0;
-			decimal taxTotal = 0;
+            decimal taxTotal = 0;
 			decimal shippingTotal = 0;
 			AddressType shipAddress = null;
 
 			var paymentDetailItems = new List<PaymentDetailsItemType>();
 			foreach (var item in invoice.Items)
 			{
-				if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.TaxKey) {
+				if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.TaxKey) 
+                {
 					taxTotal = item.TotalPrice;
-				} else if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.ShippingKey) {
+				} 
+                else if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.ShippingKey) 
+                {
 					shippingTotal = item.TotalPrice;
 					var address = item.ExtendedData.GetAddress(Merchello.Core.AddressType.Shipping);
 					if (address != null) {
@@ -137,7 +141,20 @@ namespace Merchello.Plugin.Payments.PayPal
 							Phone = address.Phone
 						};
 					}
-				} else {
+				}
+                else if (item.LineItemTfKey == Merchello.Core.Constants.TypeFieldKeys.LineItem.DiscountKey)
+                {
+                    var discountItem = new PaymentDetailsItemType
+                    {
+                        Name = item.Name,
+                        ItemURL = (articleBySkuPath.IsEmpty() ? null : articleBySkuPath + item.Sku),
+                        Amount = new BasicAmountType(currencyCodeType, PriceToString(item.Price*-1, currencyDecimals)),
+                        Quantity = item.Quantity,
+                    };
+                    paymentDetailItems.Add(discountItem);
+                    itemTotal -= item.TotalPrice;
+                } 
+                else {
 					var paymentItem = new PaymentDetailsItemType {
 						Name = item.Name,
 						ItemURL = (articleBySkuPath.IsEmpty() ? null : articleBySkuPath + item.Sku),
@@ -155,8 +172,8 @@ namespace Merchello.Plugin.Payments.PayPal
 				ItemTotal = new BasicAmountType(currencyCodeType, PriceToString(itemTotal, currencyDecimals)),
 				TaxTotal = new BasicAmountType(currencyCodeType, PriceToString(taxTotal, currencyDecimals)),
 				ShippingTotal = new BasicAmountType(currencyCodeType, PriceToString(shippingTotal, currencyDecimals)),
-				OrderTotal = new BasicAmountType(currencyCodeType, PriceToString(itemTotal + taxTotal + shippingTotal, currencyDecimals)),
-				PaymentAction = PaymentActionCodeType.ORDER,
+                OrderTotal = new BasicAmountType(currencyCodeType, PriceToString(invoice.Total, currencyDecimals)),
+                PaymentAction = PaymentActionCodeType.ORDER,
 				InvoiceID = invoice.InvoiceNumberPrefix + invoice.InvoiceNumber.ToString("0"),
 				SellerDetails = new SellerDetailsType { PayPalAccountID = _settings.AccountId },
 				PaymentRequestID = "PaymentRequest",

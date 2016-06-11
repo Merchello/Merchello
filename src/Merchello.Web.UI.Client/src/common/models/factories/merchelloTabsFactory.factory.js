@@ -7,75 +7,86 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             // creates tabs for the product listing page
             function createProductListTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productContentTypeList', 'merchelloTabs_productContentTypes', '#/merchello/merchello/productcontenttypelist/manage')
                 return tabs;
             }
 
-            // creates tabs for the product editor page
+           // creates tabs for the product editor page
             function createNewProductEditorTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('createproduct', 'Product', '#/merchello/merchello/productedit/');
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('createproduct', 'merchelloTabs_product', '#/merchello/merchello/productedit/');
                 return tabs;
             }
 
             // creates tabs for the product editor page
-            function createProductEditorTabs(productKey) {
+            function createProductEditorTabs(productKey, hasVariants) {
+                if (hasVariants !== undefined && hasVariants == true)
+                {
+                    return createProductEditorWithOptionsTabs(productKey);
+                }
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('productedit', 'Product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
                 return tabs;
             }
 
             // creates tabs for the product editor with options tabs
             function createProductEditorWithOptionsTabs(productKey) {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('optionslist', 'Product Options', '#/merchello/merchello/productoptionseditor/' + productKey);
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
+                tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 
             // creates tabs for the product variant editor
-            function createProductVariantEditorTabs(productKey, productVariantKey) {
+           function createProductVariantEditorTabs(productKey, productVariantKey) {
                 var tabs = new Constructor();
-                tabs.addTab('productlist', 'Product Listing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('variantlist', 'Product Variants', '#/merchello/merchello/producteditwithoptions/' + productKey);
-                tabs.addTab('varianteditor', 'Product Variant Editor', '#/merchello/merchello/productvariantedit/' + productKey + '?variantid=' + productVariantKey);
+                tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
+                tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
+                tabs.addTab('variantlist', 'merchelloTabs_productVariants', '#/merchello/merchello/producteditwithoptions/' + productKey);
+                tabs.addTab('varianteditor', 'merchelloTabs_productVariantEditor', '#/merchello/merchello/productedit/' + productKey + '?variantid=' + productVariantKey);
+               tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey + '?variantid=' + productVariantKey);
                 return tabs;
             }
+
 
             // creates tabs for the sales listing page
             function createSalesListTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
+                tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
                 return tabs;
             }
 
             // creates the tabs for sales overview section
             function createSalesTabs(invoiceKey) {
                 var tabs = new Constructor();
-                tabs.addTab('saleslist', 'Sales Listing', '#/merchello/merchello/saleslist/manage');
-                tabs.addTab('overview', 'Sale', '#/merchello/merchello/saleoverview/' + invoiceKey);
-                tabs.addTab('payments', 'Payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
-                tabs.addTab('shipments', 'Shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
+                tabs.addTab('saleslist', 'merchelloTabs_salesListing', '#/merchello/merchello/saleslist/manage');
+                tabs.addTab('overview', 'merchelloTabs_sales', '#/merchello/merchello/saleoverview/' + invoiceKey);
+                tabs.addTab('payments', 'merchelloTabs_payments', '#/merchello/merchello/invoicepayments/' + invoiceKey);
+                tabs.addTab('shipments', 'merchelloTabs_shipments', '#/merchello/merchello/ordershipments/' + invoiceKey);
                 return tabs;
             }
 
             // creates the tabs for the customer list page
             function createCustomerListTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
+                tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
                 return tabs;
             }
 
             // creates the customer overview tabs
             function createCustomerOverviewTabs(customerKey, hasAddresses) {
                 var tabs = new Constructor();
-                tabs.addTab('customerlist', 'Customer Listing', '#/merchello/merchello/customerlist/manage');
-                tabs.addTab('overview', 'Customer', '#/merchello/merchello/customeroverview/' + customerKey);
+                tabs.addTab('customerlist', 'merchelloTabs_customerListing', '#/merchello/merchello/customerlist/manage');
+                tabs.addTab('overview', 'merchelloTabs_customer', '#/merchello/merchello/customeroverview/' + customerKey);
                 if(hasAddresses) {
-                    tabs.addTab('addresses', 'Addresses', '#/merchello/merchello/customeraddresses/' + customerKey);
+                    tabs.addTab('addresses', 'merchelloTabs_customerAddresses', '#/merchello/merchello/customeraddresses/' + customerKey);
                 }
                 return tabs;
             }
@@ -83,26 +94,30 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             // creates the tabs for the gateway provider section
             function createGatewayProviderTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('providers', 'Gateway Providers', '#/merchello/merchello/gatewayproviderlist/manage');
-                tabs.addTab('notification', 'Notification', '#/merchello/merchello/notificationproviders/manage');
-                tabs.addTab('payment', 'Payment', '#/merchello/merchello/paymentproviders/manage');
-                tabs.addTab('shipping', 'Shipping', '#/merchello/merchello/shippingproviders/manage');
-                tabs.addTab('taxation', 'Taxation', '#/merchello/merchello/taxationproviders/manage');
+                tabs.addTab('providers', 'merchelloTabs_gatewayProviders', '#/merchello/merchello/gatewayproviderlist/manage');
+                tabs.addTab('notification', 'merchelloTabs_notification', '#/merchello/merchello/notificationproviders/manage');
+                tabs.addTab('payment', 'merchelloTabs_payment', '#/merchello/merchello/paymentproviders/manage');
+                tabs.addTab('shipping', 'merchelloTabs_shipping', '#/merchello/merchello/shippingproviders/manage');
+                tabs.addTab('taxation', 'merchelloTabs_taxation', '#/merchello/merchello/taxationproviders/manage');
                 return tabs;
             }
 
             // creates the tabs for the marketing section
             function createMarketingTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('offers', 'Offers Listing', '#/merchello/merchello/offerslist/manage');
+                tabs.addTab('offers', 'merchelloTabs_offerListing', '#/merchello/merchello/offerslist/manage');
                 return tabs;
             }
 
             function createReportsTabs() {
                 var tabs = new Constructor();
-                tabs.addTab('reportslist', 'Reports', '#/merchello/merchello/reportslist/manage');
+                tabs.addTab('reportsdashboard', 'merchelloTabs_reports', '#/merchello/merchello/reportsdashboard/manage');
+                tabs.addTab('salesOverTime', 'merchelloTabs_salesOverTime', '#/merchello/merchello/salesOverTime/manage');
+                tabs.addTab("salesByItem", "merchelloTabs_salesByItem", '#/merchello/merchello/salesByItem/manage');
+                tabs.addTab("abandonedBasket", "merchelloTabs_abandonedBasket", '#/merchello/merchello/abandonedBasket/manage');
                 return tabs;
             }
+
 
             return {
                 createNewProductEditorTabs: createNewProductEditorTabs,

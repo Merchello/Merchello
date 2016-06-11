@@ -1,4 +1,5 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Web")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Web.Store")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Web.UI")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Tests.Base")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Tests.UnitTests")]

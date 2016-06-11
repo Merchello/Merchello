@@ -22,14 +22,24 @@
         private readonly Database _database;
 
         /// <summary>
+        /// The <see cref="ILogger"/>.
+        /// </summary>
+        private readonly ILogger _logger;
+
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BaseDataCreation"/> class.
         /// </summary>
         /// <param name="database">
         /// The database.
         /// </param>
-        public BaseDataCreation(Database database)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public BaseDataCreation(Database database, ILogger logger)
         {
             _database = database;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,7 +49,7 @@
         /// <param name="tableName">Name of the table to create base data for</param>
         public void InitializeBaseData(string tableName)
         {
-            LogHelper.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
+            _logger.Info<BaseDataCreation>(string.Format("Creating data in table {0}", tableName));
 
             if (tableName.Equals("merchTypeField")) CreateDbTypeFieldData();   
 
@@ -49,11 +59,11 @@
 
             if (tableName.Equals("merchOrderStatus")) CreateOrderStatusData();
 
-            if (tableName.EndsWith("merchShipmentStatus")) this.CreateShipmentStatusData();
+            if (tableName.Equals("merchShipmentStatus")) this.CreateShipmentStatusData();
          
-            if (tableName.EndsWith("merchGatewayProviderSettings")) CreateGatewayProviderSettingsData();
+            if (tableName.Equals("merchGatewayProviderSettings")) CreateGatewayProviderSettingsData();
 
-            if (tableName.EndsWith("merchStoreSetting")) CreateStoreSettingData();          
+            if (tableName.Equals("merchStoreSetting")) CreateStoreSettingData();          
         }
 
         /// <summary>
@@ -84,6 +94,7 @@
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.Cash.TypeKey, Alias = ptf.Cash.Alias, Name = ptf.Cash.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.CreditCard.TypeKey, Alias = ptf.CreditCard.Alias, Name = ptf.CreditCard.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.PurchaseOrder.TypeKey, Alias = ptf.PurchaseOrder.Alias, Name = ptf.PurchaseOrder.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = ptf.Redirect.TypeKey, Alias = ptf.Redirect.Alias, Name = ptf.Redirect.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
 
             //// AppliedPaymentType
             var apf = new AppliedPaymentTypeField();
@@ -111,6 +122,7 @@
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.Shipment.TypeKey, Alias = entity.Shipment.Alias, Name = entity.Shipment.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.Warehouse.TypeKey, Alias = entity.Warehouse.Alias, Name = entity.Warehouse.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
             _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.WarehouseCatalog.TypeKey, Alias = entity.WarehouseCatalog.Alias, Name = entity.WarehouseCatalog.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
+            _database.Insert("merchTypeField", "Key", new TypeFieldDto() { Key = entity.EntityCollection.TypeKey, Alias = entity.EntityCollection.Alias, Name = entity.EntityCollection.Name, UpdateDate = DateTime.Now, CreateDate = DateTime.Now });
         }
 
         /// <summary>
@@ -216,13 +228,14 @@
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.DateFormatKey, Name = "dateFormat", Value = "dd-MM-yyyy", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.TimeFormatKey, Name = "timeFormat", Value = "am-pm", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.UnitSystemKey, Name = "unitSystem", Value = "Imperial", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippableKey, Name = "globalShippable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
-            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTaxableKey, Name = "globalTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippableKey, Name = "globalShippable", Value = "true", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTaxableKey, Name = "globalTaxable", Value = "true", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTrackInventoryKey, Name = "globalTrackInventory", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalShippingIsTaxableKey, Name = "globalShippingIsTaxable", Value = "false", TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.MigrationKey, Name = "migration", Value = Guid.NewGuid().ToString(), TypeName = "System.Guid", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
             _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Constants.StoreSettingKeys.GlobalTaxationApplicationKey, Name = "globalTaxationApplication", Value = "Invoice", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.DefaultExtendedContentCulture, Name = "defaultExtendedContentCulture", Value = "en-US", TypeName = "System.String", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
+            _database.Insert("merchStoreSetting", "Key", new StoreSettingDto() { Key = Core.Constants.StoreSettingKeys.HasDomainRecordKey, Name = "hasDomainRecord", Value = false.ToString(), TypeName = "System.Boolean", CreateDate = DateTime.Now, UpdateDate = DateTime.Now });
         }
-
     }
 }

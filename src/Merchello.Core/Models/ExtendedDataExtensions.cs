@@ -6,12 +6,16 @@
     using System.Globalization;
     using System.IO;
     using System.Linq;
-    using System.Web.UI;
-    using System.Web.WebPages;
     using System.Xml;
     using System.Xml.Linq;
+
+    using Merchello.Core.Logging;
+
     using Newtonsoft.Json;
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
+
+    using Constants = Core.Constants;
 
     /// <summary>
     /// Extension methods for <see cref="ExtendedDataCollection"/>
@@ -36,6 +40,69 @@
             return extendedData.Keys.ToArray().Any(keys.Contains);
         }
 
+        /// <summary>
+        /// Gets a typed value.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type to be returned.
+        /// </typeparam>
+        /// <returns>
+        /// The typed value.
+        /// </returns>
+        public static T GetValue<T>(this ExtendedDataCollection extendedData, string key) where T : class, new()
+        {
+            try
+            {
+                var value = extendedData.GetValue(key);
+                return !value.IsNullOrWhiteSpace() ? 
+                    JsonConvert.DeserializeObject<T>(value) : 
+                    default(T);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("ExtendedData");
+                MultiLogHelper.WarnWithException(typeof(ExtendedDataCollectionExtensions), "Failed to deserialize value. Proceding with operation returning default T.", ex, logData);
+                return default(T);
+            }
+        }
+
+        /// <summary>
+        /// Sets an object value into an extended data collection
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of object to be serialized
+        /// </typeparam>
+        public static void SetValue<T>(this ExtendedDataCollection extendedData, string key, T model) where T : class, new()
+        {
+            try
+            {
+                var value = JsonConvert.SerializeObject(model);
+                extendedData.SetValue(key, value);
+            }
+            catch (Exception ex)
+            {
+                var logData = MultiLogger.GetBaseLoggingData();
+                logData.AddCategory("ExtendedData");
+                MultiLogHelper.WarnWithException(typeof(ExtendedDataCollectionExtensions), "Failed to serialize value. Proceding with operation.", ex, logData);   
+            }
+        }
+
         #region ExtendedDataCollection
 
         /// <summary>
@@ -49,7 +116,7 @@
         /// </param>
         public static void AddExtendedDataCollection(this ExtendedDataCollection extendedData, ExtendedDataCollection extendedDataToSerialize)
         {
-            extendedData.SetValue(Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
+            extendedData.SetValue(Core.Constants.ExtendedDataKeys.ExtendedData, extendedDataToSerialize.SerializeToXml());
         }
 
         /// <summary>
@@ -148,7 +215,7 @@
                         dictionary[Constants.ExtendedDataKeys.Name],
                         dictionary[Constants.ExtendedDataKeys.Sku],
                         int.Parse(dictionary[Constants.ExtendedDataKeys.Quantity]),
-                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price]),
+                        decimal.Parse(dictionary[Constants.ExtendedDataKeys.Price], NumberStyles.Any, CultureInfo.InvariantCulture),
                         new ExtendedDataCollection(dictionary[Constants.ExtendedDataKeys.ExtendedData])
                     };
                                
@@ -195,6 +262,21 @@
             return dictionary;
         }
 
+        /// <summary>
+        /// The get allows validation value.
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        internal static bool GetAllowsValidationValue(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.ContainsKey(Constants.ExtendedDataKeys.LineItemAllowsValidation) || 
+                extendedData.GetValue(Constants.ExtendedDataKeys.LineItemAllowsValidation).AsBool();
+        }
+
         #endregion
 
         #region Product / ProductVariant
@@ -212,23 +294,24 @@
         {
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductKey, productVariant.ProductKey.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.ProductVariantKey, productVariant.Key.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productVariant.CostOfGoods.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productVariant.Weight.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productVariant.Width.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productVariant.Height.ToString());
-            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productVariant.Length.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.CostOfGoods, productVariant.CostOfGoods == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.CostOfGoods).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Weight, productVariant.Weight == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Weight).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Width, productVariant.Width == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Width).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Height, productVariant.Height == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Height).ToString(CultureInfo.InvariantCulture));
+            extendedData.SetValue(Constants.ExtendedDataKeys.Length, productVariant.Length == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.Length).ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.Barcode, productVariant.Barcode);
             extendedData.SetValue(Constants.ExtendedDataKeys.Price, productVariant.Price.ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.OnSale, productVariant.OnSale.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Manufacturer, productVariant.Manufacturer);
             extendedData.SetValue(Constants.ExtendedDataKeys.ManufacturerModelNumber, productVariant.ManufacturerModelNumber);
-            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : productVariant.SalePrice.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.SalePrice, productVariant.SalePrice == null ? 0.ToString(CultureInfo.InvariantCulture) : ((decimal)productVariant.SalePrice).ToString(CultureInfo.InvariantCulture));
             extendedData.SetValue(Constants.ExtendedDataKeys.TrackInventory, productVariant.TrackInventory.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.OutOfStockPurchase, productVariant.OutOfStockPurchase.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Taxable, productVariant.Taxable.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Shippable, productVariant.Shippable.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.Download, productVariant.Download.ToString());
             extendedData.SetValue(Constants.ExtendedDataKeys.DownloadMediaId, productVariant.DownloadMediaId.ToString());
+            extendedData.SetValue(Constants.ExtendedDataKeys.VersionKey, productVariant.VersionKey.ToString());
         }
 
         /// <summary>
@@ -390,6 +473,36 @@
         }
 
         /// <summary>
+        /// True/false indicating whether or not the collection contains a ProductKey
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended data.
+        /// </param>
+        /// <returns>
+        ///  A value indicating whether or not the extended data collection contains a version key.
+        /// </returns>
+        public static bool ContainsVersionKey(this ExtendedDataCollection extendedData)
+        {
+            return extendedData.ContainsKey(Constants.ExtendedDataKeys.VersionKey);
+        }
+
+        /// <summary>
+        /// Returns the VersionKey
+        /// </summary>
+        /// <param name="extendedData">
+        /// The extended Data.
+        /// </param>
+        /// <returns>
+        /// The version key.
+        /// </returns>
+        public static Guid GetVersionKey(this ExtendedDataCollection extendedData)
+        {
+            return !extendedData.ContainsVersionKey() ? 
+                Guid.Empty : 
+                extendedData.GetValue(Constants.ExtendedDataKeys.VersionKey).AsGuid();
+        }
+
+        /// <summary>
         /// Returns the "merchTaxable" value
         /// </summary>
         /// <param name="extendedData">The <see cref="ExtendedDataCollection"/></param>
@@ -460,8 +573,7 @@
         /// </returns>
         public static decimal GetPriceValue(this ExtendedDataCollection extendedData)
         {
-            decimal converted = decimal.TryParse(extendedData.GetValue(Constants.ExtendedDataKeys.Price), System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
-            return converted;
+            return extendedData.GetValue(Constants.ExtendedDataKeys.Price).AsDecimal();
         }
 
         /// <summary>
@@ -628,9 +740,13 @@
         /// </returns>
         public static IAddress GetAddress(this ExtendedDataCollection extendedData, AddressType addressType)
         {
-            return extendedData.GetAddress(addressType == AddressType.Shipping
+            var address = extendedData.GetAddress(addressType == AddressType.Shipping
                                                ? Constants.ExtendedDataKeys.ShippingDestinationAddress
                                                : Constants.ExtendedDataKeys.BillingAddress);
+
+            if (address != null) address.AddressType = addressType;
+
+            return address;
         }
 
         /// <summary>
@@ -657,6 +773,7 @@
 
         #endregion
 
+       
         #region IShipment
 
 
@@ -883,7 +1000,7 @@
         /// <param name="modifier">
         /// The modifier.
         /// </param>
-        internal static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
+        public static void MergeDataModifierLogs(this ExtendedDataCollection extendedData, IDataModifierData modifier)
         {
             if (modifier.ModifiedDataLogs == null) return;
             foreach (var log in modifier.ModifiedDataLogs)
@@ -942,7 +1059,7 @@
         private static decimal AsDecimal(this string value)
         {
             decimal converted;
-            return decimal.TryParse(value, out converted) ? converted : 0;
+            return decimal.TryParse(value, System.Globalization.NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out converted) ? converted : 0;
         }
 
         /// <summary>

@@ -49,6 +49,28 @@
             }
 
             /// <summary>
+            /// Gets the configuration key for the checkout manager invoice creation.
+            /// </summary>
+            public static string CheckoutManagerInvoiceCreate
+            {
+                get
+                {
+                    return "CheckoutManagerInvoiceCreate";
+                }
+            }
+
+            /// <summary>
+            /// Gets the item cache validation.
+            /// </summary>
+            public static string ItemCacheValidation
+            {
+                get
+                {
+                    return "ItemCacheValidation";
+                }
+            }
+
+            /// <summary>
             /// Gets the configuration key for the order preparation order create.
             /// </summary>
             public static string OrderPreparationOrderCreate
@@ -70,6 +92,17 @@
             public static string MerchelloHelperProductDataModifiers
             {
                 get { return "MerchelloHelperProductDataModifiers"; }
+            }
+
+            /// <summary>
+            /// Gets the copy product.
+            /// </summary>
+            public static string CopyProduct
+            {
+                get
+                {
+                    return "CopyProduct";
+                }
             }
         }
     }

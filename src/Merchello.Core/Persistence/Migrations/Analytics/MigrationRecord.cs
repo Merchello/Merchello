@@ -44,5 +44,10 @@
         /// Gets or sets a value indicating whether is upgrade.
         /// </summary>
         public bool IsUpgrade { get; set; }
+
+        /// <summary>
+        /// Gets or sets the domain name.
+        /// </summary>
+        public string DomainName { get; set; }
     }
 }

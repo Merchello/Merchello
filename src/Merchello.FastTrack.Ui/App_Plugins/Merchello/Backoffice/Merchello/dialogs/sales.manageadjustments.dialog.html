@@ -1,0 +1,87 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Sales.Dialogs.ManageAdjustmentsController">
+    <div class="umb-modalcolumn-header">
+        <h4><localize key="merchelloSales_manageAdjustments">Manage Adjustments</localize></h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <h5><localize key="merchelloOrder_sales" /> / <localize key="merchelloOrderView_invoiceNumber" />{{ invoiceNumber }}</h5>
+        <invoice-itemization-table invoice="dialogData.invoice" payment-methods="dialogData.paymentMethods" pre-values-loaded="preValuesLoaded" all-payments="dialogData.allPayments" payments="dialogData.payments" currency-symbol="dialogData.currencySymbol"></invoice-itemization-table>
+
+        <h4><localize key="merchelloSales_adjustments"></localize></h4>
+        <table class="table table-striped adjustment-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th class="text-right">Amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-show="adjustments.length > 0" data-ng-repeat="item in adjustments">
+
+                    <td>{{item.name}}</td>
+                    <td>
+                        <span data-ng-show="item.price < 0">({{item.absPrice() | currency : dialogData.currencySymbol}})</span>
+                        <span data-ng-show="item.price >= 0">{{item.absPrice() | currency : dialogData.currencySymbol}}</span>
+                    </td>
+                    <td class="text-right">
+                        <merchello-delete-icon do-delete="deleteAdjustment(item)"></merchello-delete-icon>
+                    </td>
+                </tr>
+                <tr data-ng-show="adjustments.length === 0">
+                    <td colspan="3">
+                        <p><localize key="content_listViewNoItems">There are no items show in the list.</localize></p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <h4><localize key="merchelloSales_addAdjustment"></localize></h4>
+        <form name="adjustmentFrm" id="adjustmentFrm">
+
+            <div class="form-group">
+                <label><localize key="placeholders_enterDescription"></localize></label>
+                <input type="text" data-ng-model="name" class="form-control adjustment-desc" />
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6 adjustment-amount">
+                    <div class="form-group">
+                        <label><localize key="merchelloGeneral_amount"></localize></label>
+                        <div class="input-prepend">
+                            <span class="add-on">{{dialogData.currencySymbol}}</span>
+                            <input type="number" data-ng-model="amount">
+                        </div>
+                    </div>
+                </div>
+                <div class="span5 adjustment-radio">
+                        <label>
+                            <input type="radio" data-ng-model="operator" value="-"> <localize key="merchelloGeneral_decrease"></localize>
+                        </label>
+                        <label>
+                            <input type="radio" data-ng-model="operator" value="+"> <localize key="merchelloGeneral_increase"></localize>
+                        </label>
+                </div>
+                <div class="span1 adjustment-icon">
+                    <merchello-add-icon do-add="addAdjustment()"></merchello-add-icon>
+                </div>
+            </div>
+
+        </form>
+
+
+    </div>
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                <!-- ACTION: Cancel -->
+                <a href data-ng-click="close()" class="btn btn-link"><localize key="general_cancel">Cancel</localize></a>
+                <!-- ACTION: Save Button -->
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="buttons_save" />
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

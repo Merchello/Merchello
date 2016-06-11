@@ -1,0 +1,27 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.PickStaticCollectionController">
+    <div class="umb-modalcolumn-header">
+        <h4>{{ pickerTitle }}</h4>
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+        <!-- Flyout when Change Prices is clicked -->
+        <merch-collection-tree-picker sub-tree-id="getTreeId()" entity-type="dialogData.entityType"></merch-collection-tree-picker>
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="submit(dialogData)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

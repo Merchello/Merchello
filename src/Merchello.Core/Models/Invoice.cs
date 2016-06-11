@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
 
@@ -100,6 +102,11 @@
         private static readonly PropertyInfo BillToCompanySelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.BillToCompany);
 
         /// <summary>
+        /// The bill to company selector.
+        /// </summary>
+        private static readonly PropertyInfo CurrencyCodeSelector = ExpressionHelper.GetPropertyInfo<Invoice, string>(x => x.CurrencyCode);
+
+        /// <summary>
         /// The exported selector.
         /// </summary>
         private static readonly PropertyInfo ExportedSelector = ExpressionHelper.GetPropertyInfo<Invoice, bool>(x => x.Exported);
@@ -118,6 +125,11 @@
         /// The orders changed selector.
         /// </summary>
         private static readonly PropertyInfo OrdersChangedSelector = ExpressionHelper.GetPropertyInfo<Invoice, OrderCollection>(x => x.Orders);
+
+        /// <summary>
+        /// The notes selector.
+        /// </summary>
+        private static readonly PropertyInfo NotesSelector = ExpressionHelper.GetPropertyInfo<Invoice, IEnumerable<INote>>(x => x.Notes);
 
         /// <summary>
         /// The customer key.
@@ -200,6 +212,11 @@
         private string _billToCompany;
 
         /// <summary>
+        /// The currency code.
+        /// </summary>
+        private string _currencyCode;
+
+        /// <summary>
         /// The exported.
         /// </summary>
         private bool _exported;
@@ -229,6 +246,11 @@
         /// </summary>
         private OrderCollection _orders;
 
+        /// <summary>
+        /// The notes.
+        /// </summary>
+        private IEnumerable<INote> _notes;
+
         #endregion
 
         /// <summary>
@@ -252,7 +274,7 @@
         /// The bill to address.
         /// </param>
         internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress)
-            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection())
+            : this(invoiceStatus, billToAddress, new LineItemCollection(), new OrderCollection(), Enumerable.Empty<INote>().ToArray())
         {
         }
 
@@ -271,12 +293,16 @@
         /// <param name="orders">
         /// The orders.
         /// </param>
-        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders)
+        /// <param name="notes">
+        /// The notes collection
+        /// </param>
+        internal Invoice(IInvoiceStatus invoiceStatus, IAddress billToAddress, LineItemCollection lineItemCollection, OrderCollection orders, INote[] notes)
         {
             Mandate.ParameterNotNull(invoiceStatus, "invoiceStatus");
             Mandate.ParameterNotNull(billToAddress, "billToAddress");
             Mandate.ParameterNotNull(lineItemCollection, "lineItemCollection");
             Mandate.ParameterNotNull(orders, "orders");
+            Mandate.ParameterNotNull(notes, "notes");
 
             _invoiceStatus = invoiceStatus;
 
@@ -288,7 +314,7 @@
             _billToPostalCode = billToAddress.PostalCode;
             _billToCountryCode = billToAddress.CountryCode;
             _billToPhone = billToAddress.Phone;
-
+            _notes = notes;
             _items = lineItemCollection;
             _orders = orders;
             _invoiceDate = DateTime.Now;
@@ -690,6 +716,30 @@
         }
 
         /// <summary>
+        /// Gets or sets the currency code
+        /// </summary>
+        [DataMember]
+        public string CurrencyCode
+        {
+            get
+            {
+                return _currencyCode;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _currencyCode = value;
+                        return _currencyCode;
+                    },
+                _currencyCode,
+                CurrencyCodeSelector);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not this invoice has been exported to an external system
         /// </summary>
         [DataMember]
@@ -779,6 +829,31 @@
             }
         }
 
+
+        /// <summary>
+        /// Gets or sets the collection of notes associated with the invoice
+        /// </summary>
+        [DataMember]
+        public IEnumerable<INote> Notes
+        {
+            get
+            {
+                return _notes;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _notes = value;
+                        return _notes;
+                    },
+                _notes,
+                NotesSelector);
+            }
+        }
+
         /// <summary>
         /// Gets the <see cref="ILineItem"/>s in the invoice
         /// </summary>
@@ -805,6 +880,16 @@
             get { return _examineId; }
             set { _examineId = value; }
         }
+
+        /// <summary>
+        /// Accepts visitor class to visit invoice line items
+        /// </summary>
+        /// <param name="visitor">The <see cref="ILineItemVisitor"/> class</param>
+        public void Accept(ILineItemVisitor visitor)
+        {
+            this.Items.Accept(visitor);
+        }
+
 
         /// <summary>
         /// The orders changed.

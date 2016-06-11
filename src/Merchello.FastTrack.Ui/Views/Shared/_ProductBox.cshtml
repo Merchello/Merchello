@@ -1,0 +1,20 @@
+﻿@inherits UmbracoViewPage<Merchello.Web.Models.VirtualContent.IProductContent>
+@using Merchello.Core
+<div class="product-box">
+    <div class="caption">
+        <h3><a href="@Model.Url">@Model.Name</a></h3>
+
+        @if (Model.HasValue("image"))
+        {
+            var mediaId = Model.GetPropertyValue<string>("image");
+            var image = Umbraco.TypedMedia(mediaId);
+            <a href="@Model.Url" alt="@Model.Name"><img class="img-responsive" src="@image.GetCropUrl(200, 200)" alt="@Model.Name"></a>
+            
+        }
+        @if (Model.HasValue("brief"))
+        {
+            <p>@Model.GetPropertyValue("brief")</p>
+        }
+    </div>
+    @Html.Action("AddProductToBasketForm", "Basket", new { area = "Merchello", model = Model })
+</div>

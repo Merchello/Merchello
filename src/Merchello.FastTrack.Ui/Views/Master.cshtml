@@ -1,0 +1,37 @@
+﻿@inherits UmbracoTemplatePage
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Content.Name</title>
+    <link rel="stylesheet" href="~/Styles/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Styles/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="~/App_Plugins/Merchello/client/css/merchello.ui.min.css" />
+</head>
+<body>
+<div class="wrapper">
+    @Html.Partial("_Header")
+    <div class="container">
+        @RenderBody()
+    </div>
+    <div class="push"></div>
+</div>
+<div class="footer">
+    @Html.Partial("_Footer")
+</div>
+
+
+<!-- MUI dependencies -->
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/underscore.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<!-- new Merchello UI scripts -->
+<script src="~/App_Plugins/Merchello/client/js/merchello.ui.min.js"></script>
+<script src="~/App_Plugins/Merchello/client/js/merchello.ui.settings.js"></script>
+<script src="~/App_Plugins/Merchello/client/js/fasttrack.js"></script>
+</body>
+</html>

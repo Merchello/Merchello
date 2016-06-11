@@ -4,8 +4,10 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Reflection;
 
     using Merchello.Core.Gateways;
+    using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
 
     using Umbraco.Core;
@@ -21,7 +23,7 @@
         /// <summary>
         /// The instance types.
         /// </summary>
-        private readonly List<Type> _instanceTypes = new List<Type>();
+        private readonly List<Type> _instanceTypes;
 
         /// <summary>
         /// Types which have the GatewayMethodUi attribute.
@@ -42,6 +44,66 @@
             this._instanceTypes = enumerable.ToList();
 
             this.Initialize();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="UrlActionParams"/> by <see cref="GatewayMethodEditorAttribute"/>.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UrlActionParams"/>.
+        /// </returns>
+        public UrlActionParams GetUrlActionParamsByGatewayMethodUiAlias(string alias)
+        {
+            var type = this.GetTypeByGatewayMethodUiAlias(alias);
+            if (type == null) return null;
+
+            return BuildUrlActionParams(type);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="UrlActionParams"/> with a controller with a <see cref="GatewayMethodEditorAttribute"/> which as a method 
+        /// decorated with <see cref="GatewayMethodEditorAttribute"/>.
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UrlActionParams"/>.
+        /// </returns>
+        public UrlActionParams GetUrlActionParamsByGatewayMethodUiAliasOnControllerAndMethod(string alias)
+        {
+            var type = this.GetTypeByGatewayMethodUiAlias(alias);
+
+
+            if (type == null)
+            {
+                return null;
+            }
+
+            var method = type.GetMethods()
+                .FirstOrDefault(
+                    x => x.GetCustomAttributes(typeof(GatewayMethodUiAttribute), true).Length > 0 &&
+                    x.GetCustomAttribute<GatewayMethodUiAttribute>(true).Alias == alias);
+
+
+            return BuildUrlActionParams(type, method != null ? method.Name : null);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not a type was found with the <see cref="GatewayMethodEditorAttribute"/>
+        /// </summary>
+        /// <param name="alias">
+        /// The alias.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not a type was found with the <see cref="GatewayMethodEditorAttribute"/>
+        /// </returns>
+        public bool HasTypeWithGatewayMethodUiAlias(string alias)
+        {
+            return this._gatewayMethods.ContainsKey(alias);
         }
 
         /// <summary>
@@ -70,24 +132,26 @@
         }
 
         /// <summary>
-        /// The get url action params by gateway method ui alias.
+        /// Builds the <see cref="UrlActionParams"/>.
         /// </summary>
-        /// <param name="alias">
-        /// The alias.
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <param name="method">
+        /// The method to route to
         /// </param>
         /// <returns>
         /// The <see cref="UrlActionParams"/>.
         /// </returns>
-        public UrlActionParams GetUrlActionParamsByGatewayMethodUiAlias(string alias)
+        private UrlActionParams BuildUrlActionParams(Type type, string method = null)
         {
-            var type = this.GetTypeByGatewayMethodUiAlias(alias);
-            if (type == null) return null;
+            method = method.IsNullOrWhiteSpace() ? "RenderForm" : method;
 
             var urlActionParams = new UrlActionParams()
-                                      {
-                                          Controller = type.Name.EndsWith("Controller") ? type.Name.Remove(type.Name.LastIndexOf("Controller", StringComparison.Ordinal), 10) : type.Name,
-                                          Method = "RenderForm"
-                                      };
+            {
+                Controller = type.Name.EndsWith("Controller") ? type.Name.Remove(type.Name.LastIndexOf("Controller", StringComparison.Ordinal), 10) : type.Name,
+                Method = method
+            };
 
             var att = type.GetCustomAttribute<PluginControllerAttribute>(false);
             if (att != null)
@@ -99,36 +163,29 @@
         }
 
         /// <summary>
-        /// Returns a value indicating whether or not a type was found with the GatewayMethodUi alias
-        /// </summary>
-        /// <param name="alias">
-        /// The alias.
-        /// </param>
-        /// <returns>
-        /// A value indicating whether or not a type was found with the GatewayMethodUi alias
-        /// </returns>
-        public bool HasTypeWithGatewayMethodUiAlias(string alias)
-        {
-            return this._gatewayMethods.ContainsKey(alias);
-        }
-
-        /// <summary>
         /// The initialize.
         /// </summary>
         private void Initialize()
         {
             foreach (var t in this._instanceTypes)
             {
-                var att = t.GetCustomAttribute<GatewayMethodUiAttribute>(false);
-                if (att == null) continue;
+                var atts = t.GetCustomAttributes<GatewayMethodUiAttribute>(false);
+                foreach (var att in atts)
+                {
+                    if (att == null) continue;
 
-                if (!this._gatewayMethods.ContainsKey(att.Alias))
-                {
-                    this._gatewayMethods.Add(att.Alias, t);
-                }
-                else
-                {
-                    LogHelper.Info<PaymentMethodUiControllerResolver>("More than one GatewayMethodUiAttribute was found with the same alias.  Aliases are intended to be unique.");
+                    if (!this._gatewayMethods.ContainsKey(att.Alias))
+                    {
+                        this._gatewayMethods.Add(att.Alias,  t);
+                    }
+                    else
+                    {
+                        var exception =
+                            new InvalidOperationException(
+                                "Resolver expects a single controller associated with a GatewayMethodAttribute.");
+                        MultiLogHelper.Error<PaymentMethodUiControllerResolver>("More that one controller found", exception);
+
+                    }
                 }
             }
         }

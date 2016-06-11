@@ -1,0 +1,39 @@
+.order-items {
+  small {
+    display: block;
+  }
+}
+
+#adjustmentFrm {
+  .adjustment-desc {width:98%;}
+  .input-prepend {width:100%;}
+  .adjustment-amount {
+      input[type=number]{
+          width:75%;
+      }
+  }
+  .adjustment-radio {
+      padding-top:25px;
+      label:first-child {
+          margin-right:6px;
+      }
+  }
+  .adjustment-icon {
+      padding-top:24px;
+      text-align:right;
+  }
+  .form-group {
+      padding-bottom:0;
+  }
+}
+
+.adjustment-name {
+  span { display: block; }
+  small { display: inline; }
+}
+
+.adjustment-table {
+  a {
+    cursor: pointer;
+  }
+}

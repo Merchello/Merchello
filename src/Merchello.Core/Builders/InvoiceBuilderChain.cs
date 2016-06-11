@@ -11,6 +11,7 @@
     /// <summary>
     /// Represents an invoice builder
     /// </summary>
+    [Obsolete("Superseded by CheckoutInvoiceBuilderChain")]
     internal sealed class InvoiceBuilderChain : BuildChainBase<IInvoice>
     {
         /// <summary>
@@ -83,7 +84,7 @@
 
             var charges = attempt.Result.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.TotalPrice);
             var discounts = attempt.Result.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
-
+           
             // total the invoice
             decimal converted;
             attempt.Result.Total = Math.Round(decimal.TryParse((charges - discounts).ToString(CultureInfo.InvariantCulture), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture.NumberFormat, out converted) ? converted : 0, 2);

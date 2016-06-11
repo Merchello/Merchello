@@ -12,8 +12,11 @@
     
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using UnitOfWork;
 
     /// <summary>
@@ -38,14 +41,29 @@
         /// <param name="warehouseCatalogRepository">
         /// The warehouse Catalog Repository.
         /// </param>
-        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IWarehouseCatalogRepository warehouseCatalogRepository)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IWarehouseCatalogRepository warehouseCatalogRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(warehouseCatalogRepository, "warehouseCatalogRepository");
 
             _warehouseCatalogRepository = warehouseCatalogRepository;
         }
-       
+
+        /// <summary>
+        /// Gets a <see cref="IWarehouse"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IWarehouse"/>.
+        /// </returns>
         protected override IWarehouse PerformGet(Guid key)
         {
             var sql = GetBaseQuery(false)
@@ -64,6 +82,15 @@
             return warehouse;
         }
 
+        /// <summary>
+        /// Gets the collection of all <see cref="IWarehouse"/>.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IWarehouse}"/>.
+        /// </returns>
         protected override IEnumerable<IWarehouse> PerformGetAll(params Guid[] keys)
         {
             if (keys.Any())
@@ -84,22 +111,42 @@
             }
         }
 
-
+        /// <summary>
+        /// Gets the base SQL clause.
+        /// </summary>
+        /// <param name="isCount">
+        /// The is count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
         protected override Sql GetBaseQuery(bool isCount)
         {
-            // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouse Catalogs!!!
+            // TODO VERSION NEXT: this will need to be refactored when we open up Multiple Warehouse Catalogs
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<WarehouseDto>();
+                .From<WarehouseDto>(SqlSyntax);
             
             return sql;
         }
 
+        /// <summary>
+        /// Gets the base where clause.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="String"/>.
+        /// </returns>
         protected override string GetBaseWhereClause()
         {
             return "merchWarehouse.pk = @Key";
         }
 
+        /// <summary>
+        /// Gets a list delete clauses.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
         protected override IEnumerable<string> GetDeleteClauses()
         {            
             var list = new List<string>();
@@ -111,6 +158,12 @@
             return list;
         }
 
+        /// <summary>
+        /// Saves a new item to the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(IWarehouse entity)
         {
             ((Entity)entity).AddingEntity();
@@ -126,6 +179,12 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Updates an existing item in the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistUpdatedItem(IWarehouse entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -138,6 +197,12 @@
             entity.ResetDirtyProperties();
         }
 
+        /// <summary>
+        /// Deletes an existing item from the database.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistDeletedItem(IWarehouse entity)
         {
             var deletes = GetDeleteClauses();
@@ -147,7 +212,15 @@
             }
         }
 
-
+        /// <summary>
+        /// Gets a collection of <see cref="IWarehouse"/> by query.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IWarehouse}"/>.
+        /// </returns>
         protected override IEnumerable<IWarehouse> PerformGetByQuery(IQuery<IWarehouse> query)
         {
             var sqlClause = GetBaseQuery(false);

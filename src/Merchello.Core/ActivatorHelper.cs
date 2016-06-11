@@ -51,7 +51,7 @@
             Mandate.ParameterNotNullOrEmpty(typeName, "typName");
             Mandate.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
 
-            return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);            
+            return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);
         }
 
         /// <summary>
@@ -65,15 +65,19 @@
         {
             if (type == null || constructorArgumentValues == null) return Attempt<T>.Fail(new NullReferenceException("Failed to create Type due to null Type or null constructor args"));
 
-            var assembly = type.Assembly;
-            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            const BindingFlags BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            
             var constructorArgumentTypes = constructorArgumentValues.Select(value => value.GetType()).ToList();
 
-            var constructor = type.GetConstructor(bindingFlags, null, CallingConventions.Any, constructorArgumentTypes.ToArray(), null);
+            var constructor = type.GetConstructor(BindingFlags, null, CallingConventions.Any, constructorArgumentTypes.ToArray(), null);
 
             try
             {
-                return Attempt<T>.Succeed(constructor.Invoke(constructorArgumentValues) as T);
+                var obj = constructor.Invoke(constructorArgumentValues);
+                return (obj is T)
+                           ? Attempt<T>.Succeed(obj as T)
+                           : Attempt<T>.Fail(
+                               new InvalidCastException("Object invoked was not of expected type: " + typeof(T).Name));
             }
             catch (Exception ex)
             {

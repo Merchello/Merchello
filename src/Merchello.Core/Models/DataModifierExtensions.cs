@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Reflection;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
 
     using Umbraco.Core.Logging;
@@ -58,7 +59,7 @@
             var propInfo = value.GetType().GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance);
             if (propInfo == null || !propInfo.CanWrite || !propInfo.CanRead)
             {
-                LogHelper.Debug(typeof(DataModifierExtensions), "Could not change property: " + propertyName);
+                MultiLogHelper.Debug(typeof(DataModifierExtensions), "Could not change property: " + propertyName);
                 return;
             }
             
@@ -85,7 +86,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error(typeof(DataModifierExtensions), "Failed to set property: " + propertyName, ex);
+                MultiLogHelper.Error(typeof(DataModifierExtensions), "Failed to set property: " + propertyName, ex);
             }                            
         }
     }

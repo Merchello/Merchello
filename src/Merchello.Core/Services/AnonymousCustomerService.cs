@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
 
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Querying;
@@ -12,11 +13,13 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents an anonymous customer service.
     /// </summary>
-    internal class AnonymousCustomerService : IAnonymousCustomerService
+    internal class AnonymousCustomerService : MerchelloRepositoryService, IAnonymousCustomerService
     {
          #region fields
 
@@ -25,34 +28,54 @@
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
         #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnonymousCustomerService"/> class.
         /// </summary>
         public AnonymousCustomerService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnonymousCustomerService"/> class.
         /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public AnonymousCustomerService(ILogger logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
+        {            
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnonymousCustomerService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public AnonymousCustomerService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(logger, new RepositoryFactory(logger, sqlSyntax))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnonymousCustomerService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger
+        /// </param>
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public AnonymousCustomerService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
+        public AnonymousCustomerService(ILogger logger, RepositoryFactory repositoryFactory)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
         {
         }
 
@@ -65,16 +88,38 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public AnonymousCustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public AnonymousCustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-            
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnonymousCustomerService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public AnonymousCustomerService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
+
         #region Event Handlers
+
 
 
         /// <summary>
@@ -129,8 +174,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(uow))
                 {
                     repository.AddOrUpdate(anonymous);
                     uow.Commit();
@@ -161,8 +206,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(uow))
                 {
                     repository.AddOrUpdate(anonymous);
                     uow.Commit();
@@ -185,8 +230,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(uow))
                 {
                     repository.Delete(anonymous);
                     uow.Commit();
@@ -210,9 +255,9 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
+                var uow = UowProvider.GetUnitOfWork();
 
-                using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(uow))
+                using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(uow))
                 {
                     foreach (var anonymous in anonymousArray)
                     {
@@ -240,7 +285,7 @@
         /// </remarks>
         public IEnumerable<IAnonymousCustomer> GetAnonymousCustomersCreatedBefore(DateTime createdDate)
         {
-            using (var repository = _repositoryFactory.CreateAnonymousCustomerRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAnonymousCustomerRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IAnonymousCustomer>.Builder.Where(x => x.CreateDate <= createdDate);
 

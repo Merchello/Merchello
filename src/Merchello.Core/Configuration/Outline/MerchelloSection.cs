@@ -68,6 +68,18 @@
         }
 
         /// <summary>
+        /// Gets the checkout context settings collection
+        /// </summary>
+        [ConfigurationProperty("checkoutContextSettings", IsRequired = false), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
+        public SettingsCollection CheckoutContextSettings
+        {
+            get
+            {
+                return (SettingsCollection)this["checkoutContextSettings"];
+            }
+        }
+
+        /// <summary>
         /// Gets the customer element.
         /// </summary>
         [ConfigurationProperty("customer", IsRequired = true)]
@@ -110,6 +122,18 @@
         }
 
         /// <summary>
+        /// Gets the content finder culture.
+        /// </summary>
+        [ConfigurationProperty("contentFinderCulture", IsRequired = true), ConfigurationCollection(typeof(ContentFinderCultureCollection), AddItemName = "route")]
+        public ContentFinderCultureCollection ContentFinderCulture
+        {
+            get
+            {
+                return (ContentFinderCultureCollection)this["contentFinderCulture"];
+            }
+        }
+
+        /// <summary>
         /// Gets the strategies collection
         /// </summary>
         [ConfigurationProperty("strategies", IsRequired = true), ConfigurationCollection(typeof(StrategiesCollection), AddItemName = "strategy")]
@@ -143,6 +167,15 @@
         public TreeCollection BackOffice
         {
             get { return (TreeCollection)this["backoffice"]; }
+        }
+
+        /// <summary>
+        /// Gets the CurrencyFormat collection
+        /// </summary>
+        [ConfigurationProperty("currencyFormats", IsRequired = true), ConfigurationCollection(typeof(CurrencyFormatCollection), AddItemName = "format")]
+        public CurrencyFormatCollection CurrencyFormats
+        {
+            get { return (CurrencyFormatCollection)this["currencyFormats"]; }
         }
     }
 }

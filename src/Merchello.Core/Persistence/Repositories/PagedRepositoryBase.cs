@@ -6,8 +6,11 @@
     using Models.Rdbms;
     using Querying;    
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using UnitOfWork;
 
     /// <summary>
@@ -32,8 +35,14 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        protected PagedRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache) 
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        protected PagedRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+            : base(work, cache, logger, sqlSyntax)
         {
         }
 
@@ -61,7 +70,7 @@
         public virtual Page<TEntity> GetPage(long page, long itemsPerPage, IQuery<TEntity> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             var sqlClause = new Sql();
-            sqlClause.Select("*").From<TDto>();
+            sqlClause.Select("*").From<TDto>(SqlSyntax);
 
             var translator = new SqlTranslator<TEntity>(sqlClause, query);
             var sql = translator.Translate();
@@ -95,7 +104,7 @@
         public virtual Page<Guid> GetPagedKeys(long page, long itemsPerPage, IQuery<TEntity> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
             var sqlClause = new Sql();
-            sqlClause.Select("*").From<TDto>();
+            sqlClause.Select("*").From<TDto>(SqlSyntax);
 
             var translator = new SqlTranslator<TEntity>(sqlClause, query);
             var sql = translator.Translate();
@@ -171,7 +180,7 @@
         /// The items per page.
         /// </param>
         /// <param name="sql">
-        /// The sql.
+        /// The SQL.
         /// </param>
         /// <param name="orderExpression">
         /// The order expression.

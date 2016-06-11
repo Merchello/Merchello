@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -7,12 +8,17 @@
     using System.Xml;
     using System.Xml.Linq;
 
+    using Merchello.Core.EntityCollections;
+    using Merchello.Core.Logging;
+    using Merchello.Core.Models.Interfaces;
+
     using Newtonsoft.Json;
 
     using Services;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSixTwoZero;
 
     /// <summary>
@@ -148,6 +154,98 @@
         {
             return customer.Payments(MerchelloContext.Current);
         }
+
+
+
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="customer">
+        /// The invoice.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        public static void AddToCollection(this ICustomer customer, IEntityCollection collection)
+        {
+            customer.AddToCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// The add to collection.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        public static void AddToCollection(this ICustomer customer, Guid collectionKey)
+        {
+            if (!EntityCollectionProviderResolver.HasCurrent || !MerchelloContext.HasCurrent) return;
+            var attempt = EntityCollectionProviderResolver.Current.GetProviderForCollection(collectionKey);
+            if (!attempt.Success) return;
+
+            var provider = attempt.Result;
+
+            if (!provider.EnsureEntityType(EntityType.Customer))
+            {
+                MultiLogHelper.Debug(typeof(CustomerExtensions), "Attempted to add a customer to a non customer collection");
+                return;
+            }
+
+            MerchelloContext.Current.Services.CustomerService.AddToCollection(customer.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>        
+        public static void RemoveFromCollection(this ICustomer customer, IEntityCollection collection)
+        {
+            customer.RemoveFromCollection(collection.Key);
+        }
+
+        /// <summary>
+        /// The remove from collection.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>        
+        public static void RemoveFromCollection(this ICustomer customer, Guid collectionKey)
+        {
+            if (!MerchelloContext.HasCurrent) return;
+            MerchelloContext.Current.Services.CustomerService.RemoveFromCollection(customer.Key, collectionKey);
+        }
+
+        /// <summary>
+        /// Returns static collections containing the customer.
+        /// </summary>
+        /// <param name="customer">
+        /// The customer.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this ICustomer customer)
+        {
+            if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
+
+
+            return
+                ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
+                    .GetEntityCollectionsByCustomerKey(customer.Key);
+        }
+
+
 
         /// <summary>
         /// Gets a collection of addresses associated with the customer
@@ -365,7 +463,7 @@
                     writer.WriteAttributeString("email", customer.Email);
                     writer.WriteAttributeString("taxExempt", customer.TaxExempt.ToString());
                     writer.WriteAttributeString("extendedData", customer.ExtendedDataAsJson());
-                    writer.WriteAttributeString("notes", customer.Notes);
+                    writer.WriteAttributeString("notes", customer.Notes.ToJsonCollection());
                     writer.WriteAttributeString("addresses", customer.AddressesAsJson());
                     writer.WriteAttributeString("lastActivityDate", customer.LastActivityDate.ToString("s"));
                     writer.WriteAttributeString("createDate", customer.CreateDate.ToString("s"));

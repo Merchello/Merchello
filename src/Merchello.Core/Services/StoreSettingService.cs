@@ -6,19 +6,25 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading;
-    using Configuration;
-    using Configuration.Outline;
-    using Models;
-    using Models.TypeFields;
-    using Persistence;
-    using Persistence.UnitOfWork;
+
+    using Merchello.Core.Configuration;
+    using Merchello.Core.Configuration.Outline;
+    using Merchello.Core.Events;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
+    using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.UnitOfWork;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the Store Settings Service
     /// </summary>
-    public class StoreSettingService : IStoreSettingService
+    public class StoreSettingService : MerchelloRepositoryService, IStoreSettingService
     {
         #region Fields
 
@@ -31,25 +37,42 @@
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-
-        /// <summary>
-        /// The uow provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
         
         #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class. 
+        /// </summary>
+        public StoreSettingService()
+            : this(LoggerResolver.Current.Logger)
+        {            
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
         /// </summary>
-        public StoreSettingService()
-            : this(new RepositoryFactory())
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public StoreSettingService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL syntax.
+        /// </param>
+        public StoreSettingService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(new RepositoryFactory(logger, sqlSyntax), logger)
+        {
         }
 
         /// <summary>
@@ -58,9 +81,12 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public StoreSettingService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public StoreSettingService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
         }
 
         /// <summary>
@@ -72,25 +98,47 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public StoreSettingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public StoreSettingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
+        }
 
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreSettingService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public StoreSettingService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
             if (!RegionProvinceCache.IsEmpty) return;
 
             foreach (RegionElement region in MerchelloConfiguration.Current.Section.RegionalProvinces)
             {
                 CacheRegion(
-                    region.Code, 
+                    region.Code,
                     (from ProvinceElement pe in region.ProvincesConfiguration select new Province(pe.Code, pe.Name)).Cast<IProvince>().ToArray());
-            } 
+            }
         }
 
+        #endregion
+
         #region Events
+
+
 
         /// <summary>
         /// Occurs before Create
@@ -141,7 +189,12 @@
         /// <summary>
         /// Returns the province label from the configuration file
         /// </summary>
-        /// <param name="countryCode">The two letter ISO Region code</param>
+        /// <param name="countryCode">
+        /// The two letter ISO Region code
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string GetProvinceLabelForCountry(string countryCode)
         {
             return CountryHasProvinces(countryCode)
@@ -159,6 +212,26 @@
             return CountryHasProvinces(countryCode) ?
                 RegionProvinceCache[countryCode] :
                 new List<IProvince>();
+        }
+
+        /// <summary>
+        /// Returns the currency format
+        /// </summary>
+        /// <param name="currency">
+        /// The <see cref="ICurrency"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICurrencyFormat"/>.
+        /// </returns>
+        public ICurrencyFormat GetCurrencyFormat(ICurrency currency)
+        {
+            var query = MerchelloConfiguration.Current.Section.CurrencyFormats
+                        .Cast<CurrencyFormatElement>()
+                        .FirstOrDefault(cf => cf.CurrencyCode.Equals(currency.CurrencyCode, StringComparison.OrdinalIgnoreCase));
+
+            return query != null ? 
+                new CurrencyFormat(query.Format, query.Symbol) : 
+                CurrencyFormat.CreateDefault(currency.Symbol);
         }
 
         /// <summary>
@@ -191,8 +264,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateStoreSettingRepository(uow))
                 {
                     repository.AddOrUpdate(storeSetting);
                     uow.Commit();
@@ -221,8 +294,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateStoreSettingRepository(uow))
                 {
                     repository.AddOrUpdate(storeSetting);
                     uow.Commit();
@@ -255,8 +328,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateStoreSettingRepository(uow))
                 {
                     repository.Delete(storeSetting);
                     uow.Commit();
@@ -266,7 +339,7 @@
         }
 
         /// <summary>
-        /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key' (Guid)
+        /// Gets a <see cref="IStoreSetting"/> by it's unique 'Key' (GUID)
         /// </summary>
         /// <param name="key">
         /// The key.
@@ -276,7 +349,7 @@
         /// </returns>
         public IStoreSetting GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateStoreSettingRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -290,7 +363,7 @@
         /// </returns>
         public IEnumerable<IStoreSetting> GetAll()
         {
-            using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateStoreSettingRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
@@ -310,10 +383,10 @@
             var invoiceNumber = 0;
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    using (var validationRepository = _repositoryFactory.CreateInvoiceRepository(uow))
+                    using (var validationRepository = RepositoryFactory.CreateInvoiceRepository(uow))
                     { 
                         invoiceNumber = repository.GetNextInvoiceNumber(Core.Constants.StoreSettingKeys.NextInvoiceNumberKey, validationRepository.GetMaxDocumentNumber, invoicesCount);
                     }
@@ -339,10 +412,10 @@
             var orderNumber = 0;
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    using (var validationRepository = _repositoryFactory.CreateOrderRepository(uow))
+                    using (var validationRepository = RepositoryFactory.CreateOrderRepository(uow))
                     {
                         orderNumber = repository.GetNextOrderNumber(Core.Constants.StoreSettingKeys.NextOrderNumberKey, validationRepository.GetMaxDocumentNumber, ordersCount);
                     }
@@ -368,10 +441,10 @@
             var shipmentNumber = 0;
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateStoreSettingRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateStoreSettingRepository(uow))
                 {
-                    using (var validationRepository = _repositoryFactory.CreateShipmentRepository(uow))
+                    using (var validationRepository = RepositoryFactory.CreateShipmentRepository(uow))
                     {
                         shipmentNumber = repository.GetNextShipmentNumber(Core.Constants.StoreSettingKeys.NextShipmentNumberKey, validationRepository.GetMaxDocumentNumber, shipmentsCount);
                     }
@@ -384,14 +457,14 @@
         }
 
         /// <summary>
-        /// Gets the complete collection of registered typefields
+        /// Gets the complete collection of registered type fields
         /// </summary>
         /// <returns>
         /// Gets the collection of all type fields.
         /// </returns>
         public IEnumerable<ITypeField> GetTypeFields()
         {
-            using (var repository = _repositoryFactory.CreateStoreSettingRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateStoreSettingRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetTypeFields();
             }
@@ -441,7 +514,7 @@
         /// <summary>
         /// Gets a <see cref="ICurrency"/> for the currency code passed
         /// </summary>
-        /// <param name="currencyCode">The ISO Currency Code (eg. USD)</param>
+        /// <param name="currencyCode">The ISO Currency Code (e.g. USD)</param>
         /// <returns>The <see cref="ICurrency"/></returns>
         public ICurrency GetCurrencyByCode(string currencyCode)
         {
@@ -456,7 +529,7 @@
         public IEnumerable<ICountry> GetAllCountries(string[] excludeCountryCodes)
         {
             return GetAllCountries().Where(x => !excludeCountryCodes.Contains(x.CountryCode));
-        }
+        }        
 
         /// <summary>
         /// The cache region.

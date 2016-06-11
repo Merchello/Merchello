@@ -36,7 +36,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
          * Initializes the controller
          */
         function init() {
-            eventsService.on('merchello.offercomponentcollection.changed', onComponentCollectionChanged);
+            eventsService.on(eventName, onComponentCollectionChanged);
 
             // ensure that the parent scope promises have been resolved
             $scope.$watch('preValuesLoaded', function(pvl) {
@@ -203,7 +203,7 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
         }
 
         function onComponentCollectionChanged() {
-            loadComponents();
+            eventsService.unsubscribe(loadComponents);
         }
 
         function saveOffer() {

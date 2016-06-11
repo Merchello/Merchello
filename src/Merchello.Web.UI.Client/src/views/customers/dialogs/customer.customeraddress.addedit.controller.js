@@ -10,6 +10,8 @@
         ['$scope',
         function($scope) {
 
+            $scope.wasFormSubmitted = false;
+
             // exposed methods
             $scope.updateProvinceList = updateProvinceList;
             $scope.toTitleCase = toTitleCase;
@@ -31,11 +33,13 @@
             }
 
             function save() {
+                $scope.wasFormSubmitted = true;
                 if($scope.editAddressForm.address1.$valid && $scope.editAddressForm.locality.$valid && $scope.editAddressForm.postalCode.$valid) {
                     if($scope.dialogData.selectedCountry.hasProvinces()) {
                         $scope.dialogData.customerAddress.region = $scope.dialogData.selectedProvince.code;
                     }
                     $scope.dialogData.customerAddress.countryCode = $scope.dialogData.selectedCountry.countryCode;
+                    $scope.submit($scope.dialogData);
                 }
             }
 

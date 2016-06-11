@@ -4,48 +4,27 @@
 @import "globals/well";
 
 // Modules
+@import "modules/icons";
+@import "modules/listview";
+@import "modules/detachedcontent";
 @import "modules/orders";
 @import "modules/warehouse";
+@import "modules/customer";
+@import "modules/itemcache";
+@import "modules/settings";
 @import "modules/product";
 @import "modules/taxation";
 @import "modules/coupon";
+@import "modules/collections";
+@import "modules/controls";
+@import "modules/actionmenu";
+@import "modules/checkout";
+@import "modules/invoice";
+@import "modules/vieweditor";
+@import "modules/dashboard";
+@import "modules/buttons";
 
 // Data Types
 @import "datatypes/productpicker";
 @import "datatypes/producteditor";
-
-h1.logo {
-  margin: 0.25em 0;
-  a {
-    display: block;
-    width: 169px;
-    height: 48px;
-    background: url('/App_Plugins/Merchello/assets/images/h1-a.png') no-repeat;
-    text-indent: -9999px;
-  }
-}
-.merchello-documentation {
-  height: 425px;
-  position: relative;
-  text-align: left;
-  .dashboard-overflow {
-    height: 250px;
-    overflow: hidden;
-    margin-bottom: 1em;
-  }
-  .caption {
-    height: 150px;
-    padding-left: 1em;
-    h3 { text-align: center; }
-    .btn-documentation {
-      position: absolute;
-      bottom: 0;
-      margin: auto;
-    }
-    width: 100%;
-  }
-
-}
-.merchello-links {
-  margin: 2em 0 3em 0;
-}
+@import "datatypes/productcollectionselector";

@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Models.Interfaces;
     using Models.TypeFields;
@@ -11,6 +14,7 @@
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
     using RepositoryFactory = Persistence.RepositoryFactory;
@@ -32,23 +36,26 @@
         /// </summary>
         private static readonly string[] ValidSortFields = { "createdate" };
 
-        /// <summary>
-        /// The unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
         #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditLogService"/> class.
         /// </summary>
         public AuditLogService()
-            : this(new PetaPocoUnitOfWorkProvider(), new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditLogService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public AuditLogService(ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), new RepositoryFactory(), logger)
         {            
         }
 
@@ -61,16 +68,38 @@
         /// <param name="repositoryFactory">
         /// The <see cref="RepositoryFactory"/>
         /// </param>
-        public AuditLogService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public AuditLogService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditLogService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public AuditLogService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
+
         #region Event Handlers
+
 
         /// <summary>
         /// Occurs before Create
@@ -117,7 +146,7 @@
         /// </returns>  
         public override IAuditLog GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -265,8 +294,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAuditLogRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAuditLogRepository(uow))
                 {
                     repository.AddOrUpdate(auditLog);
                     uow.Commit();
@@ -298,8 +327,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAuditLogRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAuditLogRepository(uow))
                 {
                     repository.AddOrUpdate(auditLog);
                     uow.Commit();
@@ -327,8 +356,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAuditLogRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAuditLogRepository(uow))
                 {
                     foreach (var auditLog in auditLogsArray)
                     {
@@ -362,8 +391,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAuditLogRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAuditLogRepository(uow))
                 {
                     repository.Delete(auditLog);
                     uow.Commit();
@@ -391,8 +420,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAuditLogRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAuditLogRepository(uow))
                 {
                     foreach (var auditLog in auditLogsArray)
                     {
@@ -427,7 +456,7 @@
         /// </returns>        
         public IEnumerable<IAuditLog> GetAuditLogsByEntityKey(Guid entityKey)
         {
-            using (var repository = _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IAuditLog>.Builder.Where(x => x.EntityKey == entityKey);
 
@@ -459,7 +488,7 @@
         /// </returns>
         public Page<IAuditLog> GetAuditLogsByEntityTfKey(Guid entityTfKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IAuditLog>.Builder.Where(x => x.EntityTfKey == entityTfKey);
 
@@ -487,7 +516,7 @@
         /// </returns>
         public Page<IAuditLog> GetErrorAuditLogs(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
         {
-            using (var repository = _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Persistence.Querying.Query<IAuditLog>.Builder.Where(x => x.IsError);
 
@@ -517,7 +546,7 @@
         {
             var query = Persistence.Querying.Query<IAuditLog>.Builder.Where(x => x.Key != Guid.Empty);
 
-            using (var repository = _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetPage(page, itemsPerPage, query, ValidateSortByField(sortBy), sortDirection);
             }
@@ -561,7 +590,7 @@
         /// </returns>
         internal override int Count(IQuery<IAuditLog> query)
         {
-            using (var repository = _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Count(query);
             }
@@ -589,7 +618,7 @@
         {
             var query = Persistence.Querying.Query<IAuditLog>.Builder.Where(x => x.Key != Guid.Empty);
             return GetPagedKeys(
-                _repositoryFactory.CreateAuditLogRepository(_uowProvider.GetUnitOfWork()),
+                RepositoryFactory.CreateAuditLogRepository(UowProvider.GetUnitOfWork()),
                 query,
                 page,
                 itemsPerPage,

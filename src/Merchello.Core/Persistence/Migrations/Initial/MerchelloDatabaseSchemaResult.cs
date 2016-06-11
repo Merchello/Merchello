@@ -74,19 +74,38 @@
                 return new Version(1, 9, 0);
             }
 
+            if (!this.ValidTables.Contains("merchEntityCollection")
+                || !this.ValidTables.Contains("merchProduct2EntityCollection"))
+            {
+                return new Version(1, 10, 0);
+            }
+
+            if (!this.ValidTables.Contains("merchDetachedContentType")
+                || !this.ValidTables.Contains("merchProductVariantDetachedContent"))
+            {
+                return new Version(1, 11, 0);
+            }
+
+            if (!this.ValidColumns.Contains("merchInvoice,currencyCode"))
+            {
+                return new Version(1, 13, 0);
+            }
+
+            if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
+                StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey) ||
+                !this.ValidColumns.Contains("merchNote,author") ||
+                this.ValidColumns.Contains("merchCustomer,notes") ||
+                !this.ValidColumns.Contains("merchCustomer,notes") ||
+                this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.PaymentMethod.RedirectKey))
+            {
+                return new Version(1, 14, 1);
+            }
+
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
                  && this.TableDefinitions.SelectMany(definition => definition.Columns).All(x => this.ValidColumns.Contains(x.Name))))
                 return MerchelloVersion.Current;
-
-
-            //// if the error is for umbracoServer
-            //if (this.MerchelloErrors.Any(x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchOfferSettings")))
-            //{
-            //    return new Version(1, 8, 3);
-            //}
-
 
             return MerchelloVersion.Current;
         }

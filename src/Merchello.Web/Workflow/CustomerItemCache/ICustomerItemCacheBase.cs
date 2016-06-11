@@ -274,7 +274,7 @@
         void AddItem(string name, string sku, int quantity, decimal price);
 
         /// <summary>
-        /// Adds a item to the item cache
+        /// 
         /// </summary>
         /// <param name="name">
         /// The name of the item
@@ -290,7 +290,7 @@
         /// </param>
         /// <param name="extendedData">
         /// The extended Data.
-        /// </param>
+        /// </param>Adds a item to the item cache
         void AddItem(string name, string sku, int quantity, decimal price, ExtendedDataCollection extendedData);
 
         /// <summary>
@@ -366,6 +366,15 @@
         /// Saves the item cache
         /// </summary>
         void Save();
+
+        /// <summary>
+        /// Validates values stored in the internal item cache to make certain items being purchase
+        /// reflect most recent values in the back office.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool Validate();
 
         /// <summary>
         /// Accepts visitor class to visit item cache items

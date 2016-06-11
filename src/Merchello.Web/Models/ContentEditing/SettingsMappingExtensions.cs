@@ -97,8 +97,30 @@ namespace Merchello.Web.Models.ContentEditing
                         }
                         settingDisplay.GlobalShippingIsTaxable = boolValue;
                         break;
+                    case "hasDomainRecord":
+				        if (!bool.TryParse(setting.Value, out boolValue))
+				        {
+                            boolValue = false;
+				        }
+				        settingDisplay.HasDomainRecord = boolValue;
+                        break;
+                    case "migration":
+				        Guid migrationKey;
+				        try
+				        {
+				            migrationKey = new Guid(setting.Value);
+				        }
+				        catch (Exception ex)
+				        {
+				            migrationKey = Guid.Empty;
+				        }
+				        settingDisplay.MigrationKey = migrationKey;
+                        break;
                     case "globalTaxationApplication":
                         settingDisplay.GlobalTaxationApplication = (TaxationApplication)Enum.Parse(typeof(TaxationApplication), setting.Value);
+				        break;
+                    case "defaultExtendedContentCulture":
+				        settingDisplay.DefaultExtendedContentCulture = setting.Value;
 				        break;
 					default:
 						setting.Value = string.Empty;
@@ -149,6 +171,9 @@ namespace Merchello.Web.Models.ContentEditing
 						break;
                     case "globalTaxationApplication":
 				        setting.Value = settingDisplay.GlobalTaxationApplication.ToString();
+				        break;
+                    case "defaultExtendedContentCulture":
+				        setting.Value = settingDisplay.DefaultExtendedContentCulture;
 				        break;
 					default:
 						setting.Value = string.Empty;		 

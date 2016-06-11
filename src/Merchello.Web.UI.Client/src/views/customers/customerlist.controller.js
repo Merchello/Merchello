@@ -7,39 +7,27 @@
      * The controller for customer list view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerListController',
-        ['$scope', 'dialogService', 'notificationsService', 'merchelloTabsFactory', 'dialogDataFactory', 'customerResource', 'queryDisplayBuilder',
-            'queryResultDisplayBuilder', 'customerDisplayBuilder',
-        function($scope, dialogService, notificationsService, merchelloTabsFactory, dialogDataFactory, customerResource,
-                 queryDisplayBuilder, queryResultDisplayBuilder, customerDisplayBuilder) {
+        ['$scope', '$routeParams', '$filter', 'notificationsService', 'localizationService', 'settingsResource', 'merchelloTabsFactory', 'customerResource', 'entityCollectionResource',
+            'customerDisplayBuilder',
+        function($scope, $routeParams, $filter, notificationsService, localizationService, settingsResource, merchelloTabsFactory, customerResource, entityCollectionResource,
+                 customerDisplayBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
 
-            $scope.currentPage = 0;
-            $scope.customers = [];
-            $scope.filterText = '';
-            $scope.limitAmount = 25;
-            $scope.sortProperty = 'loginName';
-            $scope.currentFilters = [];
-            $scope.visible = {
-                bulkActionButton: function() {
-                    var result = false;
-                    return result;
-                },
-                bulkActionDropdown: false
-            };
+            $scope.currencySymbol = '';
+
+            $scope.customerDisplayBuilder = customerDisplayBuilder;
+            $scope.load = load;
+            $scope.entityType = 'Customer';
 
 
             // exposed methods
-            $scope.loadCustomers = loadCustomers;
-            $scope.resetFilters = resetFilters;
-            $scope.openNewCustomerDialog = openNewCustomerDialog;
-            $scope.numberOfPages = numberOfPages;
-            $scope.limitChanged = limitChanged;
-            $scope.changePage = changePage;
-            $scope.changeSortOrder = changeSortOrder;
+            $scope.getColumnValue = getColumnValue;
 
-            var maxPages = 0;
+            var globalCurrency = '';
+            var allCurrencies = [];
+            const baseUrl = '#/merchello/merchello/customeroverview/';
 
             /**
              * @ngdoc method
@@ -50,187 +38,78 @@
              * initialized when the scope loads.
              */
             function init() {
-                loadCustomers($scope.filterText);
+
+                loadSettings();
                 $scope.tabs = merchelloTabsFactory.createCustomerListTabs();
                 $scope.tabs.setActive('customerlist');
                 $scope.loaded = true;
             }
 
-            /**
-             * @ngdoc method
-             * @name loadCustomers
-             * @function
-             *
-             * @description
-             * Load the customers from the API using the provided filter (if any).
-             */
-            function loadCustomers(filterText) {
-                $scope.preValuesLoaded = false;
-                var query = queryDisplayBuilder.createDefault();
-                query.currentPage = $scope.currentPage;
-                query.itemsPerPage = $scope.limitAmount;
-                query.sortBy = sortInfo().sortBy;
-                query.sortDirection = sortInfo().sortDirection;
-                if (filterText !== $scope.filterText) {
-                    query.currentPage = 0;
-                    $scope.currentPage = 0;
-                }
-                query.addFilterTermParam(filterText);
-
-                var promiseAllCustomers = customerResource.searchCustomers(query);
-                promiseAllCustomers.then(function (customersResponse) {
-                    $scope.customers = [];
-                    var queryResult = queryResultDisplayBuilder.transform(customersResponse, customerDisplayBuilder);
-                    $scope.customers = queryResult.items;
-                    maxPages = queryResult.totalPages;
-                    if(query.parameters.length >= 0) {
-                        $scope.currentFilters = query.parameters;
-                    } else {
-                        $scope.currentFilters = [];
-                    }
-                    $scope.filterText = filterText;
+            function loadSettings() {
+                // currency matching
+                settingsResource.getAllCombined().then(function(combined) {
+                    allCurrencies = combined.currencies;
+                    globalCurrency = combined.currencySymbol;
                     $scope.preValuesLoaded = true;
-
+                }, function(reason) {
+                    notificationsService.error('Failed to load combined settings', reason.message);
                 });
             }
 
-            /**
-             * @ngdoc method
-             * @name changePage
-             * @function
-             *
-             * @description
-             * Changes the current page.
-             */
-            function changePage(page) {
-                $scope.currentPage = page;
-                $scope.loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name changeSortOrder
-             * @function
-             *
-             * @description
-             * Helper function to set the current sort on the table and switch the
-             * direction if the property is already the current sort column.
-             */
-            function changeSortOrder(propertyToSort) {
-                if ($scope.sortProperty == propertyToSort) {
-                    if ($scope.sortOrder == "asc") {
-                        $scope.sortProperty = "-" + propertyToSort;
-                        $scope.sortOrder = "desc";
-                    } else {
-                        $scope.sortProperty = propertyToSort;
-                        $scope.sortOrder = "asc";
-                    }
+            function load(query) {
+                if (query.hasCollectionKeyParam()) {
+                    return entityCollectionResource.getCollectionEntities(query);
                 } else {
-                    $scope.sortProperty = propertyToSort;
-                    $scope.sortOrder = "asc";
+                    return customerResource.searchCustomers(query);
                 }
-                $scope.loadCustomers($scope.filterText);
+            }
+
+            function getColumnValue(result, col) {
+                switch(col.name) {
+                    case 'loginName':
+                        return '<a href="' + getEditUrl(result) + '">' + result.loginName + '</a>';
+                    case 'firstName':
+                        return  '<a href="' + getEditUrl(result) + '">' + result.firstName + ' ' + result.lastName + '</a>';
+                    case 'location':
+                        var address = result.getPrimaryLocation();
+                        var ret = address.locality;
+                            ret += ' ' + address.region;
+                        if (address.countryCode !== '') {
+                            ret += ' ' + address.countryCode;
+                        }
+                        return ret.trim();
+                    case 'lastInvoiceTotal':
+                        return $filter('currency')(result.getLastInvoice().total, getCurrencySymbol(result.getLastInvoice()));
+                    default:
+                        return result[col.name];
+                }
             }
 
             /**
              * @ngdoc method
-             * @name limitChanged
+             * @name getCurrencySymbol
              * @function
              *
              * @description
-             * Helper function to set the amount of items to show per page for the paging filters and calculations
+             * Utility method to get the currency symbol for an invoice
              */
-            function limitChanged(newVal) {
-                $scope.limitAmount = newVal;
-                $scope.currentPage = 0;
-                $scope.loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name resetFilters
-             * @function
-             *
-             * @description
-             * Fired when the reset filter button is clicked.
-             */
-            function resetFilters() {
-                $scope.preValuesLoaded = false;
-                $scope.currentFilters = [];
-                $scope.filterText = "";
-                loadCustomers($scope.filterText);
-            }
-
-            /**
-             * @ngdoc method
-             * @name openNewCustomerDialog
-             * @function
-             *
-             * @description
-             * Opens the new customer dialog via the Umbraco dialogService.
-             */
-            function openNewCustomerDialog() {
-                var dialogData = dialogDataFactory.createAddEditCustomerDialogData();
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/customer.info.addedit.html',
-                    show: true,
-                    callback: processNewCustomerDialog,
-                    dialogData: dialogData
+            function getCurrencySymbol(invoice) {
+                if (invoice.currency.symbol !== '' && invoice.currency.symbol !== undefined) {
+                    return invoice.currency.symbol;
+                }
+                var currencyCode = invoice.getCurrencyCode();
+                var currency = _.find(allCurrencies, function(currency) {
+                    return currency.currencyCode === currencyCode;
                 });
-            }
-
-            /**
-             * @ngdoc method
-             * @name processEditInfoDialog
-             * @function
-             *
-             * @description
-             * Update the customer info and save.
-             */
-            function processNewCustomerDialog(dialogData) {
-                var customer = customerDisplayBuilder.createDefault();
-                customer.loginName = dialogData.email;
-                customer.email = dialogData.email;
-                customer.firstName = dialogData.firstName;
-                customer.lastName = dialogData.lastName;
-
-                var promiseSaveCustomer = customerResource.AddCustomer(customer);
-                promiseSaveCustomer.then(function (customerResponse) {
-                    notificationsService.success("Customer Saved", "");
-                    init();
-                }, function (reason) {
-                    notificationsService.error("Customer Save Failed", reason.message);
-                });
-            }
-
-            function numberOfPages() {
-                return maxPages;
-            }
-
-            /**
-             * @ngdoc method
-             * @name setVariables
-             * @function
-             *
-             * @description
-             * Returns sort information based off the current $scope.sortProperty.
-             */
-            function sortInfo() {
-                var sortDirection, sortBy;
-                // If the sortProperty starts with '-', it's representing a descending value.
-                if ($scope.sortProperty.indexOf('-') > -1) {
-                    // Get the text after the '-' for sortBy
-                    sortBy = $scope.sortProperty.split('-')[1];
-                    sortDirection = 'Descending';
-                    // Otherwise it is ascending.
+                if(currency === null || currency === undefined) {
+                    return globalCurrency;
                 } else {
-                    sortBy = $scope.sortProperty;
-                    sortDirection = 'Ascending';
+                    return currency.symbol;
                 }
-                return {
-                    sortBy: sortBy.toLowerCase(), // We'll want the sortBy all lower case for API purposes.
-                    sortDirection: sortDirection
-                }
+            }
+
+            function getEditUrl(customer) {
+                return baseUrl + customer.key;
             }
 
             // Initializes the controller

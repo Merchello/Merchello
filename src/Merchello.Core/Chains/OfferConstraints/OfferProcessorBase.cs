@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Exceptions;
+    using Merchello.Core.Logging;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Rewards;
     using Merchello.Core.Models;
@@ -124,12 +125,12 @@
                                Attempt<object>.Succeed(rewardAttempt.Result);
                 }
 
-                LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert validation object", converted.Exception);
+                MultiLogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert validation object", converted.Exception);
                 throw converted.Exception;
             }
             catch (Exception ex)
             {             
-                LogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert reward type", ex);
+                MultiLogHelper.Error(typeof(OfferProcessorBase<TConstraint, TAward>), "Failed to convert reward type", ex);
                 throw;                   
             }                           
         }
@@ -156,7 +157,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<OfferProcessorBase<TConstraint, TAward>>("Failed to convert offer constraint to typed version.", ex);
+                MultiLogHelper.Error<OfferProcessorBase<TConstraint, TAward>>("Failed to convert offer constraint to typed version.", ex);
                 throw;
             }
 

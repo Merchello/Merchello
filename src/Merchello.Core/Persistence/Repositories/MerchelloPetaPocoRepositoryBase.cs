@@ -8,19 +8,25 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
 	/// Represent an abstract Repository for PetaPoco based repositories
 	/// </summary>
-	/// <typeparam name="TEntity">The type of entity</typeparam>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+	/// <typeparam name="TEntity">The type of entity</typeparam>    
     internal abstract class MerchelloPetaPocoRepositoryBase<TEntity> : MerchelloRepositoryBase<TEntity>
 		where TEntity : class, IEntity
-	{
-	
+    {
+        /// <summary>
+        /// The sql syntax.
+        /// </summary>
+        private readonly ISqlSyntaxProvider _sqlSyntax;     	
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloPetaPocoRepositoryBase{TEntity}"/> class.
         /// </summary>
@@ -30,11 +36,30 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-			: base(work, cache)
-		{
-		}
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+			: base(work, cache, logger)
+        {
+            Mandate.ParameterNotNull(sqlSyntax, "sqlSyntax");
 
+            _sqlSyntax = sqlSyntax;
+        }
+
+        /// <summary>
+        /// Gets the SQL syntax.
+        /// </summary>
+        public ISqlSyntaxProvider SqlSyntax
+        {
+            get
+            {
+                return _sqlSyntax;
+            }
+        }
 
         /// <summary>
 		/// Gets the database Unit of Work added to the repository
@@ -51,6 +76,7 @@
 		{
 			get { return UnitOfWork.Database; }			
 		}
+
 
 		#region Abstract Methods
 

@@ -58,13 +58,17 @@
            
             var merchelloUrls = new Dictionary<string, object>();
 
-            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));            
+            var url = new UrlHelper(new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData()));
 
             merchelloUrls.Add(
                 "merchelloAuditLogApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<AuditLogApiController>(
                     controller => controller.GetSalesHistoryByInvoiceKey(Guid.Empty)));
 
+            merchelloUrls.Add(
+             "merchelloBackOfficeCheckoutApiBaseUrl",
+              url.GetUmbracoApiServiceBaseUrl<BackOfficeCheckoutApiController>(
+                  controller => controller.GetPaymentMethods()));
 
             merchelloUrls.Add(
                 "merchelloCustomerApiBaseUrl",
@@ -74,7 +78,17 @@
                         CurrentPage = 0,
                         ItemsPerPage = 25,
                         Parameters = new QueryDisplayParameter[] { }
-                    })));   
+                    })));  
+ 
+            merchelloUrls.Add(
+                "merchelloDetachedContentApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<DetachedContentApiController>(
+                controller => controller.GetContentTypes()));
+
+            merchelloUrls.Add(
+                "merchelloEntityCollectionApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<EntityCollectionApiController>(
+                controller => controller.GetEntityCollectionProviders()));
 
             merchelloUrls.Add(
                 "merchelloFixedRateShippingApiBaseUrl",
@@ -102,6 +116,11 @@
                 controller => controller.GetAllOfferSettings()));
 
             merchelloUrls.Add(
+                 "merchelloNoteApiBaseUrl",
+                 url.GetUmbracoApiServiceBaseUrl<NoteApiController>(
+                     controller => controller.GetByEntityKey(Guid.Empty)));
+
+            merchelloUrls.Add(
                 "merchelloNotificationApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<NotificationGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
@@ -120,6 +139,11 @@
                 "merchelloPaymentGatewayApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<PaymentGatewayApiController>(
                 controller => controller.GetAllGatewayProviders()));
+
+            merchelloUrls.Add(
+                "merchelloPluginViewEditorApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<PluginViewEditorApiController>(
+                    controller => controller.GetAllAppPluginsViews()));
 
             merchelloUrls.Add(
                 "merchelloProductApiBaseUrl",

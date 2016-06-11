@@ -10,7 +10,7 @@
     /// <summary>
     /// Defines a CachedProductQuery.
     /// </summary>
-    public interface ICachedProductQuery
+    public interface ICachedProductQuery : ICachedCollectionQuery
     {
         /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's key
@@ -33,6 +33,17 @@
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
         ProductDisplay GetBySku(string sku);
+
+        /// <summary>
+        /// The get by slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        ProductDisplay GetBySlug(string slug);
 
         /// <summary>
         /// Gets a <see cref="ProductVariantDisplay"/> by it's key
@@ -99,6 +110,7 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay Search(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending);
+        
 
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names

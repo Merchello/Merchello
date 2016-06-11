@@ -6,7 +6,7 @@
     /// <summary>
     /// Marker Interface for the customer repository
     /// </summary>
-    internal interface ICustomerRepository : IPagedRepository<ICustomer, CustomerDto>
+    internal interface ICustomerRepository : IPagedRepository<ICustomer, CustomerDto>, IStaticEntityCollectionRepository<ICustomer>
     {
     }
 }

@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Marketing.Constraints;
     using Merchello.Core.Marketing.Offer;
 
@@ -61,7 +62,7 @@
             var attempt = ActivatorHelper.CreateInstance<IOfferProcessor>(chainType, ctrArgs);
             if (!attempt.Success)
             {
-                LogHelper.Error<OfferProcessorFactory>("Failed to create instance of " + chainType.Name, attempt.Exception);
+                MultiLogHelper.Error<OfferProcessorFactory>("Failed to create instance of " + chainType.Name, attempt.Exception);
                 return null;
             }
 

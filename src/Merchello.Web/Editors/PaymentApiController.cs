@@ -18,10 +18,12 @@
     using Merchello.Web.Workflow.Payment;
 
     using Umbraco.Web;
+    using Umbraco.Web.Mvc;
 
     /// <summary>
     /// The payment api controller.
     /// </summary>
+    [PluginController("Merchello")]
     public class PaymentApiController : MerchelloApiController
     {
         /// <summary>

@@ -1,0 +1,13 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Master.cshtml";
+}
+@Html.Partial("_Headline")
+<div class="row">
+    <div class="col-md-6">
+        @Html.Action("LoginForm", "CustomerMembership", new { area = "FastTrack" })
+    </div>
+    <div class="col-md-6">
+        @Html.Action("RegisterForm", "CustomerMembership", new { area = "FastTrack" })
+    </div>
+</div>

@@ -1,12 +1,11 @@
-﻿using umbraco.presentation.umbraco.dialogs;
-
-namespace Merchello.Web.Models.ContentEditing
+﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
+    using Merchello.Core;
     using Merchello.Core.Models;
 
     /// <summary>
@@ -47,7 +46,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the notes.
         /// </summary>
-        public string Notes { get; set; }
+        public IEnumerable<NoteDisplay> Notes { get; set; }
 
         /// <summary>
         /// Gets or sets the last activity date.
@@ -67,7 +66,7 @@ namespace Merchello.Web.Models.ContentEditing
         /// <summary>
         /// Gets or sets the invoices.
         /// </summary>
-        public IEnumerable<InvoiceDisplay> Invoices { get; set; } 
+        public IEnumerable<InvoiceDisplay> Invoices { get; set; }
     }
 
     #region Mapping Utility Extensions
@@ -128,8 +127,36 @@ namespace Merchello.Web.Models.ContentEditing
             }
 
             ((Customer) destination).Addresses = addressList;
-            
-            destination.Notes = customer.Notes;
+
+            // set the note type field key
+            var invoiceTfKey = Constants.TypeFieldKeys.Entity.CustomerKey;
+            foreach (var idn in customer.Notes)
+            {
+                idn.EntityTfKey = invoiceTfKey;
+            }
+
+            // remove or update any notes that were previously saved and/or removed through the back office
+            var updateNotes = customer.Notes.Where(x => x.Key != Guid.Empty).ToArray();
+
+            var notes = destination.Notes.ToList();
+            var removeKeys = new List<Guid>();
+            foreach (var n in notes)
+            {
+                var update = updateNotes.FirstOrDefault(x => x.Key == n.Key);
+                if (update == null)
+                {
+                    removeKeys.Add(n.Key);
+                }
+                else
+                {
+                    n.Message = update.Message;
+                    n.InternalOnly = update.InternalOnly;
+                }
+            }
+
+            notes.AddRange(customer.Notes.Where(x => x.Key == Guid.Empty).Select(x => x.ToNote()));
+
+            destination.Notes = notes.Where(x => removeKeys.All(y => y != x.Key));
 
             return destination;
         }

@@ -1,13 +1,22 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Text.RegularExpressions;
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
+    using Merchello.Core.ValueConverters;
+    using Merchello.Web.Models.ContentEditing.Content;
+    using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Models;
+    using Umbraco.Core.Models.PublishedContent;
 
     /// <summary>
     /// The product mapping extensions.
@@ -124,32 +133,34 @@
                 destination.ProductOptions.Add(destinationProductOption);
             }
             
+            destination.AddOrUpdateDetachedContent(productDisplay);
+             
             return destination;
         }
 
-        /// <summary>
-        /// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
-        /// </summary>
-        /// <param name="productDisplay">
-        /// The product display.
-        /// </param>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="sku">
-        /// The SKU.
-        /// </param>
-        /// <param name="price">
-        /// The price.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProduct"/>.
-        /// </returns>
-        internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
-        {
-            var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
-            return ToProduct(productDisplay, destination);
-        }
+        ///// <summary>
+        ///// Maps a <see cref="ProductDisplay"/> to <see cref="IProduct"/>
+        ///// </summary>
+        ///// <param name="productDisplay">
+        ///// The product display.
+        ///// </param>
+        ///// <param name="name">
+        ///// The name.
+        ///// </param>
+        ///// <param name="sku">
+        ///// The SKU.
+        ///// </param>
+        ///// <param name="price">
+        ///// The price.
+        ///// </param>
+        ///// <returns>
+        ///// The <see cref="IProduct"/>.
+        ///// </returns>
+        //internal static IProduct ToProduct(this ProductDisplay productDisplay, string name, string sku, decimal price)
+        //{
+        //    var destination = MerchelloContext.Current.Services.ProductService.CreateProduct(name, sku, price);
+        //    return ToProduct(productDisplay, destination);
+        //}
 
         #endregion
 
@@ -177,21 +188,6 @@
         }
 
         /// <summary>
-        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ProductDisplay"/>.
-        /// </returns>
-        internal static ProductDisplay ToProductDisplay(this IProduct product)
-        {            
-            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
-            return productDisplay;
-        }
-
-        /// <summary>
         /// Maps a <see cref="ProductDisplay"/> to <see cref="ProductVariantDisplay"/>.
         /// </summary>
         /// <param name="product">
@@ -203,10 +199,29 @@
         /// <remarks>
         /// Used for adding items to item caches in <see cref="CustomerItemCacheBase"/>
         /// </remarks>
-        internal static ProductVariantDisplay AsMasterVariantDisplay(this ProductDisplay product)
+        public static ProductVariantDisplay AsMasterVariantDisplay(this ProductDisplay product)
         {
             return AutoMapper.Mapper.Map<ProductVariantDisplay>(product);
         }
+
+        /// <summary>
+        /// Maps a <see cref="IProduct"/> to <see cref="ProductDisplay"/>.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="conversionType">
+        /// The detached value conversion type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductDisplay"/>.
+        /// </returns>
+        public static ProductDisplay ToProductDisplay(this IProduct product, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var productDisplay = AutoMapper.Mapper.Map<ProductDisplay>(product);
+            productDisplay.EnsureValueConversion(conversionType);
+            return productDisplay;
+        }        
                
         #endregion
 
@@ -238,6 +253,18 @@
 
         #region IProductOption
 
+        /// <summary>
+        /// The to product option.
+        /// </summary>
+        /// <param name="productOptionDisplay">
+        /// The product option display.
+        /// </param>
+        /// <param name="destinationProductOption">
+        /// The destination product option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOption"/>.
+        /// </returns>
         internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destinationProductOption)
         {
             if (productOptionDisplay.Key != Guid.Empty)
@@ -287,6 +314,15 @@
             return destinationProductOption;
         }
 
+        /// <summary>
+        /// The to product option display.
+        /// </summary>
+        /// <param name="productOption">
+        /// The product option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionDisplay"/>.
+        /// </returns>
         internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
         {            
             return AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
@@ -294,11 +330,246 @@
 
         #endregion
 
+        #region IProductVariantDetachedContent
+
+        /// <summary>
+        /// The product variants as product variant content.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The cultureName
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariantContent}"/>.
+        /// </returns>
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, string cultureName, IPublishedContent parent = null)
+        {
+            var variantContent = new List<IProductVariantContent>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var variant in display.ProductVariants)
+            {
+                var contentType = variant.DetachedContents.Any()
+                                      ? PublishedContentType.Get(
+                                          PublishedItemType.Content,
+                                          variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
+                                      : null;
+
+                variantContent.Add(new ProductVariantContent(variant, contentType, cultureName, parent));
+            }
+
+            return variantContent;
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether or not this object can be rendered as virtual content.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool HasVirtualContent(this ProductDisplay display)
+        {
+            return display.Available && display.DetachedContents.Any(x => x.CanBeRendered);
+        }
+
+        /// <summary>
+        /// Creates <see cref="IProductContent"/> from the display object.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public static IProductContent AsProductContent(this ProductDisplay display)
+        {
+            if (!display.HasVirtualContent()) return null;
+            var factory = new ProductContentFactory();
+            return factory.BuildContent(display);
+        }
+
+        /// <summary>
+        /// Gets the default slug.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string GetDefaultSlug(this ProductDisplayBase display)
+        {
+            return PathHelper.ConvertToSlug(string.Format("{0}-{1}", display.Name, display.Sku));
+        }
+
+        /// <summary>
+        /// The slug.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        internal static string Slug(this ProductDisplayBase display, string cultureName)
+        {
+            var defaultSlug = display.GetDefaultSlug();
+            if (!display.DetachedContents.Any()) return defaultSlug;
+
+            var dc = display.DetachedContentForCulture(cultureName);
+
+            return dc.Slug.IsNullOrWhiteSpace() ? defaultSlug : dc.Slug;
+        }
+
+        /// <summary>
+        /// The template id.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal static int TemplateId(this ProductDisplayBase display, string cultureName)
+        {
+            if (!display.DetachedContents.Any()) return 0;
+
+            var dc = display.DetachedContentForCulture(cultureName);
+
+            return dc == null ? 0 : dc.TemplateId;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ProductVariantDetachedContentDisplay"/> for a given culture.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantDetachedContentDisplay"/>.
+        /// </returns>
+        internal static ProductVariantDetachedContentDisplay DetachedContentForCulture(this ProductDisplayBase display, string cultureName)
+        {
+            return display.DetachedContents.Any()
+                       ? display.DetachedContents.FirstOrDefault(x => x.CultureName == cultureName)
+                       : null;
+        }
+
+        /// <summary>
+        /// Adds or updates <see cref="IProductVariantDetachedContent"/>.
+        /// </summary>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        internal static void AddOrUpdateDetachedContent(this IProductBase destination, ProductDisplayBase display)
+        {
+            if (destination.DetachedContents.Any())
+            {
+                // detached content
+                var removedLanguages =
+                    destination.DetachedContents.Where(
+                        x => !display.DetachedContents.Select(y => y.CultureName).Contains(x.CultureName));
+
+                foreach (var lang in removedLanguages)
+                {
+                    destination.DetachedContents.RemoveItem(lang.CultureName);
+                }
+            }
+
+
+            foreach (var detachedContent in display.DetachedContents.ToArray())
+            {
+                if (destination.DetachedContents.Contains(detachedContent.CultureName))
+                {
+                    var destContent = destination.DetachedContents[detachedContent.CultureName];
+                    detachedContent.ToProductVariantDetachedContent(destContent);
+                }
+                else
+                {
+                    var variant = display.GetType().IsAssignableFrom(typeof(ProductDisplay))
+                                      ? ((ProductDisplay)display).AsMasterVariantDisplay()
+                                      : (ProductVariantDisplay)display;
+                    destination.DetachedContents.Add(detachedContent.ToProductVariantDetachedContent(variant.Key));
+                }
+            }         
+        }
+
+        /// <summary>
+        /// Utility for setting the IsForBackOfficeEditor property.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="conversionType">
+        /// The value conversion type.
+        /// </param>
+        internal static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            ((ProductDisplayBase)display).EnsureValueConversion(conversionType);
+            if (display.ProductVariants.Any())
+            {
+                foreach (var variant in display.ProductVariants)
+                {
+                    variant.EnsureValueConversion(conversionType);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Utility for setting the IsForBackOfficeEditor property.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="conversionType">
+        /// The value conversion type.
+        /// </param>
+        internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+           
+            if (display.DetachedContents.Any())
+            {
+                foreach (var dc in display.DetachedContents)
+                {
+                    var contentType = DetachedValuesConverter.Current.GetContentTypeByKey(dc.DetachedContentType.UmbContentType.Key);
+                    if (dc.ValueConversion != conversionType)
+                    {
+                        dc.ValueConversion = conversionType;
+                        if (contentType != null) dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues, conversionType);
+                    }                    
+                }
+            }    
+        }
+
+        #endregion
+
         #region IProductVariant
 
-        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant)
+        internal static ProductVariantDisplay ToProductVariantDisplay(this IProductVariant productVariant, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {            
-            return AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            var display = AutoMapper.Mapper.Map<ProductVariantDisplay>(productVariant);
+            display.EnsureValueConversion(conversionType);
+            return display;
         }
 
         internal static IProductVariant ToProductVariant(this ProductVariantDisplay productVariantDisplay, IProductVariant destination)
@@ -385,6 +656,8 @@
                     variantAttributes.Add(destinationProductAttribute);
                 }
             }
+
+            destination.AddOrUpdateDetachedContent(productVariantDisplay);
 
             return destination;
         }

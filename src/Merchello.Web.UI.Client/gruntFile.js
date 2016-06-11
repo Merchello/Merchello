@@ -27,20 +27,23 @@
     grunt.initConfig({
         buildVersion: grunt.option('buildversion') || '1',
         distdir: 'build/App_Plugins/Merchello',
+        transformdir: 'build/transforms',
         bowerfiles: 'bower_components',
-        vsdir: '../Merchello.Web.UI/App_Plugins/Merchello',
+        vsdir: '../Merchello.FastTrack.UI/App_Plugins/Merchello',
+        appdir: '../Merchello.FastTrack.UI',
         pkg: grunt.file.readJSON('package.json'),
 
         // The comment block that is inserted at the top of files during build
         banner:
             '/*! <%= pkg.title || pkg.name %>\n' +
             '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
+            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>.\n' +
             ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
         
         // file locations
         src: {
             js: ['src/**/*.js', 'src/*.js'],
+            lib: ['lib/charts/*.js', 'lib/**/*.js'],
             common: ['src/common/**/*.js'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
@@ -62,6 +65,7 @@
                 files: [
                     { dest: '<%= distdir %>/views', src: ['**/*.html', '!**/*.controller.js'], expand: true, cwd: 'src/views/' },
                     { dest: '<%= distdir %>/views', src: ['**/*.html', '!**/*.js'], expand: true, cwd: 'src/common/' }
+
                 ]
             },
 
@@ -79,8 +83,20 @@
                 files: [{ dest: '<%= distdir %>/', src: '*.manifest', expand: true, cwd: 'src/' }]
             },
 
+            lib: {
+                files: [{ dest: '<%= distdir %>/lib/', src: ['../lib/charts/*.*', '../lib/codemirror/*.*'], expand: true, cwd: 'lib/' }]
+            },
+
             config: {
-              files: [{ dest: '<%= distdir %>/config', src: '**/*.*', expand: true, cwd: 'src/config/'}]  
+              files: [{ dest: '<%= distdir %>/config', src: 'merchello.config', expand: true, cwd: 'src/config/'}]
+            },
+
+            transforms: {
+                files: [{ dest: '<%= transformdir %>/', src: '**/*.config', expand: true, cwd: 'src/config/transforms/' }]
+            },
+
+            lang: {
+                files: [{ dest: '<%= distdir %>/Lang', src: '**/*.*', expand: true, cwd: 'src/config/lang'}]
             },
 
             assets: {
@@ -93,25 +109,31 @@
 
             vs: {
                 files: [
-                    //everything except the index.html root file!
                     //then we need to figure out how to not copy all the test stuff either!?
                     { dest: '<%= vsdir %>', src: '*.manifest', expand: true, cwd: '<%= distdir %>' },
                     { dest: '<%= vsdir %>/assets', src: '**', expand: true, cwd: '<%= distdir %>/assets' },
                     { dest: '<%= vsdir %>/js', src: '**', expand: true, cwd: '<%= distdir %>/js' },
                     { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/config', src: '**', expand: true, cwd: '<%= distdir %>/config' },
+                    { dest: '<%= vsdir %>/lang', src: '**', expand: true, cwd: '<%= distdir %>/lang' },
+                    { dest: '<%= vsdir %>/lib', src: '**', expand: true, cwd: '<%= distdir %>/lib' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/sales' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/catalog' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/customers' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/settings' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/dashboards' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/marketing' },
+                    { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/collections' },
+                    { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/detachedcontent' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/reports' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/gatewayproviders' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/products' },
+                    { dest: '<%= vsdir %>/Backoffice/Merchello', src: '**', expand: true, cwd: '<%= distdir %>/views/notes' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' },
-                    { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' }
+                    { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' },
+                    { dest: '<%= appdir %>', src: '**', expand: true, cwd: '<%= transformdir %>' },
+                    { dest: '<%= appdir %>/Config', src: '**', expand: true, cwd: '<%= transformdir %>/umbconfig' }
                 ]
             }
         },

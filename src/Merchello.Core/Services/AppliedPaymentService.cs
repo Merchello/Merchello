@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+
+    using Merchello.Core.Events;
+
     using Models;
     using Models.TypeFields;
     using Persistence;
@@ -11,45 +14,66 @@
     using Persistence.UnitOfWork;
     using Umbraco.Core;
     using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents the AppliedPaymentService
     /// </summary>
-    internal class AppliedPaymentService : IAppliedPaymentService
+    internal class AppliedPaymentService : MerchelloRepositoryService, IAppliedPaymentService
     {
         /// <summary>
         /// The locker.
         /// </summary>
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        /// <summary>
-        /// The database unit of work provider.
-        /// </summary>
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-
-        /// <summary>
-        /// The repository factory.
-        /// </summary>
-        private readonly RepositoryFactory _repositoryFactory;
-
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
         /// </summary>
         public AppliedPaymentService()
-            : this(new RepositoryFactory())
+            : this(LoggerResolver.Current.Logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public AppliedPaymentService(ILogger logger)
+            : this(logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
         /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The sql syntax.
+        /// </param>
+        public AppliedPaymentService(ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : this(logger, new RepositoryFactory(logger, sqlSyntax))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public AppliedPaymentService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        {            
+        public AppliedPaymentService(ILogger logger, RepositoryFactory repositoryFactory)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
         }
 
         /// <summary>
@@ -61,16 +85,39 @@
         /// <param name="repositoryFactory">
         /// The repository factory.
         /// </param>
-        public AppliedPaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public AppliedPaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
         {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AppliedPaymentService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public AppliedPaymentService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
+
         #region Event Handlers
+
+
 
         /// <summary>
         /// Occurs after Create
@@ -141,8 +188,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(uow))
                 {
                     repository.AddOrUpdate(appliedPayment);
                     uow.Commit();
@@ -164,8 +211,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(uow))
                 {
                     foreach (var appliedPayment in paymentsArray)
                     {
@@ -195,8 +242,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(uow))
                 {
                     repository.Delete(appliedPayment);
                     uow.Commit();
@@ -220,8 +267,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(uow))
                 {
                     foreach (var appliedPayment in payemntsArray)
                     {
@@ -242,7 +289,7 @@
         /// <returns>An <see cref="IAppliedPayment"/></returns>
         public IAppliedPayment GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -255,7 +302,7 @@
         /// <returns>A collection of <see cref="IAppliedPayment"/></returns>
         public IEnumerable<IAppliedPayment> GetAppliedPaymentsByPaymentKey(Guid paymentKey)
         {
-            using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IAppliedPayment>.Builder.Where(x => x.PaymentKey == paymentKey);
 
@@ -270,7 +317,7 @@
         /// <returns>A collection <see cref="IAppliedPayment"/></returns>
         public IEnumerable<IAppliedPayment> GetAppliedPaymentsByInvoiceKey(Guid invoiceKey)
         {
-            using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IAppliedPayment>.Builder.Where(x => x.InvoiceKey == invoiceKey);
 
@@ -324,8 +371,8 @@
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreateAppliedPaymentRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateAppliedPaymentRepository(uow))
                 {
                     repository.AddOrUpdate(appliedPayment);
                     uow.Commit();

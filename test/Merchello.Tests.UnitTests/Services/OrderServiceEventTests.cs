@@ -12,6 +12,11 @@ using NUnit.Framework;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Merchello.Core.Cache;
+
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     [TestFixture]
     [Category("Service Events")]
     public class OrderServiceEventTests : ServiceTestsBase<IOrder>
@@ -26,8 +31,20 @@ namespace Merchello.Tests.UnitTests.Services
 
             var mockSettingService = new Mock<IStoreSettingService>();
             mockSettingService.Setup(x => x.GetNextOrderNumber(1)).Returns(111);
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
 
-            _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(), mockSettingService.Object, new Mock<ShipmentService>().Object);
+            var uow = new MockUnitOfWorkProvider();
+
+            var repositoryFactory = new Mock<RepositoryFactory>(
+                false,
+                new NullCacheProvider(),
+                new NullCacheProvider(),
+                Logger.CreateWithDefaultLog4NetConfiguration(),
+                SqlSyntaxProvider);
+
+            // provider, repositoryFactory, logger, new TransientMessageFactory(), storeSettingService, shipmentService
+
+            _orderService = new OrderService(uow, repositoryFactory.Object, new Mock<ILogger>().Object, mockSettingService.Object, new Mock<IShipmentService>().Object);
             
 
             OrderService.StatusChanging += OrderStatusChanging;
@@ -88,10 +105,6 @@ namespace Merchello.Tests.UnitTests.Services
             Assert.NotNull(After, "After was null");
             Assert.AreEqual(fulfulled.Key, Before.OrderStatusKey);
             Assert.AreEqual(fulfulled.Key, After.OrderStatusKey);
-
         }
-
-
-
     }
 }

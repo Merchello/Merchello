@@ -27,7 +27,7 @@
             this._warehouse = warehouseService.GetDefaultWarehouse();
 
             this._provider = (ProductIndexer)ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"];
-            this._provider.RebuildIndex();
+            //this._provider.RebuildIndex();
         }
 
         
@@ -49,7 +49,7 @@
         /// <summary>
         /// 
         /// </summary>
-        [Test]
+        [Test, Category("LongRunning")]
         public void Can_RetrieveProductOptions_From_ProductInIndex()
         {            
             //// Arrange

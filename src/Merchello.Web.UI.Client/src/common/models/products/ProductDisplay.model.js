@@ -30,10 +30,12 @@
         self.taxable = false;
         self.shippable = false;
         self.download = false;
+        //self.master = true;
         self.downloadMediaId = -1;
         self.productOptions = [];
         self.productVariants = [];
         self.catalogInventories = [];
+        self.detachedContents = [];
     };
 
     ProductDisplay.prototype = (function() {
@@ -55,6 +57,7 @@
             // clean up
             variant.key = this.productVariantKey;
             variant.productKey = this.key;
+            variant.master = true;
             delete variant['productOptions'];
             delete variant['productVariants'];
             return variant;
@@ -161,6 +164,49 @@
             return _.filter(this.productVariants, function(v) { return v.taxable; });
         }
 
+        // returns a value indicating whether or not the product has a detached content that can be rendered.
+        function canBeRendered() {
+            if (!this.available) {
+                return false;
+            }
+            if (this.detachedContents.length === 0) {
+                return false;
+            }
+            if (_.filter(this.detachedContents, function(dc) { return dc.canBeRendered; }).length === 0) {
+                return false;
+            }
+            return true;
+        }
+
+        // ensures a catalog is selected if the variant is marked shippable
+        function ensureCatalogInventory(defaultCatalogKey) {
+            if (!this.shippable && !this.trackInventory) {
+                return;
+            }
+            // if this product is not associated with any catalogs we need to add the default catalog
+            // so that we can associate shipping information
+            if (this.catalogInventories.length === 0) {
+                var inv = new CatalogInventoryDisplay();
+                inv.productVariantKey = this.key;
+                inv.catalogKey = defaultCatalogKey;
+                inv.active = true;
+                this.catalogInventories.push(inv);
+            } else {
+                // if there are catalogs and none are selected we need to force the default catalog to be selected.
+                var activeInventories = _.filter(this.catalogInventories, function (ci) {
+                    return ci.active;
+                });
+                if (activeInventories.length === 0) {
+                    var defaultInv = _.find(this.catalogInventories, function (dci) {
+                        return dci.catalogKey === defaultCatalogKey;
+                    });
+                    if (defaultInv !== undefined) {
+                        defaultInv.active = true;
+                    }
+                }
+            }
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -172,7 +218,9 @@
             anyVariantsOnSale: anyVariantsOnSale,
             shippableVariants: shippableVariants,
             getProductVariant: getProductVariant,
-            taxableVariants: taxableVariants
+            taxableVariants: taxableVariants,
+            canBeRendered: canBeRendered,
+            ensureCatalogInventory: ensureCatalogInventory
         };
     }());
 

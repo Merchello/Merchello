@@ -21,6 +21,7 @@
     /// <summary>
     /// Represents the basket sale preparation.
     /// </summary>
+    [Obsolete("Use the BasketCheckoutManager.  Also important to note this should NEVER be used in combination with BasketCheckoutManager")]
     public class BasketSalePreparation : SalePreparationBase, IBasketSalePreparation
     {
         /// <summary>
@@ -138,6 +139,44 @@
         }
 
         /// <summary>
+        /// Saves the note
+        /// </summary>
+        /// <param name="note">The <see cref="INote"/></param>
+        public virtual void SaveNote(NoteDisplay note)
+        {
+            // Check for existing note and modify it if it already exists so we don't end up with lots of orphan notes if the customer keeps submitting.
+            var existingNote = GetNote();
+            if (existingNote != null)
+            {
+                existingNote.Message = note.Message;
+            }
+            else
+            {
+                Customer.ExtendedData.AddNote(note);
+            }
+            SaveCustomer(MerchelloContext, Customer, RaiseCustomerEvents);
+        }
+
+        /// <summary>
+        /// Saves the note
+        /// </summary>
+        /// <param name="message">The message to save into a note</param>
+        public virtual void SaveNote(string message)
+        {
+            Customer.ExtendedData.AddNote(new NoteDisplay() { Message = message });
+            SaveCustomer(MerchelloContext, Customer, RaiseCustomerEvents);
+        }
+
+        /// <summary>
+        /// Gets the note
+        /// </summary>
+        /// <returns>Return the <see cref="INote"/></returns>
+        public NoteDisplay GetNote()
+        {
+            return Customer.ExtendedData.GetNote();
+        }
+
+        /// <summary>
         /// The get basket checkout preparation.
         /// </summary>
         /// <param name="basket">
@@ -168,7 +207,7 @@
             var customer = basket.Customer;
             var itemCache = GetItemCache(merchelloContext, customer, basket.VersionKey);
 
-            if (!itemCache.Items.Any())
+            if (!itemCache.Items.Any() && basket.Validate())
             {
                 // this is either a new preparation or a reset due to version
                 foreach (var item in basket.Items)

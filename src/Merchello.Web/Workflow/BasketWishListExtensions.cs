@@ -1,8 +1,12 @@
 ﻿namespace Merchello.Web.Workflow
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
+    using Merchello.Core;
+    using Merchello.Core.Checkout;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
 
     using Umbraco.Core.Logging;
@@ -10,8 +14,10 @@
     /// <summary>
     /// Extension methods for the <see cref="IBasket"/> and <see cref="IWishList"/>.
     /// </summary>
+    [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class BasketWishListExtensions
     {
+
         /// <summary>
         /// Saves the entire basket to the wish list and then clears the basket.
         /// </summary>
@@ -23,7 +29,7 @@
             // Anonymous customers do not have wish lists
             if (basket.Customer.IsAnonymous)
             {
-                LogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
+                MultiLogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
                 return;
             }
 
@@ -64,7 +70,7 @@
             // Anonymous customers do not have wish lists
             if (basket.Customer.IsAnonymous)
             {
-                LogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
+                MultiLogHelper.Debug(typeof(BasketWishListExtensions), "SaveToWishList called on an anonymous customer basket.");
                 return;
             }
 

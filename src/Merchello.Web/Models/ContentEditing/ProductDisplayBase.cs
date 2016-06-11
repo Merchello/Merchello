@@ -1,9 +1,10 @@
 ﻿namespace Merchello.Web.Models.ContentEditing
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     using Newtonsoft.Json;
 
@@ -12,6 +13,11 @@
     /// </summary>
     public abstract class ProductDisplayBase : ProductVariantDataModifierData
     {
+        /// <summary>
+        /// Gets or sets the version key.
+        /// </summary>
+        public Guid VersionKey { get; set; }
+
         /// <summary>
         /// Gets or sets the SKU.
         /// </summary>
@@ -73,6 +79,11 @@
         public int DownloadMediaId { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether master.
+        /// </summary>
+        public bool Master { get; set; }
+
+        /// <summary>
         /// Gets or sets the total inventory count.
         /// </summary>
         public virtual int TotalInventoryCount { get; set; }
@@ -81,5 +92,10 @@
         /// Gets or sets the catalog inventories.
         /// </summary>
         public IEnumerable<CatalogInventoryDisplay> CatalogInventories { get; set; }
+
+        /// <summary>
+        /// Gets or sets the detached content values.
+        /// </summary>
+        public IEnumerable<ProductVariantDetachedContentDisplay> DetachedContents { get; set; }
     }
 }

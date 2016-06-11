@@ -18,6 +18,11 @@ using Umbraco.Core;
 
 namespace Merchello.Tests.IntegrationTests.TestHelpers
 {
+    using Merchello.Core.Events;
+    using Merchello.Core.Persistence;
+
+    using Umbraco.Core.Logging;
+
     internal class DataServiceMerchelloContext
     {
         public static IMerchelloContext GetMerchelloContext()
@@ -26,8 +31,12 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
             // sets up the Umbraco SqlSyntaxProvider Singleton
             SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
 
+            var sqlSyntax = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
 
-            var serviceContext = new ServiceContext(new PetaPocoUnitOfWorkProvider());
+            //AutoMapperMappings.CreateMappings();
+            var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+
+            var serviceContext = new ServiceContext(new RepositoryFactory(logger, sqlSyntax), new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object), new Mock<ILogger>().Object, new TransientMessageFactory());
             return  new MerchelloContext(serviceContext,
                 new GatewayContext(serviceContext, GatewayProviderResolver.Current),
                 new CacheHelper(new NullCacheProvider(),

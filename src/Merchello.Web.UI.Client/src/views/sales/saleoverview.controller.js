@@ -8,37 +8,35 @@
      */
     angular.module('merchello').controller('Merchello.Backoffice.SalesOverviewController',
         ['$scope', '$routeParams', '$timeout', '$log', '$location', 'assetsService', 'dialogService', 'localizationService', 'notificationsService', 'invoiceHelper',
-            'auditLogResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
-            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder',
-            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder',
+            'auditLogResource', 'noteResource', 'invoiceResource', 'settingsResource', 'paymentResource', 'shipmentResource', 'paymentGatewayProviderResource',
+            'orderResource', 'dialogDataFactory', 'merchelloTabsFactory', 'addressDisplayBuilder', 'countryDisplayBuilder', 'salesHistoryDisplayBuilder', 'noteDisplayBuilder',
+            'invoiceDisplayBuilder', 'paymentDisplayBuilder', 'paymentMethodDisplayBuilder', 'shipMethodsQueryDisplayBuilder', 'noteDisplayBuilder',
         function($scope, $routeParams, $timeout, $log, $location, assetsService, dialogService, localizationService, notificationsService, invoiceHelper,
-                 auditLogResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
-                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder) {
+                 auditLogResource, noteResource, invoiceResource, settingsResource, paymentResource, shipmentResource, paymentGatewayProviderResource, orderResource, dialogDataFactory,
+                 merchelloTabsFactory, addressDisplayBuilder, countryDisplayBuilder, salesHistoryDisplayBuilder, noteDisplayBuilder, invoiceDisplayBuilder, paymentDisplayBuilder, paymentMethodDisplayBuilder, shipMethodsQueryDisplayBuilder, noteDisplayBuilder) {
 
             // exposed properties
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.paymentMethodsLoaded = false;
             $scope.invoice = {};
+            $scope.invoiceNumber = '';
             $scope.tabs = [];
             $scope.historyLoaded = false;
-            $scope.remainingBalance = 0.0;
-            $scope.shippingTotal = 0.0;
-            $scope.taxTotal = 0.0;
             $scope.currencySymbol = '';
             $scope.settings = {};
             $scope.salesHistory = {};
+
             $scope.paymentMethods = [];
             $scope.allPayments = [];
             $scope.payments = [];
             $scope.billingAddress = {};
             $scope.hasShippingAddress = false;
-            $scope.authorizedCapturedLabel = '';
-            $scope.shipmentLineItems = [];
-            $scope.customLineItems = [];
             $scope.discountLineItems = [];
             $scope.debugAllowDelete = false;
             $scope.newPaymentOpen = false;
+            $scope.entityType = 'Invoice';
+            
 
             // exposed methods
             //  dialogs
@@ -53,10 +51,13 @@
             $scope.reload = init;
             $scope.openAddressAddEditDialog = openAddressAddEditDialog;
             $scope.setNotPreValuesLoaded = setNotPreValuesLoaded;
-
+            $scope.saveNotes = saveNotes;
+            $scope.deleteNote = deleteNote;
 
             // localize the sales history message
             $scope.localizeMessage = localizeMessage;
+
+            $scope.refresh = refresh;
 
 
             var countries = [];
@@ -77,6 +78,7 @@
                 if(Umbraco.Sys.ServerVariables.isDebuggingEnabled) {
                     $scope.debugAllowDelete = true;
                 }
+
             }
 
             function localizeMessage(msg) {
@@ -116,6 +118,8 @@
                 }
             }
 
+
+
             /**
              * @ngdoc method
              * @name loadInvoice
@@ -128,20 +132,18 @@
                 $scope.shipmentLineItems = [];
                 $scope.customLineItems = [];
                 $scope.discountLineItems = [];
-
                 var promise = invoiceResource.getByKey(id);
                 promise.then(function (invoice) {
                     $scope.invoice = invoiceDisplayBuilder.transform(invoice);
                     $scope.billingAddress = $scope.invoice.getBillToAddress();
-                    var taxLineItem = $scope.invoice.getTaxLineItem();
-                    $scope.taxTotal = taxLineItem !== undefined ? taxLineItem.price : 0;
-                    $scope.shippingTotal = $scope.invoice.shippingTotal();
+
+                    $scope.invoiceNumber = $scope.invoice.prefixedInvoiceNumber();
                     loadSettings();
                     loadPayments(id);
                     loadAuditLog(id);
+
                     loadShippingAddress(id);
-                    aggregateScopeLineItemCollection($scope.invoice.getCustomLineItems(), $scope.customLineItems);
-                    aggregateScopeLineItemCollection($scope.invoice.getDiscountLineItems(), $scope.discountLineItems);
+
 
                     $scope.showFulfill = hasUnPackagedLineItems();
                     $scope.loaded = true;
@@ -152,6 +154,8 @@
                     }
 
                    $scope.tabs.appendCustomerTab($scope.invoice.customerKey);
+
+                    console.info($scope.invoice);
 
                 }, function (reason) {
                     notificationsService.error("Invoice Load Failed", reason.message);
@@ -166,44 +170,24 @@
              * @description - Load the Merchello settings.
              */
             function loadSettings() {
-               var settingsPromise = settingsResource.getAllSettings();
-               settingsPromise.then(function(settings) {
-                   $scope.settings = settings;
-               }, function(reason) {
-                   notificationsService.error('Failed to load global settings', reason.message);
-               })
-
-               var countriesPromise = settingsResource.getAllCountries();
-               countriesPromise.then(function(results) {
-                   countries = countryDisplayBuilder.transform(results);
+               settingsResource.getAllCombined().then(function(combined) {
+                   $scope.settings = combined.settings;
+                   countries = combined.countries;
+                   if ($scope.invoice.currency.symbol === '') {
+                       var currency = _.find(combined.currencies, function (symbol) {
+                           return symbol.currecyCode === $scope.invoice.getCurrencyCode()
+                       });
+                       if (currency !== undefined) {
+                           $scope.currencySymbol = currency.symbol;
+                       } else {
+                           $scope.currencySymbol = combined.currencySymbol;
+                       }
+                   } else {
+                       $scope.currencySymbol = $scope.invoice.currency.symbol;
+                   }
                });
+           }
 
-               // TODO this can be refactored now that we have currency on the invoice model
-               if ($scope.invoice.currency.symbol === '') {
-                    var currencySymbolPromise = settingsResource.getAllCurrencies();
-                    currencySymbolPromise.then(function (symbols) {
-                        var currency = _.find(symbols, function(symbol) {
-                            return symbol.currencyCode === $scope.invoice.getCurrencyCode()
-                        });
-                        if (currency !== undefined) {
-                        $scope.currencySymbol = currency.symbol;
-                        } else {
-                            // this handles a legacy error where in some cases the invoice may not have saved the ISO currency code
-                            // default currency
-                            var defaultCurrencyPromise = settingsResource.getCurrencySymbol();
-                            defaultCurrencyPromise.then(function (currencySymbol) {
-                                $scope.currencySymbol = currencySymbol;
-                            }, function (reason) {
-                                notificationService.error('Failed to load the default currency symbol', reason.message);
-                            });
-                        }
-                    }, function (reason) {
-                        alert('Failed: ' + reason.message);
-                    });
-               } else {
-                   $scope.currencySymbol = $scope.invoice.currency.symbol;
-               }
-            }
 
             /**
              * @ngdoc method
@@ -213,21 +197,16 @@
              * @description - Load the Merchello payments for the invoice.
              */
             function loadPayments(key) {
-                if (!$scope.invoice.isPaid()) {
-                    var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
-                    paymentsPromise.then(function(payments) {
-                        $scope.allPayments = paymentDisplayBuilder.transform(payments);
-                        $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
-                        loadPaymentMethods()
-                        $scope.remainingBalance = invoiceHelper.round($scope.invoice.remainingBalance($scope.allPayments), 2);
-                        $scope.authorizedCapturedLabel  = $scope.remainingBalance == '0' ? 'merchelloOrderView_captured' : 'merchelloOrderView_authorized';
-                        $scope.preValuesLoaded = true;
-                    }, function(reason) {
-                        notificationsService.error('Failed to load payments for invoice', reason.message);
-                    });
-                } else {
+
+                var paymentsPromise = paymentResource.getPaymentsByInvoice(key);
+                paymentsPromise.then(function(payments) {
+                    $scope.allPayments = paymentDisplayBuilder.transform(payments);
+                    $scope.payments = _.filter($scope.allPayments, function(p) { return !p.voided && !p.collected; })
+                    loadPaymentMethods();
                     $scope.preValuesLoaded = true;
-                }
+                }, function(reason) {
+                    notificationsService.error('Failed to load payments for invoice', reason.message);
+                });
             }
 
             /**
@@ -332,6 +311,7 @@
                     // added a timeout here to give the examine index
                     $timeout(function() {
                         notificationsService.success("Payment Captured");
+                        console.info(paymentRequest);
                         loadInvoice(paymentRequest.invoiceKey);
                     }, 400);
                 }, function (reason) {
@@ -381,10 +361,10 @@
                     data.invoiceKey = $scope.invoice.key;
 
                     // TODO this could eventually turn into an array
-                    var shipmentLineItem = $scope.invoice.getShippingLineItems();
-                    if ($scope.shipmentLineItems[0]) {
-                        var shipMethodKey = $scope.shipmentLineItems[0].extendedData.getValue('merchShipMethodKey');
-                        var request = { shipMethodKey: shipMethodKey, invoiceKey: data.invoiceKey, lineItemKey: $scope.shipmentLineItems[0].key };
+                    var shipmentLineItems = $scope.invoice.getShippingLineItems();
+                    if (shipmentLineItems[0]) {
+                        var shipMethodKey = shipmentLineItems[0].extendedData.getValue('merchShipMethodKey');
+                        var request = { shipMethodKey: shipMethodKey, invoiceKey: data.invoiceKey, lineItemKey: shipmentLineItems[0].key };
                         var shipMethodPromise = shipmentResource.getShipMethodAndAlternatives(request);
                         shipMethodPromise.then(function(result) {
                             data.shipMethods = shipMethodsQueryDisplayBuilder.transform(result);
@@ -472,17 +452,6 @@
                 }
 
                 return found;
-            }
-
-            // utility method to assist in building scope line item collections
-            function aggregateScopeLineItemCollection(lineItems, collection) {
-                if(angular.isArray(lineItems)) {
-                    angular.forEach(lineItems, function(item) {
-                        collection.push(item);
-                    });
-                } else {
-                    collection.push(lineItems);
-                }
             }
 
             /**
@@ -573,6 +542,30 @@
                         notificationsService.error("Failed to update shippingaddress", reason.message);
                     });
                 }
+            }
+
+            function saveNotes() {
+                saveInvoice();
+            }
+            
+            function deleteNote(note) {
+                $scope.invoice.notes = _.reject($scope.invoice.notes, function(n) {
+                    return n.key === note.key;
+                });
+
+                saveInvoice();
+            }
+            
+            function saveInvoice() {
+                invoiceResource.saveInvoice($scope.invoice).then(function(data) {
+                    refresh();
+                });
+            }
+
+            function refresh() {
+                $timeout(function () {
+                    loadInvoice($scope.invoice.key);
+                }, 400);
             }
 
             // initialize the controller

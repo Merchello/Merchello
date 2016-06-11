@@ -9,10 +9,12 @@
     using Merchello.Core.Services;
     using Merchello.Examine.Providers;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// The order data service.
     /// </summary>
-    internal class OrderDataService : IOrderDataService
+    internal class OrderDataService : DataServiceBase, IOrderDataService
     {
         /// <summary>
         /// The merchello context.
@@ -47,7 +49,9 @@
         /// </returns>
         public IEnumerable<IOrder> GetAll()
         {
-            return new OrderService().GetPage(1, 100).Items;
+            return MerchelloContext.HasCurrent
+                       ? MerchelloContext.Current.Services.OrderService.GetPage(1, 100).Items
+                       : new OrderService(Logger.CreateWithDefaultLog4NetConfiguration()).GetPage(1, 100).Items;
         }
 
         /// <summary>

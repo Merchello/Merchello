@@ -1,7 +1,7 @@
-﻿using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// Defines a standard address
     /// </summary>
@@ -76,6 +76,9 @@ namespace Merchello.Core.Models
         [DataMember]
         bool IsCommercial { get; set; }
 
-
+        /// <summary>
+        /// Gets or sets the address type.
+        /// </summary>
+        AddressType AddressType { get; set; }
     }
 }

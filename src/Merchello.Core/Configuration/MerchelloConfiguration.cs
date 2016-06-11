@@ -7,7 +7,12 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Web.Routing;
     using System.Xml.Linq;
+
+    using Merchello.Core.Checkout;
+    using Merchello.Core.Logging;
+
     using Outline;
     using Umbraco.Core.IO;
     using Umbraco.Core.Logging;
@@ -96,6 +101,43 @@
         }
 
         /// <summary>
+        /// Gets the configured <see cref="ICheckoutContextSettings"/>.
+        /// </summary>
+        public ICheckoutContextSettings CheckoutContextSettings
+        {
+            get
+            {
+                if (Section.CheckoutContextSettings != null)
+                {
+                    try
+                    {
+                        return new CheckoutContextSettings
+                            {
+                                InvoiceNumberPrefix = GetCheckoutManagerSetting("InvoiceNumberPrefix"),
+                                ApplyTaxesToInvoice = GetCheckoutManagerSetting("ApplyTaxesToInvoice", true),
+                                RaiseCustomerEvents = GetCheckoutManagerSetting("RaiseCustomerEvents", false),
+                                ResetCustomerManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetCustomerManagerDataOnVersionChange", true),
+                                ResetExtendedManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetExtendedManagerDataOnVersionChange", true),
+                                ResetOfferManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetOfferManagerDataOnVersionChange", true),
+                                ResetPaymentManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetPaymentManagerDataOnVersionChange", true),
+                                ResetShippingManagerDataOnVersionChange = GetCheckoutManagerSetting("ResetShippingManagerDataOnVersionChange", true),
+                                EmptyBasketOnPaymentSuccess = GetCheckoutManagerSetting("EmptyBasketOnPaymentSuccess", true)
+                        };
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MultiLogHelper.WarnWithException<MerchelloConfiguration>("Failed to instantiate CheckoutContextSettings from configuration.  Returning new CheckoutContextSettings()", ex);
+                        return new CheckoutContextSettings();
+                    }
+
+                }
+
+                return new CheckoutContextSettings();
+            }
+        }
+
+        /// <summary>
         /// Gets the customer member types.
         /// </summary>
         public IEnumerable<string> CustomerMemberTypes
@@ -161,7 +203,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                     return null;
                 }
             }
@@ -180,7 +222,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                    MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                     return null;
                 }
             }
@@ -193,6 +235,29 @@
         public string FullpathToRoot
         {
             get { return GetRootDirectorySafe(); }
+        }
+
+        /// <summary>
+        /// The get product slug culture prefix.
+        /// </summary>
+        /// <param name="cultureName">
+        /// The culture name.
+        /// </param>
+        /// <returns>
+        /// The product slug prefix.
+        /// </returns>
+        public string GetProductSlugCulturePrefix(string cultureName)
+        {
+            try
+            {
+                if (!Section.ContentFinderCulture.Routes().Any()) return string.Empty;
+                var el = Section.ContentFinderCulture[cultureName];
+                return el == null ? string.Empty : el.ProductSlugPrefix.EnsureNotEndsWith('/');
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -212,7 +277,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve pluggable object with key: " + alias, ex);
+                MultiLogHelper.Error<MerchelloConfiguration>("Failed to retrieve pluggable object with key: " + alias, ex);
                 return null;
             }
         }
@@ -232,7 +297,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve strategy with key: " + alias, ex);
+                MultiLogHelper.Error<MerchelloConfiguration>("Failed to retrieve strategy with key: " + alias, ex);
                 return null;
             }
         }
@@ -250,7 +315,7 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Error<MerchelloConfiguration>("Failed to retrieve task chain with key: " + alias, ex);
+                MultiLogHelper.Error<MerchelloConfiguration>("Failed to retrieve task chain with key: " + alias, ex);
                 return null;
             }
         }
@@ -272,8 +337,34 @@
             }
             catch (Exception ex)
             {
-                LogHelper.Info<MerchelloConfiguration>(ex.Message);
+                MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
                 return string.Empty;
+            }
+        }
+
+        internal string GetCheckoutManagerSetting(string alias)
+        {
+            try
+            {
+                return Section.CheckoutContextSettings[alias].Value;
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return string.Empty;
+            }
+        }
+
+        internal bool GetCheckoutManagerSetting(string alias, bool defaultSetting)
+        {
+            try
+            {
+                return bool.Parse(Section.CheckoutContextSettings[alias].Value);
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Info<MerchelloConfiguration>(ex.Message);
+                return defaultSetting;
             }
         }
 

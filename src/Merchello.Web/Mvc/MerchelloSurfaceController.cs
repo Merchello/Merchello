@@ -6,6 +6,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Gateways;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Services;
     using Merchello.Web.Pluggable;
@@ -52,7 +53,11 @@
         {
             get
             {
-                return _customerContext ?? PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);        
+                if (_customerContext == null)
+                {
+                    _customerContext = PluggableObjectHelper.GetInstance<CustomerContextBase>("CustomerContext", UmbracoContext);
+                }
+                return _customerContext;        
             }
         }
 
@@ -118,9 +123,22 @@
             var exception =
                 new InvalidOperationException(
                     "Attempt to delete an item from a collection that does not match the CurrentUser");
-            LogHelper.Error<MerchelloSurfaceController>("Customer item cache operation failed.", exception);
+            MultiLogHelper.Error<MerchelloSurfaceController>("Customer item cache operation failed.", exception);
 
             throw exception;
+        }
+
+        /// <summary>
+        /// Gets default <see cref="IExtendedLoggerData"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IExtendedLoggerData"/>.
+        /// </returns>
+        protected virtual IExtendedLoggerData GetExtendedLoggerData()
+        {
+            var logData = MultiLogger.GetBaseLoggingData();
+            logData.AddCategory("SurfaceController");
+            return logData;
         }
     }
 }

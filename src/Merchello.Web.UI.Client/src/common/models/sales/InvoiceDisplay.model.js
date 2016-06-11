@@ -26,15 +26,34 @@
         self.billToEmail = '';
         self.billToPhone = '';
         self.billToCompany = '';
+        self.currencyCode = '';
         self.exported = '';
         self.archived = '';
         self.total = 0.0;
         self.currency = {};
         self.items = [];
         self.orders = [];
+        self.notes = [];
     };
 
     InvoiceDisplay.prototype = (function() {
+
+        function ensureArray(items) {
+            var collection = [];
+            if (items === undefined || items === null) {
+                return collection;
+            }
+
+            if (!angular.isArray(items)) {
+                collection.push(items);
+            } else {
+                angular.forEach(items, function(item) {
+                   collection.push(item);
+                });
+            }
+
+            return collection;
+        }
 
         function getBillingAddress() {
             var adr = new AddressDisplay();
@@ -85,6 +104,11 @@
 
         // gets the currency code for the invoice
         function getCurrencyCode() {
+
+            if(this.currencyCode !== '') {
+                return this.currencyCode;
+            }
+
             if (this.currency.currencyCode === '') {
                 var first = this.items[0];
                 var currencyCode = first.extendedData.getValue('merchCurrencyCode');
@@ -96,7 +120,7 @@
 
         // gets the product line items
         function getProductLineItems() {
-            return _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; });
+            return ensureArray( _.filter(this.items, function (item) { return item.lineItemTypeField.alias === 'Product'; }));
         }
 
         // gets the tax line items
@@ -106,16 +130,22 @@
 
         // gets the shipping line items
         function getShippingLineItems() {
-            return _.find(this.items, function (item) {
+            return ensureArray(_.filter(this.items, function (item) {
                 return item.lineItemTypeField.alias === 'Shipping';
-            });
+            }));
+        }
+
+        function getAdjustmentLineItems() {
+            return ensureArray(_.filter(this.items, function(item) {
+               return item.lineItemTypeField.alias === 'Adjustment';
+            }));
         }
 
         // gets the custom line items
         function getCustomLineItems() {
-            var custom =  _.filter(this.items, function(item) {
+            var custom =  ensureArray(_.filter(this.items, function(item) {
                 return item.lineItemType === 'Custom';
-            });
+            }));
             if (custom === undefined) {
                 custom = [];
             }
@@ -172,6 +202,14 @@
             return this.total - amountPaid;
         }
 
+        function prefixedInvoiceNumber() {
+            if (this.invoiceNumberPrefix === '') {
+                return this.invoiceNumber;
+            } else {
+                return this.invoiceNumberPrefix + '-' + this.invoiceNumber;
+            }
+        }
+
         function isAnonymous() {
             return this.customerKey === '00000000-0000-0000-0000-000000000000';
         }
@@ -182,6 +220,7 @@
             getCurrencyCode: getCurrencyCode,
             getProductLineItems: getProductLineItems,
             getDiscountLineItems: getDiscountLineItems,
+            getAdjustmentLineItems: getAdjustmentLineItems,
             getTaxLineItem: getTaxLineItem,
             getShippingLineItems: getShippingLineItems,
             getCustomLineItems: getCustomLineItems,
@@ -192,7 +231,8 @@
             remainingBalance: remainingBalance,
             invoiceDateString: invoiceDateString,
             shippingTotal: shippingTotal,
-            isAnonymous:  isAnonymous
+            isAnonymous:  isAnonymous,
+            prefixedInvoiceNumber: prefixedInvoiceNumber
         };
     }());
 

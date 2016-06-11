@@ -8,10 +8,12 @@
     using Core.Services;
     using Providers;
 
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// The invoice data service.
     /// </summary>
-    internal class InvoiceDataService : IInvoiceDataService
+    internal class InvoiceDataService : DataServiceBase, IInvoiceDataService
     {
         /// <summary>
         /// The merchello context.
@@ -47,7 +49,9 @@
         /// </returns>
         public IEnumerable<IInvoice> GetAll()
         {
-            return new InvoiceService().GetPage(1, 100).Items;
+            return MerchelloContext.HasCurrent
+                       ? MerchelloContext.Current.Services.InvoiceService.GetPage(1, 100).Items
+                       : new InvoiceService(Logger.CreateWithDefaultLog4NetConfiguration()).GetPage(1, 100).Items;
         }
 
 

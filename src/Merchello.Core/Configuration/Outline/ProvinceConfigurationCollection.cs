@@ -8,6 +8,14 @@
     public class ProvinceConfigurationCollection : ConfigurationElementCollection
     {
         /// <summary>
+        /// Gets the <see cref="ProvinceElement"/> with the index of index from the collection
+        /// </summary>
+        public ProvinceElement this[object index]
+        {
+            get { return (ProvinceElement)this.BaseGet(index); }
+        } 
+
+        /// <summary>
         /// The create new element.
         /// </summary>
         /// <returns>
@@ -31,13 +39,5 @@
         {
             return ((ProvinceElement)element).Code;
         }
-
-        /// <summary>
-        /// Gets the <see cref="ProvinceElement"/> with the index of index from the collection
-        /// </summary>
-        public ProvinceElement this[object index]
-        {
-            get { return (ProvinceElement)this.BaseGet(index); }
-        } 
     }
 }

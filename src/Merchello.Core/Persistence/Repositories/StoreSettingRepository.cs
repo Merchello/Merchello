@@ -12,14 +12,17 @@
     using Querying;    
     using Umbraco.Core;
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
+    using Umbraco.Core.Persistence.SqlSyntax;
+
     using UnitOfWork;
 
     /// <summary>
     /// Represents the Store Settings Repository
     /// </summary>
-    internal class StoreSettingRepository :  MerchelloPetaPocoRepositoryBase<IStoreSetting>, IStoreSettingRepository
+    internal class StoreSettingRepository : MerchelloPetaPocoRepositoryBase<IStoreSetting>, IStoreSettingRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StoreSettingRepository"/> class.
@@ -30,8 +33,14 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public StoreSettingRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache)
-            : base(work, cache)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntax">
+        /// The SQL Syntax.
+        /// </param>
+        public StoreSettingRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+            : base(work, cache, logger, sqlSyntax)
         {            
         }
 
@@ -44,7 +53,7 @@
         /// <returns>The next invoice number</returns>
         public int GetNextInvoiceNumber(Guid storeSettingKey, Func<int> validate, int invoicesCount = 1)
         {
-            Mandate.ParameterCondition(1 >= invoicesCount, "invoicesCount");
+            Mandate.ParameterCondition(1 <= invoicesCount, "invoicesCount");
 
             var setting = Get(storeSettingKey);
             if (string.IsNullOrEmpty(setting.Value)) setting.Value = "1";
@@ -213,7 +222,7 @@
         {
             var sql = new Sql();
             sql.Select(isCount ? "COUNT(*)" : "*")
-                .From<StoreSettingDto>();
+                .From<StoreSettingDto>(SqlSyntax);
 
             return sql;
         }

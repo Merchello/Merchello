@@ -26,6 +26,12 @@
                     $scope.defaultWarehouseCatalog = {};
 
                     function init() {
+                       /* $scope.$watch('settings', function(nv, ov) {
+                            if (nv !== undefined) {
+                                console.info($scope.settings);
+                            }
+                        })*/
+
                         var promiseWarehouse = warehouseResource.getDefaultWarehouse();
                         promiseWarehouse.then(function (warehouse) {
                             $scope.defaultWarehouse = warehouseDisplayBuilder.transform(warehouse);

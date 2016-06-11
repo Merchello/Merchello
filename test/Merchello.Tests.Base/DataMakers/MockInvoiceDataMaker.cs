@@ -3,12 +3,16 @@ using Merchello.Core.Models;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    using System;
+    using System.Configuration;
     using System.Linq;
     using System.Runtime.CompilerServices;
 
     using Merchello.Core.Gateways.Shipping;
+    using Merchello.Core.Persistence;
     using Merchello.Core.Services;
     using Merchello.Tests.Base.Mocks;
+    using Merchello.Tests.Base.SqlSyntax;
 
     public class MockInvoiceDataMaker : MockDataMakerBase
     {
@@ -22,7 +26,7 @@ namespace Merchello.Tests.Base.DataMakers
                     Name = "Unpaid",
                     SortOrder = 0
                 };
-            var invoice = new Invoice(status);
+            var invoice = new Invoice(status) { CurrencyCode = "USD" };
             invoice.SetBillingAddress(billTo);
             invoice.Total = total;
 
@@ -53,9 +57,14 @@ namespace Merchello.Tests.Base.DataMakers
                 CountryCode = "US",
             };
 
+            var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
 
+            // sets up the Umbraco SqlSyntaxProvider Singleton OBSOLETE
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
 
-            var invoiceService = new InvoiceService();
+            var sqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
+
+            var invoiceService = new InvoiceService(TestLogger, sqlSyntaxProvider);
 
             var invoice = invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
 

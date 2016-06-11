@@ -8,7 +8,7 @@
     /// <summary>
     /// Defines a CachedCustomerQuery
     /// </summary>
-    public interface ICachedCustomerQuery
+    public interface ICachedCustomerQuery : ICachedCollectionQuery
     {
         /// <summary>
         /// Gets an <see cref="CustomerDisplay"/> by it's key
@@ -89,5 +89,6 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay Search(DateTime lastActivityDateStart, DateTime lastActivityDateEnd, long page, long itemsPerPage, string sortBy = "loginName", SortDirection sortDirection = SortDirection.Ascending);
+
     }
 }

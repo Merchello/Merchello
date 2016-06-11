@@ -1,44 +1,101 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using Merchello.Core.Models;
-using Merchello.Core.Persistence;
-using Merchello.Core.Persistence.Querying;
-using Merchello.Core.Persistence.UnitOfWork;
-using Umbraco.Core;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Services
+﻿namespace Merchello.Core.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Threading;
+
+    using Merchello.Core.Events;
+    using Merchello.Core.Models;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
+
+    using Umbraco.Core;
+    using Umbraco.Core.Events;
+    using Umbraco.Core.Logging;
+
     /// <summary>
     /// Represents the PaymentMethodService
     /// </summary>
-    internal class PaymentMethodService : IPaymentMethodService
+    internal class PaymentMethodService : MerchelloRepositoryService, IPaymentMethodService
     {
-
-        private readonly IDatabaseUnitOfWorkProvider _uowProvider;
-        private readonly RepositoryFactory _repositoryFactory;
-
         private static readonly ReaderWriterLockSlim Locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-         public PaymentMethodService()
-            : this(new RepositoryFactory())
-        { }
+        #region Constructor
 
-        public PaymentMethodService(RepositoryFactory repositoryFactory)
-            : this(new PetaPocoUnitOfWorkProvider(), repositoryFactory)
-        { }
-
-        public PaymentMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory)
-        {
-            Mandate.ParameterNotNull(provider, "provider");
-            Mandate.ParameterNotNull(repositoryFactory, "repositoryFactory");
-
-            _uowProvider = provider;
-            _repositoryFactory = repositoryFactory;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentMethodService"/> class.
+        /// </summary>
+        public PaymentMethodService()
+            : this(LoggerResolver.Current.Logger)
+        {            
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentMethodService"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public PaymentMethodService(ILogger logger)
+            : this(new RepositoryFactory(), logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentMethodService"/> class.
+        /// </summary>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public PaymentMethodService(RepositoryFactory repositoryFactory, ILogger logger)
+            : this(new PetaPocoUnitOfWorkProvider(logger), repositoryFactory, logger)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public PaymentMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger)
+            : this(provider, repositoryFactory, logger, new TransientMessageFactory())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentMethodService"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="repositoryFactory">
+        /// The repository factory.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="eventMessagesFactory">
+        /// The event messages factory.
+        /// </param>
+        public PaymentMethodService(IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger, IEventMessagesFactory eventMessagesFactory)
+            : base(provider, repositoryFactory, logger, eventMessagesFactory)
+        {
+        }
+
+        #endregion
 
         /// <summary>
         /// Attempts to create a <see cref="IPaymentMethod"/> for a given provider.  If the provider already 
@@ -74,8 +131,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentMethodRepository(uow))
                 {
                     repository.AddOrUpdate(paymentMethod);
                     uow.Commit();
@@ -103,8 +160,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentMethodRepository(uow))
                 {
                     repository.AddOrUpdate(paymentMethod);
                     uow.Commit();
@@ -126,8 +183,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentMethodRepository(uow))
                 {
                     foreach (var paymentMethod in paymentMethodsArray)
                     {
@@ -156,8 +213,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentMethodRepository(uow))
                 {
                     repository.Delete(paymentMethod);
                     uow.Commit();
@@ -180,8 +237,8 @@ namespace Merchello.Core.Services
 
             using (new WriteLock(Locker))
             {
-                var uow = _uowProvider.GetUnitOfWork();
-                using (var repository = _repositoryFactory.CreatePaymentMethodRepository(uow))
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreatePaymentMethodRepository(uow))
                 {
                     foreach (var method in methods)
                     {
@@ -202,7 +259,7 @@ namespace Merchello.Core.Services
         /// <returns><see cref="IPaymentMethod"/></returns>
         public IPaymentMethod GetByKey(Guid key)
         {
-            using (var repository = _repositoryFactory.CreatePaymentMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.Get(key);
             }
@@ -215,7 +272,7 @@ namespace Merchello.Core.Services
         /// <returns>A collection of <see cref="IPaymentMethod"/></returns>
         public IEnumerable<IPaymentMethod> GetPaymentMethodsByProviderKey(Guid providerKey)
         {
-            using (var repository = _repositoryFactory.CreatePaymentMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IPaymentMethod>.Builder.Where(x => x.ProviderKey == providerKey);
 
@@ -230,7 +287,7 @@ namespace Merchello.Core.Services
         /// <param name="paymentCode">The paymentCode</param>
         public IPaymentMethod GetPaymentMethodByPaymentCode(Guid providerKey, string paymentCode)
         {
-            using (var repository = _repositoryFactory.CreatePaymentMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 var query =
                     Query<IPaymentMethod>.Builder.Where(
@@ -245,7 +302,7 @@ namespace Merchello.Core.Services
         /// </summary>
         public IEnumerable<IPaymentMethod> GetAll()
         {
-            using (var repository = _repositoryFactory.CreatePaymentMethodRepository(_uowProvider.GetUnitOfWork()))
+            using (var repository = RepositoryFactory.CreatePaymentMethodRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
             }
