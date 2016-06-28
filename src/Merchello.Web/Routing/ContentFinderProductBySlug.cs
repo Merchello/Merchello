@@ -1,15 +1,10 @@
 ﻿namespace Merchello.Web.Routing
 {
-    using System.Globalization;
-    using System.Linq;
-    using System.Net.Mime;
-
     using Merchello.Core;
     using Merchello.Core.Configuration;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
-    using Umbraco.Web;
     using Umbraco.Web.Routing;
 
     /// <summary>

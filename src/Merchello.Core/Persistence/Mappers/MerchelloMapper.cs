@@ -101,7 +101,7 @@ namespace Merchello.Core.Persistence.Mappers
         {
             //var mapper = Mappers.FirstOrDefault(x => x.Key == entityType).Value;
             Type mapper;
-            MapperCache.TryGetValue(entityType, out  mapper);
+            MapperCache.TryGetValue(entityType, out mapper);
 
             if (mapper == null)
             {

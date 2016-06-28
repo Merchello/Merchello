@@ -27,9 +27,8 @@
 
         // removes the product options choice
         function removeAttributeChoice(idx) {
-            console.info(idx);
             if(idx >= 0) {
-                this.choices.splice(idx, 1);
+               this.choices.splice(idx, 1);
             }
         }
 
