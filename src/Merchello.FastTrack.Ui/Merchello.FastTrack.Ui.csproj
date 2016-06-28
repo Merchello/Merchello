@@ -514,7 +514,9 @@
     <Content Include="Config\404handlers.config" />
     <Content Include="Views\Shared\_Address.cshtml" />
     <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
-    <Content Include="App_Plugins\Merchello\config\merchello.config" />
+    <Content Include="App_Plugins\Merchello\config\merchello.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\BillingAddressForm.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\ShippingAddressForm.cshtml" />
@@ -560,6 +562,7 @@
     <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerSalesHistory.cshtml" />
     <Content Include="App_Plugins\Merchello\Views\WishList\WishListForm.cshtml" />
     <Content Include="Views\Category.cshtml" />
+    <Content Include="Views\Merchello\Notification\OrderConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
