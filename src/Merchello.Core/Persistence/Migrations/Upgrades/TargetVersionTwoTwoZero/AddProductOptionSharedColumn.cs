@@ -13,7 +13,7 @@
     /// <summary>
     /// Adds the "shared" field to the merchProductOption table for shared option refactoring.
     /// </summary>
-    [Migration("2.1.0", "2.2.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("2.1.0", "2.2.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddProductOptionSharedColumn : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
