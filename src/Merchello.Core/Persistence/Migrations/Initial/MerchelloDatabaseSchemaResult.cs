@@ -101,6 +101,11 @@
                 return new Version(1, 14, 1);
             }
 
+            if (!this.ValidColumns.Contains("merchProductOption,shared"))
+            {
+                return new Version(2, 1, 0);
+            }
+
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))

@@ -16,13 +16,66 @@
     [KnownType(typeof(ProductAttribute))]
     public class ProductAttributeCollection : NotifiyCollectionBase<Guid, IProductAttribute>
     {
+        /// <summary>
+        /// The thread locker.
+        /// </summary>
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IProductAttribute item)
+        /// <summary>
+        /// The equals comparison.
+        /// </summary>
+        /// <param name="compare">
+        /// The compare.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Equals(ProductAttributeCollection compare)
         {
-            return item.Key;
+            return Count == compare.Count && compare.All(item => Contains(item.Key));
         }
 
+        /// <summary>
+        /// Gets the index of a given key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public override int IndexOfKey(Guid key)
+        {
+            for (var i = 0; i < Count; i++)
+            {
+                if (this[i].Key == key)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Performs the contains operation based off the option choice SKU.
+        /// </summary>
+        /// <param name="sku">
+        /// The SKU.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Contains(string sku)
+        {
+            return this.Any(x => x.Sku == sku);
+        }
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
         internal new void Add(IProductAttribute item)
         {
             using (new WriteLock(_addLocker))
@@ -46,35 +99,19 @@
             }
         }
 
-        public bool Equals(ProductAttributeCollection compare)
+        /// <summary>
+        /// The get key for item.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        protected override Guid GetKeyForItem(IProductAttribute item)
         {
-            return Count == compare.Count && compare.All(item => Contains(item.Key));
+            return item.Key;
         }
-
-        public override int IndexOfKey(Guid key)
-        {
-            for (var i = 0; i < Count; i++)
-            {
-                if (this[i].Key == key)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-
-        public bool Contains(string sku)
-        {
-            return this.Any(x => x.Sku == sku);
-        }
-
-        //public bool Contains(Guid key)
-        //{
-        //    return this.Any(x => x.Key == key);
-        //}
-
-        
 
     }
 }

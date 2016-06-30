@@ -27,6 +27,11 @@
         public bool Required { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the option is shared option.
+        /// </summary>
+        public bool Shared { get; set; }
+
+        /// <summary>
         /// Gets or sets the sort order.
         /// </summary>
         public int SortOrder { get; set; }

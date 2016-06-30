@@ -11,6 +11,7 @@
         self.key = '';
         self.name = '';
         self.required = true;
+        self.shared = false;
         self.sortOrder = 1;
         self.choices = [];
     };
