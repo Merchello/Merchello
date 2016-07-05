@@ -3589,6 +3589,7 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         $scope.detachedContentTypes = [];
         $scope.args =  { test: 'action hit' };
 
+        $scope.title = '';
         $scope.edit = editContentType;
         $scope.delete = deleteContentType;
 
@@ -3596,11 +3597,22 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
 
         function init() {
             $scope.debugAllowDelete = Umbraco.Sys.ServerVariables.isDebuggingEnabled;
-            loadDetachedContentTypes();
+
+            var langKey =  $scope.entityType === 'Product' ? 'productContentTypes' : 'productOptionContentTypes';
+
+            console.info($scope.entityType);
+
+            localizationService.localize('merchelloDetachedContent_' + langKey).then(function(result) {
+               $scope.title = result;
+                loadDetachedContentTypes();
+            });
+
         }
 
         function loadDetachedContentTypes() {
+
             detachedContentResource.getDetachedContentTypeByEntityType($scope.entityType).then(function(results) {
+
                 $scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
