@@ -649,7 +649,8 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
-    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionSharedColumn.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductAttributeColumns.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteAuthorColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteInternalOnlyColumn.cs" />
@@ -660,6 +661,7 @@
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductOptionRepository.cs" />
     <Compile Include="Persistence\Repositories\NoteRepository.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\DetachedContentTypeRepository.cs" />
@@ -680,6 +682,7 @@
     <Compile Include="Persistence\Repositories\OfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\OfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\ProductOptionRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
     <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs">

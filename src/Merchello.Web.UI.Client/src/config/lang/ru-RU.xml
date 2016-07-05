@@ -109,6 +109,7 @@
     <key alias="salesOverTime">Продажи за период</key>
     <key alias="salesByItem">Продажи по товарам</key>
     <key alias="abandonedBasket">Брошенные корзины</key>
+    <key alias="contentTypes">Content Types</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Анонимные корзины</key>
@@ -194,6 +195,7 @@
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Выберите тип документа</key>
+    <key alias="contentTypes">Content Types</key>
     <key alias="productContentTypes">Типы документов для товаров</key>
     <key alias="slug">Ключ URL</key>
     <key alias="slugDescription">Ключи URL явлются фрагментами адреса страницы товара.</key>
@@ -213,6 +215,13 @@
     <key alias="noProductContentType"><![CDATA[
       <h5>Вы не выбрали тип документа для товаров</h5>
     ]]></key>
+    <key alias="productOptionContentTypes">Product Option Content Types</key>
+    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="noProductOptionContentType">
+      <![CDATA[
+      <h5>You have not selected a product option content type</h5>
+    ]]>
+    </key>
     <key alias="deleteWarning"><![CDATA[
     Эта операция также удалит ВСЕ значения дополнительных свойств, сопоставленных товарам этого типа.
     ]]></key>

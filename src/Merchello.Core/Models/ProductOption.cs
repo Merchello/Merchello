@@ -1,8 +1,11 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Specialized;
+    using System.Reflection;
     using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -12,6 +15,28 @@
     [DataContract(IsReference = true)]
     public sealed class ProductOption : Entity, IProductOption
     {
+
+        /// <summary>
+        /// The name selector.
+        /// </summary>
+        private static readonly PropertyInfo NameSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.Name);
+
+        /// <summary>
+        /// The required selector.
+        /// </summary>
+        private static readonly PropertyInfo RequiredSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Required);
+
+        /// <summary>
+        /// The shared selector.
+        /// </summary>
+        private static readonly PropertyInfo SharedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Shared);
+
+        /// <summary>
+        /// The product attribute collection changed selector.
+        /// </summary>
+        private static readonly PropertyInfo ProductAttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
+
+
         /// <summary>
         /// The name.
         /// </summary>
@@ -26,6 +51,11 @@
         /// The value indicating whether or not the option is a shared option.
         /// </summary>
         private bool _shared;
+
+        /// <summary>
+        /// The detached content type.
+        /// </summary>
+        private IDetachedContentType _detachedContentType;
 
         /// <summary>
         /// The option choices collection.
@@ -96,7 +126,14 @@
 
             set
             {
-                _name = value;
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _name = value;
+                        return _name;
+                    },
+                _name,
+                NameSelector);
             }
         }
 
@@ -116,14 +153,20 @@
 
             set
             {
-                _required = value;
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _required = value;
+                        return _required;
+                    },
+                _required,
+                RequiredSelector);
             }
         }
 
         /// <summary>
         /// Gets or sets the order in which to list product option with respect to its product association
         /// </summary>
-        /// TODO RSS this should be on the product association
         [DataMember]
         public int SortOrder { get; set; }
 
@@ -145,6 +188,22 @@
         }
 
         /// <summary>
+        /// Gets the detached content type.
+        /// </summary>
+        public IDetachedContentType DetachedContentType
+        {
+            get
+            {
+                return _detachedContentType;
+            }
+
+            internal set
+            {
+                _detachedContentType = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the choices (product attributes) associated with this option
         /// </summary>
         [DataMember]
@@ -152,13 +211,34 @@
         {
             get
             {
+
                 return _choices;
             }
 
             set
-            { 
-                _choices = value;                
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                _choices = value;
+                _choices.CollectionChanged += ChoiceCollectionChanged;       
             }
+        }
+
+        /// <summary>
+        /// Handles the Choice Collection Changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ChoiceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.OnPropertyChanged(ProductAttributesChangedSelector);
         }
     }
 }

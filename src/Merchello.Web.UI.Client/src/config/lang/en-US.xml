@@ -106,6 +106,7 @@
     <key alias="salesOverTime">Sales Over Time</key>
     <key alias="salesByItem">Sales By Item</key>
     <key alias="abandonedBasket">Abandoned Basket</key>
+    <key alias="contentTypes">Content Types</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Anonymous Baskets</key>
@@ -192,6 +193,7 @@
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
+    <key alias="contentTypes">Content Types</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="slug">URL Slug</key>
     <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
@@ -211,6 +213,13 @@
     <key alias="noProductContentType">
       <![CDATA[
       <h5>You have not selected a product content type</h5>
+    ]]>
+    </key>
+    <key alias="productOptionContentTypes">Product Option Content Types</key>
+    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="noProductOptionContentType">
+      <![CDATA[
+      <h5>You have not selected a product option content type</h5>
     ]]>
     </key>
     <key alias="deleteWarning">

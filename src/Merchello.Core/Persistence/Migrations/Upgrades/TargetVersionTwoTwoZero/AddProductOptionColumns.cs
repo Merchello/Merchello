@@ -13,26 +13,37 @@
     /// <summary>
     /// Adds the "shared" field to the merchProductOption table for shared option refactoring.
     /// </summary>
-    [Migration("2.1.0", "2.2.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
-    public class AddProductOptionSharedColumn : MerchelloMigrationBase, IMerchelloMigration
+    [Migration("2.2.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    public class AddProductOptionColumns : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
-        /// Updates the merchProductOption table adding the shared bit field.
+        /// Updates the merchProductOption table adding the shared and detached content type key fields.
         /// </summary>
         public override void Up()
         {
             var database = ApplicationContext.Current.DatabaseContext.Database;
             var columns = SqlSyntax.GetColumnsInSchema(database).ToArray();
 
-            if (
-              columns.Any(
+            // 'shared' column
+            if (columns.Any(
                   x => x.TableName.InvariantEquals("merchProductOption") && x.ColumnName.InvariantEquals("shared"))
               == false)
             {
-                Logger.Info(typeof(AddProductOptionSharedColumn), "Adding shared column to merchProductOption table.");
+                Logger.Info(typeof(AddProductOptionColumns), "Adding shared column to merchProductOption table.");
 
-                //// Add the new currency code column
+                //// Add the new 'shared' column
                 Create.Column("shared").OnTable("merchProductOption").AsBoolean().WithDefaultValue(false);
+            }
+
+            // 'detachedContentType' column
+            if (columns.Any(x => x.TableName.InvariantEquals("merchProductOption") && x.ColumnName.InvariantEquals("detachedContentTypeKey"))
+              == false)
+            {
+                Logger.Info(typeof(AddProductOptionColumns), "Adding detachedContentType column to merchProductOption table.");
+
+                //// Add the new 'shared' column
+                Create.Column("detachedContentTypeKey").OnTable("merchProductOption").AsGuid().Nullable()
+                    .ForeignKey("FK_merchProductOptionDetachedContent_merchProductOption", "merchDetachedContentType", "pk");
             }
         }
 

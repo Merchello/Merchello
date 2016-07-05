@@ -2,6 +2,7 @@
 {
     using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -25,8 +26,11 @@
         bool Required { get; set; }
 
         /// <summary>
-        /// Gets or sets the order in which to list product option with respect to its product association
+        /// Gets or sets the order in which to list product option with respect to its product association.
         /// </summary>
+        /// <remarks>
+        /// This field is stored in the product 2 product option association - cache value should always be null.
+        /// </remarks>
         [DataMember]
         int SortOrder { get; set; }
 
@@ -34,6 +38,11 @@
         /// Gets or sets a value indicating whether this is a shared option.
         /// </summary>
         bool Shared { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IDetachedContentType"/>.
+        /// </summary>
+        IDetachedContentType DetachedContentType { get; }
 
         /// <summary>
         /// Gets or sets the choices (product attributes) associated with this option

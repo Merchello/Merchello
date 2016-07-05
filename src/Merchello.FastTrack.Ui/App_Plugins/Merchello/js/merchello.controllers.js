@@ -6777,7 +6777,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductContentTypeL
 
         function init() {
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
-            $scope.tabs.setActive('productContentTypeList');
+            $scope.tabs.setActive('contentTypeList');
         }
 
         // Initializes the controller

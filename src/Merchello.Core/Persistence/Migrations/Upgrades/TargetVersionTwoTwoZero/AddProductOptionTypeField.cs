@@ -13,7 +13,7 @@
     /// <summary>
     /// Responsible for adding the ProductOption Entity type field key.
     /// </summary>
-    [Migration("2.1.0", "2.2.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("2.2.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddProductOptionTypeField : MerchelloMigrationBase, IMerchelloMigration
     {
 

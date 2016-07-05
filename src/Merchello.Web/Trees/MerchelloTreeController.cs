@@ -161,6 +161,13 @@
                     _textService.Localize("merchelloDetachedContent/productContentType", _culture),
                     false)
                     .LaunchDialogView(DialogsPath + "productcontenttype.add.html", _textService.Localize("merchelloDetachedContent/productContentType", _culture));
+
+                menu.Items.Add<NewProductOptionContentTypeAction>(
+                    _textService.Localize("merchelloDetachedContent/productOptionContentType", _culture),
+                    false)
+                    .LaunchDialogView(
+                        DialogsPath + "productoptioncontenttype.add.html",
+                        _textService.Localize("merchelloDetachedContent/productOptionContentType", _culture));
             }
 
             if (id == "customers")
