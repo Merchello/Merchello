@@ -25,9 +25,6 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
             $scope.debugAllowDelete = Umbraco.Sys.ServerVariables.isDebuggingEnabled;
 
             var langKey =  $scope.entityType === 'Product' ? 'productContentTypes' : 'productOptionContentTypes';
-
-            console.info($scope.entityType);
-
             localizationService.localize('merchelloDetachedContent_' + langKey).then(function(result) {
                $scope.title = result;
                 loadDetachedContentTypes();

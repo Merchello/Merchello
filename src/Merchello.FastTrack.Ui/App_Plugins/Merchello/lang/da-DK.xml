@@ -387,6 +387,7 @@
     <key alias="private">Private</key>
     <key alias="increase">Increase</key>
     <key alias="decrease">Decrease</key>
+    <key alias="associateWith">Associate with</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Standard indstillinger for butik</key>
@@ -606,6 +607,7 @@
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
     <key alias="contentTypes">Content Types</key>
+    <key alias="associateContentType">Associate Content Type</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="slug">URL Slug</key>
     <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>

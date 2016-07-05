@@ -70,6 +70,7 @@
     <key alias="private">Приватный</key>
     <key alias="increase">Увеличить</key>
     <key alias="decrease">Уменьшить</key>
+    <key alias="associateWith">Associate with</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -196,6 +197,7 @@
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Выберите тип документа</key>
     <key alias="contentTypes">Content Types</key>
+    <key alias="associateContentType">Associate Content Type</key>
     <key alias="productContentTypes">Типы документов для товаров</key>
     <key alias="slug">Ключ URL</key>
     <key alias="slugDescription">Ключи URL явлются фрагментами адреса страницы товара.</key>
