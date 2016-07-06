@@ -519,6 +519,7 @@
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
+    <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
@@ -1226,6 +1227,7 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IProductOptionService.cs" />
     <Compile Include="Services\Interfaces\IUaaSItemProviderService.cs" />
     <Compile Include="Logging\ILoggerProvider.cs" />
     <Compile Include="Services\NoteService.cs" />
@@ -1261,6 +1263,7 @@
     <Compile Include="Services\PageCachedServiceBase.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\ProductOptionService.cs" />
     <Compile Include="Services\TaxMethodService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ITaxMethodService.cs" />

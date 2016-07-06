@@ -477,6 +477,20 @@
         }
 
         /// <summary>
+        /// Returns an instance of the <see cref="IProductOptionRepository"/>.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOptionRepository"/>.
+        /// </returns>
+        internal virtual IProductOptionRepository CreateProductOptionRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ProductOptionRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+        }
+
+        /// <summary>
         /// Returns an instance of the <see cref="IProductVariantRepository"/>
         /// </summary>
         /// <param name="uow">

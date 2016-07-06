@@ -37,7 +37,14 @@
         /// <summary>
         /// Gets or sets a value indicating whether this is a shared option.
         /// </summary>
+        [DataMember]
         bool Shared { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shared count - this is the number of products this option is associated with.
+        /// </summary>
+        [DataMember]
+        int SharedCount { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IDetachedContentType"/>.

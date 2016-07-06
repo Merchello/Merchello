@@ -51,6 +51,13 @@
         public bool Shared { get; set; }
 
         /// <summary>
+        /// Gets or sets the shared count.
+        /// </summary>
+        [Column("sharedCount")]
+        [Constraint(Default = "0")]
+        public int SharedCount { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

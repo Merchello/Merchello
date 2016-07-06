@@ -32,6 +32,11 @@
         private static readonly PropertyInfo SharedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Shared);
 
         /// <summary>
+        /// The shared count selector.
+        /// </summary>
+        private static readonly PropertyInfo SharedCountSelector = ExpressionHelper.GetPropertyInfo<ProductOption, int>(x => x.SharedCount);
+
+        /// <summary>
         /// The product attribute collection changed selector.
         /// </summary>
         private static readonly PropertyInfo ProductAttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
@@ -51,6 +56,11 @@
         /// The value indicating whether or not the option is a shared option.
         /// </summary>
         private bool _shared;
+
+        /// <summary>
+        /// The shared count.
+        /// </summary>
+        private int _sharedCount;
 
         /// <summary>
         /// The detached content type.
@@ -183,7 +193,38 @@
 
             set
             {
-                _shared = value;
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _shared = value;
+                        return _shared;
+                    },
+                _shared,
+                SharedSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the shared count - this is the number of products this option is associated with.
+        /// </summary>
+        [DataMember]
+        public int SharedCount
+        {
+            get
+            {
+                return _sharedCount;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _sharedCount = value;
+                        return _sharedCount;
+                    },
+                _sharedCount,
+                SharedCountSelector);
             }
         }
 

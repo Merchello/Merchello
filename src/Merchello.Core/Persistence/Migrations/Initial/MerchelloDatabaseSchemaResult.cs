@@ -101,6 +101,7 @@
             }
 
             if (!this.ValidColumns.Contains("merchProductOption,shared") ||
+                !this.ValidColumns.Contains("merchProductOption,sharedCount") ||
                 !this.ValidColumns.Contains("merchProductOption,detachedContentTypeKey") ||
                 !this.ValidColumns.Contains("merchProductAttribute,detachedContentValues") ||
                 this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.Entity.ProductOptionKey))
