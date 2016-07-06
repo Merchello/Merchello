@@ -108,6 +108,7 @@
     <key alias="salesByItem">Sales By Item</key>
     <key alias="abandonedBasket">Abandoned Basket</key>
     <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Anonymous Baskets</key>
@@ -201,6 +202,7 @@
     <key alias="copyProduct">Copy Product</key>
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
+
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>

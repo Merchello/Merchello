@@ -111,6 +111,7 @@
     <key alias="salesByItem">Продажи по товарам</key>
     <key alias="abandonedBasket">Брошенные корзины</key>
     <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Анонимные корзины</key>

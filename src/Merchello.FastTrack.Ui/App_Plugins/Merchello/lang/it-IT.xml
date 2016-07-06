@@ -54,6 +54,7 @@
     <key alias="salesByItem">Sales By Item</key>
     <key alias="abandonedBasket">Abandoned Basket</key>
     <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Anonymous Baskets</key>
