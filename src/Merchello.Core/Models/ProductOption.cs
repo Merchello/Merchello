@@ -5,7 +5,6 @@
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -15,7 +14,6 @@
     [DataContract(IsReference = true)]
     public sealed class ProductOption : Entity, IProductOption
     {
-
         /// <summary>
         /// The name selector.
         /// </summary>
@@ -37,10 +35,14 @@
         private static readonly PropertyInfo SharedCountSelector = ExpressionHelper.GetPropertyInfo<ProductOption, int>(x => x.SharedCount);
 
         /// <summary>
+        /// The detached content type key selector.
+        /// </summary>
+        private static readonly PropertyInfo DetachedContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<ProductOption, Guid?>(x => x.DetachedContentTypeKey);
+
+        /// <summary>
         /// The product attribute collection changed selector.
         /// </summary>
         private static readonly PropertyInfo ProductAttributesChangedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, ProductAttributeCollection>(x => x.Choices);
-
 
         /// <summary>
         /// The name.
@@ -63,9 +65,9 @@
         private int _sharedCount;
 
         /// <summary>
-        /// The detached content type.
+        /// The detached content type key.
         /// </summary>
-        private IDetachedContentType _detachedContentType;
+        private Guid? _detachedContentTypeKey;
 
         /// <summary>
         /// The option choices collection.
@@ -229,18 +231,26 @@
         }
 
         /// <summary>
-        /// Gets the detached content type.
+        /// Gets or sets the detached content type key.
         /// </summary>
-        public IDetachedContentType DetachedContentType
+        [DataMember]
+        public Guid? DetachedContentTypeKey
         {
             get
             {
-                return _detachedContentType;
+                return _detachedContentTypeKey;
             }
 
-            internal set
+            set
             {
-                _detachedContentType = value;
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _detachedContentTypeKey = value;
+                        return _detachedContentTypeKey;
+                    },
+                _detachedContentTypeKey,
+                DetachedContentTypeKeySelector);
             }
         }
 

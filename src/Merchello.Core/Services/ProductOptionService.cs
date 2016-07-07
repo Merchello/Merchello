@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
 
     using Merchello.Core.Events;
@@ -9,6 +10,7 @@
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
+    using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
@@ -100,6 +102,40 @@
 
         #endregion
 
+        #region Events
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductOptionService, Events.NewEventArgs<IProductOption>> Creating;
+
+        /// <summary>
+        /// Occurs after Create
+        /// </summary>
+        public static event TypedEventHandler<IProductOptionService, Events.NewEventArgs<IProductOption>> Created;
+
+        /// <summary>
+        /// Occurs before Save
+        /// </summary>
+        public static event TypedEventHandler<IProductOptionService, SaveEventArgs<IProductOption>> Saving;
+
+        /// <summary>
+        /// Occurs after Save
+        /// </summary>
+        public static event TypedEventHandler<IProductOptionService, SaveEventArgs<IProductOption>> Saved;
+
+        /// <summary>
+        /// Occurs before Delete
+        /// </summary>		
+        public static event TypedEventHandler<IProductOptionService, DeleteEventArgs<IProductOption>> Deleting;
+
+        /// <summary>
+        /// Occurs after Delete
+        /// </summary>
+        public static event TypedEventHandler<IProductOptionService, DeleteEventArgs<IProductOption>> Deleted;
+
+#endregion
+
         /// <summary>
         /// Creates a <see cref="IProductOption"/> without saving it to the database.
         /// </summary>
@@ -120,7 +156,22 @@
         /// </returns>
         public IProductOption CreateProductOption(string name, bool shared = false, bool required = true, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var option = new ProductOption(name)
+                        {
+                            Shared = shared, 
+                            Required = required
+                        };
+
+            if (raiseEvents)
+            if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IProductOption>(option), this))
+            {
+                option.WasCancelled = true;
+                return option;
+            }
+
+            if (raiseEvents) Created.RaiseEvent(new Events.NewEventArgs<IProductOption>(option), this);
+
+            return option;
         }
 
         /// <summary>
@@ -147,7 +198,11 @@
             bool required = true,
             bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var option = CreateProductOption(name, shared, required, raiseEvents);
+
+            Save(option);
+
+            return option;
         }
 
         /// <summary>
@@ -156,9 +211,29 @@
         /// <param name="option">
         /// The option to be saved
         /// </param>
-        public void Save(IProductOption option)
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
+        public void Save(IProductOption option, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            if (raiseEvents)
+                if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IProductOption>(option), this))
+                {
+                    ((ProductOption)option).WasCancelled = true;
+                    return;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+                    repository.AddOrUpdate(option);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProductOption>(option), this);
         }
 
         /// <summary>
@@ -167,9 +242,28 @@
         /// <param name="options">
         /// The collection of product options to be saved
         /// </param>
-        public void Save(IEnumerable<IProductOption> options)
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
+        public void Save(IEnumerable<IProductOption> options, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var optionsArray = options as IProductOption[] ?? options.ToArray();
+            if (raiseEvents) Saving.RaiseEvent(new SaveEventArgs<IProductOption>(optionsArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+                    foreach (var option in optionsArray)
+                    {
+                        repository.AddOrUpdate(option);
+                    }
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProductOption>(optionsArray), this);
         }
 
         /// <summary>
@@ -178,13 +272,34 @@
         /// <param name="option">
         /// The option to be deleted
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
         /// <remarks>
         /// This performs a check to ensure the option is valid to be deleted
         /// </remarks>
-        public void Delete(IProductOption option)
+        public void Delete(IProductOption option, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            if (raiseEvents)
+                if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IProductOption>(option), this))
+                {
+                    ((ProductOption)option).WasCancelled = true;
+                    return;
+                }
+
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+                    repository.Delete(option);
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductOption>(option), this);
         }
+
 
         /// <summary>
         /// Deletes a collection of product options
@@ -192,12 +307,33 @@
         /// <param name="options">
         /// The collection of product options to be deleted
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
         /// <remarks>
         /// This performs a check to ensure the option is valid to be deleted
         /// </remarks>
-        public void Delete(IEnumerable<IProductOption> options)
+        public void Delete(IEnumerable<IProductOption> options, bool raiseEvents = true)
         {
-            throw new NotImplementedException();
+            var optionsArray = options as IProductOption[] ?? options.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProductOption>(optionsArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+                    foreach (var option in optionsArray)
+                    {
+                        repository.Delete(option);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductOption>(optionsArray), this);
         }
 
         /// <summary>
@@ -211,7 +347,10 @@
         /// </returns>
         public IProductOption GetByKey(Guid key)
         {
-            throw new NotImplementedException();
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.Get(key);
+            }
         }
 
 
@@ -226,7 +365,10 @@
         /// </returns>
         public IEnumerable<IProductOption> GetByKeys(IEnumerable<Guid> keys)
         {
-            throw new NotImplementedException();
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys.ToArray());
+            }
         }
 
         /// <summary>
@@ -281,6 +423,20 @@
             SortDirection sortDirection = SortDirection.Descending)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets all the product options.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductOption}"/>.
+        /// </returns>
+        internal IEnumerable<IProductOption> GetAll()
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll();
+            }
         }
     }
 }

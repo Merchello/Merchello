@@ -218,6 +218,8 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
 
+            SaveProductAttributes(entity);
+
             entity.ResetDirtyProperties();
         }
 
@@ -233,7 +235,10 @@
 
             var factory = new ProductOptionFactory();
             var dto = factory.BuildDto(entity);
+
             Database.Update(dto);
+
+            SaveProductAttributes(entity);
 
             entity.ResetDirtyProperties();
         }
@@ -248,6 +253,125 @@
         {
             if (EnsureSharedDelete(entity))
             base.PersistDeletedItem(entity);
+        }
+
+
+        /// <summary>
+        /// Gets the product attribute collection.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
+        private ProductAttributeCollection GetProductAttributeCollection(Guid optionKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+               .From<ProductAttributeDto>(SqlSyntax)
+               .Where<ProductAttributeDto>(x => x.OptionKey == optionKey);
+
+            var dtos = Database.Fetch<ProductAttributeDto>(sql);
+
+            var attributes = new ProductAttributeCollection();
+            var factory = new ProductAttributeFactory();
+
+            foreach (var dto in dtos)
+            {
+                var attribute = factory.BuildEntity(dto);
+                attributes.Add(attribute);
+            }
+            return attributes;
+        }
+
+        /// <summary>
+        /// Deletes a product attribute.
+        /// </summary>
+        /// <param name="productAttribute">
+        /// The product attribute.
+        /// </param>
+        private void DeleteProductAttribute(IProductAttribute productAttribute)
+        {
+            //// We want ProductVariant events to trigger on a ProductVariant Delete
+            //// and we need to delete all variants that had the attribute that is to be deleted so the current solution
+            //// is to delete all associations from the merchProductVariant2ProductAttribute table so that the follow up
+            //// EnsureProductVariantsHaveAttributes called in the ProductVariantService cleans up the orphaned variants and fires off
+            //// the events
+
+            Database.Execute(
+                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE productAttributeKey = @Key)",
+                new { Key = productAttribute.Key });
+
+            Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
+        }
+
+
+        /// <summary>
+        /// Saves the attribute collection.
+        /// </summary>
+        /// <param name="option">
+        /// The product option.
+        /// </param>
+        private void SaveProductAttributes(IProductOption option)
+        {
+            if (!option.Choices.Any()) return;
+
+            var existing = GetProductAttributeCollection(option.Key);
+
+            //// Ensure all ids are in the new list
+            var resetSorts = false;
+            foreach (var ex in existing)
+            { 
+                if (option.Choices.Contains(ex.Key)) continue;
+                DeleteProductAttribute(ex);
+                resetSorts = true;
+            }
+
+            if (resetSorts)
+            {
+                var count = 1;
+                foreach (var att in option.Choices.OrderBy(x => x.SortOrder))
+                {
+                    att.SortOrder = count;
+                    att.OptionKey = option.Key;
+                    option.Choices.Add(att);
+                    count = count + 1;
+                }
+            }
+
+            option.Choices.ForEach(SaveProductAttribute);
+
+
+            //// TODO RSS need to raise an event here to clear caches and reindex products
+        }
+
+        /// <summary>
+        /// Saves a product attribute.
+        /// </summary>
+        /// <param name="att">
+        /// The product attribute.
+        /// </param>
+        private void SaveProductAttribute(IProductAttribute att)
+        {
+            var factory = new ProductAttributeFactory();
+
+            if (!att.HasIdentity)
+            {
+                att.UseCount = 0;
+                att.CreateDate = DateTime.Now;
+                att.UpdateDate = DateTime.Now;
+
+                var dto = factory.BuildDto(att);
+                Database.Insert(dto);
+                att.Key = dto.Key;
+            }
+            else
+            {
+                ((Entity)att).UpdatingEntity();
+                var dto = factory.BuildDto(att);
+                Database.Update(dto);
+            }
         }
 
         /// <summary>

@@ -25,6 +25,7 @@
                     SortOrder = dto.Product2ProductOptionDto.SortOrder,
                     Required = dto.Required,
                     Shared = dto.Shared,
+                    DetachedContentTypeKey = dto.DetachedContentTypeKey,
                     SharedCount = dto.SharedCount,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
@@ -51,6 +52,7 @@
                     Name = entity.Name,
                     Required = entity.Required,
                     Shared = entity.Shared,
+                    DetachedContentTypeKey = entity.DetachedContentTypeKey,
                     SharedCount = entity.SharedCount,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate

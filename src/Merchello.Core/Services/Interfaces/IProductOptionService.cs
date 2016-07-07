@@ -60,7 +60,11 @@
         /// <param name="option">
         /// The option to be saved
         /// </param>
-        void Save(IProductOption option);
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
+        void Save(IProductOption option, bool raiseEvents = true);
+
 
         /// <summary>
         /// Saves a collection of product options
@@ -68,7 +72,11 @@
         /// <param name="options">
         /// The collection of product options to be saved
         /// </param>
-        void Save(IEnumerable<IProductOption> options);
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
+        void Save(IEnumerable<IProductOption> options, bool raiseEvents = true);
+
 
         /// <summary>
         /// Deletes a product option
@@ -76,10 +84,13 @@
         /// <param name="option">
         /// The option to be deleted
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
         /// <remarks>
         /// This performs a check to ensure the option is valid to be deleted
         /// </remarks>
-        void Delete(IProductOption option);
+        void Delete(IProductOption option, bool raiseEvents = true);
 
         /// <summary>
         /// Deletes a collection of product options
@@ -87,10 +98,13 @@
         /// <param name="options">
         /// The collection of product options to be deleted
         /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
         /// <remarks>
         /// This performs a check to ensure the option is valid to be deleted
         /// </remarks>
-        void Delete(IEnumerable<IProductOption> options);
+        void Delete(IEnumerable<IProductOption> options, bool raiseEvents = true);
 
         /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Models
 {
+    using System;
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.DetachedContent;
@@ -47,9 +48,9 @@
         int SharedCount { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="IDetachedContentType"/>.
+        /// Gets or sets the detached content type key.
         /// </summary>
-        IDetachedContentType DetachedContentType { get; }
+        Guid? DetachedContentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the choices (product attributes) associated with this option

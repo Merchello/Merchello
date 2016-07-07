@@ -34,7 +34,7 @@
         [Column("detachedContentTypeKey")]
         [ForeignKey(typeof(DetachedContentTypeDto), Name = "FK_merchProductOptionDetachedContent_merchProductOption", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public Guid DetachedContentTypeKey { get; set; }
+        public Guid? DetachedContentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether required.
@@ -71,11 +71,6 @@
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the detached content type.
-        /// </summary>
-        [ResultColumn]
-        public DetachedContentTypeDto DetachedContentType { get; set; }
 
         /// <summary>
         /// Gets or sets the result for product to product option association.

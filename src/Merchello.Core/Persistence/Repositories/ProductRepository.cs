@@ -1640,7 +1640,8 @@
             var factory = new ProductAttributeFactory();
 
             if (!productAttribute.HasIdentity)
-            {                
+            {
+                productAttribute.UseCount = 1;
                 productAttribute.CreateDate = DateTime.Now;
                 productAttribute.UpdateDate = DateTime.Now;
 
