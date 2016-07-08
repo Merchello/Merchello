@@ -128,6 +128,7 @@
         /// </returns>
         IEnumerable<IProductOption> GetByKeys(IEnumerable<Guid> keys);
 
+
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
         /// </summary>
@@ -143,10 +144,14 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="sharedOnly">
+        /// The shared Only.
+        /// </param>
         /// <returns>
         /// The <see cref="Page{IProductOption}"/>.
         /// </returns>
-        Page<IProductOption> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+        Page<IProductOption> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool sharedOnly = true);
+
 
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
@@ -155,20 +160,23 @@
         /// A search term to filter by
         /// </param>
         /// <param name="page">
-        /// The page.
+        /// The page requested.
         /// </param>
         /// <param name="itemsPerPage">
-        /// The items per page.
+        /// The number of items per page.
         /// </param>
         /// <param name="sortBy">
-        /// The sort by.
+        /// The sort by field.
         /// </param>
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="sharedOnly">
+        /// Indicates whether or not to only include shared option.
+        /// </param>
         /// <returns>
         /// The <see cref="Page{IProductOption}"/>.
         /// </returns>
-        Page<IProductOption> GetPage(string term, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+        Page<IProductOption> GetPage(string term, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool sharedOnly = true);
     }
 }

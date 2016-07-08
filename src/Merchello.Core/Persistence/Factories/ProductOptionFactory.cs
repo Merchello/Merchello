@@ -22,7 +22,7 @@
             var option = new ProductOption(dto.Name, dto.Required)
                 {
                     Key = dto.Key,
-                    SortOrder = dto.Product2ProductOptionDto.SortOrder,
+                    SortOrder = dto.Product2ProductOptionDto == null ? 0 : dto.Product2ProductOptionDto.SortOrder,
                     Required = dto.Required,
                     Shared = dto.Shared,
                     DetachedContentTypeKey = dto.DetachedContentTypeKey,

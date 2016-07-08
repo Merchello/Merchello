@@ -79,6 +79,60 @@
         }
 
         /// <summary>
+        /// Gets a page of <see cref="IProductOption"/>.
+        /// </summary>
+        /// <param name="term">
+        /// A search term to filter by
+        /// </param>
+        /// <param name="page">
+        /// The page requested.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The number of items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="sharedOnly">
+        /// Indicates whether or not to only include shared option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IProductOption}"/>.
+        /// </returns>
+        public Page<IProductOption> GetPage(
+            string term,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending,
+            bool sharedOnly = true)
+        {
+            var sql = BuildSearchSql(term, sharedOnly);
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                sql.Append(sortDirection == SortDirection.Ascending
+                    ? string.Format("ORDER BY {0} ASC", sortBy)
+                    : string.Format("ORDER BY {0} DESC", sortBy));
+            }
+
+
+            var p = Database.Page<ProductOptionDto>(page, itemsPerPage, sql);
+
+            return new Page<IProductOption>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(x => Get(x.Key)).ToList()
+            };
+        }
+
+        /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.
         /// </summary>
         /// <param name="key">
@@ -257,6 +311,33 @@
 
 
         /// <summary>
+        /// Ensures duplicate SKUs do not exist.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <param name="att">
+        /// The att.
+        /// </param>
+        /// <param name="index">
+        /// The index.
+        /// </param>
+        private static void EnsureAttributeSku(IProductOption option, IProductAttribute att, int index = 1)
+        {
+            if (option.Choices.Count(x => x.Sku == att.Sku) == 1) return;
+
+            if (option.Choices.All(x => x.Sku != string.Concat(att.Sku, index)))
+            {
+                att.Sku = string.Concat(att.Sku, index);
+                return;
+            }
+
+            index++;
+
+            EnsureAttributeSku(option, att, index);
+        }
+
+        /// <summary>
         /// Gets the product attribute collection.
         /// </summary>
         /// <param name="optionKey">
@@ -340,7 +421,10 @@
                 }
             }
 
-            option.Choices.ForEach(SaveProductAttribute);
+            foreach (var att in option.Choices)
+            {
+                SaveProductAttribute(option, att);
+            }
 
 
             //// TODO RSS need to raise an event here to clear caches and reindex products
@@ -349,10 +433,13 @@
         /// <summary>
         /// Saves a product attribute.
         /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
         /// <param name="att">
         /// The product attribute.
         /// </param>
-        private void SaveProductAttribute(IProductAttribute att)
+        private void SaveProductAttribute(IProductOption option, IProductAttribute att)
         {
             var factory = new ProductAttributeFactory();
 
@@ -362,6 +449,12 @@
                 att.CreateDate = DateTime.Now;
                 att.UpdateDate = DateTime.Now;
 
+                att.SortOrder = option.Choices.Max(x => x.SortOrder) + 1;
+                EnsureAttributeSku(option, att);
+
+                // Ensure the option key
+                att.OptionKey = option.Key;
+
                 var dto = factory.BuildDto(att);
                 Database.Insert(dto);
                 att.Key = dto.Key;
@@ -369,10 +462,12 @@
             else
             {
                 ((Entity)att).UpdatingEntity();
+                EnsureAttributeSku(option, att);
                 var dto = factory.BuildDto(att);
                 Database.Update(dto);
             }
         }
+
 
         /// <summary>
         /// The ensure shared delete.
@@ -385,10 +480,43 @@
         /// </returns>
         private bool EnsureSharedDelete(IProductOption entity)
         {
-            if (!entity.Shared) return true;
+            return !entity.Shared || entity.Choices.Sum(x => x.UseCount) == 0;
+        }
 
-            // assert option is not being used by other products
-            return false;
+
+        /// <summary>
+        /// Builds the product search SQL.
+        /// </summary>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="sharedOnly">
+        /// The shared Only.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql BuildSearchSql(string searchTerm, bool sharedOnly)
+        {
+            searchTerm = searchTerm.Replace(",", " ");
+            var invidualTerms = searchTerm.Split(' ');
+
+            var terms = invidualTerms.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+
+            var sql = new Sql();
+            sql.Select("*").From<ProductOptionDto>(SqlSyntax);
+
+            if (terms.Any())
+            {
+                var preparedTerms = string.Format("%{0}%", string.Join("% ", terms)).Trim();
+
+                sql.Where("name LIKE @name", new { @name = preparedTerms });
+            }
+
+            if (sharedOnly) sql.Where("shared = @shared", new { @shared = true });
+
+            return sql;
         }
     }
 }

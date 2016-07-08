@@ -386,12 +386,15 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="sharedOnly">
+        /// Limit to only shared options.
+        /// </param>
         /// <returns>
         /// The <see cref="Page{IProductOption}"/>.
         /// </returns>
-        public Page<IProductOption> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending)
+        public Page<IProductOption> GetPage(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool sharedOnly = true)
         {
-            throw new NotImplementedException();
+            return GetPage(string.Empty, page, itemsPerPage, sortBy, sortDirection, sharedOnly);
         }
 
         /// <summary>
@@ -412,6 +415,9 @@
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="sharedOnly">
+        /// Limit to only shared options.
+        /// </param>
         /// <returns>
         /// The <see cref="Page{IProductOption}"/>.
         /// </returns>
@@ -420,9 +426,13 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            bool sharedOnly = true)
         {
-            throw new NotImplementedException();
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetPage(term, page, itemsPerPage, sortBy, sortDirection, sharedOnly);
+            }
         }
 
         /// <summary>

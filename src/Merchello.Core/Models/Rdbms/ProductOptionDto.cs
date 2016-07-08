@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Models.Rdbms
 {
     using System;
+    using System.Collections.Generic;
 
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.DatabaseAnnotations;
@@ -71,8 +72,7 @@
         [Constraint(Default = "getdate()")]
         public DateTime CreateDate { get; set; }
 
-
-        /// <summary>
+            /// <summary>
         /// Gets or sets the result for product to product option association.
         /// </summary>
         [ResultColumn]
