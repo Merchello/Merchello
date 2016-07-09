@@ -22,6 +22,11 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the UI element.
+        /// </summary>
+        public string UiElement { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether required.
         /// </summary>
         public bool Required { get; set; }
@@ -30,6 +35,16 @@
         /// Gets or sets a value indicating whether the option is shared option.
         /// </summary>
         public bool Shared { get; set; }
+
+        /// <summary>
+        /// Gets or sets the shared count.
+        /// </summary>
+        public int SharedCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the detached content key.
+        /// </summary>
+        public Guid DetachedContentKey { get; set; }
 
         /// <summary>
         /// Gets or sets the sort order.

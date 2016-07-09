@@ -332,6 +332,7 @@
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="Editors\PluginViewEditorApiController.cs" />
+    <Compile Include="Editors\ProductOptionApiController.cs" />
     <Compile Include="Editors\Reports\AbandonedBasketReportApiController.cs" />
     <Compile Include="Editors\Reports\MonthlyReportApiControllerBase.cs" />
     <Compile Include="Editors\Reports\ReportSqlHelper.cs" />

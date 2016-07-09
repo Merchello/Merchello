@@ -1441,7 +1441,7 @@
                 var count = 1;
                 foreach (var o in product.ProductOptions.OrderBy(x => x.SortOrder))
                 {
-                    o.SortOrder = count;
+                    ((ProductOption)o).SortOrder = count;
                     count = count + 1;
                     product.ProductOptions.Add(o);
                 }

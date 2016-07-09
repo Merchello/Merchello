@@ -545,6 +545,16 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 ]
             },
 
+            productoption: {
+                columns: [
+                    { name: 'name', localizeKey: 'merchelloTableCaptions_optionName' },
+                    { name: 'uiOption', localizeKey: 'merchelloTableCaptions_optionUi' },
+                    { name: 'choices', localizeKey: 'merchelloTableCaptions_optionValues', resultColumn: true },
+                    { name: 'shared', localizeKey: 'merchelloTableCaptions_shared' },
+                    { name: 'sharedCount', localizeKey: 'merchelloTableCaptions_sharedCount' }
+                ]
+            },
+
             customer:  {
                 columns: [
                     { name: 'loginName', localizeKey: 'merchelloCustomers_loginName' },

@@ -54,7 +54,7 @@
     <key alias="salesByItem">Ventas por artículo</key>
     <key alias="abandonedBasket">Carritos abandonados</key>
     <key alias="contentTypes">Content Types</key>
-    <key alias="sharedProductOptions">Product Options</key>
+    <key alias="sharedProductOptions">Shared Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Carritos anónimos</key>
@@ -108,6 +108,9 @@
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">No hay productos en esta colección</key>
+  </area>
+  <area alias="merchellProductOptions">
+    <key alias="sharedCount">Share Count</key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales"><![CDATA[
@@ -325,6 +328,7 @@
     <key alias="increase">Increase</key>
     <key alias="decrease">Decrease</key>
     <key alias="associateWith">Associate with</key>
+    <key alias="shared">Shared</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Configuración de la tienda</key>

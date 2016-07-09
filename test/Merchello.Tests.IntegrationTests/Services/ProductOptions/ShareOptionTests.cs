@@ -14,6 +14,8 @@
     {
         private IProductOptionService _productOptionService;
 
+        private Guid _optionKey;
+
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
@@ -21,7 +23,18 @@
 
             this._productOptionService = MerchelloContext.Current.Services.ProductOptionService;
 
-            //this.DbPreTestDataWorker.DeleteAllSharedOptions();
+            this.DbPreTestDataWorker.DeleteAllSharedOptions();
+
+            var option = this._productOptionService.CreateProductOption("Retrieve", true);
+            option.AddChoice("Choice 1", "choice1");
+            option.AddChoice("Choice 2", "choice2");
+            option.AddChoice("Choice 3", "choice3");
+            option.AddChoice("Choice 4", "choice4");
+            this._productOptionService.Save(option);
+
+            MerchelloContext.Current.Cache.RuntimeCache.ClearAllCache();
+
+            _optionKey = option.Key;
         }
 
         [SetUp]
@@ -96,22 +109,9 @@
         public void Can_Get_An_Option_By_Its_Key()
         {
             //// Arrange
-            var option = this._productOptionService.CreateProductOption("Shared", true);
-            option.AddChoice("Shared", "shared1");
-            option.AddChoice("Shared", "shared2");
-            option.AddChoice("Shared", "shared3");
-            option.AddChoice("Shared", "shared4");
-            this._productOptionService.Save(option);
-
-            Assert.IsTrue(option.HasIdentity);
-            Assert.AreEqual(option.Choices.Count, 4);
-
-
-
-            var key = new Guid("7D588422-2B05-405D-9CB8-6744DF54B4C4"); //  option.Key;
 
             //// Act
-            var retrieved = _productOptionService.GetByKey(key);
+            var retrieved = _productOptionService.GetByKey(_optionKey);
 
             //// Assert
             Assert.NotNull(retrieved, "Retrieved was null");

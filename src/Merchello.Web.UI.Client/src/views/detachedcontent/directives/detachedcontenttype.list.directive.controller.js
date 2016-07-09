@@ -18,6 +18,7 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
         $scope.title = '';
         $scope.edit = editContentType;
         $scope.delete = deleteContentType;
+        $scope.add = addContentType;
 
         $scope.debugAllowDelete = false;
 
@@ -39,6 +40,28 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
                 $scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
                 $scope.loaded = true;
                 $scope.preValuesLoaded = true;
+            });
+        }
+        
+        function addContentType() {
+            var dialogData = dialogDataFactory.createAddDetachedContentTypeDialogData();
+            dialogData.contentType = detachedContentTypeDisplayBuilder.createDefault();
+            dialogData.contentType.entityType = $scope.entityType;
+            dialogService.open({
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/detachedcontenttype.add.html',
+                show: true,
+                callback: processAddDialog,
+                dialogData: dialogData
+            });
+        }
+
+        function processAddDialog(dialogData) {
+            detachedContentResource.addDetachedContentType(dialogData.contentType).then(function(result) {
+                notificationsService.success("Content Type Saved", "");
+                loadDetachedContentTypes();
+                notificationsService.success('Saved successfully');
+            }, function(reason) {
+                notificationsService.error('Failed to add detached content type ' + reason);
             });
         }
 

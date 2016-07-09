@@ -68,6 +68,7 @@
     <key alias="increase">Increase</key>
     <key alias="decrease">Decrease</key>
     <key alias="associateWith">Associate with</key>
+    <key alias="shared">Shared</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -108,7 +109,7 @@
     <key alias="salesByItem">Sales By Item</key>
     <key alias="abandonedBasket">Abandoned Basket</key>
     <key alias="contentTypes">Content Types</key>
-    <key alias="sharedProductOptions">Product Options</key>
+    <key alias="sharedProductOptions">Shared Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Anonymous Baskets</key>
@@ -192,6 +193,9 @@
     <key alias="copyProduct">Copy Product</key>
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
+  </area>
+  <area alias="merchellProductOptions">
+    <key alias="sharedCount">Share Count</key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>

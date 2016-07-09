@@ -21,6 +21,8 @@ namespace Merchello.Core.Models
             return item.Key;
         }
 
+        // TODO 2.2.0 should not need to CAST to ProductOption 
+        // This is a quick fix in the 2.2.0 refactoring and needs to be addressed before release
         internal new void Add(IProductOption item)
         {
             using (new WriteLock(_addLocker))
@@ -31,13 +33,13 @@ namespace Merchello.Core.Models
                     var exists = Contains(item.Key);
                     if (exists)
                     {
-                        this[key].SortOrder = item.SortOrder;
+                        ((ProductOption)this[key]).SortOrder = item.SortOrder;
                         return;
                     }
                 }
 
                 // set the sort order to the next highest
-                item.SortOrder = this.Any() ? this.Max(x => x.SortOrder) + 1 : 1;
+                ((ProductOption)item).SortOrder = this.Any() ? this.Max(x => x.SortOrder) + 1 : 1;
                 base.Add(item);
                 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));

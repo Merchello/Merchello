@@ -71,6 +71,7 @@
     <key alias="increase">Увеличить</key>
     <key alias="decrease">Уменьшить</key>
     <key alias="associateWith">Associate with</key>
+    <key alias="shared">Shared</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -111,7 +112,7 @@
     <key alias="salesByItem">Продажи по товарам</key>
     <key alias="abandonedBasket">Брошенные корзины</key>
     <key alias="contentTypes">Content Types</key>
-    <key alias="sharedProductOptions">Product Options</key>
+    <key alias="sharedProductOptions">Shared Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Анонимные корзины</key>
@@ -194,6 +195,9 @@
     <key alias="copyProduct">Создать копию</key>
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
+  </area>
+  <area alias="merchellProductOptions">
+    <key alias="sharedCount">Share Count</key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Выберите тип документа</key>

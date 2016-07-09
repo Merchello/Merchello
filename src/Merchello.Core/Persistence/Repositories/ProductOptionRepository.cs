@@ -122,13 +122,15 @@
 
             var p = Database.Page<ProductOptionDto>(page, itemsPerPage, sql);
 
+            var keys = p.Items.Select(x => x.Key).ToArray();
+
             return new Page<IProductOption>()
             {
                 CurrentPage = p.CurrentPage,
                 ItemsPerPage = p.ItemsPerPage,
                 TotalItems = p.TotalItems,
                 TotalPages = p.TotalPages,
-                Items = p.Items.Select(x => Get(x.Key)).ToList()
+                Items = keys.Any() ? GetAll(keys).ToList() : Enumerable.Empty<IProductOption>().ToList()
             };
         }
 
@@ -152,7 +154,7 @@
             if (dto == null)
                 return null;
 
-            var factory = new ProductOptionFactory();
+            var factory = new ProductOptionFactory(GetProductAttributeCollection);
 
             var option = factory.BuildEntity(dto);
 
@@ -180,7 +182,7 @@
             }
             else
             {
-                var factory = new ProductOptionFactory();
+                var factory = new ProductOptionFactory(GetProductAttributeCollection);
                 var dtos = Database.Fetch<ProductOptionDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
@@ -317,7 +319,7 @@
         /// The option.
         /// </param>
         /// <param name="att">
-        /// The att.
+        /// The attribute.
         /// </param>
         /// <param name="index">
         /// The index.

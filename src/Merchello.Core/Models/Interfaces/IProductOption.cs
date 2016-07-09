@@ -27,10 +27,10 @@
         bool Required { get; set; }
 
         /// <summary>
-        /// Gets or sets the order in which to list product option with respect to its product association.
+        /// Gets the order in which to list product option with respect to its product association.
         /// </summary>
         /// <remarks>
-        /// This field is stored in the product 2 product option association - cache value should always be null.
+        /// This field is stored in the product 2 product option association and is not valid for shared option list (it is populated when associated with a product) - cache value should always be 0.
         /// </remarks>
         [DataMember]
         int SortOrder { get; set; }
