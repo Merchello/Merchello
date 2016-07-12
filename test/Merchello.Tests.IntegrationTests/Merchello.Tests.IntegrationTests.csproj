@@ -345,6 +345,7 @@
     <Compile Include="Payments\PaymentProcessingTests.cs" />
     <Compile Include="Reports\ReportResolutionTests.cs" />
     <Compile Include="Scratch.cs" />
+    <Compile Include="Services\ProductOptions\OptionTestsBase.cs" />
     <Compile Include="Services\ProductOptions\ShareOptionTests.cs" />
     <Compile Include="Services\Product\CopyProductTests.cs" />
     <Compile Include="Services\Product\ProductAllinTests.cs" />

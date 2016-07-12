@@ -10,32 +10,8 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class ShareOptionTests : MerchelloAllInTestBase
+    public class ShareOptionTests : OptionTestsBase
     {
-        private IProductOptionService _productOptionService;
-
-        private Guid _optionKey;
-
-        [TestFixtureSetUp]
-        public override void FixtureSetup()
-        {
-            base.FixtureSetup();
-
-            this._productOptionService = MerchelloContext.Current.Services.ProductOptionService;
-
-            this.DbPreTestDataWorker.DeleteAllSharedOptions();
-
-            var option = this._productOptionService.CreateProductOption("Retrieve", true);
-            option.AddChoice("Choice 1", "choice1");
-            option.AddChoice("Choice 2", "choice2");
-            option.AddChoice("Choice 3", "choice3");
-            option.AddChoice("Choice 4", "choice4");
-            this._productOptionService.Save(option);
-
-            MerchelloContext.Current.Cache.RuntimeCache.ClearAllCache();
-
-            _optionKey = option.Key;
-        }
 
         [SetUp]
         public void Setup()
@@ -118,5 +94,7 @@
             Assert.NotNull(retrieved.Choices, "Choice collection was null");
             Assert.AreEqual(retrieved.Choices.Count, 4, "Did not have any choices");
         }
+
+
     }
 }

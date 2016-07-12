@@ -29,6 +29,8 @@
         /// </summary>
         private readonly IProductVariantRepository _productVariantRepository;
 
+        private readonly IProductOptionRepository _productOptionRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductRepository"/> class.
         /// </summary>

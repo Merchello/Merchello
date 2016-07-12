@@ -9,7 +9,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
 
         // In the initial release of this feature we are only going to allow sharedOnly params
         // to be managed here.  We may open this up at a later date depending on feedback.
-        $scope.sharedOnly = false;
+        $scope.sharedOnly = true;
 
         // list view
         $scope.load = load;
