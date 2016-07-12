@@ -78,6 +78,53 @@
             _detachedContentTypeRepository = detachedContentTypeRepository;
         }
 
+        public IEnumerable<IProductOption> GetByProductKey(Guid productKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+               .From<ProductOptionDto>(SqlSyntax)
+               .InnerJoin<Product2ProductOptionDto>(SqlSyntax)
+               .On<ProductOptionDto, Product2ProductOptionDto>(SqlSyntax, left => left.Key, right => right.OptionKey)
+               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey)
+               .OrderBy<Product2ProductOptionDto>(x => x.SortOrder, SqlSyntax);
+
+            var dtos = Database.Fetch<ProductOptionDto, Product2ProductOptionDto>(sql);
+
+            var factory = new ProductOptionFactory();
+
+            return dtos.Any()
+                       ? dtos.Select(
+                           x =>
+                               {
+                                   var option = factory.BuildEntity(x);
+                                   option.Choices = GetProductAttributeCollection(option.Key, productKey);
+                                   return option;
+                               })
+                       : Enumerable.Empty<IProductOption>();
+        }
+
+        public IEnumerable<IProductOption> SaveForProduct(IEnumerable<IProductOption> options, Guid productKey)
+        {
+            // Order the options by sort order
+            var savers = options.OrderBy(x => x.SortOrder);
+            
+            // Find the product options to find any that need to be removed 
+            var existing = GetByProductKey(productKey).ToArray();
+
+            if (existing.Any())
+            {
+                // Remove any options that previously existed in the product option collection that are not present in the new collection
+                SafeRemoveOldOptions(savers, existing, productKey);
+            }
+
+            return savers;
+        }
+
+
+
+
+
+
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
         /// </summary>
@@ -154,9 +201,10 @@
             if (dto == null)
                 return null;
 
-            var factory = new ProductOptionFactory(GetProductAttributeCollection);
+            var factory = new ProductOptionFactory();
 
             var option = factory.BuildEntity(dto);
+            option.Choices = GetProductAttributeCollection(option.Key);
 
             return option;
         }
@@ -172,7 +220,6 @@
         /// </returns>
         protected override IEnumerable<IProductOption> PerformGetAll(params Guid[] keys)
         {
-
             if (keys.Any())
             {
                 foreach (var id in keys)
@@ -182,11 +229,10 @@
             }
             else
             {
-                var factory = new ProductOptionFactory(GetProductAttributeCollection);
                 var dtos = Database.Fetch<ProductOptionDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return factory.BuildEntity(dto);
+                    yield return Get(dto.Key);
                 }
             }
         }
@@ -355,6 +401,31 @@
                .From<ProductAttributeDto>(SqlSyntax)
                .Where<ProductAttributeDto>(x => x.OptionKey == optionKey);
 
+            return GetProductAttributeCollection(sql);
+        }
+
+        private ProductAttributeCollection GetProductAttributeCollection(Guid optionKey, Guid productKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductAttributeDto>(SqlSyntax)
+                .Append("WHERE [merchProductAttribute].[pk] IN (")
+                .Append("SELECT DISTINCT(productAttributeKey)")
+                .Append("FROM [merchProductVariant2ProductAttribute]")
+                .Append("WHERE optionKey = @okey", new { @okey = optionKey })
+                .Append("AND productVariantKey IN (")
+                .Append("SELECT [merchProductVariant].[pk] IN (")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE productKey = @pvk", new { @pvk = productKey })
+                .Append("AND [master] = @m", new { @m = false })
+                .Append(")) ORDER BY sortOrder");
+
+            return GetProductAttributeCollection(sql);
+
+        }
+
+        private ProductAttributeCollection GetProductAttributeCollection(Sql sql)
+        {
             var dtos = Database.Fetch<ProductAttributeDto>(sql);
 
             var attributes = new ProductAttributeCollection();
@@ -365,6 +436,7 @@
                 var attribute = factory.BuildEntity(dto);
                 attributes.Add(attribute);
             }
+
             return attributes;
         }
 
@@ -387,6 +459,51 @@
                 new { Key = productAttribute.Key });
 
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
+        }
+
+
+        private void DeleteSharedProductAttributeVariantAssociation(IProductOption option, Guid productKey)
+        {
+            var keys = option.Choices.Select(x => x.Key).ToArray();
+
+            var sql = new Sql();
+            sql.Append("DELETE FROM merchProductVariant2ProductAttribute")
+                .Append("WHERE productVariantKey IN (")
+                .Append("SELECT productVariantKey FROM  merchProductVariant2ProductAttribute T1")
+                .Append("JOIN  merchProductVariant T2 ON T1.productVariantKey = T2.pk")
+                .Append("WHERE T2.productKey = @pk", new { @pk = productKey })
+                .Append(")")
+                .Append("AND optionKey IN (@oks)", new { @oks = keys });
+
+            Database.Execute(sql);
+
+            foreach (var choice in option.Choices.Where(choice => choice.UseCount >= 0))
+            {
+                choice.UseCount--;
+            }
+        }
+
+        private void SafeRemoveOldOptions(IEnumerable<IProductOption> savers, IEnumerable<IProductOption> existing, Guid productKey)
+        {
+
+            var removers = existing.Where(ex => savers.All(sv => sv.Key != ex.Key)).ToArray();
+            if (removers.Any())
+            {
+                foreach (var rm in removers)
+                {
+                    if (rm.Shared)
+                    {
+                        //// shared options cannot be deleted from a product.  Instead useCount will be decremented
+                        rm.SharedCount--;
+                        DeleteSharedProductAttributeVariantAssociation(rm, productKey);
+                        AddOrUpdate(rm);
+                    }
+                    else
+                    {
+                        Delete(rm);
+                    }
+                }
+            }
         }
 
 
@@ -482,7 +599,8 @@
         /// </returns>
         private bool EnsureSharedDelete(IProductOption entity)
         {
-            return !entity.Shared || entity.Choices.Sum(x => x.UseCount) == 0;
+            return !entity.Shared || 
+                (entity.Shared && entity.Choices.Sum(x => x.UseCount) == 0);
         }
 
 

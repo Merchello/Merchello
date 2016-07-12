@@ -11,29 +11,7 @@
     /// </summary>
     internal class ProductOptionFactory : IEntityFactory<IProductOption, ProductOptionDto>
     {
-        /// <summary>
-        /// A function to get the shared choices.
-        /// </summary>
-        private Func<Guid, ProductAttributeCollection> _getSharedChoices;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProductOptionFactory"/> class.
-        /// </summary>
-        public ProductOptionFactory()
-            : this(null)
-        { 
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProductOptionFactory"/> class.
-        /// </summary>
-        /// <param name="getSharedChoices">
-        /// The get shared choices.
-        /// </param>
-        internal ProductOptionFactory(Func<Guid, ProductAttributeCollection> getSharedChoices)
-        {
-            _getSharedChoices = getSharedChoices;
-        }
+       
 
         /// <summary>
         /// Builds the <see cref="IProductOption"/> entity.
@@ -57,8 +35,6 @@
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };
-
-            if (_getSharedChoices != null) option.Choices = _getSharedChoices.Invoke(option.Key);
 
             return option;
         }

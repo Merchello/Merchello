@@ -1,6 +1,6 @@
 angular.module('merchello').controller('Merchello.Backoffice.SharedProductOptionsController',
-    ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource',
-    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource) {
+    ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource', 'dialogDataFactory', 'dialogService',
+    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService) {
 
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
@@ -9,7 +9,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
 
         // In the initial release of this feature we are only going to allow sharedOnly params
         // to be managed here.  We may open this up at a later date depending on feedback.
-        $scope.sharedOnly = true;
+        $scope.sharedOnly = false;
 
         // list view
         $scope.load = load;
@@ -59,6 +59,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
                     return result.choices.length + ' ' + values;
             }
         }
+
 
         init();
     }]);

@@ -14,8 +14,6 @@
 
             function init() {
                 var key = $routeParams.id;
-                $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
-                $scope.tabs.setActive('optionslist');
                 loadSettings();
                 loadProduct(key);
             }
@@ -32,6 +30,10 @@
                 var promise = productResource.getByKey(key);
                 promise.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
+
+                    $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key, $scope.product.hasVariants());
+                    $scope.tabs.hideTab('productcontent');
+                    $scope.tabs.setActive('optionslist');
                     $scope.loaded = true;
                     $scope.preValuesLoaded = true;
 

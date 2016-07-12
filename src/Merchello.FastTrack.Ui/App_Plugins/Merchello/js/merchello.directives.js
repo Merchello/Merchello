@@ -946,7 +946,7 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
         },
         template:
         '<div class="control-group">' +
-        '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+        '<label><localize key="merchelloDetachedContent_contentTypes" /></label>' +
         '<select class="span11" data-ng-model="selectedContentType" data-ng-options="ct.name for ct in contentTypes track by ct.key" data-ng-change="emitChanged()" data-ng-show="loaded">' +
             '<option value="">{{ noSelection }}</option>' +
         '</select>' +
@@ -1510,6 +1510,30 @@ angular.module('merchello.directives').directive('merchelloMoveIcon', function(l
     }
 });
 
+// the Create button that emulates Umbraoc's directive
+angular.module('merchello.directives').directive('merchelloCreateButton', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doCreate: '&',
+            links: '='     // JSON format { text: [text], url: [url] }
+        },
+        template: '<div class="btn-group">' +
+        '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
+        '<localize key="actions_create">Create</localize>' +
+        '<span class="caret"></span>' +
+        '</a>' +
+        '<ul class="dropdown-menu">' +
+        '<li>' +
+        '<a href="#">' + '' + '</a>' +
+        '</li>' +
+        '</ul></div>',
+        link: function(scope, elm, attr) {
+
+        }
+    }
+});
 
 
 angular.module('merchello.directives').directive('merchelloListView',

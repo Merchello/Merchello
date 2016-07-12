@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
@@ -13,6 +14,40 @@
     /// </summary>
     internal interface IProductOptionRepository : IRepositoryQueryable<Guid, IProductOption>
     {
+        /// <summary>
+        /// Get the collection of <see cref="IProductOption"/> for a given product.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductOption}"/>.
+        /// </returns>
+        /// <remarks>
+        /// The method manages the sort order of the options with respect to the product
+        /// This query is never cached and is intended to generate objects that will be cached in 
+        /// individual product collections
+        /// </remarks>
+        IEnumerable<IProductOption> GetByProductKey(Guid productKey);
+
+        /// <summary>
+        /// Safely saves product options for a given product.
+        /// </summary>
+        /// <param name="options">
+        /// The options.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <remarks>
+        /// This method ensures the product association of choices, deleted only NON shared options and manages the sort order
+        /// </remarks>
+        /// <returns>
+        /// The saved collection <see cref="IEnumerable{IProductOption}"/>.
+        /// </returns>
+        IEnumerable<IProductOption> SaveForProduct(IEnumerable<IProductOption> options, Guid productKey);
+
+
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
         /// </summary>

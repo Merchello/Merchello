@@ -48,7 +48,7 @@ angular.module('merchello').controller('Merchello.Directives.DetachedContentType
             dialogData.contentType = detachedContentTypeDisplayBuilder.createDefault();
             dialogData.contentType.entityType = $scope.entityType;
             dialogService.open({
-                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/detachedcontenttype.add.html',
+                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/detachedcontenttype.add.right.html',
                 show: true,
                 callback: processAddDialog,
                 dialogData: dialogData

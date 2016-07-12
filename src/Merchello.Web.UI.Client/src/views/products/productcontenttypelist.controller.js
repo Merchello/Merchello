@@ -11,6 +11,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductContentTypeL
             $scope.tabs.setActive('contentTypeList');
         }
 
+
         // Initializes the controller
         init();
     }]);

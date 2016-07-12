@@ -127,4 +127,28 @@ angular.module('merchello.directives').directive('merchelloMoveIcon', function(l
     }
 });
 
+// the Create button that emulates Umbraoc's directive
+angular.module('merchello.directives').directive('merchelloCreateButton', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doCreate: '&',
+            links: '='     // JSON format { text: [text], url: [url] }
+        },
+        template: '<div class="btn-group">' +
+        '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
+        '<localize key="actions_create">Create</localize>' +
+        '<span class="caret"></span>' +
+        '</a>' +
+        '<ul class="dropdown-menu">' +
+        '<li>' +
+        '<a href="#">' + '' + '</a>' +
+        '</li>' +
+        '</ul></div>',
+        link: function(scope, elm, attr) {
+
+        }
+    }
+});
 

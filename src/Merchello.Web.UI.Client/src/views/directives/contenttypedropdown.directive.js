@@ -8,7 +8,7 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
         },
         template:
         '<div class="control-group">' +
-        '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+        '<label><localize key="merchelloDetachedContent_contentTypes" /></label>' +
         '<select class="span11" data-ng-model="selectedContentType" data-ng-options="ct.name for ct in contentTypes track by ct.key" data-ng-change="emitChanged()" data-ng-show="loaded">' +
             '<option value="">{{ noSelection }}</option>' +
         '</select>' +

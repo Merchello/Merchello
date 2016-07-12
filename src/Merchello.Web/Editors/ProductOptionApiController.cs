@@ -43,6 +43,15 @@
             _productOptionService = merchelloContext.Services.ProductOptionService;
         }
 
+        /// <summary>
+        /// Provides a paged listing of product options.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
         [HttpPost]
         public QueryResultDisplay SearchOptions(QueryDisplay query)
         {
