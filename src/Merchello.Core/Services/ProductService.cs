@@ -282,7 +282,7 @@
             }
 
             // verify that all variants of this product still have attributes - or delete them
-            _productVariantService.EnsureProductVariantsHaveAttributes(product);
+            EnsureProductVariantsHaveAttributes(product);
 
             // save any remaining variants changes in the variants collection
             if (product.ProductVariants.Any())
@@ -320,10 +320,10 @@
                 EnsureVariants(productArray);
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
-
             // verify that all variants of these products still have attributes - or delete them
-            _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
+            productArray.ForEach(EnsureProductVariantsHaveAttributes);
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
         }
 
         /// <summary>
@@ -1582,6 +1582,23 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Ensures that all <see cref="IProductVariant"/> except the "master" variant for the <see cref="IProduct"/> have attributes
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/> to verify</param>
+        private void EnsureProductVariantsHaveAttributes(IProduct product)
+        {
+            var variants = _productVariantService.GetByProductKey(product.Key);
+            var productVariants = variants as IProductVariant[] ?? variants.ToArray();
+            if (!productVariants.Any()) return;
+            foreach (var variant in productVariants.Where(variant => !variant.Attributes.Any()))
+            {
+                _productVariantService.Delete(variant);
+                product.ProductVariants.Remove(variant.Sku);
+            }
+        }
+
 
 
         /// <summary>

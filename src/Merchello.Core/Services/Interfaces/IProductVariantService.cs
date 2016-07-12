@@ -45,17 +45,6 @@
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         void Save(IEnumerable<IProductVariant> productVariantList, bool raiseEvents = true);
 
-        /// <summary>
-        /// Ensures that all <see cref="IProductVariant"/> except the "master" variant for the <see cref="IProduct"/> have attributes
-        /// </summary>
-        /// <param name="product"><see cref="IProduct"/> to verify</param>
-        void EnsureProductVariantsHaveAttributes(IProduct product);
-
-        /// <summary>
-        /// Ensures that every <see cref="IProductVariant"/> for every <see cref="IProduct"/> (except it's master variant) in the collection has related <see cref="IProductAttribute"/>
-        /// </summary>
-        /// <param name="productList">The collection of <see cref="IProduct"/> to ensure</param>
-        void EnsureProductVariantsHaveAttributes(IEnumerable<IProduct> productList);
 
         /// <summary>
         /// Deletes a single <see cref="IProductVariant"/>
@@ -109,36 +98,6 @@
         /// <param name="warehouseKey">The 'unique' key of the warehouse</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         IEnumerable<IProductVariant> GetByWarehouseKey(Guid warehouseKey);
-
-        /// <summary>
-        /// Creates a collection of <see cref="IProductVariant"/> that can be created based on unmapped product options.
-        /// </summary>
-        /// <param name="product">The <see cref="IProduct"/></param>
-        /// <returns>A collection of <see cref="IProductVariant"/></returns>
-        IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product);
-            
-        /// <summary>
-        /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="attributeKeys">
-        /// The attribute Keys.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IProductVariant"/>.
-        /// </returns>
-        IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys);
-
-        /// <summary>
-        /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
-        /// to determine if the a variant already exists with the attributes passed
-        /// </summary>
-        /// <param name="product">The <see cref="IProduct"/> to reference</param>
-        /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
-        /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
-        bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes);
 
         /// <summary>
         /// True/false indicating whether or not a SKU is already exists in the database
