@@ -94,7 +94,8 @@
             // Ensures the sort order with respect to this product
             EnsureProductOptionsSortOrder(product.ProductOptions);
 
-            SaveForProduct(product.ProductOptions.AsEnumerable(), product.Key);
+            // Reset the Product Options Collection so that updated values are ordered and cached correctly
+            product.ProductOptions = SaveForProduct(product.ProductOptions.AsEnumerable(), product.Key);
         }
 
         /// <summary>
@@ -121,6 +122,11 @@
             {
                 // Remove any options that previously existed in the product option collection that are not present in the new collection
                 this.SafeRemoveSharedOptionsFromProduct(savers, existing, productKey);
+            }
+
+            foreach (var o in savers)
+            {
+                this.SafeAddOrUpdateProductWithProductOption(o, productKey);
             }
 
             return GetProductOptionCollection(productKey);
@@ -605,6 +611,14 @@
                 new { Key = productAttribute.Key });
 
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
+        }
+
+        private void SafeAddOrUpdateProductWithProductOption(IProductOption option, Guid productKey)
+        {
+            if (!option.HasIdentity)
+            {
+                PersistNewItem(option);
+            }
         }
 
         /// <summary>
