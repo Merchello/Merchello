@@ -6,6 +6,7 @@
     using System.Threading;
 
     using Merchello.Core.Events;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
@@ -280,6 +281,12 @@
         /// </remarks>
         public void Delete(IProductOption option, bool raiseEvents = true)
         {
+            if (!EnsureSafeOptionDelete(option))
+            {
+                MultiLogHelper.Warn<ProductOptionService>("A ProductOption delete attempt was aborted.  The option cannot be deleted due to it being shared with one or more products.");
+                return;
+            }
+
             if (raiseEvents)
                 if (Deleting.IsRaisedEventCancelled(new DeleteEventArgs<IProductOption>(option), this))
                 {
@@ -292,6 +299,7 @@
                 var uow = UowProvider.GetUnitOfWork();
                 using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
                 {
+
                     repository.Delete(option);
                     uow.Commit();
                 }
@@ -301,40 +309,7 @@
         }
 
 
-        /// <summary>
-        /// Deletes a collection of product options
-        /// </summary>
-        /// <param name="options">
-        /// The collection of product options to be deleted
-        /// </param>
-        /// <param name="raiseEvents">
-        /// Optional boolean indicating whether or not to raise events.
-        /// </param>
-        /// <remarks>
-        /// This performs a check to ensure the option is valid to be deleted
-        /// </remarks>
-        public void Delete(IEnumerable<IProductOption> options, bool raiseEvents = true)
-        {
-            var optionsArray = options as IProductOption[] ?? options.ToArray();
-            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProductOption>(optionsArray), this);
-
-            using (new WriteLock(Locker))
-            {
-                var uow = UowProvider.GetUnitOfWork();
-
-                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
-                {
-                    foreach (var option in optionsArray)
-                    {
-                        repository.Delete(option);
-                    }
-
-                    uow.Commit();
-                }
-            }
-
-            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductOption>(optionsArray), this);
-        }
+        
 
         /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.
@@ -436,6 +411,44 @@
         }
 
         /// <summary>
+        /// Deletes a collection of product options
+        /// </summary>
+        /// <param name="options">
+        /// The collection of product options to be deleted
+        /// </param>
+        /// <param name="raiseEvents">
+        /// Optional boolean indicating whether or not to raise events.
+        /// </param>
+        /// <remarks>
+        /// This performs a check to ensure the option is valid to be deleted
+        /// 
+        /// THIS is INTERNAL due to sharing policies
+        /// 
+        /// </remarks>
+        internal void Delete(IEnumerable<IProductOption> options, bool raiseEvents = true)
+        {
+            var optionsArray = options as IProductOption[] ?? options.ToArray();
+            if (raiseEvents) Deleting.RaiseEvent(new DeleteEventArgs<IProductOption>(optionsArray), this);
+
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+                    foreach (var option in optionsArray)
+                    {
+                        repository.Delete(option);
+                    }
+
+                    uow.Commit();
+                }
+            }
+
+            if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductOption>(optionsArray), this);
+        }
+
+        /// <summary>
         /// Gets all the product options.
         /// </summary>
         /// <returns>
@@ -446,6 +459,17 @@
             using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetAll();
+            }
+        }
+
+
+        private bool EnsureSafeOptionDelete(IProductOption option)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                var count = repository.GetProductOptionShareCount(option.Key);
+
+                return option.Shared ? count == 0 : count == 1;
             }
         }
     }

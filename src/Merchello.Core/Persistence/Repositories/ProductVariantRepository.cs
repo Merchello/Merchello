@@ -26,6 +26,11 @@
     internal class ProductVariantRepository : MerchelloPetaPocoRepositoryBase<IProductVariant>, IProductVariantRepository
     {
         /// <summary>
+        /// The <see cref="IProductOptionRepository"/>.
+        /// </summary>
+        private readonly IProductOptionRepository _productOptionRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantRepository"/> class.
         /// </summary>
         /// <param name="work">
@@ -40,18 +45,20 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        /// <param name="productOptionRepository">
+        /// The <see cref="IProductOptionRepository"/>.
+        /// </param>
+        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductOptionRepository productOptionRepository)
             : base(work, cache, logger, sqlSyntax)
-        {            
+        {
+            Mandate.ParameterNotNull(productOptionRepository, "productOptionRepository");
+
+            _productOptionRepository = productOptionRepository;
         }
 
         /// <summary>
         /// Gets a value indicating whether is cached repository.
         /// </summary>
-        /// <remarks>
-        /// TODO the ProductVariantService should eventually be made internal (or removed)
-        /// All access to IProductVariant should be done through IProduct for better Cache management
-        /// </remarks>
         protected override bool IsCachedRepository
         {
             get
@@ -77,7 +84,6 @@
             var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
             return dtos.DistinctBy(dto => dto.ProductVariantKey).Select(dto => Get(dto.ProductVariantKey));
-
         }
 
         /// <summary>
@@ -98,7 +104,6 @@
             return variants.FirstOrDefault(x => x.Attributes.Count() == attributeKeys.Count() && attributeKeys.All(key => x.Attributes.FirstOrDefault(att => att.Key == key) != null));
         }
 
-
         /// <summary>
         /// Compares the <see cref="ProductAttributeCollection"/> with other <see cref="IProductVariant"/>s of the <see cref="IProduct"/> pass
         /// to determine if the a variant already exists with the attributes passed
@@ -110,11 +115,8 @@
         {
             var variants = GetByProductKey(product.Key).ToArray();
 
-            //// http://issues.merchello.com/youtrack/issue/M-941
             var keys = attributes.Select(x => x.Key);
             return variants.Any(x => x.Attributes.All(z => keys.Contains(z.Key)));
-
-           //// return variants.Any(x => x.Attributes.Equals(attributes));
         }
 
         /// <summary>
@@ -126,6 +128,28 @@
         {
             var query = Querying.Query<IProductVariant>.Builder.Where(x => x.ProductKey == productKey && ((ProductVariant)x).Master == false);
             return GetByQuery(query);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ProductVariantCollection"/> for a given product.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantCollection"/>.
+        /// </returns>
+        public ProductVariantCollection GetProductVariantCollection(Guid productKey)
+        {
+            var collection = new ProductVariantCollection();
+            var variants = GetByProductKey(productKey);
+
+            foreach (var variant in variants.Where(variant => variant != null))
+            {
+                collection.Add(variant);
+            }
+
+            return collection;
         }
 
         /// <summary>
@@ -145,47 +169,8 @@
             return Database.Fetch<ProductVariantDto>(sql).Any();
         }
 
-        ///// <summary>
-        ///// Deletes all detached content for culture.
-        ///// </summary>
-        ///// <param name="cultureName">
-        ///// The culture name.
-        ///// </param>
-        //public void DeleteAllDetachedContentForCulture(string cultureName)
-        //{
-        //    Database.Execute(
-        //        "DELETE FROM merchProductVariantDetachedContent WHERE cultureName = @Cn",
-        //        new { @Cn = cultureName });
-        //}
 
-        /// <summary>
-        /// The get product attribute collection.
-        /// </summary>
-        /// <param name="productVariantKey">
-        /// The product variant key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ProductAttributeCollection"/>.
-        /// </returns>
-        internal ProductAttributeCollection GetProductAttributeCollection(Guid productVariantKey)
-        {
-            var sql = new Sql();
-            sql.Select("*")
-                .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
-                .InnerJoin<ProductAttributeDto>(SqlSyntax)
-                .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(SqlSyntax, left => left.ProductAttributeKey, right => right.Key)
-                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey == productVariantKey);
-
-            var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(sql);
-
-            var factory = new ProductAttributeFactory();
-            var collection = new ProductAttributeCollection();
-            foreach (var dto in dtos)
-            {
-                collection.Add(factory.BuildEntity(dto.ProductAttributeDto));
-            }
-            return collection;
-        }
+        #region Object Collections
 
         /// <summary>
         /// Gets the <see cref="DetachedContentCollection{IProductVariantDetachedContent}"/> for the collection.
@@ -196,11 +181,78 @@
         /// <returns>
         /// The <see cref="DetachedContentCollection{IProductVariantDetachedContent}"/>.
         /// </returns>
-        internal DetachedContentCollection<IProductVariantDetachedContent> GetDetachedContentCollection(Guid productVariantKey)
+        public DetachedContentCollection<IProductVariantDetachedContent> GetDetachedContentCollection(Guid productVariantKey)
         {
             var contents = this.GetProductVariantDetachedContents(productVariantKey);
             return new DetachedContentCollection<IProductVariantDetachedContent> { contents };
         }
+
+        /// <summary>
+        /// Gets the category inventory collection.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CatalogInventoryCollection"/>.
+        /// </returns>
+        public CatalogInventoryCollection GetCategoryInventoryCollection(Guid productVariantKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+               .From<CatalogInventoryDto>(SqlSyntax)
+               .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
+               .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
+               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey);
+
+            var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
+
+            var collection = new CatalogInventoryCollection();
+            var factory = new CatalogInventoryFactory();
+
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto));
+            }
+
+            return collection;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Saves the catalog inventory.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <remarks>
+        /// This merely asserts that an association between the warehouse and the variant has been made
+        /// </remarks>
+        public void SaveCatalogInventory(IProductVariant productVariant)
+        {
+            var existing = GetCategoryInventoryCollection(productVariant.Key);
+
+            foreach (var inv in existing.Where(inv => !((ProductVariant)productVariant).CatalogInventoryCollection.Contains(inv.CatalogKey)))
+            {
+                DeleteCatalogInventory(productVariant.Key, inv.CatalogKey);
+            }
+
+            foreach (var inv in productVariant.CatalogInventories.Where(inv => !existing.Contains(inv.CatalogKey)))
+            {
+                AddCatalogInventory(productVariant, inv);
+            }
+
+            foreach (var inv in productVariant.CatalogInventories.Where(x => existing.Contains(x.CatalogKey)))
+            {
+                UpdateCatalogInventory(inv);
+            }
+        }
+
+
+
+        #region DetachedContent
+
 
         /// <summary>
         /// Safely saves the detached content selection.
@@ -208,7 +260,7 @@
         /// <param name="productVariant">
         /// The product variant.
         /// </param>
-        internal void SaveDetachedContents(IProductVariant productVariant)
+        public void SaveDetachedContents(IProductVariant productVariant)
         {
             var existing = this.GetDetachedContentCollection(productVariant.Key).ToArray();
 
@@ -297,66 +349,6 @@
         }
 
         /// <summary>
-        /// Saves the catalog inventory.
-        /// </summary>
-        /// <param name="productVariant">
-        /// The product variant.
-        /// </param>
-        /// <remarks>
-        /// This merely asserts that an association between the warehouse and the variant has been made
-        /// </remarks>
-        internal void SaveCatalogInventory(IProductVariant productVariant)
-        {
-            var existing = GetCategoryInventoryCollection(productVariant.Key);
-
-            foreach (var inv in existing.Where(inv => !((ProductVariant)productVariant).CatalogInventoryCollection.Contains(inv.CatalogKey)))
-            {
-                DeleteCatalogInventory(productVariant.Key, inv.CatalogKey);
-            }
-
-            foreach (var inv in productVariant.CatalogInventories.Where(inv => !existing.Contains(inv.CatalogKey)))
-            {
-                AddCatalogInventory(productVariant, inv);
-            }
-
-            foreach (var inv in productVariant.CatalogInventories.Where(x => existing.Contains(x.CatalogKey)))
-            {
-                UpdateCatalogInventory(inv);
-            }
-        }
-
-        /// <summary>
-        /// Gets the category inventory collection.
-        /// </summary>
-        /// <param name="productVariantKey">
-        /// The product variant key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CatalogInventoryCollection"/>.
-        /// </returns>
-        internal CatalogInventoryCollection GetCategoryInventoryCollection(Guid productVariantKey)
-        {
-            var sql = new Sql();
-            sql.Select("*")
-               .From<CatalogInventoryDto>(SqlSyntax)
-               .InnerJoin<WarehouseCatalogDto>(SqlSyntax)
-               .On<CatalogInventoryDto, WarehouseCatalogDto>(SqlSyntax, left => left.CatalogKey, right => right.Key)
-               .Where<CatalogInventoryDto>(x => x.ProductVariantKey == productVariantKey);
-
-            var dtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
-
-            var collection = new CatalogInventoryCollection();
-            var factory = new CatalogInventoryFactory();
-
-            foreach (var dto in dtos)
-            {
-                collection.Add(factory.BuildEntity(dto));
-            }
-
-            return collection;
-        }
-
-        /// <summary>
         /// Gets detached content associated with the product variant.
         /// </summary>
         /// <param name="productVariantKey">
@@ -386,6 +378,14 @@
             return dtos.Select(factory.BuildEntity);
         }
 
+        #endregion
+
+
+
+
+
+        #region RepositoryBase overrides
+
         /// <summary>
         /// Gets the product variant.
         /// </summary>
@@ -405,7 +405,7 @@
             if (dto == null || dto.ProductVariantDto == null)
                 return null;
 
-            var factory = new ProductVariantFactory(GetProductAttributeCollection, GetCategoryInventoryCollection, GetDetachedContentCollection);
+            var factory = new ProductVariantFactory(_productOptionRepository.GetProductAttributeCollectionForVariant, GetCategoryInventoryCollection, GetDetachedContentCollection);
             var variant = factory.BuildEntity(dto.ProductVariantDto);
 
             variant.ResetDirtyProperties();
@@ -494,25 +494,6 @@
             return "merchProductVariant.pk = @Key";
         }
 
-        /// <summary>
-        /// Gets the delete clauses that need to be executed when a variant is to be deleted
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{String}"/>.
-        /// </returns>
-        protected override IEnumerable<string> GetDeleteClauses()
-        {
-            var list = new List<string>
-            {
-                "DELETE FROM merchCatalogInventory WHERE productVariantKey = @Key",
-                "DELETE FROM merchProductVariantDetachedContent WHERE productVariantKey = @Key",
-                "DELETE FROM merchProductVariantIndex WHERE productVariantKey = @Key",
-                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Key",
-                "DELETE FROM merchProductVariant WHERE pk = @Key"
-            };
-
-            return list;
-        }
 
         /// <summary>
         /// The persist new item.
@@ -608,6 +589,8 @@
         /// </param>
         protected override void PersistDeletedItem(IProductVariant entity)
         {
+            _productOptionRepository.DeleteProductVariantAttributes(entity);
+
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
@@ -616,6 +599,28 @@
 
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
         }
+
+        /// <summary>
+        /// Gets the delete clauses that need to be executed when a variant is to be deleted
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
+        protected override IEnumerable<string> GetDeleteClauses()
+        {
+            var list = new List<string>
+            {
+                "DELETE FROM merchCatalogInventory WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariantDetachedContent WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariantIndex WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Key",
+                "DELETE FROM merchProductVariant WHERE pk = @Key"
+            };
+
+            return list;
+        }
+
+        #endregion
 
         /// <summary>
         /// The mandate product variant rules.
@@ -636,6 +641,8 @@
 
             return true;
         }
+
+        #region Inventory
 
         /// <summary>
         /// Associates a <see cref="IProductVariant"/> with a catalog inventory.
@@ -704,6 +711,8 @@
 
             Database.Execute(Sql, new { @pvKey = productVariantKey, @cKey = catalogKey });
         }
+
+        #endregion
 
         /// <summary>
         /// True/false indicating whether or not a SKU exists on a record other than the record with the id passed

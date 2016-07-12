@@ -93,20 +93,6 @@
         void Delete(IProductOption option, bool raiseEvents = true);
 
         /// <summary>
-        /// Deletes a collection of product options
-        /// </summary>
-        /// <param name="options">
-        /// The collection of product options to be deleted
-        /// </param>
-        /// <param name="raiseEvents">
-        /// Optional boolean indicating whether or not to raise events.
-        /// </param>
-        /// <remarks>
-        /// This performs a check to ensure the option is valid to be deleted
-        /// </remarks>
-        void Delete(IEnumerable<IProductOption> options, bool raiseEvents = true);
-
-        /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.
         /// </summary>
         /// <param name="key">

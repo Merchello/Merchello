@@ -15,20 +15,12 @@
     internal interface IProductOptionRepository : IRepositoryQueryable<Guid, IProductOption>
     {
         /// <summary>
-        /// Get the collection of <see cref="IProductOption"/> for a given product.
+        /// Saves the product options for a given product.
         /// </summary>
-        /// <param name="productKey">
-        /// The product key.
+        /// <param name="product">
+        /// The product.
         /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductOption}"/>.
-        /// </returns>
-        /// <remarks>
-        /// The method manages the sort order of the options with respect to the product
-        /// This query is never cached and is intended to generate objects that will be cached in 
-        /// individual product collections
-        /// </remarks>
-        IEnumerable<IProductOption> GetByProductKey(Guid productKey);
+        void SaveForProduct(IProduct product);
 
         /// <summary>
         /// Safely saves product options for a given product.
@@ -45,8 +37,35 @@
         /// <returns>
         /// The saved collection <see cref="IEnumerable{IProductOption}"/>.
         /// </returns>
-        IEnumerable<IProductOption> SaveForProduct(IEnumerable<IProductOption> options, Guid productKey);
+        ProductOptionCollection SaveForProduct(IEnumerable<IProductOption> options, Guid productKey);
 
+        /// <summary>
+        /// Gets the <see cref="ProductOptionCollection"/> for a given product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionCollection"/>.
+        /// </returns>
+        /// <remarks>
+        /// The method manages the sort order of the options with respect to the product
+        /// This query is never cached and is intended to generate objects that will be cached in 
+        /// individual product collections
+        /// </remarks>
+        ProductOptionCollection GetProductOptionCollection(Guid productKey);
+
+
+        /// <summary>
+        /// Gets a <see cref="ProductAttributeCollection"/> for a product variant.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
+        ProductAttributeCollection GetProductAttributeCollectionForVariant(Guid productVariantKey);
 
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
@@ -73,5 +92,13 @@
         /// The <see cref="Page{IProductOption}"/>.
         /// </returns>
         Page<IProductOption> GetPage(string term, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool sharedOnly = true);
+
+
+        void DeleteProductVariantAttributes(IProductVariant variant);
+
+        int GetProductOptionShareCount(Guid optionKey);
+
+
+        int GetProductAttributeUseCount(Guid attributeKey);
     }
 }

@@ -14,6 +14,8 @@
     {
         protected IProductOptionService _productOptionService;
 
+        protected IProductService _productService;
+
         protected Guid _optionKey;
 
         protected Guid _productKey;
@@ -25,15 +27,12 @@
 
             this._productOptionService = MerchelloContext.Current.Services.ProductOptionService;
 
+            this._productService = MerchelloContext.Current.Services.ProductService;
+
             this.DbPreTestDataWorker.DeleteAllProducts();
             this.DbPreTestDataWorker.DeleteAllSharedOptions();
 
-            var option = this._productOptionService.CreateProductOption("Retrieve", true);
-            option.AddChoice("Choice 1", "choice1");
-            option.AddChoice("Choice 2", "choice2");
-            option.AddChoice("Choice 3", "choice3");
-            option.AddChoice("Choice 4", "choice4");
-            this._productOptionService.Save(option);
+            var option = CreateSavedOption();
 
             _optionKey = option.Key;
 
@@ -51,6 +50,18 @@
 
             MerchelloContext.Current.Cache.RuntimeCache.ClearAllCache();
 
+        }
+
+        protected IProductOption CreateSavedOption()
+        {
+            var option = this._productOptionService.CreateProductOption("Retrieve", true);
+            option.AddChoice("Choice 1", "choice1");
+            option.AddChoice("Choice 2", "choice2");
+            option.AddChoice("Choice 3", "choice3");
+            option.AddChoice("Choice 4", "choice4");
+            this._productOptionService.Save(option);
+
+            return option;
         }
 
     }

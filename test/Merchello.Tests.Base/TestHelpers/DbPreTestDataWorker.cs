@@ -405,7 +405,7 @@ namespace Merchello.Tests.Base.TestHelpers
         public void DeleteAllSharedOptions()
         {
             var all = ProductOptionService.GetPage(1, long.MaxValue);
-            ProductOptionService.Delete(all.Items);
+            ((ProductOptionService)ProductOptionService).Delete(all.Items);
         }
 
         public IProductOptionService ProductOptionService

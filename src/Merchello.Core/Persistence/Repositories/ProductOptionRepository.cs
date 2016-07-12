@@ -78,32 +78,38 @@
             _detachedContentTypeRepository = detachedContentTypeRepository;
         }
 
-        public IEnumerable<IProductOption> GetByProductKey(Guid productKey)
+
+        /// <summary>
+        /// Saves options associated with a product.
+        /// </summary>
+        /// <param name="product">
+        /// The product with options to be saved.
+        /// </param>
+        /// <remarks>
+        /// Note:  'shared' product options associated with a product may not have the entire collection of ProductAttributes (choices)
+        /// so the actual work is done on the shared option which is then filtered again and replaced in the product 
+        /// </remarks>
+        public void SaveForProduct(IProduct product)
         {
-            var sql = new Sql();
-            sql.Select("*")
-               .From<ProductOptionDto>(SqlSyntax)
-               .InnerJoin<Product2ProductOptionDto>(SqlSyntax)
-               .On<ProductOptionDto, Product2ProductOptionDto>(SqlSyntax, left => left.Key, right => right.OptionKey)
-               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey)
-               .OrderBy<Product2ProductOptionDto>(x => x.SortOrder, SqlSyntax);
+            // Ensures the sort order with respect to this product
+            EnsureProductOptionsSortOrder(product.ProductOptions);
 
-            var dtos = Database.Fetch<ProductOptionDto, Product2ProductOptionDto>(sql);
-
-            var factory = new ProductOptionFactory();
-
-            return dtos.Any()
-                       ? dtos.Select(
-                           x =>
-                               {
-                                   var option = factory.BuildEntity(x);
-                                   option.Choices = GetProductAttributeCollection(option.Key, productKey);
-                                   return option;
-                               })
-                       : Enumerable.Empty<IProductOption>();
+            SaveForProduct(product.ProductOptions.AsEnumerable(), product.Key);
         }
 
-        public IEnumerable<IProductOption> SaveForProduct(IEnumerable<IProductOption> options, Guid productKey)
+        /// <summary>
+        /// Saves a collection of product options for a given product.
+        /// </summary>
+        /// <param name="options">
+        /// The options.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The saved collection <see cref="IEnumerable{IProductOption}"/>.
+        /// </returns>
+        public ProductOptionCollection SaveForProduct(IEnumerable<IProductOption> options, Guid productKey)
         {
             // Order the options by sort order
             var savers = options.OrderBy(x => x.SortOrder);
@@ -114,15 +120,107 @@
             if (existing.Any())
             {
                 // Remove any options that previously existed in the product option collection that are not present in the new collection
-                SafeRemoveOldOptions(savers, existing, productKey);
+                this.SafeRemoveSharedOptionsFromProduct(savers, existing, productKey);
             }
 
-            return savers;
+            return GetProductOptionCollection(productKey);
+        }
+
+        /// <summary>
+        /// Deletes the product attribute relations for a given <see cref="IProductVariant"/>.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        public void DeleteProductVariantAttributes(IProductVariant variant)
+        {
+            //// This needs to delete all attributes from the merchProductVariant2ProductAttribute table.
+
+            var attributeKeys = variant.Attributes.Select(x => x.Key);
+
+            Database.Execute("UPDATE merchProductAttribute SET useCount = useCount - 1 WHERE useCount > 0 AND pk IN (@keys)", new { @keys = attributeKeys });
+            Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @key", new { @key = variant.Key });
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ProductOptionCollection"/> for a given product key.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionCollection"/>.
+        /// </returns>
+        /// <remarks>
+        /// The method manages the sort order of the options with respect to the product
+        /// This query is never cached and is intended to generate objects that will be cached in 
+        /// individual product collections
+        /// </remarks>
+        public ProductOptionCollection GetProductOptionCollection(Guid productKey)
+        {
+            var options = GetByProductKey(productKey);
+
+            // Build the collection
+            var collection = new ProductOptionCollection();
+
+            foreach (var o in options)
+            {
+                collection.Add(o);
+            }
+
+            return collection;
         }
 
 
+        /// <summary>
+        /// Gets a <see cref="ProductAttributeCollection"/> for a product variant.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
+        public ProductAttributeCollection GetProductAttributeCollectionForVariant(Guid productVariantKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
+                .InnerJoin<ProductAttributeDto>(SqlSyntax)
+                .On<ProductVariant2ProductAttributeDto, ProductAttributeDto>(SqlSyntax, left => left.ProductAttributeKey, right => right.Key)
+                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductVariantKey == productVariantKey);
 
+            var dtos = Database.Fetch<ProductVariant2ProductAttributeDto, ProductAttributeDto>(sql);
 
+            var factory = new ProductAttributeFactory();
+            var collection = new ProductAttributeCollection();
+            foreach (var dto in dtos)
+            {
+                collection.Add(factory.BuildEntity(dto.ProductAttributeDto));
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// Gets the product attribute collection.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
+        public ProductAttributeCollection GetProductAttributeCollection(Guid optionKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+                .From<ProductAttributeDto>(SqlSyntax)
+                .Where<ProductAttributeDto>(x => x.OptionKey == optionKey)
+                .OrderBy<ProductAttributeDto>(x => x.SortOrder, SqlSyntax);
+
+            return GetProductAttributeCollection(sql);
+        }
 
 
         /// <summary>
@@ -157,7 +255,7 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool sharedOnly = true)
         {
-            var sql = BuildSearchSql(term, sharedOnly);
+            var sql = this.GetSearchSql(term, sharedOnly);
 
             if (!string.IsNullOrEmpty(sortBy))
             {
@@ -180,6 +278,53 @@
                 Items = keys.Any() ? GetAll(keys).ToList() : Enumerable.Empty<IProductOption>().ToList()
             };
         }
+
+
+
+        #region Internal Counts
+
+        /// <summary>
+        /// Gets the shareCount for a <see cref="IProductOption"/>.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int GetProductOptionShareCount(Guid optionKey)
+        {
+            var sql = new Sql();
+            sql.Select("COUNT(*)")
+                .From<Product2ProductOptionDto>(SqlSyntax)
+                .Where<Product2ProductOptionDto>(x => x.OptionKey == optionKey);
+
+            return Database.ExecuteScalar<int>(sql);
+        }
+
+        /// <summary>
+        /// Gets the product attribute use count.
+        /// </summary>
+        /// <param name="attributeKey">
+        /// The attribute key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int GetProductAttributeUseCount(Guid attributeKey)
+        {
+            var sql = new Sql();
+            sql.Select("COUNT(*)")
+                .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
+                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductAttributeKey == attributeKey);
+
+
+            return Database.ExecuteScalar<int>(sql);
+        }
+
+        #endregion
+
+        #region Base overrides
 
         /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.
@@ -311,6 +456,10 @@
         /// <param name="entity">
         /// The entity.
         /// </param>
+        /// <remarks>
+        /// This should never be a partial variation of an option 
+        /// (e.g. NEVER save a non shared option that has been queried with a reduced collection of choices) 
+        /// </remarks>
         protected override void PersistNewItem(IProductOption entity)
         {
             ((Entity)entity).AddingEntity();
@@ -319,7 +468,7 @@
             var dto = factory.BuildDto(entity);
             Database.Insert(dto);
             entity.Key = dto.Key;
-
+            
             SaveProductAttributes(entity);
 
             entity.ResetDirtyProperties();
@@ -331,6 +480,10 @@
         /// <param name="entity">
         /// The entity.
         /// </param>
+        /// <remarks>
+        /// This should never be a partial variation of an option 
+        /// (e.g. NEVER save a non shared option that has been queried with a reduced collection of choices) 
+        /// </remarks>
         protected override void PersistUpdatedItem(IProductOption entity)
         {
             ((Entity)entity).UpdatingEntity();
@@ -345,18 +498,8 @@
             entity.ResetDirtyProperties();
         }
 
-        /// <summary>
-        /// Deletes a ProductOption.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        protected override void PersistDeletedItem(IProductOption entity)
-        {
-            if (EnsureSharedDelete(entity))
-            base.PersistDeletedItem(entity);
-        }
 
+        #endregion
 
         /// <summary>
         /// Ensures duplicate SKUs do not exist.
@@ -385,25 +528,20 @@
             EnsureAttributeSku(option, att, index);
         }
 
+
+
         /// <summary>
-        /// Gets the product attribute collection.
+        /// Gets the <see cref="ProductAttributeCollection"/> for a specific product.
         /// </summary>
         /// <param name="optionKey">
         /// The option key.
         /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductAttributeCollection"/>.
         /// </returns>
-        private ProductAttributeCollection GetProductAttributeCollection(Guid optionKey)
-        {
-            var sql = new Sql();
-            sql.Select("*")
-               .From<ProductAttributeDto>(SqlSyntax)
-               .Where<ProductAttributeDto>(x => x.OptionKey == optionKey);
-
-            return GetProductAttributeCollection(sql);
-        }
-
         private ProductAttributeCollection GetProductAttributeCollection(Guid optionKey, Guid productKey)
         {
             var sql = new Sql();
@@ -421,9 +559,17 @@
                 .Append(")) ORDER BY sortOrder");
 
             return GetProductAttributeCollection(sql);
-
         }
 
+        /// <summary>
+        /// Gets the the <see cref="ProductAttributeCollection"/> by SQL.
+        /// </summary>
+        /// <param name="sql">
+        /// The SQL.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeCollection"/>.
+        /// </returns>
         private ProductAttributeCollection GetProductAttributeCollection(Sql sql)
         {
             var dtos = Database.Fetch<ProductAttributeDto>(sql);
@@ -461,31 +607,20 @@
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
         }
 
-
-        private void DeleteSharedProductAttributeVariantAssociation(IProductOption option, Guid productKey)
+        /// <summary>
+        /// Safely removes old shared options from a product.
+        /// </summary>
+        /// <param name="savers">
+        /// The savers.
+        /// </param>
+        /// <param name="existing">
+        /// The existing.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        private void SafeRemoveSharedOptionsFromProduct(IEnumerable<IProductOption> savers, IEnumerable<IProductOption> existing, Guid productKey)
         {
-            var keys = option.Choices.Select(x => x.Key).ToArray();
-
-            var sql = new Sql();
-            sql.Append("DELETE FROM merchProductVariant2ProductAttribute")
-                .Append("WHERE productVariantKey IN (")
-                .Append("SELECT productVariantKey FROM  merchProductVariant2ProductAttribute T1")
-                .Append("JOIN  merchProductVariant T2 ON T1.productVariantKey = T2.pk")
-                .Append("WHERE T2.productKey = @pk", new { @pk = productKey })
-                .Append(")")
-                .Append("AND optionKey IN (@oks)", new { @oks = keys });
-
-            Database.Execute(sql);
-
-            foreach (var choice in option.Choices.Where(choice => choice.UseCount >= 0))
-            {
-                choice.UseCount--;
-            }
-        }
-
-        private void SafeRemoveOldOptions(IEnumerable<IProductOption> savers, IEnumerable<IProductOption> existing, Guid productKey)
-        {
-
             var removers = existing.Where(ex => savers.All(sv => sv.Key != ex.Key)).ToArray();
             if (removers.Any())
             {
@@ -494,9 +629,7 @@
                     if (rm.Shared)
                     {
                         //// shared options cannot be deleted from a product.  Instead useCount will be decremented
-                        rm.SharedCount--;
-                        DeleteSharedProductAttributeVariantAssociation(rm, productKey);
-                        AddOrUpdate(rm);
+                        this.DeleteSharedProductOptionFromProduct(rm, productKey);
                     }
                     else
                     {
@@ -506,6 +639,40 @@
             }
         }
 
+
+        /// <summary>
+        /// Removes attribute association from IProduct for a shared option.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <remarks>
+        /// This affectively deletes the shared option from the product
+        /// </remarks>
+        private void DeleteSharedProductOptionFromProduct(IProductOption option, Guid productKey)
+        {
+            foreach (var clause in this.GetRemoveShareProductOptionFromProductSql(option, productKey))
+            {
+                Database.Execute(clause);
+            }
+
+            var countsToUpdate = option.Choices.Where(choice => choice.UseCount >= 0).ToArray();
+
+            // the option parameter may not contain all of the choices of the main option
+            // due to the product association so we need to get the full option and decrement
+            // the UseCounts of only the attributes that were assigned to the product
+            var sharedOption = Get(option.Key);
+
+            foreach (var choice in sharedOption.Choices.Where(choice => countsToUpdate.Any(x => x.Key == choice.Key)))
+            {
+                choice.UseCount--;
+            }
+            
+            AddOrUpdate(sharedOption);
+        }
 
         /// <summary>
         /// Saves the attribute collection.
@@ -564,7 +731,6 @@
 
             if (!att.HasIdentity)
             {
-                att.UseCount = 0;
                 att.CreateDate = DateTime.Now;
                 att.UpdateDate = DateTime.Now;
 
@@ -587,22 +753,60 @@
             }
         }
 
-
         /// <summary>
-        /// The ensure shared delete.
+        /// Ensures the sort order of product options.
         /// </summary>
-        /// <param name="entity">
-        /// The entity.
+        /// <param name="options">
+        /// The options.
         /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private bool EnsureSharedDelete(IProductOption entity)
+        private void EnsureProductOptionsSortOrder(ProductOptionCollection options)
         {
-            return !entity.Shared || 
-                (entity.Shared && entity.Choices.Sum(x => x.UseCount) == 0);
+            if (!options.Any()) return;
+
+            var sort = 1;
+            var sorted = options.OrderBy(x => x.SortOrder);
+            foreach (var option in sorted)
+            {
+                if (option.SortOrder != sort) option.SortOrder = sort;
+                sort++;
+            }
         }
 
+        /// <summary>
+        /// Gets a collection of options for a specific <see cref="IProduct"/>.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProduct}"/>.
+        /// </returns>
+        private IEnumerable<IProductOption> GetByProductKey(Guid productKey)
+        {
+            var sql = new Sql();
+            sql.Select("*")
+               .From<ProductOptionDto>(SqlSyntax)
+               .InnerJoin<Product2ProductOptionDto>(SqlSyntax)
+               .On<ProductOptionDto, Product2ProductOptionDto>(SqlSyntax, left => left.Key, right => right.OptionKey)
+               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey)
+               .OrderBy<Product2ProductOptionDto>(x => x.SortOrder, SqlSyntax);
+
+            var dtos = Database.Fetch<ProductOptionDto, Product2ProductOptionDto>(sql);
+
+            var factory = new ProductOptionFactory();
+
+            return dtos.Any()
+                       ? dtos.Select(
+                           x =>
+                           {
+                               var option = factory.BuildEntity(x);
+                               option.Choices = GetProductAttributeCollection(option.Key, productKey);
+                               return option;
+                           })
+                       : Enumerable.Empty<IProductOption>();
+        }
+
+        #region Sql
 
         /// <summary>
         /// Builds the product search SQL.
@@ -616,7 +820,7 @@
         /// <returns>
         /// The <see cref="Sql"/>.
         /// </returns>
-        private Sql BuildSearchSql(string searchTerm, bool sharedOnly)
+        private Sql GetSearchSql(string searchTerm, bool sharedOnly)
         {
             searchTerm = searchTerm.Replace(",", " ");
             var invidualTerms = searchTerm.Split(' ');
@@ -638,5 +842,53 @@
 
             return sql;
         }
+
+        /// <summary>
+        /// Gets a list of SQL clauses to be executed when removing shared options from a product.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Sql}"/>.
+        /// </returns>
+        private IEnumerable<Sql> GetRemoveShareProductOptionFromProductSql(IProductOption option, Guid productKey)
+        {
+            var keys = option.Choices.Select(x => x.Key).ToArray();
+
+            var sortOrder = option.SortOrder;
+
+            var list = new List<Sql>
+            {
+                //// Product Attribute Association
+                new Sql().Append("DELETE FROM merchProductVariant2ProductAttribute")
+                    .Append("WHERE productVariantKey IN (")
+                    .Append(
+                        "SELECT productVariantKey FROM  merchProductVariant2ProductAttribute T1")
+                    .Append("JOIN  merchProductVariant T2 ON T1.productVariantKey = T2.pk")
+                    .Append("WHERE T2.productKey = @pk", new { @pk = productKey })
+                    .Append(")")
+                    .Append("AND optionKey IN (@oks)", new { @oks = keys }),
+
+                //// Product Option Association
+                new Sql().Append("DELETE FROM merchProduct2ProductOption WHERE optionKey = @ok AND productKey = @pk", new { @ok = option.Key, @pk = productKey }),
+
+                //// Update SortOrder
+                new Sql().Append("UPDATE merchProduct2ProductOption SET sortOrder = sortOrder -1 WHERE sortOrder > @so", new { @so = sortOrder }),
+
+                //// Update the ProductOption shareCount
+                new Sql().Append("UPDATE merchProductOption SET shareCount = shareCount - 1 WHERE shareCount > 0 AND pk = @key", new { @key = option.Key })
+            };
+
+            // Update the product attribute use counts
+            list.AddRange(option.Choices.Select(choice => new Sql().Append("UPDATE merchProductAttribute SET useCount = useCount - 1 WHERE useCount > 0 AND pk = @key", new { @key = choice.Key })));
+
+            return list;
+        }
+
+        #endregion
     }
 }

@@ -473,7 +473,7 @@
         /// </returns>
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateProductVariantRepository(uow), _logger, _sqlSyntax);
+            return new ProductRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax, CreateProductVariantRepository(uow), CreateProductOptionRepository(uow));
         }
 
         /// <summary>
@@ -501,7 +501,7 @@
         /// </returns>
         internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductVariantRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new ProductVariantRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax, CreateProductOptionRepository(uow));
         }
 
         /// <summary>

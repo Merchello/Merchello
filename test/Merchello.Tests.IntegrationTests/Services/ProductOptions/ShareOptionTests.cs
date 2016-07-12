@@ -13,11 +13,6 @@
     public class ShareOptionTests : OptionTestsBase
     {
 
-        [SetUp]
-        public void Setup()
-        {
-
-        }
 
         [Test]
         public void Can_Add_A_Shared_Option()
@@ -72,12 +67,26 @@
             var key = option.Key;
 
             //// Act
-            _productOptionService.Delete(option);
+            this._productOptionService.Delete(option);
 
             //// Assert
-            var deleted = _productOptionService.GetByKey(key);
+            var deleted = this._productOptionService.GetByKey(key);
 
             Assert.IsNull(deleted);
+        }
+
+        [Test]
+        public void Can_Add_A_Shared_Option_To_A_Product()
+        {
+            //// Arrange
+            var product = _productService.GetByKey(_productKey);
+            var option = _productOptionService.GetByKey(_optionKey);
+
+            //// Act
+            product.ProductOptions.Add(option);
+            _productService.Save(product);
+
+            //// Assert
 
         }
 
@@ -87,7 +96,7 @@
             //// Arrange
 
             //// Act
-            var retrieved = _productOptionService.GetByKey(_optionKey);
+            var retrieved = this._productOptionService.GetByKey(_optionKey);
 
             //// Assert
             Assert.NotNull(retrieved, "Retrieved was null");
