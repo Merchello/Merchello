@@ -37,11 +37,6 @@
         public bool Shared { get; set; }
 
         /// <summary>
-        /// Gets or sets the shared count.
-        /// </summary>
-        public int SharedCount { get; set; }
-
-        /// <summary>
         /// Gets or sets the detached content key.
         /// </summary>
         public Guid DetachedContentKey { get; set; }

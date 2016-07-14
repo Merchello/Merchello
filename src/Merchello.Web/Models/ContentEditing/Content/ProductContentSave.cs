@@ -3,7 +3,7 @@
     /// <summary>
     /// The product content save.
     /// </summary>
-    public class ProductContentSave : DetachedContentSaveItem<ProductDisplay>
+    public class ProductContentSave : ProductContentSaveItemBase<ProductDisplay>
     {
     }
 }

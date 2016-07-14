@@ -2527,9 +2527,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.shared = false;
         self.sortOrder = 1;
         self.detachedContentTypeKey = '';
-        self.sharedCount = 0;
         self.choices = [];
-
     };
 
     ProductOptionDisplay.prototype = (function() {

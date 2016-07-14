@@ -13,6 +13,8 @@
             $scope.deleteProductDialog = deleteProductDialog;
 
             function init() {
+
+                console.info('got here');
                 var key = $routeParams.id;
                 loadSettings();
                 loadProduct(key);
@@ -30,16 +32,18 @@
                 var promise = productResource.getByKey(key);
                 promise.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
-
-                    $scope.tabs = merchelloTabsFactory.createProductEditorTabs(key, $scope.product.hasVariants());
-                    $scope.tabs.hideTab('productcontent');
-                    $scope.tabs.setActive('optionslist');
-                    $scope.loaded = true;
-                    $scope.preValuesLoaded = true;
-
+                    setTabs();
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });
+            }
+
+            function setTabs() {
+                $scope.tabs = merchelloTabsFactory.createProductEditorTabs($scope.product.key, $scope.product.hasVariants());
+                $scope.tabs.hideTab('productcontent');
+                $scope.tabs.setActive('optionslist');
+                $scope.loaded = true;
+                $scope.preValuesLoaded = true;
             }
 
             /**
@@ -75,17 +79,12 @@
                 }
                 if (thisForm.$valid) {
                     notificationsService.info("Saving Product...", "");
-                    console.info($scope.product);
+
                     var promise = productResource.save($scope.product);
                     promise.then(function (product) {
                         notificationsService.success("Product Saved", "");
                         $scope.product = productDisplayBuilder.transform(product);
-                        if (!$scope.product.hasVariants()) {
-                            // short pause to make sure examine index has a chance to update
-                            $timeout(function() {
-                                $location.url("/merchello/merchello/productedit/" + $scope.product.key, true);
-                            }, 400);
-                        }
+                        setTabs();
                     }, function (reason) {
                         notificationsService.error("Product Save Failed", reason.message);
                     });
