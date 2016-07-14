@@ -77,7 +77,8 @@
             { 44, typeof(Invoice2EntityCollectionDto) },
             { 45, typeof(Customer2EntityCollectionDto) },
             { 46, typeof(ProductVariantDetachedContentDto) },
-            { 47, typeof(NoteDto) }
+            { 47, typeof(NoteDto) },
+            { 48, typeof(ProductOptionAttributeShareDto) }
         };
 
         /// <summary>

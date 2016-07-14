@@ -105,6 +105,7 @@
                 !this.ValidColumns.Contains("merchProductOption,detachedContentTypeKey") ||
                 !this.ValidColumns.Contains("merchProductAttribute,detachedContentValues") ||
                 !this.ValidColumns.Contains("merchProductAttribute,useCount") ||
+                !this.ValidTables.Contains("merchProductOptionAttributeShare") ||
                 this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.Entity.ProductOptionKey))
             {
                 return new Version(2, 1, 0);

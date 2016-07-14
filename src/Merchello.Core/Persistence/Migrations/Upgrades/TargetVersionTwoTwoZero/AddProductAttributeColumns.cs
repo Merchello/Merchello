@@ -13,7 +13,7 @@
     /// <summary>
     /// Adds columns to the merchProductAttribute table.
     /// </summary>
-    [Migration("2.2.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("2.2.0", 2, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddProductAttributeColumns : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>

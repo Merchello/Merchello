@@ -20,24 +20,35 @@
         /// <param name="product">
         /// The product.
         /// </param>
-        void SaveForProduct(IProduct product);
+        /// <returns>
+        /// A collection of product keys of products that need to be refreshed in the current cache and examine.
+        /// </returns>
+        IEnumerable<Guid> SaveForProduct(IProduct product);
 
         /// <summary>
-        /// Safely saves product options for a given product.
+        /// Creates the attribute association between product attribute and product variant.
         /// </summary>
-        /// <param name="options">
-        /// The options.
+        /// <param name="variant">
+        /// The variant.
         /// </param>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <remarks>
-        /// This method ensures the product association of choices, deleted only NON shared options and manages the sort order
-        /// </remarks>
         /// <returns>
-        /// The saved collection <see cref="IEnumerable{IProductOption}"/>.
+        /// A collection of product keys of products that need to be refreshed in the current cache and examine.
         /// </returns>
-        ProductOptionCollection SaveForProduct(IEnumerable<IProductOption> options, Guid productKey);
+        IEnumerable<Guid> CreateAttributeAssociationForProductVariant(IProductVariant variant);
+
+        /// <summary>
+        /// Queries for product options by a collection of keys.
+        /// </summary>
+        /// <param name="optionKeys">
+        /// The option Keys.
+        /// </param>
+        /// <param name="sharedOnly">
+        /// The shared Only.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductOption}"/>.
+        /// </returns>
+        IEnumerable<IProductOption> GetProductOptions(Guid[] optionKeys, bool sharedOnly = false);
 
         /// <summary>
         /// Gets the <see cref="ProductOptionCollection"/> for a given product key.
@@ -93,12 +104,54 @@
         /// </returns>
         Page<IProductOption> GetPage(string term, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool sharedOnly = true);
 
+        /// <summary>
+        /// Deletes all products options.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <remarks>
+        /// Used when deleting a product
+        /// </remarks>
+        /// <returns>
+        /// A collection of product keys of products that need to be refreshed in the current cache and examine.
+        /// </returns>
+        IEnumerable<Guid> DeleteAllProductOptions(IProduct product);
 
-        void DeleteProductVariantAttributes(IProductVariant variant);
+        /// <summary>
+        /// Deletes all product attributes from a product variant.
+        /// </summary>
+        /// <param name="variant">
+        /// The variant.
+        /// </param>
+        /// <remarks>
+        /// Used when deleting a product variant
+        /// </remarks>
+        /// <returns>
+        /// A collection of product keys of products that need to be refreshed in the current cache and examine.
+        /// </returns>
+        IEnumerable<Guid> DeleteAllProductVariantAttributes(IProductVariant variant);
 
+        /// <summary>
+        /// Gets the count of the number of product associations for an option
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The count.
+        /// </returns>
         int GetProductOptionShareCount(Guid optionKey);
 
-
+        /// <summary>
+        /// Gets the count of the product variant associations for a product attribute.
+        /// </summary>
+        /// <param name="attributeKey">
+        /// The attribute key.
+        /// </param>
+        /// <returns>
+        /// The count.
+        /// </returns>
         int GetProductAttributeUseCount(Guid attributeKey);
     }
 }

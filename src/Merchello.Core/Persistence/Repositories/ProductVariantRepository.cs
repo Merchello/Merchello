@@ -523,7 +523,7 @@
             entity.Key = dto.Key; // to set HasIdentity
 
             Database.Insert(dto.ProductVariantIndexDto);
-            ((ProductVariant) entity).ExamineId = dto.ProductVariantIndexDto.Id;
+            ((ProductVariant)entity).ExamineId = dto.ProductVariantIndexDto.Id;
 
             // insert associations for every attribute
             foreach (var association in entity.Attributes.Select(att => new ProductVariant2ProductAttributeDto()
@@ -578,7 +578,7 @@
 
             entity.ResetDirtyProperties();
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+            RemoveProductsFromRuntimeCache(new[] { entity.ProductKey });
         }
 
         /// <summary>
@@ -589,7 +589,8 @@
         /// </param>
         protected override void PersistDeletedItem(IProductVariant entity)
         {
-            _productOptionRepository.DeleteProductVariantAttributes(entity);
+            var productKeys = _productOptionRepository.DeleteAllProductVariantAttributes(entity).ToArray();
+            RemoveProductsFromRuntimeCache(productKeys);
 
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
@@ -597,7 +598,8 @@
                 Database.Execute(delete, new { entity.Key });
             }
 
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(entity.ProductKey));
+            if (!productKeys.Contains(entity.ProductKey))
+                RemoveProductsFromRuntimeCache(new[] { entity.ProductKey });
         }
 
         /// <summary>
@@ -613,7 +615,6 @@
                 "DELETE FROM merchCatalogInventory WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariantDetachedContent WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariantIndex WHERE productVariantKey = @Key",
-                "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @Key",
                 "DELETE FROM merchProductVariant WHERE pk = @Key"
             };
 
@@ -749,5 +750,20 @@
             return slug;
         }
 
+
+        /// <summary>
+        /// Removes products from cache.
+        /// </summary>
+        /// <param name="productKeys">
+        /// The product keys of products that need to be removed from cache.
+        /// </param>
+        private void RemoveProductsFromRuntimeCache(IEnumerable<Guid> productKeys)
+        {
+            // clear the cache for other products affected
+            foreach (var key in productKeys)
+            {
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+            }
+        }
     }
 }

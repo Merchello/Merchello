@@ -529,6 +529,7 @@
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
     <Compile Include="Models\Rdbms\Product2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\ProductOptionAttributeShareDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantDetachedContentDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
@@ -654,6 +655,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductAttributeColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionTypeField.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\CreateProductOptionAttributeShareTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteAuthorColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteInternalOnlyColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddRedirectPaymentMethodType.cs" />

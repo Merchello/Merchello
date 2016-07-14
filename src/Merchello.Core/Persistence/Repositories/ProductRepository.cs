@@ -1184,20 +1184,12 @@
         {
             var list = new List<string>
                 {                    
-                    @"DELETE FROM merchProductVariant2ProductAttribute WHERE optionKey IN 
-                        (SELECT pk FROM merchProductOption WHERE pk IN 
-                        (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",                    
-                    @"DELETE FROM merchProductAttribute WHERE optionKey IN 
-                        (SELECT pk FROM merchProductOption WHERE pk IN 
-                        (SELECT optionKey FROM merchProduct2ProductOption WHERE productKey = @Key))",
-                    "DELETE FROM merchProduct2ProductOption WHERE productKey = @Key",
                     "DELETE FROM merchCatalogInventory WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariantDetachedContent WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",
                     "DELETE FROM merchProductVariantIndex WHERE productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @Key)",                    
                     "DELETE FROM merchProductVariant WHERE productKey = @Key",
                     "DELETE FROM merchProduct2EntityCollection WHERE productKey = @Key",
-                    "DELETE FROM merchProduct WHERE pk = @Key",
-                    "DELETE FROM merchProductOption WHERE pk NOT IN (SELECT optionKey FROM merchProduct2ProductOption)"
+                    "DELETE FROM merchProduct WHERE pk = @Key"
                 };
 
             return list;
@@ -1236,7 +1228,7 @@
             _productOptionRepository.SaveForProduct(entity);
 
             // synchronize the inventory
-            ((ProductVariantRepository)_productVariantRepository).SaveCatalogInventory(((Product)entity).MasterVariant);
+            _productVariantRepository.SaveCatalogInventory(((Product)entity).MasterVariant);
 
             entity.ResetDirtyProperties();
         }
@@ -1261,7 +1253,7 @@
             Database.Update(dto);
             Database.Update(dto.ProductVariantDto);
 
-            _productOptionRepository.SaveForProduct(entity);
+            RemoveProductsFromRuntimeCache(_productOptionRepository.SaveForProduct(entity));
 
             // synchronize the inventory
             _productVariantRepository.SaveCatalogInventory(((Product)entity).MasterVariant);
@@ -1279,6 +1271,8 @@
         /// </param>
         protected override void PersistDeletedItem(IProduct entity)
         {
+           RemoveProductsFromRuntimeCache(_productOptionRepository.DeleteAllProductOptions(entity));
+
             var deletes = GetDeleteClauses();
             foreach (var delete in deletes)
             {
@@ -1369,6 +1363,21 @@
             sql.Where("master = @master", new { @master = true });
 
             return sql;
+        }
+
+        /// <summary>
+        /// Removes products from cache.
+        /// </summary>
+        /// <param name="productKeys">
+        /// The product keys of products that need to be removed from cache.
+        /// </param>
+        private void RemoveProductsFromRuntimeCache(IEnumerable<Guid> productKeys)
+        {
+            // clear the cache for other products affected
+            foreach (var key in productKeys)
+            {
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProduct>(key));
+            }
         }
     }
 }
