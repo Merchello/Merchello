@@ -74,7 +74,6 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
         [Test]
         public void Can_Remove_An_Option_By_The_Option()
         {
-
             //// Arrange
             var product = PreTestDataWorker.MakeExistingProduct();
             product.ProductOptions.Add(new ProductOption("Option1"));
@@ -85,13 +84,13 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
 
             product.ProductOptions.Add(new ProductOption("Option4"));
             _productService.Save(product);
-            Assert.IsTrue(product.ProductOptions.Count == 4);
+            Assert.AreEqual(4, product.ProductOptions.Count);
 
             //// Act
             product.ProductOptions.Remove(removeItem);
 
             //// Assert
-            Assert.IsTrue(product.ProductOptions.Count == 3);
+            Assert.AreEqual(4, product.ProductOptions.Count);
         }
 
         /// <summary>
@@ -155,7 +154,7 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
             Assert.AreEqual(4, product.ProductVariants.Count, "ProductVariant count is not 4");
 
             //// Act
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Remove(removeChoice);
+            product.ProductOptions.First(x => x.Name == "Color").Choices.RemoveItem(removeChoice.Key);
             _productService.Save(product);
 
             // Assert

@@ -129,8 +129,6 @@
                 Database.Insert(association);
             }
 
-            Database.Execute("UPDATE merchProductAttribute SET useCount = useCount + 1 WHERE pk IN (@keys)", new { @keys = variant.Attributes.Select(x => x.Key).ToArray() });
-
             var sharedOptions = GetProductOptions(variant.Attributes.Select(x => x.OptionKey).ToArray(), true);
 
             return GetProductKeysForCacheRefresh(sharedOptions.Select(x => x.Key).ToArray());
@@ -179,7 +177,7 @@
         {
             var sharedOptionKeys = product.ProductOptions.Where(x => x.Shared).Select(x => x.Key).ToArray();
 
-            var statements = GetRemoveAllProductOptionsFromProductSql(product, sharedOptionKeys);
+            var statements = GetRemoveAllProductOptionsFromProductSql(product);
 
             foreach (var sql in statements)
             {
@@ -208,9 +206,6 @@
 
             var sharedOptions = GetProductOptions(variant.Attributes.Select(x => x.OptionKey).Distinct().ToArray(), true);
 
-            var attributeKeys = variant.Attributes.Select(x => x.Key);
-
-            Database.Execute("UPDATE merchProductAttribute SET useCount = useCount - 1 WHERE useCount > 0 AND pk IN (@keys)", new { @keys = attributeKeys });
             Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @key", new { @key = variant.Key });
 
             return GetProductKeysForCacheRefresh(sharedOptions.Select(x => x.Key).ToArray());
@@ -544,6 +539,7 @@
             var list = new List<string>
                 {
                     "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT productVariantKey FROM merchProductVariant2ProductAttribute WHERE optionKey = @Key)",
+                    "DELETE FROM merchProductOptionAttributeShare WHERE optionKey = @Key",
                     "DELETE FROM merchProduct2ProductOption WHERE optionKey = @Key",
                     "DELETE FROM merchProductAttribute WHERE optionKey = @Key",
                     "DELETE FROM merchProductOption WHERE pk = @Key"
@@ -707,6 +703,8 @@
         /// </returns>
         private IEnumerable<Guid> GetProductKeysForCacheRefresh(Guid[] sharedOptionKeys)
         {
+            if (!sharedOptionKeys.Any()) return Enumerable.Empty<Guid>();
+
             var sql = new Sql().Select("*")
                 .From<Product2ProductOptionDto>(SqlSyntax)
                 .Where("optionKey IN (@keys)", new { @keys = sharedOptionKeys });
@@ -737,6 +735,18 @@
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
         }
 
+        /// <summary>
+        /// Adds or updates a product option, respecting shared option rules.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <param name="exists">
+        /// The exists.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
         private void SafeAddOrUpdateProductWithProductOption(IProductOption option, bool exists, Guid productKey)
         {
             var makeAssociation = false;
@@ -745,17 +755,12 @@
             {
                 // this option is being added through the product UI
                 option.Shared = false;
-                option.SharedCount = 1;
                 PersistNewItem(option);
                 makeAssociation = true;
             }
             else
             {
-                if (!exists)
-                {
-                    option.SharedCount++;
-                    makeAssociation = true;
-                }
+                if (!exists) makeAssociation = true;
 
                 PersistUpdatedItem(option);
             }
@@ -773,20 +778,20 @@
 
                 Database.Insert(dto);
 
-                if (option.Shared)
-                {
-                    foreach (var choice in option.Choices)
+                if (!option.Shared) return;
+
+                foreach (var mapDto in option.Choices.Select(
+                    choice => 
+                    new ProductOptionAttributeShareDto
                     {
-                        var mapDto = new ProductOptionAttributeShareDto
-                                         {
-                                             ProductKey = productKey,
-                                             OptionKey = choice.OptionKey,
-                                             AttributeKey = choice.Key,
-                                             CreateDate = DateTime.Now,
-                                             UpdateDate = DateTime.Now
-                                         };
-                        Database.Insert(dto);
-                    }
+                        ProductKey = productKey,
+                        OptionKey = choice.OptionKey,
+                        AttributeKey = choice.Key,
+                        CreateDate = DateTime.Now,
+                        UpdateDate = DateTime.Now
+                    }))
+                {
+                    this.Database.Insert(mapDto);
                 }
             }
         }
@@ -817,7 +822,7 @@
                     }
                     else
                     {
-                        Delete(rm);
+                        PersistDeletedItem(rm);
                     }
                 }
             }
@@ -867,10 +872,6 @@
                 {
                     DeleteProductAttribute(ex);
                     resetSorts = true;
-                }
-                else
-                {
-                    ex.UseCount--;
                 }
 
             }
@@ -1027,21 +1028,46 @@
         /// <param name="product">
         /// The product.
         /// </param>
-        /// <param name="sharedOptionKeys">
-        /// The shared option keys.
+        /// <returns>
+        /// The <see cref="IEnumerable{Sql}"/>.
+        /// </returns>
+        private IEnumerable<Sql> GetRemoveAllProductOptionsFromProductSql(IProduct product)
+        {
+            var list = new List<Sql>
+                {
+                    //// Remove any shared option associations
+                    new Sql("DELETE FROM merchProductOptionAttributeShare WHERE productKey = @key", new { @key = product.Key }),
+
+                    //// Remove the product 2 option associations
+                    new Sql("DELETE FROM merchProduct2ProductOption WHERE productKey = @key", new { @key = product.Key })  
+                };
+
+            list.AddRange(GetRemoveAllProductVariantProductAttributeSql(product));
+
+            return list;
+        }
+
+        /// <summary>
+        /// Gets the SQL statements to execute when deleting an option which has choices that define variants.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Sql}"/>.
         /// </returns>
-        private IEnumerable<Sql> GetRemoveAllProductOptionsFromProductSql(IProduct product, Guid[] sharedOptionKeys)
+        private IEnumerable<Sql> GetRemoveAllProductVariantProductAttributeSql(IProduct product)
         {
-            var list = new List<Sql>
-                {
-                    new Sql().Append("DELETE FROM merchProduct2ProductOption WHERE productKey = @key", new { @key = product.Key })  
-                };
+            var optionKeys = product.ProductOptions.Where(x => !x.Shared).Select(x => x.Key).ToArray();
 
-            if (sharedOptionKeys.Any()) 
-                 list.Add(new Sql().Append("UPDATE merchProductOption SET shareCount = shareCount - 1 WHERE pk IN (@keys)", new { @keys = sharedOptionKeys }));
+            var list = new List<Sql>
+            {
+                // Remove varaint associations
+                new Sql("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (SELECT [merchProductVariant].pk FROM merchProductVariant WHERE productKey = @pk)", new { @pk = product.Key })
+            };
+
+            // Remove only option choices for non shared options
+            if (optionKeys.Any()) list.Add(new Sql("DELETE FROM merchProductAttribute WHERE optionKey IN (@okeys)", new { @okeys = optionKeys }));
 
             return list;
         }
@@ -1067,7 +1093,7 @@
             var list = new List<Sql>
             {
                 //// Product Attribute Association
-                new Sql().Append("DELETE FROM merchProductVariant2ProductAttribute")
+                new Sql("DELETE FROM merchProductVariant2ProductAttribute")
                     .Append("WHERE productVariantKey IN (")
                     .Append("SELECT productVariantKey FROM  merchProductVariant2ProductAttribute T1")
                     .Append("JOIN  merchProductVariant T2 ON T1.productVariantKey = T2.pk")
@@ -1076,20 +1102,14 @@
                     .Append("AND optionKey IN (@oks)", new { @oks = keys }),
 
                 // Delete the shared attribute association
-                new Sql().Append("DELETE FROM merchProductOption2ProductAttributeShare WHERE optionKey = @ok A"),
+                new Sql("DELETE FROM merchProductOptionAttributeShare WHERE optionKey = @ok AND productKey = @pk", new { @ok = option.Key, @pk = productKey }),
 
                 //// Product Option Association
-                new Sql().Append("DELETE FROM merchProduct2ProductOption WHERE optionKey = @ok AND productKey = @pk", new { @ok = option.Key, @pk = productKey }),
+                new Sql("DELETE FROM merchProduct2ProductOption WHERE optionKey = @ok AND productKey = @pk", new { @ok = option.Key, @pk = productKey }),
 
                 //// Update SortOrder
-                new Sql().Append("UPDATE merchProduct2ProductOption SET sortOrder = sortOrder -1 WHERE sortOrder > @so", new { @so = sortOrder }),
-
-                //// Update the ProductOption shareCount
-                new Sql().Append("UPDATE merchProductOption SET shareCount = shareCount - 1 WHERE shareCount > 0 AND pk = @key", new { @key = option.Key })
+                new Sql("UPDATE merchProduct2ProductOption SET sortOrder = sortOrder -1 WHERE sortOrder > @so", new { @so = sortOrder }),
             };
-
-            // Update the product attribute use counts
-            list.AddRange(option.Choices.Select(choice => new Sql().Append("UPDATE merchProductAttribute SET useCount = useCount - 1 WHERE useCount > 0 AND pk = @key", new { @key = choice.Key })));
 
             return list;
         }

@@ -20,6 +20,8 @@
 
         protected Guid _productKey;
 
+        private int _sharedCount = 1;
+
         [TestFixtureSetUp]
         public override void FixtureSetup()
         {
@@ -42,7 +44,7 @@
 
             //// Act
             product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Black"));
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Black", "Blue"));
+            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
 
             DbPreTestDataWorker.ProductService.Save(product);
 
@@ -54,12 +56,14 @@
 
         protected IProductOption CreateSavedOption()
         {
-            var option = this._productOptionService.CreateProductOption("Retrieve", true);
+            var option = this._productOptionService.CreateProductOption("Shared Option " + _sharedCount, true);
             option.AddChoice("Choice 1", "choice1");
             option.AddChoice("Choice 2", "choice2");
             option.AddChoice("Choice 3", "choice3");
             option.AddChoice("Choice 4", "choice4");
             this._productOptionService.Save(option);
+
+            _sharedCount++;
 
             return option;
         }
