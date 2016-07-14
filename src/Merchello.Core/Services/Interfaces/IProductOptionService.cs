@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Counting;
     using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core.Persistence;
@@ -114,6 +115,16 @@
         /// </returns>
         IEnumerable<IProductOption> GetByKeys(IEnumerable<Guid> keys);
 
+        /// <summary>
+        /// Gets the usage information about the product option.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOptionUseCount"/>.
+        /// </returns>
+        IProductOptionUseCount GetProductOptionUseCount(IProductOption option);
 
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.

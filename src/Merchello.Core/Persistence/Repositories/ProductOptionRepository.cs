@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Counting;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
@@ -27,6 +28,11 @@
     /// </remarks>
     internal class ProductOptionRepository : MerchelloPetaPocoRepositoryBase<IProductOption>, IProductOptionRepository
     {
+        /// <summary>
+        /// Valid sort fields.
+        /// </summary>
+        private static readonly string[] _validSortFields = { "name" };
+
         /// <summary>
         /// The detached content type repository.
         /// </summary>
@@ -162,6 +168,46 @@
         }
 
         /// <summary>
+        /// Gets use count information for an option and its choices.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionUseCount"/>.
+        /// </returns>
+        /// <remarks>
+        /// Used for determining shared option usage
+        /// </remarks>
+        public IProductOptionUseCount GetProductOptionUseCount(IProductOption option)
+        {
+            var allChoices = GetProductAttributeCollection(option.Key);
+
+            var oUseDto = Database.Fetch<EntityUseCountDto>(GetOptionUseCountSql(option.Key)).FirstOrDefault();
+
+            if (oUseDto == null) return null;
+
+            var poUse = new ProductOptionUseCount { Shared = option.Shared };
+
+            var factory = new EntityUseCountFactory();
+            poUse.Option = factory.Build(oUseDto);
+
+            var choiceUses = Database.Fetch<EntityUseCountDto>(GetAttributeUseCountSql(option.Key));
+
+            var choices = (choiceUses.Any() ? 
+                choiceUses.Select(x => factory.Build(x)) : 
+                Enumerable.Empty<EntityUseCount>()).ToList();
+
+            //// fill any missing attributes (unused) with 0
+            var missing = allChoices.Where(x => choices.All(y => y.Key != x.Key));
+            choices.AddRange(missing.Select(unused => new EntityUseCount { Key = unused.Key, UseCount = 0 }));
+
+            poUse.Choices = choices;
+
+            return poUse;
+        }
+
+        /// <summary>
         /// Deletes all products options.
         /// </summary>
         /// <param name="product">
@@ -183,7 +229,6 @@
             {
                 Database.Execute(sql);
             }
-
 
             return sharedOptionKeys;
         }
@@ -220,7 +265,7 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        public int GetProductOptionShareCount(Guid optionKey)
+        public int GetSharedProductOptionCount(Guid optionKey)
         {
             var sql = new Sql();
             sql.Select("COUNT(*)")
@@ -239,13 +284,12 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        public int GetProductAttributeUseCount(Guid attributeKey)
+        public int GetSharedProductAttributeCount(Guid attributeKey)
         {
             var sql = new Sql();
             sql.Select("COUNT(*)")
-                .From<ProductVariant2ProductAttributeDto>(SqlSyntax)
-                .Where<ProductVariant2ProductAttributeDto>(x => x.ProductAttributeKey == attributeKey);
-
+                .From<ProductOptionAttributeShareDto>(SqlSyntax)
+                .Where<ProductOptionAttributeShareDto>(x => x.AttributeKey == attributeKey);
 
             return Database.ExecuteScalar<int>(sql);
         }
@@ -360,17 +404,16 @@
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Descending,
+            SortDirection sortDirection = SortDirection.Ascending,
             bool sharedOnly = true)
         {
             var sql = this.GetSearchSql(term, sharedOnly);
 
-            if (!string.IsNullOrEmpty(sortBy))
-            {
-                sql.Append(sortDirection == SortDirection.Ascending
-                    ? string.Format("ORDER BY {0} ASC", sortBy)
-                    : string.Format("ORDER BY {0} DESC", sortBy));
-            }
+            sortBy = ValidateSortField(sortBy);
+
+            sql.Append(sortDirection == SortDirection.Ascending
+                ? string.Format("ORDER BY {0} ASC", sortBy)
+                : string.Format("ORDER BY {0} DESC", sortBy));
 
 
             var p = Database.Page<ProductOptionDto>(page, itemsPerPage, sql);
@@ -596,8 +639,21 @@
             entity.ResetDirtyProperties();
         }
 
-
         #endregion
+
+        /// <summary>
+        /// Validates the sortBy field.
+        /// </summary>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// A validated field.
+        /// </returns>
+        private static string ValidateSortField(string sortBy)
+        {
+            return _validSortFields.Contains(sortBy) ? sortBy : "name";
+        }
 
         /// <summary>
         /// Ensures duplicate SKUs do not exist.
@@ -965,8 +1021,7 @@
                .From<ProductOptionDto>(SqlSyntax)
                .InnerJoin<Product2ProductOptionDto>(SqlSyntax)
                .On<ProductOptionDto, Product2ProductOptionDto>(SqlSyntax, left => left.Key, right => right.OptionKey)
-               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey)
-               .OrderBy<Product2ProductOptionDto>(x => x.SortOrder, SqlSyntax);
+               .Where<Product2ProductOptionDto>(x => x.ProductKey == productKey);
 
             var dtos = Database.Fetch<ProductOptionDto, Product2ProductOptionDto>(sql);
 
@@ -976,7 +1031,7 @@
 
             var options = new List<IProductOption>();
 
-            foreach (var option in dtos.Select(dto => factory.BuildEntity(dto)))
+            foreach (var option in dtos.OrderBy(x => x.Product2ProductOptionDto.SortOrder).Select(dto => factory.BuildEntity(dto)))
             {
                 option.Choices = this.GetProductAttributeCollection(option, productKey);
                 options.Add(option);
@@ -1112,6 +1167,52 @@
             };
 
             return list;
+        }
+
+        /// <summary>
+        /// Gets the option use count SQL.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql GetOptionUseCountSql(Guid optionKey)
+        {
+            var sql =
+                new Sql("SELECT optionKey AS pk, COUNT(*) AS useCount").Append("FROM (")
+                    .Append("SELECT optionKey, productKey")
+                    .Append("FROM merchProduct2ProductOption")
+                    .Append("GROUP BY optionKey, productKey")
+                    .Append(") T1")
+                    .Append("WHERE optionKey = @ok", new { @ok = optionKey })
+                    .Append("GROUP By optionKey");
+
+            return sql;
+        }
+
+        /// <summary>
+        /// Gets the SQL to determine attribute use count for a specific option.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Sql"/>.
+        /// </returns>
+        private Sql GetAttributeUseCountSql(Guid optionKey)
+        {
+            var sql =
+                new Sql("SELECT attributeKey AS pk, COUNT(*) AS useCount").Append("FROM (")
+                    .Append("SELECT attributeKey, optionKey")
+                    .Append("FROM merchProductOptionAttributeShare")
+                    .Append("GROUP BY attributeKey, productKey, optionKey")
+                    .Append(") T1")
+                    .Append("WHERE optionKey = @ok", new { @ok = optionKey })
+                    .Append("GROUP BY attributeKey");
+
+            return sql;
         }
 
         #endregion

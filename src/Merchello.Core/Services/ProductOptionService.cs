@@ -8,6 +8,7 @@
     using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Counting;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
@@ -347,6 +348,23 @@
         }
 
         /// <summary>
+        /// Gets the usage information about the product option.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOptionUseCount"/>.
+        /// </returns>
+        public IProductOptionUseCount GetProductOptionUseCount(IProductOption option)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductOptionUseCount(option);
+            }
+        }
+
+        /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
         /// </summary>
         /// <param name="page">
@@ -462,12 +480,20 @@
             }
         }
 
-
+        /// <summary>
+        /// Ensures the option is safe to delete.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether or not the option can be deleted.
+        /// </returns>
         private bool EnsureSafeOptionDelete(IProductOption option)
         {
             using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
             {
-                var count = repository.GetProductOptionShareCount(option.Key);
+                var count = repository.GetSharedProductOptionCount(option.Key);
 
                 return option.Shared ? count == 0 : count == 1;
             }

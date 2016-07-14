@@ -455,6 +455,9 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\Counting\EntityUseCount.cs" />
+    <Compile Include="Models\Counting\IProductOptionUseCount.cs" />
+    <Compile Include="Models\Counting\ProductOptionUseCount.cs" />
     <Compile Include="Models\CurrencyFormat.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentType.cs" />
@@ -520,6 +523,7 @@
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
+    <Compile Include="Models\Rdbms\EntityUseCountDto.cs" />
     <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
@@ -609,6 +613,7 @@
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="PathHelper.cs" />
+    <Compile Include="Persistence\Factories\EntityUseCountFactory.cs" />
     <Compile Include="Persistence\Factories\NoteFactory.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DetachedContentTypeFactory.cs" />

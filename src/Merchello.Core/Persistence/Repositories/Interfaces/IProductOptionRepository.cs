@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Counting;
     using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core.Persistence;
@@ -102,7 +103,21 @@
         /// <returns>
         /// The <see cref="Page{IProductOption}"/>.
         /// </returns>
-        Page<IProductOption> GetPage(string term, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending, bool sharedOnly = true);
+        Page<IProductOption> GetPage(string term, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending, bool sharedOnly = true);
+
+        /// <summary>
+        /// Gets use count information for an option and its choices.
+        /// </summary>
+        /// <param name="option">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionUseCount"/>.
+        /// </returns>
+        /// <remarks>
+        /// Used for determining shared option usage
+        /// </remarks>
+        IProductOptionUseCount GetProductOptionUseCount(IProductOption option);
 
         /// <summary>
         /// Deletes all products options.
@@ -141,7 +156,7 @@
         /// <returns>
         /// The count.
         /// </returns>
-        int GetProductOptionShareCount(Guid optionKey);
+        int GetSharedProductOptionCount(Guid optionKey);
 
         /// <summary>
         /// Gets the count of the product variant associations for a product attribute.
@@ -152,6 +167,6 @@
         /// <returns>
         /// The count.
         /// </returns>
-        int GetProductAttributeUseCount(Guid attributeKey);
+        int GetSharedProductAttributeCount(Guid attributeKey);
     }
 }

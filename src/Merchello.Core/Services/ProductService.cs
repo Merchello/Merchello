@@ -931,6 +931,45 @@
         /// <summary>
         /// The get products keys with option.
         /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysWithOption(
+            Guid optionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
         /// <param name="optionName">
         /// The option name.
         /// </param>

@@ -224,6 +224,56 @@
             return _productVariantRepository.SkuExists(sku);
         }
 
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetProductsKeysWithOption(
+            Guid optionKey,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql("SELECT *")
+                .Append("FROM [merchProductVariant]")
+                .Append("WHERE [merchProductVariant].[productKey] IN (")
+                .Append("SELECT DISTINCT([productKey])")
+                .Append("FROM (")
+                .Append("SELECT	[merchProductVariant].[productKey]")
+                .Append("FROM [merchProductVariant]")
+                .Append("INNER JOIN [merchProductVariant2ProductAttribute]")
+                .Append("ON	[merchProductVariant].[pk] = [merchProductVariant2ProductAttribute].[productVariantKey]")
+                .Append("INNER JOIN [merchProductOption]")
+                .Append("ON [merchProductVariant2ProductAttribute].[optionKey] = [merchProductOption].[pk]")
+                .Append("INNER JOIN [merchProductAttribute]")
+                .Append("ON [merchProductVariant2ProductAttribute].[productAttributeKey] = [merchProductAttribute].[pk]")
+                .Append("WHERE [merchProductOption].[pk] = @key", new { @key = optionKey })
+                .Append(") [merchProductVariant]")
+                .Append(")")
+                .Append("AND [merchProductVariant].[master] = 1");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
         /// <summary>
         /// The get products keys with option.
         /// </summary>
