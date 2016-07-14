@@ -24,7 +24,6 @@
                     Key = dto.Key,
                     OptionKey = dto.OptionKey,
                     SortOrder = dto.SortOrder,
-                    UseCount = dto.UseCount,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };
@@ -51,7 +50,6 @@
                     Name = entity.Name,
                     Sku = entity.Sku,
                     SortOrder = entity.SortOrder,
-                    UseCount = entity.UseCount,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

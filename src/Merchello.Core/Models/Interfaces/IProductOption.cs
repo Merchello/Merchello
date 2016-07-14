@@ -42,12 +42,6 @@
         bool Shared { get; set; }
 
         /// <summary>
-        /// Gets or sets the shared count - this is the number of products this option is associated with.
-        /// </summary>
-        [DataMember]
-        int SharedCount { get; set; }
-
-        /// <summary>
         /// Gets or sets the detached content type key.
         /// </summary>
         Guid? DetachedContentTypeKey { get; set; }
@@ -57,5 +51,13 @@
         /// </summary>
         [DataMember]
         ProductAttributeCollection Choices { get; set; }
+
+        /// <summary>
+        /// Gets a clone version of the option.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IProductOption"/>.
+        /// </returns>
+        IProductOption Clone();
     }
 }

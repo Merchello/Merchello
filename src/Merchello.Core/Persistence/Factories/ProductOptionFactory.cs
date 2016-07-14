@@ -31,7 +31,6 @@
                     Required = dto.Required,
                     Shared = dto.Shared,
                     DetachedContentTypeKey = dto.DetachedContentTypeKey,
-                    SharedCount = dto.SharedCount,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };
@@ -57,7 +56,6 @@
                     Required = entity.Required,
                     Shared = entity.Shared,
                     DetachedContentTypeKey = entity.DetachedContentTypeKey,
-                    SharedCount = entity.SharedCount,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

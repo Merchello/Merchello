@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading;
-using Umbraco.Core;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Threading;
+
+    using Umbraco.Core;
+
     /// <summary>
     /// Defines a product option collection
     /// </summary>
@@ -14,39 +15,38 @@ namespace Merchello.Core.Models
     [DataContract(IsReference = true)]
     public class ProductOptionCollection : NotifiyCollectionBase<Guid, IProductOption>
     {
+        /// <summary>
+        /// The _add locker.
+        /// </summary>
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IProductOption item)
+        /// <summary>
+        /// Overrides the Remove method.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public new bool Remove(IProductOption item)
         {
-            return item.Key;
+            if (Guid.Empty.Equals(item.Key) || !Contains(item.Key)) return false;
+
+            this.RemoveItem(item.Key);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+            return true;
         }
 
-        // TODO 2.2.0 should not need to CAST to ProductOption 
-        // This is a quick fix in the 2.2.0 refactoring and needs to be addressed before release
-        internal new void Add(IProductOption item)
-        {
-            using (new WriteLock(_addLocker))
-            {
-                var key = GetKeyForItem(item);
-                if (Guid.Empty != key)
-                {
-                    var exists = Contains(item.Key);
-                    if (exists)
-                    {
-                        ((ProductOption)this[key]).SortOrder = item.SortOrder;
-                        return;
-                    }
-                }
-
-                // set the sort order to the next highest
-                ((ProductOption)item).SortOrder = this.Any() ? this.Max(x => x.SortOrder) + 1 : 1;
-                base.Add(item);
-                
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
-            }
-        }
-
-       
+        /// <summary>
+        /// The contains.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public bool Contains(string name)
         {
             return this.Any(x => x.Name == name);
@@ -62,6 +62,49 @@ namespace Merchello.Core.Models
                 }
             }
             return -1;
+        }
+
+        /// <summary>
+        /// Adds a new option to the collection.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        internal new void Add(IProductOption item)
+        {
+            using (new WriteLock(_addLocker))
+            {
+                var key = GetKeyForItem(item);
+                if (Guid.Empty != key)
+                {
+                    var exists = Contains(item.Key);
+                    if (exists)
+                    {
+                        this[key].SortOrder = item.SortOrder;
+                        return;
+                    }
+                }
+
+                // set the sort order to the next highest
+                item.SortOrder = this.Any() ? this.Max(x => x.SortOrder) + 1 : 1;
+                base.Add(item);
+                
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+            }
+        }
+
+        /// <summary>
+        /// The get key for item.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        protected override Guid GetKeyForItem(IProductOption item)
+        {
+            return item.Key;
         }
 
     }

@@ -54,13 +54,6 @@
         public int SortOrder { get; set; }
 
         /// <summary>
-        /// Gets or sets the use count - this is the number of product variants that use this attribute.
-        /// </summary>
-        [Column("useCount")]
-        [Constraint(Default = "0")]
-        public int UseCount { get; set; }
-
-        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

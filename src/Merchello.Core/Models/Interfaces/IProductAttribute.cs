@@ -36,9 +36,11 @@
         int SortOrder { get; set; }
 
         /// <summary>
-        /// Gets or sets the use count - this is the number of product variants that use this attribute.
+        /// Returns a clone of the attribute.
         /// </summary>
-        [DataMember]
-        int UseCount { get; set; }
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        IProductAttribute Clone();
     }
 }

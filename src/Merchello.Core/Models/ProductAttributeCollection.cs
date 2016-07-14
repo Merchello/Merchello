@@ -71,6 +71,24 @@
         }
 
         /// <summary>
+        /// Overrides the Remove method.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public new bool Remove(IProductAttribute item)
+        {
+            if (Guid.Empty.Equals(item.Key) || !Contains(item.Key)) return false;
+
+            this.RemoveItem(item.Key);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+            return true;            
+        }
+
+        /// <summary>
         /// The add.
         /// </summary>
         /// <param name="item">

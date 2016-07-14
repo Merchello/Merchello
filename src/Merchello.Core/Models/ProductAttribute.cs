@@ -64,9 +64,14 @@
         public int SortOrder { get; set; }
 
         /// <summary>
-        /// Gets or sets the use count - this is the number of product variants that use this attribute.
+        /// Creates a cloned copy of this object.
         /// </summary>
-        [DataMember]
-        public int UseCount { get; set; }
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        public IProductAttribute Clone()
+        {
+            return (ProductAttribute)this.MemberwiseClone();
+        }
     }
 }
