@@ -1,0 +1,18 @@
+{
+    "productAttributeEditors" : [
+
+        {
+            "name": "",
+            "alias": "",
+            "fieldset" : [
+                {
+                    "label": "Image",
+                    "description": "",
+                    "key": "",
+                    "propertyEditorAlias": "Umbraco.MediaPicker"
+                }
+            ]
+        }
+
+    ]
+}

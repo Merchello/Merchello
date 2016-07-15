@@ -53,6 +53,8 @@
     <key alias="salesOverTime">Sales Over Time</key>
     <key alias="salesByItem">Sales By Item</key>
     <key alias="abandonedBasket">Abandoned Basket</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Shared Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Anonymous Baskets</key>
@@ -106,6 +108,9 @@
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
+  </area>
+  <area alias="merchellProductOptions">
+    <key alias="sharedCount">Share Count</key>
   </area>
   <area alias="merchelloSales">
     <key alias="noSales"><![CDATA[
@@ -367,6 +372,8 @@
     <key alias="private">Private</key>
     <key alias="increase">Increase</key>
     <key alias="decrease">Decrease</key>
+    <key alias="associateWith">Associate with</key>
+    <key alias="shared">Shared</key>
   </area>
   <area alias="merchelloSettings">
     <key alias="storeDefaults">Impostazioni del negozio</key>
@@ -582,6 +589,51 @@
     <!-- phrases -->
     <key alias="fulfillManually">Fulfill Manually</key>
     <key alias="createShipment">Create Shipment</key>
+  </area>
+  <area alias="merchelloDetachedContent">
+    <key alias="selectContentType">Select Content Type</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="associateContentType">Associate Content Type</key>
+    <key alias="productContentTypes">Product Content Types</key>
+    <key alias="slug">URL Slug</key>
+    <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
+    <key alias="selectTemplate">Select an Umbraco template</key>
+    <key alias="canBeRendered">Allow this content to be rendered.</key>
+    <key alias="productContentTypesInfo">Umbraco Content Types (Document Types) that can be assoicated with Merchello products and product variants.</key>
+    <key alias="productContentType">Product Content Type</key>
+    <key alias="umbracoContentTypeName">Umbraco Content Type</key>
+    <key alias="umbracoContentTypeAlias">Umbraco Alias</key>
+    <key alias="tabs">Tabs</key>
+    <key alias="noDetachedContentTypes">
+      <![CDATA[
+      <h5>You have not associated any Umbraco content types with Merchello</h5>
+      <p>This can be done through the Products context menu.</p>
+      ]]>
+    </key>
+    <key alias="noProductContentType">
+      <![CDATA[
+      <h5>You have not selected a product content type</h5>
+    ]]>
+    </key>
+    <key alias="productOptionContentTypes">Product Option Content Types</key>
+    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="noProductOptionContentType">
+      <![CDATA[
+      <h5>You have not selected a product option content type</h5>
+    ]]>
+    </key>
+    <key alias="deleteWarning">
+      <![CDATA[
+    This will also delete ALL property data associated with products that use this product type.
+    ]]>
+    </key>
+    <key alias="removeDetachedContent">Remove Extended Content</key>
+    <key alias="removeDetachedContentWarning">
+      <![CDATA[
+    Deleting extended content does NOT delete the product or variant itself.  Use this action if you want to
+    fully remove or change the associated Umbraco content type. This WILL remove content for ALL languages configured.
+    ]]>
+    </key>
   </area>
   <area alias="merchelloDelete">
     <key alias="deleteConfirmation">Delete Confirmation</key>

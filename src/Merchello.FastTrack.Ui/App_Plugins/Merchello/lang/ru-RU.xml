@@ -70,6 +70,8 @@
     <key alias="private">Приватный</key>
     <key alias="increase">Увеличить</key>
     <key alias="decrease">Уменьшить</key>
+    <key alias="associateWith">Associate with</key>
+    <key alias="shared">Shared</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -109,6 +111,8 @@
     <key alias="salesOverTime">Продажи за период</key>
     <key alias="salesByItem">Продажи по товарам</key>
     <key alias="abandonedBasket">Брошенные корзины</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Shared Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Анонимные корзины</key>
@@ -192,8 +196,13 @@
     <key alias="newProductName">Задайте наименование товара</key>
     <key alias="newProductSku">Задайте артикул товара</key>
   </area>
+  <area alias="merchellProductOptions">
+    <key alias="sharedCount">Share Count</key>
+  </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Выберите тип документа</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="associateContentType">Associate Content Type</key>
     <key alias="productContentTypes">Типы документов для товаров</key>
     <key alias="slug">Ключ URL</key>
     <key alias="slugDescription">Ключи URL явлются фрагментами адреса страницы товара.</key>
@@ -213,6 +222,13 @@
     <key alias="noProductContentType"><![CDATA[
       <h5>Вы не выбрали тип документа для товаров</h5>
     ]]></key>
+    <key alias="productOptionContentTypes">Product Option Content Types</key>
+    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="noProductOptionContentType">
+      <![CDATA[
+      <h5>You have not selected a product option content type</h5>
+    ]]>
+    </key>
     <key alias="deleteWarning"><![CDATA[
     Эта операция также удалит ВСЕ значения дополнительных свойств, сопоставленных товарам этого типа.
     ]]></key>

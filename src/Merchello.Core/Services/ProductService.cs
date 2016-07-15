@@ -282,7 +282,7 @@
             }
 
             // verify that all variants of this product still have attributes - or delete them
-            _productVariantService.EnsureProductVariantsHaveAttributes(product);
+            EnsureProductVariantsHaveAttributes(product);
 
             // save any remaining variants changes in the variants collection
             if (product.ProductVariants.Any())
@@ -320,10 +320,10 @@
                 EnsureVariants(productArray);
             }
 
-            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
-
             // verify that all variants of these products still have attributes - or delete them
-            _productVariantService.EnsureProductVariantsHaveAttributes(productArray);
+            productArray.ForEach(EnsureProductVariantsHaveAttributes);
+
+            if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(productArray), this);
         }
 
         /// <summary>
@@ -927,6 +927,45 @@
         }
 
         #region Filtering
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        internal Page<Guid> GetProductsKeysWithOption(
+            Guid optionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductsKeysWithOption(
+                    optionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
 
         /// <summary>
         /// The get products keys with option.
@@ -1582,6 +1621,23 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Ensures that all <see cref="IProductVariant"/> except the "master" variant for the <see cref="IProduct"/> have attributes
+        /// </summary>
+        /// <param name="product"><see cref="IProduct"/> to verify</param>
+        private void EnsureProductVariantsHaveAttributes(IProduct product)
+        {
+            var variants = _productVariantService.GetByProductKey(product.Key);
+            var productVariants = variants as IProductVariant[] ?? variants.ToArray();
+            if (!productVariants.Any()) return;
+            foreach (var variant in productVariants.Where(variant => !variant.Attributes.Any()))
+            {
+                _productVariantService.Delete(variant);
+                product.ProductVariants.Remove(variant.Sku);
+            }
+        }
+
 
 
         /// <summary>

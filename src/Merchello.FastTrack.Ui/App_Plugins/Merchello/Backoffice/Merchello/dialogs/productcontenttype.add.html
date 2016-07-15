@@ -10,7 +10,16 @@
                 <label for="description"><localize key="editcontenttype_description" /></label>
                 <textarea name="description" type="text" class="span11" data-ng-model="description" rows="3"></textarea>
             </div>
+            <div class="control-group">
+                <label for="associateType"><localize key="merchelloGeneral_associateWith">Associate with</localize></label>
+                <select name="associateType" data-ng-model="associateType">
+                    <option value="Product">Product</option>
+                    <option value="ProductOption">Product Option</option>
+                </select>
+
+            </div>
             <content-type-drop-down selected-content-type="contentType" />
+
         </div>
     </form>
     <div class="umb-el-wrap umb-panel-buttons">

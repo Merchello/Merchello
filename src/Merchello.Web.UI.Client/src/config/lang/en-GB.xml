@@ -67,6 +67,8 @@
     <key alias="private">Private</key>
     <key alias="increase">Increase</key>
     <key alias="decrease">Decrease</key>
+    <key alias="associateWith">Associate with</key>
+    <key alias="shared">Shared</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Products</key>
@@ -106,6 +108,8 @@
     <key alias="salesOverTime">Sales Over Time</key>
     <key alias="salesByItem">Sales By Item</key>
     <key alias="abandonedBasket">Abandoned Basket</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="sharedProductOptions">Shared Product Options</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Anonymous Baskets</key>
@@ -154,6 +158,7 @@
     <key alias="allCustomer">All Customers</key>
     <key alias="allInvoice">All Sales</key>
     <key alias="allOffer">All Offers</key>
+    <key alias="allProductOption">Shared Product Options</key>
     <key alias="productCollections">Product Collections</key>
     <key alias="invoiceCollections">Invoice Collections</key>
     <key alias="customerCollections">Customer Collections</key>
@@ -180,6 +185,11 @@
     <key alias="endDate">End Date</key>
     <key alias="active">Active</key>
     <key alias="sortOrder">Sort Order</key>
+    <key alias="optionName">Option Name</key>
+    <key alias="optionUi">Option UI</key>
+    <key alias="optionValues">Option Values</key>
+    <key alias="shared">Shared</key>
+    <key alias="sharedCount">Shared Count</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>
@@ -200,8 +210,13 @@
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
   </area>
+  <area alias="merchellProductOptions">
+    <key alias="sharedCount">Share Count</key>
+  </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>
+    <key alias="contentTypes">Content Types</key>
+    <key alias="associateContentType">Associate Content Type</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="slug">URL Slug</key>
     <key alias="slugDescription">URL slugs are the exact address of a specific page.</key>
@@ -221,6 +236,13 @@
     <key alias="noProductContentType">
       <![CDATA[
       <h5>You have not selected a product content type</h5>
+    ]]>
+    </key>
+    <key alias="productOptionContentTypes">Product Option Content Types</key>
+    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="noProductOptionContentType">
+    <![CDATA[
+      <h5>You have not selected a product option content type</h5>
     ]]>
     </key>
     <key alias="deleteWarning">

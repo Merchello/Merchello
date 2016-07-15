@@ -10,8 +10,11 @@
         var self = this;
         self.key = '';
         self.name = '';
+        self.uiElement = '';
         self.required = true;
+        self.shared = false;
         self.sortOrder = 1;
+        self.detachedContentTypeKey = '';
         self.choices = [];
     };
 

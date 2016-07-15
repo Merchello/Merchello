@@ -96,6 +96,7 @@
         Order,
         Payment,
         Product,
+        ProductOption,
         Shipment,
         Warehouse,
         WarehouseCatalog,

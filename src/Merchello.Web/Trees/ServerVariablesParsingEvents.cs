@@ -156,6 +156,16 @@
                 })));
             
             merchelloUrls.Add(
+                 "merchelloProductOptionApiBaseUrl",
+                url.GetUmbracoApiServiceBaseUrl<ProductOptionApiController>(
+                controller => controller.SearchOptions(new QueryDisplay()
+                {
+                    CurrentPage = 0,
+                    ItemsPerPage = 25,
+                    Parameters = new QueryDisplayParameter[] { }
+                })));
+
+            merchelloUrls.Add(
                 "merchelloSettingsApiBaseUrl",
                 url.GetUmbracoApiServiceBaseUrl<SettingsApiController>(
                 controller => controller.GetAllCountries()));

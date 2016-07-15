@@ -797,6 +797,20 @@ var UmbContentTypeDisplay = function() {
 
 angular.module('merchello.models').constant('UmbContentTypeDisplay', UmbContentTypeDisplay);
 
+/**
+ * @ngdoc model
+ * @name AddDetachedContentTypeDialogData
+ * @function
+ *
+ * @description
+ *  A dialog data object for adding or editing DetachedContentTypeDisplay objects
+ */
+var AddDetachedContentTypeDialogData = function() {
+    var self = this;
+    self.contentType = {};
+};
+
+angular.module('merchello.models').constant('AddDetachedContentTypeDialogData', AddDetachedContentTypeDialogData);
     /**
      * @ngdoc model
      * @name AddEditCustomerAddressDialogData
@@ -2508,8 +2522,11 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         var self = this;
         self.key = '';
         self.name = '';
+        self.uiElement = '';
         self.required = true;
+        self.shared = false;
         self.sortOrder = 1;
+        self.detachedContentTypeKey = '';
         self.choices = [];
     };
 
@@ -2832,6 +2849,16 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             param.value = term;
             addParameter.call(this, param);
         }
+        
+        function addSharedOptionOnlyParam(sharedOnly) {
+            if (sharedOnly === undefined || sharedOnly === true) {
+                return;
+            }
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'sharedOnly';
+            param.value = 'false';
+            addParameter.call(this, param);
+        }
 
         function applyInvoiceQueryDefaults() {
             this.sortBy = 'invoiceNumber';
@@ -2847,7 +2874,8 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,
             addFilterTermParam: addFilterTermParam,
-            hasCollectionKeyParam: hasCollectionKeyParam
+            hasCollectionKeyParam: hasCollectionKeyParam,
+            addSharedOptionOnlyParam: addSharedOptionOnlyParam
         };
     }());
 
@@ -4681,6 +4709,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new EditDetachedContentTypeDialogData();
         }
 
+        function createAddDetachedContentTypeDialogData() {
+            return new AddDetachedContentTypeDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -4723,7 +4755,8 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
             createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData,
             createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog,
-            createEditDetachedContentTypeDialogData: createEditDetachedContentTypeDialogData
+            createEditDetachedContentTypeDialogData: createEditDetachedContentTypeDialogData,
+            createAddDetachedContentTypeDialogData: createAddDetachedContentTypeDialogData
         };
 }]);
 
@@ -4963,7 +4996,8 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
             function createProductListTabs() {
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
-                tabs.addTab('productContentTypeList', 'merchelloTabs_productContentTypes', '#/merchello/merchello/productcontenttypelist/manage')
+                tabs.addTab('sharedoptions', 'merchelloTabs_sharedProductOptions', '#/merchello/merchello/sharedoptions/manage');
+                tabs.addTab('contentTypeList', 'merchelloTabs_contentTypes', '#/merchello/merchello/productcontenttypelist/manage');
                 return tabs;
             }
 
@@ -4985,6 +5019,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
+                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionseditor/' + productKey);
                 return tabs;
             }
 
