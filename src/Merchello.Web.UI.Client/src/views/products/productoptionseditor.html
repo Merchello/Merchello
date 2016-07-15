@@ -51,6 +51,9 @@
                         <!-- Allows adding/removing/editing of options / attributes -->
                         <product-options-manage product="product" parent-form="productForm" classes="'col-xs-10 span10'" on-update="save(form)"></product-options-manage>
                     </div>
+
+                    <product-options-list product="product" pre-values-loaded="preValuesLoaded" />
+
                 </div>
 
         </merchello-panel>

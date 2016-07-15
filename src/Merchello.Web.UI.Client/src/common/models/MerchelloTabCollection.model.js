@@ -66,14 +66,14 @@
         }
 
         function hideTab(id) {
-            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            var existing = _.find(this.items, function(tab) {return tab.id === id; });
             if (existing !== undefined && existing !== null) {
                 existing.visible = false;
             }
         }
 
         function showTab(id) {
-            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            var existing = _.find(this.items, function(tab) {return tab.id === id; });
             if (existing !== undefined && existing !== null) {
                 existing.visible = true;
             }

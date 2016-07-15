@@ -10,6 +10,6 @@
 var EditDetachedContentTypeDialogData = function() {
     var self = this;
     self.contentType = {};
-}
+};
 
 angular.module('merchello.models').constant('EditDetachedContentTypeDialogData', EditDetachedContentTypeDialogData);

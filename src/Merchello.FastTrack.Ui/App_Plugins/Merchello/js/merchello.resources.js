@@ -322,6 +322,21 @@ angular.module('merchello.resources').factory('backOfficeCheckoutResource',
                     return deferred.promise;
                 },
 
+                getGravatarUrl: function(email) {
+                    var deferred = $q.defer();
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetGravatarUrl';
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: {email: email}
+                        }).then(function(resp) {
+                            deferred.resolve(resp.data.gravatarUrl);
+                        });
+
+
+                    return deferred.promise;
+                },
 
                 /**
                  * @ngdoc method
@@ -516,7 +531,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                     var url = baseUrl + 'PostAddEntityToCollections';
                     var data = [];
                     angular.forEach(collectionKeys, function(ck) {
-                      data.push({ entityKey: entityKey, collectionKey: ck })
+                      data.push({ entityKey: entityKey, collectionKey: ck });
                     });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -536,7 +551,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                     var url = baseUrl + 'DeleteEntityFromCollections';
                     var data = [];
                     angular.forEach(collectionKeys, function(ck) {
-                        data.push({ entityKey: entityKey, collectionKey: ck })
+                        data.push({ entityKey: entityKey, collectionKey: ck });
                     });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -589,7 +604,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         'Failed to delete the entity collection');
                 }
 
-            }
+            };
 
         }]);
 
@@ -1530,7 +1545,7 @@ angular.module('merchello.resources').factory('noteResource', [
                             deferred.resolve(data);
 
                         }, function(reason) {
-                            deferred.reject('Failed to save product content ' + reason)
+                            deferred.reject('Failed to save product content ' + reason);
                         });
 
                     return deferred.promise;
@@ -1653,7 +1668,7 @@ angular.module('merchello.resources').factory('productOptionResource',
                 }
 
 
-            }
+            };
 
         }]);
 angular.module('merchello.resources').factory('salesByItemResource',
@@ -1920,7 +1935,7 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
                         settings: settingDisplayBuilder.transform(data[0]),
                         currencies: data[1],
                         currencySymbol: _.find(data[1], function(c) {
-                            return c.currencyCode === data[0].currencyCode
+                            return c.currencyCode === data[0].currencyCode;
                         }).symbol,
                         countries: countryDisplayBuilder.transform(data[2])
                     };
@@ -2386,7 +2401,7 @@ angular.module('merchello.resources').factory('vieweditorResource',
             },
 
             addNewView: function(viewData) {
-                var url = baseUrl + 'AddNewView'
+                var url = baseUrl + 'AddNewView';
                 var deferred = $q.defer();
                 
                 $q.all([umbRequestHelper.resourcePromise(

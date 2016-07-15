@@ -15,7 +15,7 @@
 
         function toArray() {
             return this.items;
-        };
+        }
 
         function isEmpty() {
             return this.items.length === 0;
@@ -57,7 +57,7 @@
             toArray: toArray,
             getValue: getValue,
             setValue: setValue
-        }
+        };
 
     }());
 

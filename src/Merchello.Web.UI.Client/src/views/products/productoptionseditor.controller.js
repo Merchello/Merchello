@@ -14,7 +14,6 @@
 
             function init() {
 
-                console.info('got here');
                 var key = $routeParams.id;
                 loadSettings();
                 loadProduct(key);
@@ -33,6 +32,7 @@
                 promise.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
                     setTabs();
+                    console.info($scope.product.productOptions);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });

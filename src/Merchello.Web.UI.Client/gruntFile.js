@@ -10,7 +10,7 @@
     grunt.registerTask('build', ['clean', 'concat', 'sass:build', 'copy']);
 
     //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['clean', 'concat', 'sass:dev', 'copy', 'karma:unit', 'watch']);
+    grunt.registerTask('build-dev', ['clean', 'concat', 'sass:dev', 'copy', 'watch']);
 
     // watches
     grunt.registerTask('watch-css', ['sass:dev', 'copy:assets', 'copy:vs']);

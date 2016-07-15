@@ -20,6 +20,6 @@ angular.module('merchello.resources').factory('productOptionResource',
                 }
 
 
-            }
+            };
 
         }]);

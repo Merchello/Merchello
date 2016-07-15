@@ -16,19 +16,13 @@
 
             <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
-                <merchello-list-view builder="productOptionDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
+                <!-- builder="productOptionDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
 
-                </merchello-list-view>
 
-                <!-- Prompt to create products if no products in the catalog -->
-                <div class="pager well" data-ng-show="products.length == 0 && collectionKey===''">
-                    <h5><localize key="merchelloVariant_noProduct"/></h5>
-                    <p><localize key="merchelloVariant_newProductPrompt"/></p>
-                    <a href="#/merchello/merchello/productedit/create" class="btn btn-primary"><localize key="merchelloVariant_newProduct" /></a>
-                </div>
-                <div class="pager well" data-ng-show="products.length == 0 && collectionKey!==''">
-                    <h5><localize key="merchelloProducts_emptyProductCollection"/></h5>
-                </div>
+                -->
+                <h4><localize key="merchelloProductOptions_manageShared">Manage Shared Product Options</localize></h4>
+                <product-options-list shared-option="sharedOnly" pre-values-loaded="preValuesLoaded"></product-options-list>
+
             </div>
         </merchello-panel>
 

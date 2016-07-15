@@ -23,6 +23,7 @@
                 $scope.addOption = addOption;
                 $scope.removeOption = removeOption;
 
+
                 /**
                  * @ngdoc method
                  * @name addOption

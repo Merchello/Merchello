@@ -21,7 +21,7 @@ OfferProviderDisplay.prototype = (function() {
 
     return {
         editorUrl : editorUrl
-    }
+    };
 }());
 
 angular.module('merchello.models').constant('OfferProviderDisplay', OfferProviderDisplay);

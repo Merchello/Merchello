@@ -205,7 +205,7 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
                 }
 
                 // ensure property did not set an array
-                if (angular.isArray(dcv.value) && dcv.value.length == 0) {
+                if (angular.isArray(dcv.value) && dcv.value.length === 0) {
                     dcv.value = '';
                 }
                 values.push(dcv);
@@ -308,14 +308,14 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
         }
 
         function hideTab(id) {
-            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            var existing = _.find(this.items, function(tab) {return tab.id === id; });
             if (existing !== undefined && existing !== null) {
                 existing.visible = false;
             }
         }
 
         function showTab(id) {
-            var existing = _.find(this.items, function(tab) {return tab.id === id});
+            var existing = _.find(this.items, function(tab) {return tab.id === id; });
             if (existing !== undefined && existing !== null) {
                 existing.visible = true;
             }
@@ -854,7 +854,7 @@ angular.module('merchello.models').constant('AddDetachedContentTypeDialogData', 
  * @description
  *  A dialog data object for adding or editing Static Collection objects
  */
-function AddEditEntityStaticCollectionDialog() {
+var AddEditEntityStaticCollectionDialog = function () {
     var self = this;
     self.entityType = '';
     self.collectionKeys = [];
@@ -863,7 +863,9 @@ function AddEditEntityStaticCollectionDialog() {
 AddEditEntityStaticCollectionDialog.prototype = (function() {
 
     function exists(key) {
-        if (this.collectionKeys.length === 0) return false;
+        if (this.collectionKeys.length === 0) {
+            return false;
+        }
         var found = _.find(this.collectionKeys, function(k) {
             return k === key;
         });
@@ -971,7 +973,7 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
         self.invoiceBalance = 0;
         self.amount = 0;
         self.currencySymbol = '';
-        self.showSpinner = function() { return true; }
+        self.showSpinner = function() { return true; };
         self.processorArgs = new ProcessorArgumentCollectionDisplay();
     };
 
@@ -988,7 +990,7 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
 
         return {
             asPaymentRequestDisplay: asPaymentRequestDisplay
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('AddPaymentDialogData', AddPaymentDialogData);
@@ -1096,7 +1098,7 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
             this.paymentKey = payment.key;
             this.paymentMethodKey = payment.paymentMethodKey;
             this.paymentMethodName = payment.paymentMethodName;
-            this.payment = payment
+            this.payment = payment;
         }
 
         //// helper method to set required associated invoice info
@@ -1150,7 +1152,7 @@ angular.module('merchello.models').constant('AddEditEntityStaticCollectionDialog
 var ConfigureOfferComponentDialogData = function() {
     var self = this;
     self.component = {};
-}
+};
 
 ConfigureOfferComponentDialogData.prototype = (function() {
 
@@ -1165,7 +1167,7 @@ ConfigureOfferComponentDialogData.prototype = (function() {
     return {
         setValue: setValue,
         getValue: getValue
-    }
+    };
 }());
 
 angular.module('merchello.models').constant('ConfigureOfferComponentDialogData');
@@ -1366,7 +1368,7 @@ angular.module('merchello.models').constant('ConfigureOfferComponentDialogData')
 var EditDetachedContentTypeDialogData = function() {
     var self = this;
     self.contentType = {};
-}
+};
 
 angular.module('merchello.models').constant('EditDetachedContentTypeDialogData', EditDetachedContentTypeDialogData);
     /**
@@ -1450,7 +1452,7 @@ angular.module('merchello.models').constant('EditDetachedContentTypeDialogData',
 
         return {
             toPaymentRequestDisplay: toPaymentRequestDisplay
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('ProcessRefundPaymentDialogData', ProcessRefundPaymentDialogData);
@@ -1481,7 +1483,7 @@ angular.module('merchello.models').constant('EditDetachedContentTypeDialogData',
 
         return {
             toPaymentRequestDisplay : toPaymentRequestDisplay
-        }
+        };
 
     }());
 
@@ -1722,7 +1724,7 @@ OfferComponentDefinitionDisplay.prototype = (function() {
     return {
         clone: clone,
         isConfigured: isConfigured
-    }
+    };
 }());
 
 angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);
@@ -1749,7 +1751,7 @@ OfferProviderDisplay.prototype = (function() {
 
     return {
         editorUrl : editorUrl
-    }
+    };
 }());
 
 angular.module('merchello.models').constant('OfferProviderDisplay', OfferProviderDisplay);
@@ -1829,7 +1831,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             if (!hasComponents.call(this)) {
                 return true;
             }
-            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false});
+            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false; });
             return notConfigured === undefined;
         }
 
@@ -1930,7 +1932,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             setLineItemName: setLineItemName,
             validateComponents: validateComponents,
             reorderComponent: reorderComponent
-        }
+        };
 
     }());
 
@@ -2197,7 +2199,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
 
         function toArray() {
             return this.items;
-        };
+        }
 
         function isEmpty() {
             return this.items.length === 0;
@@ -2239,7 +2241,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             toArray: toArray,
             getValue: getValue,
             setValue: setValue
-        }
+        };
 
     }());
 
@@ -2525,6 +2527,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.uiElement = '';
         self.required = true;
         self.shared = false;
+        self.sharedCount = 0;
         self.sortOrder = 1;
         self.detachedContentTypeKey = '';
         self.choices = [];
@@ -3013,7 +3016,7 @@ SalesOverTimeResult.prototype = (function() {
 
     return {
         getDateLabel : getDateLabel
-    }
+    };
 
 })();
 
@@ -4904,9 +4907,9 @@ angular.module('merchello.models').factory('dialogDataFactory',
                             definitions.push(definition);
                         }
                     } else {
-                        definitions = genericModelBuilder.transform(jsonResult[ i ], Constructor);
-                        definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                        definitions = genericModelBuilder.transform(jsonResult, Constructor);
+                        definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                     }
                     return definitions;
                 }
@@ -5011,7 +5014,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates tabs for the product editor page
             function createProductEditorTabs(productKey, hasVariants) {
-                if (hasVariants !== undefined && hasVariants == true)
+                if (hasVariants !== undefined && hasVariants === true)
                 {
                     return createProductEditorWithOptionsTabs(productKey);
                 }
@@ -5807,13 +5810,13 @@ angular.module('merchello.models').factory('salesByItemResultBuilder',
                     }
                 } else {
                     models = genericModelBuilder.transform(jsonResult, Constructor);
-                    models.productVariant = productVariantDisplayBuilder.transform(jsonResult[i].productVariant);
+                    models.productVariant = productVariantDisplayBuilder.transform(jsonResult.productVariant);
                     models.totals = resultCurrencyValueBuilder.transform(jsonResult.totals);
                 }
                 return models;
             }
         };
-}])
+}]);
 
 angular.module('merchello.models').factory('salesOverTimeResultBuilder',
     ['genericModelBuilder', 'resultCurrencyValueBuilder', 'SalesOverTimeResult',

@@ -2452,17 +2452,17 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
             'customerResource', 'backOfficeCheckoutResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder', 'customerAddressDisplayBuilder',
             'itemCacheInstructionBuilder', 'addToItemCacheInstructionBuilder',
-        function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, backOfficeCheckoutResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder, customerAddressDisplayBuilder,
                  itemCacheInstructionBuilder, addToItemCacheInstructionBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
-            $scope.avatarUrl = "";
+            $scope.avatarUrl;
             $scope.defaultShippingAddress = {};
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
@@ -2550,7 +2550,9 @@ angular.module('merchello').controller('Merchello.Common.Dialogs.DateRangeSelect
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = customerDisplayBuilder.transform(customerResponse);
                     $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
-                    $scope.avatarUrl = gravatarService.getAvatarUrl($scope.customer.email);
+                    customerResource.getGravatarUrl($scope.customer.email).then(function(url) {
+                        $scope.avatarUrl = url;
+                    });
                     $scope.defaultBillingAddress = $scope.customer.getDefaultBillingAddress();
                     $scope.defaultShippingAddress = $scope.customer.getDefaultShippingAddress();
                     $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key, $scope.customer.hasAddresses());
@@ -6160,11 +6162,12 @@ angular.module('merchello').controller('Merchello.Notes.Dialog.NoteAddEditContro
 
 angular.module('merchello').controller('Merchello.Backoffice.SharedProductOptionsController',
     ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource', 'dialogDataFactory', 'dialogService',
-    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService) {
+        'merchelloListViewHelper',
+    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService, merchelloListViewHelper) {
 
-        $scope.loaded = false;
-        $scope.preValuesLoaded = false;
-        $scope.entityType = 'ProductOption';
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+
         $scope.tabs = [];
 
         // In the initial release of this feature we are only going to allow sharedOnly params
@@ -6172,32 +6175,22 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
         $scope.sharedOnly = true;
 
         // list view
-        $scope.load = load;
-        $scope.getColumnValue = getColumnValue;
+        //$scope.entityType = 'ProductOption';
+        //$scope.load = load;
+        //$scope.getColumnValue = getColumnValue;
 
-        var yes = '';
-        var no = '';
-        var values = '';
+
+
 
         function init() {
 
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
             $scope.tabs.setActive('sharedoptions');
 
-            $q.all([
-                localizationService.localize('general_yes'),
-                localizationService.localize('general_no'),
-                localizationService.localize('merchelloTableCaptions_optionValues')
-            ]).then(function(data) {
-                yes = data[0];
-                no = data[1];
-                values = data[2];
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-            });
 
         }
 
+        /*
         function load(query) {
             query.addSharedOptionOnlyParam($scope.sharedOnly);
             return productOptionResource.searchOptions(query);
@@ -6219,6 +6212,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
                     return result.choices.length + ' ' + values;
             }
         }
+        */
 
 
         init();
@@ -8002,7 +7996,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             function init() {
 
-                console.info('got here');
                 var key = $routeParams.id;
                 loadSettings();
                 loadProduct(key);
@@ -8021,6 +8014,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 promise.then(function (product) {
                     $scope.product = productDisplayBuilder.transform(product);
                     setTabs();
+                    console.info($scope.product.productOptions);
                 }, function (reason) {
                     notificationsService.error("Product Load Failed", reason.message);
                 });

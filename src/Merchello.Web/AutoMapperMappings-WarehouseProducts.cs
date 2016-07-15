@@ -6,6 +6,8 @@
 
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Web.Models.ContentEditing.Content;
+    using Merchello.Web.Models.MapperResolvers.Offers;
+    using Merchello.Web.Models.MapperResolvers.ProductOptions;
 
     using Models.ContentEditing;
     using Models.MapperResolvers;
@@ -34,10 +36,15 @@
                 .ForMember(dest => dest.ProductKey, opt => opt.MapFrom(x => x.Key));
            
             AutoMapper.Mapper.CreateMap<IProductAttribute, ProductAttributeDisplay>();
-            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>();
+
+            AutoMapper.Mapper.CreateMap<IProductOption, ProductOptionDisplay>()
+                .ForMember(
+                    dest => dest.ShareCount,
+                    opt =>
+                    opt.ResolveUsing<ProductOptionSharedCountResolver>()
+                        .ConstructedBy(() => new ProductOptionSharedCountResolver()));
+
             AutoMapper.Mapper.CreateMap<ICatalogInventory, CatalogInventoryDisplay>();            
-
-
         }
     }
 }

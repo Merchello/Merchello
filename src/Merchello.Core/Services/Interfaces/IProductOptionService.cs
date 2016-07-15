@@ -116,7 +116,7 @@
         IEnumerable<IProductOption> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
-        /// Gets the usage information about the product option.
+        /// Gets the usage information about the product option, including the attribute usage.
         /// </summary>
         /// <param name="option">
         /// The option.
@@ -125,6 +125,17 @@
         /// The <see cref="IProductOptionUseCount"/>.
         /// </returns>
         IProductOptionUseCount GetProductOptionUseCount(IProductOption option);
+
+        /// <summary>
+        /// The get product option share count.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int GetProductOptionShareCount(IProductOption option);
 
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.

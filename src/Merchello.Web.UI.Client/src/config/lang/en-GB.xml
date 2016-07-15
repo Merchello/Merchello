@@ -210,8 +210,14 @@
     <key alias="newProductName">New Product Name</key>
     <key alias="newProductSku">New Product SKU</key>
   </area>
-  <area alias="merchellProductOptions">
+  <area alias="merchelloProductOptions">
     <key alias="sharedCount">Share Count</key>
+    <key alias="manageShared">Manage Shared Product Options</key>
+    <key alias="noSharedProductOptions">
+      <![CDATA[
+      <h5>You have not setup any shared product options</h5>
+      ]]>
+    </key>
   </area>
   <area alias="merchelloDetachedContent">
     <key alias="selectContentType">Select Content Type</key>

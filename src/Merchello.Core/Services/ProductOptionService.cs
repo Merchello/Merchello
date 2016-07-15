@@ -365,6 +365,23 @@
         }
 
         /// <summary>
+        /// Gets the number of occurrences that an option has been shared.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The count of option shares.
+        /// </returns>
+        public int GetProductOptionShareCount(IProductOption option)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetSharedProductOptionCount(option.Key);
+            }
+        }
+
+        /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.
         /// </summary>
         /// <param name="page">

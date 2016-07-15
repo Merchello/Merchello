@@ -1,10 +1,11 @@
 angular.module('merchello').controller('Merchello.Backoffice.SharedProductOptionsController',
     ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource', 'dialogDataFactory', 'dialogService',
-    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService) {
+        'merchelloListViewHelper',
+    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService, merchelloListViewHelper) {
 
-        $scope.loaded = false;
-        $scope.preValuesLoaded = false;
-        $scope.entityType = 'ProductOption';
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+
         $scope.tabs = [];
 
         // In the initial release of this feature we are only going to allow sharedOnly params
@@ -12,32 +13,22 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
         $scope.sharedOnly = true;
 
         // list view
-        $scope.load = load;
-        $scope.getColumnValue = getColumnValue;
+        //$scope.entityType = 'ProductOption';
+        //$scope.load = load;
+        //$scope.getColumnValue = getColumnValue;
 
-        var yes = '';
-        var no = '';
-        var values = '';
+
+
 
         function init() {
 
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
             $scope.tabs.setActive('sharedoptions');
 
-            $q.all([
-                localizationService.localize('general_yes'),
-                localizationService.localize('general_no'),
-                localizationService.localize('merchelloTableCaptions_optionValues')
-            ]).then(function(data) {
-                yes = data[0];
-                no = data[1];
-                values = data[2];
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-            });
 
         }
 
+        /*
         function load(query) {
             query.addSharedOptionOnlyParam($scope.sharedOnly);
             return productOptionResource.searchOptions(query);
@@ -59,6 +50,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
                     return result.choices.length + ' ' + values;
             }
         }
+        */
 
 
         init();

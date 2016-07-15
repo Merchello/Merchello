@@ -23,7 +23,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             // creates tabs for the product editor page
             function createProductEditorTabs(productKey, hasVariants) {
-                if (hasVariants !== undefined && hasVariants == true)
+                if (hasVariants !== undefined && hasVariants === true)
                 {
                     return createProductEditorWithOptionsTabs(productKey);
                 }

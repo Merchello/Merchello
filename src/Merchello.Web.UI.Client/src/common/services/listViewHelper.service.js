@@ -21,6 +21,7 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 ]
             },
 
+            // TODO remove this
             productoption: {
                 columns: [
                     { name: 'name', localizeKey: 'merchelloTableCaptions_optionName' },
@@ -28,7 +29,10 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                     { name: 'choices', localizeKey: 'merchelloTableCaptions_optionValues', resultColumn: true },
                     { name: 'shared', localizeKey: 'merchelloTableCaptions_shared' },
                     { name: 'sharedCount', localizeKey: 'merchelloTableCaptions_sharedCount' }
-                ]
+                ],
+                pageSize: 10,
+                orderBy: 'name',
+                orderDirection: 'asc'
             },
 
             customer:  {

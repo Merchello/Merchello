@@ -32,9 +32,9 @@ angular.module('merchello.services').factory('detachedContentHelper',
                     // save the current language only
                     angular.forEach(args.scope.contentTabs, function(ct) {
                         if (ct.id === 'render') {
-                            args.scope.detachedContent.slug = _.find(ct.properties, function(s) { return s.alias === 'slug'}).value;
-                            args.scope.detachedContent.templateId = _.find(ct.properties, function(t) { return t.alias === 'templateId' }).value;
-                            args.scope.detachedContent.canBeRendered = _.find(ct.properties, function(r) { return r.alias === 'canBeRendered'}).value === '1' ? true : false;
+                            args.scope.detachedContent.slug = _.find(ct.properties, function(s) { return s.alias === 'slug'; }).value;
+                            args.scope.detachedContent.templateId = _.find(ct.properties, function(t) { return t.alias === 'templateId'; }).value;
+                            args.scope.detachedContent.canBeRendered = _.find(ct.properties, function(r) { return r.alias === 'canBeRendered'; }).value === '1' ? true : false;
                         } else {
                             angular.forEach(ct.properties, function (p) {
                                 console.info(p);
@@ -121,6 +121,6 @@ angular.module('merchello.services').factory('detachedContentHelper',
                 return tab;
             }
 
-        }
+        };
 
 }]);

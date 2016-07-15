@@ -33,7 +33,7 @@ angular.module('merchello.resources').factory('vieweditorResource',
             },
 
             addNewView: function(viewData) {
-                var url = baseUrl + 'AddNewView'
+                var url = baseUrl + 'AddNewView';
                 var deferred = $q.defer();
                 
                 $q.all([umbRequestHelper.resourcePromise(

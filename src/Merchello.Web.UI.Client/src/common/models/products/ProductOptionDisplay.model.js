@@ -13,6 +13,7 @@
         self.uiElement = '';
         self.required = true;
         self.shared = false;
+        self.sharedCount = 0;
         self.sortOrder = 1;
         self.detachedContentTypeKey = '';
         self.choices = [];
