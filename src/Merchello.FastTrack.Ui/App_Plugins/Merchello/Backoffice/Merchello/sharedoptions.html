@@ -16,12 +16,8 @@
 
             <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
-                <!-- builder="productOptionDisplayBuilder" load="load" get-column-value="getColumnValue" entity-type="entityType">
-
-
-                -->
                 <h4><localize key="merchelloProductOptions_manageShared">Manage Shared Product Options</localize></h4>
-                <product-options-list shared-option="sharedOnly" pre-values-loaded="preValuesLoaded"></product-options-list>
+                <product-options-list shared-only="sharedOnly" load="load" pre-values-loaded="preValuesLoaded"></product-options-list>
 
             </div>
         </merchello-panel>

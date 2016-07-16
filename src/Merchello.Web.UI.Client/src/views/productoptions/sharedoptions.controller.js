@@ -10,47 +10,18 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
 
         // In the initial release of this feature we are only going to allow sharedOnly params
         // to be managed here.  We may open this up at a later date depending on feedback.
-        $scope.sharedOnly = true;
-
-        // list view
-        //$scope.entityType = 'ProductOption';
-        //$scope.load = load;
-        //$scope.getColumnValue = getColumnValue;
-
-
-
+        $scope.sharedOnly = false;
 
         function init() {
-
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
             $scope.tabs.setActive('sharedoptions');
-
-
         }
 
-        /*
-        function load(query) {
+
+        $scope.load = function(query) {
             query.addSharedOptionOnlyParam($scope.sharedOnly);
             return productOptionResource.searchOptions(query);
         }
-
-        function getColumnValue(result, col) {
-
-            switch(col.name) {
-                case 'name':
-                    return '<a href="#">' + result.name + '</a>';
-                case 'shared':
-                    return result.shared ? yes : no;
-
-                case 'sharedCount':
-                    return result.sharedCount.toString();
-                case 'uiOption':
-                    return !result.uiElement ? '-' : result.uiElement;
-                case 'choices':
-                    return result.choices.length + ' ' + values;
-            }
-        }
-        */
 
 
         init();
