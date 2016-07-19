@@ -6,7 +6,7 @@ Merchello is a high performance, designer friendly, open source [Umbraco CMS](ht
 
 In version 1, Merchello supports a large variety of products with options that can be attached to a single warehouse, processes orders, manages taxes and shipping, and sends out email notifications to your customers. The beauty of Merchello is that while it oversees all of your products, orders, and store settings, it allows Umbraco to maintain your content. This seamless integration gives you the flexibility to build your store in any way imagineable on a robust platform capable of handling a wide variety of store sizes.
 
-Version 2 will be coming very soon.
+Version 2.1.0 is here! Check the new 2.1.0 features https://github.com/Merchello/Merchello/releases/tag/2.1.0 .
 
 ## Basic features
 
