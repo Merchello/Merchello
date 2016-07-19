@@ -22,9 +22,9 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the UI element.
+        /// Gets or sets the UI option.
         /// </summary>
-        public string UiElement { get; set; }
+        public string UiOption { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether required.
@@ -47,7 +47,7 @@
         /// <summary>
         /// Gets or sets the detached content key.
         /// </summary>
-        public Guid DetachedContentKey { get; set; }
+        public Guid DetachedContentTypeKey { get; set; }
 
         /// <summary>
         /// Gets or sets the sort order.

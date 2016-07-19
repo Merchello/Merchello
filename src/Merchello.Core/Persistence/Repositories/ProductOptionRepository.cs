@@ -100,9 +100,8 @@
         /// </returns>
         public IEnumerable<Guid> SaveForProduct(IProduct product)
         {
-            if (!product.ProductOptions.Any()) return Enumerable.Empty<Guid>();
-
             // Ensures the sort order with respect to this product
+            if (!product.ProductOptions.Any()) 
             EnsureProductOptionsSortOrder(product.ProductOptions);
 
             // Reset the Product Options Collection so that updated values are ordered and cached correctly

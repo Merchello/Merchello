@@ -47,6 +47,12 @@
         Guid? DetachedContentTypeKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the UI option.
+        /// </summary>
+        [DataMember]
+        string UiOption { get; set; }
+
+        /// <summary>
         /// Gets or sets the choices (product attributes) associated with this option
         /// </summary>
         [DataMember]

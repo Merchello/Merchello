@@ -10,7 +10,7 @@
         var self = this;
         self.key = '';
         self.name = '';
-        self.uiElement = '';
+        self.uiOption = '';
         self.required = true;
         self.shared = false;
         self.sharedCount = 0;
@@ -36,6 +36,10 @@
             }
         }
 
+        function hasDetachedContent() {
+            return this.detachedContentTypeKey !== '00000000-0000-0000-0000-000000000000';
+        }
+
         // resets the product options choice sort order
         function resetChoiceSortOrders() {
             for (var i = 0; i < this.choices.length; i++) {
@@ -46,7 +50,8 @@
         return {
             addAttributeChoice: addAttributeChoice,
             removeAttributeChoice: removeAttributeChoice,
-            resetChoiceSortOrders: resetChoiceSortOrders
+            resetChoiceSortOrders: resetChoiceSortOrders,
+            hasDetachedContent: hasDetachedContent
         };
     }());
 

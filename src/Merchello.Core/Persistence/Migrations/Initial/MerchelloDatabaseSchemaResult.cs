@@ -102,7 +102,9 @@
 
             if (!this.ValidColumns.Contains("merchProductOption,shared") ||
                 !this.ValidColumns.Contains("merchProductOption,detachedContentTypeKey") ||
+                !this.ValidColumns.Contains("merchProductOption,uiOption") ||
                 !this.ValidColumns.Contains("merchProductAttribute,detachedContentValues") ||
+                !this.ValidColumns.Contains("merchProductAttribute,isDefaultChoice") ||
                 !this.ValidTables.Contains("merchProductOptionAttributeShare") ||
                 this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.Entity.ProductOptionKey))
             {

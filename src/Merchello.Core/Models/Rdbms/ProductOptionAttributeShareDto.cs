@@ -37,6 +37,12 @@
         public Guid AttributeKey { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        [Column("isDefaultChoice")]
+        public bool IsDefaultChoice { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

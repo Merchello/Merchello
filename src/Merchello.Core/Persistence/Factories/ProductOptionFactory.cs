@@ -5,14 +5,13 @@
 
     using Merchello.Core.Models;
     using Merchello.Core.Models.Rdbms;
+    using Umbraco.Core;
 
     /// <summary>
     /// Responsible for building <see cref="IProductOption"/> and <see cref="ProductOptionDto"/>.
     /// </summary>
     internal class ProductOptionFactory : IEntityFactory<IProductOption, ProductOptionDto>
     {
-       
-
         /// <summary>
         /// Builds the <see cref="IProductOption"/> entity.
         /// </summary>
@@ -31,6 +30,7 @@
                     Required = dto.Required,
                     Shared = dto.Shared,
                     DetachedContentTypeKey = dto.DetachedContentTypeKey,
+                    UiOption = dto.UiOption.IsNullOrWhiteSpace() ? string.Empty : dto.UiOption,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };
@@ -56,6 +56,7 @@
                     Required = entity.Required,
                     Shared = entity.Shared,
                     DetachedContentTypeKey = entity.DetachedContentTypeKey,
+                    UiOption = entity.UiOption.IsNullOrWhiteSpace() ? null : entity.UiOption,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

@@ -1,11 +1,14 @@
 angular.module('merchello.directives').directive('productOptionsList', [
-    '$q', 'localizationService', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder',
-    function($q, localizationService, queryDisplayBuilder, queryResultDisplayBuilder, productOptionDisplayBuilder) {
+    '$q', 'localizationService', 'eventsService', 'dialogService', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder',
+    function($q, localizationService, eventsService, dialogService, queryDisplayBuilder, queryResultDisplayBuilder, productOptionDisplayBuilder) {
     return {
         restrict: 'E',
         replace: true,
         scope: {
             load: '&',
+            doAdd: '&',
+            doEdit: '&',
+            doDelete: '&',
             sharedOnly: '=?',
             preValuesLoaded: '='
         },
@@ -34,10 +37,56 @@ angular.module('merchello.directives').directive('productOptionsList', [
             var yes = '';
             var no = '';
             var values = '';
+            var isShared = false;
+            var onAdd = 'merchelloProductOptionOnAddOpen';
+
+            scope.getColumnValue = function(propName, option) {
+                switch(propName) {
+                    case 'shared':
+                        return option.shared ? yes + ' (' + option.shareCount + ')' : no;
+                    case 'values':
+                        return option.choices.length + ' ' + values;
+                }
+            }
+
+            scope.delete = function(option) {
+                scope.doDelete()(option);
+                search();
+            }
+
+            scope.add = function() {
+                var dialogData = {
+                    name: '',
+                    detachedContentTypeKey: '',
+                    uiOption: '',
+                    required: true,
+                    shared: scope.sharedOnly !== undefined,
+                    choices: [],
+                    productKey: ''
+                };
+
+                eventsService.emit(onAdd, dialogData);
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.add.html',
+                    show: true,
+                    callback: processDeleteOption,
+                    dialogData: dialogData
+                });
+            }
+
+            function processDeleteOption(dialogData) {
+                var option = productOptionDisplayBuilder.createDefault();
+                option.name = dialogData.name;
+                option.detachedContentTypeKey = dialogData.detachedContentTypeKey;
+                option.uiOption  = dialogData.uiOption;
+
+                scope.doAdd()(option);
+            }
 
             function init() {
 
-                var isShared = ('sharedOnly' in attr);
+                isShared = ('sharedOnly' in attr);
 
                 var noResultsKey = isShared ? 'noSharedProductOptions' : 'noProductOptions';
 

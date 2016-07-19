@@ -52,6 +52,14 @@
         public bool Shared { get; set; }
 
         /// <summary>
+        /// Gets or sets the UI option.
+        /// </summary>
+        [Column("uiOption")]
+        [Length(50)]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string UiOption { get; set; }
+        
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

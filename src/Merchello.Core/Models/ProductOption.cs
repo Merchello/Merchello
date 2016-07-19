@@ -31,6 +31,11 @@
         private static readonly PropertyInfo SharedSelector = ExpressionHelper.GetPropertyInfo<ProductOption, bool>(x => x.Shared);
 
         /// <summary>
+        /// The UI option selector.
+        /// </summary>
+        private static readonly PropertyInfo UiOptionSelector = ExpressionHelper.GetPropertyInfo<ProductOption, string>(x => x.UiOption);
+
+        /// <summary>
         /// The detached content type key selector.
         /// </summary>
         private static readonly PropertyInfo DetachedContentTypeKeySelector = ExpressionHelper.GetPropertyInfo<ProductOption, Guid?>(x => x.DetachedContentTypeKey);
@@ -54,6 +59,11 @@
         /// The value indicating whether or not the option is a shared option.
         /// </summary>
         private bool _shared;
+
+        /// <summary>
+        /// The UI option.
+        /// </summary>
+        private string _uiOption;
 
         /// <summary>
         /// The detached content type key.
@@ -221,6 +231,30 @@
                     },
                 _detachedContentTypeKey,
                 DetachedContentTypeKeySelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the UI option.
+        /// </summary>
+        [DataMember]
+        public string UiOption
+        {
+            get
+            {
+                return _uiOption;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                    o =>
+                    {
+                        _uiOption = value;
+                        return _uiOption;
+                    },
+                _uiOption,
+                UiOptionSelector);
             }
         }
 

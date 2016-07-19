@@ -3,35 +3,48 @@
 
     <div class="control-group umb-control-group">
 
-        <table class="table table-striped merchello-striped-table detached-content-type-table" data-ng-show="preValuesLoaded && detachedContentTypes.length > 0">
-            <thead>
-            <tr>
-                <th><localize key="merchelloTableCaptions_optionName" /></th>
-                <th><localize key="merchelloTableCaptions_optionUi" /></th>
-                <th><localize key="merchelloTableCaptions_optionValues" /></th>
-                <th><localize key="merchelloTableCaptions_shared" /></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="merchello-icon-container" data-ng-repeat="contentType in detachedContentTypes">
-                <td>{{ contentType.name }}</td>
-                <td><i class="icon {{contentType.umbContentType.icon}}" data-ng-hide="contentType.umbContentType.icon===''"></i> {{contentType.umbContentType.name}}</td>
-                <td>{{contentType.umbContentType.alias}}</td>
-                <td class="text-right">
-                    <merchello-icon-bar show-add="false" show-edit="true" show-delete="debugAllowDelete" do-edit="edit(contentType)" do-delete="delete(contentType)"></merchello-icon-bar>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="merchello-section-label">
+            <localize key="merchelloProductOptions_editOptions"></localize>
+        </div>
+        <div class="merchello-controls">
 
-    </div>
+            <table class="table table-striped merchello-striped-table detached-content-type-table" data-ng-show="preValuesLoaded && queryResult.items.length > 0">
+                <thead>
+                <tr>
+                    <th data-ng-show="queryResult.items.length > 1 && !sharedOnly"></th>
+                    <th><localize key="merchelloTableCaptions_optionName" /></th>
+                    <th><localize key="merchelloTableCaptions_optionUi" /></th>
+                    <th><localize key="merchelloTableCaptions_optionValues" /></th>
+                    <th><localize key="merchelloTableCaptions_shared" /></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="merchello-icon-container" data-ng-repeat="option in queryResult.items">
+                    <td data-ng-show="queryResult.items.length > 1 && !sharedOnly">
+                        <merchello-sort-icon data-ng-if="queryResult.items.length > 1 && !sharedOnly"></merchello-sort-icon>
+                    </td>
+                    <td>{{ option.name }}</td>
+                    <td></td>
+                    <td data-ng-bind="getColumnValue('values', option)"></td>
+                    <td data-ng-bind="getColumnValue('shared', option)"></td>
+                    <td class="text-right">
+                        <div class="span2">
+                            <merchello-icon-bar show-add="false" show-edit="true" show-delete="true" do-edit="doEdit()(option)" do-delete="delete(option)"></merchello-icon-bar>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-    <div class="pager well" data-ng-hide="totalItems > 0" data-ng-bind-html-unsafe="noResults">
+            <div class="pager well" data-ng-hide="queryResult.totalItems > 0" data-ng-bind-html-unsafe="noResults">
 
-    </div>
+            </div>
 
-    <div class="text-center">
-        <merchello-add-icon do-add="add()"></merchello-add-icon>
+            <div class="text-center">
+                <merchello-add-icon do-add="add()"></merchello-add-icon>
+            </div>
+        </div>
     </div>
 
 

@@ -1,13 +1,54 @@
 angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManagerController', [
-    '$scope', '$q', '$routeParams', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-    function($scope, $q, $routeParams, $timeout, notificationsService, dialogService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+    '$scope', '$q', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService',
+        'merchelloTabsFactory', 'productResource', 'eventsService', 'settingsResource', 'productDisplayBuilder', 'queryResultDisplayBuilder',
+    function($scope, $q, $routeParams, $location, $timeout, notificationsService, dialogService,
+             merchelloTabsFactory, productResource, eventsService, settingsResource, productDisplayBuilder, queryResultDisplayBuilder) {
 
         $scope.product = {};
 
         $scope.save = save;
         $scope.deleteProductDialog = deleteProductDialog;
 
+        var onAdd = 'merchelloProductOptionOnAddOpen';
+
+        $scope.load = function(query) {
+
+            var deferred = $q.defer();
+
+            var hasOptions = $scope.product.productOptions.length > 0;
+            var itemsPerPage = hasOptions ?
+                $scope.product.productOptions.length : query.itemsPerPage;
+
+            var result = queryResultDisplayBuilder.createDefault();
+            result.currentPage = 1;
+            result.itemsPerPage = itemsPerPage;
+            result.totalPages = hasOptions ? 1 : 0;
+            result.totalItems = $scope.product.productOptions.length;
+            result.items = hasOptions ? angular.extend([], $scope.product.productOptions) : [];
+
+            deferred.resolve(result);
+
+            return deferred.promise;
+
+        }
+
+        $scope.doEdit = function(option) {
+            var url = "/merchello/merchello/productoptionseditor/" + option.key;
+            url += "?product=" + $scope.product.key;
+            $location.url(url, true);
+        }
+
+        $scope.doDelete = function(option) {
+            $scope.product.removeOption(option);
+        }
+
+
+
         function init() {
+
+            eventsService.on(onAdd, function(name, args) {
+                args.productKey = $scope.product.key;
+            });
 
             var key = $routeParams.id;
             $q.all([

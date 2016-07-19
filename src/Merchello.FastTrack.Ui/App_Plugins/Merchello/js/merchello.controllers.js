@@ -1072,7 +1072,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             // if these are constraints, enable the sort
             if ($scope.componentType === 'Constraint') {
                 $scope.sortableOptions.disabled = false;
-                console.info($scope.sortableOptions);
             }
         }
 
@@ -6160,6 +6159,96 @@ angular.module('merchello').controller('Merchello.Notes.Dialog.NoteAddEditContro
         init();
 }]);
 
+angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductOptionAddController',
+    ['$scope', 'productAttributeDisplayBuilder',
+    function($scope, productAttributeDisplayBuilder) {
+
+
+        $scope.contentType = {};
+
+        $scope.choiceName = '';
+
+        $scope.defaultChoice = {};
+
+        console.info($scope.dialogData);
+
+
+        // adds a choice to the dialog data collection of choicds
+        $scope.addChoice = function() {
+
+            if ($scope.choiceName !== '') {
+                var choice = productAttributeDisplayBuilder.createDefault();
+                choice.name = $scope.choiceName;
+                choice.sku = $scope.choiceName.toLocaleLowerCase();
+                choice.sortOrder = $scope.dialogData.choices.length + 1;
+
+                if ($scope.dialogData.choices.length === 0) {
+                    choice.isDefaultChoice = true;
+                    $scope.defaultChoice = choice;
+                }
+
+                var exists = _.find($scope.dialogData.choices, function(c) { return c.sku === choice.sku; });
+                if (exists === undefined) {
+                    $scope.dialogData.choices.push(choice);
+                } else {
+
+                }
+
+            }
+
+            $scope.choiceName = '';
+        }
+
+        // removes a choice from the dialog data collection of choices
+        $scope.remove = function(idx) {
+            if ($scope.dialogData.choices.length > idx) {
+                var remover = $scope.dialogData.choices[idx];
+                var sort = remover.sortOrder;
+                var wasSelected = remover.isDefaultChoice;
+                $scope.dialogData.choices.splice(idx, 1);
+                _.each($scope.dialogData.choices, function(c) {
+                   if (c.sortOrder > sort) {
+                       c.sortOrder -= 1;
+                   }
+                });
+                if (wasSelected) {
+                    if($scope.dialogData.choices.length > 0) {
+                        $scope.dialogData.choices[0].isDefaultChoice = true;
+                    }
+                }
+            }
+        }
+
+        $scope.setSelectedChoice = function(choice) {
+            _.each($scope.dialogData.choices, function (c) {
+                if(c.sku === choice.sku) {
+                    c.isDefaultChoice = true;
+                } else {
+                    c.isDefaultChoice = false;
+                }
+            });
+        }
+
+        $scope.sortableOptions = {
+            start : function(e, ui) {
+                ui.item.data('start', ui.item.index());
+                console.info('start');
+            },
+            stop: function (e, ui) {
+                var choice = ui.item.scope().choice;
+                var start = ui.item.data('start'),
+                    end =  ui.item.index();
+                for(var i = 0; i < $scope.dialogData.choices.length; i++) {
+                    $scope.dialogData.choices[i].sortOrder = i + 1;
+                }
+                console.info($scope.dialogData.choices);
+            },
+            disabled: false,
+            cursor: "move"
+        }
+
+}]);
+
 angular.module('merchello').controller('Merchello.Backoffice.SharedProductOptionsController',
     ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource', 'dialogDataFactory', 'dialogService',
         'merchelloListViewHelper',
@@ -6172,7 +6261,7 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
 
         // In the initial release of this feature we are only going to allow sharedOnly params
         // to be managed here.  We may open this up at a later date depending on feedback.
-        $scope.sharedOnly = false;
+        $scope.sharedOnly = true;
 
         function init() {
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
@@ -7577,7 +7666,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
                 productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
                     notificationsService.success("Product copied");
                     $timeout(function() {
-                        $location.url("/merchello/merchello/productedit/" + result.key);
+                        $location.url("/merchello/merchello/productedit/" + result.key, true);
                     }, 1000);
                 });
             }
@@ -8090,15 +8179,56 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
     }]);
 
 angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManagerController', [
-    '$scope', '$q', '$routeParams', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-    function($scope, $q, $routeParams, $timeout, notificationsService, dialogService, merchelloTabsFactory, productResource, settingsResource, productDisplayBuilder) {
+    '$scope', '$q', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService',
+        'merchelloTabsFactory', 'productResource', 'eventsService', 'settingsResource', 'productDisplayBuilder', 'queryResultDisplayBuilder',
+    function($scope, $q, $routeParams, $location, $timeout, notificationsService, dialogService,
+             merchelloTabsFactory, productResource, eventsService, settingsResource, productDisplayBuilder, queryResultDisplayBuilder) {
 
         $scope.product = {};
 
         $scope.save = save;
         $scope.deleteProductDialog = deleteProductDialog;
 
+        var onAdd = 'merchelloProductOptionOnAddOpen';
+
+        $scope.load = function(query) {
+
+            var deferred = $q.defer();
+
+            var hasOptions = $scope.product.productOptions.length > 0;
+            var itemsPerPage = hasOptions ?
+                $scope.product.productOptions.length : query.itemsPerPage;
+
+            var result = queryResultDisplayBuilder.createDefault();
+            result.currentPage = 1;
+            result.itemsPerPage = itemsPerPage;
+            result.totalPages = hasOptions ? 1 : 0;
+            result.totalItems = $scope.product.productOptions.length;
+            result.items = hasOptions ? angular.extend([], $scope.product.productOptions) : [];
+
+            deferred.resolve(result);
+
+            return deferred.promise;
+
+        }
+
+        $scope.doEdit = function(option) {
+            var url = "/merchello/merchello/productoptionseditor/" + option.key;
+            url += "?product=" + $scope.product.key;
+            $location.url(url, true);
+        }
+
+        $scope.doDelete = function(option) {
+            $scope.product.removeOption(option);
+        }
+
+
+
         function init() {
+
+            eventsService.on(onAdd, function(name, args) {
+                args.productKey = $scope.product.key;
+            });
 
             var key = $routeParams.id;
             $q.all([

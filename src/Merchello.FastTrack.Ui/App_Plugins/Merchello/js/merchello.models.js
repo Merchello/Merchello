@@ -2281,6 +2281,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
+        self.isDefaultChoice = false;
     };
 
     angular.module('merchello.models').constant('ProductAttributeDisplay', ProductAttributeDisplay);
@@ -2524,7 +2525,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         var self = this;
         self.key = '';
         self.name = '';
-        self.uiElement = '';
+        self.uiOption = '';
         self.required = true;
         self.shared = false;
         self.sharedCount = 0;
@@ -2550,6 +2551,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             }
         }
 
+        function hasDetachedContent() {
+            return this.detachedContentTypeKey !== '00000000-0000-0000-0000-000000000000';
+        }
+
         // resets the product options choice sort order
         function resetChoiceSortOrders() {
             for (var i = 0; i < this.choices.length; i++) {
@@ -2560,7 +2565,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         return {
             addAttributeChoice: addAttributeChoice,
             removeAttributeChoice: removeAttributeChoice,
-            resetChoiceSortOrders: resetChoiceSortOrders
+            resetChoiceSortOrders: resetChoiceSortOrders,
+            hasDetachedContent: hasDetachedContent
         };
     }());
 
@@ -5022,7 +5028,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('productedit', 'merchelloTabs_product', '#/merchello/merchello/productedit/' + productKey);
                 tabs.addTab('productcontent', 'merchelloTabs_detachedContent', '#/merchello/merchello/productdetachedcontent/' + productKey);
-                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionmanager/' + productKey);
+                tabs.addTab('optionslist', 'merchelloTabs_productOptions', '#/merchello/merchello/productoptionsmanager/' + productKey);
                 return tabs;
             }
 

@@ -197,6 +197,12 @@
   <area alias="merchelloProductOptions">
     <key alias="sharedCount">Share Count</key>
     <key alias="manageShared">Manage Shared Product Options</key>
+    <key alias="editOptions">
+      <![CDATA[
+      <strong>Edit Options</strong>
+      <small>Edit or add options, which will auto-update your variants</small>
+      ]]>
+    </key>
     <key alias="noSharedProductOptions">
       <![CDATA[
       <h5>You have not setup any shared product options</h5>
