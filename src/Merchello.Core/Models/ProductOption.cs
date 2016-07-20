@@ -151,6 +151,15 @@
         }
 
         /// <summary>
+        /// Gets or sets the use name.
+        /// </summary>
+        /// <remarks>
+        /// This is the name associated with the product option when the option is shared.
+        /// Provides an alternate, per use naming of the option.
+        /// </remarks>
+        public string UseName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not it is required to select an option in order to purchase the associated product.
         /// </summary>
         /// <remarks>
@@ -178,7 +187,7 @@
         }
 
         /// <summary>
-        /// Gets the order in which to list product option with respect to its product association
+        /// Gets or sets the order in which to list product option with respect to its product association
         /// </summary>
         /// <remarks>
         /// This field is stored in the product 2 product option association and is not valid for shared option list (it is populated when associated with a product) - cache value should always be 0.

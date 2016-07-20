@@ -23,6 +23,25 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
             return productOptionResource.searchOptions(query);
         }
 
+        // adds an option
+        $scope.add = function(option) {
+            // this is the toggle to relead in the directive
+            $scope.preValuesLoaded = false;
+
+            productOptionResource.addProductOption(option).then(function(o) {
+               $scope.preValuesLoaded = true;
+            });
+        }
+
+        $scope.delete = function(option) {
+            if (option.canBeDeleted()) {
+                $scope.preValuesLoaded = false;
+
+                productOptionResource.deleteProductOption(option).then(function() {
+                   $scope.preValuesLoaded = true;
+                });
+            }
+        }
 
         init();
     }]);

@@ -2525,6 +2525,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         var self = this;
         self.key = '';
         self.name = '';
+        self.useName = '';
         self.uiOption = '';
         self.required = true;
         self.shared = false;
@@ -2555,6 +2556,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             return this.detachedContentTypeKey !== '00000000-0000-0000-0000-000000000000';
         }
 
+        function canBeDeleted() {
+            return this.shared ? this.shareCount === 0 : true;
+        }
+
         // resets the product options choice sort order
         function resetChoiceSortOrders() {
             for (var i = 0; i < this.choices.length; i++) {
@@ -2566,7 +2571,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             addAttributeChoice: addAttributeChoice,
             removeAttributeChoice: removeAttributeChoice,
             resetChoiceSortOrders: resetChoiceSortOrders,
-            hasDetachedContent: hasDetachedContent
+            hasDetachedContent: hasDetachedContent,
+            canBeDeleted: canBeDeleted
         };
     }());
 

@@ -24,6 +24,7 @@
                     Key = dto.Key,
                     OptionKey = dto.OptionKey,
                     SortOrder = dto.SortOrder,
+                    IsDefaultChoice = dto.IsDefaultChoice,
                     UpdateDate = dto.UpdateDate,
                     CreateDate = dto.CreateDate
                 };
@@ -50,6 +51,7 @@
                     Name = entity.Name,
                     Sku = entity.Sku,
                     SortOrder = entity.SortOrder,
+                    IsDefaultChoice = entity.IsDefaultChoice,
                     UpdateDate = entity.UpdateDate,
                     CreateDate = entity.CreateDate
                 };

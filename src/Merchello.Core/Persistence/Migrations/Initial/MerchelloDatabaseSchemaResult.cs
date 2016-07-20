@@ -105,6 +105,7 @@
                 !this.ValidColumns.Contains("merchProductOption,uiOption") ||
                 !this.ValidColumns.Contains("merchProductAttribute,detachedContentValues") ||
                 !this.ValidColumns.Contains("merchProductAttribute,isDefaultChoice") ||
+                !this.ValidColumns.Contains("merchProduct2ProductOption,useName") ||
                 !this.ValidTables.Contains("merchProductOptionAttributeShare") ||
                 this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.Entity.ProductOptionKey))
             {

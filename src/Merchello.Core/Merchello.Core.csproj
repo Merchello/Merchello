@@ -657,6 +657,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProduct2ProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductAttributeColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionTypeField.cs" />

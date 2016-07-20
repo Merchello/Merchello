@@ -26,6 +26,10 @@
             var option = new ProductOption(dto.Name, dto.Required)
                 {
                     Key = dto.Key,
+                    UseName = dto.Product2ProductOptionDto == null ? dto.Name :
+                        dto.Product2ProductOptionDto.UseName.IsNullOrWhiteSpace() ? 
+                            dto.Name : 
+                            dto.Product2ProductOptionDto.UseName,
                     SortOrder = dto.Product2ProductOptionDto == null ? 0 : dto.Product2ProductOptionDto.SortOrder,
                     Required = dto.Required,
                     Shared = dto.Shared,

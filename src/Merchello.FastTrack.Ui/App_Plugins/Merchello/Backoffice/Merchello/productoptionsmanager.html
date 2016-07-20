@@ -1,6 +1,5 @@
 <form novalidate name="productForm"
       data-ng-controller="Merchello.Backoffice.ProductOptionsManagerController"
-      data-ng-show="loaded"
       data-ng-submit="save()">
 
     <umb-panel val-show-validation>
@@ -39,8 +38,7 @@
                     Variants tab
                 ----------------------------------------------------------------------------------------->
                 <div class="control-group umb-control-group">
-                    <!-- Allows adding/removing/editing of options / attributes -->
-                    <product-options-list product="product" load="load" do-add="doAdd" do-edit="doEdit" do-delete="doDelete" pre-values-loaded="preValuesLoaded" />
+                    <product-options-list load="load" do-add="doAdd" do-delete="doDelete" pre-values-loaded="preValuesLoaded"></product-options-list>
                 </div>
 
         </merchello-panel>

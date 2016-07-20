@@ -6163,14 +6163,11 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
     ['$scope', 'productAttributeDisplayBuilder',
     function($scope, productAttributeDisplayBuilder) {
 
-
         $scope.contentType = {};
-
         $scope.choiceName = '';
-
         $scope.defaultChoice = {};
-
-        console.info($scope.dialogData);
+        $scope.selectedAttribute = {};
+        $scope.wasFormSubmitted = false;
 
 
         // adds a choice to the dialog data collection of choicds
@@ -6185,15 +6182,13 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 if ($scope.dialogData.choices.length === 0) {
                     choice.isDefaultChoice = true;
                     $scope.defaultChoice = choice;
+                    $scope.selectedAttribute = choice;
                 }
 
                 var exists = _.find($scope.dialogData.choices, function(c) { return c.sku === choice.sku; });
                 if (exists === undefined) {
                     $scope.dialogData.choices.push(choice);
-                } else {
-
                 }
-
             }
 
             $scope.choiceName = '';
@@ -6214,25 +6209,36 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 if (wasSelected) {
                     if($scope.dialogData.choices.length > 0) {
                         $scope.dialogData.choices[0].isDefaultChoice = true;
+                        $scope.selectedAttribute = $scope.dialogData.choices[0];
                     }
                 }
             }
         }
 
+        // sets the default choice property
         $scope.setSelectedChoice = function(choice) {
-            _.each($scope.dialogData.choices, function (c) {
-                if(c.sku === choice.sku) {
-                    c.isDefaultChoice = true;
-                } else {
-                    c.isDefaultChoice = false;
+            $scope.selectedAttribute.isDefaultChoice = false;
+            choice.isDefaultChoice = true;
+            $scope.selectedAttribute = choice;
+        }
+
+
+        // Saves an option
+        $scope.save = function() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.productOptionForm.name.$valid) {
+                // setup the option
+                if ($scope.contentType.key) {
+                    $scope.dialogData.detachedContentTypeKey = $scope.contentType.key;
                 }
-            });
+
+                $scope.submit($scope.dialogData);
+            }
         }
 
         $scope.sortableOptions = {
             start : function(e, ui) {
                 ui.item.data('start', ui.item.index());
-                console.info('start');
             },
             stop: function (e, ui) {
                 var choice = ui.item.scope().choice;
@@ -6241,7 +6247,6 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 for(var i = 0; i < $scope.dialogData.choices.length; i++) {
                     $scope.dialogData.choices[i].sortOrder = i + 1;
                 }
-                console.info($scope.dialogData.choices);
             },
             disabled: false,
             cursor: "move"
@@ -6274,6 +6279,25 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
             return productOptionResource.searchOptions(query);
         }
 
+        // adds an option
+        $scope.add = function(option) {
+            // this is the toggle to relead in the directive
+            $scope.preValuesLoaded = false;
+
+            productOptionResource.addProductOption(option).then(function(o) {
+               $scope.preValuesLoaded = true;
+            });
+        }
+
+        $scope.delete = function(option) {
+            if (option.canBeDeleted()) {
+                $scope.preValuesLoaded = false;
+
+                productOptionResource.deleteProductOption(option).then(function() {
+                   $scope.preValuesLoaded = true;
+                });
+            }
+        }
 
         init();
     }]);
@@ -8180,11 +8204,14 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
 angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManagerController', [
     '$scope', '$q', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService',
-        'merchelloTabsFactory', 'productResource', 'eventsService', 'settingsResource', 'productDisplayBuilder', 'queryResultDisplayBuilder',
+        'merchelloTabsFactory', 'productResource', 'eventsService', 'settingsResource',
+        'productOptionDisplayBuilder', 'productDisplayBuilder', 'queryResultDisplayBuilder',
     function($scope, $q, $routeParams, $location, $timeout, notificationsService, dialogService,
-             merchelloTabsFactory, productResource, eventsService, settingsResource, productDisplayBuilder, queryResultDisplayBuilder) {
+             merchelloTabsFactory, productResource, eventsService, settingsResource,
+             productOptionDisplayBuilder, productDisplayBuilder, queryResultDisplayBuilder) {
 
         $scope.product = {};
+        $scope.preValuesLoaded = false;
 
         $scope.save = save;
         $scope.deleteProductDialog = deleteProductDialog;
@@ -8204,7 +8231,11 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
             result.itemsPerPage = itemsPerPage;
             result.totalPages = hasOptions ? 1 : 0;
             result.totalItems = $scope.product.productOptions.length;
-            result.items = hasOptions ? angular.extend([], $scope.product.productOptions) : [];
+            result.items = [];
+
+            _.each($scope.product.productOptions, function(po) {
+                result.items.push(po);
+            });
 
             deferred.resolve(result);
 
@@ -8213,16 +8244,23 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         }
 
         $scope.doEdit = function(option) {
-            var url = "/merchello/merchello/productoptionseditor/" + option.key;
-            url += "?product=" + $scope.product.key;
-            $location.url(url, true);
+
         }
 
         $scope.doDelete = function(option) {
-            $scope.product.removeOption(option);
+            executeReload(function() {
+                $scope.product.removeOption(option);
+            });
         }
 
 
+        $scope.doAdd = function(option) {
+            option.sortOrder = $scope.product.productOptions.length + 1;
+
+            executeReload(function() {
+                $scope.product.productOptions.push(option);
+            });
+        }
 
         function init() {
 
@@ -8233,10 +8271,10 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
             var key = $routeParams.id;
             $q.all([
                 settingsResource.getCurrencySymbol(),
-                productResource.getByKey(key)
+                loadProduct(key)
             ]).then(function(data) {
                 $scope.currencySymbol = data[0];
-                $scope.product = productDisplayBuilder.transform(data[1]);
+                $scope.product = data[1];
                 setTabs();
             });
         }
@@ -8245,10 +8283,18 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
             $scope.tabs = merchelloTabsFactory.createProductEditorTabs($scope.product.key, $scope.product.hasVariants());
             $scope.tabs.hideTab('productcontent');
             $scope.tabs.setActive('optionslist');
-            $scope.loaded = true;
             $scope.preValuesLoaded = true;
         }
 
+        function loadProduct(key) {
+            var deferred = $q.defer();
+            productResource.getByKey(key).then(function(prod) {
+                var p = productDisplayBuilder.transform(prod);
+                deferred.resolve(p);
+            });
+
+            return deferred.promise;
+        }
 
         /**
          * @ngdoc method
@@ -8267,8 +8313,12 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
             if (thisForm.$valid) {
                 notificationsService.info("Saving Product...", "");
 
-                var promise = productResource.save($scope.product);
-                promise.then(function (product) {
+                $scope.product.productOptions = _.sortBy($scope.product.productOptions, function (po) {
+                    return po.sortOrder;
+                });
+
+                $scope.preValuesLoaded = false;
+                productResource.save($scope.product).then(function (product) {
                     notificationsService.success("Product Saved", "");
                     $scope.product = productDisplayBuilder.transform(product);
                     setTabs();
@@ -8276,6 +8326,15 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
                     notificationsService.error("Product Save Failed", reason.message);
                 });
             }
+        }
+
+        function executeReload(callback) {
+            $scope.preValuesLoaded = false;
+            // we need a timeout here so that the directive has time to catch the pre value toggle
+            $timeout(function() {
+                callback();
+                $scope.preValuesLoaded = true;
+            }, 400);
         }
 
         /**

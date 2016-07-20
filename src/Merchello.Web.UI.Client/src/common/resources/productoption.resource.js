@@ -27,6 +27,45 @@ angular.module('merchello.resources').factory('productOptionResource',
                         });
 
                     return deferred.promise;
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name addProductOption
+                 * @description adds a 'shared' product option
+                 **/
+                addProductOption: function(option) {
+                    var url = baseUrl + 'PostProductOption';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            option
+                        ),
+                        'Failed to create new product option')
+                        .then(function(po) {
+                            var result = productOptionDisplayBuilder.transform(po);
+                            deferred.resolve(result);
+                        });
+
+                    return deferred.promise;
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name deleteProductOption
+                 * @description deletes a shared product option.  options associated with products
+                 * should be removed from the productOptions collection rather than deleted through this service.
+                 **/
+                deleteProductOption : function(option) {
+                    var url = baseUrl + 'DeleteProductOption';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { id: option.key }
+                        }),
+                        'Failed to delete option');
                 }
 
             };

@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Web.Editors
 {
+    using System;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Web.Http;
 
     using Merchello.Core;
@@ -65,6 +68,48 @@
             var page = _productOptionService.GetPage(term, query.CurrentPage + 1, query.ItemsPerPage, query.SortBy, query.SortDirection, sharedOnly);
 
             return page.ToQueryResultDisplay(AutoMapper.Mapper.Map<IProductOption, ProductOptionDisplay>);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="IProductOption"/>.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionDisplay"/>.
+        /// </returns>
+        [HttpPost]
+        public ProductOptionDisplay PostProductOption(ProductOptionDisplay option)
+        {
+            var productOption = option.ToProductOption(new ProductOption(option.Name));
+            _productOptionService.Save(productOption);
+
+            return productOption.ToProductOptionDisplay();
+        }
+
+        /// <summary>
+        /// Deletes a product option.
+        /// </summary>
+        /// <param name="id">
+        /// The option key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="HttpResponseMessage"/>.
+        /// </returns>
+        [HttpGet, HttpDelete]
+        public HttpResponseMessage DeleteProductOption(Guid id)
+        {
+            try
+            {
+                var option = _productOptionService.GetByKey(id);
+                _productOptionService.Delete(option);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ angular.module('merchello.directives').directive('productOptionsList', [
             doEdit: '&',
             doDelete: '&',
             sharedOnly: '=?',
+            showFilter: '=?',
             preValuesLoaded: '='
         },
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.list.tpl.html',
@@ -17,11 +18,8 @@ angular.module('merchello.directives').directive('productOptionsList', [
 
             scope.loaded = false;
             scope.totalItems = 0;
-
             scope.isReady = false;
-
             scope.noResults = '';
-
             scope.options = {
                 pageSize: 10,
                 currentPage: 1,
@@ -29,7 +27,8 @@ angular.module('merchello.directives').directive('productOptionsList', [
                 orderBy: 'name',
                 orderDirection: 'asc'
             };
-
+            scope.isShared = false;
+            scope.hasFilter = false;
             scope.queryResult = queryResultDisplayBuilder.createDefault();
 
             /// PRIVATE
@@ -37,11 +36,17 @@ angular.module('merchello.directives').directive('productOptionsList', [
             var yes = '';
             var no = '';
             var values = '';
-            var isShared = false;
+
             var onAdd = 'merchelloProductOptionOnAddOpen';
 
             scope.getColumnValue = function(propName, option) {
                 switch(propName) {
+                    case 'name':
+                        if (option.shared && !scope.isShared) {
+                            return option.useName + ' (' + option.name + ')';
+                        } else {
+                            return option.name;
+                        }
                     case 'shared':
                         return option.shared ? yes + ' (' + option.shareCount + ')' : no;
                     case 'values':
@@ -50,8 +55,23 @@ angular.module('merchello.directives').directive('productOptionsList', [
             }
 
             scope.delete = function(option) {
-                scope.doDelete()(option);
-                search();
+
+                var dialogData = {
+                    name: '',
+                    option: option
+                };
+                dialogData.name = option.name;
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteOption,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.showDelete = function(option) {
+                return option.shared ? option.shareCount === 0 : true;
             }
 
             scope.add = function() {
@@ -70,25 +90,71 @@ angular.module('merchello.directives').directive('productOptionsList', [
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.add.html',
                     show: true,
-                    callback: processDeleteOption,
+                    callback: processAddOption,
                     dialogData: dialogData
                 });
             }
 
+            scope.enterSearch = function($event) {
+                $($event.target).next().focus();
+            }
+
+            scope.next = function() {
+                if (scope.options.currentPage < scope.queryResult.totalPages) {
+                    scope.options.currentPage++;
+                    scope.search();
+                }
+            };
+
+            scope.goToPage = function(pageNumber) {
+                scope.options.currentPage = pageNumber + 1;
+                scope.search();
+            }
+
+            scope.prev = function() {
+                if (scope.options.currentPage - 1 > 0) {
+                    scope.options.currentPage--;
+                    scope.search();
+                }
+            }
+
+            scope.sortableOptions = {
+                start : function(e, ui) {
+                    ui.item.data('start', ui.item.index());
+                },
+                stop: function (e, ui) {
+                    var choice = ui.item.scope().choice;
+                    var start = ui.item.data('start'),
+                        end =  ui.item.index();
+                    for(var i = 0; i < scope.queryResult.items.length; i++) {
+                        scope.queryResult.items[i].sortOrder = i + 1;
+                    }
+                },
+                disabled: true,
+                cursor: "move"
+            }
+
             function processDeleteOption(dialogData) {
+                scope.doDelete()(dialogData.option);
+            }
+
+            function processAddOption(dialogData) {
                 var option = productOptionDisplayBuilder.createDefault();
                 option.name = dialogData.name;
                 option.detachedContentTypeKey = dialogData.detachedContentTypeKey;
                 option.uiOption  = dialogData.uiOption;
-
+                option.choices = dialogData.choices;
+                option.shared = dialogData.shared;
                 scope.doAdd()(option);
             }
 
             function init() {
 
-                isShared = ('sharedOnly' in attr);
+                scope.isShared = ('sharedOnly' in attr);
+                scope.hasFilter = ('showFilter' in attr);
 
-                var noResultsKey = isShared ? 'noSharedProductOptions' : 'noProductOptions';
+                scope.sortableOptions.disabled = scope.isShared;
+                var noResultsKey = scope.isShared ? 'noSharedProductOptions' : 'noProductOptions';
 
                 $q.all([
                     localizationService.localize('general_yes'),
@@ -106,15 +172,18 @@ angular.module('merchello.directives').directive('productOptionsList', [
                 scope.$watch('preValuesLoaded', function(nv, ov) {
                    if (nv === true) {
                        scope.isReady = true;
+                   } else {
+                       scope.isReady = false;
                    }
 
                    if (scope.isReady) {
-                       search();
+                       scope.search();
                    }
                 });
             }
 
-            function search() {
+            scope.search = function() {
+
                 var page = scope.options.currentPage - 1;
                 var perPage = scope.options.pageSize;
                 var sortBy = scope.options.orderBy;
@@ -128,9 +197,8 @@ angular.module('merchello.directives').directive('productOptionsList', [
 
                 scope.load()(query).then(function(result) {
 
-                    console.info(result);
                     scope.queryResult = result;
-
+                    console.info(scope.queryResult.items);
                     scope.pagination = [];
 
                     //list 10 pages as per normal

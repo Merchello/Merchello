@@ -18,6 +18,12 @@
         string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the use name.
+        /// </summary>
+        [DataMember]
+        string UseName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether or not it is required to select an option in order to purchase the associated product.
         /// </summary>
         /// <remarks>

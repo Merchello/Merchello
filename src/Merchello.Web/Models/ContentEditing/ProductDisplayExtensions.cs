@@ -259,28 +259,33 @@
         /// <param name="productOptionDisplay">
         /// The product option display.
         /// </param>
-        /// <param name="destinationProductOption">
+        /// <param name="destination">
         /// The destination product option.
         /// </param>
         /// <returns>
         /// The <see cref="IProductOption"/>.
         /// </returns>
-        internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destinationProductOption)
+        internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destination)
         {
             if (productOptionDisplay.Key != Guid.Empty)
             {
-                destinationProductOption.Key = productOptionDisplay.Key;
+                destination.Key = productOptionDisplay.Key;
             }
-            destinationProductOption.Required = productOptionDisplay.Required;
-            destinationProductOption.SortOrder = productOptionDisplay.SortOrder;
 
+            destination.Required = productOptionDisplay.Required;
+            destination.SortOrder = productOptionDisplay.SortOrder;
+            destination.Shared = productOptionDisplay.Shared;
+            destination.UiOption = productOptionDisplay.UiOption;
+
+            if (!productOptionDisplay.DetachedContentTypeKey.Equals(Guid.Empty))
+            destination.DetachedContentTypeKey = productOptionDisplay.DetachedContentTypeKey;
 
             // Fix with option deletion here #M-161 #M-150
             // remove any product choices that exist in destination and do not exist in productDisplay
-            var removers = destinationProductOption.Choices.Where(x => !productOptionDisplay.Choices.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToArray();
+            var removers = destination.Choices.Where(x => !productOptionDisplay.Choices.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToArray();
             foreach (var remove in removers)
             {
-                destinationProductOption.Choices.RemoveItem(remove);
+                destination.Choices.RemoveItem(remove);
             }
 
             foreach (var choice in productOptionDisplay.Choices)
@@ -294,10 +299,9 @@
 
                 IProductAttribute destinationProductAttribute;
 
-                
-                if (destinationProductOption.Choices.Contains(choice.Sku))
+                if (destination.Choices.Contains(choice.Sku))
                 {
-                    destinationProductAttribute = destinationProductOption.Choices[choice.Key];
+                    destinationProductAttribute = destination.Choices[choice.Key];
 
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }
@@ -308,10 +312,11 @@
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }
 
-                destinationProductOption.Choices.Add(destinationProductAttribute);
+                destinationProductAttribute.IsDefaultChoice = choice.IsDefaultChoice;
+                destination.Choices.Add(destinationProductAttribute);
             }
 
-            return destinationProductOption;
+            return destination;
         }
 
         /// <summary>

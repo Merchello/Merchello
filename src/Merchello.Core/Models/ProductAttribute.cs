@@ -64,6 +64,12 @@
         public int SortOrder { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        [DataMember]
+        public bool IsDefaultChoice { get; set; }
+
+        /// <summary>
         /// Creates a cloned copy of this object.
         /// </summary>
         /// <returns>

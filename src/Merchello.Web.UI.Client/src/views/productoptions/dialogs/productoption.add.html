@@ -32,9 +32,9 @@
                     <td data-ng-show="dialogData.choices.length > 1">
                         <merchello-sort-icon data-ng-if="dialogData.choices.length > 1"></merchello-sort-icon>
                     </td>
-                    <td><input type="text" data-ng-model="choice.name" /></td>
-                    <td><input type="text" data-ng-model="choice.sku" /></td>
-                    <td><input type="radio" name="choiceSelected" data-ng-checked="choice.isDefaultChoice" /></td>
+                    <td><input type="text" data-ng-model="dialogData.choices[$index].name" /></td>
+                    <td><input type="text" data-ng-model="dialogData.choices[$index].sku" /></td>
+                    <td><input type="radio" name="choiceSelected" data-ng-value="dialogData.choices[$index]" data-ng-change="setSelectedChoice(dialogData.choices[$index])" data-ng-model="selectedAttribute" /></td>
                     <td><merchello-delete-icon do-delete="remove($index)" /></td>
                 </tr>
                 </tbody>
@@ -65,7 +65,7 @@
                     </a>
 
                     <button class="btn btn-primary"
-                            data-ng-click="submit(dialogData)">
+                            data-ng-click="save(dialogData)">
                         <localize key="buttons_save">Save</localize>
                     </button>
 

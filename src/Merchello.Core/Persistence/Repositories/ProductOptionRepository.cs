@@ -818,6 +818,7 @@
                 if (!exists) makeAssociation = true;
 
                 PersistUpdatedItem(option);
+
             }
 
             if (makeAssociation)
@@ -835,19 +836,33 @@
 
                 if (!option.Shared) return;
 
-                foreach (var mapDto in option.Choices.Select(
-                    choice => 
-                    new ProductOptionAttributeShareDto
-                    {
-                        ProductKey = productKey,
-                        OptionKey = choice.OptionKey,
-                        AttributeKey = choice.Key,
-                        CreateDate = DateTime.Now,
-                        UpdateDate = DateTime.Now
-                    }))
+                foreach (
+                    var mapDto in
+                        option.Choices.Select(
+                            choice =>
+                            new ProductOptionAttributeShareDto
+                                {
+                                    ProductKey = productKey,
+                                    OptionKey = choice.OptionKey,
+                                    AttributeKey = choice.Key,
+                                    CreateDate = DateTime.Now,
+                                    UpdateDate = DateTime.Now
+                                }))
                 {
                     this.Database.Insert(mapDto);
                 }
+            }
+            else
+            {
+                Database.Update<Product2ProductOptionDto>(
+                    "SET sortOrder = @so, updateDate = @ud WHERE productKey = @pk AND optionKey = @ok", 
+                    new
+                        {
+                            @so = option.SortOrder,
+                            @ud = DateTime.Now,
+                            @pk = productKey,
+                            @ok = option.Key
+                        });
             }
         }
 

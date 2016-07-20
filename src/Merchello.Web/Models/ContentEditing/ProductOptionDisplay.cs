@@ -22,6 +22,11 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the use name.
+        /// </summary>
+        public string UseName { get; set; }
+
+        /// <summary>
         /// Gets or sets the UI option.
         /// </summary>
         public string UiOption { get; set; }

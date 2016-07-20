@@ -36,6 +36,12 @@
         int SortOrder { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        [DataMember]
+        bool IsDefaultChoice { get; set; }
+
+        /// <summary>
         /// Returns a clone of the attribute.
         /// </summary>
         /// <returns>
