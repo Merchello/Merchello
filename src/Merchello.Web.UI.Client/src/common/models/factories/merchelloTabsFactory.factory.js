@@ -35,6 +35,12 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 return tabs;
             }
 
+            // create tabs for product options editors
+            function createProductOptionAddTabs() {
+                var tabs = new Constructor();
+                return tabs;
+            }
+
             // creates tabs for the product editor with options tabs
             function createProductEditorWithOptionsTabs(productKey) {
                 var tabs = new Constructor();
@@ -126,6 +132,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
                 createProductEditorWithOptionsTabs: createProductEditorWithOptionsTabs,
+                createProductOptionAddTabs: createProductOptionAddTabs,
                 createSalesListTabs: createSalesListTabs,
                 createSalesTabs: createSalesTabs,
                 createCustomerListTabs: createCustomerListTabs,

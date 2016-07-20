@@ -211,6 +211,8 @@
     <key alias="newProductSku">New Product SKU</key>
   </area>
   <area alias="merchelloProductOptions">
+    <key alias="newOption">New Option</key>
+    <key alias="sharedOption">Shared Options</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Edit Options</strong>

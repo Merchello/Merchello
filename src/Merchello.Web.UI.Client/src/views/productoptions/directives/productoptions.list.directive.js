@@ -76,14 +76,12 @@ angular.module('merchello.directives').directive('productOptionsList', [
 
             scope.add = function() {
                 var dialogData = {
-                    name: '',
-                    detachedContentTypeKey: '',
-                    uiOption: '',
-                    required: true,
-                    shared: scope.sharedOnly !== undefined,
-                    choices: [],
+                    option: productOptionDisplayBuilder.createDefault(),
+                    showTabs: !scope.sharedOnly,
                     productKey: ''
                 };
+
+                dialogData.option.shared = scope.sharedOnly !== undefined;
 
                 eventsService.emit(onAdd, dialogData);
 
@@ -139,13 +137,7 @@ angular.module('merchello.directives').directive('productOptionsList', [
             }
 
             function processAddOption(dialogData) {
-                var option = productOptionDisplayBuilder.createDefault();
-                option.name = dialogData.name;
-                option.detachedContentTypeKey = dialogData.detachedContentTypeKey;
-                option.uiOption  = dialogData.uiOption;
-                option.choices = dialogData.choices;
-                option.shared = dialogData.shared;
-                scope.doAdd()(option);
+                scope.doAdd()(dialogData.option);
             }
 
             function init() {
@@ -198,7 +190,7 @@ angular.module('merchello.directives').directive('productOptionsList', [
                 scope.load()(query).then(function(result) {
 
                     scope.queryResult = result;
-                    console.info(scope.queryResult.items);
+
                     scope.pagination = [];
 
                     //list 10 pages as per normal

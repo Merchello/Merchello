@@ -1,0 +1,52 @@
+<form name="productOptionForm" id="productOptionForm">
+
+        <div class="form-group row-fluid">
+            <label for="name"><localize key="general_name" /></label>
+            <div class="error" data-ng-show="productOptionForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+            <input name="name" id="name" data-ng-model="option.name" class="span8" type="text" required />
+        </div>
+
+        <div class="control-group" data-ng-show="option.name !== ''">
+
+            <h5>Choices</h5>
+            <input type="text" name="choice" data-ng-model="choiceName" merch-enter="addChoice()" /> <merchello-add-icon do-add="addChoice()"></merchello-add-icon>
+        </div>
+        <table class="table settings-table col-xs-6 span6" data-ng-show="option.choices.length > 0">
+            <thead>
+            <tr>
+                <th data-ng-show="option.choices.length > 1"></th>
+                <th>Name</th>
+                <th>Sku</th>
+                <th>Selected</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody data-ui-sortable="sortableOptions" data-ng-model="option.choices">
+            <tr data-ng-repeat="choice in option.choices" class="sortable">
+                <td data-ng-show="option.choices.length > 1">
+                    <merchello-sort-icon data-ng-if="option.choices.length > 1"></merchello-sort-icon>
+                </td>
+                <td><input type="text" data-ng-model="option.choices[$index].name" /></td>
+                <td><input type="text" data-ng-model="option.choices[$index].sku" /></td>
+                <td><input type="radio" name="choiceSelected" data-ng-value="option.choices[$index]" data-ng-change="setSelectedChoice(option.choices[$index])" data-ng-model="selectedAttribute" /></td>
+                <td><merchello-delete-icon do-delete="remove($index)" /></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="form-group row-fluid">
+            <h5>Custom Settings</h5>
+            <label for="uiOption">UI Option</label>
+            <select id="uiOption" name="uiOption" class="span8" data-ng-change="setContentType" data-ng-model="option.uiOption">
+                <option value="">-</option>
+                <option value="select">Select List</option>
+                <option value="radio">Radio Buttons</option>
+            </select>
+        </div>
+
+        <div class="form-group row-fluid control-group">
+            <detached-content-type-select entity-type="ProductOption" selected-content-type="contentType"></detached-content-type-select>
+        </div>
+
+
+</form>

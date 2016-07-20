@@ -1,0 +1,93 @@
+<form name="productOptionForm" id="productOptionForm" data-ng-show="ready">
+
+    <div class="form-group row-fluid">
+        <label for="name"><localize key="general_name" /></label>
+        <div class="error" data-ng-show="productOptionForm.name.$invalid && wasFormSubmitted">Name is a required field.</div>
+        <input name="name" id="name" data-ng-model="option.name" class="span8" type="text" required />
+    </div>
+
+
+    <div class="merchello-controls merchello-list-view umb-listview">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td><localize key="merchelloTableCaptions_optionName" /></td>
+                <td><localize key="merchelloTableCaptions_optionUi" /></td>
+                <td><localize key="merchelloTableCaptions_optionValues" /></td>
+                <td>
+                    <form class="pull-right ng-pristine ng-valid" novalidate>
+                        <i class="icon-search" data-ng-click="enterSearch($event)"></i>
+                        <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
+                    </form>
+                </td>
+            </tr>
+            </thead>
+            <tbody data-ng-show="queryResult.totalItems > 0" >
+            <tr class="merchello-icon-container" data-ng-class="{ sortable : !isShared  }" class="sortable" data-ng-repeat="option in queryResult.items">
+                <td>{{ option.name }}</td>
+                <td>{{ option.uiOption }}</td>
+                <td data-ng-bind="getColumnValue('values', option)"></td>
+                <td class="text-right">
+                    <merchello-add-icon do-add="selectOption(option)" />
+                </td>
+            </tr>
+            </tbody>
+            <tbody data-ng-hide="queryResult.totalItems > 0" >
+            <td colspan="6" data-ng-bind-html-unsafe="noResults">
+
+            </td>
+            </tbody>
+            <tfoot ng-show="pagination.length > 1">
+            <tr>
+                <th colspan="6">
+                    <div class="pull-left">
+                    </div>
+                    <div class="pagination pagination-right">
+                        <ul>
+                            <li ng-class="{disabled:options.pageNumber <= 1}">
+                                <a href="#" ng-click="prev()" prevent-default>
+                                    <localize key="general_previous">Previous</localize>
+                                </a>
+                            </li>
+
+                            <li ng-repeat="pgn in pagination"
+                                ng-class="{active:pgn.isActive}">
+
+                                <a href="#" ng-click="goToPage(pgn.val - 1)" prevent-default
+                                   ng-bind="pgn.name ? pgn.name : pgn.val"
+                                   ng-if="pgn.val != '...'"></a>
+                                <span ng-bind="pgn.val" ng-if="pgn.val == '...'"></span>
+                            </li>
+
+                            <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages}">
+                                <a href="#" ng-click="next()" prevent-default>
+                                    <localize key="general_next">Next</localize>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+
+
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="save()">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</form>
