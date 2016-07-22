@@ -27,8 +27,8 @@
         <tr data-ng-repeat="choice in sharedOption.choices">
             <td>{{ choice.name }}</td>
             <td>{{ choice.sku }}</td>
-            <td class="text-center"><input type="checkbox" data-ng-model="selectedChoices" data-ng-value="choice.key" data-ng-checked="choice.selected" /></td>
-            <td><input type="radio" name="defaultChoice" data-ng-model="defaultChoice" data-ng-value="choice.key" data-ng-checked="choice.isDefaultChoice" /></td>
+            <td class="text-center"><input type="checkbox" data-ng-model="selectedChoices" data-ng-change="addRemoveChoice(choice)" data-ng-value="choice.key" data-ng-checked="choice.selected" /></td>
+            <td><input type="radio" data-ng-model="defaultChoice.current" data-ng-value="choice" data-ng-change="validateDefaultChoice($event)" /></td>
             <td></td>
         </tr>
         </tbody>

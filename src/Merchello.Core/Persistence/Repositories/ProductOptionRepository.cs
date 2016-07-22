@@ -817,7 +817,7 @@
             {
                 if (!exists) makeAssociation = true;
 
-                PersistUpdatedItem(option);
+                if (!option.Shared) PersistUpdatedItem(option);
 
             }
 

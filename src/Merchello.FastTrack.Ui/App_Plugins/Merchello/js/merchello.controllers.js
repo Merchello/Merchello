@@ -6167,6 +6167,9 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
 
         $scope.visiblePanel = 'newoption';
 
+        var newEvent = 'merchNewProductOptionSave';
+        var sharedEvent = 'merchSharedProductOptionSave';
+
         if ($scope.dialogData.showTabs) {
 
             $scope.tabs = merchelloTabsFactory.createProductOptionAddTabs();
@@ -6203,7 +6206,9 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
             var validation = { valid: false };
 
             if ($scope.visiblePanel === 'newoption') {
-                eventsService.emit('merchNewProductOptionSave', validation);
+                eventsService.emit(newEvent, validation);
+            } else if ($scope.visiblePanel === 'sharedoption') {
+                eventsService.emit(sharedEvent, validation);
             }
 
             if (validation.valid) {

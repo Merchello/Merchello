@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive("productOptionsAddEdit",
-    ['eventsService', 'productAttributeDisplayBuilder',
-    function(eventsService, productAttributeDisplayBuilder) {
+    ['$timeout', 'eventsService', 'productAttributeDisplayBuilder',
+    function($timeout, eventsService, productAttributeDisplayBuilder) {
     return {
         restrict: 'E',
         replace: true,
@@ -96,9 +96,8 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 cursor: "move"
             }
 
-
             function validate(args) {
-                if (scope.productOptionForm.$valid) {
+                if (scope.productOptionForm.$valid && scope.option.choices.length > 0) {
                     args.valid = true;
                 } else {
                     scope.wasFormSubmitted = true;

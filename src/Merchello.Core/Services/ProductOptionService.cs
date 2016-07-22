@@ -160,6 +160,7 @@
         {
             var option = new ProductOption(name)
                         {
+                            UseName = name,
                             Shared = shared, 
                             Required = required
                         };

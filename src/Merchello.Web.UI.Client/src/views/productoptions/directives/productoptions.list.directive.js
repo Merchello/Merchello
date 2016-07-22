@@ -71,7 +71,7 @@ angular.module('merchello.directives').directive('productOptionsList', [
             }
 
             scope.showDelete = function(option) {
-                return option.shared ? option.shareCount === 0 : true;
+                return option.shared ? option.shareCount === 0 || !scope.isShared : true;
             }
 
             scope.add = function() {

@@ -9,6 +9,7 @@
         <div class="control-group" data-ng-show="option.name !== ''">
 
             <h5>Choices</h5>
+            <div class="error" data-ng-show="option.choices.length === 0 && wasFormSubmitted">At least one choice must be defined.</div>
             <input type="text" name="choice" data-ng-model="choiceName" merch-enter="addChoice()" /> <merchello-add-icon do-add="addChoice()"></merchello-add-icon>
         </div>
         <table class="table settings-table col-xs-6 span6" data-ng-show="option.choices.length > 0">
