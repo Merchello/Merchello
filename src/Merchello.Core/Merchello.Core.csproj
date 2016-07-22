@@ -523,7 +523,9 @@
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
+    <Compile Include="Models\Rdbms\DtoExtensions.cs" />
     <Compile Include="Models\Rdbms\EntityUseCountDto.cs" />
+    <Compile Include="Models\Rdbms\IDto.cs" />
     <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
@@ -671,7 +673,9 @@
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IBulkOperationRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductOptionRepository.cs" />
+    <Compile Include="Persistence\Repositories\MerchelloBulkOperationRepository.cs" />
     <Compile Include="Persistence\Repositories\NoteRepository.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\DetachedContentTypeRepository.cs" />

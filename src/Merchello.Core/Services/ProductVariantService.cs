@@ -265,7 +265,8 @@
                     {
                         repository.AddOrUpdate(variant);
                     }
-                    uow.Commit();
+
+                    uow.CommitBulk<IProductVariant>();
                 }
             }
 
@@ -489,7 +490,8 @@
                 OutOfStockPurchase = product.OutOfStockPurchase,
                 Taxable = product.Taxable,
                 Shippable = product.Shippable,
-                Download = product.Download
+                Download = product.Download,
+                VersionKey = Guid.NewGuid()
             };
         }
 

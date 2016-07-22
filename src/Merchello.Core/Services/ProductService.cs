@@ -1615,18 +1615,26 @@
                 // Check to see if the variant exists
                 var productAttributes = list as IProductAttribute[] ?? list.ToArray();
                    
-                // TODO refactor this to be more efficient
+                // TODO refactor
                 if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
                    
-                var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection(), false);
+                var variant = ((ProductVariantService)_productVariantService).CreateProductVariant(product, productAttributes.ToProductAttributeCollection());
+                newVariants.Add(variant);
                 foreach (var inv in product.CatalogInventories)
                 {
                     variant.AddToCatalogInventory(inv.CatalogKey);
-                    newVariants.Add(variant);
+
                 }
             }
 
-            if (newVariants.Any()) _productVariantService.Save(newVariants, false);
+            if (newVariants.Any())
+            {
+                _productVariantService.Save(newVariants, false);
+                foreach (var v in newVariants)
+                {
+                    product.ProductVariants.Add(v);
+                }
+            }
         }
 
         /// <summary>
