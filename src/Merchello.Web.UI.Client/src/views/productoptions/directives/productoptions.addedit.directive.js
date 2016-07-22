@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive("productOptionsAddEdit",
-    ['$timeout', 'eventsService', 'productAttributeDisplayBuilder',
-    function($timeout, eventsService, productAttributeDisplayBuilder) {
+    ['$timeout', 'eventsService', 'productOptionResource', 'productAttributeDisplayBuilder',
+    function($timeout, eventsService, productOptionResource, productAttributeDisplayBuilder) {
     return {
         restrict: 'E',
         replace: true,
@@ -13,13 +13,45 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
 
             scope.contentType = {};
             scope.choiceName = '';
-            scope.defaultChoice = {};
-            scope.selectedAttribute = {};
             scope.wasFormSubmitted = false;
+            scope.ready = false;
+            scope.counts = {};
+
+            scope.selectedAttribute = {
+                current: undefined,
+                previous: undefined,
+                isSet: false
+            }
+
+            if (scope.option.key === '') {
+                scope.ready = true;
+            } else {
+                 productOptionResource.getUseCounts(scope.option).then(function(counts) {
+                     scope.counts = counts;
+                     scope.ready = true;
+                 });
+            }
+
+
+            if (scope.option.choices.length > 0) {
+                scope.selectedAttribute.current = _.find(scope.option.choices, function(c) {
+                   if (c.isDefaultChoice) {
+                       return c;
+                   }
+                });
+
+                if (scope.selectedAttribute.current) {
+                    scope.selectedAttribute.previous = scope.selectedAttribute.current;
+                } else {
+                    scope.selectedAttribute.current = scope.selectedAttribute.previous = scope.option.choices[0];
+                }
+            }
 
             eventsService.on('merchNewProductOptionSave', function(name, args) {
                 validate(args);
             });
+
+
 
             // adds a choice to the dialog data collection of choicds
             scope.addChoice = function() {
@@ -32,8 +64,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
 
                     if (scope.option.choices.length === 0) {
                         choice.isDefaultChoice = true;
-                        scope.defaultChoice = choice;
-                        scope.selectedAttribute = choice;
+                        scope.selectedAttribute.current = scope.selectedAttribute.previous = choice;
                     }
 
                     var exists = _.find(scope.option.choices, function(c) { return c.sku === choice.sku; });
@@ -57,28 +88,25 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                             c.sortOrder -= 1;
                         }
                     });
+
                     if (wasSelected) {
                         if(scope.option.choices.length > 0) {
                             scope.option.choices[0].isDefaultChoice = true;
-                            scope.selectedAttribute = scope.option.choices[0];
+                            scope.selectedAttribute.current = scope.selectedAttribute.previous = scope.option.choices[0];
                         }
                     }
                 }
             };
 
             // sets the default choice property
-            scope.setSelectedChoice = function(choice) {
-                scope.selectedAttribute.isDefaultChoice = false;
-                choice.isDefaultChoice = true;
-                scope.selectedAttribute = choice;
+            scope.setSelectedChoice = function() {
+                scope.selectedAttribute.previous.isDefaultChoice = false;
+                scope.selectedAttribute.current.isDefaultChoice = true;
+                scope.selectedAttribute.previous = scope.selectedAttribute.current;
             };
 
 
             // Saves an option
-
-            scope.setContentType = function() {
-                scope.option.detachedContentTypeKey = scope.contentType.key;
-            }
 
             scope.sortableOptions = {
                 start : function(e, ui) {
@@ -98,12 +126,15 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
 
             function validate(args) {
                 if (scope.productOptionForm.$valid && scope.option.choices.length > 0) {
+                    scope.option.detachedContentTypeKey = scope.contentType.key;
                     args.valid = true;
+
                 } else {
                     scope.wasFormSubmitted = true;
                 }
-
             };
+
+
         }
     };
 }]);

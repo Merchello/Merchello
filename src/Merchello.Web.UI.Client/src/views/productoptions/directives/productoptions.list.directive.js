@@ -78,7 +78,12 @@ angular.module('merchello.directives').directive('productOptionsList', [
                 var dialogData = {
                     option: productOptionDisplayBuilder.createDefault(),
                     showTabs: !scope.sharedOnly,
-                    productKey: ''
+                    productKey: '',
+                    exclude: scope.isShared ? [] : _.pluck(
+                        _.filter(scope.queryResult.items,
+                            function(o) {
+                                if (o.shared) { return o; }
+                            }), 'key')
                 };
 
                 dialogData.option.shared = scope.sharedOnly !== undefined;
@@ -89,6 +94,27 @@ angular.module('merchello.directives').directive('productOptionsList', [
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.add.html',
                     show: true,
                     callback: processAddOption,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.edit = function(option) {
+
+                var clone = productOptionDisplayBuilder.createDefault();
+                clone = angular.extend(clone, option);
+
+                var dialogData = {
+                    option: clone,
+                    showTabs: false,
+                    productKey: ''
+                }
+
+                eventsService.emit(onAdd, dialogData);
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.edit.html',
+                    show: true,
+                    callback: processEditOption,
                     dialogData: dialogData
                 });
             }
@@ -138,6 +164,10 @@ angular.module('merchello.directives').directive('productOptionsList', [
 
             function processAddOption(dialogData) {
                 scope.doAdd()(dialogData.option);
+            }
+
+            function processEditOption(dialogData) {
+                scope.doEdit()(dialogData.option);
             }
 
             function init() {

@@ -6218,6 +6218,27 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
 
 }]);
 
+angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductOptionEditController',
+    ['$scope', 'eventsService',
+    function($scope, eventsService) {
+
+        $scope.visiblePanel = 'newoption';
+
+        var eventName = 'merchNewProductOptionSave';
+
+
+
+        $scope.validate = function() {
+            var validation = { valid: false };
+
+            eventsService.emit(eventName, validation);
+
+            if (validation.valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+
+}]);
 angular.module('merchello').controller('Merchello.Backoffice.SharedProductOptionsController',
     ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource', 'dialogDataFactory', 'dialogService',
         'merchelloListViewHelper',
@@ -6250,6 +6271,15 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
 
             productOptionResource.addProductOption(option).then(function(o) {
                $scope.preValuesLoaded = true;
+            });
+        }
+
+        $scope.edit = function(option) {
+            // this is the toggle to relead in the directive
+            $scope.preValuesLoaded = false;
+
+            productOptionResource.saveProductOption(option).then(function(o) {
+                $scope.preValuesLoaded = true;
             });
         }
 

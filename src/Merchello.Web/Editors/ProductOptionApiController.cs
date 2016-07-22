@@ -8,6 +8,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.Counting;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.Querying;
@@ -44,6 +45,23 @@
              : base(merchelloContext)
         {
             _productOptionService = merchelloContext.Services.ProductOptionService;
+        }
+
+        /// <summary>
+        /// Gets the use count for the product option.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionUseCount"/>.
+        /// </returns>
+        [HttpGet]
+        public ProductOptionUseCount GetProductOptionUseCount(Guid id)
+        {
+            var option = _productOptionService.GetByKey(id);
+
+            return _productOptionService.GetProductOptionUseCount(option) as ProductOptionUseCount;
         }
 
         /// <summary>
@@ -86,6 +104,25 @@
             _productOptionService.Save(productOption);
 
             return productOption.ToProductOptionDisplay();
+        }
+
+        /// <summary>
+        /// Puts (saves) a product option.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionDisplay"/>.
+        /// </returns>
+        [HttpPut, HttpPost]
+        public ProductOptionDisplay PutProductOption(ProductOptionDisplay option)
+        {
+            var destination = _productOptionService.GetByKey(option.Key);
+            destination = option.ToProductOption(destination);
+            _productOptionService.Save(destination);
+
+            return destination.ToProductOptionDisplay();
         }
 
         /// <summary>

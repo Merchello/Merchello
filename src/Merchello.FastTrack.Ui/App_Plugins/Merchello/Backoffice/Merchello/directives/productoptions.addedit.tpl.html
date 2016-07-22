@@ -1,4 +1,4 @@
-<form name="productOptionForm" id="productOptionForm">
+<form name="productOptionForm" id="productOptionForm" data-ng-show="ready">
 
         <div class="form-group row-fluid">
             <label for="name"><localize key="general_name" /></label>
@@ -27,9 +27,9 @@
                 <td data-ng-show="option.choices.length > 1">
                     <merchello-sort-icon data-ng-if="option.choices.length > 1"></merchello-sort-icon>
                 </td>
-                <td><input type="text" data-ng-model="option.choices[$index].name" /></td>
-                <td><input type="text" data-ng-model="option.choices[$index].sku" /></td>
-                <td><input type="radio" name="choiceSelected" data-ng-value="option.choices[$index]" data-ng-change="setSelectedChoice(option.choices[$index])" data-ng-model="selectedAttribute" /></td>
+                <td><input type="text" data-ng-model="choice.name" /></td>
+                <td><input type="text" data-ng-model="choice.sku" /></td>
+                <td><input type="radio" name="choiceSelected" data-ng-value="choice" data-ng-change="setSelectedChoice()" data-ng-model="selectedAttribute.current" /></td>
                 <td><merchello-delete-icon do-delete="remove($index)" /></td>
             </tr>
             </tbody>
@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-group row-fluid control-group">
-            <detached-content-type-select entity-type="ProductOption" selected-content-type="contentType"></detached-content-type-select>
+            <detached-content-type-select entity-type="ProductOption" selected-content-type="contentType" set-selected-content-type-key="option.detachedContentTypeKey"></detached-content-type-select>
         </div>
 
 

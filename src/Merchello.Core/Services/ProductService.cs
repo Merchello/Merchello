@@ -1615,6 +1615,7 @@
                 // Check to see if the variant exists
                 var productAttributes = list as IProductAttribute[] ?? list.ToArray();
                    
+                // TODO refactor this to be more efficient
                 if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
                    
                 var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection(), false);

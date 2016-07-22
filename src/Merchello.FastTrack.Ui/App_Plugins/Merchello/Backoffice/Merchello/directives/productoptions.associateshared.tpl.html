@@ -57,7 +57,7 @@
                 <td data-ng-bind="getColumnValue('values', option)"></td>
                 <td>
                     <div class="text-right">
-                    <merchello-add-icon do-add="selectOption(option)"></merchello-add-icon>
+                    <merchello-add-icon do-add="selectOption(option)" data-ng-if="showAdd(option)"></merchello-add-icon>
                     </div>
                 </td>
             </tr>

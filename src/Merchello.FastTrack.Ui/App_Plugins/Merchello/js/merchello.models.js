@@ -140,6 +140,15 @@ angular.module('merchello.models').constant('BackOfficeTreeDisplay', BackOfficeT
     };
 
     angular.module('merchello.models').constant('DialogEditorViewDisplay', DialogEditorViewDisplay);
+var EntityUseCount = function() {
+  var self = this;
+    self.key = '';
+    self.count = 0;
+};
+
+
+angular.module('merchello.models').constant('EntityUseCount', EntityUseCount);
+
     /**
      * @ngdoc model
      * @name ExtendedDataDisplay
@@ -2577,6 +2586,15 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
     }());
 
     angular.module('merchello.models').constant('ProductOptionDisplay', ProductOptionDisplay);
+var ProductOptionUseCount = function() {
+    var self = this;
+    self.option = 0;
+    self.shared = false;
+    self.choices = [];
+};
+
+angular.module('merchello.models').constant('ProductOptionUseCount', ProductOptionUseCount);
+
 /**
  * @ngdoc model
  * @name ProductVariantDetachedContentDisplay
@@ -4799,6 +4817,23 @@ angular.module('merchello.models').factory('dialogDataFactory',
             }]);
 
 
+angular.module('merchello.models').factory('entityUseCountBuilder',
+    ['genericModelBuilder', 'EntityUseCount',
+    function(genericModelBuilder, EntityUseCount) {
+
+        var Constructor = EntityUseCount;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                return genericModelBuilder.transform(jsonResult, Constructor);
+            }
+        };
+
+}]);
+
     /**
      * @ngdoc service
      * @name merchello.models.extendedDataDisplayBuilder
@@ -5548,6 +5583,26 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
             };
 
     }]);
+
+angular.module('merchello.models').factory('productOptionUseCountBuilder',
+    ['genericModelBuilder', 'entityUseCountBuilder' , 'ProductOptionUseCount',
+    function(genericModelBuilder, entityUseCountBuilder, ProductOptionUseCount) {
+
+        var Constructor = ProductOptionUseCount;
+
+        return {
+            createDefault: function() {
+                return new Constructor();
+            },
+            transform: function(jsonResult) {
+                var result = this.createDefault();
+                result.option = entityUseCountBuilder.transform(jsonResult.option);
+                result.choices = entityUseCountBuilder.transform(jsonResult.choices);
+                return result;
+            }
+        };
+
+}]);
 
 /**
  * @ngdoc models

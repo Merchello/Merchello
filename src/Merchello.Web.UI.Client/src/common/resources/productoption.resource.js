@@ -1,6 +1,6 @@
 angular.module('merchello.resources').factory('productOptionResource',
-    ['$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder',
-        function($q, $http, umbRequestHelper, queryResultDisplayBuilder, productOptionDisplayBuilder) {
+    ['$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder', 'productOptionUseCountBuilder',
+        function($q, $http, umbRequestHelper, queryResultDisplayBuilder, productOptionDisplayBuilder, productOptionUseCountBuilder) {
 
             var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductOptionApiBaseUrl'];
 
@@ -29,6 +29,26 @@ angular.module('merchello.resources').factory('productOptionResource',
                     return deferred.promise;
                 },
 
+                getUseCounts: function(option) {
+                    var url = baseUrl + 'GetProductOptionUseCount';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { id: option.key }
+                        }),
+                        'Failed to retreive default report data')
+                        .then(function(data) {
+                            var counts = productOptionUseCountBuilder.transform(data);
+                            deferred.resolve(counts);
+                        });
+
+                    return deferred.promise;
+                },
+
+
                 /**
                  * @ngdoc method
                  * @name addProductOption
@@ -43,6 +63,23 @@ angular.module('merchello.resources').factory('productOptionResource',
                             option
                         ),
                         'Failed to create new product option')
+                        .then(function(po) {
+                            var result = productOptionDisplayBuilder.transform(po);
+                            deferred.resolve(result);
+                        });
+
+                    return deferred.promise;
+                },
+
+                saveProductOption: function(option) {
+                    var url = baseUrl + 'PutProductOption';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            option
+                        ),
+                        'Failed to save product option')
                         .then(function(po) {
                             var result = productOptionDisplayBuilder.transform(po);
                             deferred.resolve(result);

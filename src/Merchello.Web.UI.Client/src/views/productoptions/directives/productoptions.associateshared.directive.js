@@ -1,14 +1,15 @@
 angular.module('merchello.directives').directive('productOptionsAssociateShared',
-    ['$q', 'localizationService', 'eventsService', 'productOptionResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+    ['$q', '$timeout', 'localizationService', 'eventsService', 'productOptionResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
         'productOptionDisplayBuilder',
-    function($q, localizationService, eventsService, productOptionResource, queryDisplayBuilder, queryResultDisplayBuilder,
+    function($q, $timeout, localizationService, eventsService, productOptionResource, queryDisplayBuilder, queryResultDisplayBuilder,
         productOptionDisplayBuilder) {
 
         return {
             restrict: 'E',
             replace: true,
             scope: {
-                option: '='
+                option: '=',
+                exclude: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.associateshared.tpl.html',
             link: function (scope, elm, attr) {
@@ -19,6 +20,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
 
                 scope.optionSelected = false;
                 scope.selectedChoices = [];
+                scope.pagination = [];
 
                 scope.defaultChoice = {
                     current: undefined,
@@ -54,6 +56,11 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     }
                 }
 
+                scope.goToPage = function(pageNumber) {
+                    scope.options.currentPage = pageNumber + 1;
+                    scope.search();
+                }
+
                 scope.next = function() {
                     if (scope.options.currentPage < scope.queryResult.totalPages) {
                         scope.options.currentPage++;
@@ -76,6 +83,45 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     productOptionResource.searchOptions(query).then(function(results) {
                        scope.queryResult = results;
                         scope.ready = true;
+
+                        scope.pagination = [];
+
+                        //list 10 pages as per normal
+                        if (scope.queryResult.totalPages <= 10) {
+                            for (var i = 0; i < scope.queryResult.totalPages; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.currentPage == (i + 1)
+                                });
+                            }
+                        }
+                        else {
+                            //if there is more than 10 pages, we need to do some fancy bits
+
+                            //get the max index to start
+                            var maxIndex = scope.queryResult.totalPages - 10;
+                            //set the start, but it can't be below zero
+                            var start = Math.max(scope.options.currentPage - 5, 0);
+                            //ensure that it's not too far either
+                            start = Math.min(maxIndex, start);
+
+                            for (var i = start; i < (10 + start) ; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.currentPage == (i + 1)
+                                });
+                            }
+
+                            //now, if the start is greater than 0 then '1' will not be displayed, so do the elipses thing
+                            if (start > 0) {
+                                scope.pagination.unshift({ name: "First", val: 1, isActive: false }, {val: "...",isActive: false});
+                            }
+
+                            //same for the end
+                            if (start < maxIndex) {
+                                scope.pagination.push({ val: "...", isActive: false }, { name: "Last", val: scope.queryResult.totalPages, isActive: false });
+                            }
+                        }
                     });
 
                 }
@@ -99,6 +145,15 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     scope.optionSelected = false;
                 }
 
+                scope.showAdd = function(option) {
+                    if (scope.exclude) {
+                        var fnd = _.find(scope.exclude, function(key) {
+                           return key === option.key;
+                        });
+                        return !fnd;
+                    }
+                    return true;
+                }
 
                 scope.selectOption = function(option) {
                     scope.sharedOption = option;
@@ -213,19 +268,21 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                 }
 
                 function createAssociatedOption() {
+
+                    // todo - hashkeys sometimes don't map here
                     var option = angular.extend(scope.option, scope.sharedOption);
 
                     option.choices = _.filter(option.choices, function(oc) {
                        var exists = _.find(scope.selectedChoices, function (sc) {
                           return sc === oc.key;
                        });
+
                         if (exists) {
+                            // wait for the hashkeys
                             return oc;
                         }
                     });
-
                 }
-
 
                 function validate(args) {
                     if (scope.productOptionForm.$valid) {

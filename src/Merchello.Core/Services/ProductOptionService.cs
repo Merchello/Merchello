@@ -310,9 +310,6 @@
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductOption>(option), this);
         }
 
-
-        
-
         /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.
         /// </summary>
