@@ -85,7 +85,7 @@
             ProductService.Saved += ProductServiceSaved;
             ProductService.Deleted += ProductServiceDeleted;
 
-            ProductVariantService.Created += ProductVariantServiceCreated;
+            //ProductVariantService.Created += ProductVariantServiceCreated;
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
 
@@ -135,8 +135,6 @@
 
             e.Fields.Add("downloadMediaPropertyIds", value);
         }
-
-        // TODO RSS - come up with another way of updating the customer index ... we should not need to requiry the customer here
 
         /// <summary>
         /// The customer address service deleted.

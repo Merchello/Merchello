@@ -1614,8 +1614,7 @@
             {
                 // Check to see if the variant exists
                 var productAttributes = list as IProductAttribute[] ?? list.ToArray();
-                   
-                // TODO refactor
+
                 if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
                    
                 var variant = ((ProductVariantService)_productVariantService).CreateProductVariant(product, productAttributes.ToProductAttributeCollection());
@@ -1629,7 +1628,7 @@
 
             if (newVariants.Any())
             {
-                _productVariantService.Save(newVariants, false);
+               // _productVariantService.Save(newVariants);
                 foreach (var v in newVariants)
                 {
                     product.ProductVariants.Add(v);
