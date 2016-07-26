@@ -40,8 +40,15 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         }
 
         $scope.doEdit = function(option) {
+
             executeReload(function() {
-                _.extend(_.findWhere($scope.product.options, { key: option.key }), option);
+                var options = _.reject($scope.product.productOptions, function(po) {
+                   return po.key === option.key;
+                });
+
+                options.push(option);
+                options = _.sortBy(options, 'sortOrder');
+                $scope.product.productOptions = options;
             });
 
         }

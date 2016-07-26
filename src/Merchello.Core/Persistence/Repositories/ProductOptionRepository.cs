@@ -931,6 +931,21 @@
                         Database.Execute(clause);
                     }
                 }
+
+                var newChoices = o.Choices.Where(x => current.Choices.All(cc => cc.Key != x.Key));
+                var dtos = newChoices.Select(nc => new ProductOptionAttributeShareDto
+                        {
+                            ProductKey = productKey,
+                            AttributeKey = nc.Key,
+                            OptionKey = nc.OptionKey,
+                            IsDefaultChoice = nc.IsDefaultChoice,
+                            CreateDate = DateTime.Now,
+                            UpdateDate = DateTime.Now
+                        });
+                foreach (var dto in dtos)
+                {
+                    Database.Insert(dto);
+                }
             }
         }
 
@@ -1156,9 +1171,13 @@
         {
             var list = new List<Sql>
                 {
+                 new Sql(
+                         "DELETE FROM merchProductVariant2ProductAttribute WHERE optionKey = @ok AND productAttributeKey = @ak AND productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @pk AND master = 0)",
+                         new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey }),
+
                      new Sql(
                          "DELETE FROM merchProductOptionAttributeShare WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok", 
-                     new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey })       
+                     new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey })
                 };
 
             return list;

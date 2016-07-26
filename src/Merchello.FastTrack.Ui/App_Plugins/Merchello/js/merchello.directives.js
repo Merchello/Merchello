@@ -2364,7 +2364,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 if (scope.choiceName !== '') {
                     var choice = productAttributeDisplayBuilder.createDefault();
                     choice.name = scope.choiceName;
-                    choice.sku = scope.choiceName.toLocaleLowerCase();
+                    choice.sku = scope.choiceName.replace(/\W+/g, " ").replace(/\s+/g, '-').toLocaleLowerCase();
                     choice.sortOrder = scope.option.choices.length + 1;
 
                     if (scope.option.choices.length === 0) {
@@ -2509,9 +2509,6 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
 
 
                 var values = '';
-
-                console.info(scope.sharedOptionsEditor);
-
 
                 eventsService.on('merchSharedProductOptionSave', function(name, args) {
                     validate(args);
@@ -2793,7 +2790,6 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                 function validate(args) {
                     if (scope.productOptionForm.$valid) {
                         scope.option = createAssociatedOption();
-                        console.info(scope.option);
                         args.valid = true;
                     } else {
                         scope.wasFormSubmitted = true;

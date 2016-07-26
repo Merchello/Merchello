@@ -7,8 +7,6 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
         var newName = 'merchNewProductOptionSave';
         var sharedEvent = 'merchSharedProductOptionSave';
 
-        console.info($scope.dialogData);
-
 
         $scope.validate = function() {
             var validation = { valid: false };

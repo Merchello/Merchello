@@ -6227,8 +6227,6 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
         var newName = 'merchNewProductOptionSave';
         var sharedEvent = 'merchSharedProductOptionSave';
 
-        console.info($scope.dialogData);
-
 
         $scope.validate = function() {
             var validation = { valid: false };
@@ -8108,8 +8106,15 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         }
 
         $scope.doEdit = function(option) {
+
             executeReload(function() {
-                _.extend(_.findWhere($scope.product.options, { key: option.key }), option);
+                var options = _.reject($scope.product.productOptions, function(po) {
+                   return po.key === option.key;
+                });
+
+                options.push(option);
+                options = _.sortBy(options, 'sortOrder');
+                $scope.product.productOptions = options;
             });
 
         }

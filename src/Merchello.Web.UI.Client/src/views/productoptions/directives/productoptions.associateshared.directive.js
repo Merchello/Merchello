@@ -46,9 +46,6 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
 
                 var values = '';
 
-                console.info(scope.sharedOptionsEditor);
-
-
                 eventsService.on('merchSharedProductOptionSave', function(name, args) {
                     validate(args);
                 });
@@ -329,7 +326,6 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                 function validate(args) {
                     if (scope.productOptionForm.$valid) {
                         scope.option = createAssociatedOption();
-                        console.info(scope.option);
                         args.valid = true;
                     } else {
                         scope.wasFormSubmitted = true;
