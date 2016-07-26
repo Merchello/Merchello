@@ -828,6 +828,7 @@
                     OptionKey = option.Key,
                     ProductKey = productKey,
                     SortOrder = option.SortOrder,
+                    UseName = option.UseName,
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now
                 };
@@ -845,6 +846,7 @@
                                     ProductKey = productKey,
                                     OptionKey = choice.OptionKey,
                                     AttributeKey = choice.Key,
+                                    IsDefaultChoice = choice.IsDefaultChoice,
                                     CreateDate = DateTime.Now,
                                     UpdateDate = DateTime.Now
                                 }))
@@ -855,14 +857,31 @@
             else
             {
                 Database.Update<Product2ProductOptionDto>(
-                    "SET sortOrder = @so, updateDate = @ud WHERE productKey = @pk AND optionKey = @ok", 
+                    "SET sortOrder = @so, useName = @un, updateDate = @ud WHERE productKey = @pk AND optionKey = @ok", 
                     new
                         {
                             @so = option.SortOrder,
+                            @un = option.UseName,
                             @ud = DateTime.Now,
                             @pk = productKey,
                             @ok = option.Key
                         });
+
+                if (option.Shared)
+                {
+                    foreach (var choice in option.Choices)
+                    {
+                        Database.Update<ProductOptionAttributeShareDto>(
+                            "SET isDefaultChoice = @dfc WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok",
+                            new
+                                {
+                                    @dfc = choice.IsDefaultChoice,
+                                    @pk = productKey,
+                                    @ak = choice.Key,
+                                    @ok = option.Key
+                                });
+                    }
+                }
             }
         }
 
@@ -880,7 +899,8 @@
         /// </param>
         private void SafeRemoveSharedOptionsFromProduct(IEnumerable<IProductOption> savers, IEnumerable<IProductOption> existing, Guid productKey)
         {
-            var removers = existing.Where(ex => savers.All(sv => sv.Key != ex.Key)).ToArray();
+            var existingOptions = existing as IProductOption[] ?? existing.ToArray();
+            var removers = existingOptions.Where(ex => savers.All(sv => sv.Key != ex.Key)).ToArray();
             if (removers.Any())
             {
                 foreach (var rm in removers)
@@ -893,6 +913,22 @@
                     else
                     {
                         PersistDeletedItem(rm);
+                    }
+                }
+            }
+
+            // now check the selected choices for each of the savers
+            foreach (var o in savers)
+            {
+                var current = existingOptions.FirstOrDefault(x => x.Key == o.Key);
+                if (current == null) continue;
+
+                var removeChoices = current.Choices.Where(x => o.Choices.All(oc => oc.Key != x.Key));
+                foreach (var rm in removeChoices)
+                {
+                    foreach (var clause in GetRemoveAttributeFromSharedProductOptionSql(rm, productKey))
+                    {
+                        Database.Execute(clause);
                     }
                 }
             }
@@ -938,7 +974,7 @@
             { 
                 if (option.Choices.Contains(ex.Key)) continue;
 
-                if (!option.Shared)
+                if (!option.Shared || (option.Shared && GetSharedProductAttributeCount(ex.Key) == 0))
                 {
                     DeleteProductAttribute(ex);
                     resetSorts = true;
@@ -1112,6 +1148,18 @@
                 };
 
             list.AddRange(GetRemoveAllProductVariantProductAttributeSql(product));
+
+            return list;
+        }
+
+        private IEnumerable<Sql> GetRemoveAttributeFromSharedProductOptionSql(IProductAttribute attribute, Guid productKey)
+        {
+            var list = new List<Sql>
+                {
+                     new Sql(
+                         "DELETE FROM merchProductOptionAttributeShare WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok", 
+                     new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey })       
+                };
 
             return list;
         }

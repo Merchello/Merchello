@@ -15,7 +15,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             scope.choiceName = '';
             scope.wasFormSubmitted = false;
             scope.ready = false;
-            scope.counts = {};
+            scope.counts = undefined;
 
             scope.selectedAttribute = {
                 current: undefined,
@@ -28,6 +28,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             } else {
                  productOptionResource.getUseCounts(scope.option).then(function(counts) {
                      scope.counts = counts;
+
                      scope.ready = true;
                  });
             }
@@ -98,6 +99,19 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 }
             };
 
+            scope.showDelete = function(choice) {
+              if (scope.counts) {
+                  var fnd = _.find(scope.counts.choices, function(cc) {
+                      return cc.key === choice.key;
+                  });
+                  if (fnd) {
+                      return fnd.useCount === 0;
+                  } else {
+                      return true;
+                  }
+              }
+            };
+
             // sets the default choice property
             scope.setSelectedChoice = function() {
                 scope.selectedAttribute.previous.isDefaultChoice = false;
@@ -126,7 +140,12 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
 
             function validate(args) {
                 if (scope.productOptionForm.$valid && scope.option.choices.length > 0) {
-                    scope.option.detachedContentTypeKey = scope.contentType.key;
+                    if (scope.contentType) {
+                        scope.option.detachedContentTypeKey = scope.contentType.key;
+                    } else {
+                        scope.option.detachedContentTypeKey = '';
+                    }
+
                     args.valid = true;
 
                 } else {

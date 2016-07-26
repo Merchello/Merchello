@@ -5578,6 +5578,8 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
                         options = genericModelBuilder.transform(jsonResult, Constructor);
                         options.choices = productAttributeDisplayBuilder.transform(jsonResult.choices);
                     }
+
+
                     return options;
                 }
             };

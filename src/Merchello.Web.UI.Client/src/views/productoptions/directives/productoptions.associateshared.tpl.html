@@ -3,7 +3,7 @@
 <form name="productOptionForm" id="productOptionForm" data-ng-show="optionSelected">
 
     <div class="form-group row-fluid">
-        <b>Selected:</b> {{ sharedOption.name }} <merchello-delete-icon do-delete="removeOption()"></merchello-delete-icon>
+        <b>Selected:</b> {{ sharedOption.name }} <merchello-delete-icon do-delete="removeOption()" data-ng-if="!sharedOptionsEditor"></merchello-delete-icon>
     </div>
 
     <div class="form-group row-fluid">

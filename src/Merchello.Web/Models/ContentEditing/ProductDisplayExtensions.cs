@@ -272,13 +272,21 @@
                 destination.Key = productOptionDisplay.Key;
             }
 
+            destination.Name = productOptionDisplay.Name;
             destination.Required = productOptionDisplay.Required;
             destination.SortOrder = productOptionDisplay.SortOrder;
             destination.Shared = productOptionDisplay.Shared;
             destination.UiOption = productOptionDisplay.UiOption;
 
             if (!productOptionDisplay.DetachedContentTypeKey.Equals(Guid.Empty))
-            destination.DetachedContentTypeKey = productOptionDisplay.DetachedContentTypeKey;
+            {
+                destination.DetachedContentTypeKey = productOptionDisplay.DetachedContentTypeKey;
+            }
+            else
+            {
+                destination.DetachedContentTypeKey = null;
+            }
+            
 
             // Fix with option deletion here #M-161 #M-150
             // remove any product choices that exist in destination and do not exist in productDisplay
@@ -312,6 +320,8 @@
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }
 
+                destinationProductAttribute.Name = choice.Name;
+                destinationProductAttribute.SortOrder = choice.SortOrder;
                 destinationProductAttribute.IsDefaultChoice = choice.IsDefaultChoice;
                 destination.Choices.Add(destinationProductAttribute);
             }
@@ -330,7 +340,9 @@
         /// </returns>
         internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
         {            
-            return AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+            var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+            display.Choices = display.Choices.OrderBy(x => x.SortOrder);
+            return display;
         }
 
         #endregion

@@ -2,16 +2,24 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
     ['$scope', 'eventsService',
     function($scope, eventsService) {
 
-        $scope.visiblePanel = 'newoption';
+        $scope.visiblePanel = $scope.dialogData.sharedOptionEditor ? 'sharedoption' : 'newoption';
 
-        var eventName = 'merchNewProductOptionSave';
+        var newName = 'merchNewProductOptionSave';
+        var sharedEvent = 'merchSharedProductOptionSave';
 
+        console.info($scope.dialogData);
 
 
         $scope.validate = function() {
             var validation = { valid: false };
 
-            eventsService.emit(eventName, validation);
+            if ($scope.visiblePanel === 'newoption') {
+                eventsService.emit(newName, validation);
+            } else if ($scope.visiblePanel === 'sharedoption') {
+                eventsService.emit(sharedEvent, validation);
+            }
+
+
 
             if (validation.valid) {
                 $scope.submit($scope.dialogData);

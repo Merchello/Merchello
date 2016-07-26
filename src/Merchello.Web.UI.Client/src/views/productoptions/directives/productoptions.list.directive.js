@@ -99,15 +99,18 @@ angular.module('merchello.directives').directive('productOptionsList', [
             }
 
             scope.edit = function(option) {
-
                 var clone = productOptionDisplayBuilder.createDefault();
                 clone = angular.extend(clone, option);
+
+                clone.choices = _.sortBy(clone.choices, 'sortOrder');
 
                 var dialogData = {
                     option: clone,
                     showTabs: false,
-                    productKey: ''
+                    productKey: '',
+                    sharedOptionEditor: !scope.isShared && option.shared
                 }
+
 
                 eventsService.emit(onAdd, dialogData);
 

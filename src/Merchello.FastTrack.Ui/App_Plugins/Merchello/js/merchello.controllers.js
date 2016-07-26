@@ -6222,16 +6222,24 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
     ['$scope', 'eventsService',
     function($scope, eventsService) {
 
-        $scope.visiblePanel = 'newoption';
+        $scope.visiblePanel = $scope.dialogData.sharedOptionEditor ? 'sharedoption' : 'newoption';
 
-        var eventName = 'merchNewProductOptionSave';
+        var newName = 'merchNewProductOptionSave';
+        var sharedEvent = 'merchSharedProductOptionSave';
 
+        console.info($scope.dialogData);
 
 
         $scope.validate = function() {
             var validation = { valid: false };
 
-            eventsService.emit(eventName, validation);
+            if ($scope.visiblePanel === 'newoption') {
+                eventsService.emit(newName, validation);
+            } else if ($scope.visiblePanel === 'sharedoption') {
+                eventsService.emit(sharedEvent, validation);
+            }
+
+
 
             if (validation.valid) {
                 $scope.submit($scope.dialogData);
@@ -8058,144 +8066,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
         }]);
 
-
-    angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsEditorController',
-        ['$scope', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService', 'merchelloTabsFactory', 'dialogDataFactory', 'productResource', 'settingsResource', 'productDisplayBuilder',
-        function($scope, $routeParams, $location, $timeout, notificationsService, dialogService, merchelloTabsFactory, dialogDataFactory, productResource, settingsResource, productDisplayBuilder) {
-
-            $scope.loaded = false;
-            $scope.preValuesLoaded = false;
-            $scope.product = productDisplayBuilder.createDefault();
-            $scope.currencySymbol = '';
-
-            // Exposed methods
-            $scope.save = save;
-            $scope.deleteProductDialog = deleteProductDialog;
-
-            function init() {
-
-                var key = $routeParams.id;
-                loadSettings();
-                loadProduct(key);
-            }
-
-            /**
-             * @ngdoc method
-             * @name loadProduct
-             * @function
-             *
-             * @description
-             * Load a product by the product key.
-             */
-            function loadProduct(key) {
-                var promise = productResource.getByKey(key);
-                promise.then(function (product) {
-                    $scope.product = productDisplayBuilder.transform(product);
-                    setTabs();
-                    console.info($scope.product.productOptions);
-                }, function (reason) {
-                    notificationsService.error("Product Load Failed", reason.message);
-                });
-            }
-
-            function setTabs() {
-                $scope.tabs = merchelloTabsFactory.createProductEditorTabs($scope.product.key, $scope.product.hasVariants());
-                $scope.tabs.hideTab('productcontent');
-                $scope.tabs.setActive('optionslist');
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-            }
-
-            /**
-             * @ngdoc method
-             * @name loadSettings
-             * @function
-             *
-             * @description
-             * Load the settings from the settings service to get the currency symbol
-             */
-            function loadSettings() {
-                var currencySymbolPromise = settingsResource.getCurrencySymbol();
-                currencySymbolPromise.then(function(currencySymbol) {
-                    $scope.currencySymbol = currencySymbol;
-                }, function (reason) {
-                    notificationsService.error("Settings Load Failed", reason.message);
-                });
-            }
-
-            /**
-             * @ngdoc method
-             * @name save
-             * @function
-             *
-             * @description
-             * Saves the product - used for changing the master variant name
-             */
-            function save(thisForm) {
-                // TODO we should unbind the return click event
-                // so that we can quickly add the options and remove the following
-                if(thisForm === undefined) {
-                    return;
-                }
-                if (thisForm.$valid) {
-                    notificationsService.info("Saving Product...", "");
-
-                    var promise = productResource.save($scope.product);
-                    promise.then(function (product) {
-                        notificationsService.success("Product Saved", "");
-                        $scope.product = productDisplayBuilder.transform(product);
-                        setTabs();
-                    }, function (reason) {
-                        notificationsService.error("Product Save Failed", reason.message);
-                    });
-                }
-            }
-
-            /**
-             * @ngdoc method
-             * @name deleteProductDialog
-             * @function
-             *
-             * @description
-             * Opens the delete confirmation dialog via the Umbraco dialogService.
-             */
-            function deleteProductDialog() {
-                var dialogData = dialogDataFactory.createDeleteProductDialogData();
-                dialogData.product = $scope.product;
-                dialogData.name = $scope.product.name + ' (' + $scope.product.sku + ')';
-                dialogData.warning = 'This action cannot be reversed.';
-
-                dialogService.open({
-                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
-                    show: true,
-                    callback: deleteProductDialogConfirmation,
-                    dialogData: dialogData
-                });
-            }
-
-            /**
-             * @ngdoc method
-             * @name deleteProductDialogConfirmation
-             * @function
-             *
-             * @description
-             * Called when the Delete Product button is pressed.
-             */
-            function deleteProductDialogConfirmation() {
-                var promiseDel = productResource.deleteProduct($scope.product);
-                promiseDel.then(function () {
-                    notificationsService.success("Product Deleted", "");
-                    $location.url("/merchello/merchello/productlist/manage", true);
-                }, function (reason) {
-                    notificationsService.error("Product Deletion Failed", reason.message);
-                });
-            }
-
-
-            // Initializes the controller
-            init();
-    }]);
-
 angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManagerController', [
     '$scope', '$q', '$routeParams', '$location', '$timeout', 'notificationsService', 'dialogService',
         'merchelloTabsFactory', 'productResource', 'eventsService', 'settingsResource',
@@ -8238,6 +8108,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         }
 
         $scope.doEdit = function(option) {
+            executeReload(function() {
+                _.extend(_.findWhere($scope.product.options, { key: option.key }), option);
+            });
 
         }
 

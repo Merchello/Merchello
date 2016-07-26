@@ -26,6 +26,8 @@
                         options = genericModelBuilder.transform(jsonResult, Constructor);
                         options.choices = productAttributeDisplayBuilder.transform(jsonResult.choices);
                     }
+
+
                     return options;
                 }
             };

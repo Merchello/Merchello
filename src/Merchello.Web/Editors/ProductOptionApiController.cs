@@ -48,6 +48,22 @@
         }
 
         /// <summary>
+        /// Gets the <see cref="ProductOptionDisplay"/> by it's key.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductOptionDisplay"/>.
+        /// </returns>
+        [HttpGet]
+        public ProductOptionDisplay GetByKey(Guid id)
+        {
+            var option = _productOptionService.GetByKey(id);
+            return option.ToProductOptionDisplay();
+        }
+
+        /// <summary>
         /// Gets the use count for the product option.
         /// </summary>
         /// <param name="id">

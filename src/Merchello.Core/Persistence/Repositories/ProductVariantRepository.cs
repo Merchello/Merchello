@@ -230,10 +230,7 @@
                 xrefs.AddRange(associations);
             }
 
-            foreach (var xr in xrefs)
-            {
-                Database.Insert(xr);
-            }
+            Database.BulkInsertRecords<ProductVariant2ProductAttributeDto>(xrefs);
 
             SaveCatalogInventory(productVariants);
 

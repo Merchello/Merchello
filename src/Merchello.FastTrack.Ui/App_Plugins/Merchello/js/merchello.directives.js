@@ -1719,8 +1719,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
                         scope.listViewResultSet.totalPages = queryResult.totalPages;
 
-                        console.info(queryResult);
-                        
+
                         scope.pagination = [];
 
                         //list 10 pages as per normal
@@ -2320,7 +2319,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             scope.choiceName = '';
             scope.wasFormSubmitted = false;
             scope.ready = false;
-            scope.counts = {};
+            scope.counts = undefined;
 
             scope.selectedAttribute = {
                 current: undefined,
@@ -2333,6 +2332,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             } else {
                  productOptionResource.getUseCounts(scope.option).then(function(counts) {
                      scope.counts = counts;
+
                      scope.ready = true;
                  });
             }
@@ -2403,6 +2403,19 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 }
             };
 
+            scope.showDelete = function(choice) {
+              if (scope.counts) {
+                  var fnd = _.find(scope.counts.choices, function(cc) {
+                      return cc.key === choice.key;
+                  });
+                  if (fnd) {
+                      return fnd.useCount === 0;
+                  } else {
+                      return true;
+                  }
+              }
+            };
+
             // sets the default choice property
             scope.setSelectedChoice = function() {
                 scope.selectedAttribute.previous.isDefaultChoice = false;
@@ -2431,7 +2444,12 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
 
             function validate(args) {
                 if (scope.productOptionForm.$valid && scope.option.choices.length > 0) {
-                    scope.option.detachedContentTypeKey = scope.contentType.key;
+                    if (scope.contentType) {
+                        scope.option.detachedContentTypeKey = scope.contentType.key;
+                    } else {
+                        scope.option.detachedContentTypeKey = '';
+                    }
+
                     args.valid = true;
 
                 } else {
@@ -2455,7 +2473,8 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
             replace: true,
             scope: {
                 option: '=',
-                exclude: '=?'
+                exclude: '=?',
+                sharedOptionsEditor: '=?'
             },
             templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.associateshared.tpl.html',
             link: function (scope, elm, attr) {
@@ -2463,6 +2482,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                 scope.defaultChoice = {};
                 scope.wasFormSubmitted = false;
                 scope.noResults = '';
+                scope.ready = false;
 
                 scope.optionSelected = false;
                 scope.selectedChoices = [];
@@ -2474,6 +2494,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     isSet: false
                 };
 
+                scope.productOption = {};
                 scope.sharedOption = {};
 
                 scope.queryResult = queryResultDisplayBuilder.createDefault();
@@ -2486,13 +2507,51 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     filter: ''
                 };
 
-                scope.ready = false;
 
                 var values = '';
+
+                console.info(scope.sharedOptionsEditor);
+
 
                 eventsService.on('merchSharedProductOptionSave', function(name, args) {
                     validate(args);
                 });
+
+
+                // init shared option editor
+                if(('sharedOptionsEditor' in attr) && scope.sharedOptionsEditor) {
+
+                    scope.productOption = scope.option;
+                    productOptionResource.getByKey(scope.option.key).then(function(po) {
+                       scope.sharedOption = po;
+                        scope.optionSelected = true;
+
+                        _.each(scope.sharedOption.choices, function(soc) {
+
+                            // find the previously selected choice
+                            var fnd = _.find(scope.productOption.choices, function(poc) {
+                                return poc.key === soc.key;
+                            });
+
+                            if (fnd) {
+                                soc.selected = true;
+                                scope.selectedChoices.push(soc.key);
+                                if (fnd.isDefaultChoice) {
+                                    scope.defaultChoice.current = soc;
+                                    scope.defaultChoice.previous = soc;
+                                    scope.defaultChoice.isSet = true;
+                                }
+                                ensureDefaultChoice();
+                            } else {
+                                soc.selected = false;
+                            }
+                        });
+
+                        scope.ready = true;
+                    });
+                } else {
+                    scope.ready = true;
+                }
 
 
                 scope.prev = function() {
@@ -2642,7 +2701,6 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                         // sets the default choice in the case where the selectedChoices array was originally empty
                         ensureDefaultChoice();
                     }
-
                 }
 
                 // validates that a choice can be selected
@@ -2728,11 +2786,14 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                             return oc;
                         }
                     });
+
+                    return option;
                 }
 
                 function validate(args) {
                     if (scope.productOptionForm.$valid) {
                         scope.option = createAssociatedOption();
+                        console.info(scope.option);
                         args.valid = true;
                     } else {
                         scope.wasFormSubmitted = true;
@@ -2847,15 +2908,18 @@ angular.module('merchello.directives').directive('productOptionsList', [
             }
 
             scope.edit = function(option) {
-
                 var clone = productOptionDisplayBuilder.createDefault();
                 clone = angular.extend(clone, option);
+
+                clone.choices = _.sortBy(clone.choices, 'sortOrder');
 
                 var dialogData = {
                     option: clone,
                     showTabs: false,
-                    productKey: ''
+                    productKey: '',
+                    sharedOptionEditor: !scope.isShared && option.shared
                 }
+
 
                 eventsService.emit(onAdd, dialogData);
 

@@ -40,6 +40,9 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         }
 
         $scope.doEdit = function(option) {
+            executeReload(function() {
+                _.extend(_.findWhere($scope.product.options, { key: option.key }), option);
+            });
 
         }
 

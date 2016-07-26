@@ -6,6 +6,23 @@ angular.module('merchello.resources').factory('productOptionResource',
 
             return {
 
+                getByKey: function(key) {
+                    var deferred = $q.defer();
+                    var url = baseUrl + 'GetByKey';
+                    umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { id: key }
+                        }),
+                        'Failed to get product option by key').then(function(data) {
+                        var result = productOptionDisplayBuilder.transform(data);
+                        deferred.resolve(result);
+                    });
+
+                    return deferred.promise;
+                },
+
                 /**
                  * @ngdoc method
                  * @name searchOptions
