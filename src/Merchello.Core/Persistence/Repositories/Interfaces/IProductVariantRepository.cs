@@ -104,7 +104,6 @@
         ///// </param>
         //void DeleteAllDetachedContentForCulture(string cultureName);
 
-
         /// <summary>
         /// Saves the catalog inventory.
         /// </summary>

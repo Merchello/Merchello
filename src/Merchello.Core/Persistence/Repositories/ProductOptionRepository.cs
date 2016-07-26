@@ -1167,17 +1167,34 @@
             return list;
         }
 
+        /// <summary>
+        /// Gets the SQL required to remove an option choice from an assigned shared option.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Sql}"/>.
+        /// </returns>
         private IEnumerable<Sql> GetRemoveAttributeFromSharedProductOptionSql(IProductAttribute attribute, Guid productKey)
         {
+            var pvKeys =
+                Database.Fetch<KeyDto>(
+                    "SELECT * FROM merchProductVariant T1 INNER JOIN merchProductVariant2ProductAttribute T2 ON T1.pk = T2.productVariantKey WHERE T1.productKey = @pk AND T1.master = 0 AND T2.optionKey = @ok AND T2.productAttributeKey = @ak",
+                    new { @pk = productKey, @ok = attribute.OptionKey, @ak = attribute.Key });
+
             var list = new List<Sql>
                 {
-                 new Sql(
-                         "DELETE FROM merchProductVariant2ProductAttribute WHERE optionKey = @ok AND productAttributeKey = @ak AND productVariantKey IN (SELECT pk FROM merchProductVariant WHERE productKey = @pk AND master = 0)",
-                         new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey }),
+                     new Sql(
+                             "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (@pvks)",
+                             new { @pvks = pvKeys.Select(x => x.Key) }),
 
                      new Sql(
-                         "DELETE FROM merchProductOptionAttributeShare WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok", 
-                     new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey })
+                             "DELETE FROM merchProductOptionAttributeShare WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok", 
+                         new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey })
                 };
 
             return list;

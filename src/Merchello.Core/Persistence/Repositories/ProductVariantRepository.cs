@@ -169,8 +169,6 @@
             return Database.Fetch<ProductVariantDto>(sql).Any();
         }
 
-
-
         #region Bulk Operations
 
 

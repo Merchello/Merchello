@@ -6237,8 +6237,6 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 eventsService.emit(sharedEvent, validation);
             }
 
-
-
             if (validation.valid) {
                 $scope.submit($scope.dialogData);
             }
