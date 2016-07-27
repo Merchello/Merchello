@@ -28,7 +28,7 @@
                     <td data-ng-show="queryResult.items.length > 1 && !sharedOnly">
                         <merchello-sort-icon data-ng-if="queryResult.items.length > 1 && !sharedOnly"></merchello-sort-icon>
                     </td>
-                    <td>{{ option.name }}</td>
+                    <td data-ng-bind="getColumnValue('name', option)"></td>
                     <td>{{ option.uiOption }}</td>
                     <td data-ng-bind="getColumnValue('values', option)"></td>
                     <td data-ng-bind="getColumnValue('shared', option)"></td>

@@ -57,6 +57,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     scope.productOption = scope.option;
                     productOptionResource.getByKey(scope.option.key).then(function(po) {
                         po.sortOrder = scope.option.sortOrder;
+                        po.useName = scope.option.useName;
                        scope.sharedOption = po;
 
                         scope.optionSelected = true;
