@@ -277,6 +277,9 @@
             destination.SortOrder = productOptionDisplay.SortOrder;
             destination.Shared = productOptionDisplay.Shared;
             destination.UiOption = productOptionDisplay.UiOption;
+            destination.UseName = productOptionDisplay.UseName.IsNullOrWhiteSpace()
+                                      ? productOptionDisplay.Name
+                                      : productOptionDisplay.UseName;
 
             if (!productOptionDisplay.DetachedContentTypeKey.Equals(Guid.Empty))
             {
