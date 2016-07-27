@@ -4,6 +4,8 @@
     using System.Runtime.Serialization;
     using EntityBase;
 
+    using Merchello.Core.Models.DetachedContent;
+
     using Umbraco.Core;
 
     /// <summary>
@@ -68,6 +70,12 @@
         /// </summary>
         [DataMember]
         public bool IsDefaultChoice { get; set; }
+
+        /// <summary>
+        /// Gets the detached data values.
+        /// </summary>
+        [DataMember]
+        public DetachedDataValuesCollection DetachedDataValues { get; internal set; }
 
         /// <summary>
         /// Creates a cloned copy of this object.

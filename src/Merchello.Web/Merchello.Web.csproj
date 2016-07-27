@@ -352,6 +352,7 @@
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductContentSaveItemBase.cs" />
+    <Compile Include="Models\MapperResolvers\DetachedContent\ProductAttributeDetachedDataValuesResolver.cs" />
     <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\IItemCacheModel.cs" />

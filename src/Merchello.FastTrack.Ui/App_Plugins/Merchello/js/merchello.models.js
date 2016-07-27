@@ -2290,6 +2290,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
+        self.detachedDataValues = {};
         self.isDefaultChoice = false;
     };
 
@@ -5042,6 +5043,10 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            function createDefault() {
+                return new Constructor();
+            }
+
             // creates tabs for the product listing page
             function createProductListTabs() {
                 var tabs = new Constructor();
@@ -5166,6 +5171,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createDefault: createDefault,
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
@@ -5493,16 +5499,29 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      * A utility service that builds ProductAttributeDisplay models
      */
     angular.module('merchello.models').factory('productAttributeDisplayBuilder',
-        ['genericModelBuilder', 'ProductAttributeDisplay',
-        function(genericModelBuilder, ProductAttributeDisplay) {
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'ProductAttributeDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, ProductAttributeDisplay) {
 
             var Constructor = ProductAttributeDisplay;
             return {
                 createDefault: function() {
-                    return new Constructor();
+                    var att = new Constructor();
+                    att.detachedDataValues = extendedDataDisplayBuilder.createDefault();
+                    return att;
                 },
                 transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
+                    var results = [];
+                    if (angular.isArray(results)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var result = genericModelBuilder.transform(jsonResult[i], Constructor);
+                            result.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult[i].detachedDataValues)
+                            results.push(result);
+                        }
+                    } else {
+                        results = genericModelBuilder.transform(jsonResult, Constructor);
+                        results.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
+                    }
+                    return results;
                 }
             };
     }]);

@@ -1,0 +1,36 @@
+<div class="umb-panel merchello-side-panel"
+     ng-controller="Merchello.ProductOption.Dialogs.ProductOptionChoiceContentController" data-ng-show="ready">
+    <div class="umb-modalcolumn-header">
+        <h4>Edit Choice Content</h4>
+
+        <!-- Tabs for Variants & Options -->
+    </div>
+
+    <div class="umb-panel-body with-header with-footer">
+
+        <div class="product-option-tabs">
+            <merchello-tabs tabs="tabs" width-css="span11"></merchello-tabs>
+        </div>
+
+        <umb-property property="property" ng-repeat="property in currentTab.properties">
+            <umb-editor model="property"></umb-editor>
+        </umb-property>
+
+    </div>
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary"
+                        data-ng-click="validate()">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

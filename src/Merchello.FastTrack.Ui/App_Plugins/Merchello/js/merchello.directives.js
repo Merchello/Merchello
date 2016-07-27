@@ -2303,8 +2303,8 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
     };
 });
 angular.module('merchello.directives').directive("productOptionsAddEdit",
-    ['$timeout', 'eventsService', 'productOptionResource', 'productAttributeDisplayBuilder',
-    function($timeout, eventsService, productOptionResource, productAttributeDisplayBuilder) {
+    ['$timeout', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
+    function($timeout, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {
     return {
         restrict: 'E',
         replace: true,
@@ -2315,7 +2315,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.addedit.tpl.html',
         link: function (scope, elm, attr) {
 
-            scope.contentType = {};
+            scope.contentType = undefined;
             scope.choiceName = '';
             scope.wasFormSubmitted = false;
             scope.ready = false;
@@ -2423,6 +2423,20 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 scope.selectedAttribute.previous = scope.selectedAttribute.current;
             };
 
+
+            scope.addDetachedContent = function(choice) {
+                var dialogData = {
+                    choice: choice,
+                    contentType: scope.contentType
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.choicecontent.html',
+                    show: true,
+                    callback: void(0),
+                    dialogData: dialogData
+                });
+            }
 
             // Saves an option
 
