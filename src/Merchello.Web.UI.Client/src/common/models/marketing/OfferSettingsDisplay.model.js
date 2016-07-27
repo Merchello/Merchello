@@ -74,7 +74,7 @@
             if (!hasComponents.call(this)) {
                 return true;
             }
-            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false});
+            var notConfigured = _.find(this.componentDefinitions, function(c) { return c.isConfigured() === false; });
             return notConfigured === undefined;
         }
 
@@ -175,7 +175,7 @@
             setLineItemName: setLineItemName,
             validateComponents: validateComponents,
             reorderComponent: reorderComponent
-        }
+        };
 
     }());
 

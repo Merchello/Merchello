@@ -149,7 +149,7 @@
                             deferred.resolve(data);
 
                         }, function(reason) {
-                            deferred.reject('Failed to save product content ' + reason)
+                            deferred.reject('Failed to save product content ' + reason);
                         });
 
                     return deferred.promise;

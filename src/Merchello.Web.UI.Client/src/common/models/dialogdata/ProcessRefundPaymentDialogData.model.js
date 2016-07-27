@@ -28,7 +28,7 @@
 
         return {
             toPaymentRequestDisplay: toPaymentRequestDisplay
-        }
+        };
     }());
 
     angular.module('merchello.models').constant('ProcessRefundPaymentDialogData', ProcessRefundPaymentDialogData);

@@ -115,7 +115,6 @@
 
         #region Events
 
-
         /// <summary>
         /// Occurs after Create
         /// </summary>
@@ -155,6 +154,7 @@
         /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        [Obsolete("Use internal CreateProductVariant")]
         public IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
@@ -181,7 +181,7 @@
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/></param>
         /// <param name="name">The name of the product variant</param>
-        /// <param name="sku">The unique sku of the product variant</param>
+        /// <param name="sku">The unique SKU of the product variant</param>
         /// <param name="price">The price of the product variant</param>
         /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
@@ -217,94 +217,18 @@
 
 
         /// <summary>
-        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
-        /// without saving it to the database
-        /// </summary>
-        /// <param name="product">The <see cref="IProduct"/></param>
-        /// <param name="attributes">The <see cref="IProductVariant"/></param>
-        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        internal IProductVariant CreateProductVariant(IProduct product, ProductAttributeCollection attributes)
-        {
-            var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
-
-            // verify the order of the attributes so that a sku can be constructed in the same order as the UI
-            var optionIds = product.ProductOptionsForAttributes(attributes).OrderBy(x => x.SortOrder).Select(x => x.Key).Distinct();
-
-            // the base sku
-            var sku = product.Sku;
-            var name = string.Format("{0} - ", product.Name);
-
-            foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
-            {
-                name += att.Name + " ";
-
-                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", string.Empty) : att.Sku);
-            }
-
-            return CreateProductVariant(product, name, sku, product.Price, attributes);
-        }
-
-        /// <summary>
-        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
-        /// without saving it to the database
-        /// </summary>
-        /// <param name="product">The <see cref="IProduct"/></param>
-        /// <param name="name">The name of the product variant</param>
-        /// <param name="sku">The unique SKU of the product variant</param>
-        /// <param name="price">The price of the product variant</param>
-        /// <param name="attributes">The <see cref="ProductAttributeCollection"/></param>        
-        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
-        internal IProductVariant CreateProductVariant(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes)
-        {
-            Mandate.ParameterNotNull(product, "product");
-            Mandate.ParameterNotNull(attributes, "attributes");
-            Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");
-
-            //// http://issues.merchello.com/youtrack/issue/M-740
-            // verify there is not already a variant with these attributes
-            ////Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
-            if (this.ProductVariantWithAttributesExists(product, attributes))
-            {
-                LogHelper.Debug<ProductVariantService>("Attempt to create a new variant that already exists.  Returning existing variant.");
-                return this.GetProductVariantWithAttributes(product, attributes.Select(x => x.Key).ToArray());
-            }
-
-
-            return new ProductVariant(product.Key, attributes, name, sku, price)
-            {
-                CostOfGoods = product.CostOfGoods,
-                SalePrice = product.SalePrice,
-                OnSale = product.OnSale,
-                Weight = product.Weight,
-                Length = product.Length,
-                Width = product.Width,
-                Height = product.Height,
-                Barcode = product.Barcode,
-                Available = product.Available,
-                Manufacturer = product.Manufacturer,
-                ManufacturerModelNumber = product.ManufacturerModelNumber,
-                TrackInventory = product.TrackInventory,
-                OutOfStockPurchase = product.OutOfStockPurchase,
-                Taxable = product.Taxable,
-                Shippable = product.Shippable,
-                Download = product.Download
-            };
-        }
-
-
-        /// <summary>
         /// Saves a single instance of a <see cref="IProductVariant"/>
         /// </summary>
-        /// <param name="productVariant"></param>
+        /// <param name="productVariant">The <see cref="IProductVariant"/> to be saved</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Save(IProductVariant productVariant, bool raiseEvents = true)
         {
-            if(raiseEvents)
-            if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IProductVariant>(productVariant), this))
-            {
-                ((ProductVariant)productVariant).WasCancelled = true;
-                return;
-            }
+            if (raiseEvents)
+                if (Saving.IsRaisedEventCancelled(new SaveEventArgs<IProductVariant>(productVariant), this))
+                {
+                    ((ProductVariant)productVariant).WasCancelled = true;
+                    return;
+                }
 
             using (new WriteLock(Locker))
             {
@@ -317,7 +241,7 @@
             }
 
             if (raiseEvents)
-            Saved.RaiseEvent(new SaveEventArgs<IProductVariant>(productVariant), this);
+                Saved.RaiseEvent(new SaveEventArgs<IProductVariant>(productVariant), this);
         }
 
         /// <summary>
@@ -341,37 +265,14 @@
                     {
                         repository.AddOrUpdate(variant);
                     }
-                    uow.Commit();
+
+                    uow.CommitBulk<IProductVariant>();
                 }
             }
 
-            if(raiseEvents)
+            if (raiseEvents)
+
             Saved.RaiseEvent(new SaveEventArgs<IProductVariant>(productVariants), this);
-        }
-
-        /// <summary>
-        /// Ensures that all <see cref="IProductVariant"/> except the "master" variant for the <see cref="IProduct"/> have attributes
-        /// </summary>
-        /// <param name="product"><see cref="IProduct"/> to varify</param>
-        public void EnsureProductVariantsHaveAttributes(IProduct product)
-        {
-            var variants = GetByProductKey(product.Key);
-            var productVariants = variants as IProductVariant[] ?? variants.ToArray();
-            if (!productVariants.Any()) return;
-            foreach (var variant in productVariants.Where(variant => !variant.Attributes.Any()))
-            {
-                Delete(variant);
-                product.ProductVariants.Remove(variant.Sku);
-            }            
-        }
-
-        /// <summary>
-        /// Ensures that every <see cref="IProductVariant"/> for every <see cref="IProduct"/> (except it's master variant) in the collection has related <see cref="IProductAttribute"/>
-        /// </summary>
-        /// <param name="productList">The collection of <see cref="IProduct"/> to ensure</param>
-        public void EnsureProductVariantsHaveAttributes(IEnumerable<IProduct> productList)
-        {
-            foreach(var p in productList) EnsureProductVariantsHaveAttributes(p);
         }
 
         /// <summary>
@@ -399,13 +300,14 @@
                     uow.Commit();
                 }
             }
+
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductVariant>(productVariant), this);
         }
 
         /// <summary>
         /// Deletes a collection of <see cref="IProductVariant"/>
         /// </summary>
-        /// <param name="productVariantList">The collction of <see cref="IProductVariant"/> to be deleted</param>
+        /// <param name="productVariantList">The collection of <see cref="IProductVariant"/> to be deleted</param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         public void Delete(IEnumerable<IProductVariant> productVariantList, bool raiseEvents = true)
         {
@@ -475,18 +377,11 @@
             }
         }
 
-        internal IEnumerable<IProductVariant> GetAll(params Guid[] keys)
-        {
-            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
-            {
-                return repository.GetAll(keys);
-            }
-        }
 
         /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> object for a given Product Key
         /// </summary>
-        /// <param name="productKey">Guid product key of the <see cref="IProductVariant"/> collection to retrieve</param>
+        /// <param name="productKey">The product key of the <see cref="IProductVariant"/> collection to retrieve</param>
         /// <returns>A collection of <see cref="IProductVariant"/></returns>
         public IEnumerable<IProductVariant> GetByProductKey(Guid productKey)
         {
@@ -510,6 +405,135 @@
         }
 
         /// <summary>
+        /// True/false indicating whether or not a SKU is already exists in the database
+        /// </summary>
+        /// <param name="sku">The SKU to be tested</param>
+        /// <returns>A value indicating whether or not the SKU exists</returns>
+        public bool SkuExists(string sku)
+        {
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.SkuExists(sku);
+            }
+        }
+
+
+        /// <summary>
+        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
+        /// without saving it to the database
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="attributes">The <see cref="IProductVariant"/></param>
+        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        internal IProductVariant CreateProductVariant(IProduct product, ProductAttributeCollection attributes)
+        {
+            var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
+
+            // verify the order of the attributes so that a sku can be constructed in the same order as the UI
+            var optionIds = product.ProductOptionsForAttributes(attributes).OrderBy(x => x.SortOrder).Select(x => x.Key).Distinct();
+
+            // the base sku
+            var sku = product.Sku;
+            var name = string.Format("{0} - ", product.Name);
+
+            foreach (var att in optionIds.Select(key => attributes.FirstOrDefault(x => x.OptionKey == key)).Where(att => att != null))
+            {
+                name += att.Name + " ";
+
+                sku += skuSeparator + (string.IsNullOrEmpty(att.Sku) ? Regex.Replace(att.Name, "[^0-9a-zA-Z]+", string.Empty) : att.Sku);
+            }
+
+            return CreateProductVariant(product, name, sku, product.Price, attributes);
+        }
+
+
+        /// <summary>
+        /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
+        /// without saving it to the database
+        /// </summary>
+        /// <param name="product">The <see cref="IProduct"/></param>
+        /// <param name="name">The name of the product variant</param>
+        /// <param name="sku">The unique SKU of the product variant</param>
+        /// <param name="price">The price of the product variant</param>
+        /// <param name="attributes">The <see cref="ProductAttributeCollection"/></param>        
+        /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        internal IProductVariant CreateProductVariant(IProduct product, string name, string sku, decimal price, ProductAttributeCollection attributes)
+        {
+            Mandate.ParameterNotNull(product, "product");
+            Mandate.ParameterNotNull(attributes, "attributes");
+            Mandate.ParameterCondition(attributes.Count >= product.ProductOptions.Count(x => x.Required), "An attribute must be assigned for every required option");
+
+            //// http://issues.merchello.com/youtrack/issue/M-740
+            // verify there is not already a variant with these attributes
+            ////Mandate.ParameterCondition(false == ProductVariantWithAttributesExists(product, attributes), "A ProductVariant already exists for the ProductAttributeCollection");
+            if (this.ProductVariantWithAttributesExists(product, attributes))
+            {
+                LogHelper.Debug<ProductVariantService>("Attempt to create a new variant that already exists.  Returning existing variant.");
+                return this.GetProductVariantWithAttributes(product, attributes.Select(x => x.Key).ToArray());
+            }
+
+
+            return new ProductVariant(product.Key, attributes, name, sku, price)
+            {
+                CostOfGoods = product.CostOfGoods,
+                SalePrice = product.SalePrice,
+                OnSale = product.OnSale,
+                Weight = product.Weight,
+                Length = product.Length,
+                Width = product.Width,
+                Height = product.Height,
+                Barcode = product.Barcode,
+                Available = product.Available,
+                Manufacturer = product.Manufacturer,
+                ManufacturerModelNumber = product.ManufacturerModelNumber,
+                TrackInventory = product.TrackInventory,
+                OutOfStockPurchase = product.OutOfStockPurchase,
+                Taxable = product.Taxable,
+                Shippable = product.Shippable,
+                Download = product.Download,
+                VersionKey = Guid.NewGuid()
+            };
+        }
+
+        /// <summary>
+        /// Gets the count of all product variants.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductVariant}"/>.
+        /// </returns>
+        /// <remarks>
+        /// Used in tests
+        /// </remarks>
+        internal IEnumerable<IProductVariant> GetAll(params Guid[] keys)
+        {
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetAll(keys);
+            }
+        }
+
+        /// <summary>
+        /// Gets the count of <see cref="IProductVariant"/> by a query
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        internal int Count(IQuery<IProductVariant> query)
+        {
+            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.Count(query);
+            }
+        }
+
+
+        /// <summary>
         /// Creates a collection of <see cref="IProductVariant"/> that can be created based on unmapped product options.
         /// </summary>
         /// <param name="product">The <see cref="IProduct"/></param>
@@ -520,41 +544,38 @@
         /// be refactored
         /// 
         /// </remarks>
-        public IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product)
+        [Obsolete("Unused method")]
+        private IEnumerable<IProductVariant> GetProductVariantsThatCanBeCreated(IProduct product)
         {
             var variants = new List<IProductVariant>();
 
             if (!product.ProductOptions.Any()) return variants;
 
-            var possibleCombinations = GetPossibleProductAttributeCombinations(product);
-            
-            foreach (var combo in possibleCombinations)
+            foreach (var combo in product.GetPossibleProductAttributeCombinations())
             {
                 var attributes = new ProductAttributeCollection();
-                
-                foreach(var att in combo) attributes.Add(att);
+
+                foreach (var att in combo) attributes.Add(att);
 
                 if (!ProductVariantWithAttributesExists(product, attributes)) variants.Add(CreateProductVariant(product, attributes));
             }
 
             return variants;
-
-        }
-
-        [Obsolete("Use Product Extension Method")]
-        public IEnumerable<IEnumerable<IProductAttribute>> GetPossibleProductAttributeCombinations(IProduct product)
-        {
-            if (!product.ProductOptions.Any()) return new List<IEnumerable<IProductAttribute>>();
-
-            var optionChoices = product.ProductOptions.Select(option => option.Choices.ToList()).ToList();
-
-            return optionChoices.CartesianProduct();
         }
 
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
         /// </summary>
-        public IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys)
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="attributeKeys">
+        /// The attribute Keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductVariant"/>.
+        /// </returns>
+        private IProductVariant GetProductVariantWithAttributes(IProduct product, Guid[] attributeKeys)
         {
             using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
@@ -569,32 +590,11 @@
         /// <param name="product">The <see cref="IProduct"/> to reference</param>
         /// <param name="attributes"><see cref="ProductAttributeCollection"/> to compare</param>
         /// <returns>True/false indicating whether or not a <see cref="IProductVariant"/> already exists with the <see cref="ProductAttributeCollection"/> passed</returns>
-        public bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
+        private bool ProductVariantWithAttributesExists(IProduct product, ProductAttributeCollection attributes)
         {
             using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.ProductVariantWithAttributesExists(product, attributes);
-            }
-        }
-
-        /// <summary>
-        /// True/false indicating whether or not a sku is already exists in the database
-        /// </summary>
-        /// <param name="sku">The sku to be tested</param>
-        /// <returns></returns>
-        public bool SkuExists(string sku)
-        {
-            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
-            {
-                return repository.SkuExists(sku);
-            }
-        }
-
-        internal int Count(IQuery<IProductVariant> query)
-        {
-            using (var repository = RepositoryFactory.CreateProductVariantRepository(UowProvider.GetUnitOfWork()))
-            {
-                return repository.Count(query);
             }
         }
     }

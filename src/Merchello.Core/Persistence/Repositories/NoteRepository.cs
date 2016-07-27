@@ -109,9 +109,9 @@
 
             var factory = new NoteFactory();
 
-            var customer = factory.BuildEntity(dto);
+            var note = factory.BuildEntity(dto);
 
-            return customer;
+            return note;
         }
 
         /// <summary>

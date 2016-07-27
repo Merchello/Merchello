@@ -27,9 +27,9 @@
                             definitions.push(definition);
                         }
                     } else {
-                        definitions = genericModelBuilder.transform(jsonResult[ i ], Constructor);
-                        definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult[ i ].extendedData);
-                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[ i ].dialogEditorView);
+                        definitions = genericModelBuilder.transform(jsonResult, Constructor);
+                        definitions.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
+                        definitions.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                     }
                     return definitions;
                 }

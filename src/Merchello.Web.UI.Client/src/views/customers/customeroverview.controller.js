@@ -7,17 +7,17 @@
      * The controller for customer overview view
      */
     angular.module('merchello').controller('Merchello.Backoffice.CustomerOverviewController',
-        ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'gravatarService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
+        ['$scope', '$q', '$log', '$routeParams', '$timeout', '$filter', 'dialogService', 'notificationsService', 'localizationService', 'settingsResource', 'invoiceHelper', 'merchelloTabsFactory', 'dialogDataFactory',
             'customerResource', 'backOfficeCheckoutResource', 'customerDisplayBuilder', 'countryDisplayBuilder', 'currencyDisplayBuilder', 'settingDisplayBuilder', 'invoiceResource', 'invoiceDisplayBuilder', 'customerAddressDisplayBuilder',
             'itemCacheInstructionBuilder', 'addToItemCacheInstructionBuilder',
-        function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, gravatarService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
+        function($scope, $q, $log, $routeParams, $timeout, $filter, dialogService, notificationsService, localizationService, settingsResource, invoiceHelper, merchelloTabsFactory, dialogDataFactory,
                  customerResource, backOfficeCheckoutResource, customerDisplayBuilder, countryDisplayBuilder, currencyDisplayBuilder, settingDisplayBuilder, invoiceResource, invoiceDisplayBuilder, customerAddressDisplayBuilder,
                  itemCacheInstructionBuilder, addToItemCacheInstructionBuilder) {
 
             $scope.loaded = false;
             $scope.preValuesLoaded = false;
             $scope.tabs = [];
-            $scope.avatarUrl = "";
+            $scope.avatarUrl;
             $scope.defaultShippingAddress = {};
             $scope.defaultBillingAddress = {};
             $scope.customer = {};
@@ -105,7 +105,9 @@
                 promiseLoadCustomer.then(function(customerResponse) {
                     $scope.customer = customerDisplayBuilder.transform(customerResponse);
                     $scope.invoiceTotals = invoiceHelper.getTotalsByCurrencyCode($scope.customer.invoices);
-                    $scope.avatarUrl = gravatarService.getAvatarUrl($scope.customer.email);
+                    customerResource.getGravatarUrl($scope.customer.email).then(function(url) {
+                        $scope.avatarUrl = url;
+                    });
                     $scope.defaultBillingAddress = $scope.customer.getDefaultBillingAddress();
                     $scope.defaultShippingAddress = $scope.customer.getDefaultShippingAddress();
                     $scope.tabs = merchelloTabsFactory.createCustomerOverviewTabs(key, $scope.customer.hasAddresses());

@@ -49,9 +49,9 @@ angular.module('merchello.services').service('dateHelper', [
             });
 
             return deferred.promise;
-        }
+        };
 
         this.getGmt0EquivalentDate = function(dt) {
            return new Date(dt.getTime() + (dt.getTimezoneOffset() * 60000));
-        }
+        };
 }]);

@@ -43,9 +43,33 @@
         /// <param name="sku">The SKU to be tested</param>
         /// <returns>A value indicating whether or not a SKU is already exists in the database</returns>
         bool SkuExists(string sku);
-        
+
 
         #region Filter Queries
+
+
+        /// <summary>
+        /// The get products keys with option.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        Page<Guid> GetProductsKeysWithOption(Guid optionKey, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
 
 

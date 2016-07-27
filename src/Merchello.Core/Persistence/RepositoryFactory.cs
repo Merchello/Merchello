@@ -473,7 +473,21 @@
         /// </returns>
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateProductVariantRepository(uow), _logger, _sqlSyntax);
+            return new ProductRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax, CreateProductVariantRepository(uow), CreateProductOptionRepository(uow));
+        }
+
+        /// <summary>
+        /// Returns an instance of the <see cref="IProductOptionRepository"/>.
+        /// </summary>
+        /// <param name="uow">
+        /// The database unit of work.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOptionRepository"/>.
+        /// </returns>
+        internal virtual IProductOptionRepository CreateProductOptionRepository(IDatabaseUnitOfWork uow)
+        {
+            return new ProductOptionRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -487,7 +501,7 @@
         /// </returns>
         internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductVariantRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new ProductVariantRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax, CreateProductOptionRepository(uow));
         }
 
         /// <summary>

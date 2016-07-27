@@ -551,6 +551,14 @@
                 }
 
                 /// <summary>
+                /// Gets the product option type field key that represents the entity.
+                /// </summary>
+                public static Guid ProductOptionKey
+                {
+                    get { return new Guid("AF98E419-8B4A-44C8-AFDE-A7FFB2B9AF7F"); }
+                }
+
+                /// <summary>
                 /// Gets the shipment type field key that represents the entity
                 /// </summary>
                 public static Guid ShipmentKey

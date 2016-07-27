@@ -43,10 +43,17 @@
 
             foreach (var option in Original.ProductOptions)
             {
-                entity.ProductOptions.Add(new ProductOption(option.Name));
-                foreach (var choice in option.Choices)
+                if (option.Shared)
                 {
-                    entity.ProductOptions.First(x => x.Name == option.Name).Choices.Add(new ProductAttribute(choice.Name, choice.Sku));                    
+                    entity.ProductOptions.Add(option.Clone());
+                }
+                else
+                {
+                    entity.ProductOptions.Add(new ProductOption(option.Name));
+                    foreach (var choice in option.Choices)
+                    {
+                        entity.ProductOptions.First(x => x.Name == option.Name).Choices.Add(new ProductAttribute(choice.Name, choice.Sku));
+                    }
                 }
             }
 

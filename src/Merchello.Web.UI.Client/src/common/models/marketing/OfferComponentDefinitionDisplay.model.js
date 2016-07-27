@@ -47,7 +47,7 @@ OfferComponentDefinitionDisplay.prototype = (function() {
     return {
         clone: clone,
         isConfigured: isConfigured
-    }
+    };
 }());
 
 angular.module('merchello.models').constant('OfferComponentDefinitionDisplay', OfferComponentDefinitionDisplay);

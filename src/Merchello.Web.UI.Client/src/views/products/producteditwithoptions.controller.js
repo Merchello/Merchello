@@ -28,6 +28,7 @@
             function init() {
                 var key = $routeParams.id;
                 $scope.tabs = merchelloTabsFactory.createProductEditorWithOptionsTabs(key);
+                $scope.tabs.hideTab('productcontent');
                 $scope.tabs.setActive('variantlist');
                 loadSettings();
                 loadProduct(key);

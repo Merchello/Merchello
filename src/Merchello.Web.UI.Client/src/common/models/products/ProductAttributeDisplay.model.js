@@ -13,6 +13,7 @@
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
+        self.isDefaultChoice = false;
     };
 
     angular.module('merchello.models').constant('ProductAttributeDisplay', ProductAttributeDisplay);

@@ -322,6 +322,21 @@ angular.module('merchello.resources').factory('backOfficeCheckoutResource',
                     return deferred.promise;
                 },
 
+                getGravatarUrl: function(email) {
+                    var deferred = $q.defer();
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetGravatarUrl';
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: {email: email}
+                        }).then(function(resp) {
+                            deferred.resolve(resp.data.gravatarUrl);
+                        });
+
+
+                    return deferred.promise;
+                },
 
                 /**
                  * @ngdoc method
@@ -516,7 +531,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                     var url = baseUrl + 'PostAddEntityToCollections';
                     var data = [];
                     angular.forEach(collectionKeys, function(ck) {
-                      data.push({ entityKey: entityKey, collectionKey: ck })
+                      data.push({ entityKey: entityKey, collectionKey: ck });
                     });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -536,7 +551,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                     var url = baseUrl + 'DeleteEntityFromCollections';
                     var data = [];
                     angular.forEach(collectionKeys, function(ck) {
-                        data.push({ entityKey: entityKey, collectionKey: ck })
+                        data.push({ entityKey: entityKey, collectionKey: ck });
                     });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -589,7 +604,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         'Failed to delete the entity collection');
                 }
 
-            }
+            };
 
         }]);
 
@@ -1530,7 +1545,7 @@ angular.module('merchello.resources').factory('noteResource', [
                             deferred.resolve(data);
 
                         }, function(reason) {
-                            deferred.reject('Failed to save product content ' + reason)
+                            deferred.reject('Failed to save product content ' + reason);
                         });
 
                     return deferred.promise;
@@ -1631,6 +1646,133 @@ angular.module('merchello.resources').factory('noteResource', [
             };
     }]);
 
+angular.module('merchello.resources').factory('productOptionResource',
+    ['$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder', 'productOptionUseCountBuilder',
+        function($q, $http, umbRequestHelper, queryResultDisplayBuilder, productOptionDisplayBuilder, productOptionUseCountBuilder) {
+
+            var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductOptionApiBaseUrl'];
+
+            return {
+
+                getByKey: function(key) {
+                    var deferred = $q.defer();
+                    var url = baseUrl + 'GetByKey';
+                    umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { id: key }
+                        }),
+                        'Failed to get product option by key').then(function(data) {
+                        var result = productOptionDisplayBuilder.transform(data);
+                        deferred.resolve(result);
+                    });
+
+                    return deferred.promise;
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name searchOptions
+                 * @description Searches for all product options with a ListQuery object
+                 **/
+                searchOptions: function (query) {
+                    var url =  baseUrl + 'SearchOptions';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http.post(
+                            url,
+                            query
+                        ),
+                        'Failed to search product options')
+                        .then(function(data) {
+                            var result = queryResultDisplayBuilder.transform(data, productOptionDisplayBuilder);
+                            deferred.resolve(result);
+                        });
+
+                    return deferred.promise;
+                },
+
+                getUseCounts: function(option) {
+                    var url = baseUrl + 'GetProductOptionUseCount';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { id: option.key }
+                        }),
+                        'Failed to retreive default report data')
+                        .then(function(data) {
+                            var counts = productOptionUseCountBuilder.transform(data);
+                            deferred.resolve(counts);
+                        });
+
+                    return deferred.promise;
+                },
+
+
+                /**
+                 * @ngdoc method
+                 * @name addProductOption
+                 * @description adds a 'shared' product option
+                 **/
+                addProductOption: function(option) {
+                    var url = baseUrl + 'PostProductOption';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            option
+                        ),
+                        'Failed to create new product option')
+                        .then(function(po) {
+                            var result = productOptionDisplayBuilder.transform(po);
+                            deferred.resolve(result);
+                        });
+
+                    return deferred.promise;
+                },
+
+                saveProductOption: function(option) {
+                    var url = baseUrl + 'PutProductOption';
+
+                    var deferred = $q.defer();
+                    umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            option
+                        ),
+                        'Failed to save product option')
+                        .then(function(po) {
+                            var result = productOptionDisplayBuilder.transform(po);
+                            deferred.resolve(result);
+                        });
+
+                    return deferred.promise;
+                },
+
+                /**
+                 * @ngdoc method
+                 * @name deleteProductOption
+                 * @description deletes a shared product option.  options associated with products
+                 * should be removed from the productOptions collection rather than deleted through this service.
+                 **/
+                deleteProductOption : function(option) {
+                    var url = baseUrl + 'DeleteProductOption';
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: { id: option.key }
+                        }),
+                        'Failed to delete option');
+                }
+
+            };
+
+        }]);
 angular.module('merchello.resources').factory('salesByItemResource',
     ['$http', '$q', 'umbRequestHelper', 'queryResultDisplayBuilder', 'salesByItemResultBuilder',
     function($http, $q, umbRequestHelper, queryResultDisplayBuilder, salesByItemResultBuilder) {
@@ -1895,7 +2037,7 @@ angular.module('merchello.resources').factory('salesOverTimeResource',
                         settings: settingDisplayBuilder.transform(data[0]),
                         currencies: data[1],
                         currencySymbol: _.find(data[1], function(c) {
-                            return c.currencyCode === data[0].currencyCode
+                            return c.currencyCode === data[0].currencyCode;
                         }).symbol,
                         countries: countryDisplayBuilder.transform(data[2])
                     };
@@ -2361,7 +2503,7 @@ angular.module('merchello.resources').factory('vieweditorResource',
             },
 
             addNewView: function(viewData) {
-                var url = baseUrl + 'AddNewView'
+                var url = baseUrl + 'AddNewView';
                 var deferred = $q.defer();
                 
                 $q.all([umbRequestHelper.resourcePromise(

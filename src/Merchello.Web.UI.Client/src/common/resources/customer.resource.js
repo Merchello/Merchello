@@ -108,6 +108,21 @@
                     return deferred.promise;
                 },
 
+                getGravatarUrl: function(email) {
+                    var deferred = $q.defer();
+
+                    var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloCustomerApiBaseUrl'] + 'GetGravatarUrl';
+                        $http({
+                            url: url,
+                            method: "GET",
+                            params: {email: email}
+                        }).then(function(resp) {
+                            deferred.resolve(resp.data.gravatarUrl);
+                        });
+
+
+                    return deferred.promise;
+                },
 
                 /**
                  * @ngdoc method

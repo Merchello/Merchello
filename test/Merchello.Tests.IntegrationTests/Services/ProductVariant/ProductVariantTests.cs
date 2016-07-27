@@ -54,7 +54,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
             //// Arrange
             
             //// Act
-            var combinations = ((ProductVariantService)_productVariantService).GetPossibleProductAttributeCombinations(_product).ToArray();
+            var combinations = _product.GetPossibleProductAttributeCombinations().ToArray();
 
             //// Assert
             Assert.IsTrue(combinations.Any());
@@ -236,7 +236,7 @@ namespace Merchello.Tests.IntegrationTests.Services.ProductVariant
 
             //// Act
             var attIds = attributes.Select(x => x.Key).ToArray();
-            var retrieved = _productVariantService.GetProductVariantWithAttributes(_product, attIds);
+            var retrieved = _product.GetProductVariantForPurchase(attIds);
 
             //// Assert
             Assert.NotNull(retrieved);

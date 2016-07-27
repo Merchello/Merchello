@@ -94,11 +94,22 @@
             if (!this.ValidColumns.Contains("merchNote,internalOnly") ||
                 StoreSettings.All(x => x.Key != Constants.StoreSettingKeys.HasDomainRecordKey) ||
                 !this.ValidColumns.Contains("merchNote,author") ||
-                this.ValidColumns.Contains("merchCustomer,notes") ||
                 !this.ValidColumns.Contains("merchCustomer,notes") ||
                 this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.PaymentMethod.RedirectKey))
             {
                 return new Version(1, 14, 1);
+            }
+
+            if (!this.ValidColumns.Contains("merchProductOption,shared") ||
+                !this.ValidColumns.Contains("merchProductOption,detachedContentTypeKey") ||
+                !this.ValidColumns.Contains("merchProductOption,uiOption") ||
+                !this.ValidColumns.Contains("merchProductAttribute,detachedContentValues") ||
+                !this.ValidColumns.Contains("merchProductAttribute,isDefaultChoice") ||
+                !this.ValidColumns.Contains("merchProduct2ProductOption,useName") ||
+                !this.ValidTables.Contains("merchProductOptionAttributeShare") ||
+                this.TypeFields.All(x => x.Key != Constants.TypeFieldKeys.Entity.ProductOptionKey))
+            {
+                return new Version(2, 1, 0);
             }
 
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version

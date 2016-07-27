@@ -1,0 +1,26 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.Product.Dialogs.AddDetachedContentTypeController" data-ng-show="loaded">
+    <form name="productContentTypeForm" id="productContentTypeForm">
+        <div class="form-group row-fluid" style="padding: 1em">
+            <div class="control-group">
+                <label for="name"><localize key="general_name" /></label>
+                <input name="name" type="text" class="span11" data-ng-model="dialogData.contentType.name" required />
+                <div class="error" data-ng-show="productContentTypeForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+            </div>
+            <div class="control-group">
+                <label for="description"><localize key="editcontenttype_description" /></label>
+                <textarea name="description" type="text" class="span11" data-ng-model="dialogData.contentType.description" rows="3"></textarea>
+            </div>
+            <content-type-drop-down selected-content-type="contentType" />
+
+        </div>
+    </form>
+    <div class="umb-el-wrap umb-panel-buttons">
+        <div class="btn-toolbar umb-btn-toolbar pull-right">
+            <!-- ACTION: Cancel -->
+            <a href data-ng-click="nav.hideNavigation()" class="btn btn-link"><localize key="general_cancel"></localize></a>
+            <!-- ACTION: Submit DialogData -->
+            <button class="btn btn-primary" data-ng-click="save()"><localize key="buttons_save" /></button>
+
+        </div>
+    </div>
+</div>

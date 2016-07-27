@@ -31,5 +31,10 @@
         /// Gets or sets the sort order.
         /// </summary>
         public int SortOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        public bool IsDefaultChoice { get; set; }
     }
 }

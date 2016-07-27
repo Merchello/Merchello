@@ -455,6 +455,9 @@
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBaseExtensions.cs" />
     <Compile Include="Marketing\Rewards\OfferRewardComponentBase{T}.cs" />
+    <Compile Include="Models\Counting\EntityUseCount.cs" />
+    <Compile Include="Models\Counting\IProductOptionUseCount.cs" />
+    <Compile Include="Models\Counting\ProductOptionUseCount.cs" />
     <Compile Include="Models\CurrencyFormat.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentType.cs" />
@@ -516,9 +519,14 @@
     <Compile Include="Models\OfferRedeemed.cs" />
     <Compile Include="Models\OfferSettings.cs" />
     <Compile Include="Models\DetachedContent\ProductVariantDetachedContent.cs" />
+    <Compile Include="Models\ProductOptionExtensions.cs" />
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
+    <Compile Include="Models\Rdbms\DtoExtensions.cs" />
+    <Compile Include="Models\Rdbms\EntityUseCountDto.cs" />
+    <Compile Include="Models\Rdbms\IDto.cs" />
+    <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
@@ -527,6 +535,7 @@
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
     <Compile Include="Models\Rdbms\Product2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\EntityCollectionDto.cs" />
+    <Compile Include="Models\Rdbms\ProductOptionAttributeShareDto.cs" />
     <Compile Include="Models\Rdbms\ProductVariantDetachedContentDto.cs" />
     <Compile Include="Models\ShipmentStatus.cs" />
     <Compile Include="Models\MonitorModels\INotifyModel.cs" />
@@ -606,6 +615,7 @@
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="PathHelper.cs" />
+    <Compile Include="Persistence\Factories\EntityUseCountFactory.cs" />
     <Compile Include="Persistence\Factories\NoteFactory.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
     <Compile Include="Persistence\Factories\DetachedContentTypeFactory.cs" />
@@ -649,6 +659,11 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProduct2ProductOptionColumns.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductAttributeColumns.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionColumns.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionTypeField.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\CreateProductOptionAttributeShareTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteAuthorColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddNoteInternalOnlyColumn.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoZeroZero\AddRedirectPaymentMethodType.cs" />
@@ -658,6 +673,9 @@
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IBulkOperationRepository.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IProductOptionRepository.cs" />
+    <Compile Include="Persistence\Repositories\MerchelloBulkOperationRepository.cs" />
     <Compile Include="Persistence\Repositories\NoteRepository.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\DetachedContentTypeRepository.cs" />
@@ -678,6 +696,7 @@
     <Compile Include="Persistence\Repositories\OfferRedeemedRepository.cs" />
     <Compile Include="Persistence\Repositories\OfferSettingsRepository.cs" />
     <Compile Include="Persistence\Repositories\PagedRepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\ProductOptionRepository.cs" />
     <Compile Include="Persistence\Repositories\ShipmentStatusRepository.cs" />
     <Compile Include="Persistence\Repositories\WarehouseCatalogRepository.cs" />
     <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs">
@@ -1221,6 +1240,7 @@
     <Compile Include="SerializationHelper.cs" />
     <Compile Include="Services\AnonymousCustomerService.cs" />
     <Compile Include="Services\AppliedPaymentService.cs" />
+    <Compile Include="Services\Interfaces\IProductOptionService.cs" />
     <Compile Include="Services\Interfaces\IUaaSItemProviderService.cs" />
     <Compile Include="Logging\ILoggerProvider.cs" />
     <Compile Include="Services\NoteService.cs" />
@@ -1256,6 +1276,7 @@
     <Compile Include="Services\PageCachedServiceBase.cs" />
     <Compile Include="Services\PaymentMethodService.cs" />
     <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\ProductOptionService.cs" />
     <Compile Include="Services\TaxMethodService.cs" />
     <Compile Include="Services\GatewayProviderService.cs" />
     <Compile Include="Services\Interfaces\ITaxMethodService.cs" />

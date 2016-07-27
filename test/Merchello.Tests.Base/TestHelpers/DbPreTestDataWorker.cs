@@ -400,6 +400,24 @@ namespace Merchello.Tests.Base.TestHelpers
 
         #endregion
 
+        #region IProductOption
+
+        public void DeleteAllSharedOptions()
+        {
+            var all = ProductOptionService.GetPage(1, long.MaxValue);
+            ((ProductOptionService)ProductOptionService).Delete(all.Items);
+        }
+
+        public IProductOptionService ProductOptionService
+        {
+            get
+            {
+                return _serviceContext.ProductOptionService;
+            }
+        }
+
+        #endregion
+
         #region IProductVariant
 
 

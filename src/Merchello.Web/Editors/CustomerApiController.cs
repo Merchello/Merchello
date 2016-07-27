@@ -4,7 +4,10 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
+    using System.Security.Cryptography;
+    using System.Text;
     using System.Web.Http;
+    using System.Web.Security;
 
     using Merchello.Core;
     using Merchello.Core.Logging;
@@ -107,6 +110,33 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets the avatar URL.
+        /// </summary>
+        /// <param name="email">
+        /// The email.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        [HttpGet]
+        public object GetGravatarUrl(string email)
+        {
+            var hash = new StringBuilder();
+            var md5provider = new MD5CryptoServiceProvider();
+            byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(email));
+
+            foreach (byte t in bytes)
+            {
+                hash.Append(t.ToString("x2"));
+            }
+
+            return new
+                       {
+                            gravatarUrl = string.Format("https://www.gravatar.com/avatar/{0}?d=mm", hash.ToString().ToLowerInvariant())
+                       };
+        }
 
         /// <summary>
         /// Returns an customer by id (key)

@@ -110,7 +110,30 @@
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
         QueryResultDisplay Search(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending);
-        
+
+        /// <summary>
+        /// Gets products with that have an option with name.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        QueryResultDisplay GetProductsWithOption(Guid optionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Descending);
+
 
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names

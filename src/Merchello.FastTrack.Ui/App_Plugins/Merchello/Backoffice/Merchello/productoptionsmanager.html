@@ -1,6 +1,5 @@
 <form novalidate name="productForm"
-      data-ng-controller="Merchello.Backoffice.ProductOptionsEditorController"
-      data-ng-show="loaded"
+      data-ng-controller="Merchello.Backoffice.ProductOptionsManagerController"
       data-ng-submit="save()">
 
     <umb-panel val-show-validation>
@@ -26,10 +25,6 @@
                             <li><a data-ng-click="deleteProductDialog()"><localize key="merchelloVariant_deleteProduct" /></a></li>
                         </ul>
                     </div>
-                    <!--div class="btn-group">
-                        <a data-ng-click="deleteProductDialog()" class="btn"><localize key="merchelloVariant_deleteProduct" /></a>
-                        <a data-ng-disabled="productForm.$invalid" data-ng-click="save(productForm)" class="btn btn-success"><localize key="buttons_save" /></a>
-                    </div-->
                 </div>
             </div>
 
@@ -43,15 +38,7 @@
                     Variants tab
                 ----------------------------------------------------------------------------------------->
                 <div class="control-group umb-control-group">
-                    <label class="merchello-control-label">
-                        <localize key="merchelloProductEdit_editOptions" />
-                        <small><localize key="merchelloProductEdit_editOptionsHelper" /></small>
-                    </label>
-                    <div class="merchello-controls row-fluid">
-                        {{rebuildVariants | json}}
-                        <!-- Allows adding/removing/editing of options / attributes -->
-                        <product-options-manage product="product" parent-form="productForm" classes="'col-xs-10 span10'" on-update="save(form, rebuild)" rebuild-variants="rebuildVariants"></product-options-manage>
-                    </div>
+                    <product-options-list load="load" do-add="doAdd" do-delete="doDelete" do-edit="doEdit" pre-values-loaded="preValuesLoaded"></product-options-list>
                 </div>
 
         </merchello-panel>

@@ -308,7 +308,45 @@
         {
             return GetQueryResultDisplay(_productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
         }
-        
+
+        /// <summary>
+        /// Gets products with that have an option with name.
+        /// </summary>
+        /// <param name="optionKey">
+        /// The option key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QueryResultDisplay"/>.
+        /// </returns>
+        public QueryResultDisplay GetProductsWithOption(
+            Guid optionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return
+            this.GetQueryResultDisplay(
+                _productService.GetProductsKeysWithOption(
+                    optionKey,
+                    page,
+                    itemsPerPage,
+                    sortBy,
+                    sortDirection));
+        }
+
         /// <summary>
         /// Gets products with that have an option with name and a collection of choice names
         /// </summary>

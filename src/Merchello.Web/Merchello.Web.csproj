@@ -332,6 +332,7 @@
     <Compile Include="Editors\EntityCollectionApiController.cs" />
     <Compile Include="Editors\MarketingApiController.cs" />
     <Compile Include="Editors\PluginViewEditorApiController.cs" />
+    <Compile Include="Editors\ProductOptionApiController.cs" />
     <Compile Include="Editors\Reports\AbandonedBasketReportApiController.cs" />
     <Compile Include="Editors\Reports\MonthlyReportApiControllerBase.cs" />
     <Compile Include="Editors\Reports\ReportSqlHelper.cs" />
@@ -350,6 +351,8 @@
     <Compile Include="Factories\CustomerProfileModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\ContentEditing\Content\ProductContentSaveItemBase.cs" />
+    <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\IItemCacheModel.cs" />
     <Compile Include="Models\Ui\IWishListModel.cs" />
@@ -524,6 +527,7 @@
     <Compile Include="PropertyConverters\ProductCollectionValueConverter.cs" />
     <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
     <Compile Include="PropertyEditors\ProductCollectionPicker.cs" />
+    <Compile Include="Trees\Actions\NewProductOptionContentTypeAction.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorMonitorBase{T}.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorOrderShippedMonitor.cs" />
     <Compile Include="Workflow\Notification\Monitor\RazorPartialOrderShippedMonitor.cs" />

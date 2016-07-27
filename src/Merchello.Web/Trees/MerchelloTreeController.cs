@@ -158,9 +158,10 @@
                     //.NavigateToRoute("merchello/merchello/productedit/create");
 
                 menu.Items.Add<NewProductContentTypeAction>(
-                    _textService.Localize("merchelloDetachedContent/productContentType", _culture),
+                    _textService.Localize("merchelloDetachedContent/associateContentType", _culture),
                     false)
-                    .LaunchDialogView(DialogsPath + "productcontenttype.add.html", _textService.Localize("merchelloDetachedContent/productContentType", _culture));
+                    .LaunchDialogView(DialogsPath + "productcontenttype.add.html", _textService.Localize("merchelloDetachedContent/associateContentType", _culture));
+
             }
 
             if (id == "customers")
