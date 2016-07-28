@@ -220,9 +220,13 @@
             criteria.Field("productVariantKey", key.ToString());
 
             var result = CachedSearch(criteria, ExamineDisplayExtensions.ToProductVariantDisplay).FirstOrDefault();
-            result.EnsureValueConversion(this._conversionType);
 
-            if (result != null) return this.ModifyData(result);
+
+            if (result != null)
+            {
+                result.EnsureValueConversion(this._conversionType);
+                return this.ModifyData(result);
+            }
 
             var variant = _productService.GetProductVariantByKey(key);
 

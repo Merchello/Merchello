@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing.Content;
@@ -13,6 +14,14 @@
     /// </summary>
     public class ProductAttributeDisplay //: IHaveDetachedDataValues
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductAttributeDisplay"/> class.
+        /// </summary>
+        public ProductAttributeDisplay()
+        {
+            DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>();
+        }
+
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
