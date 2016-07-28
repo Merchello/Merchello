@@ -2509,6 +2509,30 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             }
         }
 
+        function prepForSave() {
+            angular.forEach(this.detachedContents, function(dc) {
+                dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+            });
+
+            angular.forEach(this.productVariants, function(pv) {
+                if (pv.detachedContents.length > 0) {
+                    angular.forEach(pv.detachedContents, function(pvdc) {
+                        pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                    });
+                }
+
+                angular.forEach(pv.attributes, function(a) {
+                    a.detachedDataValues = a.detachedDataValues.toArray();
+                });
+            });
+
+            angular.forEach(this.productOptions, function(po) {
+                angular.forEach(po.choices, function(c) {
+                    c.detachedDataValues = c.detachedDataValues.toArray();
+                });
+            });
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -2522,7 +2546,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             getProductVariant: getProductVariant,
             taxableVariants: taxableVariants,
             canBeRendered: canBeRendered,
-            ensureCatalogInventory: ensureCatalogInventory
+            ensureCatalogInventory: ensureCatalogInventory,
+            prepForSave: prepForSave
         };
     }());
 
@@ -2801,6 +2826,17 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             return missing;
         }
 
+
+        function prepForSave() {
+            angular.forEach(this.detachedContents, function(dc) {
+                dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+            });
+
+            angular.forEach(this.attributes, function(a) {
+                a.detachedDataValues = a.detachedDataValues.toArray();
+            });
+        }
+
         return {
             getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
@@ -2810,7 +2846,8 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             hasDetachedContent: hasDetachedContent,
             assertLanguageContent: assertLanguageContent,
             detachedContentType: detachedContentType,
-            getDetachedContent: getDetachedContent
+            getDetachedContent: getDetachedContent,
+            prepForSave: prepForSave
         };
     }());
 

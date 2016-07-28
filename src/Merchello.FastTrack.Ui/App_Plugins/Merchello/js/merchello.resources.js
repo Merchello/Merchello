@@ -1503,6 +1503,10 @@ angular.module('merchello.resources').factory('noteResource', [
                  * @description Saves / updates product with an api call back to the server
                  **/
                 save: function (product) {
+
+                    product.prepForSave();
+
+                    /*
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
@@ -1512,7 +1516,7 @@ angular.module('merchello.resources').factory('noteResource', [
                             c.detachedDataValues = c.detachedDataValues.asDetachedValueArray();
                         })
                     });
-
+                    */
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -1522,6 +1526,9 @@ angular.module('merchello.resources').factory('noteResource', [
                 },
 
                 saveProductContent: function(product, cultureName, files) {
+
+                    product.prepForSave();
+                    /*
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
@@ -1532,6 +1539,10 @@ angular.module('merchello.resources').factory('noteResource', [
                                 pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
                             });
                         }
+
+                        angular.forEach(pv.attributes, function(a) {
+                           a.detachedDataValues = a.detachedDataValues.toArray();
+                        });
                     });
 
                     angular.forEach(product.productOptions, function(po) {
@@ -1539,8 +1550,7 @@ angular.module('merchello.resources').factory('noteResource', [
                           c.detachedDataValues = c.detachedDataValues.toArray();
                        });
                     });
-
-                    console.info(product);
+                    */
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
                     var deferred = $q.defer();
@@ -1574,13 +1584,8 @@ angular.module('merchello.resources').factory('noteResource', [
                  * @description Saves / updates product variant with an api call back to the server
                  **/
                 saveVariant: function (productVariant) {
-                    angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
-                    });
 
-                    angular.forEach(productVariant.attributes, function(a) {
-                       a.detachedDataValues = a.detachedDataValues.toArray();
-                    });
+                    productVariant.prepForSave();
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
@@ -1591,9 +1596,9 @@ angular.module('merchello.resources').factory('noteResource', [
                 },
 
                 saveVariantContent: function(productVariant, cultureName, files) {
-                    angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
-                    });
+
+                    productVariant.prepForSave();
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
 
                     var deferred = $q.defer();

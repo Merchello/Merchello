@@ -207,6 +207,30 @@
             }
         }
 
+        function prepForSave() {
+            angular.forEach(this.detachedContents, function(dc) {
+                dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+            });
+
+            angular.forEach(this.productVariants, function(pv) {
+                if (pv.detachedContents.length > 0) {
+                    angular.forEach(pv.detachedContents, function(pvdc) {
+                        pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                    });
+                }
+
+                angular.forEach(pv.attributes, function(a) {
+                    a.detachedDataValues = a.detachedDataValues.toArray();
+                });
+            });
+
+            angular.forEach(this.productOptions, function(po) {
+                angular.forEach(po.choices, function(c) {
+                    c.detachedDataValues = c.detachedDataValues.toArray();
+                });
+            });
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -220,7 +244,8 @@
             getProductVariant: getProductVariant,
             taxableVariants: taxableVariants,
             canBeRendered: canBeRendered,
-            ensureCatalogInventory: ensureCatalogInventory
+            ensureCatalogInventory: ensureCatalogInventory,
+            prepForSave: prepForSave
         };
     }());
 
