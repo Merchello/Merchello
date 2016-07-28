@@ -5,15 +5,19 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
 
     using Merchello.Core;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
+    using Merchello.Web.WebApi.Binders;
 
+    using Umbraco.Core;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -135,10 +139,18 @@
         public ProductOptionDisplay PutProductOption(ProductOptionDisplay option)
         {
             var destination = _productOptionService.GetByKey(option.Key);
+            
             destination = option.ToProductOption(destination);
             _productOptionService.Save(destination);
 
             return destination.ToProductOptionDisplay();
+        }
+
+        public ProductAttributeDisplay PutProductAttributeDetachedContent(
+            [ModelBinder(typeof(ProductAttributeContentSaveBinder))] 
+            ProductAttributeContentSave attributeContentItem)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

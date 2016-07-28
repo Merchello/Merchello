@@ -110,6 +110,13 @@
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
+
+                    angular.forEach(product.productOptions, function(po) {
+                        angular.forEach(po.choices, function(c) {
+                            c.detachedDataValues = c.detachedDataValues.asDetachedValueArray();
+                        })
+                    });
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -124,12 +131,20 @@
                     });
 
                     angular.forEach(product.productVariants, function(pv) {
-                      if (pv.detachedContents.length > 0) {
-                          angular.forEach(pv.detachedContents, function(pvdc) {
-                            pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
-                          });
-                      }
+                        if (pv.detachedContents.length > 0) {
+                            angular.forEach(pv.detachedContents, function(pvdc) {
+                                pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                            });
+                        }
                     });
+
+                    angular.forEach(product.productOptions, function(po) {
+                       angular.forEach(po.choices, function(c) {
+                          c.detachedDataValues = c.detachedDataValues.toArray();
+                       });
+                    });
+
+                    console.info(product);
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
                     var deferred = $q.defer();
@@ -156,6 +171,7 @@
 
                 },
 
+
                 /**
                  * @ngdoc method
                  * @name saveVariant
@@ -165,6 +181,11 @@
                     angular.forEach(productVariant.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
+
+                    angular.forEach(productVariant.attributes, function(a) {
+                       a.detachedDataValues = a.detachedDataValues.toArray();
+                    });
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,

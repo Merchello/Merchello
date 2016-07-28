@@ -2413,8 +2413,11 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                   } else {
                       return true;
                   }
+              } else {
+                  return false;
               }
             };
+
 
             // sets the default choice property
             scope.setSelectedChoice = function() {
@@ -2546,6 +2549,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                             var fnd = _.find(scope.productOption.choices, function(poc) {
                                 return poc.key === soc.key;
                             });
+
 
                             if (fnd) {
                                 soc.selected = true;
@@ -2790,6 +2794,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     // todo - hashkeys sometimes don't map here
                     var option = angular.extend(scope.option, scope.sharedOption);
 
+
                     option.choices = _.filter(option.choices, function(oc) {
                        var exists = _.find(scope.selectedChoices, function (sc) {
                           return sc === oc.key;
@@ -2800,6 +2805,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                             return oc;
                         }
                     });
+
 
                     return option;
                 }

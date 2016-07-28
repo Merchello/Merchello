@@ -2275,6 +2275,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
     };
 
     angular.module('merchello.models').constant('CatalogInventoryDisplay', CatalogInventoryDisplay);
+/**
+ * Created by rusty on 7/27/2016.
+ */
+
     /**
      * @ngdoc model
      * @name ProductAttributeDisplay

@@ -56,6 +56,28 @@
         IProductOption CreateProductOptionWithKey(string name, bool shared = false, bool required = true, bool raiseEvents = true);
 
         /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        IProductAttribute GetProductAttributeByKey(Guid key);
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The collection attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        IEnumerable<IProductAttribute> GetProductAttributes(IEnumerable<Guid> keys);
+
+        /// <summary>
         /// Saves a single product option.
         /// </summary>
         /// <param name="option">

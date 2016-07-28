@@ -1,7 +1,7 @@
 angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductOptionChoiceContentController',
-    ['$scope', '$timeout', 'editorState', 'merchelloTabsFactory', 'contentResource',
+    ['$scope', '$timeout', 'editorState', 'merchelloTabsFactory', 'contentResource', 'productOptionResource',
         'detachedContentResource', 'detachedContentHelper',
-    function($scope, $timeout, editorState, merchelloTabsFactory, contentResource,
+    function($scope, $timeout, editorState, merchelloTabsFactory, contentResource, productOptionResource,
              detachedContentResource, detachedContentHelper) {
 
         $scope.currentTabs = undefined;
@@ -18,7 +18,21 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
             }
         };
 
-        console.info($scope.dialogData);
+
+        $scope.save = function() {
+
+            console.info('Save attribute content');
+            /*
+            var args = {
+                saveMethod: productOptionResource.saveProductContent,
+                content: product,
+                scope: $scope,
+                statusMessage: 'Saving...'
+            };
+            */
+
+            //detachedContentHelper.detachedContentPerformSave(args);
+        }
 
         function init() {
             editor.detachedContentType = $scope.dialogData.contentType;
@@ -79,6 +93,7 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 $scope.tabs.setActive(id);
             }
         }
+
 
         init();
 

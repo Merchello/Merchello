@@ -235,6 +235,21 @@
             {
                 destinationProductAttribute.Key = productAttributeDisplay.Key;
             }
+
+            var validPropertyTypeAliases = productAttributeDisplay.DetachedDataValues.Select(x => x.Key);
+            var removeAtts = destinationProductAttribute.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+            foreach (var remove in removeAtts)
+            {
+                destinationProductAttribute.DetachedDataValues.RemoveValue(remove.Key);
+            }
+
+            foreach (var item in productAttributeDisplay.DetachedDataValues)
+            {
+                if (!item.Key.IsNullOrWhiteSpace())
+                    destinationProductAttribute.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
+            }
+
+
             destinationProductAttribute.Name = productAttributeDisplay.Name;
             destinationProductAttribute.Sku = productAttributeDisplay.Sku;
             destinationProductAttribute.OptionKey = productAttributeDisplay.OptionKey;

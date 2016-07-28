@@ -208,6 +208,41 @@
             return option;
         }
 
+
+        /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        public IProductAttribute GetProductAttributeByKey(Guid key)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductAttributeByKey(key);
+            }
+        }
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The collection attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        public IEnumerable<IProductAttribute> GetProductAttributes(IEnumerable<Guid> keys)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductAttributes(keys.ToArray());
+            }
+        }
+
         /// <summary>
         /// Saves a single product option.
         /// </summary>
@@ -440,6 +475,26 @@
             using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetPage(term, page, itemsPerPage, sortBy, sortDirection, sharedOnly);
+            }
+        }
+
+        /// <summary>
+        /// Updates an attribute.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        internal void Save(IProductAttribute attribute)
+        {
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+
+                    repository.UpdateAttribute(attribute);
+                    uow.Commit();
+                }
             }
         }
 

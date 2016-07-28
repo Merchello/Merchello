@@ -18,7 +18,7 @@
     /// <summary>
     /// The product variant detached content display.
     /// </summary>
-    public class ProductVariantDetachedContentDisplay
+    public class ProductVariantDetachedContentDisplay : IHaveDetachedDataValues
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantDetachedContentDisplay"/> class.

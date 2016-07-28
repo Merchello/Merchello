@@ -1506,6 +1506,13 @@ angular.module('merchello.resources').factory('noteResource', [
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
+
+                    angular.forEach(product.productOptions, function(po) {
+                        angular.forEach(po.choices, function(c) {
+                            c.detachedDataValues = c.detachedDataValues.asDetachedValueArray();
+                        })
+                    });
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -1520,12 +1527,20 @@ angular.module('merchello.resources').factory('noteResource', [
                     });
 
                     angular.forEach(product.productVariants, function(pv) {
-                      if (pv.detachedContents.length > 0) {
-                          angular.forEach(pv.detachedContents, function(pvdc) {
-                            pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
-                          });
-                      }
+                        if (pv.detachedContents.length > 0) {
+                            angular.forEach(pv.detachedContents, function(pvdc) {
+                                pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                            });
+                        }
                     });
+
+                    angular.forEach(product.productOptions, function(po) {
+                       angular.forEach(po.choices, function(c) {
+                          c.detachedDataValues = c.detachedDataValues.toArray();
+                       });
+                    });
+
+                    console.info(product);
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
                     var deferred = $q.defer();
@@ -1552,6 +1567,7 @@ angular.module('merchello.resources').factory('noteResource', [
 
                 },
 
+
                 /**
                  * @ngdoc method
                  * @name saveVariant
@@ -1561,6 +1577,11 @@ angular.module('merchello.resources').factory('noteResource', [
                     angular.forEach(productVariant.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
+
+                    angular.forEach(productVariant.attributes, function(a) {
+                       a.detachedDataValues = a.detachedDataValues.toArray();
+                    });
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -1722,6 +1743,10 @@ angular.module('merchello.resources').factory('productOptionResource',
                 addProductOption: function(option) {
                     var url = baseUrl + 'PostProductOption';
 
+                    angular.forEach(option.choices, function(c) {
+                        c.detachedDataValues = c.detachedDataValues.asDetachedValueArray();
+                    });
+
                     var deferred = $q.defer();
                     umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -1739,6 +1764,10 @@ angular.module('merchello.resources').factory('productOptionResource',
                 saveProductOption: function(option) {
                     var url = baseUrl + 'PutProductOption';
 
+                    angular.forEach(option.choices, function(c) {
+                        c.detachedDataValues = c.detachedDataValues.asDetachedValueArray();
+                    });
+
                     var deferred = $q.defer();
                     umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -1751,6 +1780,36 @@ angular.module('merchello.resources').factory('productOptionResource',
                         });
 
                     return deferred.promise;
+                },
+
+                saveAttributeContent: function(attribute, contentType, files) {
+
+                    attribute.detachedDataValues = attribute.detachedDataValues.asDetachedValueArray();
+
+
+                    var url = baseUrl + 'PutProductAttributeDetachedContent';
+                    var deferred = $q.defer();
+                    umbRequestHelper.postMultiPartRequest(
+                        url,
+                        { key: "attributeContentItem", value: { display: attribute, contentType: contentType } },
+                        function (data, formData) {
+                            //now add all of the assigned files
+                            for (var f in files) {
+                                //each item has a property alias and the file object, we'll ensure that the alias is suffixed to the key
+                                // so we know which property it belongs to on the server side
+                                formData.append("file_" + files[f].alias, files[f].file);
+                            }
+                        },
+                        function (data, status, headers, config) {
+
+                            deferred.resolve(data);
+
+                        }, function(reason) {
+                            deferred.reject('Failed to save product attribute ' + reason);
+                        });
+
+                    return deferred.promise;
+
                 },
 
                 /**

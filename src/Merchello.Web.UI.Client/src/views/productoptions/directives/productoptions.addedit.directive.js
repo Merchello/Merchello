@@ -109,8 +109,11 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                   } else {
                       return true;
                   }
+              } else {
+                  return false;
               }
             };
+
 
             // sets the default choice property
             scope.setSelectedChoice = function() {

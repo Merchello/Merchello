@@ -30,7 +30,7 @@
                 <td><input type="text" data-ng-model="choice.name" /></td>
                 <td><input type="text" data-ng-model="choice.sku" /></td>
                 <td><input type="radio" name="choiceSelected" data-ng-value="choice" data-ng-change="setSelectedChoice()" data-ng-model="selectedAttribute.current" /></td>
-                <td><merchello-save-icon do-save="addDetachedContent(choice)" show-save="contentType" /></td>
+                <td><merchello-save-icon do-save="addDetachedContent(choice)" show-save="contentType && option.key !== ''" /></td>
                 <td>
                     <merchello-delete-icon do-delete="remove($index)" data-ng-if="showDelete(choice)" />
                 </td>

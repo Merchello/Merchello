@@ -34,7 +34,7 @@
             // this class to be sealed
             Key = Guid.NewGuid();
             HasIdentity = false;
-
+            DetachedDataValues = new DetachedDataValuesCollection();
             Name = name;
             Sku = sku;
         }

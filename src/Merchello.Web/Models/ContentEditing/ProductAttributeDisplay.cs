@@ -4,13 +4,14 @@
     using System.Collections.Generic;
 
     using Merchello.Core.ValueConverters;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     using Newtonsoft.Json;
 
     /// <summary>
     /// The product attribute display.
     /// </summary>
-    public class ProductAttributeDisplay
+    public class ProductAttributeDisplay //: IHaveDetachedDataValues
     {
         /// <summary>
         /// Gets or sets the key.
