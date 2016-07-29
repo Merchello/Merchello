@@ -1655,8 +1655,10 @@ angular.module('merchello.resources').factory('noteResource', [
     }]);
 
 angular.module('merchello.resources').factory('productOptionResource',
-    ['$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder', 'productOptionUseCountBuilder',
-        function($q, $http, umbRequestHelper, queryResultDisplayBuilder, productOptionDisplayBuilder, productOptionUseCountBuilder) {
+    ['$q', '$http', 'umbRequestHelper', 'queryResultDisplayBuilder',
+        'productOptionDisplayBuilder', 'productOptionUseCountBuilder', 'productAttributeDisplayBuilder',
+        function($q, $http, umbRequestHelper, queryResultDisplayBuilder,
+                 productOptionDisplayBuilder, productOptionUseCountBuilder, productAttributeDisplayBuilder) {
 
             var baseUrl = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductOptionApiBaseUrl'];
 
@@ -1792,7 +1794,8 @@ angular.module('merchello.resources').factory('productOptionResource',
                         },
                         function (data, status, headers, config) {
 
-                            deferred.resolve(data);
+                            var choice = productAttributeDisplayBuilder.transform(data);
+                            deferred.resolve(choice);
 
                         }, function(reason) {
                             deferred.reject('Failed to save product attribute ' + reason);

@@ -265,15 +265,20 @@
         /// <param name="productAttribute">
         /// The product attribute.
         /// </param>
-        /// <param name="conversionType">
-        /// The conversion type.
-        /// </param>
         /// <returns>
         /// The <see cref="ProductAttributeDisplay"/>.
         /// </returns>
-        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {            
-            return AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
+        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute)
+        {
+            return productAttribute.ToProductAttributeDisplay(null);
+        }
+
+        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute, IContentType contentType, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var display = AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
+            if (contentType == null) return display;
+            display.EnsureValueConversion(contentType, conversionType);
+            return display;
         }
 
 
@@ -366,22 +371,18 @@
         /// <param name="productOption">
         /// The product option.
         /// </param>
+        /// <param name="conversionType">
+        /// The property editor conversion type.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductOptionDisplay"/>.
         /// </returns>
-        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
+        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {
-            try
-            {
-                var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
-                display.Choices = display.Choices.OrderBy(x => x.SortOrder);
-                return display;
-            }
-            catch (Exception ex)
-            {
-                MultiLogHelper.Error(typeof(ProductDisplayExtensions), "Failed to map ProductOption to ProductOptionDisplay", ex);
-                throw;
-            }      
+            var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+            display.EnsureValueConversion(conversionType);
+            display.Choices = display.Choices.OrderBy(x => x.SortOrder);
+            return display;
         }
 
         #endregion

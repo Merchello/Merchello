@@ -304,6 +304,7 @@
             var factory = new ProductAttributeFactory();
             var dto = factory.BuildDto(attribute);
             Database.Update(dto);
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductOption>(attribute.OptionKey));
         }
 
         /// <summary>

@@ -100,6 +100,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             };
 
             scope.showDelete = function(choice) {
+
               if (scope.counts) {
                   var fnd = _.find(scope.counts.choices, function(cc) {
                       return cc.key === choice.key;
@@ -132,7 +133,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 dialogService.open({
                     template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.choicecontent.html',
                     show: true,
-                    callback: void(0),
+                    callback: processDetachedContentSave,
                     dialogData: dialogData
                 });
             }
@@ -153,6 +154,12 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 },
                 disabled: false,
                 cursor: "move"
+            }
+
+            function processDetachedContentSave(dialogData) {
+                scope.option.choices = _.reject(scope.option.choices, function(c) { return c.key === dialogData.choice.key; });
+                scope.option.choices.push(dialogData.choice);
+                scope.option.choices = _.sortBy(scope.option.choices, 'sortOrder');
             }
 
             function validate(args) {

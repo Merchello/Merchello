@@ -12,6 +12,7 @@
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
     using Merchello.Core.Services;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
@@ -119,17 +120,7 @@
 
             var page = _productOptionService.GetPage(term, query.CurrentPage + 1, query.ItemsPerPage, query.SortBy, query.SortDirection, sharedOnly);
 
-            var debug = page.Items.Last();
-
-            foreach (var att in debug.Choices)
-            {
-                var ta = att.ToProductAttributeDisplay();
-                var temp = "";
-            }
-
-            var debugMapped = debug.ToProductOptionDisplay();
-
-            return page.ToQueryResultDisplay(AutoMapper.Mapper.Map<IProductOption, ProductOptionDisplay>);
+            return page.ToQueryResultDisplay(MapToProductOptionDisplayForEditor);
         }
 
         /// <summary>
@@ -147,7 +138,7 @@
             var productOption = option.ToProductOption(new ProductOption(option.Name));
             _productOptionService.Save(productOption);
 
-            return productOption.ToProductOptionDisplay();
+            return productOption.ToProductOptionDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -167,7 +158,7 @@
             destination = option.ToProductOption(destination);
             _productOptionService.Save(destination);
 
-            return destination.ToProductOptionDisplay();
+            return destination.ToProductOptionDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -203,7 +194,7 @@
 
             ((ProductOptionService)_productOptionService).Save(destination);
 
-            return destination.ToProductAttributeDisplay();
+            return destination.ToProductAttributeDisplay(contentType, DetachedValuesConversionType.Editor);
             
         }
 
@@ -229,6 +220,11 @@
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
+        }
+
+        private ProductOptionDisplay MapToProductOptionDisplayForEditor(IProductOption option)
+        {
+            return option.ToProductOptionDisplay(DetachedValuesConversionType.Editor);
         }
     }
 }

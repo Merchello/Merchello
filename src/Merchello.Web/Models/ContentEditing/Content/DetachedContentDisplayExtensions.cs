@@ -205,11 +205,18 @@ namespace Merchello.Web.Models.ContentEditing.Content
             {
                 if (contentType.Value != null)
                 {
-                    choice.ValueConversion = conversionType;
-                    choice.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType.Value, choice.DetachedDataValues, conversionType);
+                    choice.EnsureValueConversion(contentType.Value, conversionType);
                 }
                     
             }
+        }
+
+        internal static void EnsureValueConversion(this ProductAttributeDisplay display, IContentType contentType, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            if (display.ValueConversion == conversionType) return;
+
+            display.ValueConversion = conversionType;
+            display.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, display.DetachedDataValues, conversionType);
         }
     }
 }

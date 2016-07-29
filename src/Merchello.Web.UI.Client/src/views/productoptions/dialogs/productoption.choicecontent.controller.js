@@ -8,10 +8,7 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
         $scope.tabs = [];
         $scope.preValuesLoaded = false;
 
-
         var umbracoTabs = [];
-
-        console.info($scope.dialogData);
 
         var editor = {
             detachedContentType: null,
@@ -21,9 +18,7 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
             }
         };
 
-
         $scope.save = function() {
-            console.info('got here');
             var args = {
                 saveMethod: productOptionResource.saveAttributeContent,
                 content: $scope.dialogData.choice,
@@ -33,7 +28,8 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
             };
 
             detachedContentHelper.attributeContentPerformSave(args).then(function(att) {
-                console.info(att);
+                $scope.dialogData.choice = att;
+                $scope.submit($scope.dialogData);
             });
         }
 
