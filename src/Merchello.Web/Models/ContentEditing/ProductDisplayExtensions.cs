@@ -7,6 +7,7 @@
     using System.Text.RegularExpressions;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
@@ -258,7 +259,19 @@
             return destinationProductAttribute;
         }
 
-        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute)
+        /// <summary>
+        /// Maps <see cref="IProductAttribute"/> to <see cref="ProductAttributeDisplay"/>.
+        /// </summary>
+        /// <param name="productAttribute">
+        /// The product attribute.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeDisplay"/>.
+        /// </returns>
+        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
         {            
             return AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
         }
@@ -357,10 +370,18 @@
         /// The <see cref="ProductOptionDisplay"/>.
         /// </returns>
         internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
-        {            
-            var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
-            display.Choices = display.Choices.OrderBy(x => x.SortOrder);
-            return display;
+        {
+            try
+            {
+                var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+                display.Choices = display.Choices.OrderBy(x => x.SortOrder);
+                return display;
+            }
+            catch (Exception ex)
+            {
+                MultiLogHelper.Error(typeof(ProductDisplayExtensions), "Failed to map ProductOption to ProductOptionDisplay", ex);
+                throw;
+            }      
         }
 
         #endregion
@@ -549,52 +570,7 @@
             }         
         }
 
-        /// <summary>
-        /// Utility for setting the IsForBackOfficeEditor property.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="conversionType">
-        /// The value conversion type.
-        /// </param>
-        internal static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-            ((ProductDisplayBase)display).EnsureValueConversion(conversionType);
-            if (display.ProductVariants.Any())
-            {
-                foreach (var variant in display.ProductVariants)
-                {
-                    variant.EnsureValueConversion(conversionType);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Utility for setting the IsForBackOfficeEditor property.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="conversionType">
-        /// The value conversion type.
-        /// </param>
-        internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-           
-            if (display.DetachedContents.Any())
-            {
-                foreach (var dc in display.DetachedContents)
-                {
-                    var contentType = DetachedValuesConverter.Current.GetContentTypeByKey(dc.DetachedContentType.UmbContentType.Key);
-                    if (dc.ValueConversion != conversionType)
-                    {
-                        dc.ValueConversion = conversionType;
-                        if (contentType != null) dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues, conversionType);
-                    }                    
-                }
-            }    
-        }
+    
 
         #endregion
 

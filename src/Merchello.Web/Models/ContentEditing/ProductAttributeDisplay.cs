@@ -12,14 +12,14 @@
     /// <summary>
     /// The product attribute display.
     /// </summary>
-    public class ProductAttributeDisplay //: IHaveDetachedDataValues
+    public class ProductAttributeDisplay : IHaveDetachedDataValues
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductAttributeDisplay"/> class.
         /// </summary>
         public ProductAttributeDisplay()
         {
-            DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>();
+            this.ValueConversion = DetachedValuesConversionType.Db;
         }
 
         /// <summary>

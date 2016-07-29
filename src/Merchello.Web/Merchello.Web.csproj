@@ -356,6 +356,7 @@
     <Compile Include="Models\ContentEditing\Content\ProductAttributeContentSave.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductAttributeContentSaveBinder.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductContentSaveItemBase.cs" />
+    <Compile Include="Models\ContentEditing\Content\DetachedContentDisplayExtensions.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\ProductAttributeDetachedDataValuesResolver.cs" />
     <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />

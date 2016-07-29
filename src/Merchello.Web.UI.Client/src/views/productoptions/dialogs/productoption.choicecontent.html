@@ -1,36 +1,37 @@
 <div class="umb-panel merchello-side-panel"
-     ng-controller="Merchello.ProductOption.Dialogs.ProductOptionChoiceContentController" data-ng-show="ready">
+     ng-controller="Merchello.ProductOption.Dialogs.ProductOptionChoiceContentController">
     <div class="umb-modalcolumn-header">
         <h4>Edit Choice Content</h4>
 
         <!-- Tabs for Variants & Options -->
     </div>
+    <form novalidate name="productAttributeContentForm" data-ng-show="preValuesLoaded" data-ng-submit="save()" val-form-manager>
+        <div class="umb-panel-body with-header with-footer">
 
-    <div class="umb-panel-body with-header with-footer">
+            <div class="product-option-tabs">
+                <merchello-tabs tabs="tabs" width-css="span11"></merchello-tabs>
+            </div>
 
-        <div class="product-option-tabs">
-            <merchello-tabs tabs="tabs" width-css="span11"></merchello-tabs>
+            <umb-property property="property" ng-repeat="property in currentTab.properties">
+                <umb-editor model="property"></umb-editor>
+            </umb-property>
+
         </div>
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
 
-        <umb-property property="property" ng-repeat="property in currentTab.properties">
-            <umb-editor model="property"></umb-editor>
-        </umb-property>
+                    <a href data-ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
 
-    </div>
-    <div class="umb-panel-footer">
-        <div class="umb-el-wrap umb-panel-buttons">
-            <div class="btn-toolbar umb-btn-toolbar pull-right">
+                    <button class="btn btn-primary"
+                            data-ng-click="save()">
+                        <localize key="buttons_save">Save</localize>
+                    </button>
 
-                <a href data-ng-click="close()" class="btn btn-link">
-                    <localize key="general_cancel">Cancel</localize>
-                </a>
-
-                <button class="btn btn-primary"
-                        data-ng-click="save()">
-                    <localize key="buttons_save">Save</localize>
-                </button>
-
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>

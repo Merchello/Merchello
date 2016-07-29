@@ -1525,32 +1525,12 @@ angular.module('merchello.resources').factory('noteResource', [
                         'Failed to save data for product key ' + product.key);
                 },
 
-                saveProductContent: function(product, cultureName, files) {
+                saveProductContent: function(args, files) {
 
+                    var product = args.content;
+                    var cultureName = args.scope.language.isoCode;
                     product.prepForSave();
-                    /*
-                    angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
-                    });
 
-                    angular.forEach(product.productVariants, function(pv) {
-                        if (pv.detachedContents.length > 0) {
-                            angular.forEach(pv.detachedContents, function(pvdc) {
-                                pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
-                            });
-                        }
-
-                        angular.forEach(pv.attributes, function(a) {
-                           a.detachedDataValues = a.detachedDataValues.toArray();
-                        });
-                    });
-
-                    angular.forEach(product.productOptions, function(po) {
-                       angular.forEach(po.choices, function(c) {
-                          c.detachedDataValues = c.detachedDataValues.toArray();
-                       });
-                    });
-                    */
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
                     var deferred = $q.defer();
@@ -1595,8 +1575,10 @@ angular.module('merchello.resources').factory('noteResource', [
                         'Failed to save data for product variant key ' + productVariant.key);
                 },
 
-                saveVariantContent: function(productVariant, cultureName, files) {
+                saveVariantContent: function(args, files) {
 
+                    var productVariant = args.content;
+                    var cultureName = args.scope.language.isoCode;
                     productVariant.prepForSave();
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
@@ -1787,7 +1769,10 @@ angular.module('merchello.resources').factory('productOptionResource',
                     return deferred.promise;
                 },
 
-                saveAttributeContent: function(attribute, contentType, files) {
+                saveAttributeContent: function(args, files) {
+
+                    var attribute = args.content;
+                    var contentType = args.contentType;
 
                     attribute.detachedDataValues = attribute.detachedDataValues.asDetachedValueArray();
 
@@ -1796,7 +1781,7 @@ angular.module('merchello.resources').factory('productOptionResource',
                     var deferred = $q.defer();
                     umbRequestHelper.postMultiPartRequest(
                         url,
-                        { key: "attributeContentItem", value: { display: attribute, contentType: contentType } },
+                        { key: "detachedContentItem", value: { display: attribute, detachedContentType: contentType } },
                         function (data, formData) {
                             //now add all of the assigned files
                             for (var f in files) {

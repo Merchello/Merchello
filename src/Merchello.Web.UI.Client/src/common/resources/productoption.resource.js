@@ -113,7 +113,10 @@ angular.module('merchello.resources').factory('productOptionResource',
                     return deferred.promise;
                 },
 
-                saveAttributeContent: function(attribute, contentType, files) {
+                saveAttributeContent: function(args, files) {
+
+                    var attribute = args.content;
+                    var contentType = args.contentType;
 
                     attribute.detachedDataValues = attribute.detachedDataValues.asDetachedValueArray();
 
@@ -122,7 +125,7 @@ angular.module('merchello.resources').factory('productOptionResource',
                     var deferred = $q.defer();
                     umbRequestHelper.postMultiPartRequest(
                         url,
-                        { key: "attributeContentItem", value: { display: attribute, contentType: contentType } },
+                        { key: "detachedContentItem", value: { display: attribute, detachedContentType: contentType } },
                         function (data, formData) {
                             //now add all of the assigned files
                             for (var f in files) {

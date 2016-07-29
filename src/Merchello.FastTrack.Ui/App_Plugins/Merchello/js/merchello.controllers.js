@@ -6220,15 +6220,18 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
 
 angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductOptionChoiceContentController',
     ['$scope', '$timeout', 'editorState', 'merchelloTabsFactory', 'contentResource', 'productOptionResource',
-        'detachedContentResource', 'detachedContentHelper',
+        'detachedContentResource', 'detachedContentHelper', 'fileManager',
     function($scope, $timeout, editorState, merchelloTabsFactory, contentResource, productOptionResource,
-             detachedContentResource, detachedContentHelper) {
+             detachedContentResource, detachedContentHelper, fileManager) {
 
         $scope.currentTabs = undefined;
         $scope.tabs = [];
-        $scope.ready = false;
+        $scope.preValuesLoaded = false;
+
 
         var umbracoTabs = [];
+
+        console.info($scope.dialogData);
 
         var editor = {
             detachedContentType: null,
@@ -6240,18 +6243,18 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
 
 
         $scope.save = function() {
-
-            console.info('Save attribute content');
-            /*
+            console.info('got here');
             var args = {
-                saveMethod: productOptionResource.saveProductContent,
-                content: product,
+                saveMethod: productOptionResource.saveAttributeContent,
+                content: $scope.dialogData.choice,
+                contentType: editor.detachedContentType,
                 scope: $scope,
                 statusMessage: 'Saving...'
             };
-            */
 
-            //detachedContentHelper.detachedContentPerformSave(args);
+            detachedContentHelper.attributeContentPerformSave(args).then(function(att) {
+                console.info(att);
+            });
         }
 
         function init() {
@@ -6266,7 +6269,7 @@ angular.module('merchello').controller('Merchello.ProductOption.Dialogs.ProductO
                 if (umbracoTabs.length > 0) {
                     switchTab(umbracoTabs[0]);
                 }
-                $scope.ready = true;
+                $scope.preValuesLoaded = true;
             });
         }
 

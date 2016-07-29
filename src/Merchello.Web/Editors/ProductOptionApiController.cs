@@ -8,6 +8,7 @@
     using System.Web.Http.ModelBinding;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
     using Merchello.Core.Services;
@@ -16,8 +17,10 @@
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
     using Merchello.Web.WebApi.Binders;
+    using Merchello.Web.WebApi.Filters;
 
     using Umbraco.Core;
+    using Umbraco.Core.Services;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -32,10 +35,15 @@
         private readonly IProductOptionService _productOptionService;
 
         /// <summary>
+        /// The <see cref="IContentTypeService"/>.
+        /// </summary>
+        private readonly IContentTypeService _contentTypeService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductOptionApiController"/> class.
         /// </summary>
         public ProductOptionApiController()
-            : this(Core.MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current, ApplicationContext.Current.Services.ContentTypeService)
         {
         }
 
@@ -45,10 +53,16 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public ProductOptionApiController(IMerchelloContext merchelloContext)
+        /// <param name="contentTypeService">
+        /// Umbraco's <see cref="IContentTypeService"/>
+        /// </param>
+        public ProductOptionApiController(IMerchelloContext merchelloContext, IContentTypeService contentTypeService)
              : base(merchelloContext)
         {
+            Mandate.ParameterNotNull(contentTypeService, "contentTypeService");
+            _contentTypeService = contentTypeService;
             _productOptionService = merchelloContext.Services.ProductOptionService;
+            
         }
 
         /// <summary>
@@ -105,6 +119,16 @@
 
             var page = _productOptionService.GetPage(term, query.CurrentPage + 1, query.ItemsPerPage, query.SortBy, query.SortDirection, sharedOnly);
 
+            var debug = page.Items.Last();
+
+            foreach (var att in debug.Choices)
+            {
+                var ta = att.ToProductAttributeDisplay();
+                var temp = "";
+            }
+
+            var debugMapped = debug.ToProductOptionDisplay();
+
             return page.ToQueryResultDisplay(AutoMapper.Mapper.Map<IProductOption, ProductOptionDisplay>);
         }
 
@@ -146,11 +170,41 @@
             return destination.ToProductOptionDisplay();
         }
 
+        /// <summary>
+        /// Puts (saves) a product option attribute with content.
+        /// </summary>
+        /// <param name="attributeContentItem">
+        /// The attribute content item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
         public ProductAttributeDisplay PutProductAttributeDetachedContent(
             [ModelBinder(typeof(ProductAttributeContentSaveBinder))] 
             ProductAttributeContentSave attributeContentItem)
         {
-            throw new NotImplementedException();
+            var contentTypeAlias = attributeContentItem.DetachedContentType.UmbContentType.Alias;
+            var contentType = _contentTypeService.GetContentType(contentTypeAlias);
+
+            if (contentType == null)
+            {
+                var nullRef = new NullReferenceException("Could not find ContentType with alias: " + contentTypeAlias);
+                MultiLogHelper.Error<ProductOptionApiController>("Failed to find content type", nullRef);
+                throw nullRef;
+            }
+
+            var attribute = attributeContentItem.Display;
+
+            attribute.DetachedDataValues = DetachedContentHelper.GetUpdatedValues<ProductAttributeContentSave, ProductAttributeDisplay>(contentType, attributeContentItem);
+            var destination = _productOptionService.GetProductAttributeByKey(attribute.Key);
+            destination = attribute.ToProductAttribute(destination);
+
+            ((ProductOptionService)_productOptionService).Save(destination);
+
+            return destination.ToProductAttributeDisplay();
+            
         }
 
         /// <summary>
