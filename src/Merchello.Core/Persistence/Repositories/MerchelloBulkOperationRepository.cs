@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -13,6 +14,7 @@
     using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
@@ -55,6 +57,70 @@
             : base(work, cache, logger, sqlSyntax)
         {
             _factory = factory;
+        }
+
+        protected void BulkInsertRecordsWithKey<T>(IEnumerable<T> collection)
+        {
+            //don't do anything if there are no records.
+            if (collection.Any() == false)
+                return;
+
+            using (var tr = Database.GetTransaction())
+            {
+                BulkInsertRecordsWithKey(collection, tr, true);
+            }
+        }
+
+        /// <summary>
+        /// Performs the bulk insertion in the context of a current transaction with an optional parameter to complete the transaction
+        /// when finished
+        /// </summary>
+        protected void BulkInsertRecordsWithKey<T>(IEnumerable<T> collection, Transaction tr, bool commitTrans = false)
+        {
+            //don't do anything if there are no records.
+            var dtos = collection as T[] ?? collection.ToArray();
+            if (dtos.Any() == false)
+                return;
+
+            try
+            {
+                //if it is sql ce or it is a sql server version less than 2008, we need to do individual inserts.
+                var sqlServerSyntax = SqlSyntax as SqlServerSyntaxProvider;
+                if (sqlServerSyntax == null || SqlSyntax is SqlCeSyntaxProvider)
+                {
+                    //SqlCe doesn't support bulk insert statements!
+                    foreach (var poco in dtos)
+                    {
+                        Database.Insert(poco);
+                    }
+                }
+                else
+                {
+                    string[] sqlStatements;
+                    var cmds = GenerateBulkInsertCommand(dtos, Database.Connection, out sqlStatements);
+                    for (var i = 0; i < sqlStatements.Length; i++)
+                    {
+                        using (var cmd = cmds[i])
+                        {
+                            cmd.CommandText = sqlStatements[i];
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                if (commitTrans)
+                {
+                    tr.Complete();
+                }
+            }
+            catch
+            {
+                if (commitTrans)
+                {
+                    tr.Dispose();
+                }
+                throw;
+            }
         }
 
         /// <summary>
@@ -141,5 +207,161 @@
         /// This needs to be done in the typed repository as some entities override the method defined in EntityBase
         /// </remarks>
         protected abstract void ApplyAddingOrUpdating(TransactionType transactionType, TEntity entity);
+
+
+        private IDbCommand[] GenerateBulkInsertCommand<T>(
+            IEnumerable<T> collection,
+            IDbConnection connection,
+            out string[] sql)
+        {
+            //A filter used below a few times to get all columns except result cols and not the primary key if it is auto-incremental
+            Func<Database.PocoData, KeyValuePair<string, Database.PocoColumn>, bool> includeColumn = (data, column) =>
+            {
+                if (column.Value.ResultColumn) return false;
+                if (data.TableInfo.AutoIncrement && column.Key == data.TableInfo.PrimaryKey) return false;
+                return true;
+            };
+
+            var pd = Umbraco.Core.Persistence.Database.PocoData.ForType(typeof(T));
+            var tableName = Database.EscapeTableName(pd.TableInfo.TableName);
+
+            //get all columns to include and format for sql
+            var cols = string.Join(", ",
+                pd.Columns
+                .Where(c => includeColumn(pd, c))
+                .Select(c => tableName + "." + Database.EscapeSqlIdentifier(c.Key)).ToArray());
+
+            var itemArray = collection.ToArray();
+
+            //calculate number of parameters per item
+            var paramsPerItem = pd.Columns.Count(i => includeColumn(pd, i));
+
+            //Example calc:
+            // Given: we have 4168 items in the itemArray, each item contains 8 command parameters (values to be inserterted)                
+            // 2100 / 8 = 262.5
+            // Math.Floor(2100 / 8) = 262 items per trans
+            // 4168 / 262 = 15.908... = there will be 16 trans in total
+
+            //all items will be included if we have disabled db parameters
+            var itemsPerTrans = Math.Floor(2000.00 / paramsPerItem);
+            //there will only be one transaction if we have disabled db parameters
+            var numTrans = Math.Ceiling(itemArray.Length / itemsPerTrans);
+
+            var sqlQueries = new List<string>();
+            var commands = new List<IDbCommand>();
+
+            for (var tIndex = 0; tIndex < numTrans; tIndex++)
+            {
+                var itemsForTrans = itemArray
+                    .Skip(tIndex * (int)itemsPerTrans)
+                    .Take((int)itemsPerTrans);
+
+                var cmd = Database.CreateCommand(connection, "");
+                var pocoValues = new List<string>();
+                var index = 0;
+                foreach (var poco in itemsForTrans)
+                {
+                    var values = new List<string>();
+                    //get all columns except result cols and not the primary key if it is auto-incremental
+                    foreach (var i in pd.Columns.Where(x => includeColumn(pd, x)))
+                    {
+                        AddParam(cmd, i.Value.GetValue(poco), "@");
+                        values.Add(string.Format("{0}{1}", "@", index++));
+                    }
+                    pocoValues.Add("(" + string.Join(",", values.ToArray()) + ")");
+                }
+
+                var sqlResult = string.Format("INSERT INTO {0} ({1}) VALUES {2}", tableName, cols, string.Join(", ", pocoValues));
+                sqlQueries.Add(sqlResult);
+                commands.Add(cmd);
+            }
+
+            sql = sqlQueries.ToArray();
+
+            return commands.ToArray();
+        }
+
+
+        private void AddParam(IDbCommand cmd, object item, string ParameterPrefix)
+        {
+            // Convert value to from poco type to db type
+            if (Umbraco.Core.Persistence.Database.Mapper != null && item != null)
+            {
+                var fn = Umbraco.Core.Persistence.Database.Mapper.GetToDbConverter(item.GetType());
+                if (fn != null)
+                    item = fn(item);
+            }
+
+            // Support passed in parameters
+            var idbParam = item as IDbDataParameter;
+            if (idbParam != null)
+            {
+                idbParam.ParameterName = string.Format("{0}{1}", ParameterPrefix, cmd.Parameters.Count);
+                cmd.Parameters.Add(idbParam);
+                return;
+            }
+
+            var p = cmd.CreateParameter();
+            p.ParameterName = string.Format("{0}{1}", ParameterPrefix, cmd.Parameters.Count);
+            if (item == null)
+            {
+                p.Value = DBNull.Value;
+            }
+            else
+            {
+                var t = item.GetType();
+                if (t.IsEnum)       // PostgreSQL .NET driver wont cast enum to int
+                {
+                    p.Value = (int)item;
+                }
+                else if (t == typeof(Guid))
+                {
+                    p.Value = item.ToString();
+                    p.DbType = DbType.String;
+                    p.Size = 40;
+                }
+                else if (t == typeof(string))
+                {
+                    // out of memory exception occurs if trying to save more than 4000 characters to SQL Server CE NText column. 
+                    //Set before attempting to set Size, or Size will always max out at 4000
+                    if ((item as string).Length + 1 > 4000 && p.GetType().Name == "SqlCeParameter")
+                        p.GetType().GetProperty("SqlDbType").SetValue(p, SqlDbType.NText, null);
+
+                    p.Size = (item as string).Length + 1;
+                    if (p.Size < 4000)
+                        p.Size = Math.Max((item as string).Length + 1, 4000);       // Help query plan caching by using common size
+
+                    p.Value = item;
+                }
+                else if (t == typeof(AnsiString))
+                {
+                    // Thanks @DataChomp for pointing out the SQL Server indexing performance hit of using wrong string type on varchar
+                    p.Size = Math.Max((item as AnsiString).Value.Length + 1, 4000);
+                    p.Value = (item as AnsiString).Value;
+                    p.DbType = DbType.AnsiString;
+                }
+                else if (t == typeof(bool))
+                {
+                    p.Value = ((bool)item) ? 1 : 0;
+                }
+                else if (item.GetType().Name == "SqlGeography") //SqlGeography is a CLR Type
+                {
+                    p.GetType().GetProperty("UdtTypeName").SetValue(p, "geography", null); //geography is the equivalent SQL Server Type
+                    p.Value = item;
+                }
+
+                else if (item.GetType().Name == "SqlGeometry") //SqlGeometry is a CLR Type
+                {
+                    p.GetType().GetProperty("UdtTypeName").SetValue(p, "geometry", null); //geography is the equivalent SQL Server Type
+                    p.Value = item;
+                }
+                else
+                {
+                    p.Value = item;
+                }
+            }
+
+            cmd.Parameters.Add(p);
+        }
     }
 }

@@ -2303,8 +2303,8 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
     };
 });
 angular.module('merchello.directives').directive("productOptionsAddEdit",
-    ['$timeout', 'eventsService', 'productOptionResource', 'productAttributeDisplayBuilder',
-    function($timeout, eventsService, productOptionResource, productAttributeDisplayBuilder) {
+    ['$timeout', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
+    function($timeout, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {
     return {
         restrict: 'E',
         replace: true,
@@ -2315,7 +2315,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
         templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.addedit.tpl.html',
         link: function (scope, elm, attr) {
 
-            scope.contentType = {};
+            scope.contentType = undefined;
             scope.choiceName = '';
             scope.wasFormSubmitted = false;
             scope.ready = false;
@@ -2404,6 +2404,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             };
 
             scope.showDelete = function(choice) {
+
               if (scope.counts) {
                   var fnd = _.find(scope.counts.choices, function(cc) {
                       return cc.key === choice.key;
@@ -2413,8 +2414,11 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                   } else {
                       return true;
                   }
+              } else {
+                  return false;
               }
             };
+
 
             // sets the default choice property
             scope.setSelectedChoice = function() {
@@ -2423,6 +2427,20 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 scope.selectedAttribute.previous = scope.selectedAttribute.current;
             };
 
+
+            scope.addDetachedContent = function(choice) {
+                var dialogData = {
+                    choice: choice,
+                    contentType: scope.contentType
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.choicecontent.html',
+                    show: true,
+                    callback: processDetachedContentSave,
+                    dialogData: dialogData
+                });
+            }
 
             // Saves an option
 
@@ -2440,6 +2458,12 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 },
                 disabled: false,
                 cursor: "move"
+            }
+
+            function processDetachedContentSave(dialogData) {
+                scope.option.choices = _.reject(scope.option.choices, function(c) { return c.key === dialogData.choice.key; });
+                scope.option.choices.push(dialogData.choice);
+                scope.option.choices = _.sortBy(scope.option.choices, 'sortOrder');
             }
 
             function validate(args) {
@@ -2532,6 +2556,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                             var fnd = _.find(scope.productOption.choices, function(poc) {
                                 return poc.key === soc.key;
                             });
+
 
                             if (fnd) {
                                 soc.selected = true;
@@ -2776,6 +2801,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     // todo - hashkeys sometimes don't map here
                     var option = angular.extend(scope.option, scope.sharedOption);
 
+
                     option.choices = _.filter(option.choices, function(oc) {
                        var exists = _.find(scope.selectedChoices, function (sc) {
                           return sc === oc.key;
@@ -2786,6 +2812,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                             return oc;
                         }
                     });
+
 
                     return option;
                 }

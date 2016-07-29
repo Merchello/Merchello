@@ -5,15 +5,23 @@
     using System.Net;
     using System.Net.Http;
     using System.Web.Http;
+    using System.Web.Http.ModelBinding;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
     using Merchello.Core.Services;
+    using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.ContentEditing;
+    using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.Querying;
     using Merchello.Web.WebApi;
+    using Merchello.Web.WebApi.Binders;
+    using Merchello.Web.WebApi.Filters;
 
+    using Umbraco.Core;
+    using Umbraco.Core.Services;
     using Umbraco.Web.Mvc;
 
     /// <summary>
@@ -28,10 +36,15 @@
         private readonly IProductOptionService _productOptionService;
 
         /// <summary>
+        /// The <see cref="IContentTypeService"/>.
+        /// </summary>
+        private readonly IContentTypeService _contentTypeService;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductOptionApiController"/> class.
         /// </summary>
         public ProductOptionApiController()
-            : this(Core.MerchelloContext.Current)
+            : this(Core.MerchelloContext.Current, ApplicationContext.Current.Services.ContentTypeService)
         {
         }
 
@@ -41,10 +54,16 @@
         /// <param name="merchelloContext">
         /// The merchello context.
         /// </param>
-        public ProductOptionApiController(IMerchelloContext merchelloContext)
+        /// <param name="contentTypeService">
+        /// Umbraco's <see cref="IContentTypeService"/>
+        /// </param>
+        public ProductOptionApiController(IMerchelloContext merchelloContext, IContentTypeService contentTypeService)
              : base(merchelloContext)
         {
+            Mandate.ParameterNotNull(contentTypeService, "contentTypeService");
+            _contentTypeService = contentTypeService;
             _productOptionService = merchelloContext.Services.ProductOptionService;
+            
         }
 
         /// <summary>
@@ -101,7 +120,7 @@
 
             var page = _productOptionService.GetPage(term, query.CurrentPage + 1, query.ItemsPerPage, query.SortBy, query.SortDirection, sharedOnly);
 
-            return page.ToQueryResultDisplay(AutoMapper.Mapper.Map<IProductOption, ProductOptionDisplay>);
+            return page.ToQueryResultDisplay(MapToProductOptionDisplayForEditor);
         }
 
         /// <summary>
@@ -119,7 +138,7 @@
             var productOption = option.ToProductOption(new ProductOption(option.Name));
             _productOptionService.Save(productOption);
 
-            return productOption.ToProductOptionDisplay();
+            return productOption.ToProductOptionDisplay(DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -135,10 +154,48 @@
         public ProductOptionDisplay PutProductOption(ProductOptionDisplay option)
         {
             var destination = _productOptionService.GetByKey(option.Key);
+            
             destination = option.ToProductOption(destination);
             _productOptionService.Save(destination);
 
-            return destination.ToProductOptionDisplay();
+            return destination.ToProductOptionDisplay(DetachedValuesConversionType.Editor);
+        }
+
+        /// <summary>
+        /// Puts (saves) a product option attribute with content.
+        /// </summary>
+        /// <param name="attributeContentItem">
+        /// The attribute content item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeDisplay"/>.
+        /// </returns>
+        [FileUploadCleanupFilter]
+        [HttpPost, HttpPut]
+        public ProductAttributeDisplay PutProductAttributeDetachedContent(
+            [ModelBinder(typeof(ProductAttributeContentSaveBinder))] 
+            ProductAttributeContentSave attributeContentItem)
+        {
+            var contentTypeAlias = attributeContentItem.DetachedContentType.UmbContentType.Alias;
+            var contentType = _contentTypeService.GetContentType(contentTypeAlias);
+
+            if (contentType == null)
+            {
+                var nullRef = new NullReferenceException("Could not find ContentType with alias: " + contentTypeAlias);
+                MultiLogHelper.Error<ProductOptionApiController>("Failed to find content type", nullRef);
+                throw nullRef;
+            }
+
+            var attribute = attributeContentItem.Display;
+
+            attribute.DetachedDataValues = DetachedContentHelper.GetUpdatedValues<ProductAttributeContentSave, ProductAttributeDisplay>(contentType, attributeContentItem);
+            var destination = _productOptionService.GetProductAttributeByKey(attribute.Key);
+            destination = attribute.ToProductAttribute(destination);
+
+            ((ProductOptionService)_productOptionService).Save(destination);
+
+            return destination.ToProductAttributeDisplay(contentType, DetachedValuesConversionType.Editor);
+            
         }
 
         /// <summary>
@@ -163,6 +220,11 @@
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
+        }
+
+        private ProductOptionDisplay MapToProductOptionDisplayForEditor(IProductOption option)
+        {
+            return option.ToProductOptionDisplay(DetachedValuesConversionType.Editor);
         }
     }
 }

@@ -7,6 +7,7 @@
     using System.Text.RegularExpressions;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
@@ -235,6 +236,21 @@
             {
                 destinationProductAttribute.Key = productAttributeDisplay.Key;
             }
+
+            var validPropertyTypeAliases = productAttributeDisplay.DetachedDataValues.Select(x => x.Key);
+            var removeAtts = destinationProductAttribute.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+            foreach (var remove in removeAtts)
+            {
+                destinationProductAttribute.DetachedDataValues.RemoveValue(remove.Key);
+            }
+
+            foreach (var item in productAttributeDisplay.DetachedDataValues)
+            {
+                if (!item.Key.IsNullOrWhiteSpace())
+                    destinationProductAttribute.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
+            }
+
+
             destinationProductAttribute.Name = productAttributeDisplay.Name;
             destinationProductAttribute.Sku = productAttributeDisplay.Sku;
             destinationProductAttribute.OptionKey = productAttributeDisplay.OptionKey;
@@ -243,9 +259,26 @@
             return destinationProductAttribute;
         }
 
+        /// <summary>
+        /// Maps <see cref="IProductAttribute"/> to <see cref="ProductAttributeDisplay"/>.
+        /// </summary>
+        /// <param name="productAttribute">
+        /// The product attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeDisplay"/>.
+        /// </returns>
         internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute)
-        {            
-            return AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
+        {
+            return productAttribute.ToProductAttributeDisplay(null);
+        }
+
+        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute, IContentType contentType, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var display = AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
+            if (contentType == null) return display;
+            display.EnsureValueConversion(contentType, conversionType);
+            return display;
         }
 
 
@@ -338,12 +371,16 @@
         /// <param name="productOption">
         /// The product option.
         /// </param>
+        /// <param name="conversionType">
+        /// The property editor conversion type.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductOptionDisplay"/>.
         /// </returns>
-        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
-        {            
+        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
             var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+            display.EnsureValueConversion(conversionType);
             display.Choices = display.Choices.OrderBy(x => x.SortOrder);
             return display;
         }
@@ -534,52 +571,7 @@
             }         
         }
 
-        /// <summary>
-        /// Utility for setting the IsForBackOfficeEditor property.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="conversionType">
-        /// The value conversion type.
-        /// </param>
-        internal static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-            ((ProductDisplayBase)display).EnsureValueConversion(conversionType);
-            if (display.ProductVariants.Any())
-            {
-                foreach (var variant in display.ProductVariants)
-                {
-                    variant.EnsureValueConversion(conversionType);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Utility for setting the IsForBackOfficeEditor property.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="conversionType">
-        /// The value conversion type.
-        /// </param>
-        internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-           
-            if (display.DetachedContents.Any())
-            {
-                foreach (var dc in display.DetachedContents)
-                {
-                    var contentType = DetachedValuesConverter.Current.GetContentTypeByKey(dc.DetachedContentType.UmbContentType.Key);
-                    if (dc.ValueConversion != conversionType)
-                    {
-                        dc.ValueConversion = conversionType;
-                        if (contentType != null) dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues, conversionType);
-                    }                    
-                }
-            }    
-        }
+    
 
         #endregion
 

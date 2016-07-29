@@ -286,7 +286,7 @@
 
             // save any remaining variants changes in the variants collection
             if (product.ProductVariants.Any())
-            _productVariantService.Save(product.ProductVariants);
+            _productVariantService.Save(product.ProductVariants, false);
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
 
@@ -1606,6 +1606,7 @@
                     product.ProductVariants.Remove(remover.Sku);
 
                 }
+
                 _productVariantService.Delete(removers);
             }
 
@@ -1622,7 +1623,6 @@
                 foreach (var inv in product.CatalogInventories)
                 {
                     variant.AddToCatalogInventory(inv.CatalogKey);
-
                 }
             }
 

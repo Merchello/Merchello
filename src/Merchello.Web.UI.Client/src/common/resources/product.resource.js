@@ -107,9 +107,20 @@
                  * @description Saves / updates product with an api call back to the server
                  **/
                 save: function (product) {
+
+                    product.prepForSave();
+
+                    /*
                     angular.forEach(product.detachedContents, function(dc) {
                         dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
                     });
+
+                    angular.forEach(product.productOptions, function(po) {
+                        angular.forEach(po.choices, function(c) {
+                            c.detachedDataValues = c.detachedDataValues.asDetachedValueArray();
+                        })
+                    });
+                    */
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProduct';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -118,18 +129,12 @@
                         'Failed to save data for product key ' + product.key);
                 },
 
-                saveProductContent: function(product, cultureName, files) {
-                    angular.forEach(product.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
-                    });
+                saveProductContent: function(args, files) {
 
-                    angular.forEach(product.productVariants, function(pv) {
-                      if (pv.detachedContents.length > 0) {
-                          angular.forEach(pv.detachedContents, function(pvdc) {
-                            pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
-                          });
-                      }
-                    });
+                    var product = args.content;
+                    var cultureName = args.scope.language.isoCode;
+                    product.prepForSave();
+
 
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductWithDetachedContent';
                     var deferred = $q.defer();
@@ -156,15 +161,16 @@
 
                 },
 
+
                 /**
                  * @ngdoc method
                  * @name saveVariant
                  * @description Saves / updates product variant with an api call back to the server
                  **/
                 saveVariant: function (productVariant) {
-                    angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
-                    });
+
+                    productVariant.prepForSave();
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariant';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -173,10 +179,12 @@
                         'Failed to save data for product variant key ' + productVariant.key);
                 },
 
-                saveVariantContent: function(productVariant, cultureName, files) {
-                    angular.forEach(productVariant.detachedContents, function(dc) {
-                        dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
-                    });
+                saveVariantContent: function(args, files) {
+
+                    var productVariant = args.content;
+                    var cultureName = args.scope.language.isoCode;
+                    productVariant.prepForSave();
+
                     var url = Umbraco.Sys.ServerVariables['merchelloUrls']['merchelloProductApiBaseUrl'] + 'PutProductVariantWithDetachedContent';
 
                     var deferred = $q.defer();

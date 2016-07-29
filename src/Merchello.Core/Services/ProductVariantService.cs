@@ -265,7 +265,7 @@
                     {
                         repository.AddOrUpdate(variant);
                     }
-
+                    //uow.Commit();
                     uow.CommitBulk<IProductVariant>();
                 }
             }

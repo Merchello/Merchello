@@ -194,8 +194,11 @@
             }
 
             // insert the variants
-            Database.BulkInsertRecords<ProductVariantDto>(dtos);
-            Database.BulkInsertRecords<ProductVariantIndexDto>(dtos.Select(v => v.ProductVariantIndexDto));
+            BulkInsertRecordsWithKey<ProductVariantDto>(dtos);
+            BulkInsertRecordsWithKey<ProductVariantIndexDto>(dtos.Select(v => v.ProductVariantIndexDto));
+
+            // We have to look up the examine ids
+            var idDtos = Database.Fetch<ProductVariantIndexDto>("WHERE productVariantKey IN (@pvkeys)", new { @pvkeys = dtos.Select(x => x.Key) });
 
             foreach (var entity in productVariants)
             {
@@ -203,7 +206,11 @@
                 // ReSharper disable once PossibleNullReferenceException
                 entity.Key = dto.Key; // to set HasIdentity
 
-                ((ProductVariant)entity).ExamineId = dto.ProductVariantIndexDto.Id;
+                var productVariantIndexDto = idDtos.FirstOrDefault(id => id.ProductVariantKey == dto.Key);
+                if (productVariantIndexDto != null)
+                {
+                    ((ProductVariant)entity).ExamineId = productVariantIndexDto.Id;
+                }
 
                 foreach (var inv in entity.CatalogInventories)
                 {
@@ -228,7 +235,7 @@
                 xrefs.AddRange(associations);
             }
 
-            Database.BulkInsertRecords<ProductVariant2ProductAttributeDto>(xrefs);
+            BulkInsertRecordsWithKey<ProductVariant2ProductAttributeDto>(xrefs);
 
             SaveCatalogInventory(productVariants);
 

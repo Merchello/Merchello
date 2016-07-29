@@ -176,6 +176,17 @@
             return missing;
         }
 
+
+        function prepForSave() {
+            angular.forEach(this.detachedContents, function(dc) {
+                dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+            });
+
+            angular.forEach(this.attributes, function(a) {
+                a.detachedDataValues = a.detachedDataValues.toArray();
+            });
+        }
+
         return {
             getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
@@ -185,7 +196,8 @@
             hasDetachedContent: hasDetachedContent,
             assertLanguageContent: assertLanguageContent,
             detachedContentType: detachedContentType,
-            getDetachedContent: getDetachedContent
+            getDetachedContent: getDetachedContent,
+            prepForSave: prepForSave
         };
     }());
 

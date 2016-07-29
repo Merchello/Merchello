@@ -69,6 +69,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                                 return poc.key === soc.key;
                             });
 
+
                             if (fnd) {
                                 soc.selected = true;
                                 scope.selectedChoices.push(soc.key);
@@ -312,6 +313,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                     // todo - hashkeys sometimes don't map here
                     var option = angular.extend(scope.option, scope.sharedOption);
 
+
                     option.choices = _.filter(option.choices, function(oc) {
                        var exists = _.find(scope.selectedChoices, function (sc) {
                           return sc === oc.key;
@@ -322,6 +324,7 @@ angular.module('merchello.directives').directive('productOptionsAssociateShared'
                             return oc;
                         }
                     });
+
 
                     return option;
                 }

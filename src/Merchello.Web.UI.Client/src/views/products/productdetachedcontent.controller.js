@@ -155,7 +155,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
 
             // The content type scaffold
             function loadScaffold() {
-                console.info($scope.currentTab);
+
                 // every detached content associated with a variant MUST share the same content type,
                 var detachedContentType = $scope.productVariant.detachedContentType();
 

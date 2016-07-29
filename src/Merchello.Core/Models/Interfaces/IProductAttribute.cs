@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -40,6 +41,12 @@
         /// </summary>
         [DataMember]
         bool IsDefaultChoice { get; set; }
+
+        /// <summary>
+        /// Gets the values.
+        /// </summary>
+        [DataMember]
+        DetachedDataValuesCollection DetachedDataValues { get; }
 
         /// <summary>
         /// Returns a clone of the attribute.

@@ -40,7 +40,6 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductOptionsManag
         }
 
         $scope.doEdit = function(option) {
-
             executeReload(function() {
                 var options = _.reject($scope.product.productOptions, function(po) {
                    return po.key === option.key;

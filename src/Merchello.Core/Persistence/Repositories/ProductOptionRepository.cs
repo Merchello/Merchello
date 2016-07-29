@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
     using Merchello.Core.Models.EntityBase;
@@ -167,6 +168,36 @@
         }
 
         /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        public IProductAttribute GetProductAttributeByKey(Guid key)
+        {
+            return GetProductAttributes(new[] { key }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="attributeKeys">
+        /// The attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        public IEnumerable<IProductAttribute> GetProductAttributes(Guid[] attributeKeys)
+        {
+            var dtos = Database.Fetch<ProductAttributeDto>("SELECT * FROM merchProductAttribute WHERE pk IN (@akeys)", new { @akeys = attributeKeys });
+            var factory = new ProductAttributeFactory();
+            return dtos.Select(dto => factory.BuildEntity(dto));
+        }
+
+        /// <summary>
         /// Gets use count information for an option and its choices.
         /// </summary>
         /// <param name="option">
@@ -253,6 +284,27 @@
             Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @key", new { @key = variant.Key });
 
             return GetProductKeysForCacheRefresh(sharedOptions.Select(x => x.Key).ToArray());
+        }
+
+        /// <summary>
+        /// Updates an attribute.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        public void UpdateAttribute(IProductAttribute attribute)
+        {
+            if (!attribute.HasIdentity)
+            {
+                var invalid = new InvalidOperationException("Cannot update an attribute that does not have an identity");
+                MultiLogHelper.Error<ProductOptionRepository>("Attempt to update a new attribute", invalid);
+                throw invalid;
+            }
+
+            var factory = new ProductAttributeFactory();
+            var dto = factory.BuildDto(attribute);
+            Database.Update(dto);
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductOption>(attribute.OptionKey));
         }
 
         /// <summary>

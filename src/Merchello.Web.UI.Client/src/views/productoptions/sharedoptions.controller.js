@@ -36,7 +36,6 @@ angular.module('merchello').controller('Merchello.Backoffice.SharedProductOption
         $scope.edit = function(option) {
             // this is the toggle to relead in the directive
             $scope.preValuesLoaded = false;
-
             productOptionResource.saveProductOption(option).then(function(o) {
                 $scope.preValuesLoaded = true;
             });

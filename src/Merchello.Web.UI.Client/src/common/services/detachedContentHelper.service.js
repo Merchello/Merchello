@@ -2,25 +2,66 @@ angular.module('merchello.services').factory('detachedContentHelper',
     ['$q', 'fileManager', 'formHelper',
     function($q, fileManager, formHelper) {
 
+        function validate(args) {
+            if (!angular.isObject(args)) {
+                throw "args must be an object";
+            }
+            if (!args.scope) {
+                throw "args.scope is not defined";
+            }
+            if (!args.content) {
+                throw "args.content is not defined";
+            }
+            if (!args.statusMessage) {
+                throw "args.statusMessage is not defined";
+            }
+            if (!args.saveMethod) {
+                throw "args.saveMethod is not defined";
+            }
+        }
+
         return {
+
+            attributeContentPerformSave: function(args) {
+                validate(args);
+
+                var deferred = $q.defer();
+                if (args.scope.preValuesLoaded && formHelper.submitForm({ scope: args.scope, statusMessage: args.statusMessage })) {
+                    args.scope.preValuesLoaded = false;
+
+                    // get any files from the fileManager
+                    var files = fileManager.getFiles();
+
+                    angular.forEach(args.scope.contentTabs, function(ct) {
+                        angular.forEach(ct.properties, function (p) {
+                            if (typeof p.value !== "function") {
+                                args.scope.dialogData.choice.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
+                            }
+                        });
+                    });
+
+                    args.saveMethod(args, files).then(function(data) {
+
+                        formHelper.resetForm({ scope: args.scope, notifications: data.notifications });
+                        args.scope.preValuesLoaded = true;
+                        deferred.resolve(data);
+
+                    }, function (err) {
+
+                        args.scope.preValuesLoaded = true;
+                        deferred.reject(err);
+                    });
+
+                } else {
+                    deferred.reject();
+                }
+
+                return deferred.promise;
+            },
 
             detachedContentPerformSave: function(args) {
 
-                if (!angular.isObject(args)) {
-                    throw "args must be an object";
-                }
-                if (!args.scope) {
-                    throw "args.scope is not defined";
-                }
-                if (!args.content) {
-                    throw "args.content is not defined";
-                }
-                if (!args.statusMessage) {
-                    throw "args.statusMessage is not defined";
-                }
-                if (!args.saveMethod) {
-                    throw "args.saveMethod is not defined";
-                }
+                validate(args);
 
                 var deferred = $q.defer();
                 if (args.scope.preValuesLoaded && formHelper.submitForm({ scope: args.scope, statusMessage: args.statusMessage })) {
@@ -37,7 +78,6 @@ angular.module('merchello.services').factory('detachedContentHelper',
                             args.scope.detachedContent.canBeRendered = _.find(ct.properties, function(r) { return r.alias === 'canBeRendered'; }).value === '1' ? true : false;
                         } else {
                             angular.forEach(ct.properties, function (p) {
-                                console.info(p);
                                 if (typeof p.value !== "function") {
                                     args.scope.detachedContent.detachedDataValues.setValue(p.alias, angular.toJson(p.value));
                                 }
@@ -45,7 +85,8 @@ angular.module('merchello.services').factory('detachedContentHelper',
                         }
                     });
 
-                    args.saveMethod(args.content, args.scope.language.isoCode, files).then(function(data) {
+                    //args.saveMethod(args.content, args.scope.language.isoCode, files)
+                    args.saveMethod(args, files).then(function(data) {
                         
                         formHelper.resetForm({ scope: args.scope, notifications: data.notifications });
                         args.scope.preValuesLoaded = true;

@@ -2275,6 +2275,10 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
     };
 
     angular.module('merchello.models').constant('CatalogInventoryDisplay', CatalogInventoryDisplay);
+/**
+ * Created by rusty on 7/27/2016.
+ */
+
     /**
      * @ngdoc model
      * @name ProductAttributeDisplay
@@ -2290,6 +2294,7 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
         self.name = '';
         self.sku = '';
         self.sortOrder = 0;
+        self.detachedDataValues = {};
         self.isDefaultChoice = false;
     };
 
@@ -2504,6 +2509,30 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             }
         }
 
+        function prepForSave() {
+            angular.forEach(this.detachedContents, function(dc) {
+                dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+            });
+
+            angular.forEach(this.productVariants, function(pv) {
+                if (pv.detachedContents.length > 0) {
+                    angular.forEach(pv.detachedContents, function(pvdc) {
+                        pvdc.detachedDataValues = pvdc.detachedDataValues.toArray();
+                    });
+                }
+
+                angular.forEach(pv.attributes, function(a) {
+                    a.detachedDataValues = a.detachedDataValues.toArray();
+                });
+            });
+
+            angular.forEach(this.productOptions, function(po) {
+                angular.forEach(po.choices, function(c) {
+                    c.detachedDataValues = c.detachedDataValues.toArray();
+                });
+            });
+        }
+
         return {
             hasVariants: hasVariants,
             totalInventory: totalInventory,
@@ -2517,7 +2546,8 @@ angular.module('merchello.models').constant('OfferProviderDisplay', OfferProvide
             getProductVariant: getProductVariant,
             taxableVariants: taxableVariants,
             canBeRendered: canBeRendered,
-            ensureCatalogInventory: ensureCatalogInventory
+            ensureCatalogInventory: ensureCatalogInventory,
+            prepForSave: prepForSave
         };
     }());
 
@@ -2796,6 +2826,17 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             return missing;
         }
 
+
+        function prepForSave() {
+            angular.forEach(this.detachedContents, function(dc) {
+                dc.detachedDataValues = dc.detachedDataValues.asDetachedValueArray();
+            });
+
+            angular.forEach(this.attributes, function(a) {
+                a.detachedDataValues = a.detachedDataValues.toArray();
+            });
+        }
+
         return {
             getProductForMasterVariant: getProductForMasterVariant,
             ensureCatalogInventory: ensureCatalogInventory,
@@ -2805,7 +2846,8 @@ angular.module('merchello.models').constant('ProductVariantDetachedContentDispla
             hasDetachedContent: hasDetachedContent,
             assertLanguageContent: assertLanguageContent,
             detachedContentType: detachedContentType,
-            getDetachedContent: getDetachedContent
+            getDetachedContent: getDetachedContent,
+            prepForSave: prepForSave
         };
     }());
 
@@ -5042,6 +5084,10 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            function createDefault() {
+                return new Constructor();
+            }
+
             // creates tabs for the product listing page
             function createProductListTabs() {
                 var tabs = new Constructor();
@@ -5166,6 +5212,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createDefault: createDefault,
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
@@ -5493,16 +5540,29 @@ angular.module('merchello.models').factory('notificationGatewayProviderDisplayBu
      * A utility service that builds ProductAttributeDisplay models
      */
     angular.module('merchello.models').factory('productAttributeDisplayBuilder',
-        ['genericModelBuilder', 'ProductAttributeDisplay',
-        function(genericModelBuilder, ProductAttributeDisplay) {
+        ['genericModelBuilder', 'extendedDataDisplayBuilder', 'ProductAttributeDisplay',
+        function(genericModelBuilder, extendedDataDisplayBuilder, ProductAttributeDisplay) {
 
             var Constructor = ProductAttributeDisplay;
             return {
                 createDefault: function() {
-                    return new Constructor();
+                    var att = new Constructor();
+                    att.detachedDataValues = extendedDataDisplayBuilder.createDefault();
+                    return att;
                 },
                 transform: function(jsonResult) {
-                    return genericModelBuilder.transform(jsonResult, Constructor);
+                    var results = [];
+                    if (angular.isArray(jsonResult)) {
+                        for(var i = 0; i < jsonResult.length; i++) {
+                            var result = genericModelBuilder.transform(jsonResult[i], Constructor);
+                            result.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult[i].detachedDataValues)
+                            results.push(result);
+                        }
+                    } else {
+                        results = genericModelBuilder.transform(jsonResult, Constructor);
+                        results.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult.detachedDataValues);
+                    }
+                    return results;
                 }
             };
     }]);

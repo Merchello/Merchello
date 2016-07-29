@@ -4,6 +4,10 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
             var Constructor = MerchelloTabCollection;
 
+            function createDefault() {
+                return new Constructor();
+            }
+
             // creates tabs for the product listing page
             function createProductListTabs() {
                 var tabs = new Constructor();
@@ -128,6 +132,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
 
 
             return {
+                createDefault: createDefault,
                 createNewProductEditorTabs: createNewProductEditorTabs,
                 createProductListTabs: createProductListTabs,
                 createProductEditorTabs: createProductEditorTabs,
