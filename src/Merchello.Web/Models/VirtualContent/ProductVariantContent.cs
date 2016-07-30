@@ -32,14 +32,17 @@
         /// <param name="contentType">
         /// The content type.
         /// </param>
+        /// <param name="optionContentTypes">
+        /// The option Content Types.
+        /// </param>
         /// <param name="cultureName">
         /// The culture name.
         /// </param>
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public ProductVariantContent(ProductVariantDisplay variant, PublishedContentType contentType, string cultureName = "en-US", IPublishedContent parent = null)
-            : base(variant, contentType, cultureName)
+        public ProductVariantContent(ProductVariantDisplay variant, PublishedContentType contentType, IDictionary<Guid, PublishedContentType> optionContentTypes, string cultureName = "en-US", IPublishedContent parent = null)
+            : base(variant, contentType, optionContentTypes, cultureName)
         {
             _variant = variant;
             _parent = parent;

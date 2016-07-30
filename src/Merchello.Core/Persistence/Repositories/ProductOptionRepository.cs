@@ -192,9 +192,7 @@
         /// </returns>
         public IEnumerable<IProductAttribute> GetProductAttributes(Guid[] attributeKeys)
         {
-            var dtos = Database.Fetch<ProductAttributeDto>("SELECT * FROM merchProductAttribute WHERE pk IN (@akeys)", new { @akeys = attributeKeys });
-            var factory = new ProductAttributeFactory();
-            return dtos.Select(dto => factory.BuildEntity(dto));
+            return attributeKeys.Select(key => this.GetStashed(key, this.GetAttributeByKey));
         }
 
         /// <summary>
@@ -304,6 +302,7 @@
             var factory = new ProductAttributeFactory();
             var dto = factory.BuildDto(attribute);
             Database.Update(dto);
+            Stash(attribute);
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductOption>(attribute.OptionKey));
         }
 
@@ -399,7 +398,9 @@
             var collection = new ProductAttributeCollection();
             foreach (var dto in dtos)
             {
-                collection.Add(factory.BuildEntity(dto.ProductAttributeDto));
+                var attribute = factory.BuildEntity(dto.ProductAttributeDto);
+                RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+                collection.Add(attribute);
             }
 
             return collection;
@@ -792,7 +793,7 @@
 
             foreach (var dto in dtos.OrderBy(x => x.SortOrder))
             {
-                var attribute = factory.BuildEntity(dto);
+                var attribute = Stash(factory.BuildEntity(dto));
                 attributes.Add(attribute);
             }
 
@@ -840,6 +841,7 @@
                 new { Key = productAttribute.Key });
 
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
+            Purge(productAttribute);
         }
 
         /// <summary>
@@ -1101,6 +1103,8 @@
                 var dto = factory.BuildDto(att);
                 Database.Update(dto);
             }
+
+            Stash(att);
         }
 
         /// <summary>
@@ -1274,6 +1278,9 @@
             // Remove only option choices for non shared options
             if (optionKeys.Any()) list.Add(new Sql("DELETE FROM merchProductAttribute WHERE optionKey IN (@okeys)", new { @okeys = optionKeys }));
 
+            RuntimeCache.ClearCacheByKeySearch(typeof(IProductAttribute).ToString());
+
+
             return list;
         }
 
@@ -1366,5 +1373,64 @@
         }
 
         #endregion
+
+        private IProductAttribute GetAttributeByKey(Guid key)
+        {
+            var sql =
+                new Sql("SELECT *").From<ProductAttributeDto>(SqlSyntax).Where<ProductAttributeDto>(x => x.Key == key);
+            var dto = Database.Fetch<ProductAttributeDto>(sql).FirstOrDefault();
+            if (dto != null)
+            {
+                var factory = new ProductAttributeFactory();
+                return factory.BuildEntity(dto);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Caches a <see cref="IProductAttribute"/>.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        private IProductAttribute Stash(IProductAttribute attribute)
+        {
+            RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+            return attribute;
+        }
+
+        /// <summary>
+        /// Attempts to get a cached <see cref="IProductAttribute"/> or invokes the getter.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <param name="_fetch">
+        /// The fetch.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        private IProductAttribute GetStashed(Guid key, Func<Guid, IProductAttribute> _fetch)
+        {
+            return RuntimeCache.GetCacheItem<IProductAttribute>(
+                Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(key),
+                () => _fetch.Invoke(key));
+        }
+
+        /// <summary>
+        /// Removes a <see cref="IProductAttribute"/> from Cache.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        private void Purge(IProductAttribute attribute)
+        {
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key));
+        }
     }
 }

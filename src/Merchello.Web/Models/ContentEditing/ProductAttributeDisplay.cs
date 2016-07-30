@@ -53,6 +53,11 @@
         public IEnumerable<KeyValuePair<string, string>> DetachedDataValues { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        public bool IsDefaultChoice { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether is for back office for editor.
         /// </summary>
         /// <remarks>
@@ -62,10 +67,5 @@
         /// </remarks>
         [JsonIgnore]
         internal DetachedValuesConversionType ValueConversion { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is default choice.
-        /// </summary>
-        public bool IsDefaultChoice { get; set; }
     }
 }

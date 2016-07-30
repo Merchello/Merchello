@@ -502,7 +502,7 @@
                                     optionKey = choice.OptionKey,
                                     name = choice.Name,
                                     sortOrder = choice.SortOrder,
-                                    sku = choice.Sku,
+                                    sku = choice.Sku
                                 });
                     }
 

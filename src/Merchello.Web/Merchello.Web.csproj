@@ -392,6 +392,10 @@
     <Compile Include="Models\Ui\Rendering\ProductCollectionExtensions.cs" />
     <Compile Include="Models\Ui\Rendering\ProductContentListView.cs" />
     <Compile Include="Models\Ui\UiModelExtensions.cs" />
+    <Compile Include="Models\VirtualContent\IProductAttributeContent.cs" />
+    <Compile Include="Models\VirtualContent\IProductOptionWrapper.cs" />
+    <Compile Include="Models\VirtualContent\ProductAttributeContent.cs" />
+    <Compile Include="Models\VirtualContent\ProductOptionWrapper.cs" />
     <Compile Include="Mvc\CheckAjaxRequestAttribute.cs" />
     <Compile Include="Mvc\MerchelloHelperViewPage.cs" />
     <Compile Include="Mvc\SurfaceControllerActivationHelper.cs" />

@@ -41,6 +41,13 @@
 
             productDisplay.ProductVariants = getProductVariants(productDisplay.Key);
             productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
+            foreach (var o in productDisplay.ProductOptions)
+            {
+                foreach (var c in o.Choices)
+                {
+                    c.EnsureAttributeDetachedDataValues();
+                }
+            }
             productDisplay.EnsureValueConversion(conversionType);
             return productDisplay;
         }

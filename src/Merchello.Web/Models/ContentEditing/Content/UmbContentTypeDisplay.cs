@@ -82,7 +82,7 @@
         /// Maps a <see cref="UmbContentTypeDisplay"/> to <see cref="IDetachedContentType"/>.
         /// </summary>
         /// <param name="umbContentType">
-        /// The umb content type.
+        /// The Umbraco content type.
         /// </param>
         /// <param name="destination">
         /// The destination.

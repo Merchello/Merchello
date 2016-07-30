@@ -49,6 +49,30 @@
         }
     </div>
 
+    @if (Model.Options.Any())
+    {
+        <ul>
+            @foreach (var o in Model.Options)
+            {
+                <li>
+                    @o.Name
+                    <ul>
+                        @foreach (var c in o.Choices)
+                        {
+                            <li>
+                                @c.Name
+                                @if (c.HasProperty("label") && c.HasValue("label"))
+                                {
+                                    <span>@c.GetPropertyValue("label")</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    }
+
 </div>
 
 @helper Categories(IProductContent product)
