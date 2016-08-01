@@ -35,16 +35,17 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="contentType">
-        /// The content Type.
-        /// </param>
         /// <param name="_parent">
         /// The parent content.
         /// </param>
-        public ProductOptionWrapper(ProductOptionDisplay display, PublishedContentType contentType = null, IPublishedContent _parent = null)
+        /// <param name="contentType">
+        /// The content Type.
+        /// </param>
+        public ProductOptionWrapper(ProductOptionDisplay display, IPublishedContent _parent, PublishedContentType contentType = null)
         {
             _display = display;
             _contentType = contentType;
+
             Initialize(_parent);
         }
 
@@ -144,7 +145,8 @@
         /// </param>
         private void Initialize(IPublishedContent parent)
         {
-            _choices = _display.Choices.Select(choice => new ProductAttributeContent(_contentType, choice, parent));
+            var ct = _contentType ?? parent.ContentType;
+            _choices = _display.Choices.Select(choice => new ProductAttributeContent(ct, choice, parent));
         }
     }
 }

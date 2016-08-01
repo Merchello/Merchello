@@ -502,7 +502,11 @@
                                     optionKey = choice.OptionKey,
                                     name = choice.Name,
                                     sortOrder = choice.SortOrder,
-                                    sku = choice.Sku
+                                    sku = choice.Sku,
+                                    isDefaultChoice = choice.IsDefaultChoice,
+                                    detachedDataValues = option.Shared ?
+                                        Enumerable.Empty<KeyValuePair<string, string>>() :
+                                        choice.DetachedDataValues.AsEnumerable()
                                 });
                     }
 
@@ -512,9 +516,12 @@
                             {
                                 option.Key,
                                 name = option.Name,
+                                detachedContentTypeKey = option.DetachedContentTypeKey ?? Guid.Empty,
                                 required = option.Required,
                                 sortOrder = option.SortOrder,
-                                choices = optionChoices
+                                choices = optionChoices,
+                                uiOption = option.UiOption ?? string.Empty,
+                                useName = option.UseName
                             });
                 }
             }
@@ -622,10 +629,12 @@
                     optionKey = attribute.OptionKey,
                     name = attribute.Name,
                     sku = attribute.Sku,
-                    sortOrder = attribute.SortOrder                    
+                    sortOrder = attribute.SortOrder,
+                    isDefaultChoice = attribute.IsDefaultChoice
                 }, 
                 Formatting.None);
             }
+
             json = string.Format(json, atts);
             return json;
         }

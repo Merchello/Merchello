@@ -7,6 +7,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing;
 
@@ -32,10 +33,18 @@
         private readonly IStoreSettingService _storeSettingService;
 
         /// <summary>
+        /// The <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        private readonly IDetachedContentTypeService _detachedContentTypeService;
+
+        /// <summary>
         /// The parent.
         /// </summary>
         private IPublishedContent _parent;
 
+        /// <summary>
+        /// The parent culture.
+        /// </summary>
         private string _parentCulture;
 
         /// <summary>
@@ -47,6 +56,11 @@
         /// The default store language.
         /// </summary>
         private string _defaultStoreLanguage;
+
+        /// <summary>
+        /// The detached content types.
+        /// </summary>
+        private Lazy<IEnumerable<IDetachedContentType>> _detachedContentTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
@@ -63,9 +77,23 @@
         /// The <see cref="IStoreSettingService"/>.
         /// </param>
         internal ProductContentFactory(IStoreSettingService storeSettingService)
+            : this(storeSettingService, MerchelloContext.Current.Services.DetachedContentTypeService)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
+        /// </summary>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        /// <param name="detachedContentTypeService">
+        /// The detached content type service.
+        /// </param>
+        internal ProductContentFactory(IStoreSettingService storeSettingService, IDetachedContentTypeService detachedContentTypeService)
         {
             _storeSettingService = storeSettingService;
-
+            _detachedContentTypeService = detachedContentTypeService;
             this.Initialize();
         }
 
@@ -119,11 +147,17 @@
 
             if (!keys.Any()) return publishedContentTypes;
 
-            var contentTypes = ApplicationContext.Current.Services.ContentTypeService.GetAllContentTypes(keys);
+            var contentTypeKeys = _detachedContentTypes.Value
+                    .Where(x => keys.Any(y => y == x.Key)).Where(x => x.ContentTypeKey != null)
+                    .Select(x => x.ContentTypeKey.Value);
+
+            var contentTypes = ApplicationContext.Current.Services.ContentTypeService.GetAllContentTypes(contentTypeKeys);
 
             foreach (var ct in contentTypes)
             {
-                publishedContentTypes.Add(ct.Key, PublishedContentType.Get(PublishedItemType.Content, ct.Alias));
+                var dct = _detachedContentTypes.Value.FirstOrDefault(x => x.ContentTypeKey != null && x.ContentTypeKey.Value == ct.Key);
+                if (dct != null)
+                publishedContentTypes.Add(dct.Key, PublishedContentType.Get(PublishedItemType.Content, ct.Alias));
             }
 
             return publishedContentTypes;
@@ -146,6 +180,8 @@
             _defaultStoreLanguage = _parentCulture.IsNullOrWhiteSpace() ?
                 _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value :
                 _parentCulture;
+
+            _detachedContentTypes = new Lazy<IEnumerable<IDetachedContentType>>(() => _detachedContentTypeService.GetAll().Where(x => x.ContentTypeKey != null));
 
             if (_allLanguages.Any())
             {

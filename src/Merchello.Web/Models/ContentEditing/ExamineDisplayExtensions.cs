@@ -31,6 +31,9 @@
         /// <param name="getProductVariants">
         /// The get Product Variants.
         /// </param>
+        /// <param name="conversionType">
+        /// The conversion Type.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductDisplay"/>.
         /// </returns>
@@ -41,13 +44,6 @@
 
             productDisplay.ProductVariants = getProductVariants(productDisplay.Key);
             productDisplay.ProductOptions = RawJsonFieldAsCollection<ProductOptionDisplay>(result, "productOptions");
-            foreach (var o in productDisplay.ProductOptions)
-            {
-                foreach (var c in o.Choices)
-                {
-                    c.EnsureAttributeDetachedDataValues();
-                }
-            }
             productDisplay.EnsureValueConversion(conversionType);
             return productDisplay;
         }

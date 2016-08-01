@@ -433,23 +433,28 @@
         /// <param name="display">
         /// The display.
         /// </param>
-        /// <param name="optionContentTypes">
-        /// The option content types.
-        /// </param>
         /// <param name="parent">
         /// The parent node
+        /// </param>
+        /// <param name="optionContentTypes">
+        /// The option content types.
         /// </param>
         /// <returns>
         /// The <see cref="IProductOptionWrapper"/>.
         /// </returns>
-        internal static IProductOptionWrapper ProductOptionAsProductOptionWrapper(this ProductOptionDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, IPublishedContent parent = null)
+        internal static IProductOptionWrapper ProductOptionAsProductOptionWrapper(this ProductOptionDisplay display, IPublishedContent parent, IDictionary<Guid, PublishedContentType> optionContentTypes)
         {
             // Find the associated content type if it exists
             var contentType = optionContentTypes.ContainsKey(display.DetachedContentTypeKey) ?
                 optionContentTypes[display.DetachedContentTypeKey] :
                 null;
 
-            return new ProductOptionWrapper(display, contentType, parent);
+            // This is a hack for the special case when HasProperty and HasValue extensions are called
+            // and a content type is not assigned. - so we will default to the product content type
+            // if there is none.  The detachedDataValues collection should be empty -
+            var ct = contentType ?? parent.ContentType;
+
+            return new ProductOptionWrapper(display, parent, contentType);
         }
 
         /// <summary>

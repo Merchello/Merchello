@@ -43,7 +43,7 @@
         /// <summary>
         /// The properties.
         /// </summary>
-        private IEnumerable<IPublishedProperty> _properties;
+        private Lazy<IEnumerable<IPublishedProperty>> _properties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductAttributeContent"/> class.
@@ -192,7 +192,7 @@
         {
             get
             {
-                return _properties.ToArray();
+                return _properties.Value.ToArray();
             }
         }
 
@@ -372,7 +372,7 @@
         /// </returns>
         public override IPublishedProperty GetProperty(string alias)
         {
-            return _properties.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
+            return _properties.Value.FirstOrDefault(x => x.PropertyTypeAlias.InvariantEquals(alias));
         }
 
         /// <summary>
@@ -410,7 +410,7 @@
         private IEnumerable<IPublishedProperty> BuildProperties()
         {
             var propDictionary = new List<IPublishedProperty>();
-            //_display.EnsureAttributeDetachedDataValues();
+            _display.EnsureAttributeDetachedDataValues();
             if (!_display.DetachedDataValues.Any() || _contentType == null) return propDictionary;
 
            
@@ -423,7 +423,7 @@
         /// </summary>
         private void Initialize()
         {
-            _properties = this.BuildProperties();
+            _properties = new Lazy<IEnumerable<IPublishedProperty>>(this.BuildProperties);
         }
     }
 }

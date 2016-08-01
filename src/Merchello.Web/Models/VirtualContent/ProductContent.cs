@@ -269,7 +269,7 @@
         private void Initialize()
         {
             _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(this.OptionContentTypes, CultureName, this));
-            _options = _display.ProductOptions.Select(x => x.ProductOptionAsProductOptionWrapper(this.OptionContentTypes, this));
+            _options = _display.ProductOptions.Select(x => x.ProductOptionAsProductOptionWrapper(this, this.OptionContentTypes));
         }
     }
 }
