@@ -553,7 +553,7 @@
 
             if (inserts.Any())
             {
-                Database.BulkInsertRecords<ProductVariantDetachedContentDto>(inserts);
+                BulkInsertRecordsWithKey<ProductVariantDetachedContentDto>(inserts);
             }
         }
 
