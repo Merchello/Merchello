@@ -5,6 +5,7 @@
     using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Models;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     /// <summary>
     /// The product option display.
@@ -53,6 +54,7 @@
         /// Gets or sets the detached content key.
         /// </summary>
         public Guid DetachedContentTypeKey { get; set; }
+
 
         /// <summary>
         /// Gets or sets the sort order.

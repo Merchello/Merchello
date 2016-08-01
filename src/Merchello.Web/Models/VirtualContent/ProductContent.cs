@@ -38,10 +38,18 @@
         private Lazy<IEnumerable<IProductVariantContent>> _variantContent;
 
         /// <summary>
+        /// The options collection.
+        /// </summary>
+        private IEnumerable<IProductOptionWrapper> _options;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductContent"/> class.
         /// </summary>
         /// <param name="contentType">
         /// The content type.
+        /// </param>
+        /// <param name="optionContentTypes">
+        /// All of the possible content types for option attribute content
         /// </param>
         /// <param name="display">
         /// The display.
@@ -57,11 +65,12 @@
         /// </param>
         public ProductContent(
             PublishedContentType contentType,
+            IDictionary<Guid, PublishedContentType> optionContentTypes,
             ProductDisplay display,           
             IPublishedContent parent = null,
             string specificCulture = "en-US",
             bool isPreviewing = false)
-            : base(display, contentType, specificCulture)
+            : base(display, contentType, optionContentTypes, specificCulture)
         {
             this._display = display;
             this._parent = parent;
@@ -121,11 +130,23 @@
         /// <summary>
         /// Gets the product options.
         /// </summary>
+        [Obsolete("Use Options property")]
         public IEnumerable<ProductOptionDisplay> ProductOptions
         {
             get
             {
-                return _display.ProductOptions;
+                return _display.ProductOptions.OrderBy(x => x.SortOrder);
+            }
+        }
+
+        /// <summary>
+        /// Gets the options.
+        /// </summary>
+        public IEnumerable<IProductOptionWrapper> Options
+        {
+            get
+            {
+                return _options.OrderBy(x => x.SortOrder);
             }
         }
 
@@ -247,7 +268,8 @@
         /// </summary>
         private void Initialize()
         {
-            _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(CultureName, this));
+            _variantContent = new Lazy<IEnumerable<IProductVariantContent>>(() => _display.ProductVariantsAsProductVariantContent(this.OptionContentTypes, CultureName, this));
+            _options = _display.ProductOptions.Select(x => x.ProductOptionAsProductOptionWrapper(this, this.OptionContentTypes));
         }
     }
 }

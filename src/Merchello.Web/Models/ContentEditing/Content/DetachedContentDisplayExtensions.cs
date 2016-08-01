@@ -7,6 +7,7 @@ namespace Merchello.Web.Models.ContentEditing.Content
 
     using AutoMapper;
 
+    using Merchello.Core;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
     using Merchello.Web.Models.VirtualContent;
@@ -148,6 +149,27 @@ namespace Merchello.Web.Models.ContentEditing.Content
             }
 
             return properties;
+        }
+
+        /// <summary>
+        /// Ensures the attribute data values.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <remarks>
+        /// This is required as some options are shared and the attribute data values are not serialized into the 
+        /// Examine index for these attributes.
+        /// </remarks>
+        /// <returns>
+        /// The detached contents.
+        /// </returns>
+        internal static void EnsureAttributeDetachedDataValues(this ProductAttributeDisplay attribute)
+        {
+            if (attribute.DetachedDataValues != null && attribute.DetachedDataValues.Any()) return;
+
+            var pa = MerchelloContext.Current.Services.ProductOptionService.GetProductAttributeByKey(attribute.Key);
+            attribute.DetachedDataValues = pa.DetachedDataValues.AsEnumerable();
         }
 
         /// <summary>

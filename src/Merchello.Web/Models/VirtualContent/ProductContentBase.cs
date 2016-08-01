@@ -37,6 +37,7 @@
         /// </summary>
         private Lazy<Dictionary<string, IEnumerable<IPublishedProperty>>> _properties;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentBase"/> class.
         /// </summary>
@@ -46,15 +47,19 @@
         /// <param name="contentType">
         /// The content Type.
         /// </param>
+        /// <param name="optionContentTypes">
+        /// The option Content Types.
+        /// </param>
         /// <param name="specificCulture">
         /// Specifically sets the culture
         /// </param>
-        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, string specificCulture)
+        protected ProductContentBase(ProductDisplayBase productBase, PublishedContentType contentType, IDictionary<Guid, PublishedContentType> optionContentTypes, string specificCulture)
         {
             Mandate.ParameterNotNull(productBase, "productBase");
             _productBase = productBase;
             this.CultureName = specificCulture;
-            _contentType = contentType;            
+            _contentType = contentType;
+            this.OptionContentTypes = optionContentTypes;
             this.Initialize();
         }
 
@@ -527,7 +532,6 @@
             }
         }
 
-
         /// <summary>
         /// Gets the detached content display.
         /// </summary>
@@ -549,6 +553,11 @@
                 return _properties.Value[this.CultureName];
             }
         }
+
+        /// <summary>
+        /// Gets the collection of <see cref="PublishedContentType"/> associated with product options.
+        /// </summary>
+        protected IDictionary<Guid, PublishedContentType> OptionContentTypes { get; }
 
         /// <summary>
         /// The get property.

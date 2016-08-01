@@ -242,7 +242,7 @@
                 DetachedContentTypeKeySelector);
             }
         }
-
+        
         /// <summary>
         /// Gets or sets the UI option.
         /// </summary>

@@ -395,6 +395,9 @@
         /// <param name="display">
         /// The display.
         /// </param>
+        /// <param name="optionContentTypes">
+        /// The option Content Types.
+        /// </param>
         /// <param name="cultureName">
         /// The cultureName
         /// </param>
@@ -404,9 +407,10 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductVariantContent}"/>.
         /// </returns>
-        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, string cultureName, IPublishedContent parent = null)
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, string cultureName, IPublishedContent parent = null)
         {
             var variantContent = new List<IProductVariantContent>();
+
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var variant in display.ProductVariants)
@@ -417,10 +421,40 @@
                                           variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
                                       : null;
 
-                variantContent.Add(new ProductVariantContent(variant, contentType, cultureName, parent));
+                variantContent.Add(new ProductVariantContent(variant, contentType, optionContentTypes, cultureName, parent));
             }
 
             return variantContent;
+        }
+
+        /// <summary>
+        /// The product option as product option wrapper.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="parent">
+        /// The parent node
+        /// </param>
+        /// <param name="optionContentTypes">
+        /// The option content types.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOptionWrapper"/>.
+        /// </returns>
+        internal static IProductOptionWrapper ProductOptionAsProductOptionWrapper(this ProductOptionDisplay display, IPublishedContent parent, IDictionary<Guid, PublishedContentType> optionContentTypes)
+        {
+            // Find the associated content type if it exists
+            var contentType = optionContentTypes.ContainsKey(display.DetachedContentTypeKey) ?
+                optionContentTypes[display.DetachedContentTypeKey] :
+                null;
+
+            // This is a hack for the special case when HasProperty and HasValue extensions are called
+            // and a content type is not assigned. - so we will default to the product content type
+            // if there is none.  The detachedDataValues collection should be empty -
+            var ct = contentType ?? parent.ContentType;
+
+            return new ProductOptionWrapper(display, parent, contentType);
         }
 
         /// <summary>
