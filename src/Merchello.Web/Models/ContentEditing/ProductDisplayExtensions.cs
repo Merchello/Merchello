@@ -229,7 +229,18 @@
 
         #region IProductAttribute
 
-
+        /// <summary>
+        /// The to product attribute.
+        /// </summary>
+        /// <param name="productAttributeDisplay">
+        /// The product attribute display.
+        /// </param>
+        /// <param name="destinationProductAttribute">
+        /// The destination product attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
         internal static IProductAttribute ToProductAttribute(this ProductAttributeDisplay productAttributeDisplay, IProductAttribute destinationProductAttribute)
         {
             if (productAttributeDisplay.Key != Guid.Empty)

@@ -872,7 +872,6 @@
                 if (!exists) makeAssociation = true;
 
                 if (!option.Shared) PersistUpdatedItem(option);
-
             }
 
             if (makeAssociation)
@@ -986,12 +985,13 @@
                     }
                 }
 
+                if (!o.Shared) return;
                 var newChoices = o.Choices.Where(x => current.Choices.All(cc => cc.Key != x.Key));
                 var dtos = newChoices.Select(nc => new ProductOptionAttributeShareDto
                         {
                             ProductKey = productKey,
                             AttributeKey = nc.Key,
-                            OptionKey = nc.OptionKey,
+                            OptionKey = o.Key,
                             IsDefaultChoice = nc.IsDefaultChoice,
                             CreateDate = DateTime.Now,
                             UpdateDate = DateTime.Now
@@ -1125,6 +1125,7 @@
                 sort++;
             }
         }
+
 
         /// <summary>
         /// Gets a collection of options for a specific <see cref="IProduct"/>.

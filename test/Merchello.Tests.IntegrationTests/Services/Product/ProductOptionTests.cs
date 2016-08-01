@@ -84,13 +84,13 @@ namespace Merchello.Tests.IntegrationTests.Services.Product
 
             product.ProductOptions.Add(new ProductOption("Option4"));
             _productService.Save(product);
-            Assert.AreEqual(4, product.ProductOptions.Count);
+            Assert.AreEqual(4, product.ProductOptions.Count, "There should be 4 options");
 
             //// Act
             product.ProductOptions.Remove(removeItem);
 
             //// Assert
-            Assert.AreEqual(4, product.ProductOptions.Count);
+            Assert.AreEqual(3, product.ProductOptions.Count, "There should be 3 options");
         }
 
         /// <summary>
