@@ -2,6 +2,9 @@
 {
     using System;
     using System.Linq;
+
+    using Merchello.Core.Logging;
+
     using Models.EntityBase;
     using Models.Rdbms;
     using Querying;    
@@ -158,6 +161,7 @@
         /// </returns>
         protected virtual Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {            
+            
             var p = GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return new Page<Guid>()
@@ -222,6 +226,44 @@
                 TotalPages = dtoPage.TotalPages,
                 Items = dtoPage.Items.Select(x => Get(x.Key)).ToList()
             };
-        } 
+        }
+
+        protected Page<Guid> TryGetCachedPageOfKeys(
+            string methodName,
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = Core.Cache.CacheKeys.GetPagedKeysCacheKey<TDto>(methodName, collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
+
+            return (Page<Guid>)RuntimeCache.GetCacheItem(cacheKey);
+        }
+
+        protected void CachePageOfKeys(
+            Page<Guid> result,
+            Guid collectionKey,
+            string methodName,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = Core.Cache.CacheKeys.GetPagedKeysCacheKey<TDto>(methodName, collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
+            RuntimeCache.GetCacheItem(cacheKey, () => result);
+        }
+
+        protected void ClearCachedPageOfKeys()
+        {
+            ClearCachedPageOfKeys(Guid.Empty);
+        }
+
+        protected void ClearCachedPageOfKeys(Guid collectionKey)
+        {
+            RuntimeCache.ClearCacheByKeySearch(Cache.CacheKeys.GetPagedKeysCacheKeyPrefix<TDto>(collectionKey));
+        }
     }
 }
