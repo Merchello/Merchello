@@ -1664,6 +1664,16 @@ angular.module('merchello.resources').factory('productOptionResource',
 
             return {
 
+                getOptionUiSettings: function() {
+                    var url = baseUrl + 'GetOptionUiSettings';
+                  return umbRequestHelper.resourcePromise(
+                    $http({
+                       url: url,
+                        method: "GET"
+                    }),
+                      'Failed to get the option ui settings');
+                },
+
                 getByKey: function(key) {
                     var deferred = $q.defer();
                     var url = baseUrl + 'GetByKey';

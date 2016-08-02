@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Web.Editors
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -8,6 +9,7 @@
     using System.Web.Http.ModelBinding;
 
     using Merchello.Core;
+    using Merchello.Core.Configuration;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
@@ -67,6 +69,18 @@
         }
 
         /// <summary>
+        /// Gets the configured option UI settings.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{String}"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<KeyValuePair<string, string>> GetOptionUiSettings()
+        {
+            return MerchelloConfiguration.Current.OptionUiSettings;
+        }
+
+            /// <summary>
         /// Gets the <see cref="ProductOptionDisplay"/> by it's key.
         /// </summary>
         /// <param name="id">

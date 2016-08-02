@@ -68,6 +68,16 @@
         }
 
         /// <summary>
+        /// Gets the settings collection
+        /// </summary>
+        [ConfigurationProperty("optionUi", IsRequired = true), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
+        public SettingsCollection OptionUi
+        {
+            get { return (SettingsCollection)this["optionUi"]; }
+        }
+
+
+        /// <summary>
         /// Gets the checkout context settings collection
         /// </summary>
         [ConfigurationProperty("checkoutContextSettings", IsRequired = false), ConfigurationCollection(typeof(SettingsCollection), AddItemName = "setting")]
