@@ -34,6 +34,11 @@
         private readonly Lazy<IValidationHelper> _validationHelper;
 
         /// <summary>
+        /// The <see cref="ProductContentFactory"/>.
+        /// </summary>
+        private readonly Lazy<ProductContentFactory> _productContentFactory;
+
+        /// <summary>
         /// A value indicating whether or not data modifiers are enabled.
         /// </summary>
         private readonly bool _enableDataModifiers;
@@ -106,6 +111,7 @@
             _enableDataModifiers = enableDataModifiers;
             _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext, _enableDataModifiers));
             _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
+            _productContentFactory = new Lazy<ProductContentFactory>(() => new ProductContentFactory());
         }
 
         /// <summary>
@@ -154,7 +160,7 @@
         {
             var display = Query.Product.GetByKey(key);
             return display == null ? null : 
-                display.AsProductContent();
+                display.AsProductContent(_productContentFactory.Value);
         }
 
         /// <summary>
@@ -170,7 +176,7 @@
         {
             var display = Query.Product.GetBySlug(slug);
             return display == null ? null : 
-                display.AsProductContent();
+                display.AsProductContent(_productContentFactory.Value);
         }
 
         /// <summary>
@@ -186,7 +192,7 @@
         {
             var display = Query.Product.GetBySku(sku);
             return display == null ? null :
-                display.AsProductContent();
+                display.AsProductContent(_productContentFactory.Value);
         }
 
         /// <summary>
@@ -232,9 +238,8 @@
                 Query.Product.GetFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection)
                     .Items.Select(x => (ProductDisplay)x)
                     .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
-
-            var factory = new ProductContentFactory();
-            return products.Select(factory.BuildContent);
+            
+            return products.Select(_productContentFactory.Value.BuildContent);
         }
 
         /// <summary>

@@ -493,8 +493,24 @@
         /// </returns>
         public static IProductContent AsProductContent(this ProductDisplay display)
         {
+            return display.AsProductContent(new ProductContentFactory());
+        }
+
+        /// <summary>
+        /// Creates <see cref="IProductContent"/> from the display object.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="factory">
+        /// The factory.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public static IProductContent AsProductContent(this ProductDisplay display, ProductContentFactory factory)
+        {
             if (!display.HasVirtualContent()) return null;
-            var factory = new ProductContentFactory();
             return factory.BuildContent(display);
         }
 

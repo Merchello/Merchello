@@ -4,6 +4,7 @@
     using Gateways.Shipping;
 
     using Merchello.Core.Checkout;
+    using Merchello.Core.Persistence.Querying;
 
     using Models;
 
@@ -156,6 +157,40 @@
         internal static string GetEntityCacheKey<TEntity>(Guid key)
         {
             return string.Format("{0}.{1}", typeof(TEntity).Name, key);
+        }
+
+        internal static string GetPagedKeysCacheKey<TDto>(
+            string methodName,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            return GetPagedKeysCacheKey<TDto>(methodName, Guid.Empty, term, page, itemsPerPage, orderExpression, sortDirection);
+        }
+
+        internal static string GetPagedKeysCacheKey<TDto>(
+            string methodName,
+            Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var hash = string.Format("{0}.{1}.{2}.{3}.{4}", term, page, itemsPerPage, orderExpression, sortDirection).GetHashCode().ToString();
+            return string.Format("{0}.{1}", GetPagedKeysCacheKeyPrefix<TDto>(collectionKey), hash);
+        }
+
+        internal static string GetPagedKeysCacheKeyPrefix<TDto>()
+        {
+            return GetPagedKeysCacheKeyPrefix<TDto>(Guid.Empty);
+        }
+
+        internal static string GetPagedKeysCacheKeyPrefix<TDto>(Guid collectionKey)
+        {
+            return string.Format("pagedkeys.{0}.{1}", typeof(TDto), collectionKey);
         }
 
         /// <summary>
