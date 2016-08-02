@@ -557,7 +557,7 @@
         /// <summary>
         /// Gets the collection of <see cref="PublishedContentType"/> associated with product options.
         /// </summary>
-        protected IDictionary<Guid, PublishedContentType> OptionContentTypes { get; }
+        protected IDictionary<Guid, PublishedContentType> OptionContentTypes { get; private set; }
 
         /// <summary>
         /// The get property.
