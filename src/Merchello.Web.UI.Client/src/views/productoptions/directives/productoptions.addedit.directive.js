@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive("productOptionsAddEdit",
-    ['$timeout', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
-    function($timeout, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {
+    ['$timeout', '$q', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
+    function($timeout, $q, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {
     return {
         restrict: 'E',
         replace: true,
@@ -16,6 +16,8 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
             scope.wasFormSubmitted = false;
             scope.ready = false;
             scope.counts = undefined;
+            scope.uiOptions = [];
+            scope.selectedUiOption = {};
 
             scope.selectedAttribute = {
                 current: undefined,
@@ -23,15 +25,25 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 isSet: false
             }
 
-            if (scope.option.key === '') {
-                scope.ready = true;
-            } else {
-                 productOptionResource.getUseCounts(scope.option).then(function(counts) {
-                     scope.counts = counts;
+            productOptionResource.getOptionUiSettings().then(function(data) {
+                scope.uiOptions = data;
+                scope.selectedUiOption = _.find(scope.uiOptions, function(ui) {
+                   return ui.key === scope.option.uiOption;
+                });
+                console.info(scope.selectedUiOption);
+                console.info(scope.uiOptions);
+                if (scope.option.key === '') {
+                    scope.ready = true;
+                } else {
+                    productOptionResource.getUseCounts(scope.option).then(function(counts) {
+                        scope.counts = counts;
 
-                     scope.ready = true;
-                 });
-            }
+                        scope.ready = true;
+                    });
+                }
+            });
+
+
 
 
             if (scope.option.choices.length > 0) {
@@ -169,6 +181,8 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                     } else {
                         scope.option.detachedContentTypeKey = '';
                     }
+
+                    scope.option.uiOption = scope.selectedUiOption.key;
 
                     args.valid = true;
 

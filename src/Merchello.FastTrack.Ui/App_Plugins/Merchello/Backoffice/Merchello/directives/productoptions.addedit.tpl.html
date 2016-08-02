@@ -38,13 +38,12 @@
             </tbody>
         </table>
 
-        <div class="form-group row-fluid">
+        <div class="form-gr
+        oup row-fluid">
             <h5>Custom Settings</h5>
             <label for="uiOption">UI Option</label>
-            <select id="uiOption" name="uiOption" class="span8" data-ng-change="setContentType" data-ng-model="option.uiOption">
-                <option value="">-</option>
-                <option value="select">Select List</option>
-                <option value="radio">Radio Buttons</option>
+            <select id="uiOption" name="uiOption" class="span8" data- ng-options="ui.value for ui in uiOptions track by ui.key" data-ng-model="selectedUiOption">
+                <option value="" selected>-</option>
             </select>
         </div>
 
