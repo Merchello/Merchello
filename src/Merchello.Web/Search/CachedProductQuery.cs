@@ -15,12 +15,16 @@
     using Merchello.Core.Chains;
     using Merchello.Core.ValueConverters;
     using Merchello.Examine.Providers;
+    using Merchello.Web.Caching;
     using Merchello.Web.DataModifiers;
     using Merchello.Web.DataModifiers.Product;
     using Merchello.Web.Models.ContentEditing.Content;
+    using Merchello.Web.Models.VirtualContent;
 
     using Models.ContentEditing;
     using Models.Querying;
+
+    using Umbraco.Core.Cache;
 
     /// <summary>
     /// Represents a CachedProductQuery
@@ -40,35 +44,45 @@
         /// <summary>
         /// The data modifier.
         /// </summary>
-        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier; 
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier;
+
+        /// <summary>
+        /// The <see cref="ProductContentFactory"/>.
+        /// </summary>
+        private readonly Lazy<ProductContentFactory> _productContentFactory;
+
+        /// <summary>
+        /// The <see cref="VirtualProductContentCache"/>.
+        /// </summary>
+        public readonly VirtualProductContentCache _cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
         /// </summary>
         public CachedProductQuery()
-            : this(MerchelloContext.Current.Services.ProductService, true)
+            : this(MerchelloContext.Current, true)
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
         /// </summary>
-        /// <param name="productService">
-        /// The product service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        public CachedProductQuery(IProductService productService, bool enableDataModifiers)
-            : this(productService, enableDataModifiers, DetachedValuesConversionType.Db)
+        public CachedProductQuery(IMerchelloContext merchelloContext, bool enableDataModifiers)
+            : this(merchelloContext, enableDataModifiers, DetachedValuesConversionType.Db)
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
         /// </summary>
-        /// <param name="service">
-        /// The service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="indexProvider">
         /// The index provider.
@@ -79,16 +93,16 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        public CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers) 
-            : this(service, indexProvider, searchProvider, enableDataModifiers, DetachedValuesConversionType.Db)
+        public CachedProductQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers) 
+            : this(merchelloContext, indexProvider, searchProvider, enableDataModifiers, DetachedValuesConversionType.Db)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
         /// </summary>
-        /// <param name="productService">
-        /// The product service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="enableDataModifiers">
         /// The enable data modifiers.
@@ -96,9 +110,9 @@
         /// <param name="conversionType">
         /// The detached value conversion type.
         /// </param>
-        internal CachedProductQuery(IProductService productService, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+        internal CachedProductQuery(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
             : this(
-            productService,
+            merchelloContext,
             ExamineManager.Instance.IndexProviderCollection["MerchelloProductIndexer"],
             ExamineManager.Instance.SearchProviderCollection["MerchelloProductSearcher"],
             enableDataModifiers,
@@ -109,8 +123,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
         /// </summary>
-        /// <param name="service">
-        /// The service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="indexProvider">
         /// The index provider.
@@ -124,11 +138,13 @@
         /// <param name="conversionType">
         /// The is for back office editors.
         /// </param>
-        internal CachedProductQuery(IPageCachedService<IProduct> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers, DetachedValuesConversionType conversionType)
-            : base(service, indexProvider, searchProvider, enableDataModifiers)
+        internal CachedProductQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+            : base(merchelloContext.Services.ProductService, indexProvider, searchProvider, enableDataModifiers)
         {
-            _productService = (ProductService)service;
+            _productService = (ProductService)merchelloContext.Services.ProductService;
             this._conversionType = conversionType;
+            _productContentFactory = new Lazy<ProductContentFactory>(() => new ProductContentFactory());
+            _cache = new VirtualProductContentCache(merchelloContext.Cache.RuntimeCache, this.GetProductContent);
             this.Initialize();
         }
 
@@ -138,6 +154,48 @@
         protected override string KeyFieldInIndex
         {
             get { return "productKey"; }
+        }
+
+        /// <summary>
+        /// Gets <see cref="IProductContent"/> by it's key
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypedProductContent(Guid key)
+        {
+            return _cache.GetByKey(key);
+        }
+
+        /// <summary>
+        /// Gets the typed content by it's sku.
+        /// </summary>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypedProductContentBySku(string sku)
+        {
+            return _cache.GetBySku(sku, GetProductContentBySku);
+        }
+
+        /// <summary>
+        /// Gets the typed content by it's slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public IProductContent TypedProductContentBySlug(string slug)
+        {
+            return _cache.GetBySlug(slug, GetProductContentBySlug);
         }
 
         /// <summary>
@@ -902,7 +960,54 @@
         {
             return this.ModifyData(result.ToProductDisplay(GetVariantsByProduct, this._conversionType));
         }
-     
+
+        /// <summary>
+        /// Gets the virtual content.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        private IProductContent GetProductContent(Guid key)
+        {
+            var display = GetByKey(key);
+            return display == null ? null :
+                display.AsProductContent(_productContentFactory.Value);
+        }
+
+        /// <summary>
+        /// Gest the <see cref="IProductContent"/> by sku.
+        /// </summary>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        private IProductContent GetProductContentBySku(string sku)
+        {
+            var display = GetBySku(sku);
+            return display == null ? null :
+                display.AsProductContent(_productContentFactory.Value);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductContent"/> by slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        private IProductContent GetProductContentBySlug(string slug)
+        {
+            var display = GetBySlug(slug);
+            return display == null ? null :
+                display.AsProductContent(_productContentFactory.Value);
+        }
 
         /// <summary>
         /// Initializes the lazy

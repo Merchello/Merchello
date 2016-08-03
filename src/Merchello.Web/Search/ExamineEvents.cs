@@ -11,6 +11,9 @@
     using global::Examine;
     using Examine;
     using Examine.Providers;
+
+    using Merchello.Web.Caching;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
@@ -383,6 +386,8 @@
         /// </summary>        
         static void ProductServiceSaved(IProductService sender, SaveEventArgs<IProduct> e)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(e);
             e.SavedEntities.ForEach(IndexProduct);
         }
 
@@ -391,6 +396,8 @@
         /// </summary>   
         static void ProductServiceDeleted(IProductService sender, DeleteEventArgs<IProduct> e)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(e);
             e.DeletedEntities.ForEach(DeleteProductFromIndex);
         }
 

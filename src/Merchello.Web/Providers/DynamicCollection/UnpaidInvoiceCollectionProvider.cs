@@ -31,7 +31,7 @@
         public UnpaidInvoiceCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
-            _merchello = new MerchelloHelper(merchelloContext.Services, false);
+            _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
         /// <summary>

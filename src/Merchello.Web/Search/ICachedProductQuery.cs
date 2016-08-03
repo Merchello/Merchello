@@ -4,6 +4,9 @@
     using System.Collections.Generic;
 
     using Core.Persistence.Querying;
+
+    using Merchello.Web.Models.VirtualContent;
+
     using Models.ContentEditing;
     using Models.Querying;
 
@@ -12,6 +15,39 @@
     /// </summary>
     public interface ICachedProductQuery : ICachedCollectionQuery
     {
+        /// <summary>
+        /// Gets a <see cref="IProductContent"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        IProductContent TypedProductContent(Guid key);
+
+        /// <summary>
+        /// Gets the <see cref="IProductContent"/> by it's sku.
+        /// </summary>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        IProductContent TypedProductContentBySku(string sku);
+
+        /// <summary>
+        /// Gets the <see cref="IProductContent"/> by it's slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        IProductContent TypedProductContentBySlug(string slug);
+
         /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's key
         /// </summary>

@@ -71,7 +71,7 @@
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
 
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
+            _merchello = new MerchelloHelper(MerchelloContext, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@
             _productService = MerchelloContext.Services.ProductService;
             _productVariantService = MerchelloContext.Services.ProductVariantService;
             _warehouseService = MerchelloContext.Services.WarehouseService;
-            _merchello = new MerchelloHelper(MerchelloContext.Services, false, DetachedValuesConversionType.Editor);
+            _merchello = new MerchelloHelper(MerchelloContext, false, DetachedValuesConversionType.Editor);
         }
 
         /// <summary>

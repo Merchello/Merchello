@@ -69,7 +69,7 @@
             _storeSettingService = MerchelloContext.Services.StoreSettingService as StoreSettingService;
             _invoiceService = merchelloContext.Services.InvoiceService;
             _noteService = merchelloContext.Services.NoteService;
-            _merchello = new MerchelloHelper(merchelloContext.Services, false);
+            _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
         /// <summary>
