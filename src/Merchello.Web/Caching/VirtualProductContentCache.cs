@@ -93,6 +93,12 @@
             return CacheContent(cacheKey, get.Invoke(sku));
         }
 
+        /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         public override void ClearVirtualCache(DeleteEventArgs<IProduct> e)
         {
             base.ClearVirtualCache(e);
@@ -100,6 +106,12 @@
             RemoveFromCache(e.DeletedEntities);
         }
 
+        /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         public override void ClearVirtualCache(SaveEventArgs<IProduct> e)
         {
             base.ClearVirtualCache(e);
@@ -107,6 +119,40 @@
             RemoveFromCache(e.SavedEntities);
         }
 
+        /// <summary>
+        /// Gets the slug cache key.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetSlugCacheKey(string slug)
+        {
+            return string.Format("merch.productcontent.slug.{0}", slug);
+        }
+
+        /// <summary>
+        /// Gets the sku cache key.
+        /// </summary>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetSkuCacheKey(string sku)
+        {
+            return string.Format("merch.productcontent.sku.{0}", sku);
+        }
+
+        /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="products">
+        /// The products.
+        /// </param>
         private void RemoveFromCache(IEnumerable<IProduct> products)
         {
             foreach (var p in products)
@@ -115,6 +161,12 @@
             }
         }
 
+        /// <summary>
+        /// Clears the virtual content cache.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
         private void RemoveFromCache(IProduct product)
         {
             if (product.DetachedContents.Any())
@@ -126,16 +178,6 @@
             }
 
             Cache.ClearCacheItem(GetSkuCacheKey(product.Sku));
-        }
-
-        private string GetSlugCacheKey(string slug)
-        {
-            return string.Format("merch.productcontent.slug.{0}", slug);
-        }
-
-        private string GetSkuCacheKey(string sku)
-        {
-            return string.Format("merch.productcontent.sku.{0}", sku);
         }
     }
 }
