@@ -33,7 +33,7 @@
         /// <summary>
         /// The <see cref="IRuntimeCacheProvider"/>.
         /// </summary>
-        private readonly IRuntimeCacheProvider _cache;
+        private readonly CacheHelper _cache;
 
         /// <summary>
         /// A function used to fetch the IPublishedContent in the case it was not found in cache
@@ -49,7 +49,7 @@
         /// <param name="fetch">
         /// The fetch.
         /// </param>
-        protected VirtualContentCache(IRuntimeCacheProvider cache, Func<Guid, TContent> fetch)
+        protected VirtualContentCache(CacheHelper cache, Func<Guid, TContent> fetch)
         {
             Mandate.ParameterNotNull(cache, "cache");
             _cache = cache;
@@ -59,7 +59,7 @@
         /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>.
         /// </summary>
-        protected IRuntimeCacheProvider Cache
+        protected CacheHelper Cache
         {
             get
             {
@@ -80,7 +80,7 @@
         {
             var cacheKey = GetCacheKey(key);
 
-            var content = (TContent)_cache.GetCacheItem(cacheKey);
+            var content = (TContent)_cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;
 
             return _fetch != null ? 
@@ -106,8 +106,8 @@
         /// <summary>
         /// Gets a cached paged collection by it's cacheKey.
         /// </summary>
-        /// <param name="cacheKey">
-        /// The cache key.
+        /// <param name="pagedKeys">
+        /// The page <see cref="Guid"/>.
         /// </param>
         /// <param name="sortBy">
         /// The sort by.
@@ -115,13 +115,12 @@
         /// <returns>
         /// The <see cref="PagedCollection"/>.
         /// </returns>
-        public PagedCollection<TContent> GetPagedCollectionByCacheKey(string cacheKey, string sortBy)
+        public PagedCollection<TContent> GetPagedCollectionByCacheKey(Page<Guid> pagedKeys, string sortBy)
         {
-            var p = GetPageByCacheKey(cacheKey);
-            return p != null ?
-                MapPagedCollection(p, sortBy) :
+            return pagedKeys != null ?
+                MapPagedCollection(pagedKeys, sortBy) :
                 null;
-        } 
+        }
 
         /// <summary>
         /// Clears the runtime cache of IPublishedContent.
@@ -146,111 +145,6 @@
         }
 
         /// <summary>
-        /// Clears the runtime cache of IPublishedContent.
-        /// </summary>
-        /// <param name="entities">
-        /// The entities.
-        /// </param>
-        private void ClearVirtualCache(IEnumerable<TEntity> entities)
-        {
-            foreach (var e in entities)
-            {
-                ClearVirtualCache(e);
-            }
-
-            _cache.ClearCacheByKeySearch(GetPagedPrefix());
-        }
-
-        /// <summary>
-        /// Clears the runtime cache of IPublishedContent.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        private void ClearVirtualCache(TEntity entity)
-        {
-            _cache.ClearCacheItem(GetCacheKey(entity.Key));
-        }
-
-        /// <summary>
-        /// Gets a cache key for storing paged collection query results.
-        /// </summary>
-        /// <param name="methodName">
-        /// The method name.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetPagedQueryCacheKey(
-            string methodName,
-            long page,
-            long itemsPerPage,
-            string sortBy,
-            SortDirection sortDirection,
-            IDictionary<string, string> args = null)
-        {
-            var sb = new StringBuilder();
-            sb.Append(methodName)
-            .Append(page)
-            .Append(itemsPerPage)
-            .Append(sortBy)
-            .Append(sortDirection);
-
-            if (args != null)
-            {
-                foreach (var key in args.Keys)
-                {
-                    sb.Append(string.Format("{0}.{1}", key, args[key]));
-                }
-            }
-
-            return string.Format("{0}{1}", GetPagedPrefix(), sb.ToString().GetHashCode());
-        }
-
-        /// <summary>
-        /// Gets a page by it's cache key.
-        /// </summary>
-        /// <param name="cacheKey">
-        /// The cache key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Page{Guid}"/>.
-        /// </returns>
-        internal virtual Page<Guid> GetPageByCacheKey(string cacheKey)
-        {
-            return (Page<Guid>)_cache.GetCacheItem(cacheKey);
-        }
-
-        /// <summary>
-        /// Caches a page.
-        /// </summary>
-        /// <param name="cacheKey">
-        /// The cache key.
-        /// </param>
-        /// <param name="p">
-        /// The p.
-        /// </param>
-        internal virtual void CachePage(string cacheKey, Page<Guid> p)
-        {
-            _cache.GetCacheItem(cacheKey, () => p);
-        }
-
-        /// <summary>
         /// Caches content.
         /// </summary>
         /// <param name="cacheKey">
@@ -265,7 +159,7 @@
         internal virtual TContent CacheContent(string cacheKey, TContent content)
         {
             if (content == null) return default(TContent);
-            _cache.GetCacheItem(cacheKey, () => content);
+            _cache.RuntimeCache.GetCacheItem(cacheKey, () => content);
             return content;
         }
 
@@ -326,6 +220,30 @@
             // use the key first so we can clear it more easily
             return string.Format("{0}.{1}", key, typeof(TContent));
         }
-    }
 
+        /// <summary>
+        /// Clears the runtime cache of IPublishedContent.
+        /// </summary>
+        /// <param name="entities">
+        /// The entities.
+        /// </param>
+        private void ClearVirtualCache(IEnumerable<TEntity> entities)
+        {
+            foreach (var e in entities)
+            {
+                ClearVirtualCache(e);
+            }
+        }
+
+        /// <summary>
+        /// Clears the runtime cache of IPublishedContent.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        private void ClearVirtualCache(TEntity entity)
+        {
+            _cache.RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
+        }
+    }
 }

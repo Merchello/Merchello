@@ -5,11 +5,9 @@
     using System.Linq;
 
     using Merchello.Core.Models;
-    using Merchello.Web.Models.ContentEditing;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Events;
     using Umbraco.Core.Models;
 
@@ -22,7 +20,7 @@
         /// Initializes a new instance of the <see cref="VirtualProductContentCache"/> class.
         /// </summary>
         public VirtualProductContentCache()
-            : this(ApplicationContext.Current.ApplicationCache.RuntimeCache)
+            : this(ApplicationContext.Current.ApplicationCache)
         {
         }
 
@@ -32,7 +30,7 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public VirtualProductContentCache(IRuntimeCacheProvider cache)
+        public VirtualProductContentCache(CacheHelper cache)
             : this(cache, null)
         {
         }
@@ -46,7 +44,7 @@
         /// <param name="fetch">
         /// The fetch.
         /// </param>
-        public VirtualProductContentCache(IRuntimeCacheProvider cache, Func<Guid, IProductContent> fetch)
+        public VirtualProductContentCache(CacheHelper cache, Func<Guid, IProductContent> fetch)
             : base(cache, fetch)
         {
         }
@@ -66,7 +64,7 @@
         public IProductContent GetBySlug(string slug, Func<string, IProductContent> get)
         {
             var cacheKey = GetSlugCacheKey(slug);
-            var content = (IProductContent)Cache.GetCacheItem(cacheKey);
+            var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;
 
             return CacheContent(cacheKey, get.Invoke(slug));
@@ -87,7 +85,7 @@
         public IProductContent GetBySku(string sku, Func<string, IProductContent> get)
         {
             var cacheKey = GetSkuCacheKey(sku);
-            var content = (IProductContent)Cache.GetCacheItem(cacheKey);
+            var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;
 
             return CacheContent(cacheKey, get.Invoke(sku));
@@ -173,11 +171,11 @@
             {
                 foreach (var dc in product.DetachedContents.Where(x => !x.Slug.IsNullOrWhiteSpace()))
                 {
-                    Cache.ClearCacheItem(GetSlugCacheKey(dc.Slug));
+                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug));
                 }
             }
 
-            Cache.ClearCacheItem(GetSkuCacheKey(product.Sku));
+            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku));
         }
     }
 }

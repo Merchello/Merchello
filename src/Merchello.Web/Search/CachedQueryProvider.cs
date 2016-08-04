@@ -144,13 +144,13 @@
         private void InitializeProvider(IMerchelloContext merchelloContext)
         {
             if (_customerQuery == null)
-            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext.Services.CustomerService, _enableDataModifiers));
+            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext, _enableDataModifiers));
 
             if (_invoiceQuery == null)
-            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext.Services.InvoiceService, _enableDataModifiers));
+            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext, _enableDataModifiers));
 
             if (_orderQuery == null)
-            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext.Services.OrderService, _enableDataModifiers));
+            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext, _enableDataModifiers));
 
             if (_productQuery == null)
             _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(merchelloContext, _enableDataModifiers, _conversionType));

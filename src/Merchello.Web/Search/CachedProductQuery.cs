@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using Core;
@@ -18,6 +19,7 @@
     using Merchello.Web.Caching;
     using Merchello.Web.DataModifiers;
     using Merchello.Web.DataModifiers.Product;
+    using Merchello.Web.Models;
     using Merchello.Web.Models.ContentEditing.Content;
     using Merchello.Web.Models.VirtualContent;
 
@@ -42,11 +44,6 @@
         private readonly DetachedValuesConversionType _conversionType;
 
         /// <summary>
-        /// The data modifier.
-        /// </summary>
-        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier;
-
-        /// <summary>
         /// The <see cref="ProductContentFactory"/>.
         /// </summary>
         private readonly Lazy<ProductContentFactory> _productContentFactory;
@@ -54,7 +51,13 @@
         /// <summary>
         /// The <see cref="VirtualProductContentCache"/>.
         /// </summary>
-        public readonly VirtualProductContentCache _cache;
+        private readonly VirtualProductContentCache _cache;
+
+        /// <summary>
+        /// The data modifier.
+        /// </summary>
+        private Lazy<IDataModifierChain<IProductVariantDataModifierData>> _dataModifier;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedProductQuery"/> class.
@@ -139,12 +142,12 @@
         /// The is for back office editors.
         /// </param>
         internal CachedProductQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers, DetachedValuesConversionType conversionType)
-            : base(merchelloContext.Services.ProductService, indexProvider, searchProvider, enableDataModifiers)
+            : base(merchelloContext.Cache, merchelloContext.Services.ProductService, indexProvider, searchProvider, enableDataModifiers)
         {
             _productService = (ProductService)merchelloContext.Services.ProductService;
             this._conversionType = conversionType;
             _productContentFactory = new Lazy<ProductContentFactory>(() => new ProductContentFactory());
-            _cache = new VirtualProductContentCache(merchelloContext.Cache.RuntimeCache, this.GetProductContent);
+            _cache = new VirtualProductContentCache(merchelloContext.Cache, this.GetProductContent);
             this.Initialize();
         }
 
@@ -196,6 +199,70 @@
         public IProductContent TypedProductContentBySlug(string slug)
         {
             return _cache.GetBySlug(slug, GetProductContentBySlug);
+        }
+
+        /// <summary>
+        /// The typed product content from collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypedProductContentFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return TypedProductContentPageFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection).Items;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/>.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypedProductContentPageFromCollection(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var pagedKeys = GetCollectionPagedKeys(collectionKey, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.GetPagedCollectionByCacheKey(pagedKeys, sortBy);
         }
 
         /// <summary>
@@ -343,7 +410,11 @@
         /// </returns>
         public QueryResultDisplay Search(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending)
         {
-            return GetQueryResultDisplay(_productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection));
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+            return GetQueryResultDisplay(
+                pagedKeys ??
+                PagedKeyCache.CachePage(cacheKey, _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -369,7 +440,11 @@
         /// </returns>
         public QueryResultDisplay Search(string term, long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Ascending)
         {
-            return GetQueryResultDisplay(_productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection));
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection, new Dictionary<string, string> { { "term", term } });
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+            return GetQueryResultDisplay(
+                pagedKeys ??
+                PagedKeyCache.CachePage(cacheKey, _productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -400,14 +475,23 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsWithOption",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string> { { "optionKey", optionKey.ToString() } });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
             this.GetQueryResultDisplay(
-                _productService.GetProductsKeysWithOption(
-                    optionKey,
-                    page,
-                    itemsPerPage,
-                    sortBy,
-                    sortDirection));
+                pagedKeys ??
+                PagedKeyCache.CachePage(
+                    cacheKey,
+                    _productService.GetProductsKeysWithOption(optionKey, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -442,15 +526,29 @@
             string sortBy = "name",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var choices = choiceNames as string[] ?? choiceNames.ToArray();
+            var args = new Dictionary<string, string>
+                {
+                    { "optionName", optionName },
+                    { "choiceNames", string.Join(string.Empty, choices.OrderBy(x => x)) }
+                };
+
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsWithOption",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                args);
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysWithOption(
-                        optionName,
-                        choiceNames,
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                    pagedKeys ?? 
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysWithOption(optionName, choices, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -481,9 +579,22 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+              "GetProductsWithOption",
+              page,
+              itemsPerPage,
+              sortBy,
+              sortDirection,
+              new Dictionary<string, string> { { "optionName", optionName } });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysWithOption(optionName, page, itemsPerPage, sortBy, sortDirection));
+                    pagedKeys
+                    ?? PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysWithOption(optionName, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -518,15 +629,26 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+              "GetProductsWithOption",
+              page,
+              itemsPerPage,
+              sortBy,
+              sortDirection,
+              new Dictionary<string, string>
+                  {
+                        { "optionName", optionName },
+                        { "choiceName", choiceName }
+                  });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysWithOption(
-                        optionName,
-                        choiceName,
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysWithOption(optionName, choiceName, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -557,9 +679,26 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var names = optionNames as string[] ?? optionNames.ToArray();
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+              "GetProductsWithOption",
+              page,
+              itemsPerPage,
+              sortBy,
+              sortDirection,
+              new Dictionary<string, string>
+                  {
+                        { "optionNames", string.Join(string.Empty, names.OrderBy(x => x)) }
+                  });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysWithOption(optionNames, page, itemsPerPage, sortBy, sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysWithOption(names, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -594,9 +733,26 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsInPriceRange",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                    {
+                        { "min", min.ToString(CultureInfo.InvariantCulture) },
+                        { "max", max.ToString(CultureInfo.InvariantCulture) }
+                    });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysInPriceRange(min, max, page, itemsPerPage, sortBy, sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysInPriceRange(min, max, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -635,9 +791,27 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsInPriceRange",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                    {
+                        { "min", min.ToString(CultureInfo.InvariantCulture) },
+                        { "max", max.ToString(CultureInfo.InvariantCulture) },
+                        { "taxModifier", taxModifier.ToString(CultureInfo.InvariantCulture) }
+                    });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysInPriceRange(min, max, taxModifier, page, itemsPerPage, sortBy, sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysInPriceRange(min, max, taxModifier, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -668,9 +842,22 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsByBarcode",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string> { { "barcode", barcode } });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsByBarcode(barcode, page, itemsPerPage, sortBy, sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsByBarcode(barcode, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -701,9 +888,26 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var barcodesArray = barcodes as string[] ?? barcodes.ToArray();
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsByBarcode",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                    {
+                        { "barcodes", string.Join(string.Empty, barcodesArray.OrderBy(x => x)) }
+                    });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsByBarcode(barcodes, page, itemsPerPage, sortBy, sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsByBarcode(barcodesArray, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -734,14 +938,22 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsByManufacturer",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string> { { "manufacturer", manufacturer} });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysByManufacturer(
-                        manufacturer,
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysByManufacturer(manufacturer, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -772,14 +984,23 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var manufacturerArray = manufacturer as string[] ?? manufacturer.ToArray();
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+            "GetProductsByManufacturer",
+            page,
+            itemsPerPage,
+            sortBy,
+            sortDirection,
+            new Dictionary<string, string> { { "manufacturer", string.Join(string.Empty, manufacturerArray.OrderBy(x => x)) } });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysByManufacturer(
-                        manufacturer,
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysByManufacturer(manufacturerArray, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -810,13 +1031,28 @@
             SortDirection sortDirection = SortDirection.Descending,
             bool includeAllowOutOfStockPurchase = false)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsInStock",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                    {
+                        {
+                            "includeAllowOutOfStockPurchase",
+                            includeAllowOutOfStockPurchase.ToString()
+                        }
+                    });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysInStock(
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysInStock(page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -843,13 +1079,21 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Descending)
         {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>(
+                "GetProductsOnSale",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection);
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
             return
                 this.GetQueryResultDisplay(
-                    _productService.GetProductsKeysOnSale(
-                        page,
-                        itemsPerPage,
-                        sortBy,
-                        sortDirection));
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        _productService.GetProductsKeysOnSale(page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>

@@ -230,12 +230,7 @@
         {
             if (page <= 0) page = 1;
 
-            var products =
-                Query.Product.GetFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection)
-                    .Items.Select(x => (ProductDisplay)x)
-                    .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
-            
-            return products.Select(_productContentFactory.Value.BuildContent);
+            return Query.Product.TypedProductContentFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection);
         }
 
         /// <summary>

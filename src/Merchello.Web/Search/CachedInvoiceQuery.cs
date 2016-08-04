@@ -33,29 +33,29 @@
         /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
         /// </summary>
         public CachedInvoiceQuery()
-            : this(MerchelloContext.Current.Services.InvoiceService, true)
+            : this(MerchelloContext.Current, true)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
         /// </summary>
-        /// <param name="invoiceService">
-        /// The invoice service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        internal CachedInvoiceQuery(IInvoiceService invoiceService, bool enableDataModifiers)
-            : this(invoiceService, new CachedOrderQuery(MerchelloContext.Current.Services.OrderService, enableDataModifiers).GetByInvoiceKey, enableDataModifiers)
+        internal CachedInvoiceQuery(IMerchelloContext merchelloContext, bool enableDataModifiers)
+            : this(merchelloContext, new CachedOrderQuery(merchelloContext, enableDataModifiers).GetByInvoiceKey, enableDataModifiers)
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
         /// </summary>
-        /// <param name="invoiceService">
-        /// The invoice service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="getOrders">
         /// The get Orders.
@@ -63,9 +63,9 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        internal CachedInvoiceQuery(IInvoiceService invoiceService, Func<Guid, IEnumerable<OrderDisplay>> getOrders, bool enableDataModifiers)
+        internal CachedInvoiceQuery(IMerchelloContext merchelloContext, Func<Guid, IEnumerable<OrderDisplay>> getOrders, bool enableDataModifiers)
             : this(
-            invoiceService,
+            merchelloContext,
             getOrders,
             ExamineManager.Instance.IndexProviderCollection["MerchelloInvoiceIndexer"],
             ExamineManager.Instance.SearchProviderCollection["MerchelloInvoiceSearcher"],
@@ -76,8 +76,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedInvoiceQuery"/> class.
         /// </summary>
-        /// <param name="service">
-        /// The service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="getOrders">
         /// The get Orders.
@@ -92,14 +92,14 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         internal CachedInvoiceQuery(
-            IPageCachedService<IInvoice> service, 
+            IMerchelloContext merchelloContext, 
             Func<Guid, IEnumerable<OrderDisplay>> getOrders,
             BaseIndexProvider indexProvider, 
             BaseSearchProvider searchProvider,
             bool enableDataModifiers) 
-            : base(service, indexProvider, searchProvider, enableDataModifiers)
+            : base(merchelloContext.Cache, merchelloContext.Services.InvoiceService, indexProvider, searchProvider, enableDataModifiers)
         {
-            _invoiceService = (InvoiceService)service;
+            _invoiceService = (InvoiceService)merchelloContext.Services.InvoiceService;
             _getOrders = getOrders;
         }
 
