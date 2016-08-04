@@ -16,6 +16,7 @@ namespace Merchello.Tests.UnitTests.Services
 
     using Moq;
 
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
 
     [TestFixture]
@@ -39,16 +40,19 @@ namespace Merchello.Tests.UnitTests.Services
             //ICustomerAddressService customerAddressService,
             //IInvoiceService invoiceService,
             //IPaymentService paymentService
+            var cache = new CacheHelper(
+               new ObjectCacheRuntimeCacheProvider(),
+               new StaticCacheProvider(),
+               new NullCacheProvider());
 
             var repositoryFactory = new Mock<RepositoryFactory>(
-                 false,
-                 new NullCacheProvider(),
-                 new NullCacheProvider(),
+                 cache,
                  Logger.CreateWithDefaultLog4NetConfiguration(),
                  SqlSyntaxProvider);
 
             var uow = new MockUnitOfWorkProvider();
-
+   
+            var appContext = ApplicationContext.Current;
             _customerService = new CustomerService(uow, repositoryFactory.Object, logger, new Mock<IAnonymousCustomerService>().Object, new Mock<ICustomerAddressService>().Object, new Mock<IInvoiceService>().Object, new Mock<IPaymentService>().Object);
             Before = null;
             After = null;

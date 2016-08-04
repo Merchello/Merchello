@@ -17,6 +17,7 @@ namespace Merchello.Tests.UnitTests.Services
 
     using Moq;
 
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.SqlSyntax;
@@ -36,11 +37,12 @@ namespace Merchello.Tests.UnitTests.Services
         {
             base.FixtureSetup();
             //IDatabaseUnitOfWorkProvider provider, RepositoryFactory repositoryFactory, ILogger logger
-
-            var repositoryFactory = new Mock<RepositoryFactory>(
-                false,
-                new NullCacheProvider(),
-                new NullCacheProvider(),
+            var cache = new CacheHelper(
+                new ObjectCacheRuntimeCacheProvider(),
+                new StaticCacheProvider(),
+                new NullCacheProvider());
+            var repositoryFactory = new RepositoryFactory(
+                cache,
                 Logger.CreateWithDefaultLog4NetConfiguration(),
                 SqlSyntaxProvider);
 
@@ -53,7 +55,7 @@ namespace Merchello.Tests.UnitTests.Services
             var uow = new MockUnitOfWorkProvider();
 
 
-            _itemCacheService = new ItemCacheService(uow, repositoryFactory.Object, new Mock<ILogger>().Object);
+            _itemCacheService = new ItemCacheService(uow, repositoryFactory, new Mock<ILogger>().Object);
             Before = null;
             After = null;
 
