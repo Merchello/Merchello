@@ -54,7 +54,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ProductOptionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public ProductOptionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
             _detachedContentTypeRepository = new DetachedContentTypeRepository(work, cache, logger, sqlSyntax);
@@ -78,7 +78,7 @@
         /// <param name="detachedContentTypeRepository">
         /// The detached content type repository.
         /// </param>
-        public ProductOptionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IDetachedContentTypeRepository detachedContentTypeRepository)
+        public ProductOptionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IDetachedContentTypeRepository detachedContentTypeRepository)
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(detachedContentTypeRepository, "detachedContentTypeRepository");

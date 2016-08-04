@@ -41,7 +41,7 @@
         /// </param>
         public ShipMethodRepository(
             IDatabaseUnitOfWork work,
-            IRuntimeCacheProvider cache,
+            CacheHelper cache,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)

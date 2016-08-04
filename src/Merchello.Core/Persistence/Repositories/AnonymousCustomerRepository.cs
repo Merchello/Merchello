@@ -30,7 +30,7 @@
         /// The database unit of work.
         /// </param>
         /// <param name="cache">
-        /// The runtime cache.
+        /// The <see cref="CacheHelper"/>.
         /// </param>
         /// <param name="logger">
         /// The logger.
@@ -38,7 +38,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public AnonymousCustomerRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public AnonymousCustomerRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
         }

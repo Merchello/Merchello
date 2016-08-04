@@ -38,7 +38,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public NotificationMethodRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public NotificationMethodRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {            
         }

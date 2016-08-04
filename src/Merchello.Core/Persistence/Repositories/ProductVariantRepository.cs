@@ -48,7 +48,7 @@
         /// <param name="productOptionRepository">
         /// The <see cref="IProductOptionRepository"/>.
         /// </param>
-        public ProductVariantRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductOptionRepository productOptionRepository)
+        public ProductVariantRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductOptionRepository productOptionRepository)
             : base(work, cache, logger, sqlSyntax, () => new ProductVariantFactory())
         {
             Mandate.ParameterNotNull(productOptionRepository, "productOptionRepository");

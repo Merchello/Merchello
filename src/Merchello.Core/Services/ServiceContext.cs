@@ -172,6 +172,9 @@
         /// </summary>
         private Lazy<IWarehouseCatalogService> _warehouseCatalogService;
 
+        /// <summary>
+        /// The <see cref="RepositoryFactory"/>.
+        /// </summary>
         private readonly RepositoryFactory _repositoryFactory;
 
         #endregion

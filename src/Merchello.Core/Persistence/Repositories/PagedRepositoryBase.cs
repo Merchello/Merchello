@@ -7,7 +7,9 @@
 
     using Models.EntityBase;
     using Models.Rdbms;
-    using Querying;    
+    using Querying;
+
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
@@ -44,7 +46,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        protected PagedRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+        protected PagedRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
             : base(work, cache, logger, sqlSyntax)
         {
         }

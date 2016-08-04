@@ -53,7 +53,7 @@
         /// <param name="factory">
         /// The factory.
         /// </param>
-        protected MerchelloBulkOperationRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, Func<IEntityFactory<TEntity, TDto>> factory)
+        protected MerchelloBulkOperationRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, Func<IEntityFactory<TEntity, TDto>> factory)
             : base(work, cache, logger, sqlSyntax)
         {
             _factory = factory;
