@@ -4,7 +4,7 @@
 @using Merchello.Web.Models.Ui.Rendering
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
-    Layout = "Master.cshtml";
+    Layout = "FastTrackMaster.cshtml";
 
     var title = Model.Categories == null ? Model.Name : Model.Categories.Name;
     var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<ProductCollection>();

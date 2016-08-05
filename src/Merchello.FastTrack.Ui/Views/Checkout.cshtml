@@ -3,7 +3,7 @@
 @using Merchello.Web
 
 @{
-    Layout = "Master.cshtml";
+    Layout = "FastTrackMaster.cshtml";
     if (CurrentCustomer.Basket().IsEmpty)
     {
         Response.Redirect(ExampleUiHelper.Content.GetStoreRoot().Url);

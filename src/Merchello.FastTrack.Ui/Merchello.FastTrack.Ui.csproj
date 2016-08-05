@@ -551,6 +551,8 @@
     <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
     <Content Include="App_Plugins\Merchello\config\merchello.config" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="Views\FastTrackCategory.cshtml" />
+    <Content Include="Views\FastTrackMaster.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -611,7 +613,6 @@
     <Content Include="Views\Checkout.cshtml" />
     <Content Include="Views\CheckoutAddressForms.cshtml" />
     <Content Include="Views\ConfirmCheckout.cshtml" />
-    <Content Include="Views\Master.cshtml" />
     <Content Include="Views\Product.cshtml" />
     <Content Include="Views\Store.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />

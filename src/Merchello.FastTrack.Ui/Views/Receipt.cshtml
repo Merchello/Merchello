@@ -1,7 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.Receipt>
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
-	Layout = "Master.cshtml";
+	Layout = "FastTrackMaster.cshtml";
 }
 
 @Html.Action("SalesReceipt", "CheckoutSummary", new { area = "FastTrack" })
