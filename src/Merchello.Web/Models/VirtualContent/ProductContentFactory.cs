@@ -9,6 +9,7 @@
     using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Services;
+    using Merchello.Web.Caching;
     using Merchello.Web.Models.ContentEditing;
 
     using umbraco.cms.businesslogic.web;
@@ -62,6 +63,8 @@
         /// </summary>
         private Lazy<IEnumerable<IDetachedContentType>> _detachedContentTypes;
 
+        // private readonly VirtualProductContentCache _cache;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
         /// </summary>
@@ -69,6 +72,7 @@
             : this(MerchelloContext.Current.Services.StoreSettingService)
         {
         }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.

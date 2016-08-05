@@ -53,7 +53,7 @@
         [Obsolete("Use MerchelloHelper.Query.Product.GetByKey")]
         public static ProductDisplay GetByKey(string key)
         {
-            var merchello = new MerchelloHelper(GetMerchelloContext().Services, true);
+            var merchello = new MerchelloHelper(GetMerchelloContext(), true);
             return merchello.Query.Product.GetByKey(key.EncodeAsGuid());
         }
 
@@ -67,7 +67,7 @@
         public static IEnumerable<ProductDisplay> GetAllProducts()
         {
 
-            var merchello = new MerchelloHelper(GetMerchelloContext().Services, true);
+            var merchello = new MerchelloHelper(GetMerchelloContext(), true);
 
             return merchello.Query.Product.Search(0, int.MaxValue).Items.Select(x => (ProductDisplay)x);
         }
@@ -92,7 +92,7 @@
         public static ProductVariantDisplay GetVariantDisplayByKey(string key)
         {
 
-            var merchello = new MerchelloHelper(GetMerchelloContext().Services, true);
+            var merchello = new MerchelloHelper(GetMerchelloContext(), true);
             return null;
         }
     }

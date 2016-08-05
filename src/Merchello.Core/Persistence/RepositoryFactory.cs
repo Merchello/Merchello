@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Core.Persistence
 {
+    using System;
+
     using Cache;
     using Repositories;    
     using Services;
@@ -17,24 +19,14 @@
     public class RepositoryFactory
     {
         /// <summary>
-        /// The disable all cache.
-        /// </summary>
-        private readonly bool _disableAllCache;
-
-        /// <summary>
-        /// The null cache provider.
-        /// </summary>
-        private readonly IRuntimeCacheProvider _nullCacheProvider;
-
-        /// <summary>
-        /// The runtime cache provider.
-        /// </summary>
-        private readonly IRuntimeCacheProvider _runtimeCacheProvider;
-
-        /// <summary>
         /// The <see cref="ILogger"/>.
         /// </summary>
         private readonly ILogger _logger;
+
+        /// <summary>
+        /// The <see cref="CacheHelper"/>.
+        /// </summary>
+        private readonly CacheHelper _cacheHelper;
 
         /// <summary>
         /// The <see cref="ISqlSyntaxProvider"/>.
@@ -45,7 +37,7 @@
         /// Initializes a new instance of the <see cref="RepositoryFactory"/> class.
         /// </summary>
         public RepositoryFactory()
-            : this(false, new NullCacheProvider(), new ObjectCacheRuntimeCacheProvider())
+            : this(ApplicationContext.Current.ApplicationCache)
         {            
         }
 
@@ -59,7 +51,7 @@
         /// The SQL syntax.
         /// </param>
         public RepositoryFactory(ILogger logger, ISqlSyntaxProvider sqlSyntax)
-            : this(false, new NullCacheProvider(), new ObjectCacheRuntimeCacheProvider(), logger, sqlSyntax)
+            : this(ApplicationContext.Current.ApplicationCache, logger, sqlSyntax)
         {            
         }
 
@@ -75,8 +67,20 @@
         /// <param name="runtimeCacheProvider">
         /// The runtime cache provider.
         /// </param>
+        [Obsolete("Use constructor that passes CacheHelper")]
         public RepositoryFactory(bool disableAllCache, IRuntimeCacheProvider nullCacheProvider, IRuntimeCacheProvider runtimeCacheProvider)
             : this(disableAllCache, nullCacheProvider, runtimeCacheProvider, Logger.CreateWithDefaultLog4NetConfiguration(), ApplicationContext.Current.DatabaseContext.SqlSyntax)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositoryFactory"/> class.
+        /// </summary>
+        /// <param name="cacheHelper">
+        /// The <see cref="CacheHelper"/>.
+        /// </param>
+        public RepositoryFactory(CacheHelper cacheHelper)
+            : this(cacheHelper, Logger.CreateWithDefaultLog4NetConfiguration(), ApplicationContext.Current.DatabaseContext.SqlSyntax)
         {
         }
 
@@ -98,16 +102,32 @@
         /// <param name="sqlSyntaxProvider">
         /// The SQL syntax provider.
         /// </param>
+        [Obsolete("Use constructor that includes the CacheHelper")]
         public RepositoryFactory(
             bool disableAllCache,
             IRuntimeCacheProvider nullCacheProvider,
             IRuntimeCacheProvider runtimeCacheProvider,
             ILogger logger,
             ISqlSyntaxProvider sqlSyntaxProvider)
+            : this(ApplicationContext.Current.ApplicationCache, logger, sqlSyntaxProvider)
         {
-            _disableAllCache = disableAllCache;
-            _nullCacheProvider = nullCacheProvider;
-            _runtimeCacheProvider = runtimeCacheProvider;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositoryFactory"/> class.
+        /// </summary>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <param name="sqlSyntaxProvider">
+        /// The sql syntax provider.
+        /// </param>
+        internal RepositoryFactory(CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntaxProvider)
+        {
+            _cacheHelper = cache;
             _logger = logger;
             _sqlSyntax = sqlSyntaxProvider;
         }
@@ -134,7 +154,7 @@
         /// </returns>
         internal virtual IAppliedPaymentRepository CreateAppliedPaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new AppliedPaymentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new AppliedPaymentRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -148,7 +168,7 @@
         /// </returns>
         internal virtual IAuditLogRepository CreateAuditLogRepository(IDatabaseUnitOfWork uow)
         {
-            return new AuditLogRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new AuditLogRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -162,7 +182,7 @@
         /// </returns>
         internal virtual INoteRepository CreateNoteRepository(IDatabaseUnitOfWork uow)
         {
-            return new NoteRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new NoteRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -176,7 +196,7 @@
         /// </returns>
         internal virtual ICustomerRepository CreateCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateCustomerAddressRepository(uow), CreateNoteRepository(uow), _logger, _sqlSyntax);
+            return new CustomerRepository(uow, _cacheHelper, CreateCustomerAddressRepository(uow), CreateNoteRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -190,7 +210,7 @@
         /// </returns>
         internal virtual IAnonymousCustomerRepository CreateAnonymousCustomerRepository(IDatabaseUnitOfWork uow)
         {
-            return new AnonymousCustomerRepository(uow, _nullCacheProvider, _logger, _sqlSyntax);                
+            return new AnonymousCustomerRepository(uow, _cacheHelper, _logger, _sqlSyntax);                
         }
 
         /// <summary>
@@ -204,7 +224,7 @@
         /// </returns>
         internal virtual ICustomerAddressRepository CreateCustomerAddressRepository(IDatabaseUnitOfWork uow)
         {
-            return new CustomerAddressRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new CustomerAddressRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -218,7 +238,7 @@
         /// </returns>
         internal virtual IDigitalMediaRepository CreateDigitalMediaRepository(IDatabaseUnitOfWork uow)
         {
-            return new DigitalMediaRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new DigitalMediaRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -232,7 +252,7 @@
         /// </returns>
         internal virtual IDetachedContentTypeRepository CreateDetachedContentTypeRepository(IDatabaseUnitOfWork uow)
         {
-            return new DetachedContentTypeRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new DetachedContentTypeRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -246,7 +266,7 @@
         /// </returns>
         internal virtual IEntityCollectionRepository CreateEntityCollectionRepository(IDatabaseUnitOfWork uow)
         {
-            return new EntityCollectionRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new EntityCollectionRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -256,7 +276,7 @@
         /// <returns>The <see cref="IItemCacheRepository"/></returns>        
         internal virtual IItemCacheRepository CreateItemCacheRepository(IDatabaseUnitOfWork uow)
         {
-            return new ItemCacheRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateCacheLineItemRespository(uow), _logger, _sqlSyntax);
+            return new ItemCacheRepository(uow, _cacheHelper, CreateCacheLineItemRespository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -270,7 +290,7 @@
         /// </returns>
         internal virtual IItemCacheLineItemRepository CreateCacheLineItemRespository(IDatabaseUnitOfWork uow)
         {
-            return new ItemCacheLineItemRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new ItemCacheLineItemRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -286,7 +306,7 @@
         {
             return new InvoiceRepository(
                 uow,
-                _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider,
+                _cacheHelper,
                 CreateInvoiceLineItemRepository(uow),
                 CreateOrderRepository(uow),
                 CreateNoteRepository(uow), 
@@ -305,7 +325,7 @@
         /// </returns>
         internal virtual IInvoiceLineItemRepository CreateInvoiceLineItemRepository(IDatabaseUnitOfWork uow)
         {
-            return new InvoiceLineItemRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new InvoiceLineItemRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -319,7 +339,7 @@
         /// </returns>
         internal virtual IInvoiceStatusRepository CreateInvoiceStatusRepository(IDatabaseUnitOfWork uow)
         {
-            return new InvoiceStatusRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new InvoiceStatusRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -333,7 +353,7 @@
         /// </returns>
         internal virtual IGatewayProviderRepository CreateGatewayProviderRepository(IDatabaseUnitOfWork uow)
         {
-            return new GatewayProviderRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new GatewayProviderRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -347,7 +367,7 @@
         /// </returns>
         internal virtual INotificationMessageRepository CreateNotificationMessageRepository(IDatabaseUnitOfWork uow)
         {
-            return new NotificationMessageRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new NotificationMessageRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -361,7 +381,7 @@
         /// </returns>
         internal virtual INotificationMethodRepository CreateNotificationMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new NotificationMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new NotificationMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -375,7 +395,7 @@
         /// </returns>
         internal virtual IOfferRedeemedRepository CreateOfferRedeemedRepository(IDatabaseUnitOfWork uow)
         {
-            return new OfferRedeemedRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new OfferRedeemedRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -389,7 +409,7 @@
         /// </returns>
         internal virtual IOfferSettingsRepository CreateOfferSettingsRepository(IDatabaseUnitOfWork uow)
         {
-            return new OfferSettingsRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new OfferSettingsRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -403,7 +423,7 @@
         /// </returns>
         internal virtual IOrderRepository CreateOrderRepository(IDatabaseUnitOfWork uow)
         {
-            return new OrderRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
+            return new OrderRepository(uow, _cacheHelper, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -417,7 +437,7 @@
         /// </returns>
         internal virtual IOrderLineItemRepository CreateOrderLineItemRepository(IDatabaseUnitOfWork uow)
         {
-            return new OrderLineItemRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new OrderLineItemRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -431,7 +451,7 @@
         /// </returns>
         internal virtual IOrderStatusRepository CreateOrderStatusRepository(IDatabaseUnitOfWork uow)
         {
-            return new OrderStatusRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new OrderStatusRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -445,7 +465,7 @@
         /// </returns>
         internal virtual IPaymentRepository CreatePaymentRepository(IDatabaseUnitOfWork uow)
         {
-            return new PaymentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new PaymentRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -459,7 +479,7 @@
         /// </returns>
         internal virtual IPaymentMethodRepository CreatePaymentMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new PaymentMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new PaymentMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -473,7 +493,7 @@
         /// </returns>
         internal virtual IProductRepository CreateProductRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax, CreateProductVariantRepository(uow), CreateProductOptionRepository(uow));
+            return new ProductRepository(uow, _cacheHelper, _logger, _sqlSyntax, CreateProductVariantRepository(uow), CreateProductOptionRepository(uow));
         }
 
         /// <summary>
@@ -487,7 +507,7 @@
         /// </returns>
         internal virtual IProductOptionRepository CreateProductOptionRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductOptionRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new ProductOptionRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -501,7 +521,7 @@
         /// </returns>
         internal virtual IProductVariantRepository CreateProductVariantRepository(IDatabaseUnitOfWork uow)
         {
-            return new ProductVariantRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax, CreateProductOptionRepository(uow));
+            return new ProductVariantRepository(uow, _cacheHelper, _logger, _sqlSyntax, CreateProductOptionRepository(uow));
         }
 
         /// <summary>
@@ -518,7 +538,7 @@
         /// </returns>
         internal virtual IShipCountryRepository CreateShipCountryRepository(IDatabaseUnitOfWork uow, IStoreSettingService storeSettingService)
         {
-            return new ShipCountryRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, storeSettingService, _logger, _sqlSyntax);
+            return new ShipCountryRepository(uow, _cacheHelper, storeSettingService, _logger, _sqlSyntax);
         }
 
 
@@ -533,7 +553,7 @@
         /// </returns>
         internal virtual IShipMethodRepository CreateShipMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new ShipMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -547,7 +567,7 @@
         /// </returns>
         internal virtual IShipRateTierRepository CreateShipRateTierRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipRateTierRepository(uow, _nullCacheProvider, _logger, _sqlSyntax);       
+            return new ShipRateTierRepository(uow, _cacheHelper, _logger, _sqlSyntax);       
         }
 
         /// <summary>
@@ -561,7 +581,7 @@
         /// </returns>
         internal virtual IShipmentRepository CreateShipmentRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
+            return new ShipmentRepository(uow, _cacheHelper, CreateOrderLineItemRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -575,7 +595,7 @@
         /// </returns>
         internal virtual IShipmentStatusRepository CreateShipmentStatusRepository(IDatabaseUnitOfWork uow)
         {
-            return new ShipmentStatusRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new ShipmentStatusRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -589,7 +609,7 @@
         /// </returns>
         internal virtual IStoreSettingRepository CreateStoreSettingRepository(IDatabaseUnitOfWork uow)
         {
-            return new StoreSettingRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new StoreSettingRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -603,7 +623,7 @@
         /// </returns>
         internal virtual ITaxMethodRepository CreateTaxMethodRepository(IDatabaseUnitOfWork uow)
         {
-            return new TaxMethodRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new TaxMethodRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -617,7 +637,7 @@
         /// </returns>
         internal virtual IWarehouseRepository CreateWarehouseRepository(IDatabaseUnitOfWork uow)
         {
-            return new WarehouseRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, this.CreateWarehouseCatalogRepository(uow), _logger, _sqlSyntax);
+            return new WarehouseRepository(uow, _cacheHelper, this.CreateWarehouseCatalogRepository(uow), _logger, _sqlSyntax);
         }
 
         /// <summary>
@@ -631,7 +651,7 @@
         /// </returns>
         internal virtual IWarehouseCatalogRepository CreateWarehouseCatalogRepository(IDatabaseUnitOfWork uow)
         {
-            return new WarehouseCatalogRepository(uow, _disableAllCache ? _nullCacheProvider : _runtimeCacheProvider, _logger, _sqlSyntax);
+            return new WarehouseCatalogRepository(uow, _cacheHelper, _logger, _sqlSyntax);
         }
     }
 }

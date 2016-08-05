@@ -72,41 +72,41 @@ namespace Merchello.Tests.IntegrationTests.Examine
         }
 
 
-        [Test]
-        public void Can_Retrieve_A_CustomerDisplay_From_The_Index()
-        {
-            //// Arrange
-            var lastActivityDate = DateTime.Today;
+        //[Test]
+        //public void Can_Retrieve_A_CustomerDisplay_From_The_Index()
+        //{
+        //    //// Arrange
+        //    var lastActivityDate = DateTime.Today;
 
-            var customer = _customerService.CreateCustomerWithKey(
-                "rusty",
-                "Rusty",
-                "Swayne",
-                "test@test.com");
+        //    var customer = _customerService.CreateCustomerWithKey(
+        //        "rusty",
+        //        "Rusty",
+        //        "Swayne",
+        //        "test@test.com");
 
             
-            //customer.Notes = "Here are some notes";
-            customer.LastActivityDate = lastActivityDate;
+        //    //customer.Notes = "Here are some notes";
+        //    customer.LastActivityDate = lastActivityDate;
 
-            _customerService.Save(customer);
+        //    _customerService.Save(customer);
 
-            //// Act
-            var criteria = _searcher.CreateSearchCriteria(IndexTypes.Customer);
-            criteria.Field("loginName", "rusty");
-            var results = _searcher.Search(criteria);
+        //    //// Act
+        //    var criteria = _searcher.CreateSearchCriteria(IndexTypes.Customer);
+        //    criteria.Field("loginName", "rusty");
+        //    var results = _searcher.Search(criteria);
 
-            var customerDisplay = results.FirstOrDefault().ToCustomerDisplay(new CachedInvoiceQuery(PreTestDataWorker.InvoiceService, false).GetByCustomerKey);
+        //    var customerDisplay = results.FirstOrDefault().ToCustomerDisplay(new CachedInvoiceQuery(PreTestDataWorker.InvoiceService, false).GetByCustomerKey);
 
-            //// Assert
-            Assert.NotNull(customerDisplay);
-            Assert.AreEqual("rusty", customerDisplay.LoginName);
-            Assert.AreEqual("Rusty", customerDisplay.FirstName);
-            Assert.AreEqual("Swayne", customerDisplay.LastName);
-            Assert.AreEqual("test@test.com", customer.Email);
-            Assert.AreEqual(lastActivityDate, customerDisplay.LastActivityDate);
-            Assert.IsFalse(customerDisplay.Addresses.Any());
-            Assert.IsFalse(customerDisplay.TaxExempt);
-        }
+        //    //// Assert
+        //    Assert.NotNull(customerDisplay);
+        //    Assert.AreEqual("rusty", customerDisplay.LoginName);
+        //    Assert.AreEqual("Rusty", customerDisplay.FirstName);
+        //    Assert.AreEqual("Swayne", customerDisplay.LastName);
+        //    Assert.AreEqual("test@test.com", customer.Email);
+        //    Assert.AreEqual(lastActivityDate, customerDisplay.LastActivityDate);
+        //    Assert.IsFalse(customerDisplay.Addresses.Any());
+        //    Assert.IsFalse(customerDisplay.TaxExempt);
+        //}
 
         [TestFixtureTearDown]
         public void FixtureTearDown()

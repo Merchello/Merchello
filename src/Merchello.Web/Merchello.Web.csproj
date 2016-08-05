@@ -280,6 +280,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Caching\IPagedKeyQueryCache.cs" />
+    <Compile Include="Caching\IVirtualContentCache{T}.cs" />
+    <Compile Include="Caching\IVirtualProductContentCache.cs" />
+    <Compile Include="Caching\PagedKeyQueryCache.cs" />
+    <Compile Include="Caching\VirtualContentCache{T}.cs" />
+    <Compile Include="Caching\VirtualProductContentCache.cs" />
     <Compile Include="Controllers\Api\ProductDataTableApiControllerBase.cs" />
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
@@ -359,6 +365,7 @@
     <Compile Include="Models\ContentEditing\Content\DetachedContentDisplayExtensions.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\ProductAttributeDetachedDataValuesResolver.cs" />
     <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
+    <Compile Include="Models\PagedCollection.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\IItemCacheModel.cs" />
     <Compile Include="Models\Ui\IWishListModel.cs" />

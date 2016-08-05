@@ -4,6 +4,10 @@
     using System.Collections.Generic;
 
     using Core.Persistence.Querying;
+
+    using Merchello.Web.Models;
+    using Merchello.Web.Models.VirtualContent;
+
     using Models.ContentEditing;
     using Models.Querying;
 
@@ -12,6 +16,85 @@
     /// </summary>
     public interface ICachedProductQuery : ICachedCollectionQuery
     {
+        /// <summary>
+        /// Gets a <see cref="IProductContent"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        IProductContent TypedProductContent(Guid key);
+
+        /// <summary>
+        /// Gets the <see cref="IProductContent"/> by it's sku.
+        /// </summary>
+        /// <param name="sku">
+        /// The sku.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        IProductContent TypedProductContentBySku(string sku);
+
+        /// <summary>
+        /// Gets the <see cref="IProductContent"/> by it's slug.
+        /// </summary>
+        /// <param name="slug">
+        /// The slug.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        IProductContent TypedProductContentBySlug(string slug);
+
+        /// <summary>
+        /// Gets the typed <see cref="IProductContent"/> for a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/>.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        PagedCollection<IProductContent> TypedProductContentPageFromCollection(Guid collectionKey, long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
+
         /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's key
         /// </summary>

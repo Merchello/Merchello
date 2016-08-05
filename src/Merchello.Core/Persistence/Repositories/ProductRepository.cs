@@ -55,7 +55,7 @@
         /// <param name="productOptionRepository">
         /// The product option Repository.
         /// </param>
-        public ProductRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductVariantRepository productVariantRepository, IProductOptionRepository productOptionRepository)
+        public ProductRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IProductVariantRepository productVariantRepository, IProductOptionRepository productOptionRepository)
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(productVariantRepository, "productVariantRepository");
@@ -868,9 +868,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var result = TryGetCachedPageOfKeys("GetKeysFromCollection", collectionKey, string.Empty, page, itemsPerPage, orderExpression, sortDirection);
-            if (result != null) return result;
-
             var sql = new Sql();
             sql.Append("SELECT *")
               .Append("FROM [merchProductVariant]")
@@ -881,11 +878,7 @@
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
 
-            result = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-            CachePageOfKeys(result, collectionKey, "GetKeysFromCollection", string.Empty, page, itemsPerPage, orderExpression, sortDirection);
-            return result;
-
-            //return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
         /// <summary>
@@ -920,9 +913,6 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var result = TryGetCachedPageOfKeys("GetKeysFromCollection", collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
-            if (result != null) return result;
-
             var sql = this.BuildProductSearchSql(term);
             sql.Append("AND [merchProductVariant].[productKey] IN (")
                 .Append("SELECT DISTINCT([productKey])")
@@ -932,10 +922,7 @@
                     new { @eckey = collectionKey })
                 .Append(")");
 
-            result = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
-
-            CachePageOfKeys(result, collectionKey, "GetKeysFromCollection", term, page, itemsPerPage, orderExpression, sortDirection);
-            return result;
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
         /// <summary>

@@ -37,7 +37,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ItemCacheLineItemRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public ItemCacheLineItemRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {            
         }

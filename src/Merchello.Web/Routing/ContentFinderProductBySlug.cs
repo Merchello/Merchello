@@ -19,7 +19,7 @@
         /// Using the MerchelloHelper instead of the service will first look to construct the display object
         /// from the Examine index alleviating the need for a service call.
         /// </remarks>
-        private static readonly MerchelloHelper Merchello = new MerchelloHelper(MerchelloContext.Current.Services);
+        private static readonly MerchelloHelper Merchello = new MerchelloHelper();
 
         /// <summary>
         /// Tries to find a <see cref="IProductContent"/> by it's unique slug.

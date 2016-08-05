@@ -59,7 +59,7 @@
             : base(merchelloContext)
         {
             _customerService = merchelloContext.Services.CustomerService;
-            _merchello = new MerchelloHelper(merchelloContext.Services);
+            _merchello = new MerchelloHelper();
         }
 
         #region Payment Methods

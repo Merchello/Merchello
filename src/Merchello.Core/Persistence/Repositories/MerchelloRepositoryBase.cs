@@ -30,10 +30,15 @@
         /// </summary>
         private readonly ILogger _logger;
 
+        ///// <summary>
+        ///// The runtime cache provider.
+        ///// </summary>
+        //private readonly IRuntimeCacheProvider _cache;
+
         /// <summary>
-        /// The runtime cache provider.
+        /// The <see cref="CacheHelper"/>.
         /// </summary>
-        private readonly IRuntimeCacheProvider _cache;
+        private readonly CacheHelper _cacheHelper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloRepositoryBase{TEntity}"/> class.
@@ -41,20 +46,20 @@
         /// <param name="work">
         /// The unit of work.
         /// </param>
-        /// <param name="cache">
-        /// The runtime cache provider.
+        /// <param name="cacheHelper">
+        /// The <see cref="CacheHelper"/>.
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/>.
         /// </param>
-        protected MerchelloRepositoryBase(IUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger)
+        protected MerchelloRepositoryBase(IUnitOfWork work, CacheHelper cacheHelper, ILogger logger)
         {
             Mandate.ParameterNotNull(work, "work");
-            Mandate.ParameterNotNull(cache, "cache");
+            Mandate.ParameterNotNull(cacheHelper, "cacheHelper");
             Mandate.ParameterNotNull(logger, "logger");
 
             _work = work;
-            _cache = cache;
+            _cacheHelper = cacheHelper;
             _logger = logger;
         }
 
@@ -96,7 +101,18 @@
         /// </summary>
         protected IRuntimeCacheProvider RuntimeCache
         {
-            get { return _cache; }
+            get { return _cacheHelper.RuntimeCache; }
+        }
+
+        /// <summary>
+        /// Gets the request cache.
+        /// </summary>
+        protected ICacheProvider RequestCache
+        {
+            get
+            {
+                return _cacheHelper.RequestCache;
+            }
         }
 
         /// <summary>
@@ -118,14 +134,14 @@
             try
             {
                 PersistNewItem((TEntity)entity);
-                _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
             }
             catch (Exception ex)
             {
                 LogHelper.Error(GetType(), "An error occurred trying to add a new entity", ex);
                 ////if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
                 //// that we cache entities: http://issues.umbraco.org/issue/U4-4259
-                _cache.ClearCacheItem(GetCacheKey(entity.Key));
+                RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
                 throw;
             }
         }
@@ -139,7 +155,7 @@
             try
             {
                 PersistUpdatedItem((TEntity)entity);
-                _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+                RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
             }
             catch (Exception ex)
             {
@@ -147,7 +163,7 @@
                 LogHelper.Error(GetType(), "An error occurred trying to update an exiting entity", ex);
                 ////if an exception is thrown we need to remove the entry from cache, this is ONLY a work around because of the way
                 //// that we cache entities: http://issues.umbraco.org/issue/U4-4259
-                _cache.ClearCacheItem(GetCacheKey(entity.Key));
+                RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
                 throw;
             }
         }
@@ -159,7 +175,7 @@
         public virtual void PersistDeletedItem(IEntity entity)
         {
             PersistDeletedItem((TEntity)entity);
-            _cache.ClearCacheItem(GetCacheKey(entity.Key));
+            RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
         }
 
         #endregion
@@ -219,7 +235,7 @@
 			var entity = PerformGet(key);
 			if (entity != null)
 			{
-				_cache.GetCacheItem(GetCacheKey(key), () => entity);
+                RuntimeCache.GetCacheItem(GetCacheKey(key), () => entity);
 			}
 
 			if (entity != null)
@@ -243,7 +259,7 @@
                 
                 foreach (var key in keys)
                 {
-                    var entity = _cache.GetCacheItem(GetCacheKey(key));
+                    var entity = RuntimeCache.GetCacheItem(GetCacheKey(key));
                     if (entity != null) entities.Add((TEntity)entity);
                 }
 
@@ -254,7 +270,7 @@
             {
                 // fix http://issues.merchello.com/youtrack/issue/M-159
                 // Since IProduct and IProductVaraint both start with IProduct which was causing the cache conflict
-                var allEntities = _cache.GetCacheItemsByKeySearch(typeof(TEntity).Name + ".").ToArray(); 
+                var allEntities = RuntimeCache.GetCacheItemsByKeySearch(typeof(TEntity).Name + ".").ToArray(); 
                
                 ////_cache.GetAllByType(typeof(TEntity));
 
@@ -274,7 +290,7 @@
             {
                 if (entity != null)
                 {
-                    _cache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
+                    RuntimeCache.GetCacheItem(GetCacheKey(entity.Key), () => entity);
                 }
             }
 
@@ -351,7 +367,7 @@
 		{
 			var cacheKey = GetCacheKey(key);
 
-			var retEntity = _cache.GetCacheItem(cacheKey); 
+			var retEntity = RuntimeCache.GetCacheItem(cacheKey); 
 
 			return retEntity != null ? 
 				Attempt<TEntity>.Succeed((TEntity) retEntity) : 

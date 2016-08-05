@@ -4,12 +4,40 @@ using System.Linq;
 
 namespace Merchello.Tests.Base.DataMakers
 {
+    using System.Configuration;
+
+    using global::Umbraco.Core;
     using global::Umbraco.Core.Logging;
 
+    using Merchello.Core.Cache;
+    using Merchello.Core.Events;
     using Merchello.Core.Models;
+    using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.UnitOfWork;
+    using Merchello.Core.Services;
+    using Merchello.Tests.Base.SqlSyntax;
 
     public abstract class MockDataMakerBase
     {
+        public static ServiceContext GetServiceContext()
+        {
+            var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
+
+            // sets up the Umbraco SqlSyntaxProvider Singleton OBSOLETE
+            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
+
+            var sqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
+            var cache = new CacheHelper(
+                new ObjectCacheRuntimeCacheProvider(),
+                new StaticCacheProvider(),
+                new NullCacheProvider());
+
+            var repositoryFactory = new RepositoryFactory(cache, TestLogger, sqlSyntaxProvider);
+
+
+            return  new ServiceContext(repositoryFactory, new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
+        }
+
         public static ILogger TestLogger = Logger.CreateWithDefaultLog4NetConfiguration();
 
         public static Random NoWhammyStop = new Random();

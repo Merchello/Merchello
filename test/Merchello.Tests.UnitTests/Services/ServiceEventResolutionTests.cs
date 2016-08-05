@@ -14,6 +14,9 @@ using Umbraco.Core.Events;
 
 namespace Merchello.Tests.UnitTests.Services
 {
+    using Merchello.Core.Cache;
+
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.SqlSyntax;
 
@@ -34,7 +37,14 @@ namespace Merchello.Tests.UnitTests.Services
 
             var logger = Logger.CreateWithDefaultLog4NetConfiguration();
             var syntax = new Mock<ISqlSyntaxProvider>().Object;
-            _orderService = new OrderService(new MockUnitOfWorkProvider(), new RepositoryFactory(logger, syntax), logger, new StoreSettingService(logger, syntax), new ShipmentService(logger, syntax));
+            var cache = new CacheHelper(
+                new ObjectCacheRuntimeCacheProvider(),
+                new StaticCacheProvider(),
+                new NullCacheProvider());
+
+            var repositoryFactory = new RepositoryFactory(cache, logger, syntax);
+
+            _orderService = new OrderService(new MockUnitOfWorkProvider(), repositoryFactory, logger, new StoreSettingService(repositoryFactory, logger), new ShipmentService(repositoryFactory, logger));
 
             _orderStatusInvokeTester = new OrderStatusInvokeTester();
 

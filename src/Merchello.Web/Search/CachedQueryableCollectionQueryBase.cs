@@ -11,7 +11,9 @@
     using Merchello.Core.Services;
     using Merchello.Web.Models.Querying;
 
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
+    using Umbraco.Core.Persistence;
     using Umbraco.Web.Media.EmbedProviders.Settings;
 
     /// <summary>
@@ -27,9 +29,13 @@
         where TEntity : class, IEntity
         where TDisplay : class, new()
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryableCollectionQueryBase{TEntity,TDisplay}"/> class.
         /// </summary>
+        /// <param name="cacheHelper">
+        /// The <see cref="CacheHelper"/>.
+        /// </param>
         /// <param name="service">
         /// The service.
         /// </param>
@@ -42,8 +48,8 @@
         /// <param name="enableDataModifiers">
         /// The enable data modifiers.
         /// </param>
-        protected CachedQueryableCollectionQueryBase(IPageCachedService<TEntity> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers)
-            : base(service, indexProvider, searchProvider, enableDataModifiers)
+        protected CachedQueryableCollectionQueryBase(CacheHelper cacheHelper, IPageCachedService<TEntity> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers)
+            : base(cacheHelper, service, indexProvider, searchProvider, enableDataModifiers)
         {
         }
 
@@ -68,17 +74,16 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetFromCollection(
+        public virtual QueryResultDisplay GetFromCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var provider = this.GetEntityCollectionProvider(collectionKey);
-
+            
             return
-                this.GetQueryResultDisplay(provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
+                this.GetQueryResultDisplay(GetCollectionPagedKeys(collectionKey, page, itemsPerPage, sortBy, sortDirection));
         }
 
         /// <summary>
@@ -105,7 +110,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetFromCollection(
+        public virtual QueryResultDisplay GetFromCollection(
             Guid collectionKey,
             string searchTerm,
             long page,
@@ -123,9 +128,27 @@
 
 
             var args = this.BuildSearchTermArgs(searchTerm);
+            var cacheKey =
+                PagedKeyCache.GetPagedQueryCacheKey<CachedQueryableCollectionQueryBase<TEntity, TDisplay>>(
+                    "GetFromCollection",
+                    page,
+                    itemsPerPage,
+                    sortBy,
+                    sortDirection,
+                    new Dictionary<string, string>
+                    {
+                        { "collectionKey", collectionKey.ToString() },
+                        { "searchTerm", searchTerm }
+                    });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
 
             return
-                this.GetQueryResultDisplay(((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeys(args, page, itemsPerPage, sortBy, sortDirection));
+                this.GetQueryResultDisplay(
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey,
+                        ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeys(args, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -149,7 +172,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetNotInCollection(
+        public virtual QueryResultDisplay GetNotInCollection(
             Guid collectionKey,
             long page,
             long itemsPerPage,
@@ -164,8 +187,23 @@
                 return new QueryResultDisplay();
             }
 
-            return
-                this.GetQueryResultDisplay(((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection));
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<CachedQueryableCollectionQueryBase<TEntity, TDisplay>>(
+                "GetNotInCollection",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                {
+                    { "collectionKey", collectionKey.ToString() }
+                });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
+            return this.GetQueryResultDisplay(
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey, ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -192,7 +230,7 @@
         /// <returns>
         /// The <see cref="QueryResultDisplay"/>.
         /// </returns>
-        public QueryResultDisplay GetNotInCollection(
+        public virtual QueryResultDisplay GetNotInCollection(
             Guid collectionKey,
             string searchTerm,
             long page,
@@ -208,11 +246,27 @@
                 return new QueryResultDisplay();
             }
 
-
             var args = this.BuildSearchTermArgs(searchTerm);
 
-            return
-                this.GetQueryResultDisplay(((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(args, page, itemsPerPage, sortBy, sortDirection));
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<CachedQueryableCollectionQueryBase<TEntity, TDisplay>>(
+                "GetNotInCollection",
+                page,
+                itemsPerPage,
+                sortBy,
+                sortDirection,
+                new Dictionary<string, string>
+                {
+                    { "collectionKey", collectionKey.ToString() },
+                    { "searchTerm", searchTerm }
+                });
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
+            return this.GetQueryResultDisplay(
+                    pagedKeys ??
+                    PagedKeyCache.CachePage(
+                        cacheKey, 
+                        ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(args, page, itemsPerPage, sortBy, sortDirection)));
         }
 
         /// <summary>
@@ -239,6 +293,56 @@
             LogHelper.Error<CachedProductQuery>("EntityCollectionProvider was not resolved", attempt.Exception);
             throw attempt.Exception;                        
         }
+
+        /// <summary>
+        /// Gets a paged collection of entity keys for a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        protected Page<Guid> GetCollectionPagedKeys(
+            Guid collectionKey,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var args = new Dictionary<string, string>
+                {
+                    { "collectionKey", collectionKey.ToString() }
+                };
+
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<CachedQueryableCollectionQueryBase<TEntity, TDisplay>>(
+               "GetFromCollection",
+               page,
+               itemsPerPage,
+               sortBy,
+               sortDirection,
+               args);
+
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
+            var provider = this.GetEntityCollectionProvider(collectionKey);
+            return pagedKeys
+                   ?? PagedKeyCache.CachePage(
+                       cacheKey,
+                       provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
+        } 
 
         /// <summary>
         /// Builds the search term args.

@@ -28,22 +28,22 @@
         /// Initializes a new instance of the <see cref="CachedOrderQuery"/> class.
         /// </summary>
         public CachedOrderQuery()
-            : this(MerchelloContext.Current.Services.OrderService, true)
+            : this(MerchelloContext.Current, true)
         {            
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedOrderQuery"/> class.
         /// </summary>
-        /// <param name="orderService">
-        /// The order service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        internal CachedOrderQuery(IOrderService orderService, bool enableDataModifiers)
+        internal CachedOrderQuery(IMerchelloContext merchelloContext, bool enableDataModifiers)
             : this(
-            orderService,
+            merchelloContext,
             ExamineManager.Instance.IndexProviderCollection["MerchelloOrderIndexer"],
             ExamineManager.Instance.SearchProviderCollection["MerchelloOrderSearcher"],
             enableDataModifiers)
@@ -53,8 +53,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedOrderQuery"/> class.
         /// </summary>
-        /// <param name="service">
-        /// The service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="indexProvider">
         /// The index provider.
@@ -66,13 +66,13 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         internal CachedOrderQuery(
-            IPageCachedService<IOrder> service, 
+            IMerchelloContext merchelloContext, 
             BaseIndexProvider indexProvider, 
             BaseSearchProvider searchProvider,
             bool enableDataModifiers)
-            : base(service, indexProvider, searchProvider, enableDataModifiers)
+            : base(merchelloContext.Cache, merchelloContext.Services.OrderService, indexProvider, searchProvider, enableDataModifiers)
         {
-            _orderService = (OrderService)service;
+            _orderService = (OrderService)merchelloContext.Services.OrderService;
         }
 
         /// <summary>

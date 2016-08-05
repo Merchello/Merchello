@@ -11,6 +11,7 @@
 
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.ValueConverters;
+    using Merchello.Web.Caching;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Validation;
 
@@ -43,6 +44,7 @@
         /// </summary>
         private readonly bool _enableDataModifiers;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
         /// </summary>
@@ -58,25 +60,10 @@
         /// A value indicating whether or not to enable data modifiers
         /// </param>
         public MerchelloHelper(bool enableDataModifiers)
-            : this(MerchelloContext.Current.Services, enableDataModifiers)
+            : this(MerchelloContext.Current, enableDataModifiers)
         {            
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
-        /// </summary>
-        /// <param name="serviceContext">
-        /// The service context.
-        /// </param>
-        /// <remarks>
-        /// This constructor needs to be removed eventually as it assumes that we want to 
-        /// enable the data modifiers which might be unexpected for some implementations.  It's 
-        /// need here to prevent a breaking change in version 1.9.1
-        /// </remarks>
-        public MerchelloHelper(IServiceContext serviceContext)
-            : this(serviceContext, true)
-        {            
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
@@ -87,16 +74,31 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not to enable data modifiers
         /// </param>
+        [Obsolete("Use either the default constructor or the constructor that takes the MerchelloContext as an argument")]
         public MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers)
-            : this(serviceContext, enableDataModifiers, DetachedValuesConversionType.Db)
+            : this(MerchelloContext.Current, enableDataModifiers, DetachedValuesConversionType.Db)
         { 
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
         /// </summary>
-        /// <param name="serviceContext">
-        /// The service context.
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable data modifiers
+        /// </param>
+        public MerchelloHelper(IMerchelloContext merchelloContext, bool enableDataModifiers)
+            : this(merchelloContext, enableDataModifiers, DetachedValuesConversionType.Db)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="enableDataModifiers">
         /// The enable data modifiers.
@@ -104,12 +106,12 @@
         /// <param name="conversionType">
         /// The conversion type for detached values.
         /// </param>
-        internal MerchelloHelper(IServiceContext serviceContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+        internal MerchelloHelper(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
-            Mandate.ParameterNotNull(serviceContext, "ServiceContext cannot be null");
+            Mandate.ParameterNotNull(merchelloContext, "ServiceContext cannot be null");
 
             _enableDataModifiers = enableDataModifiers;
-            _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(serviceContext, _enableDataModifiers));
+            _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(merchelloContext, _enableDataModifiers, conversionType));
             _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
             _productContentFactory = new Lazy<ProductContentFactory>(() => new ProductContentFactory());
         }
@@ -158,9 +160,7 @@
         /// </returns>
         public IProductContent TypedProductContent(Guid key)
         {
-            var display = Query.Product.GetByKey(key);
-            return display == null ? null : 
-                display.AsProductContent(_productContentFactory.Value);
+            return Query.Product.TypedProductContent(key);
         }
 
         /// <summary>
@@ -174,9 +174,7 @@
         /// </returns>
         public IProductContent TypedProductContentBySlug(string slug)
         {
-            var display = Query.Product.GetBySlug(slug);
-            return display == null ? null : 
-                display.AsProductContent(_productContentFactory.Value);
+            return Query.Product.TypedProductContentBySlug(slug);
         }
 
         /// <summary>
@@ -190,9 +188,7 @@
         /// </returns>
         public IProductContent TypeProductContentBySku(string sku)
         {
-            var display = Query.Product.GetBySku(sku);
-            return display == null ? null :
-                display.AsProductContent(_productContentFactory.Value);
+            return Query.Product.TypedProductContentBySku(sku);
         }
 
         /// <summary>
@@ -234,12 +230,21 @@
         {
             if (page <= 0) page = 1;
 
-            var products =
-                Query.Product.GetFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection)
-                    .Items.Select(x => (ProductDisplay)x)
-                    .Where(x => x.Available && x.DetachedContents.Any(y => y.CanBeRendered));
-            
-            return products.Select(_productContentFactory.Value.BuildContent);
+            return Query.Product.TypedProductContentFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection);
+        }
+
+        /// <summary>
+        /// The type product content.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypeProductContent(IEnumerable<Guid> keys) // productKeys not productVariantKeys
+        {
+            return keys.Select(TypedProductContent);
         }
 
         /// <summary>
@@ -255,5 +260,6 @@
         {
             return CurrencyHelper.FormatCurrency(amount);
         }
+
     }
 }

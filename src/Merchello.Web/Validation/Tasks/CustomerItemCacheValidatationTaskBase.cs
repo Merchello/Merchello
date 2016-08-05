@@ -78,7 +78,7 @@
         /// </summary>
         private void Initialize()
         {
-            _merchello = new Lazy<MerchelloHelper>(() => new MerchelloHelper(_merchelloContext.Services, this._enableDataModifiers));
+            _merchello = new Lazy<MerchelloHelper>(() => new MerchelloHelper(_merchelloContext, this._enableDataModifiers));
         }
     }
 }

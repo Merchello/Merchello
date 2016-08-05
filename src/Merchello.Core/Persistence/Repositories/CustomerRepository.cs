@@ -56,7 +56,7 @@
         /// </param>
         public CustomerRepository(
             IDatabaseUnitOfWork work, 
-            IRuntimeCacheProvider cache, 
+            CacheHelper cache, 
             ICustomerAddressRepository customerAddressRepository, 
             INoteRepository noteRepository,
             ILogger logger, 

@@ -84,7 +84,7 @@
             _customerAddressService = ((Core.Services.ServiceContext)merchelloContext.Services).CustomerAddressService;
             _memberService = memberService;
 
-            _merchello = new MerchelloHelper(merchelloContext.Services, false);
+            _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
         /// <summary>

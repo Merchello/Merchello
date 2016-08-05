@@ -153,7 +153,7 @@
                 : ApplicationContext.Current.ApplicationCache;
 
 
-            var serviceContext = new ServiceContext(new RepositoryFactory(false, new NullCacheProvider(), cache.RuntimeCache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
+            var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
 
             InitializeLoggerResolver(logger);
