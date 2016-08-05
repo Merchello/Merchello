@@ -1,8 +1,0 @@
-﻿{
-	javascript : [
-		'~/App_Plugins/Merchello.PurchaseOrder/payment.purchaseorder.module.js',
-		'~/App_Plugins/Merchello.PurchaseOrder/payment.purchaseorder.models.js',
-		'~/App_Plugins/Merchello.PurchaseOrder/payment.purchaseorder.providersettings.controller.js',
-		'~/App_Plugins/Merchello.PurchaseOrder/payment.purchaseorder.paymentmethoddialog.controller.js'
-	]
-}

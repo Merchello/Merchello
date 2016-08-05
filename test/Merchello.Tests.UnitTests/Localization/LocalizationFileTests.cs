@@ -18,7 +18,7 @@
     [TestFixture]
     public class LocalizationFileTests
     {
-        private const string LocalizationFileDirectory = "../../src/Merchello.Web.UI/App_Plugins/Merchello/Lang";
+        private const string LocalizationFileDirectory = "../../src/Merchello.FastTrack.UI/App_Plugins/Merchello/Lang";
 
         private const string LocalizationSourceDirectory = "../../src/Merchello.Web.UI.Client/src/config/lang";
 
