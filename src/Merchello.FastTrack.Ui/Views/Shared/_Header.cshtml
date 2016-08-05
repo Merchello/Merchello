@@ -4,7 +4,7 @@
 @using Merchello.Web
 @{
     var storeRoot = ExampleUiHelper.Content.GetStoreRoot();
-    var catalogRoot = storeRoot.FirstChild(x => x.DocumentTypeAlias == "catalog" && x.IsVisible());
+    var catalogRoot = storeRoot.FirstChild(x => x.DocumentTypeAlias == "ftCatalog" && x.IsVisible());
     var basketPage = ExampleUiHelper.Content.GetBasket();
     var accountPage = ExampleUiHelper.Content.GetAccount();
 }

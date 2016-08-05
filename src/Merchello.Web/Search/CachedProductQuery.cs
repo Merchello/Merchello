@@ -266,6 +266,129 @@
         }
 
         /// <summary>
+        /// Search returning an <see cref="IProductContent"/> collection.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypedProductContentSearch(long page, long itemsPerPage, string sortBy = "name", SortDirection sortDirection = SortDirection.Descending)
+        {
+            return TypedProductContentSearchPaged(page, itemsPerPage, sortBy, sortDirection).Items;
+        }
+
+        /// <summary>
+        /// Search returning an <see cref="IProductContent"/> collection.
+        /// </summary>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypedProductContentSearch(
+            string term,
+            long page,
+            long itemsPerPage,
+            string sortBy = "name",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            return TypedProductContentSearchPaged(term, page, itemsPerPage, sortBy, sortDirection).Items;
+        }
+
+        /// <summary>
+        /// Search returning an <see cref="IProductContent"/> paged collection.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypedProductContentSearchPaged(
+            long page,
+            long itemsPerPage,
+            string sortBy = "name",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection);
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+
+            return
+                _cache.GetPagedCollectionByCacheKey(
+                    pagedKeys ?? _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection),
+                    sortBy);
+        }
+
+        /// <summary>
+        /// Search returning an <see cref="IProductContent"/> paged collection.
+        /// </summary>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypedProductContentSearchPaged(
+            string term,
+            long page,
+            long itemsPerPage,
+            string sortBy = "name",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection, new Dictionary<string, string> { { "term", term } });
+            var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+            return
+                _cache.GetPagedCollectionByCacheKey(
+                    pagedKeys ?? _productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection),
+                    sortBy);
+        }
+
+        /// <summary>
         /// Gets a <see cref="ProductDisplay"/> by it's unique key
         /// </summary>
         /// <param name="key">
