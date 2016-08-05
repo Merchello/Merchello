@@ -1,8 +1,0 @@
-﻿{
-	javascript : [
-		'~/App_Plugins/Merchello.Chase/payment.chase.module.js',
-		'~/App_Plugins/Merchello.Chase/payment.chase.models.js',
-		'~/App_Plugins/Merchello.Chase/payment.chase.providersettings.controller.js',
-		'~/App_Plugins/Merchello.Chase/payment.chase.paymentmethod.controller.js'
-	]
-}

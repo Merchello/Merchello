@@ -1,5 +1,0 @@
-﻿{
-	javascript : [
-		'~/App_Plugins/Merchello.Taxjar/Dialogs/taxjar.provider.configuration.controller.js'
-	]
-}

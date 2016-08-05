@@ -1,8 +1,0 @@
-﻿{
-	javascript : [
-		'~/App_Plugins/Merchello.USPS/shipping.usps.module.js',
-		'~/App_Plugins/Merchello.USPS/shipping.usps.models.js',
-		'~/App_Plugins/Merchello.USPS/shipping.usps.shippingmethod.controller.js',
-		'~/App_Plugins/Merchello.USPS/shipping.usps.shippingprovider.controller.js'
-	]
-}
