@@ -521,6 +521,13 @@
     <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\ftBillingAddress.cshtml" />
+    <Content Include="Views\ftFinalSaleSummary.cshtml" />
+    <Content Include="Views\ftPayment.cshtml" />
+    <Content Include="Views\ftPaymentMethod.cshtml" />
+    <Content Include="Views\ftPreSaleSummary.cshtml" />
+    <Content Include="Views\ftShippingAddress.cshtml" />
+    <Content Include="Views\ftShipRateQuote.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
