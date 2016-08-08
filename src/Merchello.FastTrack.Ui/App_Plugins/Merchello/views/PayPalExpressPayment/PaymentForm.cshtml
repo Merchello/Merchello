@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.Web.Store.Models.StorePaymentModel>
+@using Merchello.FastTrack.Ui
+@using Merchello.Web.Models.Ui
+@using Merchello.Web.Store.Controllers.Payment
+@using Umbraco.Web
+
+@using (Html.BeginUmbracoForm<PayPalExpressPaymentController>("Process", new { area = "Merchello" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        <a href="@ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url" class="btn btn-default">Back</a>
+        <input class="pull-right" type="image" src="//www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif" data-paypal-button="true" alt="PayPay Express" />
+    </div>
+   
+}

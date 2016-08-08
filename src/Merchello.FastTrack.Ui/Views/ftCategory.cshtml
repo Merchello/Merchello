@@ -1,4 +1,8 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<FtCategory>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
 @{
 	Layout = "FastTrack.cshtml";
 }
+
+@Html.Partial("_Headline")
+
+@Html.Partial("_ProductBoxList", Model.Products)

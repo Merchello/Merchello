@@ -1,4 +1,15 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<FtCheckout>
+﻿@inherits Merchello.Web.Mvc.MerchelloTemplatePage
+@using Merchello.FastTrack.Ui
+@using Merchello.Web
+
 @{
-	Layout = "FastTrack.cshtml";
+    Layout = "FastTrack.cshtml";
+    if (CurrentCustomer.Basket().IsEmpty)
+    {
+        Response.Redirect(ExampleUiHelper.Content.GetStoreRoot().Url);
+    }
 }
+
+@Html.Partial("_Headline")
+
+@RenderBody()

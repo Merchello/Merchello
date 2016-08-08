@@ -2334,8 +2334,7 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                 scope.selectedUiOption = _.find(scope.uiOptions, function(ui) {
                    return ui.key === scope.option.uiOption;
                 });
-                console.info(scope.selectedUiOption);
-                console.info(scope.uiOptions);
+
                 if (scope.option.key === '') {
                     scope.ready = true;
                 } else {
@@ -2486,7 +2485,12 @@ angular.module('merchello.directives').directive("productOptionsAddEdit",
                         scope.option.detachedContentTypeKey = '';
                     }
 
-                    scope.option.uiOption = scope.selectedUiOption.key;
+                    if (scope.selectedUiOption) {
+                        scope.option.uiOption = scope.selectedUiOption.key;
+                    } else {
+                        scope.option.uiOption = '';
+                    }
+
 
                     args.valid = true;
 
