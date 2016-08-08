@@ -1,8 +1,0 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
-@{
-	Layout = "FinalSaleSummary.cshtml";
-}
-
-@Html.Action("PaymentMethodForm", "CheckoutPaymentMethod", new { area = "FastTrack" })
-
-@Html.Action("DiscountForm", "CheckoutDiscount", new { area = "Merchello" })

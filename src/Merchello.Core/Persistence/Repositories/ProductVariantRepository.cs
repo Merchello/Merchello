@@ -381,19 +381,30 @@
 
             var inventoryDtos = Database.Fetch<CatalogInventoryDto, WarehouseCatalogDto>(sql);
 
+            var isSqlCe = SqlSyntax is SqlCeSyntaxProvider;
+
             string sqlStatement = string.Empty;
             int paramIndex = 0;
             var parms = new List<object>();
             var inserts = new List<CatalogInventoryDto>();
+
             foreach (var productVariant in productVariants)
             {
                 foreach (var dto in inventoryDtos.Where(i => i.ProductVariantKey == productVariant.Key))
                 {
                     if (!((ProductVariant)productVariant).CatalogInventoryCollection.Contains(dto.CatalogKey))
                     {
-                        sqlStatement += string.Format(" DELETE FROM merchCatalogInventory WHERE productVariantKey = @{0} AND catalogKey = @{1}", paramIndex++, paramIndex++);
-                        parms.Add(dto.ProductVariantKey);
-                        parms.Add(dto.CatalogKey);
+                        if (isSqlCe)
+                        {
+                            SqlCeDeleteCatalogInventory(dto.ProductVariantKey, dto.CatalogKey);
+                        }
+                        else
+                        {
+                            sqlStatement += string.Format(" DELETE FROM merchCatalogInventory WHERE productVariantKey = @{0} AND catalogKey = @{1}", paramIndex++, paramIndex++);
+                            parms.Add(dto.ProductVariantKey);
+                            parms.Add(dto.CatalogKey);
+                        }
+
                     }
                 }
 
@@ -402,13 +413,20 @@
                     inv.UpdateDate = DateTime.Now;
                     if (inventoryDtos.Any(i => i.ProductVariantKey == productVariant.Key && i.CatalogKey == inv.CatalogKey))
                     {
-                        sqlStatement += string.Format(" UPDATE merchCatalogInventory SET Count = @{0}, LowCount = @{1}, Location = @{2}, UpdateDate = @{3} WHERE catalogKey = @{4} AND productVariantKey = @{5}", paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++);
-                        parms.Add(inv.Count);
-                        parms.Add(inv.LowCount);
-                        parms.Add(inv.Location);
-                        parms.Add(inv.UpdateDate);
-                        parms.Add(inv.CatalogKey);
-                        parms.Add(inv.ProductVariantKey);
+                        if (isSqlCe)
+                        {
+                            SqlCeUpdateCatalogInventory(inv);
+                        }
+                        else
+                        {
+                            sqlStatement += string.Format(" UPDATE merchCatalogInventory SET Count = @{0}, LowCount = @{1}, Location = @{2}, UpdateDate = @{3} WHERE catalogKey = @{4} AND productVariantKey = @{5}", paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++, paramIndex++);
+                            parms.Add(inv.Count);
+                            parms.Add(inv.LowCount);
+                            parms.Add(inv.Location);
+                            parms.Add(inv.UpdateDate);
+                            parms.Add(inv.CatalogKey);
+                            parms.Add(inv.ProductVariantKey);
+                        }
                     }
                     else
                     {
@@ -437,10 +455,47 @@
             {
                 // Database.BulkInsertRecords won't work here because of the many to many and no pk.
                 foreach (var ins in inserts) Database.Insert(ins);
-                //Database.BulkInsertRecords<CatalogInventoryDto>(inserts);
             }
         }
 
+        /// <summary>
+        /// Updates SqlCe database where bulk update is not available.
+        /// </summary>
+        /// <param name="inv">
+        /// The inventory.
+        /// </param>
+        private void SqlCeUpdateCatalogInventory(ICatalogInventory inv)
+        {
+            var sql =
+                new Sql(
+                    "UPDATE merchCatalogInventory SET Count = @ct, LowCount = @lct, Location = @loc, UpdateDate = @ud WHERE catalogKey = @ck AND productVariantKey = @pvk",
+                    new
+                        {
+                            @ct = inv.Count,
+                            @lct = inv.LowCount,
+                            @loc = inv.Location,
+                            @ud = DateTime.Now,
+                            @ck = inv.CatalogKey,
+                            @pvk = inv.ProductVariantKey
+                        });
+
+            Database.Execute(sql);
+        }
+
+        /// <summary>
+        /// Deletes catalog inventory where bulk operations are not available.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <param name="catalogKey">
+        /// The catalog key.
+        /// </param>
+        private void SqlCeDeleteCatalogInventory(Guid productVariantKey, Guid catalogKey)
+        {
+            var sql = new Sql("DELETE FROM merchCatalogInventory WHERE productVariantKey = @pvk AND catalogKey = @ck", new { @pvk = productVariantKey, @ck = catalogKey });
+            Database.Execute(sql);
+        }
 
 
         #region DetachedContent

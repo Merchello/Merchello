@@ -5,6 +5,7 @@
     using System.Data;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
@@ -139,6 +140,7 @@
             if (SqlSyntax is SqlCeSyntaxProvider)
             {
                 foreach (var e in entitiesArray) PersistUpdatedItem(e);
+                return;
             }
 
 
@@ -174,7 +176,7 @@
                     var allColumns = dto.ColumnValues().ToArray();
                     var keyColumn = allColumns.First(x => x.Item1 == "pk"); // this is always named pk in Merchello
                     var paramColumns = allColumns.Where(x => x.Item1 != "pk");
-
+                    
                     sqlStatement += string.Format(" UPDATE [{0}] SET", tableName);
                     var firstParam = true;
 
@@ -185,7 +187,8 @@
                         if (firstParam) firstParam = false;
                     }
               
-                    sqlStatement += string.Format(" WHERE [pk] = @{0}", paramIndex++);
+                    sqlStatement += string.Format(" WHERE [pk] = @{0};", paramIndex++);
+
                     parms.Add(keyColumn.Item2);
                 }
 
