@@ -500,7 +500,6 @@
     <Content Include="Views\ftBasket.cshtml" />
     <Content Include="Views\ftCatalog.cshtml" />
     <Content Include="Views\ftCategory.cshtml" />
-    <Content Include="Views\ftCheckout.cshtml" />
     <Content Include="Views\ftLogin.cshtml" />
     <Content Include="Views\ftProduct.cshtml" />
     <Content Include="Views\ftReceipt.cshtml" />
@@ -528,6 +527,7 @@
     <Content Include="Views\ftPreSaleSummary.cshtml" />
     <Content Include="Views\ftShippingAddress.cshtml" />
     <Content Include="Views\ftShipRateQuote.cshtml" />
+    <Content Include="Views\ftCheckout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
