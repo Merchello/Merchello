@@ -28,6 +28,7 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.toggleOnSale = toggleOnSale;
         $scope.toggleAvailable = toggleAvailable;
         $scope.redirectToEditor = redirectToEditor;
+        $scope.getVariantAttributeForOption = getVariantAttributeForOption;
 
         function init() {
             angular.forEach($scope.product.productVariants, function(pv) {
@@ -165,6 +166,20 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
                 $scope.product.productVariants[i].selected = newstate;
             }
             $scope.allVariants = newstate;
+        }
+
+        function getVariantAttributeForOption(productVariant, option) {
+            console.info(option);
+            console.info(productVariant);
+            var att = _.find(productVariant.attributes, function(pa) {
+               return pa.optionKey === option.key;
+            });
+
+            if (att) {
+                return att.name;
+            } else {
+                return '';
+            }
         }
 
         /**
