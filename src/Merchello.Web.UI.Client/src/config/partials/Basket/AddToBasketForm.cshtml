@@ -58,7 +58,7 @@
                 }
 
                 // Inventory display
-                if (hasVariants || product.TrackInventory)
+                if ((hasVariants && product.ProductVariants.Any(x => x.TrackInventory)) || product.TrackInventory)
                 {
                     <div data-muiinv="@product.Key">
                         @if (!hasVariants && product.TrackInventory)
