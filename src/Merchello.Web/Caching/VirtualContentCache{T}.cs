@@ -39,6 +39,11 @@
         /// A function used to fetch the IPublishedContent in the case it was not found in cache
         /// </summary>
         private readonly Func<Guid, TContent> _fetch;
+
+        /// <summary>
+        /// The modified versions.
+        /// </summary>
+        private readonly bool _modifiedVersions;
  
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualContentCache{TContent,TEntity}"/> class. 
@@ -49,12 +54,18 @@
         /// <param name="fetch">
         /// The fetch.
         /// </param>
-        protected VirtualContentCache(CacheHelper cache, Func<Guid, TContent> fetch)
+        /// <param name="modified">
+        /// The modified.
+        /// </param>
+        protected VirtualContentCache(CacheHelper cache, Func<Guid, TContent> fetch, bool modified)
         {
             Mandate.ParameterNotNull(cache, "cache");
             _cache = cache;
             _fetch = fetch;
+            ModifiedVersion = modified;
         }
+
+        protected bool ModifiedVersion { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="IRuntimeCacheProvider"/>.
@@ -78,7 +89,7 @@
         /// </returns>
         public TContent GetByKey(Guid key)
         {
-            var cacheKey = GetCacheKey(key);
+            var cacheKey = GetCacheKey(key, ModifiedVersion);
 
             var content = (TContent)_cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;
@@ -152,7 +163,8 @@
         /// </param>
         public void ClearVirtualCache(Guid key)
         {
-            _cache.RuntimeCache.ClearCacheItem(GetCacheKey(key));
+            _cache.RuntimeCache.ClearCacheItem(GetCacheKey(key, true));
+            _cache.RuntimeCache.ClearCacheItem(GetCacheKey(key, false));
         }
 
         /// <summary>
@@ -207,29 +219,21 @@
         }
 
         /// <summary>
-        /// Gets the paged prefix.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private static string GetPagedPrefix()
-        {
-            return string.Format("merchpagevcontent{0}", typeof(TEntity));
-        }
-
-        /// <summary>
         /// The internal cache key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
+        /// <param name="modified">
+        /// The modified.
+        /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string GetCacheKey(Guid key)
+        private string GetCacheKey(Guid key, bool modified)
         {
             // use the key first so we can clear it more easily
-            return string.Format("{0}.{1}", key, typeof(TContent));
+            return string.Format("{0}.{1}.{2}", key, typeof(TContent), modified);
         }
 
         /// <summary>
