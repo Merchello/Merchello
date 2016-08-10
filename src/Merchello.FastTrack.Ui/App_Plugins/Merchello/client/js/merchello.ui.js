@@ -370,6 +370,7 @@ MUI.AddItem = {
                         });
                     }
 
+
                     // find all of the AddItem forms
                     MUI.AddItem.bind.forms();
 
@@ -440,12 +441,13 @@ MUI.AddItem = {
                    $(o).change(function() {
                        // TODO filter lists to ensure all choices are available
                        MUI.AddItem.updateVariantPricing(frm, key);
+                       MUI.AddItem.ensureInventorySettings(frm, key);
                    });
                 });
             }
             // initial pricing (on load)
             MUI.AddItem.updateVariantPricing(frm, key);
-
+            MUI.AddItem.ensureInventorySettings(frm, key);
         }
     },
 
@@ -468,32 +470,51 @@ MUI.AddItem = {
             return;
         }
 
-        // get all of the options associated with this product so we can
-        // find the matching data row in the product data table
-        var options = MUI.AddItem.getOptionsForProduct(frm, key);
+        var row = MUI.AddItem.findProductDataTableRow(frm, key);
 
-        if (options.length > 0) {
-            // get the current selections
-            var keys = [];
-            $.each(options, function(idx, o) {
-               keys.push($(o).val());
-            });
+        if (row !== undefined) {
 
-            var pdt = MUI.AddItem.getProductDataTable(key);
-            if (pdt !== undefined) {
-                if (keys.length > 0) {
-                    var row = pdt.getRowByMatchKeys(keys);
-                    if (row !== undefined) {
-                        // update the price
-                        var html = '';
-                        if (row.onSale) {
-                            html = "<span class='sale-price'>" + row.formattedSalePrice + "</span> <span class='original-price'>" + row.formattedPrice + "</span>";
-                        } else {
-                            html = "<span>" + row.formattedPrice + "</span>";
-                        }
+            // update the price
+            var html = '';
+            if (row.onSale) {
+                html = "<span class='sale-price'>" + row.formattedSalePrice + "</span> <span class='original-price'>" + row.formattedPrice + "</span>";
+            } else {
+                html = "<span>" + row.formattedPrice + "</span>";
+            }
 
-                        $(appendTo).html(html);
+            $(appendTo).html(html);
+        }
+
+    },
+
+    ensureInventorySettings: function(frm, key) {
+        var row = MUI.AddItem.findProductDataTableRow(frm, key);
+        if (row !== undefined) {
+            var appendTo = $(frm).find('[data-muiinv="' + row.productKey + '"]');
+            if (appendTo.length > 0) {
+
+                var showBtn = row.outOfStockPurchase || row.inventoryCount > 0;
+
+                var html = '';
+                if (row.inventoryCount > 0) {
+                    html = MUI.Settings.Labels.InStock.replace('@0', row.inventoryCount);
+                } else {
+
+                    if (row.outOfStockPurchase) {
+                        html = MUI.Settings.Labels.OutOfStockAllowPurchase;
+                    } else {
+                        html = MUI.Settings.Labels.OutOfStock;
                     }
+                    html = "<span>" + html + "</span>";
+                }
+
+                $(appendTo).html(html);
+                var btn = $(frm).find(':submit');
+
+                if (showBtn) {
+                    $(btn).show();
+                } else {
+                    $(btn).hide();
                 }
             }
         }
@@ -512,6 +533,30 @@ MUI.AddItem = {
         } else {
             return [];
         }
+    },
+
+    findProductDataTableRow: function(frm, key) {
+        // get all of the options associated with this product so we can
+        // find the matching data row in the product data table
+        var options = MUI.AddItem.getOptionsForProduct(frm, key);
+
+        var row = undefined;
+        if (options.length > 0) {
+            // get the current selections
+            var keys = [];
+            $.each(options, function (idx, o) {
+                keys.push($(o).val());
+            });
+
+            var pdt = MUI.AddItem.getProductDataTable(key);
+            if (pdt !== undefined) {
+                if (keys.length > 0) {
+                    row = pdt.getRowByMatchKeys(keys);
+                }
+            }
+        }
+
+        return row;
     },
 
     // Gets the data table

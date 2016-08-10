@@ -713,6 +713,7 @@
     <key alias="dragAndReorderHelper">If you reorder your options and variants, it will change the order in which they appear on your storefront. Drag your options (ie size, style) vertically and variants (ie women's, small) horizontally.</key>
     <key alias="changePrices">Change prices</key>
     <key alias="updateInventory">Update inventory</key>
+    <key alias="toggleTracksInventory">Toggle Tracks Inventory</key>
     <key alias="toggleAvailable">Toggle Available</key>
     <key alias="toggleOnSale">Toggle On Sale</key>
     <key alias="duplicateVariant"> Duplicate Variant</key>

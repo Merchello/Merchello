@@ -21,7 +21,7 @@
                     if (angular.isArray(jsonResult)) {
                         for(var i = 0; i < jsonResult.length; i++) {
                             var result = genericModelBuilder.transform(jsonResult[i], Constructor);
-                            result.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult[i].detachedDataValues)
+                            result.detachedDataValues = extendedDataDisplayBuilder.transform(jsonResult[i].detachedDataValues);
                             results.push(result);
                         }
                     } else {

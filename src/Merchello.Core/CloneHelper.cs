@@ -3,6 +3,8 @@
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Helper methods for cloning objects
     /// </summary>
@@ -30,6 +32,12 @@
 
                 return (T)formatter.Deserialize(ms);
             }
+        }
+
+        public static T JsonClone<T>(T obj)
+        {
+            var json = JsonConvert.SerializeObject(obj);
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

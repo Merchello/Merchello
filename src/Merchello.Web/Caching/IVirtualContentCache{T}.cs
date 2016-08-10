@@ -60,5 +60,13 @@
         /// The e.
         /// </param>
         void ClearVirtualCache(DeleteEventArgs<TEntity> e);
+
+        /// <summary>
+        /// Clears the runtime cache of IPublishedContent.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        void ClearVirtualCache(Guid key);
     }
 }

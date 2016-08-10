@@ -434,6 +434,8 @@
         
         private static void IndexProductVariant(IProductVariant productVariant)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(productVariant.ProductKey);
             ProductIndexer.ReIndexNode(productVariant.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
@@ -444,6 +446,8 @@
 
         private static void DeleteProductVariantFromIndex(IProductVariant productVariant)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(productVariant.ProductKey);
             ProductIndexer.DeleteFromIndex(((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
 

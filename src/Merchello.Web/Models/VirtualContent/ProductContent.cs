@@ -169,9 +169,9 @@
             get
             {
                 // use the display object here so the Lazy does not execute if not needed
-                return _display.ProductVariants != null
-                           ? _display.ProductVariants.Any()
-                                 ? _display.ProductVariants.Sum(x => x.TotalInventoryCount)
+                return ProductVariants != null
+                           ? ProductVariants.Any()
+                                 ? ProductVariants.Sum(x => x.TotalInventoryCount)
                                  : this.CatalogInventories.Sum(x => x.Count)
                            : 0;
             }

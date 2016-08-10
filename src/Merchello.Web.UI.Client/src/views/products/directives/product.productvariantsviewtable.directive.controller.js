@@ -7,13 +7,15 @@
  * The controller for the product variant view table view directive
  */
 angular.module('merchello').controller('Merchello.Directives.ProductVariantsViewTableDirectiveController',
-    ['$scope', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
-    function($scope, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
+    ['$scope', '$q', '$timeout', '$location', 'notificationsService', 'dialogService', 'dialogDataFactory', 'productResource', 'productDisplayBuilder', 'productVariantDisplayBuilder',
+    function($scope, $q, $timeout, $location, notificationsService, dialogService, dialogDataFactory, productResource, productDisplayBuilder, productVariantDisplayBuilder) {
 
         $scope.sortProperty = "sku";
         $scope.sortOrder = "asc";
         $scope.bulkAction = true;
         $scope.allVariants = false;
+
+        $scope.checkAll = false;
 
         // exposed methods
         $scope.assertActiveShippingCatalog = assertActiveShippingCatalog;
@@ -30,11 +32,23 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         $scope.redirectToEditor = redirectToEditor;
         $scope.getVariantAttributeForOption = getVariantAttributeForOption;
 
+
+        $scope.toggleChecks = function() {
+            if ($scope.checkAll === true) {
+                selectVariants('All');
+            } else {
+                selectVariants('None');
+            }
+        }
+
+
         function init() {
             angular.forEach($scope.product.productVariants, function(pv) {
                 pv.selected = false;
             });
         }
+
+
 
         /**
          * @ngdoc method
@@ -56,9 +70,10 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
             // Build a list of variants to select
             var filteredVariants = [];
 
-            if (attributeToSelect == "All") {
+            if (attributeToSelect === "All") {
                 filteredVariants = $scope.product.productVariants;
-            } else if (attributeToSelect == "None") {
+            } else if (attributeToSelect === "None") {
+                filteredVariants = [];
             } else {
                 filteredVariants = _.filter($scope.product.productVariants,
                     function (variant) {
@@ -169,8 +184,6 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
         }
 
         function getVariantAttributeForOption(productVariant, option) {
-            console.info(option);
-            console.info(productVariant);
             var att = _.find(productVariant.attributes, function(pa) {
                return pa.optionKey === option.key;
             });
@@ -191,26 +204,42 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Toggles the variant available setting
          */
         function toggleAvailable() {
-            var success = true;
+
+            var promises = [];
             var selected = $scope.selectedVariants();
             for (var i = 0; i < selected.length; i++) {
                 selected[i].available = !selected[i].available;
-                var savepromise = productResource.saveVariant(selected[i]);
-                savepromise.then(function () {
-                    //notificationsService.success("Product Variant Saved", "");
-                }, function (reason) {
-                    success = false;
-                    //notificationsService.error("Product Variant Save Failed", reason.message);
-                });
+                promises.push(productResource.saveVariant(selected[i]));
             }
-            if (success) {
-                notificationsService.success("Confirmed available update", "");
+            persistPromises(promises, "Confirmed available update");
+        }
+
+
+        $scope.toggleTracksInventory = function() {
+            var promises = [];
+            var selected = $scope.selectedVariants();
+            for(var i = 0; i < selected.length; i++) {
+                selected[i].trackInventory = !selected[i].trackInventory;
+                promises.push(productResource.saveVariant(selected[i]));
+            }
+
+            persistPromises(promises, "Confirmed tracks inventory update");
+
+        }
+
+        function persistPromises(promises, msg) {
+            if (promises.length === 0) {
+                return;
+            }
+
+            $q.all(promises).then(function(data) {
+                notificationsService.success(msg, "");
+                $scope.checkAll = false;
+                selectVariants('None');
                 $timeout(function() {
                     reload();
                 }, 400);
-            } else {
-                notificationsService.error("Failed to update available", "");
-            }
+            });
         }
 
         //--------------------------------------------------------------------------------------
@@ -260,26 +289,14 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
 
 
         function toggleOnSale() {
-            var success = true;
+            var promises = [];
             var selected = $scope.selectedVariants();
             for (var i = 0; i < selected.length; i++) {
                 selected[i].onSale = !selected[i].onSale;
-                var savepromise = productResource.saveVariant(selected[i]);
-                savepromise.then(function () {
-                    //notificationsService.success("Product Variant Saved", "");
-                }, function (reason) {
-                    success = false;
-                    //notificationsService.error("Product Variant Save Failed", reason.message);
-                });
+                promises.push(productResource.saveVariant(selected[i]));
+
             }
-            if (success) {
-                notificationsService.success("Confirmed on sale update", "");
-                $timeout(function() {
-                    reload();
-                }, 400);
-            } else {
-                notificationsService.error("Failed to update on sale setting", "");
-            }
+            persistPromises(promises, "Confirmed on sale update");
         }
 
         /**
@@ -292,29 +309,16 @@ angular.module('merchello').controller('Merchello.Directives.ProductVariantsView
          * Handles the new inventory passed back from the dialog and sets the variants inventory and saves them.
          */
         function updateInventoryDialogConfirm(dialogData) {
-            var success = true;
+            var promises = [];
             var selected = $scope.selectedVariants();
             for (var i = 0; i < selected.length; i++) {
                 selected[i].setAllInventoryCount(dialogData.count);
                 if(dialogData.includeLowCount) {
                     selected[i].setAllInventoryLowCount(dialogData.lowCount);
                 }
-                var savepromise = productResource.saveVariant(selected[i]);
-                savepromise.then(function () {
-                    // don't reset success here
-                }, function (reason) {
-                    success = false;
-                });
+                promises.push(productResource.saveVariant(selected[i]));
             }
-            if (success) {
-                notificationsService.success("Confirmed inventory update", "");
-                $timeout(function() {
-                    reload();
-                }, 400);
-
-            } else {
-                notificationsService.error("Failed to update inventory", "");
-            }
+            persistPromises(promises, "Confirmed inventory update");
         }
 
         /**
