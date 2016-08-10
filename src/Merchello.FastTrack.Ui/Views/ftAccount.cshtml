@@ -25,7 +25,7 @@
         @if (!((ICustomer)CurrentCustomer).WishList().IsEmpty)
         {
             <h3>@StoreFormsResource.LabelWishList</h3>
-            @Html.Action("WishListForm", "WishList", new { area = "Merchello" })
+            @Html.Action("WishListForm", "StoreWishList", new { area = "Merchello" })
         }
 
         @Html.Action("CustomerSalesHistory", "CustomerMembership", new { area = "FastTrack" })
