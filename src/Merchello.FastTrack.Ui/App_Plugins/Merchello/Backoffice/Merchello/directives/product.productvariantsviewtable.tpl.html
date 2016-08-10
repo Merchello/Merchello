@@ -9,6 +9,7 @@
                     <ul class="dropdown-menu">
                         <li><a data-ng-click="changePrices()"><localize key="merchelloProductEdit_changePrices" /></a></li>
                         <li><a data-ng-click="updateInventory()"><localize key="merchelloProductEdit_updateInventory" /></a></li>
+                        <li><a data-ng-click="toggleTracksInventory()"><localize key="merchelloProductEdit_toggleTracksInventory" /></a></li>
                         <li><a data-ng-click="toggleOnSale()"><localize key="merchelloProductEdit_toggleOnSale" /></a></li>
                         <li><a data-ng-click="toggleAvailable()"><localize key="merchelloProductEdit_toggleAvailable" /></a></li>
                     </ul>
@@ -16,7 +17,7 @@
             </th>
         </tr>
         <tr>
-            <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+            <th><input type="checkbox" data-ng-model="checkAll" data-ng-click="toggleChecks()" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
             <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                 {{option.name}}
             </th>

@@ -145,6 +145,17 @@
         }
 
         /// <summary>
+        /// Clears the runtime cache of IPublishedContent.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        public void ClearVirtualCache(Guid key)
+        {
+            _cache.RuntimeCache.ClearCacheItem(GetCacheKey(key));
+        }
+
+        /// <summary>
         /// Caches content.
         /// </summary>
         /// <param name="cacheKey">
@@ -243,7 +254,7 @@
         /// </param>
         private void ClearVirtualCache(TEntity entity)
         {
-            _cache.RuntimeCache.ClearCacheItem(GetCacheKey(entity.Key));
+            ClearVirtualCache(entity.Key);
         }
     }
 }

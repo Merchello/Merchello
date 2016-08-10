@@ -4,6 +4,14 @@ if (MUI !== undefined) {
     // Allows for overriding MUI defaults
     MUI.Settings = {
 
+        Labels: {
+            OutOfStock: 'Out of stock.',
+
+            OutOfStockAllowPurchase: 'Out of stock - Back order available.',
+
+            InStock: 'In stock (@0)'
+        },
+
         // API endpoints
         // These can be adjusted to match custom controllers which implement base classes
         Endpoints: {

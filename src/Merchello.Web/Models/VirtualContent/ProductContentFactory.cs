@@ -128,7 +128,9 @@
 
             var optionContentTypes = GetProductOptionContentTypes(display);
 
-            return new ProductContent(publishedContentType, optionContentTypes, display, _parent, _defaultStoreLanguage);
+            var clone = CloneHelper.JsonClone<ProductDisplay>(display);
+
+            return new ProductContent(publishedContentType, optionContentTypes, clone, _parent, _defaultStoreLanguage);
         }
 
         /// <summary>
