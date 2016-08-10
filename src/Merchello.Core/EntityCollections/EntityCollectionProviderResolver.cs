@@ -31,7 +31,7 @@
         /// <summary>
         /// The instance types.
         /// </summary>
-        private readonly List<Type> _instanceTypes = new List<Type>();
+        private readonly List<Type> _instanceTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProviderResolver"/> class.

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Logging;
@@ -141,6 +142,40 @@
         public abstract Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// Gets the cache key for Request caching paged collections.
+        /// </summary>
+        /// <param name="methodName">
+        /// The method name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected static string GetPagedDtoCacheKey(string methodName,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            IDictionary<string, string> args = null)
+        {
+            return Core.Cache.CacheKeys.GetPagedKeysCacheKey<TDto>(methodName, page, itemsPerPage, orderExpression, sortDirection, args);
+        }
+
+        /// <summary>
         /// Get the paged keys.
         /// </summary>
         /// <param name="page">
@@ -230,42 +265,15 @@
             };
         }
 
-        protected Page<Guid> TryGetCachedPageOfKeys(
-            string methodName,
-            Guid collectionKey,
-            string term,
-            long page,
-            long itemsPerPage,
-            string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+        protected Page<Guid> TryGetCachedPageOfKeys(string cacheKey)
         {
-            var cacheKey = Core.Cache.CacheKeys.GetPagedKeysCacheKey<TDto>(methodName, collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
-
-            return (Page<Guid>)RuntimeCache.GetCacheItem(cacheKey);
+          
+            return (Page<Guid>)RequestCache.GetCacheItem(cacheKey);
         }
 
-        protected void CachePageOfKeys(
-            Page<Guid> result,
-            Guid collectionKey,
-            string methodName,
-            string term,
-            long page,
-            long itemsPerPage,
-            string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+        protected Page<Guid> CachePageOfKeys(string cacheKey, Page<Guid> result)
         {
-            var cacheKey = Core.Cache.CacheKeys.GetPagedKeysCacheKey<TDto>(methodName, collectionKey, term, page, itemsPerPage, orderExpression, sortDirection);
-            RuntimeCache.GetCacheItem(cacheKey, () => result);
-        }
-
-        protected void ClearCachedPageOfKeys()
-        {
-            ClearCachedPageOfKeys(Guid.Empty);
-        }
-
-        protected void ClearCachedPageOfKeys(Guid collectionKey)
-        {
-            RuntimeCache.ClearCacheByKeySearch(Cache.CacheKeys.GetPagedKeysCacheKeyPrefix<TDto>(collectionKey));
+            return (Page<Guid>)RequestCache.GetCacheItem(cacheKey, () => result);
         }
     }
 }

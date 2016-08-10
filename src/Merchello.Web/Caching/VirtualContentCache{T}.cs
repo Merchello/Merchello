@@ -39,11 +39,6 @@
         /// A function used to fetch the IPublishedContent in the case it was not found in cache
         /// </summary>
         private readonly Func<Guid, TContent> _fetch;
-
-        /// <summary>
-        /// The modified versions.
-        /// </summary>
-        private readonly bool _modifiedVersions;
  
         /// <summary>
         /// Initializes a new instance of the <see cref="VirtualContentCache{TContent,TEntity}"/> class. 
@@ -65,6 +60,9 @@
             ModifiedVersion = modified;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether modified version.
+        /// </summary>
         protected bool ModifiedVersion { get; private set; }
 
         /// <summary>
@@ -134,6 +132,38 @@
         }
 
         /// <summary>
+        /// Maps a <see cref="Page{Guid}"/> to <see cref="PagedCollection{TContent}"/>.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public virtual PagedCollection<TContent> MapPagedCollection(Page<Guid> page, string sortBy)
+        {
+            var items = page.Items.Select(GetByKey).Where(x => x != null).ToArray();
+
+            if (items.Count() != page.ItemsPerPage)
+            {
+                MultiLogHelper.Warn<VirtualContentCache<TContent, TEntity>>("Could not map all items to virtual content");
+            }
+
+            return new PagedCollection<TContent>
+            {
+                CurrentPage = page.CurrentPage,
+                PageSize = items.Count(),
+                TotalPages = page.TotalPages,
+                TotalItems = page.TotalItems,
+                Items = items,
+                SortField = sortBy
+            };
+        }
+
+        /// <summary>
         /// Clears the runtime cache of IPublishedContent.
         /// </summary>
         /// <param name="e">
@@ -186,37 +216,6 @@
             return content;
         }
 
-        /// <summary>
-        /// Maps a <see cref="Page{Guid}"/> to <see cref="PagedCollection{TContent}"/>.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <returns>
-        /// The <see cref="PagedCollection"/>.
-        /// </returns>
-        protected virtual PagedCollection<TContent> MapPagedCollection(Page<Guid> page, string sortBy)
-        {
-            var items = page.Items.Select(GetByKey).Where(x => x != null).ToArray();
-
-            if (items.Count() != page.ItemsPerPage)
-            {
-                MultiLogHelper.Warn<VirtualContentCache<TContent, TEntity>>("Could not map all items to virtual content");
-            }
-
-            return new PagedCollection<TContent>
-                         {
-                             CurrentPage = page.CurrentPage,
-                             PageSize = items.Count(),
-                             TotalPages = page.TotalPages,
-                             TotalItems = page.TotalItems,
-                             Items = items,
-                             SortField = sortBy
-                         };
-        }
 
         /// <summary>
         /// The internal cache key.

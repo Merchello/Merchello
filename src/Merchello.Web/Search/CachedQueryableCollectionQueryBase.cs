@@ -142,11 +142,12 @@
                     });
 
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+            if (pagedKeys != null) return GetQueryResultDisplay(pagedKeys);
 
             return
                 this.GetQueryResultDisplay(
-                    pagedKeys ??
-                    PagedKeyCache.CachePage(
+                    PagedKeyCache
+                    .CachePage(
                         cacheKey,
                         ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeys(args, page, itemsPerPage, sortBy, sortDirection)));
         }
@@ -200,9 +201,11 @@
 
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
 
+            if (pagedKeys != null) return GetQueryResultDisplay(pagedKeys);
+
             return this.GetQueryResultDisplay(
-                    pagedKeys ??
-                    PagedKeyCache.CachePage(
+                    PagedKeyCache
+                    .CachePage(
                         cacheKey, ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection)));
         }
 
@@ -262,9 +265,11 @@
 
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
 
+            if (pagedKeys != null) return GetQueryResultDisplay(pagedKeys);
+
             return this.GetQueryResultDisplay(
-                    pagedKeys ??
-                    PagedKeyCache.CachePage(
+                    PagedKeyCache
+                    .CachePage(
                         cacheKey, 
                         ((CachedQueryableEntityCollectionProviderBase<TEntity>)provider).GetPagedEntityKeysNotInCollection(args, page, itemsPerPage, sortBy, sortDirection)));
         }
@@ -336,10 +341,10 @@
                args);
 
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
+            if (pagedKeys != null) return pagedKeys;
 
             var provider = this.GetEntityCollectionProvider(collectionKey);
-            return pagedKeys
-                   ?? PagedKeyCache.CachePage(
+            return PagedKeyCache.CachePage(
                        cacheKey,
                        provider.GetPagedEntityKeys(page, itemsPerPage, sortBy, sortDirection));
         } 

@@ -213,6 +213,10 @@ namespace Merchello.Web.Models.Ui.Rendering
         private static IEnumerable<IEntityCollection> GetProductEntityCollections(IMerchelloContext context, Guid productKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)
         {
             var cacheKey = string.Format("{0}.productEntityCollections", productKey);
+
+            var collections = (IEnumerable<IEntityCollection>)context.Cache.RequestCache.GetCacheItem(cacheKey);
+            if (collections != null) return collections;
+
             return
                 (IEnumerable<IEntityCollection>)
                 context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(productKey));
@@ -221,6 +225,10 @@ namespace Merchello.Web.Models.Ui.Rendering
         private static IEnumerable<IEntityCollection> GetCollectionChildCollections(IMerchelloContext context, Guid collectionKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)
         {
             var cacheKey = string.Format("{0}.entityCollectionChildCollection", collectionKey);
+
+            var collections = (IEnumerable<IEntityCollection>)context.Cache.RequestCache.GetCacheItem(cacheKey);
+            if (collections != null) return collections;
+
             return
                 (IEnumerable<IEntityCollection>)
                 context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(collectionKey));

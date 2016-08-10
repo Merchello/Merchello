@@ -346,9 +346,11 @@
             var cacheKey = PagedKeyCache.GetPagedQueryCacheKey<ICachedProductQuery>("Search", page, itemsPerPage, sortBy, sortDirection);
             var pagedKeys = PagedKeyCache.GetPageByCacheKey(cacheKey);
 
+            if (pagedKeys != null) return _cache.MapPagedCollection(pagedKeys, sortBy);
+
             return
                 _cache.GetPagedCollectionByCacheKey(
-                    pagedKeys ?? _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection),
+                    PagedKeyCache.CachePage(cacheKey, _productService.GetPagedKeys(page, itemsPerPage, sortBy, sortDirection)), 
                     sortBy);
         }
 
