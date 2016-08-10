@@ -147,7 +147,7 @@
             _productService = (ProductService)merchelloContext.Services.ProductService;
             this._conversionType = conversionType;
             _productContentFactory = new Lazy<ProductContentFactory>(() => new ProductContentFactory());
-            _cache = new VirtualProductContentCache(merchelloContext.Cache, this.GetProductContent);
+            _cache = new VirtualProductContentCache(merchelloContext.Cache, this.GetProductContent, enableDataModifiers);
             this.Initialize();
         }
 

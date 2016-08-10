@@ -31,7 +31,21 @@
         /// The cache.
         /// </param>
         public VirtualProductContentCache(CacheHelper cache)
-            : this(cache, null)
+            : this(cache, true)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VirtualProductContentCache"/> class.
+        /// </summary>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="modified">
+        /// The modified.
+        /// </param>
+        public VirtualProductContentCache(CacheHelper cache, bool modified)
+            : this(cache, null, modified)
         {
         }
 
@@ -44,8 +58,11 @@
         /// <param name="fetch">
         /// The fetch.
         /// </param>
-        public VirtualProductContentCache(CacheHelper cache, Func<Guid, IProductContent> fetch)
-            : base(cache, fetch)
+        /// <param name="modified">
+        /// The modified.
+        /// </param>
+        public VirtualProductContentCache(CacheHelper cache, Func<Guid, IProductContent> fetch, bool modified)
+            : base(cache, fetch, modified)
         {
         }
 
@@ -63,7 +80,7 @@
         /// </returns>
         public IProductContent GetBySlug(string slug, Func<string, IProductContent> get)
         {
-            var cacheKey = GetSlugCacheKey(slug);
+            var cacheKey = GetSlugCacheKey(slug, ModifiedVersion);
             var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;
 
@@ -84,7 +101,7 @@
         /// </returns>
         public IProductContent GetBySku(string sku, Func<string, IProductContent> get)
         {
-            var cacheKey = GetSkuCacheKey(sku);
+            var cacheKey = GetSkuCacheKey(sku, ModifiedVersion);
             var content = (IProductContent)Cache.RuntimeCache.GetCacheItem(cacheKey);
             if (content != null) return content;
 
@@ -123,12 +140,15 @@
         /// <param name="slug">
         /// The slug.
         /// </param>
+        /// <param name="modified">
+        /// The modified.
+        /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string GetSlugCacheKey(string slug)
+        private static string GetSlugCacheKey(string slug, bool modified)
         {
-            return string.Format("merch.productcontent.slug.{0}", slug);
+            return string.Format("merch.productcontent.slug.{0}.{1}", slug, modified);
         }
 
         /// <summary>
@@ -137,12 +157,15 @@
         /// <param name="sku">
         /// The sku.
         /// </param>
+        /// <param name="modified">
+        /// The modified.
+        /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string GetSkuCacheKey(string sku)
+        private static string GetSkuCacheKey(string sku, bool modified)
         {
-            return string.Format("merch.productcontent.sku.{0}", sku);
+            return string.Format("merch.productcontent.sku.{0}.{1}", sku, modified);
         }
 
         /// <summary>
@@ -171,11 +194,13 @@
             {
                 foreach (var dc in product.DetachedContents.Where(x => !x.Slug.IsNullOrWhiteSpace()))
                 {
-                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug));
+                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug, true));
+                    Cache.RuntimeCache.ClearCacheItem(GetSlugCacheKey(dc.Slug, false));
                 }
             }
 
-            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku));
+            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku, true));
+            Cache.RuntimeCache.ClearCacheItem(GetSkuCacheKey(product.Sku, false));
         }
     }
 }

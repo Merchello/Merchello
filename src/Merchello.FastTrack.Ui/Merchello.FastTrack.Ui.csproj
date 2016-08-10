@@ -632,8 +632,8 @@
     <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
     <Content Include="App_Plugins\Merchello\config\merchello.config" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
-    <Content Include="App_Plugins\Merchello\views\Basket\AddToBasketForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\views\Basket\BasketForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\StoreBasket\AddToBasketForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\StoreBasket\BasketForm.cshtml" />
     <Content Include="App_Plugins\Merchello\views\CashPayment\PaymentForm.cshtml" />
     <Content Include="App_Plugins\Merchello\views\CheckoutAddress\BillingAddressForm.cshtml" />
     <Content Include="App_Plugins\Merchello\views\CheckoutAddress\ShippingAddressForm.cshtml" />
@@ -646,7 +646,7 @@
     <Content Include="App_Plugins\Merchello\views\PayPalExpressPayment\PaymentForm.cshtml" />
     <Content Include="App_Plugins\Merchello\views\Shared\_RequireJsSubmitBtn.cshtml" />
     <Content Include="App_Plugins\Merchello\views\web.config" />
-    <Content Include="App_Plugins\Merchello\views\WishList\WishListForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\StoreWishList\WishListForm.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />
