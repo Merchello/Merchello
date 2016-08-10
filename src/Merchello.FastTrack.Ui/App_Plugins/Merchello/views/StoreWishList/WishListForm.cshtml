@@ -12,7 +12,7 @@
 @{
     var currentPage = Umbraco.TypedContent(UmbracoContext.Current.PageId);
 
-    using (Html.BeginUmbracoForm<WishListController>("UpdateWishList", new { area = "FastTrack" }, new { data_muifrm = "wishlist" }))
+    using (Html.BeginUmbracoForm<StoreWishListController>("UpdateWishList", new { area = "FastTrack" }, new { data_muifrm = "wishlist" }))
     {
 
         @Html.AntiForgeryToken()
@@ -62,11 +62,11 @@
                             <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min = "1", data_muiaction = "updatequantity" })</td>
                             <td data-muivalue="linetotal">@Model.Items[i].Total().AsFormattedCurrency()</td>
                             <td class="text-right">
-    
-                                @Html.ActionLink("Basket +", "MoveItemToBasket", "WishList", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+
+                                @Html.ActionLink("Basket +", "MoveItemToBasket", "StoreWishList", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
 
 
-                                @Html.ActionLink("Remove", "RemoveWishlistItem", "WishList", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
+                                @Html.ActionLink("Remove", "RemoveWishlistItem", "StoreWishList", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
                             </td>
                         </tr>
 

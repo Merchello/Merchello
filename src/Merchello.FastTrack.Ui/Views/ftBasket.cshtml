@@ -9,7 +9,7 @@
 
 @if (CurrentCustomer.Basket().Items.Any())
 {
-    @Html.Action("BasketForm", "Basket", new { area = "Merchello" })
+    @Html.Action("BasketForm", "StoreBasket", new { area = "Merchello" })
 }
 else
 {

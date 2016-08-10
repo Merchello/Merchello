@@ -16,10 +16,10 @@
     /// The default (generic) basket controller.
     /// </summary>
     [PluginController("Merchello")]
-    public class BasketController : BasketControllerBase<StoreBasketModel, StoreLineItemModel, StoreAddItemModel>
+    public class StoreBasketController : BasketControllerBase<StoreBasketModel, StoreLineItemModel, StoreAddItemModel>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketController"/> class.
+        /// Initializes a new instance of the <see cref="StoreBasketController"/> class.
         /// </summary>
         /// <remarks>
         /// This constructor allows you to inject your custom model factory overrides so that you can
@@ -32,18 +32,18 @@
         /// 
         /// This is just an generic MVC pattern and nothing to do with Umbraco
         /// </remarks>
-        public BasketController()
+        public StoreBasketController()
             : this(new BasketItemExtendedDataFactory<StoreAddItemModel>())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasketController"/> class.
+        /// Initializes a new instance of the <see cref="StoreBasketController"/> class.
         /// </summary>
         /// <param name="addItemExtendedDataFactory">
         /// The <see cref="BasketItemExtendedDataFactory{StoreAddItemModel}"/>.
         /// </param>
-        public BasketController(BasketItemExtendedDataFactory<StoreAddItemModel> addItemExtendedDataFactory)
+        public StoreBasketController(BasketItemExtendedDataFactory<StoreAddItemModel> addItemExtendedDataFactory)
             : base(addItemExtendedDataFactory, new AddItemModelFactory(), new BasketModelFactory())
         {
         }
