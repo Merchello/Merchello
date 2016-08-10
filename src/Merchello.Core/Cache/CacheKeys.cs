@@ -1,6 +1,9 @@
 ﻿namespace Merchello.Core.Cache
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Gateways.Shipping;
 
     using Merchello.Core.Checkout;
@@ -161,37 +164,23 @@
 
         internal static string GetPagedKeysCacheKey<TDto>(
             string methodName,
-            string term,
             long page,
             long itemsPerPage,
             string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
+            SortDirection sortDirection = SortDirection.Descending,
+            IDictionary<string, string> args = null)
         {
-            return GetPagedKeysCacheKey<TDto>(methodName, Guid.Empty, term, page, itemsPerPage, orderExpression, sortDirection);
+            var hash = string.Format("{0}.{1}.{2}.{3}.{4}", methodName, page, itemsPerPage, orderExpression, sortDirection);
+            if (args != null)
+            {
+                hash = args.Aggregate(hash, (current, item) => current + string.Format(".{0}-{1}", item.Key, item.Value));
+            }
+
+            hash = hash.GetHashCode().ToString();
+
+            return string.Format("{0}.{1}", typeof(TDto), hash);
         }
 
-        internal static string GetPagedKeysCacheKey<TDto>(
-            string methodName,
-            Guid collectionKey,
-            string term,
-            long page,
-            long itemsPerPage,
-            string orderExpression,
-            SortDirection sortDirection = SortDirection.Descending)
-        {
-            var hash = string.Format("{0}.{1}.{2}.{3}.{4}", term, page, itemsPerPage, orderExpression, sortDirection).GetHashCode().ToString();
-            return string.Format("{0}.{1}", GetPagedKeysCacheKeyPrefix<TDto>(collectionKey), hash);
-        }
-
-        internal static string GetPagedKeysCacheKeyPrefix<TDto>()
-        {
-            return GetPagedKeysCacheKeyPrefix<TDto>(Guid.Empty);
-        }
-
-        internal static string GetPagedKeysCacheKeyPrefix<TDto>(Guid collectionKey)
-        {
-            return string.Format("pagedkeys.{0}.{1}", typeof(TDto), collectionKey);
-        }
 
         /// <summary>
         /// Returns the cache key used to store the Umbraco lang file.

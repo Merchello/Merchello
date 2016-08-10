@@ -158,6 +158,7 @@
         {
             var list = new List<string>
                 {
+                    "UPDATE merchProductOption SET detachedContentTypeKey = NULL WHERE detachedContentTypeKey = @Key",
                     "DELETE FROM merchProductVariantDetachedContent WHERE merchProductVariantDetachedContent.detachedContentTypeKey = @Key",
                     "DELETE FROM merchDetachedContentType WHERE merchDetachedContentType.pk = @Key"
                 };
