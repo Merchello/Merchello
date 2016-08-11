@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.EntityCollections
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -12,6 +13,7 @@
     using Merchello.Core.Persistence.Querying;
 
     using Umbraco.Core;
+    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
 
@@ -23,7 +25,7 @@
         /// <summary>
         /// The entity collection.
         /// </summary>
-        private Lazy<IEntityCollection> _entityCollection; 
+        private Lazy<IEntityCollection> _entityCollection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProviderBase"/> class.
@@ -55,6 +57,17 @@
         }
 
         /// <summary>
+        /// Gets the cache.
+        /// </summary>
+        protected ICacheProvider Cache
+        {
+            get
+            {
+                return MerchelloContext.Cache.RequestCache;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IMerchelloContext"/>.
         /// </summary>
         protected IMerchelloContext MerchelloContext { get; private set; }
@@ -64,6 +77,7 @@
         /// Gets the collection key.
         /// </summary>
         protected Guid CollectionKey { get; private set; }
+
 
         /// <summary>
         /// The get entities.
@@ -213,11 +227,30 @@
         }
 
         /// <summary>
+        /// Gets an instance of the <see cref="IEntityCollection"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEntityCollection"/>.
+        /// </returns>
+        private IEntityCollection GetInstance()
+        {
+            var cacheKey = string.Format("merch.entitycollection.{0}", CollectionKey);
+            var provider = Cache.GetCacheItem(cacheKey);
+            if (provider != null) return (IEntityCollection)provider;
+
+            return
+                (IEntityCollection)
+                Cache.GetCacheItem(
+                    cacheKey,
+                    () => MerchelloContext.Services.EntityCollectionService.GetByKey(CollectionKey));
+        }
+
+        /// <summary>
         /// Initializes the provider.
         /// </summary>
         private void Initialize()
         {
-            _entityCollection = new Lazy<IEntityCollection>(() => MerchelloContext.Services.EntityCollectionService.GetByKey(CollectionKey));
+            _entityCollection = new Lazy<IEntityCollection>(this.GetInstance);
         }
     }
 }

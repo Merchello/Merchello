@@ -6,6 +6,8 @@
 
     using Merchello.Core.Models.EntityBase;
 
+    using Umbraco.Core.Cache;
+
     /// <summary>
     /// Marker interface for an EntityCollectionProvider.
     /// </summary>

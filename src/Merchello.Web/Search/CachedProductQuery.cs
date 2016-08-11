@@ -202,6 +202,20 @@
         }
 
         /// <summary>
+        /// Gets the typed <see cref="IProductContent"/> for a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey)
+        {
+            return TypedProductContentFromCollection(collectionKey, 1, long.MaxValue);
+        }
+
+        /// <summary>
         /// The typed product content from collection.
         /// </summary>
         /// <param name="collectionKey">

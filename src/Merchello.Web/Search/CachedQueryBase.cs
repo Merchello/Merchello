@@ -10,6 +10,7 @@
     using global::Examine.Providers;
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core.Cache;
     using Merchello.Web.Caching;
     using Merchello.Web.Models.Querying;
 
@@ -55,11 +56,6 @@
         private readonly bool _enableDataModifiers;
 
         /// <summary>
-        /// The <see cref="IPagedKeyQueryCache"/>.
-        /// </summary>
-        private readonly IPagedKeyQueryCache _pagedKeyCache;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryBase{TEntity,TDisplay}"/> class.
         /// </summary>
         /// <param name="cacheHelper">
@@ -93,7 +89,7 @@
             _indexProvider = indexProvider;
             _searchProvider = searchProvider;
             _enableDataModifiers = enableDataModifiers;
-            _pagedKeyCache = new PagedKeyQueryCache(cacheHelper);
+            this.PagedKeyCache = new PagedKeyQueryCache(cacheHelper);
             _resultFactory = new Lazy<QueryResultFactory<TDisplay>>(() => new QueryResultFactory<TDisplay>(PerformMapSearchResultToDisplayObject, GetDisplayObject));
         }
 
@@ -141,13 +137,7 @@
         /// <summary>
         /// Gets the <see cref="CacheHelper"/>.
         /// </summary>
-        protected IPagedKeyQueryCache PagedKeyCache
-        {
-            get
-            {
-                return _pagedKeyCache;
-            }
-        }
+        protected IPagedKeyQueryCache PagedKeyCache { get; private set; }
 
         /// <summary>
         /// Gets the key field in index.

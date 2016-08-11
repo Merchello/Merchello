@@ -157,7 +157,7 @@
             {
                 var catalog = GetCatalog();
 
-                return catalog.FirstChild(x => x.GetPropertyValue<ProductContentListView>("products").CollectionKey == collectionKey);
+                return catalog.FirstChild(x => x.GetDataValueAsGuid("products") == collectionKey);
             }
         }
 

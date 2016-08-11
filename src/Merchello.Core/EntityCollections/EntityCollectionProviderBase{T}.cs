@@ -54,7 +54,13 @@
         /// </returns>
         public virtual bool Exists(T entity)
         {
-            return this.PerformExists(entity);
+            var cacheKey = GetExistsCacheKey(entity);
+            var exists = Cache.GetCacheItem(cacheKey);
+
+            if (exists != null) return (bool)exists;
+
+
+            return (bool)Cache.GetCacheItem(cacheKey, () => this.PerformExists(entity));
         }
 
         /// <summary>
@@ -124,5 +130,19 @@
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending);
+
+        /// <summary>
+        /// Gets the request cache key for the exists query.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string GetExistsCacheKey(T entity)
+        {
+            return string.Format("{0}.{1}.exists", typeof(T), entity.Key);
+        }
     }
 }

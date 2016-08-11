@@ -302,6 +302,8 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
+    <Compile Include="Cache\IPagedKeyQueryCache.cs" />
+    <Compile Include="Cache\PagedKeyQueryCache.cs" />
     <Compile Include="Chains\ConfigurationChainBase.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityAttemptChainBase{T}.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityTaskBase{T}.cs" />

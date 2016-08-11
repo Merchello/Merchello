@@ -137,7 +137,7 @@ namespace Merchello.Web.Models.Ui.Rendering
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            return merchelloHelper.TypedProductContentFromCollection(
+            return merchelloHelper.Query.Product.TypedProductContentFromCollection(
                 value.CollectionKey,
                 page,
                 itemsPerPage,
