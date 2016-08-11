@@ -202,7 +202,7 @@
         /// </returns>
         public IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey)
         {
-            return TypedProductContentFromCollection(collectionKey, 1, long.MaxValue);
+            return Query.Product.TypedProductContentFromCollection(collectionKey);
         }
 
         /// <summary>

@@ -55,6 +55,17 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        IEnumerable<IProductContent> TypedProductContentFromCollection(Guid collectionKey);
+
+        /// <summary>
+        /// Gets the typed <see cref="IProductContent"/> for a collection.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
         /// <param name="page">
         /// The page.
         /// </param>
