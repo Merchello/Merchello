@@ -29,7 +29,7 @@
 
     <div class="form-group add-button">
         @{
-            using (Html.BeginUmbracoForm<BasketController>("AddBasketItem", new { area = "Merchello" }, new { role = "form", data_muifrm="additem" }))
+            using (Html.BeginUmbracoForm<StoreBasketController>("AddBasketItem", new { area = "Merchello" }, new { role = "form", data_muifrm="additem" }))
             {
                 // If the product has variants, we MUST determine which variant the customer intends to purchase
                 // so we need to give them a selection of options so that they make choices.  The collection of choices (one per options)

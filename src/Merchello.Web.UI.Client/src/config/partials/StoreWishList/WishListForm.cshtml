@@ -12,7 +12,7 @@
 @{
     var currentPage = Umbraco.TypedContent(UmbracoContext.Current.PageId);
 
-    using (Html.BeginUmbracoForm<WishListController>("UpdateWishList", new { area = "FastTrack" }, new { data_muifrm = "wishlist" }))
+    using (Html.BeginUmbracoForm<StoreWishListController>("UpdateWishList", new { area = "FastTrack" }, new { data_muifrm = "wishlist" }))
     {
 
         @Html.AntiForgeryToken()

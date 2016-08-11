@@ -9,7 +9,7 @@
 @{
     var currentPage = Umbraco.TypedContent(UmbracoContext.Current.PageId);
 
-    using (Html.BeginUmbracoForm<BasketController>("UpdateBasket", new { area = "FastTrack" }, new { data_muifrm = "basket" }))
+    using (Html.BeginUmbracoForm<StoreBasketController>("UpdateBasket", new { area = "FastTrack" }, new { data_muifrm = "basket" }))
     {
 
         @Html.AntiForgeryToken()
