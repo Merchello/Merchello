@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Caching
+﻿namespace Merchello.Core.Cache
 {
     using System;
     using System.Collections.Generic;
@@ -29,7 +29,7 @@
         public PagedKeyQueryCache(CacheHelper cache)
         {
             Mandate.ParameterNotNull(cache, "cache");
-            _cache = cache.RequestCache;
+            this._cache = cache.RequestCache;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@
         {
             if (p == null) return default(Page<Guid>);
 
-            return (Page<Guid>)_cache.GetCacheItem(cacheKey, () => p);
+            return (Page<Guid>)this._cache.GetCacheItem(cacheKey, () => p);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@
         /// </returns>
         public Page<Guid> GetPageByCacheKey(string cacheKey)
         {
-            return (Page<Guid>)_cache.GetCacheItem(cacheKey);
+            return (Page<Guid>)this._cache.GetCacheItem(cacheKey);
         }
 
         /// <summary>

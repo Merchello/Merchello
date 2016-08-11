@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Caching
+﻿namespace Merchello.Core.Cache
 {
     using System;
     using System.Collections.Generic;
