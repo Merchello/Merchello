@@ -243,27 +243,27 @@
             _services.ContentService.SaveAndPublishWithStatus(basket);
 
             var checkout = _services.ContentService.CreateContent("Checkout", storeRoot.Id, "ftCheckout");
-            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "BillingAddress");
+            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "ftBillingAddress");
             checkout.SetValue("checkoutStage", "BillingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkout);
 
             var checkoutShipping = _services.ContentService.CreateContent("Shipping Address", checkout.Id, "ftCheckout");
-            checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ShippingAddress");
+            checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ftShippingAddress");
             checkoutShipping.SetValue("checkoutStage", "ShippingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipping);
 
             var checkoutShipRateQuote = _services.ContentService.CreateContent("Ship Rate Quote", checkout.Id, "ftCheckout");
-            checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ShipRateQuote");
+            checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ftShipRateQuote");
             checkoutShipRateQuote.SetValue("checkoutStage", "ShipRateQuote");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipRateQuote);
 
             var checkoutPaymentMethod = _services.ContentService.CreateContent("Payment Method", checkout.Id, "ftCheckout");
-            checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "PaymentMethod");
+            checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "ftPaymentMethod");
             checkoutPaymentMethod.SetValue("checkoutStage", "PaymentMethod");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPaymentMethod);
 
             var checkoutPayment = _services.ContentService.CreateContent("Payment", checkout.Id, "ftCheckout");
-            checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "Payment");
+            checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "ftPayment");
             checkoutPayment.SetValue("checkoutStage", "Payment");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPayment);
 

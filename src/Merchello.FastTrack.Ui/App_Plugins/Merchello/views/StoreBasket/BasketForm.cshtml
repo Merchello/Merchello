@@ -62,11 +62,10 @@
                         @if (Model.WishListEnabled)
                         {
                             // the 'area' parameter in the route values should match the PluginController attribute alias
-                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "StoreBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "Basket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
                         }
 
-
-                        @Html.ActionLink("Remove", "RemoveBasketItem", "StoreBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
+                        @Html.ActionLink("Remove", "RemoveBasketItem", "Basket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
                     </td>
                 </tr>
 
