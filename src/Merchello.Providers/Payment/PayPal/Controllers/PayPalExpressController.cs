@@ -119,6 +119,7 @@
                 // data so that we can refund the payment later through the back office if needed.
                 var attempt = invoice.CapturePayment(payment, _paymentMethod, invoice.Total);
 
+                // Raise the event to process the email
                 Processed.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(attempt), this);
 
                 // If this is an AJAX request return the JSON

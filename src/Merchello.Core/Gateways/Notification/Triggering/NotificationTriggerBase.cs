@@ -1,7 +1,10 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Merchello.Core.Logging;
 
     using Observation;
     using Umbraco.Core.Logging;
@@ -25,7 +28,7 @@
         }
 
         /// <summary>
-        /// Value to pass to the notification monitors with addtional contacts not defined in notification message (ex. an instance specific customer or vender)
+        /// Value to pass to the notification monitors with additional contacts not defined in notification message (ex. an instance specific customer or vender)
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -42,7 +45,16 @@
                 return;
             }
 
-            LogHelper.Debug<NotificationTriggerBase<TInputModel, TMonitorModel>>(string.Format("Model passed to NotificationTriggerBase {0} does not match expected model {1}.  Notification trigger was skipped.", model.GetType(), typeof(TInputModel)));
+            var invalid =
+                new ArgumentException(
+                    string.Format(
+                        "Model passed to NotificationTriggerBase {0} does not match expected model {1}.  Notification trigger was skipped.",
+                        model.GetType(),
+                        typeof(TInputModel)));
+
+            MultiLogHelper.WarnWithException<NotificationTriggerBase<TInputModel, TMonitorModel>>(
+                "Invalid notification model",
+                invalid);
         }
 
         /// <summary>
