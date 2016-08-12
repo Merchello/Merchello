@@ -50,12 +50,17 @@
         /// <summary>
         /// The authorizing event handler.  Fires before an authorization attempt.
         /// </summary>
-        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<PaymentOperationData>> Authorizing;
+        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<AuthorizeOperationData>> Authorizing;
 
         /// <summary>
         /// The capturing event handler.  Fires before an authorize capture or capture attempt.
         /// </summary>
         public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<PaymentOperationData>> Capturing;
+
+        /// <summary>
+        /// The authorize capturing event handler.  Fires after an authorize / capture attempt
+        /// </summary>
+        public static event TypedEventHandler<PaymentGatewayMethodBase, SaveEventArgs<AuthorizeOperationData>> AuthorizeCapturing;
 
         /// <summary>
         /// The voiding event handler.  Fires before an void attempt.
@@ -120,13 +125,14 @@
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
-            var operationData = new PaymentOperationData()
+            var operationData = new AuthorizeOperationData()
             {
                 Invoice = invoice,
+                PaymentMethod = this.PaymentMethod,
                 ProcessorArgumentCollection = args
             };
 
-            Authorizing.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
+            Authorizing.RaiseEvent(new SaveEventArgs<AuthorizeOperationData>(operationData), this);
 
             // persist the invoice
             if (!invoice.HasIdentity)
@@ -160,14 +166,15 @@
         {
             Mandate.ParameterNotNull(invoice, "invoice");
 
-            var operationData = new PaymentOperationData()
-                                    {
-                                        Invoice = invoice, 
-                                        Amount = amount,
-                                        ProcessorArgumentCollection = args
-                                    };
+            var operationData = new AuthorizeOperationData()
+                {
+                    Invoice = invoice, 
+                    Amount = amount,
+                    PaymentMethod = this.PaymentMethod,
+                    ProcessorArgumentCollection = args
+                };
 
-            Capturing.RaiseEvent(new SaveEventArgs<PaymentOperationData>(operationData), this);
+            AuthorizeCapturing.RaiseEvent(new SaveEventArgs<AuthorizeOperationData>(operationData), this);
 
             // persist the invoice
             if (!invoice.HasIdentity)
@@ -175,8 +182,6 @@
 
             // authorize and capture the payment
             var response = PerformAuthorizeCapturePayment(invoice, amount, args);
-
-            //((PaymentResult)response).ApproveOrderCreation = this.EnsureApproveOrderCreation(response, invoice);
 
             AuthorizeCaptureAttempted.RaiseEvent(new PaymentAttemptEventArgs<IPaymentResult>(response), this);
 
@@ -211,6 +216,7 @@
                                         Invoice = invoice,
                                         Payment = payment,
                                         Amount = amount,
+                                        PaymentMethod = this.PaymentMethod,
                                         ProcessorArgumentCollection = args
                                     };
 
@@ -258,6 +264,7 @@
                 Invoice = invoice,
                 Payment = payment,
                 Amount = amount,
+                PaymentMethod = this.PaymentMethod,
                 ProcessorArgumentCollection = args
             };
 
@@ -294,6 +301,7 @@
             {
                 Invoice = invoice,
                 Payment = payment,
+                PaymentMethod = this.PaymentMethod,
                 ProcessorArgumentCollection = args
             };
 
