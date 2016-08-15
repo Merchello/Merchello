@@ -315,6 +315,19 @@
             throw attempt.Exception;
         }
 
+        /// <summary>
+        /// Returns a value indicating whether collection contains shippable items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether collection contains shippable items.
+        /// </returns>
+        public static bool HasShippableItems(this ILineItemContainer container)
+        {
+            return container.Items.Any(x => x.IsShippable());
+        }
 
         /// <summary>
         /// Returns a collection of shippable line items
@@ -339,8 +352,9 @@
         {
             return lineItem.LineItemType == LineItemType.Product &&
                    lineItem.ExtendedData.ContainsProductVariantKey() &&
-                   lineItem.ExtendedData.GetShippableValue() &&
-                   lineItem.ExtendedData.ContainsWarehouseCatalogKey();
+                   lineItem.ExtendedData.GetShippableValue();
+                   // &&
+                   // lineItem.ExtendedData.ContainsWarehouseCatalogKey();
         }
 
         /// <summary>
