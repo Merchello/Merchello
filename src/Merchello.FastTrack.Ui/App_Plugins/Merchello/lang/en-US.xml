@@ -184,6 +184,11 @@
     <key alias="endDate">End Date</key>
     <key alias="active">Active</key>
     <key alias="sortOrder">Sort Order</key>
+    <key alias="optionName">Option Name</key>
+    <key alias="optionUi">Option UI</key>
+    <key alias="optionValues">Option Values</key>
+    <key alias="shared">Shared</key>
+    <key alias="sharedCount">Shared Count</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">There are currently no products in this collection</key>
@@ -197,14 +202,14 @@
   <area alias="merchelloProductOptions">
     <key alias="newOption">New Option</key>
     <key alias="sharedOption">Shared Options</key>
-    <key alias="sharedCount">Share Count</key>
-    <key alias="manageShared">Manage Shared Product Options</key>
     <key alias="editOptions">
       <![CDATA[
       <strong>Edit Options</strong>
       <small>Edit or add options, which will auto-update your variants</small>
       ]]>
     </key>
+    <key alias="sharedCount">Share Count</key>
+    <key alias="manageShared">Manage Shared Product Options</key>
     <key alias="noSharedProductOptions">
       <![CDATA[
       <h5>You have not setup any shared product options</h5>
