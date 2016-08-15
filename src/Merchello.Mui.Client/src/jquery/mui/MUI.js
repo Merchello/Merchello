@@ -7,8 +7,8 @@ var MUI = (function() {
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
-        events: true,
-        console: true
+        events: false,
+        console: false
     };
 
     // Private members
