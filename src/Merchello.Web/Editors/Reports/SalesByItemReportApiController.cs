@@ -85,7 +85,7 @@
 
             _invoiceService = merchelloContext.Services.InvoiceService;
 
-            _merchello = new MerchelloHelper(merchelloContext.Services);
+            _merchello = new MerchelloHelper();
 
             _textService = umbracoContext.Application.Services.TextService;
         }

@@ -33,7 +33,7 @@
         /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
         /// </summary>
         public CachedCustomerQuery()
-            : this (MerchelloContext.Current.Services.CustomerService, true)
+            : this(MerchelloContext.Current, true)
         {            
         }
 
@@ -46,11 +46,10 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
+        [Obsolete("Use constructor that takes MerchelloContext")]
         public CachedCustomerQuery(ICustomerService customerService, bool enableDataModifiers)
             : this(
-            customerService,
-            ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"],
-            ExamineManager.Instance.SearchProviderCollection["MerchelloCustomerSearcher"],
+            MerchelloContext.Current,
             enableDataModifiers)
         {            
         }
@@ -58,8 +57,26 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
         /// </summary>
-        /// <param name="service">
-        /// The service.
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        public CachedCustomerQuery(IMerchelloContext merchelloContext, bool enableDataModifiers)
+            : this(
+                merchelloContext,
+                ExamineManager.Instance.IndexProviderCollection["MerchelloCustomerIndexer"],
+                ExamineManager.Instance.SearchProviderCollection["MerchelloCustomerSearcher"],
+                enableDataModifiers)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="indexProvider">
         /// The index provider.
@@ -70,16 +87,16 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        internal CachedCustomerQuery(IPageCachedService<ICustomer> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers)
-            : this(service, indexProvider, searchProvider, new CachedInvoiceQuery(MerchelloContext.Current.Services.InvoiceService, enableDataModifiers).GetByCustomerKey, enableDataModifiers)
+        internal CachedCustomerQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, bool enableDataModifiers)
+            : this(merchelloContext, indexProvider, searchProvider, new CachedInvoiceQuery(merchelloContext, enableDataModifiers).GetByCustomerKey, enableDataModifiers)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedCustomerQuery"/> class.
         /// </summary>
-        /// <param name="service">
-        /// The service.
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
         /// </param>
         /// <param name="indexProvider">
         /// The index provider.
@@ -93,10 +110,10 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
-        internal CachedCustomerQuery(IPageCachedService<ICustomer> service, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, Func<Guid, IEnumerable<InvoiceDisplay>> getInvoicesByCustomer, bool enableDataModifiers)
-            : base(service, indexProvider, searchProvider, enableDataModifiers)
+        internal CachedCustomerQuery(IMerchelloContext merchelloContext, BaseIndexProvider indexProvider, BaseSearchProvider searchProvider, Func<Guid, IEnumerable<InvoiceDisplay>> getInvoicesByCustomer, bool enableDataModifiers)
+            : base(merchelloContext.Cache, merchelloContext.Services.CustomerService, indexProvider, searchProvider, enableDataModifiers)
         {
-            _customerService = (CustomerService)service;
+            _customerService = (CustomerService)merchelloContext.Services.CustomerService;
             _getInvoiceByCustomer = getInvoicesByCustomer;
         }
 

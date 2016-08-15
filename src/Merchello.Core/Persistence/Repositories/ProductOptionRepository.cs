@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.Counting;
     using Merchello.Core.Models.EntityBase;
@@ -53,7 +54,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ProductOptionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public ProductOptionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
             _detachedContentTypeRepository = new DetachedContentTypeRepository(work, cache, logger, sqlSyntax);
@@ -77,7 +78,7 @@
         /// <param name="detachedContentTypeRepository">
         /// The detached content type repository.
         /// </param>
-        public ProductOptionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IDetachedContentTypeRepository detachedContentTypeRepository)
+        public ProductOptionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax, IDetachedContentTypeRepository detachedContentTypeRepository)
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(detachedContentTypeRepository, "detachedContentTypeRepository");
@@ -100,9 +101,8 @@
         /// </returns>
         public IEnumerable<Guid> SaveForProduct(IProduct product)
         {
-            if (!product.ProductOptions.Any()) return Enumerable.Empty<Guid>();
-
             // Ensures the sort order with respect to this product
+            if (!product.ProductOptions.Any()) 
             EnsureProductOptionsSortOrder(product.ProductOptions);
 
             // Reset the Product Options Collection so that updated values are ordered and cached correctly
@@ -165,6 +165,34 @@
             var factory = new ProductOptionFactory();
 
             return dtos.Select(dto => factory.BuildEntity(dto));
+        }
+
+        /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        public IProductAttribute GetProductAttributeByKey(Guid key)
+        {
+            return GetProductAttributes(new[] { key }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="attributeKeys">
+        /// The attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        public IEnumerable<IProductAttribute> GetProductAttributes(Guid[] attributeKeys)
+        {
+            return attributeKeys.Select(key => this.GetStashed(key, this.GetAttributeByKey));
         }
 
         /// <summary>
@@ -254,6 +282,28 @@
             Database.Execute("DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey = @key", new { @key = variant.Key });
 
             return GetProductKeysForCacheRefresh(sharedOptions.Select(x => x.Key).ToArray());
+        }
+
+        /// <summary>
+        /// Updates an attribute.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        public void UpdateAttribute(IProductAttribute attribute)
+        {
+            if (!attribute.HasIdentity)
+            {
+                var invalid = new InvalidOperationException("Cannot update an attribute that does not have an identity");
+                MultiLogHelper.Error<ProductOptionRepository>("Attempt to update a new attribute", invalid);
+                throw invalid;
+            }
+
+            var factory = new ProductAttributeFactory();
+            var dto = factory.BuildDto(attribute);
+            Database.Update(dto);
+            Stash(attribute);
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductOption>(attribute.OptionKey));
         }
 
         /// <summary>
@@ -348,7 +398,9 @@
             var collection = new ProductAttributeCollection();
             foreach (var dto in dtos)
             {
-                collection.Add(factory.BuildEntity(dto.ProductAttributeDto));
+                var attribute = factory.BuildEntity(dto.ProductAttributeDto);
+                RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+                collection.Add(attribute);
             }
 
             return collection;
@@ -741,7 +793,7 @@
 
             foreach (var dto in dtos.OrderBy(x => x.SortOrder))
             {
-                var attribute = factory.BuildEntity(dto);
+                var attribute = Stash(factory.BuildEntity(dto));
                 attributes.Add(attribute);
             }
 
@@ -789,6 +841,7 @@
                 new { Key = productAttribute.Key });
 
             Database.Execute("DELETE FROM merchProductAttribute WHERE pk = @Key", new { Key = productAttribute.Key });
+            Purge(productAttribute);
         }
 
         /// <summary>
@@ -818,7 +871,7 @@
             {
                 if (!exists) makeAssociation = true;
 
-                PersistUpdatedItem(option);
+                if (!option.Shared) PersistUpdatedItem(option);
             }
 
             if (makeAssociation)
@@ -828,6 +881,7 @@
                     OptionKey = option.Key,
                     ProductKey = productKey,
                     SortOrder = option.SortOrder,
+                    UseName = option.UseName,
                     CreateDate = DateTime.Now,
                     UpdateDate = DateTime.Now
                 };
@@ -836,18 +890,50 @@
 
                 if (!option.Shared) return;
 
-                foreach (var mapDto in option.Choices.Select(
-                    choice => 
-                    new ProductOptionAttributeShareDto
-                    {
-                        ProductKey = productKey,
-                        OptionKey = choice.OptionKey,
-                        AttributeKey = choice.Key,
-                        CreateDate = DateTime.Now,
-                        UpdateDate = DateTime.Now
-                    }))
+                foreach (
+                    var mapDto in
+                        option.Choices.Select(
+                            choice =>
+                            new ProductOptionAttributeShareDto
+                                {
+                                    ProductKey = productKey,
+                                    OptionKey = choice.OptionKey,
+                                    AttributeKey = choice.Key,
+                                    IsDefaultChoice = choice.IsDefaultChoice,
+                                    CreateDate = DateTime.Now,
+                                    UpdateDate = DateTime.Now
+                                }))
                 {
                     this.Database.Insert(mapDto);
+                }
+            }
+            else
+            {
+                Database.Update<Product2ProductOptionDto>(
+                    "SET sortOrder = @so, useName = @un, updateDate = @ud WHERE productKey = @pk AND optionKey = @ok", 
+                    new
+                        {
+                            @so = option.SortOrder,
+                            @un = option.UseName,
+                            @ud = DateTime.Now,
+                            @pk = productKey,
+                            @ok = option.Key
+                        });
+
+                if (option.Shared)
+                {
+                    foreach (var choice in option.Choices)
+                    {
+                        Database.Update<ProductOptionAttributeShareDto>(
+                            "SET isDefaultChoice = @dfc WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok",
+                            new
+                                {
+                                    @dfc = choice.IsDefaultChoice,
+                                    @pk = productKey,
+                                    @ak = choice.Key,
+                                    @ok = option.Key
+                                });
+                    }
                 }
             }
         }
@@ -866,7 +952,8 @@
         /// </param>
         private void SafeRemoveSharedOptionsFromProduct(IEnumerable<IProductOption> savers, IEnumerable<IProductOption> existing, Guid productKey)
         {
-            var removers = existing.Where(ex => savers.All(sv => sv.Key != ex.Key)).ToArray();
+            var existingOptions = existing as IProductOption[] ?? existing.ToArray();
+            var removers = existingOptions.Where(ex => savers.All(sv => sv.Key != ex.Key)).ToArray();
             if (removers.Any())
             {
                 foreach (var rm in removers)
@@ -880,6 +967,38 @@
                     {
                         PersistDeletedItem(rm);
                     }
+                }
+            }
+
+            // now check the selected choices for each of the savers
+            foreach (var o in savers)
+            {
+                var current = existingOptions.FirstOrDefault(x => x.Key == o.Key);
+                if (current == null) continue;
+
+                var removeChoices = current.Choices.Where(x => o.Choices.All(oc => oc.Key != x.Key));
+                foreach (var rm in removeChoices)
+                {
+                    foreach (var clause in GetRemoveAttributeFromSharedProductOptionSql(rm, productKey))
+                    {
+                        Database.Execute(clause);
+                    }
+                }
+
+                if (!o.Shared) return;
+                var newChoices = o.Choices.Where(x => current.Choices.All(cc => cc.Key != x.Key));
+                var dtos = newChoices.Select(nc => new ProductOptionAttributeShareDto
+                        {
+                            ProductKey = productKey,
+                            AttributeKey = nc.Key,
+                            OptionKey = o.Key,
+                            IsDefaultChoice = nc.IsDefaultChoice,
+                            CreateDate = DateTime.Now,
+                            UpdateDate = DateTime.Now
+                        });
+                foreach (var dto in dtos)
+                {
+                    Database.Insert(dto);
                 }
             }
         }
@@ -924,7 +1043,7 @@
             { 
                 if (option.Choices.Contains(ex.Key)) continue;
 
-                if (!option.Shared)
+                if (!option.Shared || (option.Shared && GetSharedProductAttributeCount(ex.Key) == 0))
                 {
                     DeleteProductAttribute(ex);
                     resetSorts = true;
@@ -984,6 +1103,8 @@
                 var dto = factory.BuildDto(att);
                 Database.Update(dto);
             }
+
+            Stash(att);
         }
 
         /// <summary>
@@ -1004,6 +1125,7 @@
                 sort++;
             }
         }
+
 
         /// <summary>
         /// Gets a collection of options for a specific <see cref="IProduct"/>.
@@ -1103,6 +1225,39 @@
         }
 
         /// <summary>
+        /// Gets the SQL required to remove an option choice from an assigned shared option.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Sql}"/>.
+        /// </returns>
+        private IEnumerable<Sql> GetRemoveAttributeFromSharedProductOptionSql(IProductAttribute attribute, Guid productKey)
+        {
+            var pvKeys =
+                Database.Fetch<KeyDto>(
+                    "SELECT * FROM merchProductVariant T1 INNER JOIN merchProductVariant2ProductAttribute T2 ON T1.pk = T2.productVariantKey WHERE T1.productKey = @pk AND T1.master = 0 AND T2.optionKey = @ok AND T2.productAttributeKey = @ak",
+                    new { @pk = productKey, @ok = attribute.OptionKey, @ak = attribute.Key });
+
+            var list = new List<Sql>
+                {
+                     new Sql(
+                             "DELETE FROM merchProductVariant2ProductAttribute WHERE productVariantKey IN (@pvks)",
+                             new { @pvks = pvKeys.Select(x => x.Key) }),
+
+                     new Sql(
+                             "DELETE FROM merchProductOptionAttributeShare WHERE productKey = @pk AND attributeKey = @ak AND optionKey = @ok", 
+                         new { @pk = productKey, @ak = attribute.Key, @ok = attribute.OptionKey })
+                };
+
+            return list;
+        }
+
+        /// <summary>
         /// Gets the SQL statements to execute when deleting an option which has choices that define variants.
         /// </summary>
         /// <param name="product">
@@ -1123,6 +1278,9 @@
 
             // Remove only option choices for non shared options
             if (optionKeys.Any()) list.Add(new Sql("DELETE FROM merchProductAttribute WHERE optionKey IN (@okeys)", new { @okeys = optionKeys }));
+
+            RuntimeCache.ClearCacheByKeySearch(typeof(IProductAttribute).ToString());
+
 
             return list;
         }
@@ -1216,5 +1374,64 @@
         }
 
         #endregion
+
+        private IProductAttribute GetAttributeByKey(Guid key)
+        {
+            var sql =
+                new Sql("SELECT *").From<ProductAttributeDto>(SqlSyntax).Where<ProductAttributeDto>(x => x.Key == key);
+            var dto = Database.Fetch<ProductAttributeDto>(sql).FirstOrDefault();
+            if (dto != null)
+            {
+                var factory = new ProductAttributeFactory();
+                return factory.BuildEntity(dto);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Caches a <see cref="IProductAttribute"/>.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        private IProductAttribute Stash(IProductAttribute attribute)
+        {
+            RuntimeCache.GetCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key), () => attribute);
+            return attribute;
+        }
+
+        /// <summary>
+        /// Attempts to get a cached <see cref="IProductAttribute"/> or invokes the getter.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <param name="_fetch">
+        /// The fetch.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        private IProductAttribute GetStashed(Guid key, Func<Guid, IProductAttribute> _fetch)
+        {
+            return RuntimeCache.GetCacheItem<IProductAttribute>(
+                Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(key),
+                () => _fetch.Invoke(key));
+        }
+
+        /// <summary>
+        /// Removes a <see cref="IProductAttribute"/> from Cache.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        private void Purge(IProductAttribute attribute)
+        {
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IProductAttribute>(attribute.Key));
+        }
     }
 }

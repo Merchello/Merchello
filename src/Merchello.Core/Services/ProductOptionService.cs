@@ -160,6 +160,7 @@
         {
             var option = new ProductOption(name)
                         {
+                            UseName = name,
                             Shared = shared, 
                             Required = required
                         };
@@ -205,6 +206,41 @@
             Save(option);
 
             return option;
+        }
+
+
+        /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        public IProductAttribute GetProductAttributeByKey(Guid key)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductAttributeByKey(key);
+            }
+        }
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The collection attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        public IEnumerable<IProductAttribute> GetProductAttributes(IEnumerable<Guid> keys)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetProductAttributes(keys.ToArray());
+            }
         }
 
         /// <summary>
@@ -309,9 +345,6 @@
             if (raiseEvents) Deleted.RaiseEvent(new DeleteEventArgs<IProductOption>(option), this);
         }
 
-
-        
-
         /// <summary>
         /// Gets a <see cref="IProductOption"/> by it's key.
         /// </summary>
@@ -361,6 +394,23 @@
             using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetProductOptionUseCount(option);
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of occurrences that an option has been shared.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The count of option shares.
+        /// </returns>
+        public int GetProductOptionShareCount(IProductOption option)
+        {
+            using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetSharedProductOptionCount(option.Key);
             }
         }
 
@@ -425,6 +475,26 @@
             using (var repository = RepositoryFactory.CreateProductOptionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetPage(term, page, itemsPerPage, sortBy, sortDirection, sharedOnly);
+            }
+        }
+
+        /// <summary>
+        /// Updates an attribute.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        internal void Save(IProductAttribute attribute)
+        {
+            using (new WriteLock(Locker))
+            {
+                var uow = UowProvider.GetUnitOfWork();
+                using (var repository = RepositoryFactory.CreateProductOptionRepository(uow))
+                {
+
+                    repository.UpdateAttribute(attribute);
+                    uow.Commit();
+                }
             }
         }
 

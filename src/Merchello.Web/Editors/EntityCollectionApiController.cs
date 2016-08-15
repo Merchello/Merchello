@@ -88,7 +88,7 @@
             
             _resolver = EntityCollectionProviderResolver.Current;
 
-            _merchello = new MerchelloHelper(merchelloContext.Services, false);
+            _merchello = new MerchelloHelper(merchelloContext, false);
 
             this.Initialize();
         }

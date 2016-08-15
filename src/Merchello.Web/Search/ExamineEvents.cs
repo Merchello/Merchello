@@ -11,6 +11,9 @@
     using global::Examine;
     using Examine;
     using Examine.Providers;
+
+    using Merchello.Web.Caching;
+
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Logging;
@@ -85,7 +88,7 @@
             ProductService.Saved += ProductServiceSaved;
             ProductService.Deleted += ProductServiceDeleted;
 
-            ProductVariantService.Created += ProductVariantServiceCreated;
+            //ProductVariantService.Created += ProductVariantServiceCreated;
             ProductVariantService.Saved += ProductVariantServiceSaved;
             ProductVariantService.Deleted += ProductVariantServiceDeleted;
 
@@ -135,8 +138,6 @@
 
             e.Fields.Add("downloadMediaPropertyIds", value);
         }
-
-        // TODO RSS - come up with another way of updating the customer index ... we should not need to requiry the customer here
 
         /// <summary>
         /// The customer address service deleted.
@@ -385,6 +386,8 @@
         /// </summary>        
         static void ProductServiceSaved(IProductService sender, SaveEventArgs<IProduct> e)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(e);
             e.SavedEntities.ForEach(IndexProduct);
         }
 
@@ -393,6 +396,8 @@
         /// </summary>   
         static void ProductServiceDeleted(IProductService sender, DeleteEventArgs<IProduct> e)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(e);
             e.DeletedEntities.ForEach(DeleteProductFromIndex);
         }
 
@@ -429,6 +434,8 @@
         
         private static void IndexProductVariant(IProductVariant productVariant)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(productVariant.ProductKey);
             ProductIndexer.ReIndexNode(productVariant.SerializeToXml().Root, IndexTypes.ProductVariant);
         }
 
@@ -439,6 +446,8 @@
 
         private static void DeleteProductVariantFromIndex(IProductVariant productVariant)
         {
+            var cache = new VirtualProductContentCache();
+            cache.ClearVirtualCache(productVariant.ProductKey);
             ProductIndexer.DeleteFromIndex(((ProductVariant)productVariant).ExamineId.ToString(CultureInfo.InvariantCulture));
         }
 

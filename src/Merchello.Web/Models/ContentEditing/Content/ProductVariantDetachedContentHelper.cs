@@ -18,7 +18,7 @@
     /// <typeparam name="TDisplay">
     /// The type of display object
     /// </typeparam>
-    internal sealed class ProductVariantDetachedContentHelper<TSaveModel, TDisplay>
+    internal sealed class ProductVariantDetachedContentHelper<TSaveModel, TDisplay> 
         where TSaveModel : ProductContentSaveItemBase<TDisplay> where TDisplay : ProductDisplayBase
     {
         /// <summary>

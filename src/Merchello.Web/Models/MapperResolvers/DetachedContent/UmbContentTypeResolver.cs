@@ -33,8 +33,9 @@
         /// </returns>
         protected override UmbContentTypeDisplay ResolveCore(IDetachedContentType source)
         {
-            var contentType =
-                 _contentTypeService.GetAllContentTypes().FirstOrDefault(x => x.Key == source.ContentTypeKey);
+            var contentType = source.ContentTypeKey != null ?
+                 _contentTypeService.GetContentType(source.ContentTypeKey.Value) :
+                 null;
 
             return contentType != null ? contentType.ToUmbContentTypeDisplay() : new UmbContentTypeDisplay() { AllowedTemplates = Enumerable.Empty<UmbTemplateDisplay>() };
         }

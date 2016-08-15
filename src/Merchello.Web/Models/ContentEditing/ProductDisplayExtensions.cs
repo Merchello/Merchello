@@ -7,6 +7,7 @@
     using System.Text.RegularExpressions;
 
     using Merchello.Core;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.ValueConverters;
@@ -228,13 +229,39 @@
 
         #region IProductAttribute
 
-
+        /// <summary>
+        /// The to product attribute.
+        /// </summary>
+        /// <param name="productAttributeDisplay">
+        /// The product attribute display.
+        /// </param>
+        /// <param name="destinationProductAttribute">
+        /// The destination product attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
         internal static IProductAttribute ToProductAttribute(this ProductAttributeDisplay productAttributeDisplay, IProductAttribute destinationProductAttribute)
         {
             if (productAttributeDisplay.Key != Guid.Empty)
             {
                 destinationProductAttribute.Key = productAttributeDisplay.Key;
             }
+
+            var validPropertyTypeAliases = productAttributeDisplay.DetachedDataValues.Select(x => x.Key);
+            var removeAtts = destinationProductAttribute.DetachedDataValues.Where(x => validPropertyTypeAliases.All(y => y != x.Key));
+            foreach (var remove in removeAtts)
+            {
+                destinationProductAttribute.DetachedDataValues.RemoveValue(remove.Key);
+            }
+
+            foreach (var item in productAttributeDisplay.DetachedDataValues)
+            {
+                if (!item.Key.IsNullOrWhiteSpace())
+                    destinationProductAttribute.DetachedDataValues.AddOrUpdate(item.Key, item.Value, (x, y) => item.Value);
+            }
+
+
             destinationProductAttribute.Name = productAttributeDisplay.Name;
             destinationProductAttribute.Sku = productAttributeDisplay.Sku;
             destinationProductAttribute.OptionKey = productAttributeDisplay.OptionKey;
@@ -243,9 +270,26 @@
             return destinationProductAttribute;
         }
 
+        /// <summary>
+        /// Maps <see cref="IProductAttribute"/> to <see cref="ProductAttributeDisplay"/>.
+        /// </summary>
+        /// <param name="productAttribute">
+        /// The product attribute.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductAttributeDisplay"/>.
+        /// </returns>
         internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute)
-        {            
-            return AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
+        {
+            return productAttribute.ToProductAttributeDisplay(null);
+        }
+
+        internal static ProductAttributeDisplay ToProductAttributeDisplay(this IProductAttribute productAttribute, IContentType contentType, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var display = AutoMapper.Mapper.Map<ProductAttributeDisplay>(productAttribute);
+            if (contentType == null) return display;
+            display.EnsureValueConversion(contentType, conversionType);
+            return display;
         }
 
 
@@ -259,28 +303,44 @@
         /// <param name="productOptionDisplay">
         /// The product option display.
         /// </param>
-        /// <param name="destinationProductOption">
+        /// <param name="destination">
         /// The destination product option.
         /// </param>
         /// <returns>
         /// The <see cref="IProductOption"/>.
         /// </returns>
-        internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destinationProductOption)
+        internal static IProductOption ToProductOption(this ProductOptionDisplay productOptionDisplay, IProductOption destination)
         {
             if (productOptionDisplay.Key != Guid.Empty)
             {
-                destinationProductOption.Key = productOptionDisplay.Key;
+                destination.Key = productOptionDisplay.Key;
             }
-            destinationProductOption.Required = productOptionDisplay.Required;
-            destinationProductOption.SortOrder = productOptionDisplay.SortOrder;
 
+            destination.Name = productOptionDisplay.Name;
+            destination.Required = productOptionDisplay.Required;
+            destination.SortOrder = productOptionDisplay.SortOrder;
+            destination.Shared = productOptionDisplay.Shared;
+            destination.UiOption = productOptionDisplay.UiOption;
+            destination.UseName = productOptionDisplay.UseName.IsNullOrWhiteSpace()
+                                      ? productOptionDisplay.Name
+                                      : productOptionDisplay.UseName;
+
+            if (!productOptionDisplay.DetachedContentTypeKey.Equals(Guid.Empty))
+            {
+                destination.DetachedContentTypeKey = productOptionDisplay.DetachedContentTypeKey;
+            }
+            else
+            {
+                destination.DetachedContentTypeKey = null;
+            }
+            
 
             // Fix with option deletion here #M-161 #M-150
             // remove any product choices that exist in destination and do not exist in productDisplay
-            var removers = destinationProductOption.Choices.Where(x => !productOptionDisplay.Choices.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToArray();
+            var removers = destination.Choices.Where(x => !productOptionDisplay.Choices.Select(pd => pd.Key).Contains(x.Key)).Select(x => x.Key).ToArray();
             foreach (var remove in removers)
             {
-                destinationProductOption.Choices.RemoveItem(remove);
+                destination.Choices.RemoveItem(remove);
             }
 
             foreach (var choice in productOptionDisplay.Choices)
@@ -294,10 +354,9 @@
 
                 IProductAttribute destinationProductAttribute;
 
-                
-                if (destinationProductOption.Choices.Contains(choice.Sku))
+                if (destination.Choices.Contains(choice.Sku))
                 {
-                    destinationProductAttribute = destinationProductOption.Choices[choice.Key];
+                    destinationProductAttribute = destination.Choices[choice.Key];
 
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }
@@ -308,10 +367,13 @@
                     destinationProductAttribute = choice.ToProductAttribute(destinationProductAttribute);
                 }
 
-                destinationProductOption.Choices.Add(destinationProductAttribute);
+                destinationProductAttribute.Name = choice.Name;
+                destinationProductAttribute.SortOrder = choice.SortOrder;
+                destinationProductAttribute.IsDefaultChoice = choice.IsDefaultChoice;
+                destination.Choices.Add(destinationProductAttribute);
             }
 
-            return destinationProductOption;
+            return destination;
         }
 
         /// <summary>
@@ -320,12 +382,18 @@
         /// <param name="productOption">
         /// The product option.
         /// </param>
+        /// <param name="conversionType">
+        /// The property editor conversion type.
+        /// </param>
         /// <returns>
         /// The <see cref="ProductOptionDisplay"/>.
         /// </returns>
-        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption)
-        {            
-            return AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+        internal static ProductOptionDisplay ToProductOptionDisplay(this IProductOption productOption, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
+        {
+            var display = AutoMapper.Mapper.Map<ProductOptionDisplay>(productOption);
+            display.EnsureValueConversion(conversionType);
+            display.Choices = display.Choices.OrderBy(x => x.SortOrder);
+            return display;
         }
 
         #endregion
@@ -338,6 +406,9 @@
         /// <param name="display">
         /// The display.
         /// </param>
+        /// <param name="optionContentTypes">
+        /// The option Content Types.
+        /// </param>
         /// <param name="cultureName">
         /// The cultureName
         /// </param>
@@ -347,9 +418,10 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProductVariantContent}"/>.
         /// </returns>
-        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, string cultureName, IPublishedContent parent = null)
+        internal static IEnumerable<IProductVariantContent> ProductVariantsAsProductVariantContent(this ProductDisplay display, IDictionary<Guid, PublishedContentType> optionContentTypes, string cultureName, IPublishedContent parent = null)
         {
             var variantContent = new List<IProductVariantContent>();
+
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var variant in display.ProductVariants)
@@ -360,10 +432,40 @@
                                           variant.DetachedContentForCulture(cultureName).DetachedContentType.UmbContentType.Alias)
                                       : null;
 
-                variantContent.Add(new ProductVariantContent(variant, contentType, cultureName, parent));
+                variantContent.Add(new ProductVariantContent(variant, contentType, optionContentTypes, cultureName, parent));
             }
 
             return variantContent;
+        }
+
+        /// <summary>
+        /// The product option as product option wrapper.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="parent">
+        /// The parent node
+        /// </param>
+        /// <param name="optionContentTypes">
+        /// The option content types.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductOptionWrapper"/>.
+        /// </returns>
+        internal static IProductOptionWrapper ProductOptionAsProductOptionWrapper(this ProductOptionDisplay display, IPublishedContent parent, IDictionary<Guid, PublishedContentType> optionContentTypes)
+        {
+            // Find the associated content type if it exists
+            var contentType = optionContentTypes.ContainsKey(display.DetachedContentTypeKey) ?
+                optionContentTypes[display.DetachedContentTypeKey] :
+                null;
+
+            // This is a hack for the special case when HasProperty and HasValue extensions are called
+            // and a content type is not assigned. - so we will default to the product content type
+            // if there is none.  The detachedDataValues collection should be empty -
+            var ct = contentType ?? parent.ContentType;
+
+            return new ProductOptionWrapper(display, parent, contentType);
         }
 
         /// <summary>
@@ -391,8 +493,24 @@
         /// </returns>
         public static IProductContent AsProductContent(this ProductDisplay display)
         {
+            return display.AsProductContent(new ProductContentFactory());
+        }
+
+        /// <summary>
+        /// Creates <see cref="IProductContent"/> from the display object.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <param name="factory">
+        /// The factory.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContent"/>.
+        /// </returns>
+        public static IProductContent AsProductContent(this ProductDisplay display, ProductContentFactory factory)
+        {
             if (!display.HasVirtualContent()) return null;
-            var factory = new ProductContentFactory();
             return factory.BuildContent(display);
         }
 
@@ -514,52 +632,7 @@
             }         
         }
 
-        /// <summary>
-        /// Utility for setting the IsForBackOfficeEditor property.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="conversionType">
-        /// The value conversion type.
-        /// </param>
-        internal static void EnsureValueConversion(this ProductDisplay display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-            ((ProductDisplayBase)display).EnsureValueConversion(conversionType);
-            if (display.ProductVariants.Any())
-            {
-                foreach (var variant in display.ProductVariants)
-                {
-                    variant.EnsureValueConversion(conversionType);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Utility for setting the IsForBackOfficeEditor property.
-        /// </summary>
-        /// <param name="display">
-        /// The display.
-        /// </param>
-        /// <param name="conversionType">
-        /// The value conversion type.
-        /// </param>
-        internal static void EnsureValueConversion(this ProductDisplayBase display, DetachedValuesConversionType conversionType = DetachedValuesConversionType.Db)
-        {
-           
-            if (display.DetachedContents.Any())
-            {
-                foreach (var dc in display.DetachedContents)
-                {
-                    var contentType = DetachedValuesConverter.Current.GetContentTypeByKey(dc.DetachedContentType.UmbContentType.Key);
-                    if (dc.ValueConversion != conversionType)
-                    {
-                        dc.ValueConversion = conversionType;
-                        if (contentType != null) dc.DetachedDataValues = DetachedValuesConverter.Current.Convert(contentType, dc.DetachedDataValues, conversionType);
-                    }                    
-                }
-            }    
-        }
+    
 
         #endregion
 

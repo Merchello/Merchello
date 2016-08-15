@@ -32,7 +32,7 @@
 
             var defaultWarehouse = DbPreTestDataWorker.WarehouseService.GetDefaultWarehouse();
 
-            _merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Current, false);
 
             var productService = MerchelloContext.Current.Services.ProductService;
             var entityCollectionService = MerchelloContext.Current.Services.EntityCollectionService;

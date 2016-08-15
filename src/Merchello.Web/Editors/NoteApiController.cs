@@ -49,7 +49,7 @@
         {
             Mandate.ParameterNotNull(merchelloContext, "merchelloContext");
             _noteService = merchelloContext.Services.NoteService;
-            _merchelloHelper = new MerchelloHelper(merchelloContext.Services);
+            _merchelloHelper = new MerchelloHelper();
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ SalesOverTimeResult.prototype = (function() {
 
     return {
         getDateLabel : getDateLabel
-    }
+    };
 
 })();
 

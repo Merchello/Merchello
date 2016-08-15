@@ -8,8 +8,13 @@ namespace Merchello.Tests.Base.DataMakers
     using System.Linq;
     using System.Runtime.CompilerServices;
 
+    using global::Umbraco.Core;
+
+    using Merchello.Core.Cache;
+    using Merchello.Core.Events;
     using Merchello.Core.Gateways.Shipping;
     using Merchello.Core.Persistence;
+    using Merchello.Core.Persistence.UnitOfWork;
     using Merchello.Core.Services;
     using Merchello.Tests.Base.Mocks;
     using Merchello.Tests.Base.SqlSyntax;
@@ -20,7 +25,7 @@ namespace Merchello.Tests.Base.DataMakers
         {
             var status = new InvoiceStatus()
                 {
-                    Key = Constants.DefaultKeys.InvoiceStatus.Unpaid,
+                    Key = global::Merchello.Core.Constants.DefaultKeys.InvoiceStatus.Unpaid,
                     Active = true,
                     Alias = "unpaid",
                     Name = "Unpaid",
@@ -57,14 +62,8 @@ namespace Merchello.Tests.Base.DataMakers
                 CountryCode = "US",
             };
 
-            var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
 
-            // sets up the Umbraco SqlSyntaxProvider Singleton OBSOLETE
-            SqlSyntaxProviderTestHelper.EstablishSqlSyntax(syntax);
-
-            var sqlSyntaxProvider = SqlSyntaxProviderTestHelper.SqlSyntaxProvider(syntax);
-
-            var invoiceService = new InvoiceService(TestLogger, sqlSyntaxProvider);
+            var invoiceService = GetServiceContext().InvoiceService;
 
             var invoice = invoiceService.CreateInvoice(Core.Constants.DefaultKeys.InvoiceStatus.Unpaid);
 

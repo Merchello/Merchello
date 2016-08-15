@@ -92,7 +92,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                     var url = baseUrl + 'PostAddEntityToCollections';
                     var data = [];
                     angular.forEach(collectionKeys, function(ck) {
-                      data.push({ entityKey: entityKey, collectionKey: ck })
+                      data.push({ entityKey: entityKey, collectionKey: ck });
                     });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -112,7 +112,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                     var url = baseUrl + 'DeleteEntityFromCollections';
                     var data = [];
                     angular.forEach(collectionKeys, function(ck) {
-                        data.push({ entityKey: entityKey, collectionKey: ck })
+                        data.push({ entityKey: entityKey, collectionKey: ck });
                     });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
@@ -165,6 +165,6 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         'Failed to delete the entity collection');
                 }
 
-            }
+            };
 
         }]);

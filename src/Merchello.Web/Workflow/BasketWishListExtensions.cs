@@ -8,6 +8,7 @@
     using Merchello.Core.Checkout;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
+    using Merchello.Web.Workflow.CustomerItemCache;
 
     using Umbraco.Core.Logging;
 
@@ -17,7 +18,6 @@
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
     public static class BasketWishListExtensions
     {
-
         /// <summary>
         /// Saves the entire basket to the wish list and then clears the basket.
         /// </summary>
@@ -166,6 +166,21 @@
         public static void MoveItemToBasket(this IWishList wishList, ILineItem lineItem)
         {
             wishList.MoveItemToBasket(lineItem.Key);
+        }
+
+
+        /// <summary>
+        /// Returns a value indicating whether collection contains shippable items.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether collection contains shippable items.
+        /// </returns>
+        public static bool HasShippableItems(this ICustomerItemCacheBase container)
+        {
+            return container.Items.Any(x => x.IsShippable());
         }
     }
 }

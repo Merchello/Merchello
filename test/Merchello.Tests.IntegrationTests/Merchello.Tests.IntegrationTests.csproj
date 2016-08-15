@@ -310,6 +310,7 @@
     <Compile Include="DisplayClasses\GatewayProviderDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferComponentDefinitionDisplayTests.cs" />
     <Compile Include="DisplayClasses\OfferProviderTests.cs" />
+    <Compile Include="DisplayClasses\ProductAttributeSerializationTests.cs" />
     <Compile Include="Dto\KeyOnlyDtoTests.cs" />
     <Compile Include="EntityCollections\StaticCustomerCollectionProviderTests.cs" />
     <Compile Include="EntityCollections\StaticEntityCollectionCollectionProviderTests.cs" />

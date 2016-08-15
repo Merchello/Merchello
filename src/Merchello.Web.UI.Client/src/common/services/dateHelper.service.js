@@ -5,7 +5,7 @@ angular.module('merchello.services').service('dateHelper', [
         this.convertToJsDate = function(dateString, dateFormat) {
             // date formats in merchello start with MM, dd, or yyyy
             if(dateString.indexOf('/') === -1) {
-                dateString = dateString.replace(/-/g, '/');
+                dateString = dateString.replace(/-|./g, '/');
             }
             var splitDate = dateString.split('/');
             var date;
@@ -49,9 +49,9 @@ angular.module('merchello.services').service('dateHelper', [
             });
 
             return deferred.promise;
-        }
+        };
 
         this.getGmt0EquivalentDate = function(dt) {
            return new Date(dt.getTime() + (dt.getTimezoneOffset() * 60000));
-        }
+        };
 }]);

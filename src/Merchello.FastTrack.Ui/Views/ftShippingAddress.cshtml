@@ -1,0 +1,6 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "ftPreSaleSummary.cshtml";
+}
+
+@Html.Action("ShippingAddressForm", "CheckoutAddress", new { area = "FastTrack" })

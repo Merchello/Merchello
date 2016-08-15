@@ -63,7 +63,7 @@
                 }
 
                 // ensure property did not set an array
-                if (angular.isArray(dcv.value) && dcv.value.length == 0) {
+                if (angular.isArray(dcv.value) && dcv.value.length === 0) {
                     dcv.value = '';
                 }
                 values.push(dcv);

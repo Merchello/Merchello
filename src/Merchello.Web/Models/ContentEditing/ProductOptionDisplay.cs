@@ -5,6 +5,7 @@
     using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Models;
+    using Merchello.Web.Models.ContentEditing.Content;
 
     /// <summary>
     /// The product option display.
@@ -22,9 +23,14 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the UI element.
+        /// Gets or sets the use name.
         /// </summary>
-        public string UiElement { get; set; }
+        public string UseName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UI option.
+        /// </summary>
+        public string UiOption { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether required.
@@ -37,9 +43,18 @@
         public bool Shared { get; set; }
 
         /// <summary>
+        /// Gets or sets the share count.
+        /// </summary>
+        /// <remarks>
+        /// This is a calculated field and never saved if set via Angular
+        /// </remarks>
+        public int ShareCount { get; set; }
+
+        /// <summary>
         /// Gets or sets the detached content key.
         /// </summary>
-        public Guid DetachedContentKey { get; set; }
+        public Guid DetachedContentTypeKey { get; set; }
+
 
         /// <summary>
         /// Gets or sets the sort order.

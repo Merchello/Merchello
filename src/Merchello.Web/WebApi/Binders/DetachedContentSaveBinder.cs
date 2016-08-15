@@ -23,7 +23,7 @@
     /// <typeparam name="TModelSave">
     /// The type of display model
     /// </typeparam>
-    internal abstract class DetachedContentSaveBinder<TModelSave> : IModelBinder
+    public abstract class DetachedContentSaveBinder<TModelSave> : IModelBinder
         where TModelSave : class, IHaveUploadedFiles
     {
 

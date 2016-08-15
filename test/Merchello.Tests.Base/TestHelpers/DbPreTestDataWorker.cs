@@ -14,9 +14,11 @@ using Umbraco.Core.Persistence;
 
 namespace Merchello.Tests.Base.TestHelpers
 {
+    using global::Umbraco.Core;
     using global::Umbraco.Core.Logging;
     using global::Umbraco.Core.Persistence.SqlSyntax;
 
+    using Merchello.Core.Cache;
     using Merchello.Core.Events;
     using Merchello.Core.Persistence;
 
@@ -49,11 +51,17 @@ namespace Merchello.Tests.Base.TestHelpers
 
             Database = uowProvider.GetUnitOfWork().Database;
             TestLogger = Logger.CreateWithDefaultLog4NetConfiguration();
-            _serviceContext = new ServiceContext(new RepositoryFactory(TestLogger, SqlSyntaxProvider), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
 
-            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
+            var cache = new CacheHelper(
+                new ObjectCacheRuntimeCacheProvider(),
+                new StaticCacheProvider(),
+                new NullCacheProvider());
+
+            _serviceContext = new ServiceContext(new RepositoryFactory(cache, TestLogger, SqlSyntaxProvider), new PetaPocoUnitOfWorkProvider(TestLogger), TestLogger, new TransientMessageFactory());
+
+            WarehouseCatalog = new WarehouseCatalog(global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
             {
-                Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
+                Key = global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
             }; 
         }
 
@@ -71,9 +79,9 @@ namespace Merchello.Tests.Base.TestHelpers
 
             _serviceContext = serviceContext;
 
-            WarehouseCatalog = new WarehouseCatalog(Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
+            WarehouseCatalog = new WarehouseCatalog(global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseKey)
             {
-                Key = Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
+                Key = global::Merchello.Core.Constants.DefaultKeys.Warehouse.DefaultWarehouseCatalogKey
             };
         }
 
@@ -493,7 +501,7 @@ namespace Merchello.Tests.Base.TestHelpers
         public void DeleteAllShipCountries()
         {
             var shipCountries = ((ShipCountryService)ShipCountryService).GetAllShipCountries();
-            foreach (var country in shipCountries.Where(x => !x.CountryCode.Equals(Constants.CountryCodes.EverywhereElse)))
+            foreach (var country in shipCountries.Where(x => !x.CountryCode.Equals(global::Merchello.Core.Constants.CountryCodes.EverywhereElse)))
             {
                 ShipCountryService.Delete(country);
             }

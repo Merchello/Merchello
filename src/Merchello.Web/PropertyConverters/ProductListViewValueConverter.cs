@@ -67,10 +67,8 @@
 
             if (collectionKey.IsNullOrWhiteSpace())
             {
-
-                var defaultCollection = merchello.Query.Product.Search(1, 10)
-                    .Items.Select(x => merchello.TypedProductContent(((ProductDisplay)x).Key));
-
+                var defaultCollection = merchello.Query.Product.TypedProductContentSearch(1, 10);
+                    
                 return new ProductContentListView(Guid.Empty, defaultCollection);
             }
 

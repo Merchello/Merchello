@@ -8,6 +8,7 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
             scope: {
                 entityType: '@',
                 selectedContentType: '=',
+                setSelectedContentTypeKey: '=?',
                 showSave: '=?',
                 save: '&'
             },
@@ -39,7 +40,19 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
                 function loadDetachedContentTypes() {
                     detachedContentResource.getDetachedContentTypeByEntityType(scope.entityType).then(function(results) {
                         scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
+
+                        if (('setSelectedContentTypeKey' in attr)) {
+                            var fnd = _.find(scope.detachedContentTypes, function(dtc) {
+                               return dtc.key === scope.setSelectedContentTypeKey;
+                            });
+
+                            if (fnd) {
+                                scope.selectedContentType = fnd;
+                            }
+                        }
+
                         scope.loaded = true;
+
                     });
                 }
 

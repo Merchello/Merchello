@@ -1,12 +1,18 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutAddressModel>
+﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Merchello.FastTrack.Models.FastTrackCheckoutAddressModel>
 @using System.Web.Mvc.Html
 @using Merchello.FastTrack.Controllers
 @using Merchello.FastTrack.Ui
+@using Merchello.Web
 @using Merchello.Web.Models.Ui
 @using Merchello.Web.Store.Localization
+@using Merchello.Web.Workflow
 @using Umbraco.Web
 @{
-    Model.SuccessRedirectUrl = ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShipRateQuote).Url;
+    var hasShippableItems = CurrentCustomer.Basket().HasShippableItems();
+
+    Model.SuccessRedirectUrl = hasShippableItems ? 
+        ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShipRateQuote).Url : 
+        ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url;
 }
 
 <h3>Shipping Address</h3>

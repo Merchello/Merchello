@@ -137,7 +137,7 @@
                         settings: settingDisplayBuilder.transform(data[0]),
                         currencies: data[1],
                         currencySymbol: _.find(data[1], function(c) {
-                            return c.currencyCode === data[0].currencyCode
+                            return c.currencyCode === data[0].currencyCode;
                         }).symbol,
                         countries: countryDisplayBuilder.transform(data[2])
                     };

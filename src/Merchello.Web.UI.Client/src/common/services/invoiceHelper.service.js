@@ -63,7 +63,7 @@ angular.module('merchello.services').service('invoiceHelper',
             for(var i = 0; i < num; i++) {
                 pad += char;
             }
-            return (pad + str).slice(-num)
+            return (pad + str).slice(-num);
         };
 
 }]);

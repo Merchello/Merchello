@@ -16,23 +16,23 @@
     /// </summary>
     [PluginController("Merchello")]
     [Authorize]
-    public class WishListController : WishListControllerBase<StoreItemCacheModel, StoreLineItemModel>
+    public class StoreWishListController : WishListControllerBase<StoreItemCacheModel, StoreLineItemModel>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="WishListController"/> class.
+        /// Initializes a new instance of the <see cref="StoreWishListController"/> class.
         /// </summary>
-        public WishListController()
+        public StoreWishListController()
             : this(new ItemCacheModelFactory())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WishListController"/> class.
+        /// Initializes a new instance of the <see cref="StoreWishListController"/> class.
         /// </summary>
         /// <param name="itemCacheModelFactory">
         /// The <see cref="ItemCacheModelFactory"/>.
         /// </param>
-        public WishListController(ItemCacheModelFactory itemCacheModelFactory)
+        public StoreWishListController(ItemCacheModelFactory itemCacheModelFactory)
             : base(itemCacheModelFactory)
         {
         }

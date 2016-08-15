@@ -36,6 +36,16 @@
                 Create.Column("detachedContentValues").OnTable("merchProductAttribute").AsCustom(textType).Nullable();
             }
 
+            // 'isDefaultChoice' column
+            if (columns.Any(
+                  x => x.TableName.InvariantEquals("merchProductAttribute") && x.ColumnName.InvariantEquals("isDefaultChoice"))
+              == false)
+            {
+                Logger.Info(typeof(AddProductAttributeColumns), "Adding isDefaultChoice column to merchProductAttribute table.");
+
+                //// Add the new 'isDefaultChoice' column
+                Create.Column("isDefaultChoice").OnTable("merchProductAttribute").AsBoolean().WithDefaultValue(false);
+            }
         }
 
         /// <summary>

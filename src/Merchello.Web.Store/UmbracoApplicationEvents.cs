@@ -43,7 +43,7 @@
             if (attempt.Payment.Success)
             {
                 var email = attempt.Invoice.BillToEmail;
-                Notification.Trigger("OrderConfirmation", new { email }, Topic.Notifications);
+                Notification.Trigger("OrderConfirmation", attempt, new[] { email }, Topic.Notifications);
             }
         }
     }

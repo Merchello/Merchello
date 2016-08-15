@@ -9,7 +9,7 @@
     /// </summary>
     [Serializable]
     [DataContract(IsReference = true)]
-    internal class ProductOptionUseCount : IProductOptionUseCount
+    public class ProductOptionUseCount : IProductOptionUseCount
     {
         /// <summary>
         /// Gets or sets the option.

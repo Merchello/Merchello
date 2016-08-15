@@ -56,6 +56,28 @@
         IProductOption CreateProductOptionWithKey(string name, bool shared = false, bool required = true, bool raiseEvents = true);
 
         /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        IProductAttribute GetProductAttributeByKey(Guid key);
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The collection attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        IEnumerable<IProductAttribute> GetProductAttributes(IEnumerable<Guid> keys);
+
+        /// <summary>
         /// Saves a single product option.
         /// </summary>
         /// <param name="option">
@@ -116,7 +138,7 @@
         IEnumerable<IProductOption> GetByKeys(IEnumerable<Guid> keys);
 
         /// <summary>
-        /// Gets the usage information about the product option.
+        /// Gets the usage information about the product option, including the attribute usage.
         /// </summary>
         /// <param name="option">
         /// The option.
@@ -125,6 +147,17 @@
         /// The <see cref="IProductOptionUseCount"/>.
         /// </returns>
         IProductOptionUseCount GetProductOptionUseCount(IProductOption option);
+
+        /// <summary>
+        /// The get product option share count.
+        /// </summary>
+        /// <param name="option">
+        /// The option.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int GetProductOptionShareCount(IProductOption option);
 
         /// <summary>
         /// Gets a page of <see cref="IProductOption"/>.

@@ -20,6 +20,25 @@ angular.module('merchello.directives').directive('merchelloSaveIcon', function(l
     }
 });
 
+angular.module('merchello.directives').directive('merchelloSortIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-navigation"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('actions_sort').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
 // the add icon
 angular.module('merchello.directives').directive('merchelloAddIcon', function(localizationService) {
     return {

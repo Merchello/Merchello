@@ -47,7 +47,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public WarehouseRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IWarehouseCatalogRepository warehouseCatalogRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public WarehouseRepository(IDatabaseUnitOfWork work, CacheHelper cache, IWarehouseCatalogRepository warehouseCatalogRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(warehouseCatalogRepository, "warehouseCatalogRepository");

@@ -45,7 +45,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public OrderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public OrderRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILineItemRepositoryBase<IOrderLineItem> orderLineItemRepository, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(orderLineItemRepository, "lineItemRepository");

@@ -286,7 +286,7 @@
 
             // save any remaining variants changes in the variants collection
             if (product.ProductVariants.Any())
-            _productVariantService.Save(product.ProductVariants);
+            _productVariantService.Save(product.ProductVariants, false);
 
             if (raiseEvents) Saved.RaiseEvent(new SaveEventArgs<IProduct>(product), this);
 
@@ -1598,26 +1598,40 @@
             // delete any variants that don't have the correct number of attributes
             var attCount = attributeLists.Any() ? attributeLists.First().Count() : 0;
 
-            var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount);
-            foreach (var remover in removers.ToArray())
+            var removers = product.ProductVariants.Where(x => x.Attributes.Count() != attCount).ToArray();
+            if (removers.Any())
             {
-                product.ProductVariants.Remove(remover.Sku);
-                _productVariantService.Delete(remover);
-            }
-            
+                foreach (var remover in removers)
+                {
+                    product.ProductVariants.Remove(remover.Sku);
 
+                }
+
+                _productVariantService.Delete(removers);
+            }
+
+            var newVariants = new List<IProductVariant>();
             foreach (var list in attributeLists)
             {
                 // Check to see if the variant exists
                 var productAttributes = list as IProductAttribute[] ?? list.ToArray();
-                   
+
                 if (product.GetProductVariantForPurchase(productAttributes) != null) continue;
                    
-                var variant = this._productVariantService.CreateProductVariantWithKey(product, productAttributes.ToProductAttributeCollection(), false);
+                var variant = ((ProductVariantService)_productVariantService).CreateProductVariant(product, productAttributes.ToProductAttributeCollection());
+                newVariants.Add(variant);
                 foreach (var inv in product.CatalogInventories)
                 {
                     variant.AddToCatalogInventory(inv.CatalogKey);
-                    _productVariantService.Save(variant, false);
+                }
+            }
+
+            if (newVariants.Any())
+            {
+               // _productVariantService.Save(newVariants);
+                foreach (var v in newVariants)
+                {
+                    product.ProductVariants.Add(v);
                 }
             }
         }
@@ -1631,14 +1645,15 @@
             var variants = _productVariantService.GetByProductKey(product.Key);
             var productVariants = variants as IProductVariant[] ?? variants.ToArray();
             if (!productVariants.Any()) return;
+            var removers = new List<IProductVariant>();
             foreach (var variant in productVariants.Where(variant => !variant.Attributes.Any()))
             {
-                _productVariantService.Delete(variant);
+                removers.Add(variant);
                 product.ProductVariants.Remove(variant.Sku);
             }
+
+            _productVariantService.Delete(removers);
         }
-
-
 
         /// <summary>
         /// The remove detached content from product.

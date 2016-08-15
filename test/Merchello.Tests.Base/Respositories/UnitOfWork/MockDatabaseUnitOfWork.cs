@@ -33,6 +33,12 @@ namespace Merchello.Tests.Base.Respositories.UnitOfWork
             Committed(this);
         }
 
+        public void CommitBulk<TEntity>() where TEntity : IEntity
+        {
+            CommitCalled = true;
+            Committed(this);
+        }
+
         public object Key
         {
             get { return Guid.NewGuid(); }

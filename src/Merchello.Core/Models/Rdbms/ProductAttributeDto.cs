@@ -54,6 +54,13 @@
         public int SortOrder { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        [Column("isDefaultChoice")]
+        [Constraint(Default = "0")]
+        public bool IsDefaultChoice { get; set; }
+
+        /// <summary>
         /// Gets or sets the update date.
         /// </summary>
         [Column("updateDate")]

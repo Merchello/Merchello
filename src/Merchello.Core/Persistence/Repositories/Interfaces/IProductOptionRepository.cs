@@ -52,6 +52,28 @@
         IEnumerable<IProductOption> GetProductOptions(Guid[] optionKeys, bool sharedOnly = false);
 
         /// <summary>
+        /// Gets a product attribute by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductAttribute"/>.
+        /// </returns>
+        IProductAttribute GetProductAttributeByKey(Guid key);
+
+        /// <summary>
+        /// Gets <see cref="IProductAttribute"/> by a an array of keys.
+        /// </summary>
+        /// <param name="attributeKeys">
+        /// The attribute keys.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="IEnumerable{IProductAttribute}"/>.
+        /// </returns>
+        IEnumerable<IProductAttribute> GetProductAttributes(Guid[] attributeKeys);
+
+        /// <summary>
         /// Gets the <see cref="ProductOptionCollection"/> for a given product key.
         /// </summary>
         /// <param name="productKey">
@@ -146,6 +168,14 @@
         /// A collection of product keys of products that need to be refreshed in the current cache and examine.
         /// </returns>
         IEnumerable<Guid> DeleteAllProductVariantAttributes(IProductVariant variant);
+
+        /// <summary>
+        /// Updates an attribute.
+        /// </summary>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        void UpdateAttribute(IProductAttribute attribute);
 
         /// <summary>
         /// Gets the count of the number of product associations for an option

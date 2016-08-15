@@ -1,9 +1,13 @@
 ﻿namespace Merchello.Core.Cache
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Gateways.Shipping;
 
     using Merchello.Core.Checkout;
+    using Merchello.Core.Persistence.Querying;
 
     using Models;
 
@@ -157,6 +161,26 @@
         {
             return string.Format("{0}.{1}", typeof(TEntity).Name, key);
         }
+
+        internal static string GetPagedKeysCacheKey<TDto>(
+            string methodName,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            IDictionary<string, string> args = null)
+        {
+            var hash = string.Format("{0}.{1}.{2}.{3}.{4}", methodName, page, itemsPerPage, orderExpression, sortDirection);
+            if (args != null)
+            {
+                hash = args.Aggregate(hash, (current, item) => current + string.Format(".{0}-{1}", item.Key, item.Value));
+            }
+
+            hash = hash.GetHashCode().ToString();
+
+            return string.Format("{0}.{1}", typeof(TDto), hash);
+        }
+
 
         /// <summary>
         /// Returns the cache key used to store the Umbraco lang file.

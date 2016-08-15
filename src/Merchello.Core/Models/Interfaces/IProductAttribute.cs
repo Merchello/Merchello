@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
 
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
@@ -34,6 +35,18 @@
         /// </summary>
         [DataMember]
         int SortOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is default choice.
+        /// </summary>
+        [DataMember]
+        bool IsDefaultChoice { get; set; }
+
+        /// <summary>
+        /// Gets the values.
+        /// </summary>
+        [DataMember]
+        DetachedDataValuesCollection DetachedDataValues { get; }
 
         /// <summary>
         /// Returns a clone of the attribute.

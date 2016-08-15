@@ -35,8 +35,12 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             //AutoMapperMappings.CreateMappings();
             var logger = Logger.CreateWithDefaultLog4NetConfiguration();
+            var cache = new CacheHelper(
+                new ObjectCacheRuntimeCacheProvider(),
+                new StaticCacheProvider(),
+                new NullCacheProvider());
 
-            var serviceContext = new ServiceContext(new RepositoryFactory(logger, sqlSyntax), new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object), new Mock<ILogger>().Object, new TransientMessageFactory());
+            var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, sqlSyntax), new PetaPocoUnitOfWorkProvider(new Mock<ILogger>().Object), new Mock<ILogger>().Object, new TransientMessageFactory());
             return  new MerchelloContext(serviceContext,
                 new GatewayContext(serviceContext, GatewayProviderResolver.Current),
                 new CacheHelper(new NullCacheProvider(),

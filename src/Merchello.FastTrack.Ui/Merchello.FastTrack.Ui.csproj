@@ -165,8 +165,8 @@
       <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -300,31 +300,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\FastTrack\Install\Installer.ascx" />
     <Content Include="App_Plugins\FastTrack\Install\images\despite.jpg" />
     <Content Include="App_Plugins\FastTrack\Install\images\dog-fleas.jpg" />
     <Content Include="App_Plugins\FastTrack\Install\images\element.jpg" />
     <Content Include="App_Plugins\FastTrack\Install\images\evolution.jpg" />
     <Content Include="App_Plugins\FastTrack\Install\images\paranormal.jpg" />
     <Content Include="App_Plugins\FastTrack\Install\images\planahead.jpg" />
-    <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css" />
-    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.controllers.js" />
-    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.directives.js" />
-    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.models.js" />
-    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.module.js" />
-    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.resources.js" />
-    <Content Include="App_Plugins\MerchelloProviders\js\merchello.providers.services.js" />
-    <Content Include="App_Plugins\MerchelloProviders\lang\en-GB.xml" />
-    <Content Include="App_Plugins\MerchelloProviders\lang\en-US.xml" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.paypalvault.authorizecapturepayment.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.providersettings.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.authorizecapturepayment.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.authorizepayment.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.standard.capturepayment.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.vault.authorizecapturepayment.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\braintree.vault.authorizepayment.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\refundpayment.confirm.html" />
-    <Content Include="App_Plugins\MerchelloProviders\views\dialogs\voidpayment.confirm.html" />
+    <Content Include="App_Plugins\FastTrack\Install\Installer.ascx" />
     <Content Include="App_Plugins\Merchello\assets\css\Merchello.css" />
     <Content Include="App_Plugins\Merchello\assets\images\docs.png" />
     <Content Include="App_Plugins\Merchello\assets\images\heart.png" />
@@ -348,8 +330,11 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\daterange.selection.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\delete.confirmation.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\delete.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\detachedcontenttype.add.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\detachedcontenttype.add.right.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\detachedcontenttype.edit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\edit.address.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\edit.invoiceheader.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\manage.staticcollection.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.couponreward.discountprice.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\marketing.newofferproviderselection.html" />
@@ -374,6 +359,10 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\product.add.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\product.copy.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productcontenttype.add.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.add.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.choicecontent.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.edit.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoptions.choicecontent.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.changeprice.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.updateinventory.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.create.shipment.html" />
@@ -401,6 +390,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchelloslidepanelopen.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchellospinner.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\html\merchellotabs.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\invoiceheader.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\invoiceitemizationtable.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\manageinvoiceadjustments.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\merchelloAddress.tpl.html" />
@@ -416,6 +406,9 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\product.optionsmanage.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\product.productvariantsviewtable.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\product.reorderoptions.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productoptions.addedit.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productoptions.associateshared.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productoptions.list.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productvariant.digitaldownload.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productvariant.mainproperties.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\productvariant.shipping.tpl.html" />
@@ -438,7 +431,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productedit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\producteditwithoptions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productlist.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productoptionseditor.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productoptionsmanager.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\reports.viewreport.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\reportsdashboard.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\saleoverview.html" />
@@ -446,6 +439,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\saleslist.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\salesOverTime.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\settings.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\sharedoptions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\shippingproviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\taxationproviders.html" />
     <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css" />
@@ -483,9 +477,215 @@
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.multiproductpicker.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.productselector.dialog.html" />
     <Content Include="App_Plugins\Merchello\propertyeditors\productpicker\merchello.productselector.html" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutShipRateQuote\ShipRateQuoteForm.old.cshtml" />
+    <Content Include="bin\amd64\Microsoft.VC90.CRT\msvcr90.dll" />
+    <Content Include="bin\amd64\Microsoft.VC90.CRT\README_ENU.txt" />
+    <Content Include="bin\amd64\sqlceca40.dll" />
+    <Content Include="bin\amd64\sqlcecompact40.dll" />
+    <Content Include="bin\amd64\sqlceer40EN.dll" />
+    <Content Include="bin\amd64\sqlceme40.dll" />
+    <Content Include="bin\amd64\sqlceqp40.dll" />
+    <Content Include="bin\amd64\sqlcese40.dll" />
+    <Content Include="bin\AutoMapper.dll" />
+    <Content Include="bin\AutoMapper.Net4.dll" />
+    <Content Include="bin\AutoMapper.xml" />
+    <Content Include="bin\Braintree-2.54.0.dll" />
+    <Content Include="bin\businesslogic.dll" />
+    <Content Include="bin\businesslogic.xml" />
+    <Content Include="bin\ClientDependency.Core.dll" />
+    <Content Include="bin\ClientDependency.Core.Mvc.dll" />
+    <Content Include="bin\ClientDependency.Core.Mvc.pdb" />
+    <Content Include="bin\ClientDependency.Core.pdb" />
+    <Content Include="bin\cms.dll" />
+    <Content Include="bin\cms.xml" />
+    <Content Include="bin\controls.dll" />
+    <Content Include="bin\controls.xml" />
+    <Content Include="bin\CookComputing.XmlRpcV2.dll" />
+    <Content Include="bin\Examine.dll" />
+    <Content Include="bin\Examine.pdb" />
+    <Content Include="bin\HtmlAgilityPack.dll" />
+    <Content Include="bin\HtmlAgilityPack.pdb" />
+    <Content Include="bin\HtmlAgilityPack.xml" />
+    <Content Include="bin\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="bin\ImageProcessor.dll" />
+    <Content Include="bin\ImageProcessor.Web.dll" />
+    <Content Include="bin\interfaces.dll" />
+    <Content Include="bin\interfaces.xml" />
+    <Content Include="bin\log4net.dll" />
+    <Content Include="bin\Lucene.Net.dll" />
+    <Content Include="bin\Lucene.Net.xml" />
+    <Content Include="bin\MarkdownSharp.dll" />
+    <Content Include="bin\Merchello.Core.dll" />
+    <Content Include="bin\Merchello.Core.pdb" />
+    <Content Include="bin\Merchello.Core.xml" />
+    <Content Include="bin\Merchello.Examine.dll" />
+    <Content Include="bin\Merchello.Examine.pdb" />
+    <Content Include="bin\Merchello.Examine.xml" />
+    <Content Include="bin\Merchello.FastTrack.dll" />
+    <Content Include="bin\Merchello.FastTrack.pdb" />
+    <Content Include="bin\Merchello.FastTrack.Ui.dll" />
+    <Content Include="bin\Merchello.FastTrack.Ui.pdb" />
+    <Content Include="bin\Merchello.Providers.dll" />
+    <Content Include="bin\Merchello.Providers.pdb" />
+    <Content Include="bin\Merchello.Web.dll" />
+    <Content Include="bin\Merchello.Web.pdb" />
+    <Content Include="bin\Merchello.Web.Store.dll" />
+    <Content Include="bin\Merchello.Web.Store.pdb" />
+    <Content Include="bin\Merchello.Web.xml" />
+    <Content Include="bin\Microsoft.ApplicationBlocks.Data.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Core.xml" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.dll" />
+    <Content Include="bin\Microsoft.AspNet.Identity.Owin.xml" />
+    <Content Include="bin\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll" />
+    <Content Include="bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml" />
+    <Content Include="bin\Microsoft.Owin.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.dll" />
+    <Content Include="bin\Microsoft.Owin.Host.SystemWeb.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.Cookies.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.dll" />
+    <Content Include="bin\Microsoft.Owin.Security.OAuth.xml" />
+    <Content Include="bin\Microsoft.Owin.Security.xml" />
+    <Content Include="bin\Microsoft.Owin.xml" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\MiniProfiler.dll" />
+    <Content Include="bin\MiniProfiler.pdb" />
+    <Content Include="bin\MiniProfiler.xml" />
+    <Content Include="bin\MySql.Data.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\Owin.dll" />
+    <Content Include="bin\PayPalCoreSDK.dll" />
+    <Content Include="bin\PayPalMerchantSDK.dll" />
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="bin\Semver.dll" />
+    <Content Include="bin\SQLCE4Umbraco.dll" />
+    <Content Include="bin\SQLCE4Umbraco.xml" />
+    <Content Include="bin\System.Collections.Immutable.dll" />
+    <Content Include="bin\System.Data.SqlServerCe.dll" />
+    <Content Include="bin\System.Data.SqlServerCe.Entity.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\System.Reflection.Metadata.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="bin\System.Web.Http.WebHost.xml" />
+    <Content Include="bin\System.Web.Http.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
+    <Content Include="bin\TidyNet.dll" />
+    <Content Include="bin\Umbraco.Core.dll" />
+    <Content Include="bin\Umbraco.Core.xml" />
+    <Content Include="bin\umbraco.DataLayer.dll" />
+    <Content Include="bin\umbraco.DataLayer.xml" />
+    <Content Include="bin\umbraco.dll" />
+    <Content Include="bin\umbraco.editorControls.dll" />
+    <Content Include="bin\umbraco.editorControls.xml" />
+    <Content Include="bin\umbraco.MacroEngines.dll" />
+    <Content Include="bin\umbraco.MacroEngines.xml" />
+    <Content Include="bin\Umbraco.ModelsBuilder.dll" />
+    <Content Include="bin\Umbraco.ModelsBuilder.pdb" />
+    <Content Include="bin\umbraco.providers.dll" />
+    <Content Include="bin\umbraco.providers.xml" />
+    <Content Include="bin\Umbraco.Web.PublishedContentModels.dll" />
+    <Content Include="bin\Umbraco.Web.UI.dll" />
+    <Content Include="bin\Umbraco.Web.UI.xml" />
+    <Content Include="bin\umbraco.xml" />
+    <Content Include="bin\UmbracoExamine.dll" />
+    <Content Include="bin\UmbracoExamine.xml" />
+    <Content Include="bin\UrlRewritingNet.UrlRewriter.dll" />
+    <Content Include="bin\x86\Microsoft.VC90.CRT\msvcr90.dll" />
+    <Content Include="bin\x86\Microsoft.VC90.CRT\README_ENU.txt" />
+    <Content Include="bin\x86\sqlceca40.dll" />
+    <Content Include="bin\x86\sqlcecompact40.dll" />
+    <Content Include="bin\x86\sqlceer40EN.dll" />
+    <Content Include="bin\x86\sqlceme40.dll" />
+    <Content Include="bin\x86\sqlceqp40.dll" />
+    <Content Include="bin\x86\sqlcese40.dll" />
     <Content Include="packages.config" />
     <Content Include="App_Plugins\ModelsBuilder\package.manifest" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="bin\amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
+    <Content Include="bin\Merchello.FastTrack.Ui.dll.config" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="bin\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
+    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css.map" />
+    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css.map" />
+    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
+    <Content Include="App_Plugins\Merchello\config\merchello.config" />
+    <Content Include="App_Plugins\Merchello\Package.manifest" />
+    <Content Include="App_Plugins\Merchello\views\StoreBasket\AddToBasketForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\StoreBasket\BasketForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CashPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutAddress\BillingAddressForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutAddress\ShippingAddressForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutDiscount\DiscountForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutShipRateQuote\ShipRateQuoteForm.old.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\CheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\Partials\InvalidCheckoutStage.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\PayPalExpressPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\Shared\_RequireJsSubmitBtn.cshtml" />
+    <Content Include="App_Plugins\Merchello\views\web.config" />
+    <Content Include="App_Plugins\Merchello\views\StoreWishList\WishListForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\BraintreePayPal\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\BraintreeStandardCc\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CashPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\BillingAddressForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\ShippingAddressForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutShipRateQuote\ShipRateQuoteForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\InvoiceSummary.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\SalesReceipt.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerBillingAddress.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerSalesHistory.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerShippingAddress.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\LoginForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\RegisterForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\web.config" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.creditCardValidator.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\underscore.min.js" />
+    <Content Include="Styles\css\bootstrap-theme.css" />
+    <Content Include="Styles\css\bootstrap-theme.min.css" />
+    <Content Include="Styles\css\bootstrap.css" />
+    <Content Include="Styles\css\bootstrap.min.css" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />
     <Content Include="Views\Partials\Grid\Editors\Rte.cshtml" />
@@ -512,57 +712,39 @@
     <Content Include="Config\BaseRestExtensions.config" />
     <Content Include="Config\applications.config" />
     <Content Include="Config\404handlers.config" />
+    <Content Include="Views\FastTrack.cshtml" />
+    <Content Include="Views\ftAccount.cshtml" />
+    <Content Include="Views\ftBasket.cshtml" />
+    <Content Include="Views\ftCatalog.cshtml" />
+    <Content Include="Views\ftCategory.cshtml" />
+    <Content Include="Views\ftLogin.cshtml" />
+    <Content Include="Views\ftProduct.cshtml" />
+    <Content Include="Views\ftReceipt.cshtml" />
+    <Content Include="Views\ftStore.cshtml" />
     <Content Include="Views\Shared\_Address.cshtml" />
-    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
-    <Content Include="App_Plugins\Merchello\config\merchello.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="App_Plugins\Merchello\Package.manifest" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\BillingAddressForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\ShippingAddressForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\BasketSummary.cshtml" />
-    <Content Include="Views\BillingAddress.cshtml" />
-    <Content Include="Views\Catalog.cshtml" />
-    <Content Include="Views\ShippingAddress.cshtml" />
-    <Content Include="Views\Payment.cshtml" />
-    <Content Include="Views\PaymentMethod.cshtml" />
-    <Content Include="Views\ShipRateQuote.cshtml" />
-    <Content Include="Views\FinalSaleSummary.cshtml" />
-    <Content Include="Views\PreSaleSummary.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\Partials\InvalidCheckoutStage.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutShipRateQuote\ShipRateQuoteForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\InvoiceSummary.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutDiscount\DiscountForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css.map" />
-    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
     <Content Include="Views\Shared\_Footer.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CashPayment\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CashPayment\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\Shared\_RequireJsSubmitBtn.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\SalesReceipt.cshtml" />
-    <Content Include="Views\Receipt.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\BraintreePayPal\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\BraintreeStandardCc\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\MerchelloProviders\assets\css\styles.css.map" />
-    <Content Include="App_Plugins\MerchelloProviders\Package.manifest" />
-    <Content Include="App_Plugins\Merchello\Views\PayPalExpressPayment\PaymentForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\LoginForm.cshtml" />
-    <Content Include="Views\Account.cshtml" />
-    <Content Include="Views\AccountAuth.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\RegisterForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerBillingAddress.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerShippingAddress.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerSalesHistory.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\WishList\WishListForm.cshtml" />
-    <Content Include="Views\Category.cshtml" />
-    <Content Include="Views\Merchello\Notification\OrderConfirmation.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_Headline.cshtml" />
+    <Content Include="Views\Shared\_ProductBox.cshtml" />
+    <Content Include="Views\Shared\_ProductBoxList.cshtml" />
+    <Content Include="Views\Shared\_ProductPricing.cshtml" />
+    <Content Include="Settings.StyleCop" />
+    <Content Include="Styles\css\bootstrap-theme.css.map" />
+    <Content Include="Styles\css\bootstrap-theme.min.css.map" />
+    <Content Include="Styles\css\bootstrap.css.map" />
+    <Content Include="Styles\css\bootstrap.min.css.map" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\ftBillingAddress.cshtml" />
+    <Content Include="Views\ftFinalSaleSummary.cshtml" />
+    <Content Include="Views\ftPayment.cshtml" />
+    <Content Include="Views\ftPaymentMethod.cshtml" />
+    <Content Include="Views\ftPreSaleSummary.cshtml" />
+    <Content Include="Views\ftShippingAddress.cshtml" />
+    <Content Include="Views\ftShipRateQuote.cshtml" />
+    <Content Include="Views\ftCheckout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -595,51 +777,13 @@
     <Content Include="Config\Lang\zh-CN.user.xml" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jquery.creditCardValidator.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\underscore.min.js" />
-    <Content Include="Styles\css\bootstrap-theme.css" />
-    <Content Include="Styles\css\bootstrap-theme.min.css" />
-    <Content Include="Styles\css\bootstrap.css" />
-    <Content Include="Styles\css\bootstrap.min.css" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Web.config" />
-    <Content Include="Styles\css\bootstrap-theme.css.map" />
-    <Content Include="Styles\css\bootstrap-theme.min.css.map" />
-    <Content Include="Styles\css\bootstrap.css.map" />
-    <Content Include="Styles\css\bootstrap.min.css.map" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="App_Plugins\Merchello\Views\Basket\AddToBasketForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\Basket\BasketForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutAddress\BillingAddressForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutAddress\ShippingAddressForm.cshtml" />
-    <Content Include="App_Plugins\Merchello\Views\CheckoutSummary\BasketSummary.cshtml" />
-    <Content Include="Views\Basket.cshtml" />
-    <Content Include="Views\Checkout.cshtml" />
-    <Content Include="Views\CheckoutAddressForms.cshtml" />
-    <Content Include="Views\ConfirmCheckout.cshtml" />
-    <Content Include="Views\Master.cshtml" />
-    <Content Include="Views\Product.cshtml" />
-    <Content Include="Views\Store.cshtml" />
-    <Content Include="Views\Shared\_Header.cshtml" />
-    <Content Include="Views\Shared\_Headline.cshtml" />
-    <Content Include="Views\Shared\_ProductBox.cshtml" />
-    <Content Include="Views\Shared\_ProductBoxList.cshtml" />
-    <Content Include="Views\Shared\_ProductPricing.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExampleUiHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UmbracoEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -672,7 +816,6 @@
       <Name>Merchello.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -686,9 +829,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4042</DevelopmentServerPort>
+          <DevelopmentServerPort>51323</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:4042/</IISUrl>
+          <IISUrl>http://localhost:51323/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

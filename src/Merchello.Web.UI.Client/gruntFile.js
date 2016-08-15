@@ -10,7 +10,7 @@
     grunt.registerTask('build', ['clean', 'concat', 'sass:build', 'copy']);
 
     //build-dev doesn't min - we are trying to speed this up and we don't want minified stuff when we are in dev mode
-    grunt.registerTask('build-dev', ['clean', 'concat', 'sass:dev', 'copy', 'karma:unit', 'watch']);
+    grunt.registerTask('build-dev', ['clean', 'concat', 'sass:dev', 'copy', 'watch']);
 
     // watches
     grunt.registerTask('watch-css', ['sass:dev', 'copy:assets', 'copy:vs']);
@@ -91,6 +91,10 @@
               files: [{ dest: '<%= distdir %>/config', src: 'merchello.config', expand: true, cwd: 'src/config/'}]
             },
 
+            partials: {
+                files: [{ dest: '<%= distdir %>/partials', src: '**/*.cshtml', expand: true, cwd: 'src/config/partials/'}]
+            },
+
             transforms: {
                 files: [{ dest: '<%= transformdir %>/', src: '**/*.config', expand: true, cwd: 'src/config/transforms/' }]
             },
@@ -133,6 +137,7 @@
                     { dest: '<%= vsdir %>/Backoffice/Merchello/dialogs', src: '**', expand: true, cwd: '<%= distdir %>/views/common/dialogs' },
                     { dest: '<%= vsdir %>/Backoffice/Merchello/directives', src: '**', expand: true, cwd: '<%= distdir %>/views/directives' },
                     { dest: '<%= vsdir %>/propertyeditors', src: '**', expand: true, cwd: '<%= distdir %>/views/propertyeditors' },
+                    { dest: '<%= vsdir %>/views', src: '**', expand: true, cwd: '<%= distdir %>/partials' },
                     { dest: '<%= appdir %>', src: '**', expand: true, cwd: '<%= transformdir %>' },
                     { dest: '<%= appdir %>/Config', src: '**', expand: true, cwd: '<%= transformdir %>/umbconfig' }
                 ]

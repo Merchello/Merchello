@@ -4,14 +4,22 @@ if (MUI !== undefined) {
     // Allows for overriding MUI defaults
     MUI.Settings = {
 
+        Labels: {
+            OutOfStock: 'Out of stock.',
+
+            OutOfStockAllowPurchase: 'Out of stock - Back order available.',
+
+            InStock: 'In stock (@0)'
+        },
+
         // API endpoints
         // These can be adjusted to match custom controllers which implement base classes
         Endpoints: {
             // the basket surface controller end point
-            basketSurface: '/umbraco/Merchello/Basket/',
+            basketSurface: '/umbraco/Merchello/StoreBasket/',
 
             // the wish list surface controller end point
-            wishListSurface: '/umbraco/Merchello/WishList/',
+            wishListSurface: '/umbraco/Merchello/StoreWishList/',
 
             // the product table api controller end point
             productTableApi: '/umbraco/Merchello/ProductDataTableApi/',

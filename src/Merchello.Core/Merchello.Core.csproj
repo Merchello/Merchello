@@ -302,6 +302,8 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
+    <Compile Include="Cache\IPagedKeyQueryCache.cs" />
+    <Compile Include="Cache\PagedKeyQueryCache.cs" />
     <Compile Include="Chains\ConfigurationChainBase.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityAttemptChainBase{T}.cs" />
     <Compile Include="Chains\CopyEntity\CopyEntityTaskBase{T}.cs" />
@@ -410,6 +412,7 @@
     <Compile Include="Exceptions\OfferNotActiveException.cs" />
     <Compile Include="Exceptions\SkuExistsException.cs" />
     <Compile Include="Gateways\Notification\Monitors\MonitorModelAttribute.cs" />
+    <Compile Include="Gateways\Payment\AuthorizeOperationData.cs" />
     <Compile Include="Gateways\Taxation\IProductTaxCalculationResult.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductMethod.cs" />
     <Compile Include="Gateways\Taxation\ITaxationByProductProvider.cs" />
@@ -523,7 +526,9 @@
     <Compile Include="Models\PropertyDataCollection.cs" />
     <Compile Include="Models\Rdbms\Customer2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\DistinctCurrencyCodeDto.cs" />
+    <Compile Include="Models\Rdbms\DtoExtensions.cs" />
     <Compile Include="Models\Rdbms\EntityUseCountDto.cs" />
+    <Compile Include="Models\Rdbms\IDto.cs" />
     <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
@@ -657,6 +662,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProduct2ProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductAttributeColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionTypeField.cs" />
@@ -670,7 +676,9 @@
     <Compile Include="Persistence\PetaPocoExtensions.cs" />
     <Compile Include="Persistence\Querying\QueryExtensions.cs" />
     <Compile Include="Persistence\Querying\SortDirection.cs" />
+    <Compile Include="Persistence\Repositories\Interfaces\IBulkOperationRepository.cs" />
     <Compile Include="Persistence\Repositories\Interfaces\IProductOptionRepository.cs" />
+    <Compile Include="Persistence\Repositories\MerchelloBulkOperationRepository.cs" />
     <Compile Include="Persistence\Repositories\NoteRepository.cs" />
     <Compile Include="Persistence\Repositories\AuditLogRepository.cs" />
     <Compile Include="Persistence\Repositories\DetachedContentTypeRepository.cs" />

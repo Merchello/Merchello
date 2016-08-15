@@ -39,6 +39,17 @@
             }
 
             // 'detachedContentType' column
+            if (columns.Any(x => x.TableName.InvariantEquals("merchProductOption") && x.ColumnName.InvariantEquals("uiOption"))
+              == false)
+            {
+                Logger.Info(typeof(AddProductOptionColumns), "Adding uiOption column to merchProductOption table.");
+
+                //// Add the new 'shared' column
+                Create.Column("uiOption").OnTable("merchProductOption").AsString(50).Nullable();
+            }
+
+
+            // 'detachedContentType' column
             if (columns.Any(x => x.TableName.InvariantEquals("merchProductOption") && x.ColumnName.InvariantEquals("detachedContentTypeKey"))
               == false)
             {

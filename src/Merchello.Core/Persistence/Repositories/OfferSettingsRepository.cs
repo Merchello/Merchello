@@ -42,7 +42,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public OfferSettingsRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public OfferSettingsRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
         }

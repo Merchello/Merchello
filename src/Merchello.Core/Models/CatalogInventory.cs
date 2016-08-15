@@ -20,7 +20,7 @@
         /// <summary>
         /// The product variant key.
         /// </summary>
-        private readonly Guid _productVariantKey;
+        private Guid _productVariantKey;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CatalogInventory"/> class.
@@ -54,7 +54,15 @@
         [DataMember]
         public Guid ProductVariantKey 
         {
-            get { return _productVariantKey; }
+            get
+            {
+                return _productVariantKey;
+            }
+
+            internal set
+            {
+                _productVariantKey = value;
+            }
         }
 
         /// <summary>

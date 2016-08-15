@@ -280,6 +280,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextExtensions.cs" />
+    <Compile Include="Caching\IVirtualContentCache{T}.cs" />
+    <Compile Include="Caching\IVirtualProductContentCache.cs" />
+    <Compile Include="Caching\VirtualContentCache{T}.cs" />
+    <Compile Include="Caching\VirtualProductContentCache.cs" />
     <Compile Include="Controllers\Api\ProductDataTableApiControllerBase.cs" />
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
@@ -351,7 +355,15 @@
     <Compile Include="Factories\CustomerProfileModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\ContentEditing\Content\DetachedContentHelper.cs" />
+    <Compile Include="Models\ContentEditing\Content\IHaveDetachedDataValues.cs" />
+    <Compile Include="Models\ContentEditing\Content\ProductAttributeContentSave.cs" />
+    <Compile Include="Models\ContentEditing\Content\ProductAttributeContentSaveBinder.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductContentSaveItemBase.cs" />
+    <Compile Include="Models\ContentEditing\Content\DetachedContentDisplayExtensions.cs" />
+    <Compile Include="Models\MapperResolvers\DetachedContent\ProductAttributeDetachedDataValuesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
+    <Compile Include="Models\PagedCollection.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\IItemCacheModel.cs" />
     <Compile Include="Models\Ui\IWishListModel.cs" />
@@ -385,6 +397,10 @@
     <Compile Include="Models\Ui\Rendering\ProductCollectionExtensions.cs" />
     <Compile Include="Models\Ui\Rendering\ProductContentListView.cs" />
     <Compile Include="Models\Ui\UiModelExtensions.cs" />
+    <Compile Include="Models\VirtualContent\IProductAttributeContent.cs" />
+    <Compile Include="Models\VirtualContent\IProductOptionWrapper.cs" />
+    <Compile Include="Models\VirtualContent\ProductAttributeContent.cs" />
+    <Compile Include="Models\VirtualContent\ProductOptionWrapper.cs" />
     <Compile Include="Mvc\CheckAjaxRequestAttribute.cs" />
     <Compile Include="Mvc\MerchelloHelperViewPage.cs" />
     <Compile Include="Mvc\SurfaceControllerActivationHelper.cs" />

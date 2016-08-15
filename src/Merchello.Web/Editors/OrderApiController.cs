@@ -72,7 +72,7 @@
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
-            _merchello = new MerchelloHelper(merchelloContext.Services, false);
+            _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
 
@@ -90,7 +90,7 @@
         {
             _orderService = merchelloContext.Services.OrderService;
             _invoiceService = merchelloContext.Services.InvoiceService;
-            _merchello = new MerchelloHelper(merchelloContext.Services, false);
+            _merchello = new MerchelloHelper(merchelloContext, false);
         }
 
         /// <summary>

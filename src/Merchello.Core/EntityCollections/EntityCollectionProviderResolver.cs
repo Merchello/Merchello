@@ -31,7 +31,7 @@
         /// <summary>
         /// The instance types.
         /// </summary>
-        private readonly List<Type> _instanceTypes = new List<Type>();
+        private readonly List<Type> _instanceTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProviderResolver"/> class.
@@ -259,16 +259,17 @@
         /// </summary>
         private void EnsureInitialized()
         {
-            if (_instanceTypes.Count != this.GetDistinctProviderKeys().Count()) IsInitialized = false;
+            var defined =
+                _instanceTypes
+                    .Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
+
+            var registered =
+                _entityCollectionProviderCache.Select(
+                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct().Count();
+
+            if (defined < registered) IsInitialized = false;
             if (!IsInitialized) this.Initialize();
         }
-
-        private IEnumerable<Guid> GetDistinctProviderKeys()
-        {
-            return
-                _entityCollectionProviderCache.Select(
-                    x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key).Distinct();
-        } 
 
         /// <summary>
         /// Initializes the resolver.

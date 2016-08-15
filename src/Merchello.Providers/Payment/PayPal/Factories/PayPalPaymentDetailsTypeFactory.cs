@@ -65,12 +65,18 @@
             var basicAmountFactory = new PayPalBasicAmountTypeFactory(currencyCodeType);
 
             // Get the tax total
-            var itemTotal = basicAmountFactory.Build(invoice.TotalItemPrice());
+            var itemTotal = basicAmountFactory.Build(invoice.TotalItemPrice() - invoice.TotalDiscounts());
             var shippingTotal = basicAmountFactory.Build(invoice.TotalShipping());
             var taxTotal = basicAmountFactory.Build(invoice.TotalTax());
             var invoiceTotal = basicAmountFactory.Build(invoice.Total);
 
-            var items = BuildPaymentDetailsItemTypes(invoice.ProductLineItems(), basicAmountFactory);
+            var items = BuildPaymentDetailsItemTypes(invoice.ProductLineItems(), basicAmountFactory).ToList();
+
+            if (invoice.DiscountLineItems().Any())
+            {
+                var discounts = BuildPaymentDetailsItemTypes(invoice.DiscountLineItems(), basicAmountFactory, true);
+                items.AddRange(discounts);
+            }
 
             var paymentDetails = new PaymentDetailsType
             {
@@ -159,8 +165,8 @@
             {
                 Name = item.Name,
                 ItemURL = null,
-                Amount = factory.Build(item.Price),
-                Quantity = item.Quantity,
+                Amount = factory.Build(isDiscount ? -1 * item.Price : item.Price),
+                Quantity = item.Quantity
             };
 
             return detailsItemType;

@@ -33,8 +33,8 @@
         /// <param name="work">
         /// The work.
         /// </param>
-        /// <param name="cache">
-        /// The cache.
+        /// <param name="cacheHelper">
+        /// The <see cref="CacheHelper"/>.
         /// </param>
         /// <param name="logger">
         /// The logger.
@@ -42,8 +42,8 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
-			: base(work, cache, logger)
+        protected MerchelloPetaPocoRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cacheHelper, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+			: base(work, cacheHelper, logger)
         {
             Mandate.ParameterNotNull(sqlSyntax, "sqlSyntax");
 

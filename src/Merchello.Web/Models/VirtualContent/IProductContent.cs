@@ -25,7 +25,13 @@
         /// <summary>
         /// Gets the product options.
         /// </summary>
+        [Obsolete("Use Options property")]
         IEnumerable<ProductOptionDisplay> ProductOptions { get; }
+
+        /// <summary>
+        /// Gets the product options.
+        /// </summary>
+        IEnumerable<IProductOptionWrapper> Options { get; }
 
         /// <summary>
         /// Gets the product variants.

@@ -116,6 +116,7 @@
                     item.SortOrder = this.Any() ? this.Max(x => x.SortOrder) + 1 : 1;
                 }
                 
+
                 base.Add(item);
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));

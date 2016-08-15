@@ -1,12 +1,15 @@
 ﻿namespace Merchello.Web.Models.VirtualContent
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Services;
+    using Merchello.Web.Caching;
     using Merchello.Web.Models.ContentEditing;
 
     using umbraco.cms.businesslogic.web;
@@ -31,10 +34,18 @@
         private readonly IStoreSettingService _storeSettingService;
 
         /// <summary>
+        /// The <see cref="IDetachedContentTypeService"/>.
+        /// </summary>
+        private readonly IDetachedContentTypeService _detachedContentTypeService;
+
+        /// <summary>
         /// The parent.
         /// </summary>
         private IPublishedContent _parent;
 
+        /// <summary>
+        /// The parent culture.
+        /// </summary>
         private string _parentCulture;
 
         /// <summary>
@@ -48,12 +59,20 @@
         private string _defaultStoreLanguage;
 
         /// <summary>
+        /// The detached content types.
+        /// </summary>
+        private Lazy<IEnumerable<IDetachedContentType>> _detachedContentTypes;
+
+        // private readonly VirtualProductContentCache _cache;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
         /// </summary>
         public ProductContentFactory()
             : this(MerchelloContext.Current.Services.StoreSettingService)
         {
         }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
@@ -62,9 +81,23 @@
         /// The <see cref="IStoreSettingService"/>.
         /// </param>
         internal ProductContentFactory(IStoreSettingService storeSettingService)
+            : this(storeSettingService, MerchelloContext.Current.Services.DetachedContentTypeService)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductContentFactory"/> class.
+        /// </summary>
+        /// <param name="storeSettingService">
+        /// The store setting service.
+        /// </param>
+        /// <param name="detachedContentTypeService">
+        /// The detached content type service.
+        /// </param>
+        internal ProductContentFactory(IStoreSettingService storeSettingService, IDetachedContentTypeService detachedContentTypeService)
         {
             _storeSettingService = storeSettingService;
-
+            _detachedContentTypeService = detachedContentTypeService;
             this.Initialize();
         }
 
@@ -93,7 +126,47 @@
 
             var publishedContentType = PublishedContentType.Get(PublishedItemType.Content, detachedContent.DetachedContentType.UmbContentType.Alias);
 
-            return new ProductContent(publishedContentType, display, _parent, _defaultStoreLanguage);
+            var optionContentTypes = GetProductOptionContentTypes(display);
+
+            var clone = CloneHelper.JsonClone<ProductDisplay>(display);
+
+            return new ProductContent(publishedContentType, optionContentTypes, clone, _parent, _defaultStoreLanguage);
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="PublishedContentType"/> associated with product options.
+        /// </summary>
+        /// <param name="display">
+        /// The display.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{PublishedItemType}"/>.
+        /// </returns>
+        private IDictionary<Guid, PublishedContentType> GetProductOptionContentTypes(ProductDisplay display)
+        {
+            var keys =
+                display.ProductOptions.Where(x => !x.DetachedContentTypeKey.Equals(Guid.Empty))
+                    .Select(x => x.DetachedContentTypeKey)
+                    .Distinct().ToArray();
+
+            var publishedContentTypes = new Dictionary<Guid, PublishedContentType>();
+
+            if (!keys.Any()) return publishedContentTypes;
+
+            var contentTypeKeys = _detachedContentTypes.Value
+                    .Where(x => keys.Any(y => y == x.Key)).Where(x => x.ContentTypeKey != null)
+                    .Select(x => x.ContentTypeKey.Value);
+
+            var contentTypes = ApplicationContext.Current.Services.ContentTypeService.GetAllContentTypes(contentTypeKeys);
+
+            foreach (var ct in contentTypes)
+            {
+                var dct = _detachedContentTypes.Value.FirstOrDefault(x => x.ContentTypeKey != null && x.ContentTypeKey.Value == ct.Key);
+                if (dct != null)
+                publishedContentTypes.Add(dct.Key, PublishedContentType.Get(PublishedItemType.Content, ct.Alias));
+            }
+
+            return publishedContentTypes;
         }
 
         /// <summary>
@@ -113,6 +186,8 @@
             _defaultStoreLanguage = _parentCulture.IsNullOrWhiteSpace() ?
                 _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value :
                 _parentCulture;
+
+            _detachedContentTypes = new Lazy<IEnumerable<IDetachedContentType>>(() => _detachedContentTypeService.GetAll().Where(x => x.ContentTypeKey != null));
 
             if (_allLanguages.Any())
             {

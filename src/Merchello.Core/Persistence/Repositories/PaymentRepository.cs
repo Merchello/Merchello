@@ -39,7 +39,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public PaymentRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public PaymentRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
         }

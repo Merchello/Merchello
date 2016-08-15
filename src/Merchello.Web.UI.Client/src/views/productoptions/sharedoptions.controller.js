@@ -1,65 +1,55 @@
 angular.module('merchello').controller('Merchello.Backoffice.SharedProductOptionsController',
     ['$scope','$log', '$q', 'merchelloTabsFactory', 'localizationService', 'productOptionResource', 'dialogDataFactory', 'dialogService',
-    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService) {
+        'merchelloListViewHelper',
+    function($scope, $log, $q, merchelloTabsFactory, localizationService, productOptionResource, dialogDataFactory, dialogService, merchelloListViewHelper) {
 
-        $scope.loaded = false;
-        $scope.preValuesLoaded = false;
-        $scope.entityType = 'ProductOption';
+        $scope.loaded = true;
+        $scope.preValuesLoaded = true;
+
         $scope.tabs = [];
 
         // In the initial release of this feature we are only going to allow sharedOnly params
         // to be managed here.  We may open this up at a later date depending on feedback.
         $scope.sharedOnly = true;
 
-        // list view
-        $scope.load = load;
-        $scope.getColumnValue = getColumnValue;
-
-        var yes = '';
-        var no = '';
-        var values = '';
-
         function init() {
-
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
             $scope.tabs.setActive('sharedoptions');
-
-            $q.all([
-                localizationService.localize('general_yes'),
-                localizationService.localize('general_no'),
-                localizationService.localize('merchelloTableCaptions_optionValues')
-            ]).then(function(data) {
-                yes = data[0];
-                no = data[1];
-                values = data[2];
-                $scope.loaded = true;
-                $scope.preValuesLoaded = true;
-            });
-
         }
 
-        function load(query) {
+
+        $scope.load = function(query) {
             query.addSharedOptionOnlyParam($scope.sharedOnly);
             return productOptionResource.searchOptions(query);
         }
 
-        function getColumnValue(result, col) {
+        // adds an option
+        $scope.add = function(option) {
+            // this is the toggle to relead in the directive
+            $scope.preValuesLoaded = false;
 
-            switch(col.name) {
-                case 'name':
-                    return '<a href="#">' + result.name + '</a>';
-                case 'shared':
-                    return result.shared ? yes : no;
-
-                case 'sharedCount':
-                    return result.sharedCount.toString();
-                case 'uiOption':
-                    return !result.uiElement ? '-' : result.uiElement;
-                case 'choices':
-                    return result.choices.length + ' ' + values;
-            }
+            productOptionResource.addProductOption(option).then(function(o) {
+               $scope.preValuesLoaded = true;
+            });
         }
 
+        $scope.edit = function(option) {
+            // this is the toggle to relead in the directive
+            $scope.preValuesLoaded = false;
+            productOptionResource.saveProductOption(option).then(function(o) {
+                $scope.preValuesLoaded = true;
+            });
+        }
+
+        $scope.delete = function(option) {
+            if (option.canBeDeleted()) {
+                $scope.preValuesLoaded = false;
+
+                productOptionResource.deleteProductOption(option).then(function() {
+                   $scope.preValuesLoaded = true;
+                });
+            }
+        }
 
         init();
     }]);

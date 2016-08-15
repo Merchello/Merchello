@@ -154,6 +154,7 @@
         /// <param name="attributes">The <see cref="IProductVariant"/></param>
         /// <param name="raiseEvents">Optional boolean indicating whether or not to raise events</param>
         /// <returns>Either a new <see cref="IProductVariant"/> or, if one already exists with associated attributes, the existing <see cref="IProductVariant"/></returns>
+        [Obsolete("Use internal CreateProductVariant")]
         public IProductVariant CreateProductVariantWithKey(IProduct product, ProductAttributeCollection attributes, bool raiseEvents = true)
         {
             var skuSeparator = MerchelloConfiguration.Current.DefaultSkuSeparator;
@@ -264,7 +265,8 @@
                     {
                         repository.AddOrUpdate(variant);
                     }
-                    uow.Commit();
+                    //uow.Commit();
+                    uow.CommitBulk<IProductVariant>();
                 }
             }
 
@@ -444,6 +446,7 @@
             return CreateProductVariant(product, name, sku, product.Price, attributes);
         }
 
+
         /// <summary>
         /// Creates a <see cref="IProductVariant"/> of the <see cref="IProduct"/> passed defined by the collection of <see cref="IProductAttribute"/>
         /// without saving it to the database
@@ -487,7 +490,8 @@
                 OutOfStockPurchase = product.OutOfStockPurchase,
                 Taxable = product.Taxable,
                 Shippable = product.Shippable,
-                Download = product.Download
+                Download = product.Download,
+                VersionKey = Guid.NewGuid()
             };
         }
 
