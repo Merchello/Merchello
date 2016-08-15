@@ -21,16 +21,19 @@
             </div>
 
         </div>
-        <div class="col-md-6 basket-summary">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Shipping Address</h4>
-                </div>
-                <div class="panel-body">
-                    @Html.Partial("_Address", Model.ShippingAddress)
+        @if (Model.HasShippableItems())
+        {
+            <div class="col-md-6 basket-summary">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Shipping Address</h4>
+                    </div>
+                    <div class="panel-body">
+                        @Html.Partial("_Address", Model.ShippingAddress)
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 
     <div class="row">

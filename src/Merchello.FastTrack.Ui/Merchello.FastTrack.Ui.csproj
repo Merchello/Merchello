@@ -300,6 +300,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\FastTrack\Install\images\despite.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\dog-fleas.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\element.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\evolution.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\paranormal.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\images\planahead.jpg" />
+    <Content Include="App_Plugins\FastTrack\Install\Installer.ascx" />
     <Content Include="App_Plugins\Merchello\assets\css\Merchello.css" />
     <Content Include="App_Plugins\Merchello\assets\images\docs.png" />
     <Content Include="App_Plugins\Merchello\assets\images\heart.png" />
@@ -647,6 +654,25 @@
     <Content Include="App_Plugins\Merchello\views\Shared\_RequireJsSubmitBtn.cshtml" />
     <Content Include="App_Plugins\Merchello\views\web.config" />
     <Content Include="App_Plugins\Merchello\views\StoreWishList\WishListForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\BraintreePayPal\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\BraintreeStandardCc\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CashPayment\PaymentForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\BillingAddressForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutAddress\ShippingAddressForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\PaymentMethodForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutPaymentMethod\ResolvePayment.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutShipRateQuote\ShipRateQuoteForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\BasketSummary.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\InvoiceSummary.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CheckoutSummary\SalesReceipt.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerBillingAddress.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerSalesHistory.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\CustomerShippingAddress.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\LoginForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\RegisterForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />

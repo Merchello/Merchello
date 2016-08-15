@@ -355,9 +355,12 @@
         /// <returns>The <see cref="IOrder"/></returns>
         public static IOrder PrepareOrder(this IInvoice invoice, IMerchelloContext merchelloContext)
         {
-            var orderStatus =
-                merchelloContext.Services.OrderService.GetOrderStatusByKey(
-                    Constants.DefaultKeys.OrderStatus.NotFulfilled);
+            var orderStatusKey = invoice.HasShippableItems()
+                                     ? Constants.DefaultKeys.OrderStatus.NotFulfilled
+                                     : Constants.DefaultKeys.OrderStatus.Fulfilled;
+
+            var orderStatus = 
+                merchelloContext.Services.OrderService.GetOrderStatusByKey(orderStatusKey);
 
             return invoice.PrepareOrder(merchelloContext, new OrderBuilderChain(orderStatus, invoice));
         }
