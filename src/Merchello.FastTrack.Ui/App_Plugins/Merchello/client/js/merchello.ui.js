@@ -14,8 +14,8 @@ var MUI = (function() {
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
-        events: true,
-        console: true
+        events: false,
+        console: false
     };
 
     // Private members
@@ -306,7 +306,8 @@ MUI.Services.Braintree = {
 MUI.AddItem = {
 
     events : [
-        { alias: 'added', name: 'AddItem.added' }
+        { alias: 'added', name: 'AddItem.added' },
+        { alias: 'tableCreated', name: 'AddItem.tableCreated' }
     ],
 
     addItemSuccess: 'Successfully added item to basket',
@@ -365,6 +366,7 @@ MUI.AddItem = {
                             $.each(tbl.rows, function(rindx, dataRow) {
                                 pdt.rows.push($.extend(new MUI.AddItem.ProductDataTableRow(), dataRow));
                             });
+                            MUI.emit('AddItem.tableCreated', pdt);
                             MUI.AddItem.dataTables.push(pdt);
                             //MUI.AddItem.bind.controls(pdt);
                         });

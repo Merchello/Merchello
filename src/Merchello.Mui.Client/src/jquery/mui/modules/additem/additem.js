@@ -3,7 +3,8 @@
 MUI.AddItem = {
 
     events : [
-        { alias: 'added', name: 'AddItem.added' }
+        { alias: 'added', name: 'AddItem.added' },
+        { alias: 'tableCreated', name: 'AddItem.tableCreated' }
     ],
 
     addItemSuccess: 'Successfully added item to basket',
@@ -62,6 +63,7 @@ MUI.AddItem = {
                             $.each(tbl.rows, function(rindx, dataRow) {
                                 pdt.rows.push($.extend(new MUI.AddItem.ProductDataTableRow(), dataRow));
                             });
+                            MUI.emit('AddItem.tableCreated', pdt);
                             MUI.AddItem.dataTables.push(pdt);
                             //MUI.AddItem.bind.controls(pdt);
                         });
