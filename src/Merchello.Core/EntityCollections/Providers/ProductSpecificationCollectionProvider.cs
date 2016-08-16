@@ -126,6 +126,27 @@
                     null;
         }
 
+        /// <summary>
+        /// Gets a distinct page of product keys not in multiple collections.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeys(
             Dictionary<string, object> args,
             long page,
@@ -148,15 +169,63 @@
                         null;
         }
 
+        /// <summary>
+        /// Gets a distinct page of product keys from multiple collections.
+        /// </summary>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
             long page,
             long itemsPerPage,
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            throw new NotImplementedException();
+            var keys = GetAttributeCollectionKeys();
+
+            return keys != null
+                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysNotInCollection(
+                           keys,
+                           page,
+                           itemsPerPage,
+                           sortBy,
+                           sortDirection) :
+                           null;
         }
 
+        /// <summary>
+        /// Gets a distinct page of product keys that don't exist in multiple collections.
+        /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeysNotInCollection(
             Dictionary<string, object> args,
             long page,
@@ -165,7 +234,17 @@
             SortDirection sortDirection = SortDirection.Ascending)
         {
             if (!args.ContainsKey("searchTerm")) return PerformGetPagedEntityKeysNotInCollection(page, itemsPerPage, sortBy, sortDirection);
-            throw new NotImplementedException();
+            var keys = GetAttributeCollectionKeys();
+
+            return keys != null
+                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysNotInCollection(
+                           keys,
+                           args["searchTerm"].ToString(),
+                           page,
+                           itemsPerPage,
+                           sortBy,
+                           sortDirection) :
+                           null;
         }
 
         /// <summary>
