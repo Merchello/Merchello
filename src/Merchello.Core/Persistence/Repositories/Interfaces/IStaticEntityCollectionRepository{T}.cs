@@ -30,6 +30,20 @@
         bool ExistsInCollection(Guid entityKey, Guid collectionKey);
 
         /// <summary>
+        /// Returns a value indicating whether or not the entity exists in at least one of the collections.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool ExistsInCollection(Guid entityKey, Guid[] collectionKeys);
+
+        /// <summary>
         /// Adds a entity to a static invoice collection.
         /// </summary>
         /// <param name="entityKey">
@@ -80,6 +94,34 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// Gets the entity keys for distinct entities in multiple collections
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<Guid> GetKeysFromCollection(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
         /// The get entity keys from collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -105,6 +147,38 @@
         /// </returns>
         Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// Gets a paged list of distinct keys for entities in multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="term">
+        /// A filter term
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<Guid> GetKeysFromCollection(
+            Guid[] collectionKeys,
             string term,
             long page,
             long itemsPerPage,
@@ -200,6 +274,34 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// Gets a distinct entity from multiple collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<T> GetFromCollection(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
         /// Gets entity from collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -225,6 +327,38 @@
         /// </returns>
         Page<T> GetFromCollection(
             Guid collectionKey,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending);
+
+        /// <summary>
+        /// Gets distinct entity from multiple collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<T> GetFromCollection(
+            Guid[] collectionKeys,
             string term,
             long page,
             long itemsPerPage,

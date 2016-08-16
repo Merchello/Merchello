@@ -10,6 +10,22 @@
     [TestFixture]
     public class EntityCollectionResolution : MerchelloAllInTestBase
     {
+        /// <summary>
+        /// Test shows a key can be resolved from the attribute based on the type of provider
+        /// </summary>
+        [Test]
+        public void Can_Resolve_ProductEntityCollectionProviders_Key()
+        {
+            //// Arrange
+            var expected = Core.Constants.ProviderKeys.EntityCollection.ProductSpecificationCollectionKey;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var key = resolver.GetProviderKey<ProductSpecificationCollectionProvider>();
+
+            //// Assert
+            Assert.AreEqual(expected, key);
+        }
 
         /// <summary>
         /// Test shows a key can be resolved from the attribute based on the type of provider
