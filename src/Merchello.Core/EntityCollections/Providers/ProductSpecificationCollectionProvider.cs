@@ -262,7 +262,7 @@
             var collection = MerchelloContext.Services.EntityCollectionService.GetByKey(CollectionKey);
             var children = MerchelloContext.Services.EntityCollectionService.GetChildren(CollectionKey);
 
-            var specCollection = new EntitySpecificationCollection(Core.Constants.TypeFieldKeys.Entity.ProductKey, this.ProviderAttribute().Key);
+            var specCollection = new EntitySpecificationCollection(collection);
             foreach (var child in children)
             {
                 specCollection.AttributeCollections.Add(child);

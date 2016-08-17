@@ -10,7 +10,12 @@
         </umb-header>
 
         <merchello-panel>
+            <div class="merchello-pane" data-ng-show="preValuesLoaded">
 
+                <h4><localize key="merchelloSpecFilters_manageProductFilters">Manage Product Filters</localize></h4>
+                <entity-spec-filter-list pre-values-loaded="preValuesLoaded" entity-type="entityType"></entity-spec-filter-list>
+
+            </div>
 
         </merchello-panel>
     </umb-panel>

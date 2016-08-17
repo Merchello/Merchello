@@ -495,6 +495,15 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to get entity collections for entity');
                 },
+                getEntitySpecificationCollections : function(entityType) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntitySpecificationCollections',
+                            method: "GET",
+                            params: { entityType: entityType}
+                        }),
+                        'Failed to get entity specification collections by the entityType');
+                },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(
                         $http({

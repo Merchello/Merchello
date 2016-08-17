@@ -553,7 +553,9 @@ var EntityCollectionDisplay = function() {
     self.sortOrder = 0;
 };
 
+
 angular.module('merchello.models').constant('EntityCollectionDisplay', EntityCollectionDisplay);
+
 
 /**
  * @ngdoc model
@@ -4317,13 +4319,23 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                     var collections = [];
                     if (angular.isArray(jsonResult)) {
                         for(var i = 0; i < jsonResult.length; i++) {
+                            var attCols = undefined;
+                            if (jsonResult[i].attributeCollections) {
+                                attCols = transform(jsonResult[i].attributeCollections);
+                            }
                             var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
+                            if (attCols) {
+                                collection.attributeCollections = attCols;
+                            }
                             collections.push(collection);
                         }
                     } else {
                         collections = genericModelBuilder.transform(jsonResult, Constructor);
                         collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
+                        if (jsonResult.attributeCollections) {
+                            collections.attributeCollections = transform(jsonResult.attributeCollections);
+                        }
                     }
                     return collections;
                 }

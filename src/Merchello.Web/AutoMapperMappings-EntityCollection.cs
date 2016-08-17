@@ -27,6 +27,20 @@
                     opt =>
                         opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()));
 
+            AutoMapper.Mapper.CreateMap<IEntitySpecificationCollection, EntitySpecificationCollectionDisplay>()
+                .ForMember(
+                    dest => dest.EntityTypeField,
+                    opt =>
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
+                .ForMember(
+                    dest => dest.ParentKey,
+                    opt =>
+                        opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()))
+                .ForMember(
+                     dest => dest.AttributeCollections,
+                     opt =>
+                        opt.ResolveUsing<SpecificationCollectionAttributeCollectionsValueResolver>().ConstructedBy(() => new SpecificationCollectionAttributeCollectionsValueResolver()));
+
             AutoMapper.Mapper.CreateMap<EntityCollectionProviderAttribute, EntityCollectionProviderDisplay>()
                 .ForMember(
                     dest => dest.EntityTypeField,
