@@ -8030,6 +8030,8 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
         $scope.loaded = false;
         $scope.preValuesLoaded = false;
 
+        $scope.entityType = 'Product';
+
         $scope.tabs = [];
 
         function init() {

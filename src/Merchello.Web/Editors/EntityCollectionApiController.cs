@@ -13,6 +13,7 @@
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
     using Merchello.Web.Models.ContentEditing.Collections;
     using Merchello.Web.Models.Interfaces;
@@ -202,6 +203,33 @@
         {
             var collections = _entityCollectionService.GetByEntityTfKey(entityTfKey);
             return collections.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
+        }
+
+        /// <summary>
+        /// Gets a list of entity specification collections by entity type.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntitySpecificationCollectionDisplay> GetEntitySpecificationCollections(EntityType entityType)
+        {
+            if (entityType != EntityType.Product) throw new NotImplementedException();
+
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductSpecificationCollectionProvider>();
+
+
+            var collections = _entityCollectionService.GetByProviderKey(key);
+
+
+            throw new NotImplementedException();
+            //var returns = collections.Select(x => 
+            //EntityCollectionProviderResolver.Current.GetProviderForCollection<ProductSpecificationCollectionProvider>(x.Key)..ToEntitySpecificationCollectionDisplay());
+
+            //return returns;
         }
 
         /// <summary>

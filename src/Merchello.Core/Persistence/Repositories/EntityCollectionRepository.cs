@@ -114,9 +114,6 @@
 
             var dtos = Database.Fetch<EntityCollectionDto>(sql);
             return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
-            //var factory = new EntityCollectionFactory();
-
-            //return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -172,6 +169,27 @@
             };
         }
 
+        internal IEnumerable<IEntitySpecificationCollection> GetEntitySpecificationCollections(Guid[] keys)
+        {
+            return keys.Select(this.GetEntitySpecificationCollection).Where(x => x != null);
+        }
+
+        internal IEntitySpecificationCollection GetEntitySpecificationCollection(Guid key)
+        {
+            var collection = Get(key);
+            if (collection == null) return null;
+            var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
+            var children = GetByQuery(query);
+
+            var specCollection = new EntitySpecificationCollection(collection);
+            foreach (var child in children)
+            {
+                specCollection.AttributeCollections.Add(child);
+            }
+
+            return specCollection;
+        }
+
         /// <summary>
         /// The perform get.
         /// </summary>
@@ -205,7 +223,7 @@
         /// The keys.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntityCollection"/>.
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         protected override IEnumerable<IEntityCollection> PerformGetAll(params Guid[] keys)
         {

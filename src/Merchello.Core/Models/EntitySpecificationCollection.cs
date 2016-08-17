@@ -8,21 +8,26 @@
     /// <summary>
     /// The entity specification collection.
     /// </summary>
-    internal class EntitySpecificationCollection : EntityCollection, IEntitySpecificationCollection
+    internal sealed class EntitySpecificationCollection : EntityCollection, IEntitySpecificationCollection
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EntitySpecificationCollection"/> class.
         /// </summary>
-        /// <param name="entityTfKey">
-        /// The entity type field key.
+        /// <param name="collection">
+        /// The collection.
         /// </param>
-        /// <param name="providerKey">
-        /// The provider key.
-        /// </param>
-        public EntitySpecificationCollection(Guid entityTfKey, Guid providerKey)
-            : base(entityTfKey, providerKey)
+        public EntitySpecificationCollection(IEntityCollection collection)
+            : base(collection.EntityTfKey, collection.ProviderKey)
         {
+            this.ParentKey = collection.ParentKey;
+            this.Key = collection.Key;
+            this.CreateDate = collection.CreateDate;
+            this.UpdateDate = collection.UpdateDate;
+            this.Name = collection.Name;
+            this.AttributeCollections = new EntitySpecificationAttributeCollection();
+            this.ResetDirtyProperties();
         }
+
 
         /// <summary>
         /// Gets or sets the attribute collections.
