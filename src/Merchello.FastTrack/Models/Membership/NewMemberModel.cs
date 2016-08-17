@@ -15,7 +15,7 @@
         /// </summary>
         [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredEmailAddress")]
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelEmailAddress")]
-        [EmailAddress(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "InvalidEmailAddress")]
+        [EmailAddress(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "InvalidEmailAddress", ErrorMessage = null)]
         public string Email { get; set; }
 
         /// <summary>
