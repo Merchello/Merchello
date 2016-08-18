@@ -380,7 +380,6 @@
     <Compile Include="EntityCollections\EntityCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\EntityCollectionProviderResolver.cs" />
-    <Compile Include="EntityCollections\EntitySpecificationCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\ICachedEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />

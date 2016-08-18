@@ -1,6 +1,6 @@
 angular.module('merchello.directives').directive('entitySpecFilterList', [
-    '$q', 'localizationService', 'eventsService', 'dialogService', 'entityCollectionResource',
-    function($q, localizationService, eventsService, dialogService, entityCollectionResource) {
+    '$q', 'localizationService', 'eventsService', 'dialogService', 'entityCollectionResource', 'entityCollectionDisplayBuilder',
+    function($q, localizationService, eventsService, dialogService, entityCollectionResource, entityCollectionDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -16,7 +16,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
             link: function(scope, elm, attr) {
 
                 scope.loaded = false;
-
+                scope.collections = [];
                 /// PRIVATE
                 var yes = '';
                 var no = '';
@@ -46,7 +46,8 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                         yes = data[0];
                         no = data[1];
                         values = data[2];
-                        console.info(data[3]);
+                        scope.collections = entityCollectionDisplayBuilder.transform(data[3]);
+                        console.info(scope.collections);
                         //scope.noResults = data[3];
                         scope.loaded = true;
                     });

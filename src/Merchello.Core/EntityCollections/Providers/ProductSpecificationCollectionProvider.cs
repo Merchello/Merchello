@@ -15,8 +15,11 @@
     /// <summary>
     /// Represents the product specification collection.
     /// </summary>
+    /// <remarks>
+    /// EntitySpecificationCollectionProviders need to implement <see cref="IEntitySpecificationCollectionProvider"/> (marker interface)
+    /// </remarks>
     [EntityCollectionProvider("5316C16C-E967-460B-916B-78985BB7CED2", "9F923716-A022-4089-A110-1E9B4E1F2AD1", "Product Specification Collection", "A collection of product specification that could be used for product filters and custom product groupings", false)]
-    public class ProductSpecificationCollectionProvider : CachedQueryableEntityCollectionProviderBase<IProduct>
+    public class ProductSpecificationCollectionProvider : CachedQueryableEntityCollectionProviderBase<IProduct>, IEntitySpecificationCollectionProvider
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductSpecificationCollectionProvider"/> class.
@@ -110,7 +113,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{IProductContent}"/>.
+        /// The <see cref="Page{Guid}"/>.
         /// </returns>
         protected override Page<Guid> PerformGetPagedEntityKeys(
             long page,
@@ -259,14 +262,9 @@
             var provider = Cache.GetCacheItem(cacheKey);
             if (provider != null) return (IEntitySpecificationCollection)provider;
 
-            var collection = MerchelloContext.Services.EntityCollectionService.GetByKey(CollectionKey);
-            var children = MerchelloContext.Services.EntityCollectionService.GetChildren(CollectionKey);
-
-            var specCollection = new EntitySpecificationCollection(collection);
-            foreach (var child in children)
-            {
-                specCollection.AttributeCollections.Add(child);
-            }
+            var specCollection =
+                ((EntityCollectionService)MerchelloContext.Services.EntityCollectionService)
+                    .GetEntitySpecificationCollection(CollectionKey);
 
             return
                 (IEntitySpecificationCollection)

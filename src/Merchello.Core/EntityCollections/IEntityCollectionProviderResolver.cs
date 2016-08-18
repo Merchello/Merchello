@@ -33,6 +33,11 @@
         /// </returns>
         Guid GetProviderKey(Type type);
 
+
+        IEnumerable<Guid> GetProviderKeys<T>();
+
+        IEnumerable<Guid> GetProviderKeys(Type type);
+
         /// <summary>
         /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
         /// </summary>

@@ -79,10 +79,25 @@
         /// </returns>
         public Guid GetProviderKey(Type type)
         {
-            var foundType = _instanceTypes.FirstOrDefault(type.IsAssignableFrom);
-            return foundType != null
-                ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key :
-                Guid.Empty;
+            return GetProviderKeys(type).FirstOrDefault();
+            //var foundType = _instanceTypes.FirstOrDefault(type.IsAssignableFrom);
+            //return foundType != null
+            //    ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key :
+            //    Guid.Empty;
+        }
+
+        public IEnumerable<Guid> GetProviderKeys<T>()
+        {
+            return GetProviderKeys(typeof(T));
+        }
+
+        public IEnumerable<Guid> GetProviderKeys(Type type)
+        {
+            var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
+            var foundArray = foundTypes as Type[] ?? foundTypes.ToArray();
+            return foundArray.Any()
+                ? foundArray.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key) :
+                Enumerable.Empty<Guid>();
         }
 
         /// <summary>
