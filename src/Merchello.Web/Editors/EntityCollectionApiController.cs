@@ -219,17 +219,20 @@
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductSpecificationCollectionProvider>();
+            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntitySpecificationCollectionProvider>();
 
+            // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntitySpecificationCollectionsByProviderKeys(keys);
 
-            var collections = _entityCollectionService.GetByProviderKey(key);
+            var mapped = new List<EntitySpecificationCollectionDisplay>();
+            foreach (var c in collections)
+            {
+                mapped.Add(c.ToEntitySpecificationCollectionDisplay());
+            }
 
+            //var mapped = collections.Select(x => x.ToEntitySpecificationCollectionDisplay());
 
-            throw new NotImplementedException();
-            //var returns = collections.Select(x => 
-            //EntityCollectionProviderResolver.Current.GetProviderForCollection<ProductSpecificationCollectionProvider>(x.Key)..ToEntitySpecificationCollectionDisplay());
-
-            //return returns;
+            return mapped;
         }
 
         /// <summary>

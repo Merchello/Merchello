@@ -90,21 +90,6 @@
             </summary>
             <param name="type"></param>
         </member>
-        <member name="M:UmbracoExamine.BaseUmbracoIndexer.GetXDocument(System.String,System.String)">
-            <summary>
-            Returns an XDocument for the entire tree stored for the IndexType specified.
-            </summary>
-            <param name="xPath">The xpath to the node.</param>
-            <param name="type">The type of data to request from the data service.</param>
-            <returns>Either the Content or Media xml. If the type is not of those specified null is returned</returns>
-        </member>
-        <member name="M:UmbracoExamine.BaseUmbracoIndexer.AddNodesToIndex(System.String,System.String)">
-            <summary>
-            Adds all nodes with the given xPath root.
-            </summary>
-            <param name="xPath">The x path.</param>
-            <param name="type">The type.</param>
-        </member>
         <member name="P:UmbracoExamine.BaseUmbracoIndexer.EnableDefaultEventHandler">
             <summary>
             If true, the IndexingActionHandler will be run to keep the default index up to date.

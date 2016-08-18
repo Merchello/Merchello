@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -169,12 +170,47 @@
             };
         }
 
-        internal IEnumerable<IEntitySpecificationCollection> GetEntitySpecificationCollections(Guid[] keys)
+        /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecificationCollection"/> by a collection of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecificationCollection}"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
+        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        public IEnumerable<IEntitySpecificationCollection> GetEntitySpecificationCollectionsByProviderKeys(Guid[] keys)
         {
-            return keys.Select(this.GetEntitySpecificationCollection).Where(x => x != null);
+            var sql = new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                .Where("providerKey IN (@keys)", new { @keys = keys });
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ? 
+                Enumerable.Empty<IEntitySpecificationCollection>() : 
+                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
         }
 
-        internal IEntitySpecificationCollection GetEntitySpecificationCollection(Guid key)
+        /// <summary>
+        /// Gets <see cref="IEntitySpecificationCollection"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntitySpecificationCollection"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
+        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        public IEntitySpecificationCollection GetEntitySpecificationCollection(Guid key)
         {
             var collection = Get(key);
             if (collection == null) return null;

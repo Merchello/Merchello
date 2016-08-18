@@ -4321,7 +4321,7 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                         for(var i = 0; i < jsonResult.length; i++) {
                             var attCols = undefined;
                             if (jsonResult[i].attributeCollections) {
-                                attCols = transform(jsonResult[i].attributeCollections);
+                                attCols = this.transform(jsonResult[i].attributeCollections);
                             }
                             var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
@@ -4334,7 +4334,7 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                         collections = genericModelBuilder.transform(jsonResult, Constructor);
                         collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
                         if (jsonResult.attributeCollections) {
-                            collections.attributeCollections = transform(jsonResult.attributeCollections);
+                            collections.attributeCollections = this.transform(jsonResult.attributeCollections);
                         }
                     }
                     return collections;
