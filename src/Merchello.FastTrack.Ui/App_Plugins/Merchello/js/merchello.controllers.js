@@ -1841,6 +1841,16 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
         init();
 }]);
 
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SelectSpecAttributeProviderController',
+    ['$scope',
+    function($scope) {
+
+    $scope.loaded = true;
+
+    console.info($scope.dialogData);
+
+}]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Common.Dialogs.SortStaticCollectionController

@@ -360,10 +360,11 @@
     <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
     <Compile Include="Configuration\Outline\EntityCollectionProviderElement.cs" />
+    <Compile Include="Configuration\Outline\EntitySpecificationCollectionAttributesElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
     <Compile Include="Configuration\Outline\PluggableObjectElement.cs" />
     <Compile Include="Configuration\Outline\RouteElement.cs" />
-    <Compile Include="Configuration\Outline\SelfManagedEntityCollectionProviderCollection.cs" />
+    <Compile Include="Configuration\Outline\EntityCollectionProviderCollection.cs" />
     <Compile Include="Configuration\Outline\StrategyElement.cs" />
     <Compile Include="Configuration\Outline\TreeCollection.cs" />
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
