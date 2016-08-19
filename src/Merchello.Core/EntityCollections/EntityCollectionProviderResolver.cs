@@ -80,17 +80,31 @@
         public Guid GetProviderKey(Type type)
         {
             return GetProviderKeys(type).FirstOrDefault();
-            //var foundType = _instanceTypes.FirstOrDefault(type.IsAssignableFrom);
-            //return foundType != null
-            //    ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key :
-            //    Guid.Empty;
         }
 
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
         public IEnumerable<Guid> GetProviderKeys<T>()
         {
             return GetProviderKeys(typeof(T));
         }
 
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <param name="type">
+        /// The type of the provider.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
         public IEnumerable<Guid> GetProviderKeys(Type type)
         {
             var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
@@ -111,8 +125,25 @@
         /// </returns>
         public EntityCollectionProviderAttribute GetProviderAttribute<T>()
         {
-            var foundType = _instanceTypes.FirstOrDefault(typeof(T).IsAssignableFrom);
-            return foundType != null ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false) : null;
+            return GetProviderAttributes<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionProviderAttribute}"/>.
+        /// </returns>
+        public IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes<T>()
+        {
+            var foundTypes = _instanceTypes.Where(typeof(T).IsAssignableFrom);
+            var typesArray = foundTypes as Type[] ?? foundTypes.ToArray();
+            return typesArray.Any() ? 
+                typesArray.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false)) 
+                : Enumerable.Empty<EntityCollectionProviderAttribute>();
         }
 
         /// <summary>

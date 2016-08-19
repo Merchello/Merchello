@@ -77,17 +77,17 @@
     internal static class EntityCollectionDisplayExtensions
     {
         /// <summary>
-        /// Maps <see cref="IEntitySpecificationCollection"/> to <see cref="EntitySpecificationCollectionDisplay"/>.
+        /// Maps <see cref="IEntitySpecifiedFilterCollection"/> to <see cref="EntitySpecifiedFilterCollectionDisplay"/>.
         /// </summary>
         /// <param name="collection">
         /// The collection.
         /// </param>
         /// <returns>
-        /// The <see cref="EntitySpecificationCollectionDisplay"/>.
+        /// The <see cref="EntitySpecifiedFilterCollectionDisplay"/>.
         /// </returns>
-        public static EntitySpecificationCollectionDisplay ToEntitySpecificationCollectionDisplay(this IEntitySpecificationCollection collection)
+        public static EntitySpecifiedFilterCollectionDisplay ToEntitySpecificationCollectionDisplay(this IEntitySpecifiedFilterCollection collection)
         {
-            return AutoMapper.Mapper.Map<EntitySpecificationCollectionDisplay>(collection);
+            return AutoMapper.Mapper.Map<EntitySpecifiedFilterCollectionDisplay>(collection);
         }
 
         /// <summary>

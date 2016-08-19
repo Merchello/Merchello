@@ -33,9 +33,26 @@
         /// </returns>
         Guid GetProviderKey(Type type);
 
-
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
         IEnumerable<Guid> GetProviderKeys<T>();
 
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <param name="type">
+        /// The type of the provider.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
         IEnumerable<Guid> GetProviderKeys(Type type);
 
         /// <summary>
@@ -48,6 +65,17 @@
         /// The <see cref="EntityCollectionProviderAttribute"/>.
         /// </returns>
         EntityCollectionProviderAttribute GetProviderAttribute<T>();
+
+        /// <summary>
+        /// Gets a collection of <see cref="EntityCollectionProviderAttribute"/> from providers of type T.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes<T>();
 
         /// <summary>
         /// Gets the provider attributes for all resolved types.

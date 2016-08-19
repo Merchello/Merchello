@@ -7,7 +7,7 @@
     /// The entity specification collection display.
     /// </summary>
     [DataContract(Name = "entitySpecificationCollectionDisplay", Namespace = "")]
-    public class EntitySpecificationCollectionDisplay : EntityCollectionDisplay
+    public class EntitySpecifiedFilterCollectionDisplay : EntityCollectionDisplay
     {
         /// <summary>
         /// Gets or sets the attribute collections.

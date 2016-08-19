@@ -100,6 +100,7 @@
         /// <returns>
         /// The <see cref="Guid"/>.
         /// </returns>
+        /// TODO update this to resolve from a common Marker inteface
         [HttpGet]
         public Guid[] GetSortableProviderKeys()
         {
@@ -144,6 +145,25 @@
             var providers = _staticProviderAtts.Select(x => x.ToEntityCollectionProviderDisplay());
             return providers;
         }
+
+        /// <summary>
+        /// Gets the entity specification collection providers for a given type of entity.
+        /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        [HttpGet]
+        public IEnumerable<EntityCollectionProviderDisplay> GetEntitySpecifiedFilterCollectionProviders(EntityType entityType)
+        {
+            if (entityType != EntityType.Product) throw new NotImplementedException("Only Product types have been implemented");
+
+            return
+                _resolver.GetProviderAttributes<IProductSpecifiedFilterCollectionProvider>()
+                    .Select(x => x.ToEntityCollectionProviderDisplay());
+        } 
 
         /// <summary>
         /// The get entity collection providers.
@@ -215,24 +235,16 @@
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         [HttpGet]
-        public IEnumerable<EntitySpecificationCollectionDisplay> GetEntitySpecificationCollections(EntityType entityType)
+        public IEnumerable<EntitySpecifiedFilterCollectionDisplay> GetEntitySpecifiedFilterCollections(EntityType entityType)
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntitySpecificationCollectionProvider>();
+            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntitySpecifiedFilterCollectionProvider>();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
             var collections = ((EntityCollectionService)_entityCollectionService).GetEntitySpecificationCollectionsByProviderKeys(keys);
-
-            var mapped = new List<EntitySpecificationCollectionDisplay>();
-            foreach (var c in collections)
-            {
-                mapped.Add(c.ToEntitySpecificationCollectionDisplay());
-            }
-
-            //var mapped = collections.Select(x => x.ToEntitySpecificationCollectionDisplay());
-
-            return mapped;
+            
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).ToList();
         }
 
         /// <summary>
