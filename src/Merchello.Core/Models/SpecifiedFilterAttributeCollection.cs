@@ -9,9 +9,9 @@
     using Umbraco.Core;
 
     /// <summary>
-    /// The entity specification attribute collection.
+    /// The specified filter attribute collection.
     /// </summary>
-    public class EntitySpecificationAttributeCollection : KeyedCollection<Guid, IEntityCollection>
+    public class SpecifiedFilterAttributeCollection : KeyedCollection<Guid, IEntityCollection>
     {
         /// <summary>
         /// The _add locker.

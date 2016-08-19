@@ -1845,9 +1845,11 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Sele
     ['$scope',
     function($scope) {
 
-    $scope.loaded = true;
+        $scope.loaded = true;
 
-    console.info($scope.dialogData);
+        $scope.setSelection = function(provider) {
+            $scope.submit(provider);
+        }
 
 }]);
 
@@ -1986,6 +1988,21 @@ angular.module('merchello')
         }]);
 
 
+
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecAttributeCollectionAddEditController',
+['$scope',
+    function($scope) {
+
+    $scope.wasFormSubmitted = false;
+
+    $scope.save = function() {
+        $scope.wasFormSubmitted = true;
+        if ($scope.collectionForm.name.$valid) {
+
+        }
+    }
+
+}]);
 
 angular.module('merchello').controller('Merchello.Directives.EntityStaticCollectionsDirectiveController',
     ['$scope', 'notificationsService', 'dialogService', 'entityCollectionHelper', 'entityCollectionResource', 'dialogDataFactory', 'entityCollectionDisplayBuilder',
@@ -8043,6 +8060,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
         $scope.entityType = 'Product';
 
         $scope.tabs = [];
+
+        $scope.add = function(collection) {
+            $scope.preValuesLoaded = false;
+            entityCollectionResource.addEntityCollection(collection).then(function(result) {
+                $scope.preValuesLoaded = true;
+            });
+        }
 
         function init() {
 

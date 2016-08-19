@@ -704,7 +704,7 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecificationCollection"/> by a collection of keys.
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys.
         /// </summary>
         /// <param name="keys">
         /// The keys.
@@ -717,7 +717,7 @@
         /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
         /// have this as an internal method until we can refactor
         /// </remarks>
-        internal IEnumerable<IEntitySpecificationCollection> GetEntitySpecificationCollectionsByProviderKeys(IEnumerable<Guid> keys)
+        internal IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(IEnumerable<Guid> keys)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
@@ -726,20 +726,20 @@
         }
 
         /// <summary>
-        /// Gets <see cref="IEntitySpecificationCollection"/> by it's key.
+        /// Gets <see cref="IEntitySpecifiedFilterCollection"/> by it's key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IEntitySpecificationCollection"/>.
+        /// The <see cref="IEntitySpecifiedFilterCollection"/>.
         /// </returns>
         /// <remarks>
         /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
         /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
         /// have this as an internal method until we can refactor
         /// </remarks>
-        internal IEntitySpecificationCollection GetEntitySpecificationCollection(Guid key)
+        internal IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {

@@ -46,7 +46,7 @@
         /// The description.
         /// </param>
         public EntityCollectionProviderAttribute(string key, string entityTfKey, string name, string description)
-            : this(key, entityTfKey, name, description, true)
+            : this(key, entityTfKey, name, description, true, string.Empty)
         {
         }
 
@@ -71,6 +71,9 @@
         /// <param name="localizedNameKey">
         /// The localization key for the name of the provide.  Used in cases where provider is referenced in Merchello back office tree.
         /// </param>
+        /// <param name="editorView">
+        /// Can be used to override the editor dialog
+        /// </param>
         /// <remarks>
         /// If managesUniqueCollection is true, the boot manager will automatically add the collection to the merchEntityCollection table if it does not exist.
         /// Likewise, if the provider is removed, it will remove itself from the merchEntityCollection table
@@ -81,7 +84,8 @@
             string name,
             string description,
             bool managesUniqueCollection, 
-            string localizedNameKey = "")
+            string localizedNameKey = "",
+            string editorView = "")
         {
             Mandate.ParameterNotNullOrEmpty(key, "key");
             Mandate.ParameterNotNullOrEmpty(entityTfKey, "entityTfKey");
@@ -92,6 +96,7 @@
             this.Description = description;
             this.ManagesUniqueCollection = managesUniqueCollection;
             this.LocalizedNameKey = localizedNameKey;
+            this.EditorView = editorView;
         }
 
         /// <summary>
@@ -137,5 +142,10 @@
                 return EnumTypeFieldConverter.EntityType.GetTypeField(EntityTfKey);
             }
         }
+
+        /// <summary>
+        /// Gets the relative path to the editor view html
+        /// </summary>
+        public string EditorView { get; private set; }
     }
 }

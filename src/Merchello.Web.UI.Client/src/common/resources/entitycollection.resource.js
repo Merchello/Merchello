@@ -56,14 +56,24 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to get entity collections for entity');
                 },
-                getEntitySpecificationCollections : function(entityType) {
+                getEntitySpecifiedFilterCollections : function(entityType) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecificationCollections',
+                            url: baseUrl + 'GetEntitySpecifiedFilterCollections',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
                         'Failed to get entity specification collections by the entityType');
+                },
+                getEntitySpecifiedFilterCollectionProviders : function(entityType) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionProviders',
+                            method: "GET",
+                            params: { entityType: entityType}
+                        }),
+                        'Failed to get entity specification providers by the entityType');
                 },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(

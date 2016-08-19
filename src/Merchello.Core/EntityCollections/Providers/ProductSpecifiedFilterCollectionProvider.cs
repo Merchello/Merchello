@@ -13,16 +13,16 @@
     using Umbraco.Core.Persistence;
 
     /// <summary>
-    /// Represents the product specification collection.
+    /// Represents the product specified filter collection.
     /// </summary>
     /// <remarks>
-    /// EntitySpecificationCollectionProviders need to implement <see cref="IEntitySpecificationCollectionProvider"/> (marker interface)
+    /// EntitySpecificationCollectionProviders need to implement <see cref="IEntitySpecifiedFilterCollectionProvider"/> (marker interface)
     /// </remarks>
     [EntityCollectionProvider("5316C16C-E967-460B-916B-78985BB7CED2", "9F923716-A022-4089-A110-1E9B4E1F2AD1", "Product Specification Collection", "A collection of product specification that could be used for product filters and custom product groupings", false)]
-    public class ProductSpecificationCollectionProvider : CachedQueryableEntityCollectionProviderBase<IProduct>, IEntitySpecificationCollectionProvider
+    public class ProductSpecifiedFilterCollectionProvider : CachedQueryableEntityCollectionProviderBase<IProduct>, IProductSpecifiedFilterCollectionProvider
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductSpecificationCollectionProvider"/> class.
+        /// Initializes a new instance of the <see cref="ProductSpecifiedFilterCollectionProvider"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The merchello context.
@@ -30,19 +30,30 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        public ProductSpecificationCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
+        public ProductSpecifiedFilterCollectionProvider(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
         }
 
         /// <summary>
-        /// Gets the <see cref="IEntitySpecificationCollection"/>.
+        /// Gets the type of provider that should be used when creating attribute collections
         /// </summary>
-        public new IEntitySpecificationCollection EntityCollection
+        public Type AttributeCollectionProviderType
         {
             get
             {
-                return (IEntitySpecificationCollection)base.EntityCollection;
+                return typeof(StaticProductCollectionProvider);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// </summary>
+        public new IEntitySpecifiedFilterCollection EntityCollection
+        {
+            get
+            {
+                return (IEntitySpecifiedFilterCollection)base.EntityCollection;
             }
         }
 
@@ -260,14 +271,14 @@
         {
             var cacheKey = string.Format("merch.entitycollection.{0}", CollectionKey);
             var provider = Cache.GetCacheItem(cacheKey);
-            if (provider != null) return (IEntitySpecificationCollection)provider;
+            if (provider != null) return (IEntitySpecifiedFilterCollection)provider;
 
             var specCollection =
                 ((EntityCollectionService)MerchelloContext.Services.EntityCollectionService)
                     .GetEntitySpecificationCollection(CollectionKey);
 
             return
-                (IEntitySpecificationCollection)
+                (IEntitySpecifiedFilterCollection)
                 Cache.GetCacheItem(
                     cacheKey,
                     () => specCollection);
@@ -283,7 +294,7 @@
         {
             if (!EntityCollection.AttributeCollections.Any())
             {
-                MultiLogHelper.Info<ProductSpecificationCollectionProvider>("ProductSpecificationCollection does not have any child collections. Returning null.");
+                MultiLogHelper.Info<ProductSpecifiedFilterCollectionProvider>("ProductSpecificationCollection does not have any child collections. Returning null.");
                 return null;
             }
 

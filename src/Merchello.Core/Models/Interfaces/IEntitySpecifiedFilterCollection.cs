@@ -6,8 +6,11 @@
     /// <summary>
     /// Defines the entity specification collection.  Used for filtering entities.
     /// </summary>
-    public interface IEntitySpecificationCollection : IEntityCollection
+    public interface IEntitySpecifiedFilterCollection : IEntityCollection
     {
-        EntitySpecificationAttributeCollection AttributeCollections { get; } 
+        /// <summary>
+        /// Gets the attribute collections.
+        /// </summary>
+        SpecifiedFilterAttributeCollection AttributeCollections { get; } 
     }
 }

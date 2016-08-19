@@ -9,6 +9,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
 
         $scope.tabs = [];
 
+        $scope.add = function(collection) {
+            $scope.preValuesLoaded = false;
+            entityCollectionResource.addEntityCollection(collection).then(function(result) {
+                $scope.preValuesLoaded = true;
+            });
+        }
+
         function init() {
 
             $scope.tabs = merchelloTabsFactory.createProductListTabs();

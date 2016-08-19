@@ -80,7 +80,7 @@
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
-    <key alias="productFilterSpecs">Specification Filter</key>
+    <key alias="productFilterSpecs">Specified Filters</key>
     <key alias="productListing">Product Listing</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>

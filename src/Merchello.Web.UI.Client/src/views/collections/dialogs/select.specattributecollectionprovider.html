@@ -1,15 +1,14 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SelectSpecAttributeProviderController" data-ng-show="loaded">
     <div class="umb-modalcolumn-header">
-        <h4>Add a {{ dialogData.entityType }} Filter</h4>
+        <h4>Select {{ dialogData.entityType }} Provider</h4>
     </div>
     <div class="control-group row-fluid" style="padding: 1em">
-        <table class="table settings-table col-xs-11 span11">
+        <table class="table settings-table">
             <tr>
-                <th colspan="3">Collection Provider</th>
+                <th colspan="2">Collection Provider</th>
             </tr>
-            <tr data-ng-repeat="provider in collectionProviders">
-                <td class="col-xs-1 span1"><i data-ng-class="provider.backOfficeTree.icon" data-ng-show="provider.backOfficeTree.icon !== ''"></i></td>
-                <td class="col-xs-9 span9">{{provider.backOfficeTree.title}}</td>
+            <tr data-ng-repeat="provider in dialogData.providers">
+                <td class="col-xs-9 span9">{{provider.name}}</td>
                 <td class="col-xs-2 span2 text-right"><button type="button" class="btn btn-primary" data-ng-click="setSelection(provider)"><localize key="merchelloButtons_select" /></button> </td>
             </tr>
         </table>

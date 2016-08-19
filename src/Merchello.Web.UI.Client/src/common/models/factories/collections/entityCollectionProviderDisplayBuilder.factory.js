@@ -6,8 +6,9 @@
  * A utility service that builds EntityCollectionDisplay models
  */
 angular.module('merchello.models').factory('entityCollectionProviderDisplayBuilder',
-    ['genericModelBuilder', 'entityCollectionDisplayBuilder',  'typeFieldDisplayBuilder', 'EntityCollectionProviderDisplay',
-        function(genericModelBuilder, entityCollectionDisplayBuilder, typeFieldDisplayBuilder, EntityCollectionProviderDisplay) {
+    ['genericModelBuilder', 'entityCollectionDisplayBuilder',  'typeFieldDisplayBuilder', 'dialogEditorViewDisplayBuilder',
+        'EntityCollectionProviderDisplay',
+        function(genericModelBuilder, entityCollectionDisplayBuilder, typeFieldDisplayBuilder, dialogEditorViewDisplayBuilder, EntityCollectionProviderDisplay) {
             var Constructor = EntityCollectionProviderDisplay;
             return {
                 createDefault: function() {
@@ -20,12 +21,14 @@ angular.module('merchello.models').factory('entityCollectionProviderDisplayBuild
                             var provider = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             provider.managedCollections = entityCollectionDisplayBuilder.transform(jsonResult[ i ].managedCollections);
                             provider.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[i].entityTypeField);
+                            provider.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult[i].dialogEditorView);
                             providers.push(provider);
                         }
                     } else {
                         providers = genericModelBuilder.transform(jsonResult, Constructor);
                         providers.managedCollections = entityCollectionDisplayBuilder.transform(jsonResult.managedCollections);
                         providers.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField);
+                        providers.dialogEditorView = dialogEditorViewDisplayBuilder.transform(jsonResult.dialogEditorView);
                     }
                     return providers;
                 }

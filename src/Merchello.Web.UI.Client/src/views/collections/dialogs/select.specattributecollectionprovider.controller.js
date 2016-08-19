@@ -2,8 +2,10 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Sele
     ['$scope',
     function($scope) {
 
-    $scope.loaded = true;
+        $scope.loaded = true;
 
-    console.info($scope.dialogData);
+        $scope.setSelection = function(provider) {
+            $scope.submit(provider);
+        }
 
 }]);
