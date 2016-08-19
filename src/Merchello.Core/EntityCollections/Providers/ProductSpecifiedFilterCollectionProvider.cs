@@ -38,7 +38,7 @@
         /// <summary>
         /// Gets the type of provider that should be used when creating attribute collections
         /// </summary>
-        public Type AttributeCollectionProviderType
+        public Type AttributeProviderType
         {
             get
             {

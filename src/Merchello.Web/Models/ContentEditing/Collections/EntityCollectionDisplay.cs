@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Web.Models.ContentEditing.Collections
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Cryptography;
 
@@ -10,6 +12,8 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence;
+    using Merchello.Web.Models.ContentEditing.Operations;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
