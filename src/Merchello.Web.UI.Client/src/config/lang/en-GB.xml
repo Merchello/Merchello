@@ -80,7 +80,7 @@
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
-    <key alias="productFilterSpecs">Filter Specifications</key>
+    <key alias="productFilterSpecs">Specification Filter</key>
     <key alias="productListing">Product Listing</key>
     <key alias="productContentTypes">Product Content Types</key>
     <key alias="product">Product</key>
@@ -192,7 +192,7 @@
     <key alias="shared">Shared</key>
     <key alias="sharedCount">Shared Count</key>
     <key alias="filterSpecName">Specification Name</key>
-    <key alias="filterSpecAttributes">Attributes</key>
+    <key alias="filterSpecAttributes">Filter Attributes</key>
   </area>
   <area alias="merchelloNotes">
     <key alias="notes">Notes</key>
@@ -219,6 +219,11 @@
       <![CDATA[
       <strong>Edit Filters</strong>
       <small>Add or edit filters, which can be used to enhance product filtering and nagivation.</small>
+      ]]>
+    </key>
+    <key alias="noSpecFilters">
+      <![CDATA[
+      <h5>You have not setup any specification filters</h5>
       ]]>
     </key>
   </area>

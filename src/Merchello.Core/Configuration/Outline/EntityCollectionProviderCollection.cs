@@ -7,7 +7,7 @@
     /// <summary>
     /// The self managed entity collection provider collection.
     /// </summary>
-    public class SelfManagedEntityCollectionProviderCollection : ConfigurationElementCollection
+    public class EntityCollectionProviderCollection : ConfigurationElementCollection
     {
         /// <summary>
         /// The this.
