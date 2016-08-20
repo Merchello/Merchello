@@ -256,6 +256,46 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     });
                 }
 
+                scope.edit = function(collection) {
+                    // first we need to get the provider assigned to the filter attribute collections (child collections)
+                    entityCollectionResource.getEntitySpecifiedFilterCollectionAttributeProvider(collection.key)
+                        .then(function(result) {
+
+                            var provider = entityCollectionProviderDisplayBuilder.transform(result);
+                            var attributeTemplate = entityCollectionDisplayBuilder.createDefault();
+                            attributeTemplate.providerKey = provider.key;
+                            attributeTemplate.parentKey = collection.key;
+                            attributeTemplate.entityType = scope.entityType;
+                            attributeTemplate.entityTfKey = provider.entityTfKey;
+
+                            var clone = angular.extend(entityCollectionDisplayBuilder.createDefault(), collection);
+                            var collections = clone.attributeCollections;
+                            clone.attributeCollections = [];
+                            angular.forEach(collections, function(ac) {
+                               var atclone = angular.extend(entityCollectionDisplayBuilder.createDefault(), ac);
+                                clone.attributeCollections.push(atclone);
+                            });
+
+                            var dialogData = {
+                                provider: provider,
+                                specCollection: clone,
+                                attributeTemplate: attributeTemplate,
+                                entityType: scope.entityType
+                            };
+
+                            var template = provider.dialogEditorView.editorView !== '' ?
+                                provider.dialogEditorView.editorView : '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specfilterattributecollection.addedit.html';
+
+
+                            dialogService.open({
+                                template: template,
+                                show: true,
+                                callback: processEditOption,
+                                dialogData: dialogData
+                            });
+                    });
+
+                }
 
                 function openAddCollection(provider) {
                     var collection = entityCollectionDisplayBuilder.createDefault()
@@ -266,11 +306,8 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                         attribute: collection
                     };
 
-                    var template = provider.dialogEditorView.editorView !== '' ?
-                                    provider.dialogEditorView.editorView : '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specattributecollection.addedit.html';
-
                     dialogService.open({
-                        template: template,
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specfiltercollection.add.html',
                         show: true,
                         callback: processAddAttribute,
                         dialogData: dialogData
@@ -284,12 +321,12 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 }
 
                 function processAddAttribute(dialogData) {
-                    console.info(dialogData);
                     scope.doAdd()(dialogData.attribute);
                 }
 
                 function processEditOption(dialogData) {
-                    scope.doEdit()(dialogData.option);
+                    console.info(dialogData);
+                    //scope.doEdit()(dialogData.option);
                 }
 
                 function init() {

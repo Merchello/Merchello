@@ -1,4 +1,4 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SpecAttributeCollectionAddEditController">
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SpecFilterCollectionAddController">
     <div class="umb-modalcolumn-header">
         <h4>Add {{ dialogData.collection.entityType}} Attribute Collection</h4>
 
@@ -14,7 +14,7 @@
                 <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
             </div>
 
-            <button class="btn btn-primary" data-ng-click="submit(dialogData)">
+            <button class="btn btn-primary" data-ng-click="save()">
                 <localize key="buttons_save">Save</localize>
             </button>
         </form>

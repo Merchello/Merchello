@@ -1,4 +1,4 @@
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecAttributeCollectionAddEditController',
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecFilterCollectionAddController',
 ['$scope',
     function($scope) {
 
@@ -7,7 +7,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Spec
     $scope.save = function() {
         $scope.wasFormSubmitted = true;
         if ($scope.collectionForm.name.$valid) {
-
+            $scope.submit($scope.dialogData)
         }
     }
 

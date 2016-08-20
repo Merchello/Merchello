@@ -385,12 +385,12 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.add.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.choicecontent.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoption.edit.html" />
-    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productoptions.choicecontent.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.changeprice.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\productvariant.bulk.updateinventory.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.create.shipment.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.edit.shipment.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sales.manageadjustments.dialog.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\select.specattributecollectionprovider.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.addcountry.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.fixedrate.shipmethod.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.shipcountry.addprovider.html" />
@@ -399,6 +399,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.warehousecatalog.addedit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\shipping.warehousecatalog.select.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\sort.staticcollection.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\specfiltercollection.add.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\dialogs\taxation.edittaxmethod.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\addpaymenttable.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\comparisonOperatorRadioButtons.tpl.html" />
@@ -406,6 +407,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\customer.customerlocation.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\customer.itemcachetable.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\detachedcontenttype.list.tpl.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\entity.specificationfilterlist.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\entity.staticcollections.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\filterbydaterange.tpl.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\directives\filterinvoices.tpl.html" />
@@ -453,6 +455,7 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productdetachedcontent.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productedit.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\producteditwithoptions.html" />
+    <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productfilterspecs.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productlist.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\productoptionsmanager.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\reports.viewreport.html" />
@@ -465,14 +468,6 @@
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\sharedoptions.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\shippingproviders.html" />
     <Content Include="App_Plugins\Merchello\Backoffice\Merchello\taxationproviders.html" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css" />
-    <Content Include="App_Plugins\Merchello\client\img\logo-footer.png" />
-    <Content Include="App_Plugins\Merchello\client\js\fasttrack.js" />
-    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js" />
-    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.min.js" />
-    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.settings.js" />
-    <Content Include="App_Plugins\Merchello\client\lib\card-validator.min.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.controllers.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.directives.js" />
     <Content Include="App_Plugins\Merchello\js\merchello.filters.js" />
@@ -691,11 +686,6 @@
     <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
     <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
     <Content Include="bin\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest" />
-    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.css.map" />
-    <Content Include="App_Plugins\Merchello\client\css\merchello.ui.min.css.map" />
-    <Content Include="App_Plugins\Merchello\client\js\merchello.ui.js.map" />
-    <Content Include="App_Plugins\Merchello\config\merchello.config" />
     <Content Include="App_Plugins\Merchello\Package.manifest" />
     <Content Include="App_Plugins\Merchello\views\StoreBasket\AddToBasketForm.cshtml" />
     <Content Include="App_Plugins\Merchello\views\StoreBasket\BasketForm.cshtml" />
@@ -745,6 +735,8 @@
     <Content Include="Config\EmbeddedMedia.config" />
     <Content Include="Config\BaseRestExtensions.config" />
     <Content Include="Config\404handlers.config" />
+    <Content Include="App_Plugins\Merchello\assets\css\Merchello.css.map" />
+    <Content Include="App_Plugins\Merchello\config\merchello.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />

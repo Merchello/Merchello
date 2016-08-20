@@ -502,7 +502,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
-                        'Failed to get entity specification collections by the entityType');
+                        'Failed to get entity specified filter by the entityType');
                 },
                 getEntitySpecifiedFilterCollectionProviders : function(entityType) {
 
@@ -512,7 +512,16 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
-                        'Failed to get entity specification providers by the entityType');
+                        'Failed to get entity specified filter providers by the entityType');
+                },
+                getEntitySpecifiedFilterCollectionAttributeProvider : function(collectionKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionAttributeProvider',
+                            method: "GET",
+                            params: { key: collectionKey}
+                        }),
+                        'Failed to get specified filter attribute provider by the entityType');
                 },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(
