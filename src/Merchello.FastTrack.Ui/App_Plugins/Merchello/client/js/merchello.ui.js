@@ -1146,14 +1146,86 @@ MUI.AddItem.ProductDataTableRow = function() {
 };
 
 MUI.Checkout.Address = {
-  
+
     addressType: '',
-    
-    init: function() {
-        
+
+
+    init: function () {
+        if (MUI.Settings.Endpoints.countryRegionApi === undefined || MUI.Settings.Endpoints.countryRegionApi === '') return;
+
+        var frm = $('[data-muistage="BillingAddress"]');
+        if (frm.length > 0) {
+            MUI.Checkout.Address.addressType = "Billing";
+            MUI.Checkout.Address.bind.form(frm[0]);
+            if (MUI.Settings.Defaults.BillingCountryCode.length > 0) {
+                var regionddl = frm.find(':input[data-muiaction="populateregion"]');
+                regionddl.val(MUI.Settings.Defaults.BillingCountryCode);
+                MUI.Checkout.Address.populateRegion(regionddl);
+            }
+        } else {
+            frm = $('[data-muistage="ShippingAddress"]');
+            if (frm.length > 0) {
+                MUI.Checkout.Address.addressType = "Shipping";
+                MUI.Checkout.Address.bind.form(frm[0]);
+                if (MUI.Settings.Defaults.ShippingCountryCode.length > 0) {
+                    var regionddl = frm.find(':input[data-muiaction="populateregion"]');
+                    regionddl.val(MUI.Settings.Defaults.ShippingCountryCode);
+                    MUI.Checkout.Address.populateRegion(regionddl);
+                }
+            }
+        }
+    },
+
+    bind: {
+
+        form: function (frm) {
+            // Watch for changes in the input fields
+            $(frm).find(':input[data-muiaction="populateregion"]').change(function () {
+                MUI.Checkout.Address.populateRegion($(this));
+            });
+
+            $(frm).find(':input[data-muiaction="updateregion"]').change(function () {
+                var frmRef = $(this).closest('form');
+                //keep the select list and the region textbox in sync
+                frmRef.find('[data-muivalue="region"]').val(frmRef.find('[data-muiaction="updateregion"]').val());
+            });
+        }
+    },
+
+    populateRegion: function (countryCode) {
+        //var countryCode = $(this);
+        var frmRef = countryCode.closest('form');
+        // post the form to update the basket quantities
+        var url = MUI.Settings.Endpoints.countryRegionApi + 'PostGetRegionsForCountry?countryCode=' + countryCode.val();
+        $.ajax({
+            type: 'POST',
+            url: url
+        }).then(function (results) {
+            var regionddl = frmRef.find('[data-muiaction="updateregion"]');
+            var regiontb = frmRef.find('[data-muivalue="region"]');
+            if (results.length > 0) {
+                //remove all but the first option
+                $('option', regionddl).not(':eq(0)').remove();
+                $.each(results, function (idx, item) {
+                    regionddl.append($("<option></option>").attr("value", item.code).text(item.name));
+                });
+                //show region ddl and hide region textbox
+                regionddl.show();
+                regiontb.hide();
+                regiontb.val('');
+                $('#UseForShipping').attr('disabled', false);
+            }
+            else {
+                //hide region ddl and show region textbox
+                regionddl.hide();
+                regiontb.show();
+                //also, if there is no region then billing and shipping MUST be different
+                $('#UseForShipping').prop('checked', false).attr('disabled', true);
+            }
+        }, function (err) {
+            MUI.Logger.captureError(err);
+        });
     }
-    
-    
 };
 
 //// A class to manage braintree payments
