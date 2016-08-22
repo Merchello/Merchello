@@ -1146,11 +1146,10 @@ MUI.AddItem.ProductDataTableRow = function() {
 };
 
 MUI.Checkout.Address = {
-
+  
     addressType: '',
-
-
-    init: function () {
+    
+    init: function() {
         if (MUI.Settings.Endpoints.countryRegionApi === undefined || MUI.Settings.Endpoints.countryRegionApi === '') return;
 
         var frm = $('[data-muistage="BillingAddress"]');
@@ -1240,6 +1239,8 @@ MUI.Checkout.Address = {
             MUI.Logger.captureError(err);
         });
     }
+    
+    
 };
 
 //// A class to manage braintree payments

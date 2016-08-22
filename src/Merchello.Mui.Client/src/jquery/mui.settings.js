@@ -4,6 +4,11 @@ if (MUI !== undefined) {
     // Allows for overriding MUI defaults
     MUI.Settings = {
 
+        Defaults: {
+            BillingCountryCode: 'US',
+            ShippingCountryCode: 'US'
+        },
+
         Labels: {
             OutOfStock: 'Out of stock.',
 
@@ -26,7 +31,11 @@ if (MUI !== undefined) {
 
             // the braintree surface controller
             braintreePayPalSurface:   '/umbraco/fasttrack/BraintreePayPal/',
-            braintreeStandardCcSurface: '/umbraco/fasttrack/BraintreeStandardCc/'
+            braintreeStandardCcSurface: '/umbraco/fasttrack/BraintreeStandardCc/',
+
+
+            // the checkout address surface controller end point
+            countryRegionApi: '/umbraco/Merchello/CountryRegionApi/'
         },
 
         // Notifications - the notification bar

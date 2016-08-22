@@ -61,6 +61,7 @@
             @Html.ValidationMessageFor(x => x.Locality)
         </div>
         <div class="col-md-6 form-group">
+            @Html.LabelFor(x => x.Region)
             @Html.TextBoxFor(x => x.Region, new { @class = "form-control", data_muivalue = "region", @style = "display:none;" })
             <select class="form-control" data-muiaction="updateregion">
                 <option>@StoreFormsResource.PleaseSelect</option>
