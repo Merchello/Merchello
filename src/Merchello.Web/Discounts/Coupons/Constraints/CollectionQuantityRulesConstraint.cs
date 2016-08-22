@@ -88,7 +88,7 @@
 
             var total = value.Items.Sum(x => x.Quantity);
 
-            return StringOperatorHelper.Evaluate(Quantity, total, Operator) ?
+            return StringOperatorHelper.Evaluate(total, Quantity, Operator) ?
                 this.Success(value) :
                 this.Fail(value, "The total quantity of items failed to pass the configured condition.");
         }
