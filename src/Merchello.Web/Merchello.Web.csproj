@@ -284,6 +284,7 @@
     <Compile Include="Caching\IVirtualProductContentCache.cs" />
     <Compile Include="Caching\VirtualContentCache{T}.cs" />
     <Compile Include="Caching\VirtualProductContentCache.cs" />
+    <Compile Include="Controllers\Api\CountryRegionApiControllerBase.cs" />
     <Compile Include="Controllers\Api\ProductDataTableApiControllerBase.cs" />
     <Compile Include="Controllers\BasketControllerBase{T}.cs" />
     <Compile Include="Controllers\CheckoutAddressControllerBase{T}.cs" />
