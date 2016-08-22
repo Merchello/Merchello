@@ -254,6 +254,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\Api\CountryRegionApiController.cs" />
     <Compile Include="Controllers\Api\ProductDataTableApiController.cs" />
     <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
