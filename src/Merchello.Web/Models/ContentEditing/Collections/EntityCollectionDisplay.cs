@@ -142,7 +142,8 @@
             destination.EntityTfKey = display.EntityTfKey;
             destination.ParentKey = display.ParentKey.GetValueOrDefault();
             ((EntityCollection)destination).SortOrder = display.SortOrder;
-
+            ((EntityCollection)destination).ExtendedData = display.ExtendedData.AsExtendedDataCollection();
+            destination.IsFilter = display.IsFilter;
             return destination;
         }
     }

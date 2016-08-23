@@ -191,9 +191,9 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
 
 angular.module('merchello.directives').directive('entitySpecFilterList', [
     '$q', 'localizationService', 'eventsService', 'dialogService', 'entityCollectionResource', 'entityCollectionDisplayBuilder',
-    'entityCollectionProviderDisplayBuilder', 'extendedDataDisplayBuilder',
+    'entityCollectionProviderDisplayBuilder',
     function($q, localizationService, eventsService, dialogService, entityCollectionResource, entityCollectionDisplayBuilder,
-             entityCollectionProviderDisplayBuilder, extendedDataDisplayBuilder) {
+             entityCollectionProviderDisplayBuilder) {
         return {
             restrict: 'E',
             replace: true,
@@ -267,6 +267,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                             attributeTemplate.parentKey = collection.key;
                             attributeTemplate.entityType = scope.entityType;
                             attributeTemplate.entityTfKey = provider.entityTfKey;
+                            attributeTemplate.isFilter = true;
 
                             var clone = angular.extend(entityCollectionDisplayBuilder.createDefault(), collection);
                             var collections = clone.attributeCollections;
@@ -303,7 +304,6 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     collection.entityTfKey = provider.entityTfKey;
                     collection.providerKey = provider.key;
                     collection.isFilter = true;
-                    collection.extendedData = extendedDataDisplayBuilder.createDefault();
                     var dialogData = {
                         attribute: collection
                     };

@@ -2048,7 +2048,6 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Spec
                 for(var i = 0; i < $scope.dialogData.specCollection.attributeCollections.length; i++) {
                     $scope.dialogData.specCollection.attributeCollections[i].sortOrder = i + 1;
                 }
-                console.info($scope.dialogData.specCollection.attributeCollections)
             },
             disabled: false,
             cursor: "move"

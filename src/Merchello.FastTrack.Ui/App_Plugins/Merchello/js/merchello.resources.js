@@ -541,7 +541,6 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 addEntityCollection : function(entityCollection) {
                     var url = baseUrl + 'PostAddEntityCollection';
-                    console.info(entityCollection);
                     entityCollection.extendedData = entityCollection.extendedData.toArray();
 
                     return umbRequestHelper.resourcePromise(
@@ -562,6 +561,9 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 saveSpecifiedFilterCollection : function(collection) {
                     var url = baseUrl + 'PutSpecifiedFilterCollection';
                     collection.extendedData = collection.extendedData.toArray();
+                    _.each(collection.attributeCollections, function(ac) {
+                       ac.extendedData = ac.extendedData.toArray();
+                    });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             collection

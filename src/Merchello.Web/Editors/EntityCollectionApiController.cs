@@ -604,6 +604,7 @@
                     var ec = _entityCollectionService.CreateEntityCollection(op.EntityType, op.ProviderKey, op.Name);
 
                     ec.ParentKey = op.ParentKey ?? collection.Key;
+                    ec.IsFilter = collection.IsFilter;
 
                     operations.Add(ec);
                 }
