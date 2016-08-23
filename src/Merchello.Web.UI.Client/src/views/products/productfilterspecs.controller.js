@@ -16,6 +16,13 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
             });
         }
 
+        $scope.edit = function(collection) {
+            $scope.preValuesLoaded = false;
+            entityCollectionResource.saveSpecifiedFilterCollection(collection).then(function(result) {
+                $scope.preValuesLoaded = true;
+            });
+        }
+
         function init() {
 
             $scope.tabs = merchelloTabsFactory.createProductListTabs();

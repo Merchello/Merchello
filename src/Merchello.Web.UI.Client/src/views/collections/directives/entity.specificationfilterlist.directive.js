@@ -134,8 +134,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 }
 
                 function processEditOption(dialogData) {
-                    console.info(dialogData);
-                    //scope.doEdit()(dialogData.option);
+                    scope.doEdit()(dialogData.specCollection);
                 }
 
                 function init() {

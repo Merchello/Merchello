@@ -154,6 +154,9 @@
     <key alias="noQualifyingEntities">There are no other items that can be added to the collection.</key>
     <key alias="collectionPickerTitle">Collections</key>
     <key alias="collectionPickerInfo">Add this item to one or more collections.</key>
+    <key alias="filterPickerTitle">Specified Filters</key>
+    <key alias="filterPickerInfo">Add this item to one or more specified filters.</key>
+    <key alias="filterAssociateFilters">Associate Filters</key>
     <key alias="allItems">All items</key>
     <key alias="allProduct">All Products</key>
     <key alias="allCustomer">All Customers</key>
@@ -191,7 +194,7 @@
     <key alias="optionValues">Option Values</key>
     <key alias="shared">Shared</key>
     <key alias="sharedCount">Shared Count</key>
-    <key alias="filterSpecName">Specification Name</key>
+    <key alias="filterSpecName">Filter Name</key>
     <key alias="filterSpecAttributes">Filter Attributes</key>
   </area>
   <area alias="merchelloNotes">
