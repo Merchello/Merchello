@@ -6,12 +6,14 @@
  * A utility service that builds EntityCollectionDisplay models
  */
 angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
-    ['genericModelBuilder', 'typeFieldDisplayBuilder', 'EntityCollectionDisplay',
-        function(genericModelBuilder, typeFieldDisplayBuilder, EntityCollectionDisplay) {
+    ['genericModelBuilder', 'typeFieldDisplayBuilder', 'extendedDataDisplayBuilder', 'EntityCollectionDisplay',
+        function(genericModelBuilder, typeFieldDisplayBuilder, extendedDataDisplayBuilder, EntityCollectionDisplay) {
             var Constructor = EntityCollectionDisplay;
             return {
                 createDefault: function() {
-                    return new Constructor();
+                    var c = new Constructor();
+                    c.extendedData = extendedDataDisplayBuilder.createDefault();
+                    return c;
                 },
                 transform: function(jsonResult) {
                     var collections = [];
@@ -23,6 +25,7 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                             }
                             var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
+                            collection.extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
                             if (attCols) {
                                 collection.attributeCollections = attCols;
                             }
@@ -31,6 +34,7 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                     } else {
                         collections = genericModelBuilder.transform(jsonResult, Constructor);
                         collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
+                        collections.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
                         if (jsonResult.attributeCollections) {
                             collections.attributeCollections = this.transform(jsonResult.attributeCollections);
                         }

@@ -68,6 +68,18 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is filter.
+        /// </summary>
+        [DataMember(Name = "isFilter")]
+        public bool IsFilter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
+        [DataMember(Name = "extendedData")]
+        public IEnumerable<KeyValuePair<string, string>> ExtendedData { get; set; }
+
+        /// <summary>
         /// Gets or sets the sort order.
         /// </summary>
         [DataMember(Name = "sortOrder")]

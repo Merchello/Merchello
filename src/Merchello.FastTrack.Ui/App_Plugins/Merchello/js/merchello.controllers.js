@@ -1453,7 +1453,6 @@ angular.module('merchello')
                     collection.entityTfKey = $scope.provider.entityTfKey;
                     collection.entityType = $scope.provider.entityType;
                     collection.parentKey = $scope.dialogData.parentKey;
-
                     collection.name = $scope.name;
                     var promise = entityCollectionResource.addEntityCollection(collection);
                     promise.then(function() {
@@ -1598,6 +1597,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             var promise = entityCollectionResource.getByKey($scope.collectionKey);
             promise.then(function(collection) {
                 $scope.collection = entityCollectionDisplayBuilder.transform(collection);
+                console.info($scope.collection);
                 loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to load the collection ' + reason);
@@ -1816,8 +1816,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
             treeService.getTree({section: 'merchello'}).then(function(tree) {
                 var root = tree.root;
                 var treeId = getTreeId();
-                
-                console.info(treeId);
+
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });
@@ -1904,6 +1903,7 @@ angular.module('merchello')
                 parentPromise.then(function(collections) {
                     var transformed = [];
                     if (!angular.isArray(collections)) {
+                        collections.sortOrder = 0;
                         transformed.push(entityCollectionDisplayBuilder.transform(collections));
                     } else {
                         transformed = entityCollectionDisplayBuilder.transform(collections);
@@ -1928,7 +1928,6 @@ angular.module('merchello')
                     } else {
                         $scope.entityCollections = entityCollectionDisplayBuilder.transform(collections);
                     }
-                    console.info(treeService._getTreeCache());
                     $scope.loaded = true;
                 });
             }
@@ -1946,6 +1945,8 @@ angular.module('merchello')
                 for(var i = 0; i < $scope.entityCollections.length; i++) {
                     $scope.entityCollections[i].sortOrder = i;
                 }
+
+
                 // save updated sort orders
                 var promise = entityCollectionResource.updateSortOrders($scope.entityCollections);
                 promise.then(function() {
@@ -1970,7 +1971,7 @@ angular.module('merchello')
             // Sortable available offers
             /// -------------------------------------------------------------------
 
-            $scope.sortableOptions = {
+            $scope.sortableCollections = {
                 start : function(e, ui) {
                     ui.item.data('start', ui.item.index());
                 },

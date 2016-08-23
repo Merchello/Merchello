@@ -24,6 +24,8 @@
             this.CreateDate = collection.CreateDate;
             this.UpdateDate = collection.UpdateDate;
             this.Name = collection.Name;
+            this.IsFilter = collection.IsFilter;
+            this.ExtendedData = collection.ExtendedData;
             this.AttributeCollections = new SpecifiedFilterAttributeCollection();
             this.ResetDirtyProperties();
         }
