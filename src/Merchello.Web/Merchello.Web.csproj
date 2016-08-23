@@ -356,13 +356,17 @@
     <Compile Include="Factories\CustomerProfileModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Factories\ProductDataTableFactory.cs" />
+    <Compile Include="Models\ContentEditing\Collections\EntitySpecifiedFilterCollectionDisplay.cs" />
     <Compile Include="Models\ContentEditing\Content\DetachedContentHelper.cs" />
     <Compile Include="Models\ContentEditing\Content\IHaveDetachedDataValues.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductAttributeContentSave.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductAttributeContentSaveBinder.cs" />
     <Compile Include="Models\ContentEditing\Content\ProductContentSaveItemBase.cs" />
     <Compile Include="Models\ContentEditing\Content\DetachedContentDisplayExtensions.cs" />
+    <Compile Include="Models\ContentEditing\Operations\EntityCrudOperation.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\ProductAttributeDetachedDataValuesResolver.cs" />
+    <Compile Include="Models\MapperResolvers\DialogEditorViews\EntityCollectionProviderDialogEditorViewResolver.cs" />
+    <Compile Include="Models\MapperResolvers\EntityCollections\SpecificationCollectionAttributeCollectionsValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
     <Compile Include="Models\PagedCollection.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
