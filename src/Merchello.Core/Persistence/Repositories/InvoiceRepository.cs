@@ -195,6 +195,31 @@
             return Database.ExecuteScalar<int>(sql) > 0;
         }
 
+
+        /// <summary>
+        /// Returns a value indicating whether or not the entity exists in at least one of the collections.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, Guid[] collectionKeys)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT COUNT(*)")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey AND [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @ikey = entityKey, @eckeys = collectionKeys });
+
+            return Database.ExecuteScalar<int>(sql) > 0;
+        }
+
         /// <summary>
         /// Adds a invoice to a static invoice collection.
         /// </summary>
@@ -278,6 +303,48 @@
         }
 
         /// <summary>
+        /// Gets a page of distinct entity keys from entities contained in multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+                .Append("FROM [merchInvoice]")
+                .Append("WHERE [merchInvoice].[pk] IN (")
+                .Append("SELECT DISTINCT([invoiceKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckeys = collectionKeys })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
         /// The get keys from collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -316,6 +383,50 @@
                 .Append(
                     "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
                     new { @eckey = collectionKey })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// Gets a page of distinct entity keys from entities contained in multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysFromCollection(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(term);
+            sql.Append("AND [merchInvoice].[pk] IN (")
+                .Append("SELECT DISTINCT([invoiceKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckeys = collectionKeys })
                 .Append(")");
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
@@ -366,6 +477,48 @@
         /// <summary>
         /// The get keys not in collection.
         /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInCollection(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+                .Append("FROM [merchInvoice]")
+                .Append("WHERE [merchInvoice].[pk] NOT IN (")
+                .Append("SELECT DISTINCT([invoiceKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckeys = collectionKeys })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
@@ -402,6 +555,50 @@
                 .Append(
                     "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] = @eckey",
                     new { @eckey = collectionKey })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        /// <summary>
+        /// The get keys not in collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInCollection(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(term);
+            sql.Append("AND [merchInvoice].[pk] NOT IN (")
+                .Append("SELECT DISTINCT([invoiceKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckey = collectionKeys })
                 .Append(")");
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
@@ -448,6 +645,46 @@
         }
 
         /// <summary>
+        /// Gets invoices from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetFromCollection(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysFromCollection(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
+        }
+
+        /// <summary>
         /// The get from collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -489,6 +726,50 @@
                            TotalPages = p.TotalPages,
                            Items = p.Items.Select(Get).ToList()
                        };
+        }
+
+        /// <summary>
+        /// The get from collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="term">
+        /// The term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<IInvoice> GetFromCollection(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var p = this.GetKeysFromCollection(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
+
+            return new Page<IInvoice>()
+            {
+                CurrentPage = p.CurrentPage,
+                ItemsPerPage = p.ItemsPerPage,
+                TotalItems = p.TotalItems,
+                TotalPages = p.TotalPages,
+                Items = p.Items.Select(Get).ToList()
+            };
         }
 
         #endregion

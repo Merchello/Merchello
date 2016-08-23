@@ -112,6 +112,12 @@
                 return new Version(2, 1, 0);
             }
 
+            if (!this.ValidColumns.Contains("merchEntityCollection,isFilter")
+                || !this.ValidColumns.Contains("merchEntityCollection,extendedData"))
+            {
+                return new Version(2, 2, 0);
+            }
+
 
             //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||

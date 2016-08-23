@@ -83,6 +83,7 @@
     <key alias="gateways">Провайдеры</key>
   </area>
   <area alias="merchelloTabs">
+    <key alias="productFilterSpecs">Filter Specifications</key>
     <key alias="productListing">Список товаров</key>
     <key alias="productContentTypes">Типы документов</key>
     <key alias="product">Товар</key>

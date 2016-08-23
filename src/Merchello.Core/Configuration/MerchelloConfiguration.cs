@@ -221,6 +221,17 @@
         }
 
         /// <summary>
+        /// Gets the Entity Specification Collection Specification section.
+        /// </summary>
+        public EntitySpecificationCollectionAttributesElement EntitySpecificationCollections
+        {
+            get
+            {
+                return Section.EntitySpecificationCollections;
+            }
+        }
+
+        /// <summary>
         /// Gets the back office.
         /// </summary>
         public TreeCollection BackOffice

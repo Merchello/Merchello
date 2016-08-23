@@ -1,0 +1,42 @@
+<div class="product-option-list" data-ng-show="preValuesLoaded">
+
+    <div class="control-group umb-control-group">
+
+        <div class="merchello-section-label">
+            <localize key="merchelloSpecFilters_editSpecFilter"></localize>
+        </div>
+        <div class="merchello-controls merchello-list-view umb-listview">
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <td><localize key="merchelloTableCaptions_filterSpecName" /></td>
+                    <td><localize key="merchelloTableCaptions_filterSpecAttributes" /></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="merchello-icon-container" data-ng-repeat="spec in collections">
+                    <td><a prevent-default data-ng-click="edit(spec)">{{getColumnValue('name', spec)}}</a></td>
+                    <td data-ng-bind="getColumnValue('attributes', spec)"></td>
+                    <td class="text-right">
+                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="true" do-edit="edit(spec)" do-delete="delete(spec)"></merchello-icon-bar>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody data-ng-hide="collections.length > 0" >
+                <td colspan="3" data-ng-bind-html-unsafe="noResults">
+
+                </td>
+                </tbody>
+
+            </table>
+
+            <div class="text-center">
+                <merchello-add-icon do-add="add()"></merchello-add-icon>
+            </div>
+        </div>
+    </div>
+
+
+</div>

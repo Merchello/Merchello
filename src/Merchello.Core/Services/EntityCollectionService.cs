@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -701,6 +702,51 @@
                 return repository.GetEntityCollectionsByCustomerKey(customerKey);
             }
         }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecificationCollection}"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
+        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        internal IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(IEnumerable<Guid> keys)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntitySpecificationCollectionsByProviderKeys(keys.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets <see cref="IEntitySpecifiedFilterCollection"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
+        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        internal IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetEntitySpecificationCollection(key);
+            }
+        }
+
 
         /// <summary>
         /// The validate sort by field.

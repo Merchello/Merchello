@@ -495,6 +495,34 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to get entity collections for entity');
                 },
+                getEntitySpecifiedFilterCollections : function(entityType) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntitySpecifiedFilterCollections',
+                            method: "GET",
+                            params: { entityType: entityType}
+                        }),
+                        'Failed to get entity specified filter by the entityType');
+                },
+                getEntitySpecifiedFilterCollectionProviders : function(entityType) {
+
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionProviders',
+                            method: "GET",
+                            params: { entityType: entityType}
+                        }),
+                        'Failed to get entity specified filter providers by the entityType');
+                },
+                getEntitySpecifiedFilterCollectionAttributeProvider : function(collectionKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionAttributeProvider',
+                            method: "GET",
+                            params: { key: collectionKey}
+                        }),
+                        'Failed to get specified filter attribute provider by the entityType');
+                },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(
                         $http({
@@ -526,6 +554,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             collection
                         ),
                         'Failed to save an entity collection');
+                },
+                saveSpecifiedFilterCollection : function(collection) {
+                    var url = baseUrl + 'PutSpecifiedFilterCollection';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            collection
+                        ),
+                        'Failed to save speficed entity collection');
                 },
                 addEntityToCollections: function(entityKey, collectionKeys) {
                     var url = baseUrl + 'PostAddEntityToCollections';

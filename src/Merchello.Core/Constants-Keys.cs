@@ -198,6 +198,17 @@
             public static class EntityCollection
             {
                 /// <summary>
+                /// Gets the product specification collection key.
+                /// </summary>
+                public static Guid ProductSpecificationCollectionKey
+                {
+                    get
+                    {
+                        return new Guid("5316C16C-E967-460B-916B-78985BB7CED2");
+                    }
+                }
+
+                /// <summary>
                 /// Gets the static product collection provider key.
                 /// </summary>
                 public static Guid StaticProductCollectionProviderKey

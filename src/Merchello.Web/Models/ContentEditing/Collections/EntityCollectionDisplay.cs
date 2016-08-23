@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Web.Models.ContentEditing.Collections
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Security.Cryptography;
 
@@ -10,6 +12,8 @@
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
+    using Merchello.Core.Persistence;
+    using Merchello.Web.Models.ContentEditing.Operations;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
@@ -76,6 +80,20 @@
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleClass", Justification = "Reviewed. Suppression is OK here.")]
     internal static class EntityCollectionDisplayExtensions
     {
+        /// <summary>
+        /// Maps <see cref="IEntitySpecifiedFilterCollection"/> to <see cref="EntitySpecifiedFilterCollectionDisplay"/>.
+        /// </summary>
+        /// <param name="collection">
+        /// The collection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntitySpecifiedFilterCollectionDisplay"/>.
+        /// </returns>
+        public static EntitySpecifiedFilterCollectionDisplay ToEntitySpecificationCollectionDisplay(this IEntitySpecifiedFilterCollection collection)
+        {
+            return AutoMapper.Mapper.Map<EntitySpecifiedFilterCollectionDisplay>(collection);
+        }
+
         /// <summary>
         /// Maps <see cref="IEntityCollection"/> to <see cref="EntityCollectionDisplay"/>.
         /// </summary>

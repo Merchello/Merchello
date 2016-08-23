@@ -27,6 +27,20 @@
                     opt =>
                         opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()));
 
+            AutoMapper.Mapper.CreateMap<IEntitySpecifiedFilterCollection, EntitySpecifiedFilterCollectionDisplay>()
+                .ForMember(
+                    dest => dest.EntityTypeField,
+                    opt =>
+                    opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
+                .ForMember(
+                    dest => dest.ParentKey,
+                    opt =>
+                        opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()))
+                .ForMember(
+                     dest => dest.AttributeCollections,
+                     opt =>
+                        opt.ResolveUsing<SpecificationCollectionAttributeCollectionsValueResolver>().ConstructedBy(() => new SpecificationCollectionAttributeCollectionsValueResolver()));
+
             AutoMapper.Mapper.CreateMap<EntityCollectionProviderAttribute, EntityCollectionProviderDisplay>()
                 .ForMember(
                     dest => dest.EntityTypeField,
@@ -35,7 +49,11 @@
                 .ForMember(
                     dest => dest.ManagedCollections,
                     opt =>
-                    opt.ResolveUsing<ManagedCollectionsResolver>().ConstructedBy(() => new ManagedCollectionsResolver()));
+                    opt.ResolveUsing<ManagedCollectionsResolver>().ConstructedBy(() => new ManagedCollectionsResolver()))
+                .ForMember(
+                    dest => dest.DialogEditorView,
+                    opt =>
+                    opt.ResolveUsing<EntityCollectionProviderDialogEditorViewResolver>().ConstructedBy(() => new EntityCollectionProviderDialogEditorViewResolver()));
         }
     }
 }

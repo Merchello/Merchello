@@ -18,4 +18,6 @@ var EntityCollectionDisplay = function() {
     self.sortOrder = 0;
 };
 
+
 angular.module('merchello.models').constant('EntityCollectionDisplay', EntityCollectionDisplay);
+

@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -114,9 +115,6 @@
 
             var dtos = Database.Fetch<EntityCollectionDto>(sql);
             return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
-            //var factory = new EntityCollectionFactory();
-
-            //return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -173,6 +171,62 @@
         }
 
         /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys.
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecificationCollection}"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
+        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        public IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(Guid[] keys)
+        {
+            var sql = new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                .Where("providerKey IN (@keys)", new { @keys = keys });
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ? 
+                Enumerable.Empty<IEntitySpecifiedFilterCollection>() : 
+                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets <see cref="IEntitySpecifiedFilterCollection"/> by it's key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// </returns>
+        /// <remarks>
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
+        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// have this as an internal method until we can refactor
+        /// </remarks>
+        public IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key)
+        {
+            var collection = Get(key);
+            if (collection == null) return null;
+            var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
+            var children = GetByQuery(query);
+
+            var specCollection = new EntitySpecifiedFilterCollection(collection);
+            foreach (var child in children)
+            {
+                specCollection.AttributeCollections.Add(child);
+            }
+
+            return specCollection;
+        }
+
+        /// <summary>
         /// The perform get.
         /// </summary>
         /// <param name="key">
@@ -205,7 +259,7 @@
         /// The keys.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntityCollection"/>.
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         protected override IEnumerable<IEntityCollection> PerformGetAll(params Guid[] keys)
         {
