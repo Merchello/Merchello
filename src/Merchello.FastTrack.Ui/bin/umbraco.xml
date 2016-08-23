@@ -29843,6 +29843,15 @@
             To modify move field declaration from designer file to code-behind file.
             </remarks>
         </member>
+        <member name="F:umbraco.cms.presentation.user.PermissionEditor.JsInclude2">
+            <summary>
+            JsInclude2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
         <member name="F:umbraco.cms.presentation.user.PermissionEditor.pnlUmbraco">
             <summary>
             pnlUmbraco control.
