@@ -554,6 +554,9 @@
                 ec.ParentKey = collection.ParentKey;
             }
 
+            ec.IsFilter = collection.IsFilter;
+            ((EntityCollection)ec).ExtendedData = collection.ExtendedData.AsExtendedDataCollection();
+
             _entityCollectionService.Save(ec);
 
             return ec.ToEntityCollectionDisplay();
@@ -601,6 +604,7 @@
                     var ec = _entityCollectionService.CreateEntityCollection(op.EntityType, op.ProviderKey, op.Name);
 
                     ec.ParentKey = op.ParentKey ?? collection.Key;
+                    ec.IsFilter = collection.IsFilter;
 
                     operations.Add(ec);
                 }

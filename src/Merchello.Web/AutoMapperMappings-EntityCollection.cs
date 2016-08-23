@@ -23,6 +23,10 @@
                     opt =>
                     opt.ResolveUsing<EntityTypeFieldResolver>().ConstructedBy(() => new EntityTypeFieldResolver()))
                 .ForMember(
+                    dest => dest.ExtendedData,
+                    opt =>
+                    opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
+                .ForMember(
                     dest => dest.ParentKey,
                     opt =>
                         opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()));
@@ -36,6 +40,10 @@
                     dest => dest.ParentKey,
                     opt =>
                         opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()))
+                .ForMember(
+                    dest => dest.ExtendedData,
+                    opt =>
+                    opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
                 .ForMember(
                      dest => dest.AttributeCollections,
                      opt =>

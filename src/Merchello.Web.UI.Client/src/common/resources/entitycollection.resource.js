@@ -102,6 +102,8 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 addEntityCollection : function(entityCollection) {
                     var url = baseUrl + 'PostAddEntityCollection';
+                    entityCollection.extendedData = entityCollection.extendedData.toArray();
+
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             entityCollection
@@ -110,6 +112,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 saveEntityCollection : function(collection) {
                     var url = baseUrl + 'PutEntityCollection';
+                    collection.extendedData = collection.extendedData.toArray();
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             collection
@@ -118,6 +121,10 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 saveSpecifiedFilterCollection : function(collection) {
                     var url = baseUrl + 'PutSpecifiedFilterCollection';
+                    collection.extendedData = collection.extendedData.toArray();
+                    _.each(collection.attributeCollections, function(ac) {
+                       ac.extendedData = ac.extendedData.toArray();
+                    });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             collection
@@ -184,6 +191,9 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 updateSortOrders : function(entityCollections) {
                     var url = baseUrl + 'PutUpdateSortOrders';
+                    _.each(entityCollections, function(ec) {
+                       ec.extendedData = ec.extendedData.toArray();
+                    });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             entityCollections

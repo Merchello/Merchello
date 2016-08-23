@@ -601,7 +601,11 @@
         {
             Mandate.ParameterCondition(!Guid.Empty.Equals(entityTfKey), "entityTfKey");
             Mandate.ParameterCondition(!Guid.Empty.Equals(providerKey), "providerKey");
-            var collection = new EntityCollection(entityTfKey, providerKey) { Name = name };
+            var collection = new EntityCollection(entityTfKey, providerKey)
+                                 {
+                                     Name = name,
+                                     ExtendedData = new ExtendedDataCollection()
+                                 };
 
             if (Creating.IsRaisedEventCancelled(new Events.NewEventArgs<IEntityCollection>(collection), this))
             {

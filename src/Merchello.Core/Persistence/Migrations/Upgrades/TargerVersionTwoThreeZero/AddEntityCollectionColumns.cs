@@ -6,12 +6,13 @@
     using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoTwoZero;
 
     using Umbraco.Core;
+    using Umbraco.Core.Persistence.DatabaseAnnotations;
     using Umbraco.Core.Persistence.Migrations;
 
     /// <summary>
     /// Extends the merchEntityCollection table with addition columns.
     /// </summary>
-    [Migration("2.3.0", 2, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("2.3.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
     public class AddEntityCollectionColumns : MerchelloMigrationBase, IMerchelloMigration
     {
         /// <summary>
@@ -29,7 +30,10 @@
                     x.TableName.InvariantEquals("merchEntityCollection") && x.ColumnName.InvariantEquals("extendedData"))
                 == false)
             {
-                
+                Logger.Info(typeof(AddEntityCollectionColumns), "Adding extendData column to merchEntityCollection table.");
+
+                var textType = SqlSyntax.GetSpecialDbType(SpecialDbTypes.NTEXT);
+                Create.Column("extendedData").OnTable("merchEntityCollection").AsCustom(textType).Nullable();
             }
 
             // 'isFilter' column

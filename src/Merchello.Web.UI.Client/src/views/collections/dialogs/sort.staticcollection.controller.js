@@ -49,6 +49,7 @@ angular.module('merchello')
                 parentPromise.then(function(collections) {
                     var transformed = [];
                     if (!angular.isArray(collections)) {
+                        collections.sortOrder = 0;
                         transformed.push(entityCollectionDisplayBuilder.transform(collections));
                     } else {
                         transformed = entityCollectionDisplayBuilder.transform(collections);
@@ -73,7 +74,6 @@ angular.module('merchello')
                     } else {
                         $scope.entityCollections = entityCollectionDisplayBuilder.transform(collections);
                     }
-                    console.info(treeService._getTreeCache());
                     $scope.loaded = true;
                 });
             }
@@ -91,6 +91,8 @@ angular.module('merchello')
                 for(var i = 0; i < $scope.entityCollections.length; i++) {
                     $scope.entityCollections[i].sortOrder = i;
                 }
+
+
                 // save updated sort orders
                 var promise = entityCollectionResource.updateSortOrders($scope.entityCollections);
                 promise.then(function() {
@@ -115,7 +117,7 @@ angular.module('merchello')
             // Sortable available offers
             /// -------------------------------------------------------------------
 
-            $scope.sortableOptions = {
+            $scope.sortableCollections = {
                 start : function(e, ui) {
                     ui.item.data('start', ui.item.index());
                 },

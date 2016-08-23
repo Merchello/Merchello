@@ -76,6 +76,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                             attributeTemplate.parentKey = collection.key;
                             attributeTemplate.entityType = scope.entityType;
                             attributeTemplate.entityTfKey = provider.entityTfKey;
+                            attributeTemplate.isFilter = true;
 
                             var clone = angular.extend(entityCollectionDisplayBuilder.createDefault(), collection);
                             var collections = clone.attributeCollections;
@@ -111,6 +112,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     collection.entityType = scope.entityType;
                     collection.entityTfKey = provider.entityTfKey;
                     collection.providerKey = provider.key;
+                    collection.isFilter = true;
                     var dialogData = {
                         attribute: collection
                     };
