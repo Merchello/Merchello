@@ -1649,6 +1649,11 @@
             Show disabled users in the tree in the Users section in the backoffice
             </summary>
         </member>
+        <member name="P:umbraco.UmbracoSettings.AllowPasswordReset">
+            <summary>
+            Enable the UI and API to allow back-office users to reset their passwords? Default is true
+            </summary>
+        </member>
         <member name="P:umbraco.UmbracoSettings.AutoCleanLogs">
             <summary>
             Gets a value indicating whether the logs will be auto cleaned
