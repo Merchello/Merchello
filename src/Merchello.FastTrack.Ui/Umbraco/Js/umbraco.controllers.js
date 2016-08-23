@@ -27,7 +27,7 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
         { value: "assets/img/application/logo@3x.png" }
     ];
     $scope.touchDevice = appState.getGlobalState("touchDevice");
-    
+
 
     $scope.removeNotification = function (index) {
         notificationsService.remove(index);
@@ -36,12 +36,12 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
     $scope.closeDialogs = function (event) {
         //only close dialogs if non-link and non-buttons are clicked
         var el = event.target.nodeName;
-        var els = ["INPUT","A","BUTTON"];
+        var els = ["INPUT", "A", "BUTTON"];
 
-        if(els.indexOf(el) >= 0){return;}
+        if (els.indexOf(el) >= 0) { return; }
 
         var parents = $(event.target).parents("a,button");
-        if(parents.length > 0){
+        if (parents.length > 0) {
             return;
         }
 
@@ -57,31 +57,31 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
     var evts = [];
 
     //when a user logs out or timesout
-    evts.push(eventsService.on("app.notAuthenticated", function() {
+    evts.push(eventsService.on("app.notAuthenticated", function () {
         $scope.authenticated = null;
         $scope.user = null;
     }));
-    
+
     //when the app is read/user is logged in, setup the data
     evts.push(eventsService.on("app.ready", function (evt, data) {
-        
+
         $scope.authenticated = data.authenticated;
         $scope.user = data.user;
 
-        updateChecker.check().then(function(update){
-            if(update && update !== "null"){
-                if(update.type !== "None"){
+        updateChecker.check().then(function(update) {
+            if (update && update !== "null") {
+                if (update.type !== "None") {
                     var notification = {
-                           headline: "Update available",
-                           message: "Click to download",
-                           sticky: true,
-                           type: "info",
-                           url: update.url
+                        headline: "Update available",
+                        message: "Click to download",
+                        sticky: true,
+                        type: "info",
+                        url: update.url
                     };
                     notificationsService.add(notification);
                 }
             }
-        })
+        });
 
         //if the user has changed we need to redirect to the root so they don't try to continue editing the
         //last item in the URL (NOTE: the user id can equal zero, so we cannot just do !data.lastUserId since that will resolve to true)
@@ -99,38 +99,35 @@ function MainController($scope, $rootScope, $location, $routeParams, $timeout, $
         if ($scope.user.emailHash) {
 
             //let's attempt to load the avatar, it might not exist or we might not have 
-            // internet access so we'll detect it first
-            $http.get("https://www.gravatar.com/avatar/" + $scope.user.emailHash + ".jpg?s=64&d=404")
+            // internet access, well get an empty string back
+            $http.get(umbRequestHelper.getApiUrl("gravatarApiBaseUrl", "GetCurrentUserGravatarUrl"))
                 .then(
-                    function successCallback(response) {                        
-                        $("#avatar-img").fadeTo(1000, 0, function () {
-                            $scope.$apply(function () {
-                                //this can be null if they time out
-                                if ($scope.user && $scope.user.emailHash) {
-	                            var avatarBaseUrl = "https://www.gravatar.com/avatar/",
-	                                hash = $scope.user.emailHash;
+                    function successCallback(response) {
+                        // if we can't download the gravatar for some reason, an null gets returned, we cannot do anything
+                        if (response.data !== "null") {
+                            if ($scope.user && $scope.user.emailHash) {
+                                var avatarBaseUrl = "https://www.gravatar.com/avatar/";
+                                var hash = $scope.user.emailHash;
 
-	                            $scope.avatar = [
-	                                { value: avatarBaseUrl + hash + ".jpg?s=30&d=mm" },
-	                                { value: avatarBaseUrl + hash + ".jpg?s=60&d=mm" },
-	                                { value: avatarBaseUrl + hash + ".jpg?s=90&d=mm" }
-	                            ];
-                                }
-                            });
-                            $("#avatar-img").fadeTo(1000, 1);
-                        });
+                                $scope.avatar = [
+                                    { value: avatarBaseUrl + hash + ".jpg?s=30&d=mm" },
+                                    { value: avatarBaseUrl + hash + ".jpg?s=60&d=mm" },
+                                    { value: avatarBaseUrl + hash + ".jpg?s=90&d=mm" }
+                                ];
+                            }
+                        }
+
                     }, function errorCallback(response) {
                         //cannot load it from the server so we cannot do anything
                     });
         }
-
     }));
 
-    evts.push(eventsService.on("app.ysod", function(name, error) {
+    evts.push(eventsService.on("app.ysod", function (name, error) {
         $scope.ysodOverlay = {
             view: "ysod",
             error: error,
-            show:  true
+            show: true
         };
     }));
 
@@ -150,6 +147,7 @@ angular.module('umbraco').controller("Umbraco.MainController", MainController).
             //Set url for locale files
             tmhDynamicLocaleProvider.localeLocationPattern('lib/angular/1.1.5/i18n/angular-locale_{{locale}}.js');
         });
+
 
 /**
  * @ngdoc controller
@@ -420,7 +418,6 @@ function SearchController($scope, searchService, $log, $location, navigationServ
 
                     //a canceler exists, so perform the cancelation operation and reset
                     if (canceler) {
-                        console.log("CANCELED!");
                         canceler.resolve();
                         canceler = $q.defer();
                     }
@@ -698,14 +695,15 @@ angular.module("umbraco")
             	$scope.icons = icons;
             });
 
-			$scope.submitClass = function(icon){
-				if($scope.color)
-				{
+            $scope.submitClass = function (icon) {
+				if($scope.color) {
 					$scope.submit(icon + " " + $scope.color);
-				}else{
-					$scope.submit(icon);	
+				}
+                else {
+					$scope.submit(icon);
 				}
 			};
+
 		}
 	);
 /**
@@ -1060,24 +1058,58 @@ angular.module("umbraco").controller("Umbraco.Dialogs.LinkPickerController",
 	    });
 	});
 angular.module("umbraco").controller("Umbraco.Dialogs.LoginController",
-    function ($scope, $cookies, localizationService, userService, externalLoginInfo) {
+    function ($scope, $cookies, localizationService, userService, externalLoginInfo, resetPasswordCodeInfo, $timeout, authResource) {
 
-        /**
-         * @ngdoc function
-         * @name signin
-         * @methodOf MainController
-         * @function
-         *
-         * @description
-         * signs the user in
-         */
+        var setFieldFocus = function(form, field) {
+            $timeout(function() {
+                $("form[name='" + form + "'] input[name='" + field + "']").focus();
+            });
+        }
 
+        function resetInputValidation() {
+            $scope.confirmPassword = "";
+            $scope.password = "";
+            $scope.login = "";
+            if ($scope.loginForm) {
+                $scope.loginForm.username.$setValidity('auth', true);
+                $scope.loginForm.password.$setValidity('auth', true);
+            }
+            if ($scope.requestPasswordResetForm) {
+                $scope.requestPasswordResetForm.email.$setValidity("auth", true);
+            }
+            if ($scope.setPasswordForm) {
+                $scope.setPasswordForm.password.$setValidity('auth', true);
+                $scope.setPasswordForm.confirmPassword.$setValidity('auth', true);
+            }
+        }
 
+        $scope.allowPasswordReset = Umbraco.Sys.ServerVariables.umbracoSettings.allowPasswordReset;
+
+        $scope.showLogin = function () {
+            $scope.errorMsg = "";
+            resetInputValidation();
+            $scope.view = "login";
+            setFieldFocus("loginForm", "username");
+        }
+
+        $scope.showRequestPasswordReset = function () {
+            $scope.errorMsg = "";
+            resetInputValidation();
+            $scope.view = "request-password-reset";
+            $scope.showEmailResetConfirmation = false;
+            setFieldFocus("requestPasswordResetForm", "email");
+        }
+
+        $scope.showSetPassword = function () {
+            $scope.errorMsg = "";
+            resetInputValidation();
+            $scope.view = "set-password";
+            setFieldFocus("setPasswordForm", "password");
+        }
 
         var d = new Date();
         var konamiGreetings = new Array("Suze Sunday", "Malibu Monday", "Tequila Tuesday", "Whiskey Wednesday", "Negroni Day", "Fernet Friday", "Sancerre Saturday");
         var konamiMode = $cookies.konamiLogin;
-        //var weekday = new Array("Super Sunday", "Manic Monday", "Tremendous Tuesday", "Wonderful Wednesday", "Thunder Thursday", "Friendly Friday", "Shiny Saturday");
         if (konamiMode == "1") {
             $scope.greeting = "Happy " + konamiGreetings[d.getDay()];
         } else {
@@ -1090,6 +1122,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.LoginController",
         $scope.externalLoginFormAction = Umbraco.Sys.ServerVariables.umbracoUrls.externalLoginsUrl;
         $scope.externalLoginProviders = externalLoginInfo.providers;
         $scope.externalLoginInfo = externalLoginInfo;
+        $scope.resetPasswordCodeInfo = resetPasswordCodeInfo;
 
         $scope.activateKonamiMode = function () {
             if ($cookies.konamiLogin == "1") {
@@ -1105,16 +1138,15 @@ angular.module("umbraco").controller("Umbraco.Dialogs.LoginController",
         }
 
         $scope.loginSubmit = function (login, password) {
-
+            
             //if the login and password are not empty we need to automatically 
             // validate them - this is because if there are validation errors on the server
             // then the user has to change both username & password to resubmit which isn't ideal,
-            // so if they're not empty , we'l just make sure to set them to valid.
+            // so if they're not empty, we'll just make sure to set them to valid.
             if (login && password && login.length > 0 && password.length > 0) {
                 $scope.loginForm.username.$setValidity('auth', true);
                 $scope.loginForm.password.$setValidity('auth', true);
             }
-
 
             if ($scope.loginForm.$invalid) {
                 return;
@@ -1145,6 +1177,95 @@ angular.module("umbraco").controller("Umbraco.Dialogs.LoginController",
                 }
             });
         };
+
+        $scope.requestPasswordResetSubmit = function (email) {
+
+            if (email && email.length > 0) {
+                $scope.requestPasswordResetForm.email.$setValidity('auth', true);
+            }
+            
+            $scope.showEmailResetConfirmation = false;
+
+            if ($scope.requestPasswordResetForm.$invalid) {
+                return;
+            }
+
+            $scope.errorMsg = "";
+
+            authResource.performRequestPasswordReset(email)
+                .then(function () {
+                    //remove the email entered
+                    $scope.email = "";
+                    $scope.showEmailResetConfirmation = true;
+                }, function (reason) {
+                    $scope.errorMsg = reason.errorMsg;
+                    $scope.requestPasswordResetForm.email.$setValidity("auth", false);
+                });
+
+            $scope.requestPasswordResetForm.email.$viewChangeListeners.push(function () {
+                if ($scope.requestPasswordResetForm.email.$invalid) {
+                    $scope.requestPasswordResetForm.email.$setValidity('auth', true);
+                }
+            });
+        };
+
+        $scope.setPasswordSubmit = function (password, confirmPassword) {
+
+            $scope.showSetPasswordConfirmation = false;
+
+            if (password && confirmPassword && password.length > 0 && confirmPassword.length > 0) {
+                $scope.setPasswordForm.password.$setValidity('auth', true);
+                $scope.setPasswordForm.confirmPassword.$setValidity('auth', true);
+            }
+
+            if ($scope.setPasswordForm.$invalid) {
+                return;
+            }
+
+            authResource.performSetPassword($scope.resetPasswordCodeInfo.resetCodeModel.userId, password, confirmPassword, $scope.resetPasswordCodeInfo.resetCodeModel.resetCode)
+                .then(function () {
+                    $scope.showSetPasswordConfirmation = true;
+                    $scope.resetComplete = true;
+
+                    //reset the values in the resetPasswordCodeInfo angular so if someone logs out the change password isn't shown again
+                    resetPasswordCodeInfo.resetCodeModel = null;
+
+                }, function (reason) {
+                    if (reason.data && reason.data.Message) {
+                        $scope.errorMsg = reason.data.Message;
+                    }
+                    else {
+                        $scope.errorMsg = reason.errorMsg;
+                    }
+                    $scope.setPasswordForm.password.$setValidity("auth", false);
+                    $scope.setPasswordForm.confirmPassword.$setValidity("auth", false);
+                });
+
+            $scope.setPasswordForm.password.$viewChangeListeners.push(function () {
+                if ($scope.setPasswordForm.password.$invalid) {
+                    $scope.setPasswordForm.password.$setValidity('auth', true);
+                }
+            });
+            $scope.setPasswordForm.confirmPassword.$viewChangeListeners.push(function () {
+                if ($scope.setPasswordForm.confirmPassword.$invalid) {
+                    $scope.setPasswordForm.confirmPassword.$setValidity('auth', true);
+                }
+            });
+        }
+
+
+        //Now, show the correct panel:
+
+        if ($scope.resetPasswordCodeInfo.resetCodeModel) {
+            $scope.showSetPassword();
+        }
+        else if ($scope.resetPasswordCodeInfo.errors.length > 0) {
+            $scope.view = "password-reset-code-expired";
+        }
+        else {
+            $scope.showLogin();
+        }
+
     });
 
 //used for the macro picker dialog
@@ -1358,7 +1479,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.RteEmbedController", funct
                             break;
                         case 1:
                             //error
-                            $scope.form.info = "Computer says no";
+                            $scope.form.info = "Could not embed media - please ensure the URL is valid";
                             break;
                         case 2:
                             $scope.form.preview = data.Markup;
@@ -1370,7 +1491,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.RteEmbedController", funct
                 .error(function () {
                     $scope.form.supportsDimensions = false;
                     $scope.form.preview = "";
-                    $scope.form.info = "Computer says no";
+                    $scope.form.info = "Could not embed media - please ensure the URL is valid";
                 });
         } else {
             $scope.form.supportsDimensions = false;
@@ -2833,7 +2954,7 @@ angular.module("umbraco").controller("Umbraco.Notifications.ConfirmRouteChangeCo
                         break;
                      case 1:
                         //error
-                        $scope.model.embed.info = "Computer says no";
+                        $scope.model.embed.info = "Could not embed media - please ensure the URL is valid";
                         break;
                      case 2:
                         $scope.model.embed.preview = data.Markup;
@@ -2845,7 +2966,7 @@ angular.module("umbraco").controller("Umbraco.Notifications.ConfirmRouteChangeCo
                .error(function() {
                   $scope.model.embed.supportsDimensions = false;
                   $scope.model.embed.preview = "";
-                  $scope.model.embed.info = "Computer says no";
+                  $scope.model.embed.info = "Could not embed media - please ensure the URL is valid";
                });
          } else {
             $scope.model.embed.supportsDimensions = false;
@@ -4580,8 +4701,12 @@ function ContentDeleteController($scope, contentResource, treeService, navigatio
 
     $scope.performDelete = function() {
 
+        // stop from firing again on double-click
+        if ($scope.busy) { return false; }
+
         //mark it for deletion (used in the UI)
         $scope.currentNode.loading = true;
+        $scope.busy = true;
 
         contentResource.deleteById($scope.currentNode.id).then(function () {
             $scope.currentNode.loading = false;
@@ -4614,6 +4739,7 @@ function ContentDeleteController($scope, contentResource, treeService, navigatio
         }, function(err) {
 
             $scope.currentNode.loading = false;
+            $scope.busy = false;
 
             //check if response is ysod
             if (err.status && err.status >= 500) {
@@ -4877,18 +5003,33 @@ angular.module("umbraco").controller("Umbraco.Editors.Content.EditController", C
  * @description
  * The controller for deleting content
  */
-function ContentEmptyRecycleBinController($scope, contentResource, treeService, navigationService) {
+function ContentEmptyRecycleBinController($scope, contentResource, treeService, navigationService, notificationsService, $route) {
+
+    $scope.busy = false;
 
     $scope.performDelete = function() {
 
         //(used in the UI)
+        $scope.busy = true;
         $scope.currentNode.loading = true;
 
-        contentResource.emptyRecycleBin($scope.currentNode.id).then(function () {
+        contentResource.emptyRecycleBin($scope.currentNode.id).then(function (result) {
+
+            $scope.busy = false;
             $scope.currentNode.loading = false;
-            //TODO: Need to sync tree, etc...
+
+            //show any notifications
+            if (angular.isArray(result.notifications)) {
+                for (var i = 0; i < result.notifications.length; i++) {
+                    notificationsService.showNotification(result.notifications[i]);
+                }
+            }
+
             treeService.removeChildNodes($scope.currentNode);
             navigationService.hideMenu();
+
+            //reload the current view
+            $route.reload();
         });
 
     };
@@ -5184,27 +5325,31 @@ function startUpVideosDashboardController($scope, xmlhelper, $log, $http) {
 angular.module("umbraco").controller("Umbraco.Dashboard.StartupVideosController", startUpVideosDashboardController);
 
 
-function FormsController($scope, $route, $cookieStore, packageResource) {
+function FormsController($scope, $route, $cookieStore, packageResource, localizationService) {
     $scope.installForms = function(){
-        $scope.state = "Installng package";
+        $scope.state = localizationService.localize("packager_installStateDownloading");
         packageResource
             .fetch("CD44CF39-3D71-4C19-B6EE-948E1FAF0525")
-            .then(function(pack){
-              $scope.state = "importing";
-              return packageResource.import(pack);
-            }, $scope.error)
-            .then(function(pack){
-              $scope.state = "Installing";
-              return packageResource.installFiles(pack);
-            }, $scope.error)
-            .then(function(pack){
-              $scope.state = "Restarting, please hold...";
-              return packageResource.installData(pack);
-            }, $scope.error)
-            .then(function(pack){
-              $scope.state = "All done, your browser will now refresh";
-              return packageResource.cleanUp(pack);
-            }, $scope.error)
+            .then(function(pack) {
+                $scope.state = localizationService.localize("packager_installStateImporting");
+                    return packageResource.import(pack);
+                },
+                $scope.error)
+            .then(function(pack) {
+                $scope.state = localizationService.localize("packager_installStateInstalling");
+                    return packageResource.installFiles(pack);
+                },
+                $scope.error)
+            .then(function(pack) {
+                $scope.state = localizationService.localize("packager_installStateRestarting");
+                    return packageResource.installData(pack);
+                },
+                $scope.error)
+            .then(function(pack) {
+                $scope.state = localizationService.localize("packager_installStateComplete");
+                    return packageResource.cleanUp(pack);
+                },
+                $scope.error)
             .then($scope.complete, $scope.error);
     };
 
@@ -5217,6 +5362,8 @@ function FormsController($scope, $route, $cookieStore, packageResource) {
     $scope.error = function(err){
         $scope.state = undefined;
         $scope.error = err;
+        //This will return a rejection meaning that the promise change above will stop
+        return $q.reject();
     };
 
 
@@ -5380,7 +5527,7 @@ function MediaFolderBrowserDashboardController($rootScope, $scope, contentTypeRe
 }
 angular.module("umbraco").controller("Umbraco.Dashboard.MediaFolderBrowserDashboardController", MediaFolderBrowserDashboardController);
 
-function examineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeout) {
+function ExamineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeout) {
 
     $scope.indexerDetails = [];
     $scope.searcherDetails = [];
@@ -5388,7 +5535,9 @@ function examineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeo
 
     function checkProcessing(indexer, checkActionName) {
         umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", checkActionName, { indexerName: indexer.name })),
+                $http.post(umbRequestHelper.getApiUrl("examineMgmtBaseUrl",
+                    checkActionName,
+                    { indexerName: indexer.name })),
                 'Failed to check index processing')
             .then(function(data) {
 
@@ -5399,70 +5548,73 @@ function examineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeo
                         indexer[k] = data[k];
                     }
                     indexer.isProcessing = false;
-                }
-                else {
-                    $timeout(function () {
-                        //don't continue if we've tried 100 times
-                        if (indexer.processingAttempts < 100) {
-                            checkProcessing(indexer, checkActionName);
-                            //add an attempt
-                            indexer.processingAttempts++;
-                        }
-                        else {
-                            //we've exceeded 100 attempts, stop processing
-                            indexer.isProcessing = false;
-                        }
-                    }, 1000);
+                } else {
+                    $timeout(function() {
+                            //don't continue if we've tried 100 times
+                            if (indexer.processingAttempts < 100) {
+                                checkProcessing(indexer, checkActionName);
+                                //add an attempt
+                                indexer.processingAttempts++;
+                            } else {
+                                //we've exceeded 100 attempts, stop processing
+                                indexer.isProcessing = false;
+                            }
+                        },
+                        1000);
                 }
             });
     }
 
-    $scope.search = function (searcher, e) {
+    $scope.search = function(searcher, e) {
         if (e && e.keyCode !== 13) {
             return;
         }
 
         umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "GetSearchResults", {
-                    searcherName: searcher.name,
-                    query: encodeURIComponent(searcher.searchText),
-                    queryType: searcher.searchType
-                })),
+                $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl",
+                    "GetSearchResults",
+                    {
+                        searcherName: searcher.name,
+                        query: encodeURIComponent(searcher.searchText),
+                        queryType: searcher.searchType
+                    })),
                 'Failed to search')
             .then(function(searchResults) {
                 searcher.isSearching = true;
                 searcher.searchResults = searchResults;
             });
     }
-    
+
     $scope.toggle = function(provider, propName) {
         if (provider[propName] !== undefined) {
             provider[propName] = !provider[propName];
-        }
-        else {
+        } else {
             provider[propName] = true;
         }
     }
 
     $scope.rebuildIndex = function(indexer) {
         if (confirm("This will cause the index to be rebuilt. " +
-                        "Depending on how much content there is in your site this could take a while. " +
-                        "It is not recommended to rebuild an index during times of high website traffic " +
-                        "or when editors are editing content.")) {
+            "Depending on how much content there is in your site this could take a while. " +
+            "It is not recommended to rebuild an index during times of high website traffic " +
+            "or when editors are editing content.")) {
 
             indexer.isProcessing = true;
             indexer.processingAttempts = 0;
 
             umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "PostRebuildIndex", { indexerName: indexer.name })),
+                    $http.post(umbRequestHelper.getApiUrl("examineMgmtBaseUrl",
+                        "PostRebuildIndex",
+                        { indexerName: indexer.name })),
                     'Failed to rebuild index')
-                .then(function () {
+                .then(function() {
 
                     //rebuilding has started, nothing is returned accept a 200 status code.
                     //lets poll to see if it is done.
-                    $timeout(function () {
-                        checkProcessing(indexer, "PostCheckRebuildIndex");
-                    }, 1000);
+                    $timeout(function() {
+                            checkProcessing(indexer, "PostCheckRebuildIndex");
+                        },
+                        1000);
 
                 });
         }
@@ -5470,20 +5622,23 @@ function examineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeo
 
     $scope.optimizeIndex = function(indexer) {
         if (confirm("This will cause the index to be optimized which will improve its performance. " +
-                        "It is not recommended to optimize an index during times of high website traffic " +
-                        "or when editors are editing content.")) {
+            "It is not recommended to optimize an index during times of high website traffic " +
+            "or when editors are editing content.")) {
             indexer.isProcessing = true;
 
             umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "PostOptimizeIndex", { indexerName: indexer.name })),
+                    $http.post(umbRequestHelper.getApiUrl("examineMgmtBaseUrl",
+                        "PostOptimizeIndex",
+                        { indexerName: indexer.name })),
                     'Failed to optimize index')
-                .then(function () {
+                .then(function() {
 
                     //optimizing has started, nothing is returned accept a 200 status code.
                     //lets poll to see if it is done.
-                    $timeout(function () {
-                        checkProcessing(indexer, "PostCheckOptimizeIndex");
-                    }, 1000);
+                    $timeout(function() {
+                            checkProcessing(indexer, "PostCheckOptimizeIndex");
+                        },
+                        1000);
 
                 });
         }
@@ -5493,40 +5648,333 @@ function examineMgmtController($scope, umbRequestHelper, $log, $http, $q, $timeo
         searcher.isSearching = true;
     }
 
-     
     //go get the data
 
     //combine two promises and execute when they are both done
     $q.all([
 
-        //get the indexer details
-        umbRequestHelper.resourcePromise(
-            $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "GetIndexerDetails")),
-            'Failed to retrieve indexer details')
-        .then(function(data) {
-            $scope.indexerDetails = data; 
-        }),
+            //get the indexer details
+            umbRequestHelper.resourcePromise(
+                $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "GetIndexerDetails")),
+                'Failed to retrieve indexer details')
+            .then(function(data) {
+                $scope.indexerDetails = data;
+            }),
 
-        //get the searcher details
-        umbRequestHelper.resourcePromise(
-            $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "GetSearcherDetails")),
-            'Failed to retrieve searcher details')
-        .then(function(data) {
-            $scope.searcherDetails = data;
-            for (var s in $scope.searcherDetails) {
-                $scope.searcherDetails[s].searchType = "text";
-            }
-        })
-
-    ]).then(function () {
-        //all init loading is complete
-        $scope.loading = false;
-    });
-
-
+            //get the searcher details
+            umbRequestHelper.resourcePromise(
+                $http.get(umbRequestHelper.getApiUrl("examineMgmtBaseUrl", "GetSearcherDetails")),
+                'Failed to retrieve searcher details')
+            .then(function(data) {
+                $scope.searcherDetails = data;
+                for (var s in $scope.searcherDetails) {
+                    $scope.searcherDetails[s].searchType = "text";
+                }
+            })
+        ])
+        .then(function() {
+            //all init loading is complete
+            $scope.loading = false;
+        });
 }
-angular.module("umbraco").controller("Umbraco.Dashboard.ExamineMgmtController", examineMgmtController);
-function xmlDataIntegrityReportController($scope, umbRequestHelper, $log, $http, $q, $timeout) {
+
+angular.module("umbraco").controller("Umbraco.Dashboard.ExamineMgmtController", ExamineMgmtController);
+(function() {
+    "use strict";
+
+    function HealthCheckController($scope, healthCheckResource) {
+        var SUCCESS = 0;
+        var WARNING = 1;
+        var ERROR = 2;
+        var INFO = 3;
+
+        var vm = this;
+
+        vm.viewState = "list";
+        vm.groups = [];
+        vm.selectedGroup = {};
+
+        vm.getStatus = getStatus;
+        vm.executeAction = executeAction;
+        vm.checkAllGroups = checkAllGroups;
+        vm.checkAllInGroup = checkAllInGroup;
+        vm.openGroup = openGroup;
+        vm.setViewState = setViewState;
+
+        // Get a (grouped) list of all health checks
+        healthCheckResource.getAllChecks()
+            .then(function(response) {
+                vm.groups = response;
+            });
+
+        function setGroupGlobalResultType(group) {
+            var totalSuccess = 0;
+            var totalError = 0;
+            var totalWarning = 0;
+            var totalInfo = 0;
+
+            // count total number of statusses
+            angular.forEach(group.checks,
+                function(check) {
+                    angular.forEach(check.status,
+                        function(status) {
+                            switch (status.resultType) {
+                            case SUCCESS:
+                                totalSuccess = totalSuccess + 1;
+                                break;
+                            case WARNING:
+                                totalWarning = totalWarning + 1;
+                                break;
+                            case ERROR:
+                                totalError = totalError + 1;
+                                break;
+                            case INFO:
+                                totalInfo = totalInfo + 1;
+                                break;
+                            }
+                        });
+                });
+
+            group.totalSuccess = totalSuccess;
+            group.totalError = totalError;
+            group.totalWarning = totalWarning;
+            group.totalInfo = totalInfo;
+
+        }
+
+        // Get the status of an individual check
+        function getStatus(check) {
+            check.loading = true;
+            check.status = null;
+            healthCheckResource.getStatus(check.id)
+                .then(function(response) {
+                    check.loading = false;
+                    check.status = response;
+                });
+        }
+
+        function executeAction(check, index, action) {
+            check.loading = true;
+            healthCheckResource.executeAction(action)
+                .then(function(response) {
+                    check.status[index] = response;
+                    check.loading = false;
+                });
+        }
+
+        function checkAllGroups(groups) {
+            // set number of checks which has been executed
+            for (var i = 0; i < groups.length; i++) {
+                var group = groups[i];
+                checkAllInGroup(group, group.checks);
+            }
+            vm.groups = groups;
+        }
+
+        function checkAllInGroup(group, checks) {
+            group.checkCounter = 0;
+            group.loading = true;
+
+            angular.forEach(checks,
+                function(check) {
+
+                    check.loading = true;
+
+                    healthCheckResource.getStatus(check.id)
+                        .then(function(response) {
+                            check.status = response;
+                            group.checkCounter = group.checkCounter + 1;
+                            check.loading = false;
+
+                            // when all checks are done, set global group result
+                            if (group.checkCounter === checks.length) {
+                                setGroupGlobalResultType(group);
+                                group.loading = false;
+                            }
+                        });
+                });
+        }
+
+        function openGroup(group) {
+            vm.selectedGroup = group;
+            vm.viewState = "details";
+        }
+
+        function setViewState(state) {
+            vm.viewState = state;
+
+            if (state === 'list') {
+
+                for (var i = 0; i < vm.groups.length; i++) {
+                    var group = vm.groups[i];
+                    setGroupGlobalResultType(group);
+                }
+            }
+        }
+    }
+
+    angular.module("umbraco").controller("Umbraco.Dashboard.HealthCheckController", HealthCheckController);
+})();
+
+(function() {
+    "use strict";
+
+    function RedirectUrlsController($scope, redirectUrlsResource, notificationsService, $q) {
+        //...todo
+        //search by url or url part
+        //search by domain
+        //display domain in dashboard results?
+
+        //used to cancel any request in progress if another one needs to take it's place
+        var vm = this;
+        var canceler = null;
+
+        vm.dashboard = {
+            searchTerm: "",
+            loading: false,
+            urlTrackerDisabled: false
+        };
+
+        vm.pagination = {
+            pageIndex: 0,
+            pageNumber: 1,
+            totalPages: 1,
+            pageSize: 20
+        };
+
+        vm.goToPage = goToPage;
+        vm.search = search;
+        vm.removeRedirect = removeRedirect;
+        vm.disableUrlTracker = disableUrlTracker;
+        vm.enableUrlTracker = enableUrlTracker;
+        vm.filter = filter;
+        vm.checkEnabled = checkEnabled;
+
+        function activate() {            
+            vm.checkEnabled().then(function() {
+                vm.search();
+            });
+        }
+
+        function checkEnabled() {
+            vm.dashboard.loading = true;
+            return redirectUrlsResource.isEnabled().then(function (response) {
+                vm.dashboard.urlTrackerDisabled = response !== "true";
+                vm.dashboard.loading = false;
+            });
+        }
+
+        function goToPage(pageNumber) {
+            vm.pagination.pageIndex = pageNumber - 1;
+            vm.pagination.pageNumber = pageNumber;
+            vm.search();
+        }
+
+        function search() {
+
+            vm.dashboard.loading = true;
+
+            var searchTerm = vm.dashboard.searchTerm;
+            if (searchTerm === undefined) {
+                searchTerm = "";
+            }
+
+            redirectUrlsResource.searchRedirectUrls(searchTerm, vm.pagination.pageIndex, vm.pagination.pageSize).then(function(response) {
+
+                vm.redirectUrls = response.searchResults;
+
+                // update pagination
+                vm.pagination.pageIndex = response.currentPage;
+                vm.pagination.pageNumber = response.currentPage + 1;
+                vm.pagination.totalPages = response.pageCount;
+
+                vm.dashboard.loading = false;
+
+            });
+        }
+
+        function removeRedirect(redirectToDelete) {
+            var toggleConfirm = confirm('Are you sure you want to remove the redirect from ' + '"' + redirectToDelete.originalUrl + '"' + " to " + '"' + redirectToDelete.destinationUrl + '"' + " ?");
+
+            if (toggleConfirm) {
+                redirectUrlsResource.deleteRedirectUrl(redirectToDelete.redirectId).then(function () {
+
+                    var index = vm.redirectUrls.indexOf(redirectToDelete);
+                    vm.redirectUrls.splice(index, 1);
+                    notificationsService.success("Redirect Url Removed!", "Redirect Url has been deleted");
+
+                    // check if new redirects needs to be loaded
+                    if(vm.redirectUrls.length === 0 && vm.pagination.totalPages > 1) {
+
+                        // if we are not on the first page - get records from the previous
+                        if(vm.pagination.pageIndex > 0 ) {
+                            vm.pagination.pageIndex = vm.pagination.pageIndex - 1;
+                            vm.pagination.pageNumber = vm.pagination.pageNumber - 1;
+                        }
+
+                        search();
+                    }
+
+                }, function(error) {
+                    notificationsService.error("Redirect Url Error!", "Redirect Url was not deleted");
+                });
+            }
+        }
+
+        function disableUrlTracker() {
+            var toggleConfirm = confirm("Are you sure you want to disable the URL tracker?");
+            if (toggleConfirm) {
+
+                redirectUrlsResource.toggleUrlTracker(true).then(function() {
+                    activate();
+                    notificationsService.success("URL Tracker has now been disabled");
+                }, function(error) {
+                    notificationsService.warning("Error disabling the URL Tracker, more information can be found in your log file.");
+                });
+
+            }
+        }
+
+        function enableUrlTracker() {
+            redirectUrlsResource.toggleUrlTracker(false).then(function() {
+                activate();
+                notificationsService.success("URL Tracker has now been enabled");
+            }, function(error) {
+                notificationsService.warning("Error enabling the URL Tracker, more information can be found in your log file.");
+            });
+        }
+
+        var filterDebounced = _.debounce(function(e) {
+
+            $scope.$apply(function() {
+
+                //a canceler exists, so perform the cancelation operation and reset
+                if (canceler) {
+                    canceler.resolve();
+                    canceler = $q.defer();
+                } else {
+                    canceler = $q.defer();
+                }
+
+                vm.search();
+
+            });
+
+        }, 200);
+
+        function filter() {
+            vm.dashboard.loading = true;
+            filterDebounced();
+        }
+
+        activate();
+
+    }
+
+    angular.module("umbraco").controller("Umbraco.Dashboard.RedirectUrlsController", RedirectUrlsController);
+})();
+
+function XmlDataIntegrityReportController($scope, umbRequestHelper, $log, $http) {
 
     function check(item) {
         var action = item.check;
@@ -5548,12 +5996,12 @@ function xmlDataIntegrityReportController($scope, umbRequestHelper, $log, $http,
                 "or when editors are editing content.")) {
                 item.fixing = true;
                 umbRequestHelper.resourcePromise(
-                    $http.post(umbRequestHelper.getApiUrl("xmlDataIntegrityBaseUrl", action)),
-                    'Failed to retrieve data integrity status')
-                .then(function (result) {
-                    item.fixing = false;
-                    item.invalid = result === "false";
-                });
+                        $http.post(umbRequestHelper.getApiUrl("xmlDataIntegrityBaseUrl", action)),
+                        'Failed to retrieve data integrity status')
+                    .then(function(result) {
+                        item.fixing = false;
+                        item.invalid = result === "false";
+                    });
             }
         }
     }
@@ -5585,9 +6033,9 @@ function xmlDataIntegrityReportController($scope, umbRequestHelper, $log, $http,
     for (var i in $scope.items) {
         check($scope.items[i]);
     }
-
 }
-angular.module("umbraco").controller("Umbraco.Dashboard.XmlDataIntegrityReportController", xmlDataIntegrityReportController);
+
+angular.module("umbraco").controller("Umbraco.Dashboard.XmlDataIntegrityReportController", XmlDataIntegrityReportController);
 /**
  * @ngdoc controller
  * @name Umbraco.Editors.DataType.CreateController
@@ -6754,8 +7202,12 @@ function MediaDeleteController($scope, mediaResource, treeService, navigationSer
 
     $scope.performDelete = function() {
 
+        // stop from firing again on double-click
+        if ($scope.busy) { return false; }
+
         //mark it for deletion (used in the UI)
         $scope.currentNode.loading = true;
+        $scope.busy = true;
 
         mediaResource.deleteById($scope.currentNode.id).then(function () {
             $scope.currentNode.loading = false;
@@ -6789,6 +7241,7 @@ function MediaDeleteController($scope, mediaResource, treeService, navigationSer
         }, function (err) {
 
             $scope.currentNode.loading = false;
+            $scope.busy = false;
 
             //check if response is ysod
             if (err.status && err.status >= 500) {
@@ -6970,18 +7423,33 @@ angular.module("umbraco")
  * @description
  * The controller for deleting media
  */
-function MediaEmptyRecycleBinController($scope, mediaResource, treeService, navigationService) {
+function MediaEmptyRecycleBinController($scope, mediaResource, treeService, navigationService, notificationsService, $route) {
+
+    $scope.busy = false;
 
     $scope.performDelete = function() {
 
         //(used in the UI)
+        $scope.busy = true;
         $scope.currentNode.loading = true;
 
-        mediaResource.emptyRecycleBin($scope.currentNode.id).then(function () {
+        mediaResource.emptyRecycleBin($scope.currentNode.id).then(function (result) {
+
+            $scope.busy = false;
             $scope.currentNode.loading = false;
-            //TODO: Need to sync tree, etc...
+
+            //show any notifications
+            if (angular.isArray(result.notifications)) {
+                for (var i = 0; i < result.notifications.length; i++) {
+                    notificationsService.showNotification(result.notifications[i]);
+                }
+            }
+
             treeService.removeChildNodes($scope.currentNode);
             navigationService.hideMenu();
+
+            //reload the current view
+            $route.reload();
         });
 
     };
@@ -8439,6 +8907,601 @@ angular.module("umbraco")
 
     });
 
+/**
+ * @ngdoc controller
+ * @name Umbraco.Editors.Packages.DeleteController
+ * @function
+ *
+ * @description
+ * The controller for deleting content
+ */
+function PackageDeleteController($scope, packageResource, treeService, navigationService) {
+
+    $scope.performDelete = function() {
+
+        //mark it for deletion (used in the UI)
+        $scope.currentNode.loading = true;
+        packageResource.deleteCreatedPackage($scope.currentNode.id).then(function () {
+            $scope.currentNode.loading = false;
+             
+            //get the root node before we remove it
+            var rootNode = treeService.getTreeRoot($scope.currentNode);
+
+            treeService.removeNode($scope.currentNode);
+            navigationService.hideMenu();
+        });
+
+    };
+
+    $scope.cancel = function() {
+        navigationService.hideDialog();
+    };
+}
+
+angular.module("umbraco").controller("Umbraco.Editors.Packages.DeleteController", PackageDeleteController);
+
+(function () {
+    "use strict";
+
+    function PackagesOverviewController($scope, $route, $location, navigationService, $timeout, localStorageService) {
+
+        //Hack!
+        // if there is a cookie value for packageInstallUri then we need to redirect there,
+        // the issue is that we still have webforms and we cannot go to a hash location and then window.reload
+        // because it will double load it.
+        // we will refresh and then navigate there.
+
+        var installPackageUri = localStorageService.get("packageInstallUri");
+        if (installPackageUri) {            
+            localStorageService.remove("packageInstallUri");                       
+        }
+        if (installPackageUri && installPackageUri !== "installed") {
+            //navigate to the custom installer screen, if it is just "installed", then we'll 
+            //show the installed view
+            $location.path(installPackageUri).search("");
+        }
+        else {
+            var vm = this;
+
+            vm.page = {};
+            vm.page.name = "Packages";
+            vm.page.navigation = [
+                {
+                    "name": "Packages",
+                    "icon": "icon-cloud",
+                    "view": "views/packager/views/repo.html",
+                    "active": !installPackageUri || installPackageUri === "navigation"
+                },
+                {
+                    "name": "Installed",
+                    "icon": "icon-box",
+                    "view": "views/packager/views/installed.html",
+                    "active": installPackageUri === "installed"
+                },
+                {
+                    "name": "Install local",
+                    "icon": "icon-add",
+                    "view": "views/packager/views/install-local.html",
+                    "active": installPackageUri === "local"
+                }
+            ];
+
+            $timeout(function () {
+                navigationService.syncTree({ tree: "packager", path: "-1" });
+            });
+        }
+
+    }
+
+    angular.module("umbraco").controller("Umbraco.Editors.Packages.OverviewController", PackagesOverviewController);
+
+})();
+
+(function () {
+    "use strict";
+
+    function PackagesInstallLocalController($scope, $route, $location, Upload, umbRequestHelper, packageResource, localStorageService, $timeout, $window, localizationService) {
+
+        var vm = this;
+        vm.state = "upload";
+
+        vm.localPackage = {};
+        vm.installPackage = installPackage;
+        vm.installState = {
+            status: "",
+            progress:0
+        };
+        vm.zipFile = {
+            uploadStatus: "idle",
+            uploadProgress: 0,
+            serverErrorMessage: null
+        };
+
+        $scope.handleFiles = function (files, event) {
+            if (files) {
+                for (var i = 0; i < files.length; i++) {
+                    upload(files[i]);
+                }
+            }
+        };
+
+        function upload(file) {
+
+            Upload.upload({
+                url: umbRequestHelper.getApiUrl("packageInstallApiBaseUrl", "UploadLocalPackage"),
+                fields: {},
+                file: file
+            }).progress(function (evt) {
+
+                // calculate progress in percentage
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total, 10);
+
+                // set percentage property on file
+                vm.zipFile.uploadProgress = progressPercentage;
+
+                // set uploading status on file
+                vm.zipFile.uploadStatus = "uploading";
+
+            }).success(function (data, status, headers, config) {
+
+                if (data.notifications && data.notifications.length > 0) {
+
+                    // set error status on file
+                    vm.zipFile.uploadStatus = "error";
+
+                    // Throw message back to user with the cause of the error
+                    vm.zipFile.serverErrorMessage = data.notifications[0].message;
+
+                } else {
+
+                    // set done status on file
+                    vm.zipFile.uploadStatus = "done";
+                    loadPackage();
+                    vm.localPackage = data;
+                }
+
+            }).error(function (evt, status, headers, config) {
+
+                // set status done
+                vm.zipFile.uploadStatus = "error";
+
+                // If file not found, server will return a 404 and display this message
+                if (status === 404) {
+                    vm.zipFile.serverErrorMessage = "File not found";
+                }
+                else if (status == 400) {
+                    //it's a validation error
+                    vm.zipFile.serverErrorMessage = evt.message;
+                }
+                else {
+                    //it's an unhandled error
+                    //if the service returns a detailed error
+                    if (evt.InnerException) {
+                        vm.zipFile.serverErrorMessage = evt.InnerException.ExceptionMessage;
+
+                        //Check if its the common "too large file" exception
+                        if (evt.InnerException.StackTrace && evt.InnerException.StackTrace.indexOf("ValidateRequestEntityLength") > 0) {
+                            vm.zipFile.serverErrorMessage = "File too large to upload";
+                        }
+
+                    } else if (evt.Message) {
+                        file.serverErrorMessage = evt.Message;
+                    }
+                }
+            });
+        }
+
+        function loadPackage() {
+            if (vm.zipFile.uploadStatus === "done") {
+                vm.state = "packageDetails";
+            }
+        }
+
+        function installPackage() {
+            vm.installState.status = localizationService.localize("packager_installStateImporting");
+            vm.installState.progress = "0";
+
+            packageResource
+                .import(vm.localPackage)                
+                .then(function(pack) {
+                        vm.installState.progress = "25";
+                        vm.installState.status = localizationService.localize("packager_installStateInstalling");
+                        vm.installState.progress = "50";
+                        return packageResource.installFiles(pack);
+                    },
+                    installError)
+                .then(function(pack) {
+                    vm.installState.status = localizationService.localize("packager_installStateRestarting");
+                        vm.installState.progress = "75";
+                        return packageResource.installData(pack);
+                    },
+                    installError)
+                .then(function(pack) {
+                    vm.installState.status = localizationService.localize("packager_installStateComplete");
+                        vm.installState.progress = "100";
+                        return packageResource.cleanUp(pack);
+                    },
+                    installError)
+                .then(function(result) {
+
+                        if (result.postInstallationPath) {
+                            //Put the redirect Uri in a cookie so we can use after reloading
+                            localStorageService.set("packageInstallUri", result.postInstallationPath);
+                        }
+                        else {
+                            //set to a constant value so it knows to just go to the installed view
+                            localStorageService.set("packageInstallUri", "installed");
+                        }
+
+                        //reload on next digest (after cookie)
+                        $timeout(function () {
+                            $window.location.reload(true);
+                        });
+
+                    },
+                    installError);
+        }
+        
+        function installError() {
+            //This will return a rejection meaning that the promise change above will stop
+            return $q.reject();
+        }
+    }
+
+    angular.module("umbraco").controller("Umbraco.Editors.Packages.InstallLocalController", PackagesInstallLocalController);
+
+})();
+
+(function () {
+    "use strict";
+
+    function PackagesInstalledController($scope, $route, $location, packageResource, $timeout, $window, localStorageService, localizationService) {
+
+        var vm = this;
+
+        vm.confirmUninstall = confirmUninstall;
+        vm.uninstallPackage = uninstallPackage;
+        vm.state = "list";
+        vm.installState = {
+            status: ""
+        };
+        vm.package = {};
+
+        function init() {
+            packageResource.getInstalled()
+                .then(function (packs) {
+                    vm.installedPackages = packs;
+                });
+            vm.installState.status = "";
+            vm.state = "list";
+        }
+
+        function confirmUninstall(pck) {
+            vm.state = "packageDetails";
+            vm.package = pck;
+        }
+
+        function uninstallPackage(installedPackage) {
+            vm.installState.status = localizationService.localize("packager_installStateUninstalling");
+            vm.installState.progress = "0";
+
+            packageResource.uninstall(installedPackage.id)
+                .then(function () {
+
+                    if (installedPackage.files.length > 0) {
+                        vm.installState.status = localizationService.localize("packager_installStateComplete");
+                        vm.installState.progress = "100";
+
+                        //set this flag so that on refresh it shows the installed packages list
+                        localStorageService.set("packageInstallUri", "installed");
+                        
+                        //reload on next digest (after cookie)
+                        $timeout(function () {
+                            $window.location.reload(true);
+                        });
+                        
+                    }
+                    else {
+                        init();
+                    }
+                });
+        }
+
+        init();
+
+    }
+
+    angular.module("umbraco").controller("Umbraco.Editors.Packages.InstalledController", PackagesInstalledController);
+
+})();
+
+(function () {
+    "use strict";
+
+    function PackagesRepoController($scope, $route, $location, $timeout, ourPackageRepositoryResource, $q, packageResource, localStorageService, localizationService) {
+
+        var vm = this;
+
+        vm.packageViewState = "packageList";
+        vm.categories = [];
+        vm.loading = true;
+        vm.pagination = {
+            pageNumber: 1,
+            totalPages: 10,
+            pageSize: 24
+        };
+        vm.searchQuery = "";
+        vm.installState = {
+            status: "",
+            progress: 0,
+            type: "ok"
+        };
+        vm.selectCategory = selectCategory;
+        vm.showPackageDetails = showPackageDetails;
+        vm.setPackageViewState = setPackageViewState;
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        vm.goToPage = goToPage;
+        vm.installPackage = installPackage;
+        vm.downloadPackage = downloadPackage;
+        vm.openLightbox = openLightbox;
+        vm.closeLightbox = closeLightbox;
+        vm.search = search;
+
+        var currSort = "Latest";
+        //used to cancel any request in progress if another one needs to take it's place
+        var canceler = null;
+
+        function getActiveCategory() {
+            if (vm.searchQuery !== "") {
+                return "";
+            }
+            for (var i = 0; i < vm.categories.length; i++) {
+                if (vm.categories[i].active === true) {
+                    return vm.categories[i].name;
+                }
+            }
+            return "";
+        }
+
+        function init() {
+
+            vm.loading = true;
+
+            $q.all([
+                    ourPackageRepositoryResource.getCategories()
+                    .then(function(cats) {
+                        vm.categories = cats;
+                    }),
+                    ourPackageRepositoryResource.getPopular(8)
+                    .then(function(pack) {
+                        vm.popular = pack.packages;
+                    }),
+                    ourPackageRepositoryResource.search(vm.pagination.pageNumber - 1, vm.pagination.pageSize, currSort)
+                    .then(function(pack) {
+                        vm.packages = pack.packages;
+                        vm.pagination.totalPages = Math.ceil(pack.total / vm.pagination.pageSize);
+                    })
+                ])
+                .then(function() {
+                    vm.loading = false;
+                });
+
+        }
+
+        function selectCategory(selectedCategory, categories) {
+            var reset = false;
+            for (var i = 0; i < categories.length; i++) {
+                var category = categories[i];
+                if (category.name === selectedCategory.name && category.active === true) {
+                    //it's already selected, let's unselect to show all again
+                    reset = true;
+                }
+                category.active = false;
+            }
+
+            vm.loading = true;
+            vm.searchQuery = "";
+            var searchCategory = selectedCategory.name;
+            if (reset === true) {
+                searchCategory = "";
+            }
+
+            currSort = "Latest";
+
+            $q.all([
+                    ourPackageRepositoryResource.getPopular(8, searchCategory)
+                    .then(function(pack) {
+                        vm.popular = pack.packages;
+                    }),
+                    ourPackageRepositoryResource.search(vm.pagination.pageNumber - 1, vm.pagination.pageSize, currSort, searchCategory, vm.searchQuery)
+                    .then(function(pack) {
+                        vm.packages = pack.packages;
+                        vm.pagination.totalPages = Math.ceil(pack.total / vm.pagination.pageSize);
+                        vm.pagination.pageNumber = 1;
+                    })
+                ])
+                .then(function() {
+                    vm.loading = false;
+                    selectedCategory.active = reset === false;
+                });
+        }
+
+        function showPackageDetails(selectedPackage) {
+            ourPackageRepositoryResource.getDetails(selectedPackage.id)
+                .then(function (pack) {
+                    packageResource.validateInstalled(pack.name, pack.latestVersion)
+                        .then(function() {
+                            //ok, can install
+                            vm.package = pack;
+                            vm.package.isValid = true;
+                            vm.packageViewState = "packageDetails";
+                        }, function() {
+                            //nope, cannot install
+                            vm.package = pack;
+                            vm.package.isValid = false;
+                            vm.packageViewState = "packageDetails";
+                        })
+                });
+        }
+
+        function setPackageViewState(state) {
+            if(state) {
+                vm.packageViewState = state;
+            }
+        }
+
+        function nextPage(pageNumber) {
+            ourPackageRepositoryResource.search(pageNumber - 1, vm.pagination.pageSize, currSort, getActiveCategory(), vm.searchQuery)
+                .then(function (pack) {
+                    vm.packages = pack.packages;
+                    vm.pagination.totalPages = Math.ceil(pack.total / vm.pagination.pageSize);
+                });
+        }
+
+        function prevPage(pageNumber) {
+            ourPackageRepositoryResource.search(pageNumber - 1, vm.pagination.pageSize, currSort, getActiveCategory(), vm.searchQuery)
+                .then(function (pack) {
+                    vm.packages = pack.packages;
+                    vm.pagination.totalPages = Math.ceil(pack.total / vm.pagination.pageSize);
+                });
+        }
+
+        function goToPage(pageNumber) {
+            ourPackageRepositoryResource.search(pageNumber - 1, vm.pagination.pageSize, currSort, getActiveCategory(), vm.searchQuery)
+                .then(function (pack) {
+                    vm.packages = pack.packages;
+                    vm.pagination.totalPages = Math.ceil(pack.total / vm.pagination.pageSize);
+                });
+        }
+
+        function downloadPackage(selectedPackage) {
+            vm.loading = true;
+
+            packageResource
+                .fetch(selectedPackage.id)
+                .then(function(pack) {
+                        vm.packageViewState = "packageInstall";
+                        vm.loading = false;
+                        vm.localPackage = pack;
+                        vm.localPackage.allowed = true;
+                }, function (evt, status, headers, config) {
+                    
+                    if (status == 400) {
+                        //it's a validation error
+                        vm.installState.type = "error";
+                        vm.zipFile.serverErrorMessage = evt.message;
+                    }
+                });
+        }
+
+        function error(e, args) {
+            //This will return a rejection meaning that the promise change above will stop
+            return $q.reject();
+        }
+
+        function installPackage(selectedPackage) {
+
+            vm.installState.status = localizationService.localize("packager_installStateImporting");
+            vm.installState.progress = "0";
+
+            packageResource
+                .import(selectedPackage)
+                .then(function(pack) {
+                        vm.installState.status = localizationService.localize("packager_installStateInstalling");
+                        vm.installState.progress = "33";
+                        return packageResource.installFiles(pack);
+                    },
+                    error)
+                .then(function(pack) {
+                        vm.installState.status = localizationService.localize("packager_installStateRestarting");
+                        vm.installState.progress = "66";
+                        return packageResource.installData(pack);
+                    },
+                    error)
+                .then(function(pack) {
+                        vm.installState.status = localizationService.localize("packager_installStateComplete");
+                        vm.installState.progress = "100";
+                        return packageResource.cleanUp(pack);
+                    },
+                    error)
+                .then(function(result) {
+
+                        if (result.postInstallationPath) {
+                            //Put the redirect Uri in a cookie so we can use after reloading
+                            localStorageService.set("packageInstallUri", result.postInstallationPath);
+                        }
+
+                        //reload on next digest (after cookie)
+                        $timeout(function() {
+                            window.location.reload(true);
+                        });
+
+                    },
+                    error);
+        }
+
+        function openLightbox(itemIndex, items) {
+            vm.lightbox = {
+                show: true,
+                items: items,
+                activeIndex: itemIndex
+            };
+        }
+
+        function closeLightbox() {
+            vm.lightbox.show = false;
+            vm.lightbox = null;
+        }
+
+
+        var searchDebounced = _.debounce(function(e) {
+
+            $scope.$apply(function () {
+
+                //a canceler exists, so perform the cancelation operation and reset
+                if (canceler) {
+                    canceler.resolve();
+                    canceler = $q.defer();
+                }
+                else {
+                    canceler = $q.defer();
+                }
+
+                currSort = vm.searchQuery ? "Default" : "Latest";
+
+                ourPackageRepositoryResource.search(vm.pagination.pageNumber - 1,
+                        vm.pagination.pageSize,
+                        currSort,
+                        "",
+                        vm.searchQuery,
+                        canceler)
+                    .then(function(pack) {
+                        vm.packages = pack.packages;
+                        vm.pagination.totalPages = Math.ceil(pack.total / vm.pagination.pageSize);
+                        vm.pagination.pageNumber = 1;
+                        vm.loading = false;
+                        //set back to null so it can be re-created
+                        canceler = null;
+                    });
+
+            });
+
+        }, 200);
+
+        function search(searchQuery) {
+            vm.loading = true;
+            searchDebounced();
+        }
+
+        init();
+
+    }
+
+    angular.module("umbraco").controller("Umbraco.Editors.Packages.RepoController", PackagesRepoController);
+
+})();
+
 function imageFilePickerController($scope) {
 
     $scope.pick = function() {
@@ -9409,7 +10472,7 @@ function contentPickerController($scope, dialogService, entityResource, editorSt
 
 angular.module('umbraco').controller("Umbraco.PropertyEditors.ContentPickerController", contentPickerController);
 
-function dateTimePickerController($scope, notificationsService, assetsService, angularHelper, userService, $element) {
+function dateTimePickerController($scope, notificationsService, assetsService, angularHelper, userService, $element, dateHelper) {
 
     //setup the default config
     var config = {
@@ -9433,6 +10496,8 @@ function dateTimePickerController($scope, notificationsService, assetsService, a
         $scope.model.config.format = $scope.model.config.pickTime ? "YYYY-MM-DD HH:mm:ss" : "YYYY-MM-DD";
     }
 
+
+
     $scope.hasDatetimePickerValue = $scope.model.value ? true : false;
     $scope.datetimePickerValue = null;
 
@@ -9454,18 +10519,44 @@ function dateTimePickerController($scope, notificationsService, assetsService, a
             if (e.date && e.date.isValid()) {
                 $scope.datePickerForm.datepicker.$setValidity("pickerError", true);
                 $scope.hasDatetimePickerValue = true;
-                $scope.datetimePickerValue = e.date.format($scope.model.config.format);
-                $scope.model.value = $scope.datetimePickerValue;
+                $scope.datetimePickerValue = e.date.format($scope.model.config.format);                
             }
             else {
                 $scope.hasDatetimePickerValue = false;
                 $scope.datetimePickerValue = null;
             }
-            
+
+            setModelValue();
+
             if (!$scope.model.config.pickTime) {
                 $element.find("div:first").datetimepicker("hide", 0);
             }
         });
+    }
+
+    //sets the scope model value accordingly - this is the value to be sent up to the server and depends on 
+    // if the picker is configured to offset time. We always format the date/time in a specific format for sending
+    // to the server, this is different from the format used to display the date/time.
+    function setModelValue() {
+        if ($scope.hasDatetimePickerValue) {
+            var elementData = $element.find("div:first").data().DateTimePicker;
+            if ($scope.model.config.pickTime) {
+                //check if we are supposed to offset the time
+                if ($scope.model.value && $scope.model.config.offsetTime === "1" && Umbraco.Sys.ServerVariables.application.serverTimeOffset !== undefined) {
+                    $scope.model.value = dateHelper.convertToServerStringTime(elementData.getDate(), Umbraco.Sys.ServerVariables.application.serverTimeOffset);
+                    $scope.serverTime = dateHelper.convertToServerStringTime(elementData.getDate(), Umbraco.Sys.ServerVariables.application.serverTimeOffset, "YYYY-MM-DD HH:mm:ss Z");
+                }
+                else {
+                    $scope.model.value = elementData.getDate().format("YYYY-MM-DD HH:mm:ss");
+                }
+            }
+            else {
+                $scope.model.value = elementData.getDate().format("YYYY-MM-DD");
+            }
+        }
+        else {
+            $scope.model.value = null;
+        }
     }
 
     var picker = null;
@@ -9475,6 +10566,21 @@ function dateTimePickerController($scope, notificationsService, assetsService, a
         $scope.datetimePickerValue = null;
         $scope.model.value = null;
         $scope.datePickerForm.datepicker.$setValidity("pickerError", true);
+    }
+
+    $scope.serverTime = null;
+    $scope.serverTimeNeedsOffsetting = false;
+    if (Umbraco.Sys.ServerVariables.application.serverTimeOffset !== undefined) {
+        // Will return something like 120
+        var serverOffset = Umbraco.Sys.ServerVariables.application.serverTimeOffset;
+
+        // Will return something like -120
+        var localOffset = new Date().getTimezoneOffset();
+
+        // If these aren't equal then offsetting is needed
+        // note the minus in front of serverOffset needed 
+        // because C# and javascript return the inverse offset
+        $scope.serverTimeNeedsOffsetting = (-serverOffset !== localOffset);
     }
 
     //get the current user to see if we can localize this picker
@@ -9508,8 +10614,17 @@ function dateTimePickerController($scope, notificationsService, assetsService, a
 			        });
 
 			    if ($scope.hasDatetimePickerValue) {
-			        //assign value to plugin/picker
-			        var dateVal = $scope.model.value ? moment($scope.model.value, "YYYY-MM-DD HH:mm:ss") : moment();
+			        var dateVal;
+			        //check if we are supposed to offset the time
+			        if ($scope.model.value && $scope.model.config.offsetTime === "1" && $scope.serverTimeNeedsOffsetting) {
+			            //get the local time offset from the server
+			            dateVal = dateHelper.convertToLocalMomentTime($scope.model.value, Umbraco.Sys.ServerVariables.application.serverTimeOffset);
+			            $scope.serverTime = dateHelper.convertToServerStringTime(dateVal, Umbraco.Sys.ServerVariables.application.serverTimeOffset, "YYYY-MM-DD HH:mm:ss Z");
+			        }
+			        else {
+                        //create a normal moment , no offset required
+			            var dateVal = $scope.model.value ? moment($scope.model.value, "YYYY-MM-DD HH:mm:ss") : moment();
+			        }
 
 			        element.datetimepicker("setValue", dateVal);
 			        $scope.datetimePickerValue = dateVal.format($scope.model.config.format);
@@ -9528,18 +10643,7 @@ function dateTimePickerController($scope, notificationsService, assetsService, a
 
 
 			    var unsubscribe = $scope.$on("formSubmitting", function (ev, args) {
-			        if ($scope.hasDatetimePickerValue) {
-			            var elementData = $element.find("div:first").data().DateTimePicker;
-			            if ($scope.model.config.pickTime) {
-			                $scope.model.value = elementData.getDate().format("YYYY-MM-DD HH:mm:ss");
-			            }
-			            else {
-			                $scope.model.value = elementData.getDate().format("YYYY-MM-DD");
-			            }
-			        }
-			        else {
-			            $scope.model.value = null;
-			        }
+			        setModelValue();
 			    });
 			    //unbind doc click event!
 			    $scope.$on('$destroy', function () {
@@ -9553,17 +10657,7 @@ function dateTimePickerController($scope, notificationsService, assetsService, a
     });
 
     var unsubscribe = $scope.$on("formSubmitting", function (ev, args) {
-        if ($scope.hasDatetimePickerValue) {
-            if ($scope.model.config.pickTime) {
-                $scope.model.value = $element.find("div:first").data().DateTimePicker.getDate().format("YYYY-MM-DD HH:mm:ss");
-            }
-            else {
-                $scope.model.value = $element.find("div:first").data().DateTimePicker.getDate().format("YYYY-MM-DD");
-            }
-        }
-        else {
-            $scope.model.value = null;
-        }
+        setModelValue();
     });
 
     //unbind doc click event!
@@ -9761,7 +10855,10 @@ function fileUploadController($scope, $element, $compile, imageHelper, fileManag
                         "GetBigThumbnail",
                         [{ originalImagePath: file.file }]);
 
+            var extension = file.file.substring(file.file.lastIndexOf(".") + 1, file.file.length);
+
             file.thumbnail = thumbnailUrl;
+            file.extension = extension.toLowerCase();
         });
 
         $scope.clearFiles = false;
@@ -12144,281 +13241,297 @@ angular.module("umbraco").controller("Umbraco.PrevalueEditors.IncludePropertiesL
 
 })();
 
-(function() {
-    "use strict";
+(function () {
+   "use strict";
 
-    function ListViewListLayoutController($scope, listViewHelper, $location, mediaHelper) {
+   function ListViewListLayoutController($scope, listViewHelper, $location, mediaHelper) {
 
-        var vm = this;
+      var vm = this;
 
-        vm.nodeId = $scope.contentId;
+      vm.nodeId = $scope.contentId;
         //we pass in a blacklist by adding ! to the file extensions, allowing everything EXCEPT for disallowedUploadFiles
         vm.acceptedFileTypes = !mediaHelper.formatFileTypes(Umbraco.Sys.ServerVariables.umbracoSettings.disallowedUploadFiles);
-        vm.maxFileSize = Umbraco.Sys.ServerVariables.umbracoSettings.maxFileSize + "KB";
-        vm.activeDrag = false;
-        vm.isRecycleBin = $scope.contentId === '-21' || $scope.contentId === '-20';
+      vm.maxFileSize = Umbraco.Sys.ServerVariables.umbracoSettings.maxFileSize + "KB";
+      vm.activeDrag = false;
+      vm.isRecycleBin = $scope.contentId === '-21' || $scope.contentId === '-20';
 
-        vm.selectItem = selectItem;
-        vm.clickItem = clickItem;
-        vm.selectAll = selectAll;
-        vm.isSelectedAll = isSelectedAll;
-        vm.isSortDirection = isSortDirection;
-        vm.sort = sort;
-        vm.dragEnter = dragEnter;
-        vm.dragLeave = dragLeave;
-  		vm.onFilesQueue = onFilesQueue;
-        vm.onUploadComplete = onUploadComplete;
+      vm.selectItem = selectItem;
+      vm.clickItem = clickItem;
+      vm.selectAll = selectAll;
+      vm.isSelectedAll = isSelectedAll;
+      vm.isSortDirection = isSortDirection;
+      vm.sort = sort;
+      vm.dragEnter = dragEnter;
+      vm.dragLeave = dragLeave;
+      vm.onFilesQueue = onFilesQueue;
+      vm.onUploadComplete = onUploadComplete;
 
-        function selectAll($event) {
-            listViewHelper.selectAllItems($scope.items, $scope.selection, $event);
-        }
+      function selectAll($event) {
+         listViewHelper.selectAllItems($scope.items, $scope.selection, $event);
+         }
 
-        function isSelectedAll() {
-            return listViewHelper.isSelectedAll($scope.items, $scope.selection);
-        }
+      function isSelectedAll() {
+         return listViewHelper.isSelectedAll($scope.items, $scope.selection);
+         }
 
-        function selectItem(selectedItem, $index, $event) {
-            listViewHelper.selectHandler(selectedItem, $index, $scope.items, $scope.selection, $event);
-        }
+      function selectItem(selectedItem, $index, $event) {
+         listViewHelper.selectHandler(selectedItem, $index, $scope.items, $scope.selection, $event);
+         }
 
-        function clickItem(item) {
-            $location.path($scope.entityType + '/' + $scope.entityType + '/edit/' + item.id);
-        }
+      function clickItem(item) {
+         $location.path($scope.entityType + '/' +$scope.entityType + '/edit/' +item.id);
+         }
 
-        function isSortDirection(col, direction) {
-            return listViewHelper.setSortingDirection(col, direction, $scope.options);
-        }
+      function isSortDirection(col, direction) {
+         return listViewHelper.setSortingDirection(col, direction, $scope.options);
+         }
 
-        function sort(field, allow) {
-            if (allow) {
-                listViewHelper.setSorting(field, allow, $scope.options);
-                $scope.getContent($scope.contentId);
+      function sort(field, allow, isSystem) {
+         if (allow) {
+            $scope.options.orderBySystemField = isSystem;
+            listViewHelper.setSorting(field, allow, $scope.options);
+            $scope.getContent($scope.contentId);
             }
-        }
-
-        // Dropzone upload functions
-        function dragEnter(el, event) {
-           vm.activeDrag = true;
-        }
-
-        function dragLeave(el, event) {
-           vm.activeDrag = false;
-        }
-
-  		function onFilesQueue() {
-  			vm.activeDrag = false;
-  		}
-
-        function onUploadComplete() {
-           $scope.getContent($scope.contentId);
-        }
-
-    }
-
-    angular.module("umbraco").controller("Umbraco.PropertyEditors.ListView.ListLayoutController", ListViewListLayoutController);
-
-})();
-
-function listViewController($rootScope, $scope, $routeParams, $injector, $cookieStore, notificationsService, iconHelper, dialogService, editorState, localizationService, $location, appState, $timeout, $q, mediaResource, listViewHelper, userService) {
-
-    //this is a quick check to see if we're in create mode, if so just exit - we cannot show children for content
-    // that isn't created yet, if we continue this will use the parent id in the route params which isn't what
-    // we want. NOTE: This is just a safety check since when we scaffold an empty model on the server we remove
-    // the list view tab entirely when it's new.
-    if ($routeParams.create) {
-        $scope.isNew = true;
-        return;
-    }
-
-    //Now we need to check if this is for media, members or content because that will depend on the resources we use
-    var contentResource, getContentTypesCallback, getListResultsCallback, deleteItemCallback, getIdCallback, createEditUrlCallback;
-
-    //check the config for the entity type, or the current section name (since the config is only set in c#, not in pre-vals)
-    if (($scope.model.config.entityType && $scope.model.config.entityType === "member") || (appState.getSectionState("currentSection") === "member")) {
-        $scope.entityType = "member";
-        contentResource = $injector.get('memberResource');
-        getContentTypesCallback = $injector.get('memberTypeResource').getTypes;
-        getListResultsCallback = contentResource.getPagedResults;
-        deleteItemCallback = contentResource.deleteByKey;
-        getIdCallback = function(selected) {
-            var selectedKey = getItemKey(selected.id);
-            return selectedKey;
-        };
-        createEditUrlCallback = function(item) {
-            return "/" + $scope.entityType + "/" + $scope.entityType + "/edit/" + item.key + "?page=" + $scope.options.pageNumber + "&listName=" + $scope.contentId;
-        };
-    }
-    else {
-        //check the config for the entity type, or the current section name (since the config is only set in c#, not in pre-vals)
-        if (($scope.model.config.entityType && $scope.model.config.entityType === "media") || (appState.getSectionState("currentSection") === "media")) {
-            $scope.entityType = "media";
-            contentResource = $injector.get('mediaResource');
-            getContentTypesCallback = $injector.get('mediaTypeResource').getAllowedTypes;
-        }
-        else {
-            $scope.entityType = "content";
-            contentResource = $injector.get('contentResource');
-            getContentTypesCallback = $injector.get('contentTypeResource').getAllowedTypes;
-        }
-        getListResultsCallback = contentResource.getChildren;
-        deleteItemCallback = contentResource.deleteById;
-        getIdCallback = function(selected) {
-            return selected.id;
-        };
-        createEditUrlCallback = function(item) {
-            return "/" + $scope.entityType + "/" + $scope.entityType + "/edit/" + item.id + "?page=" + $scope.options.pageNumber;
-        };
-    }
-
-    $scope.pagination = [];
-    $scope.isNew = false;
-    $scope.actionInProgress = false;
-    $scope.selection = [];
-    $scope.folders = [];
-    $scope.listViewResultSet = {
-        totalPages: 0,
-        items: []
-    };
-    
-    $scope.currentNodePermissions = {}
-
-    //Just ensure we do have an editorState
-    if (editorState.current) {
-        //Fetch current node allowed actions for the current user
-        //This is the current node & not each individual child node in the list
-        var currentUserPermissions = editorState.current.allowedActions;
-
-        //Create a nicer model rather than the funky & hard to remember permissions strings
-        $scope.currentNodePermissions = {
-            "canCopy": _.contains(currentUserPermissions, 'O'), //Magic Char = O
-            "canCreate": _.contains(currentUserPermissions, 'C'), //Magic Char = C
-            "canDelete": _.contains(currentUserPermissions, 'D'), //Magic Char = D
-            "canMove": _.contains(currentUserPermissions, 'M'), //Magic Char = M                
-            "canPublish": _.contains(currentUserPermissions, 'U'), //Magic Char = U
-            "canUnpublish": _.contains(currentUserPermissions, 'U'), //Magic Char = Z (however UI says it can't be set, so if we can publish 'U' we can unpublish)
-        };
-    }
-
-    //when this is null, we don't check permissions
-    $scope.buttonPermissions = null;
-
-    //When we are dealing with 'content', we need to deal with permissions on child nodes.
-    // Currently there is no real good way to 
-    if ($scope.entityType === "content") {
-
-        var idsWithPermissions = null;
-
-        $scope.buttonPermissions = {
-            canCopy: true,
-            canCreate: true,
-            canDelete: true,
-            canMove: true,
-            canPublish: true,
-            canUnpublish: true
-        };
-
-        $scope.$watch(function() {
-            return $scope.selection.length;
-        }, function(newVal, oldVal) {
-
-            if ((idsWithPermissions == null && newVal > 0) || (idsWithPermissions != null)) {
-                
-                //get all of the selected ids
-                var ids = _.map($scope.selection, function(i) {
-                    return i.id.toString();
-                });
-
-                //remove the dictionary items that don't have matching ids
-                var filtered = {};
-                _.each(idsWithPermissions, function (value, key, list) {
-                    if (_.contains(ids, key)) {
-                        filtered[key] = value;
-                    }
-                });
-                idsWithPermissions = filtered;
-
-                //find all ids that we haven't looked up permissions for
-                var existingIds = _.keys(idsWithPermissions);
-                var missingLookup = _.map(_.difference(ids, existingIds), function (i) {
-                    return Number(i);
-                });
-
-                if (missingLookup.length > 0) {
-                    contentResource.getPermissions(missingLookup).then(function(p) {
-                        $scope.buttonPermissions = listViewHelper.getButtonPermissions(p, idsWithPermissions);
-                    });
-                }
-                else {
-                    $scope.buttonPermissions = listViewHelper.getButtonPermissions({}, idsWithPermissions);
-                }
             }
-        });
 
+               // Dropzone upload functions
+      function dragEnter(el, event) {
+         vm.activeDrag = true;
+   }
+
+      function dragLeave(el, event) {
+         vm.activeDrag = false;
+      }
+
+      function onFilesQueue() {
+         vm.activeDrag = false;
+         }
+
+      function onUploadComplete() { 
+         $scope.getContent($scope.contentId);
+   }
+
+   }
+
+angular.module("umbraco").controller("Umbraco.PropertyEditors.ListView.ListLayoutController", ListViewListLayoutController);
+
+}) ();
+
+function listViewController($rootScope, $scope, $routeParams, $injector, $cookieStore, notificationsService, iconHelper, dialogService, editorState, localizationService, $location, appState, $timeout, $q, mediaResource, listViewHelper, userService, navigationService, treeService) {
+
+   //this is a quick check to see if we're in create mode, if so just exit - we cannot show children for content
+   // that isn't created yet, if we continue this will use the parent id in the route params which isn't what
+   // we want. NOTE: This is just a safety check since when we scaffold an empty model on the server we remove
+   // the list view tab entirely when it's new.
+   if ($routeParams.create) {
+      $scope.isNew = true;
+      return;
+   }
+
+   //Now we need to check if this is for media, members or content because that will depend on the resources we use
+   var contentResource, getContentTypesCallback, getListResultsCallback, deleteItemCallback, getIdCallback, createEditUrlCallback;
+
+   //check the config for the entity type, or the current section name (since the config is only set in c#, not in pre-vals)
+   if (($scope.model.config.entityType && $scope.model.config.entityType === "member") || (appState.getSectionState("currentSection") === "member")) {
+      $scope.entityType = "member";
+      contentResource = $injector.get('memberResource');
+      getContentTypesCallback = $injector.get('memberTypeResource').getTypes;
+      getListResultsCallback = contentResource.getPagedResults;
+      deleteItemCallback = contentResource.deleteByKey;
+      getIdCallback = function (selected) {
+         var selectedKey = getItemKey(selected.id);
+         return selectedKey;
+      };
+      createEditUrlCallback = function (item) {
+         return "/" + $scope.entityType + "/" + $scope.entityType + "/edit/" + item.key + "?page=" + $scope.options.pageNumber + "&listName=" + $scope.contentId;
+      };
+   }
+   else {
+      //check the config for the entity type, or the current section name (since the config is only set in c#, not in pre-vals)
+      if (($scope.model.config.entityType && $scope.model.config.entityType === "media") || (appState.getSectionState("currentSection") === "media")) {
+         $scope.entityType = "media";
+         contentResource = $injector.get('mediaResource');
+         getContentTypesCallback = $injector.get('mediaTypeResource').getAllowedTypes;
+      }
+      else {
+         $scope.entityType = "content";
+         contentResource = $injector.get('contentResource');
+         getContentTypesCallback = $injector.get('contentTypeResource').getAllowedTypes;
+      }
+      getListResultsCallback = contentResource.getChildren;
+      deleteItemCallback = contentResource.deleteById;
+      getIdCallback = function (selected) {
+         return selected.id;
+      };
+      createEditUrlCallback = function (item) {
+         return "/" + $scope.entityType + "/" + $scope.entityType + "/edit/" + item.id + "?page=" + $scope.options.pageNumber;
+      };
+   }
+
+   $scope.pagination = [];
+   $scope.isNew = false;
+   $scope.actionInProgress = false;
+   $scope.selection = [];
+   $scope.folders = [];
+   $scope.listViewResultSet = {
+      totalPages: 0,
+      items: []
+   };
+
+   $scope.currentNodePermissions = {}
+
+   //Just ensure we do have an editorState
+   if (editorState.current) {
+      //Fetch current node allowed actions for the current user
+      //This is the current node & not each individual child node in the list
+      var currentUserPermissions = editorState.current.allowedActions;
+
+      //Create a nicer model rather than the funky & hard to remember permissions strings
+      $scope.currentNodePermissions = {
+         "canCopy": _.contains(currentUserPermissions, 'O'), //Magic Char = O
+         "canCreate": _.contains(currentUserPermissions, 'C'), //Magic Char = C
+         "canDelete": _.contains(currentUserPermissions, 'D'), //Magic Char = D
+         "canMove": _.contains(currentUserPermissions, 'M'), //Magic Char = M                
+         "canPublish": _.contains(currentUserPermissions, 'U'), //Magic Char = U
+         "canUnpublish": _.contains(currentUserPermissions, 'U'), //Magic Char = Z (however UI says it can't be set, so if we can publish 'U' we can unpublish)
+      };
+   }
+
+   //when this is null, we don't check permissions
+   $scope.buttonPermissions = null;
+
+   //When we are dealing with 'content', we need to deal with permissions on child nodes.
+   // Currently there is no real good way to 
+   if ($scope.entityType === "content") {
+
+      var idsWithPermissions = null;
+
+      $scope.buttonPermissions = {
+         canCopy: true,
+         canCreate: true,
+         canDelete: true,
+         canMove: true,
+         canPublish: true,
+         canUnpublish: true
+      };
+
+      $scope.$watch(function () {
+         return $scope.selection.length;
+      }, function (newVal, oldVal) {
+
+         if ((idsWithPermissions == null && newVal > 0) || (idsWithPermissions != null)) {
+
+            //get all of the selected ids
+            var ids = _.map($scope.selection, function (i) {
+               return i.id.toString();
+            });
+
+            //remove the dictionary items that don't have matching ids
+            var filtered = {};
+            _.each(idsWithPermissions, function (value, key, list) {
+               if (_.contains(ids, key)) {
+                  filtered[key] = value;
+               }
+            });
+            idsWithPermissions = filtered;
+
+            //find all ids that we haven't looked up permissions for
+            var existingIds = _.keys(idsWithPermissions);
+            var missingLookup = _.map(_.difference(ids, existingIds), function (i) {
+               return Number(i);
+            });
+
+            if (missingLookup.length > 0) {
+               contentResource.getPermissions(missingLookup).then(function (p) {
+                  $scope.buttonPermissions = listViewHelper.getButtonPermissions(p, idsWithPermissions);
+               });
+            }
+            else {
+               $scope.buttonPermissions = listViewHelper.getButtonPermissions({}, idsWithPermissions);
+            }
+         }
+      });
+
+   }
+
+   $scope.options = {
+      displayAtTabNumber: $scope.model.config.displayAtTabNumber ? $scope.model.config.displayAtTabNumber : 1,
+      pageSize: $scope.model.config.pageSize ? $scope.model.config.pageSize : 10,
+      pageNumber: ($routeParams.page && Number($routeParams.page) != NaN && Number($routeParams.page) > 0) ? $routeParams.page : 1,
+      filter: '',
+      orderBy: ($scope.model.config.orderBy ? $scope.model.config.orderBy : 'VersionDate').trim(),
+      orderDirection: $scope.model.config.orderDirection ? $scope.model.config.orderDirection.trim() : "desc",
+      orderBySystemField: true,
+      includeProperties: $scope.model.config.includeProperties ? $scope.model.config.includeProperties : [
+             { alias: 'updateDate', header: 'Last edited', isSystem: 1 },
+             { alias: 'updater', header: 'Last edited by', isSystem: 1 }
+      ],
+      layout: {
+         layouts: $scope.model.config.layouts,
+         activeLayout: listViewHelper.getLayout($routeParams.id, $scope.model.config.layouts)
+      },
+      allowBulkPublish: $scope.entityType === 'content' && $scope.model.config.bulkActionPermissions.allowBulkPublish,
+      allowBulkUnpublish: $scope.entityType === 'content' && $scope.model.config.bulkActionPermissions.allowBulkUnpublish,
+      allowBulkCopy: $scope.entityType === 'content' && $scope.model.config.bulkActionPermissions.allowBulkCopy,
+      allowBulkMove: $scope.model.config.bulkActionPermissions.allowBulkMove,
+      allowBulkDelete: $scope.model.config.bulkActionPermissions.allowBulkDelete
+   };
+
+    // Check if selected order by field is actually custom field
+    for (var j = 0; j < $scope.options.includeProperties.length; j++) {
+        var includedProperty = $scope.options.includeProperties[j];
+        if (includedProperty.alias.toLowerCase() === $scope.options.orderBy.toLowerCase()) {
+            $scope.options.orderBySystemField = includedProperty.isSystem === 1;
+            break;
+        }
     }
 
-    $scope.options = {
-        displayAtTabNumber: $scope.model.config.displayAtTabNumber ? $scope.model.config.displayAtTabNumber : 1,
-        pageSize: $scope.model.config.pageSize ? $scope.model.config.pageSize : 10,
-        pageNumber: ($routeParams.page && Number($routeParams.page) != NaN && Number($routeParams.page) > 0) ? $routeParams.page : 1,
-        filter: '',
-        orderBy: ($scope.model.config.orderBy ? $scope.model.config.orderBy : 'VersionDate').trim(),
-        orderDirection: $scope.model.config.orderDirection ? $scope.model.config.orderDirection.trim() : "desc",
-        includeProperties: $scope.model.config.includeProperties ? $scope.model.config.includeProperties : [
-            { alias: 'updateDate', header: 'Last edited', isSystem: 1 },
-            { alias: 'updater', header: 'Last edited by', isSystem: 1 }
-        ],
-        layout: {
-           layouts: $scope.model.config.layouts,
-           activeLayout: listViewHelper.getLayout($routeParams.id, $scope.model.config.layouts)
-        },
-        allowBulkPublish: $scope.entityType === 'content' && $scope.model.config.bulkActionPermissions.allowBulkPublish,
-        allowBulkUnpublish: $scope.entityType === 'content' && $scope.model.config.bulkActionPermissions.allowBulkUnpublish,
-        allowBulkCopy: $scope.entityType === 'content' && $scope.model.config.bulkActionPermissions.allowBulkCopy,
-        allowBulkMove: $scope.model.config.bulkActionPermissions.allowBulkMove,
-        allowBulkDelete: $scope.model.config.bulkActionPermissions.allowBulkDelete
-    };
+   //update all of the system includeProperties to enable sorting
+   _.each($scope.options.includeProperties, function (e, i) {
 
-    //update all of the system includeProperties to enable sorting
-    _.each($scope.options.includeProperties, function(e, i) {
+        //NOTE: special case for contentTypeAlias, it's a system property that cannot be sorted
+        // to do that, we'd need to update the base query for content to include the content type alias column
+        // which requires another join and would be slower. BUT We are doing this for members so not sure it makes a diff?
+        if (e.alias != "contentTypeAlias") {
+            e.allowSorting = true;
+        }
+
+        // Another special case for members, only fields on the base table (cmsMember) can be used for sorting
+        if (e.isSystem && $scope.entityType == "member") {
+            e.allowSorting = e.alias == 'username' || e.alias == 'email';
+        }
 
         if (e.isSystem) {
-
-            //NOTE: special case for contentTypeAlias, it's a system property that cannot be sorted
-            // to do that, we'd need to update the base query for content to include the content type alias column
-            // which requires another join and would be slower. BUT We are doing this for members so not sure it makes a diff?
-            if (e.alias != "contentTypeAlias") {
-                e.allowSorting = true;
-            }
-
             //localize the header
             var key = getLocalizedKey(e.alias);
             localizationService.localize(key).then(function (v) {
                 e.header = v;
             });
         }
-    });
+   });
 
-    $scope.selectLayout = function(selectedLayout) {
-        $scope.options.layout.activeLayout = listViewHelper.setLayout($routeParams.id, selectedLayout, $scope.model.config.layouts);
-    };
+   $scope.selectLayout = function (selectedLayout) {
+      $scope.options.layout.activeLayout = listViewHelper.setLayout($routeParams.id, selectedLayout, $scope.model.config.layouts);
+   };
 
     function showNotificationsAndReset(err, reload, successMsg) {
 
         //check if response is ysod
-        if(err.status && err.status >= 500) {
+        if (err.status && err.status >= 500) {
 
             // Open ysod overlay
             $scope.ysodOverlay = {
-                view : "ysod",
-                error : err,
-                show : true
+                view: "ysod",
+                error: err,
+                show: true
             };
         }
 
         $timeout(function() {
-            $scope.bulkStatus = "";
-            $scope.actionInProgress = false;
-        }, 500);
+                $scope.bulkStatus = "";
+                $scope.actionInProgress = false;
+            },
+            500);
 
         if (reload === true) {
             $scope.reloadView($scope.contentId);
@@ -12428,218 +13541,293 @@ function listViewController($rootScope, $scope, $routeParams, $injector, $cookie
             for (var i = 0; i < err.data.notifications.length; i++) {
                 notificationsService.showNotification(err.data.notifications[i]);
             }
-        }
-        else if (successMsg) {
-            notificationsService.success("Done", successMsg);
+        } else if (successMsg) {
+            localizationService.localize("bulk_done")
+                .then(function(v) {
+                    notificationsService.success(v, successMsg);
+                });
         }
     }
 
-    $scope.next = function(pageNumber) {
+    $scope.next = function (pageNumber) {
       $scope.options.pageNumber = pageNumber;
       $scope.reloadView($scope.contentId);
-    };
+   };
 
-    $scope.goToPage = function(pageNumber) {
+   $scope.goToPage = function (pageNumber) {
       $scope.options.pageNumber = pageNumber;
       $scope.reloadView($scope.contentId);
-    };
+   };
 
-    $scope.prev = function(pageNumber) {
+   $scope.prev = function (pageNumber) {
       $scope.options.pageNumber = pageNumber;
       $scope.reloadView($scope.contentId);
-    };
+   };
 
 
-    /*Loads the search results, based on parameters set in prev,next,sort and so on*/
-    /*Pagination is done by an array of objects, due angularJS's funky way of monitoring state
-    with simple values */
+   /*Loads the search results, based on parameters set in prev,next,sort and so on*/
+   /*Pagination is done by an array of objects, due angularJS's funky way of monitoring state
+   with simple values */
 
-    $scope.reloadView = function(id) {
+   $scope.reloadView = function (id) {
 
-        $scope.viewLoaded = false;
+      $scope.viewLoaded = false;
 
-        listViewHelper.clearSelection($scope.listViewResultSet.items, $scope.folders, $scope.selection);
+      listViewHelper.clearSelection($scope.listViewResultSet.items, $scope.folders, $scope.selection);
 
-        getListResultsCallback(id, $scope.options).then(function(data) {
+      getListResultsCallback(id, $scope.options).then(function (data) {
 
-            $scope.actionInProgress = false;
-            $scope.listViewResultSet = data;
-            
-            //update all values for display
-            if ($scope.listViewResultSet.items) {
-                _.each($scope.listViewResultSet.items, function(e, index) {
-                    setPropertyValues(e);
-                });
-            }
+         $scope.actionInProgress = false;
+         $scope.listViewResultSet = data;
 
-            if ($scope.entityType === 'media') {
+         //update all values for display
+         if ($scope.listViewResultSet.items) {
+            _.each($scope.listViewResultSet.items, function (e, index) {
+               setPropertyValues(e);
+            });
+         }
 
-                mediaResource.getChildFolders($scope.contentId)
-                    .then(function(folders) {
-                        $scope.folders = folders;
-                        $scope.viewLoaded = true;
+         if ($scope.entityType === 'media') {
+
+            mediaResource.getChildFolders($scope.contentId)
+                    .then(function (folders) {
+                       $scope.folders = folders;
+                       $scope.viewLoaded = true;
                     });
 
-            } else {
-                $scope.viewLoaded = true;
-            }
+         } else {
+            $scope.viewLoaded = true;
+         }
 
-            //NOTE: This might occur if we are requesting a higher page number than what is actually available, for example
-            // if you have more than one page and you delete all items on the last page. In this case, we need to reset to the last
-            // available page and then re-load again
-            if ($scope.options.pageNumber > $scope.listViewResultSet.totalPages) {
-                $scope.options.pageNumber = $scope.listViewResultSet.totalPages;
+         //NOTE: This might occur if we are requesting a higher page number than what is actually available, for example
+         // if you have more than one page and you delete all items on the last page. In this case, we need to reset to the last
+         // available page and then re-load again
+         if ($scope.options.pageNumber > $scope.listViewResultSet.totalPages) {
+            $scope.options.pageNumber = $scope.listViewResultSet.totalPages;
 
-                //reload!
-                $scope.reloadView(id);
-            }
+            //reload!
+            $scope.reloadView(id);
+         }
 
-        });
-    };
+      });
+   };
 
-    var searchListView = _.debounce(function(){
-        $scope.$apply(function() {
+   var searchListView = _.debounce(function () {
+      $scope.$apply(function () {
+         makeSearch();
+      });
+   }, 500);
+
+   $scope.forceSearch = function (ev) {
+      //13: enter
+      switch (ev.keyCode) {
+         case 13:
             makeSearch();
-        });
-    }, 500);
+            break;
+      }
+   };
 
-    $scope.forceSearch = function (ev) {
-        //13: enter
-        switch (ev.keyCode) {
-            case 13:
-                makeSearch();
-                break;
-        }
-    };
+   $scope.enterSearch = function () {
+      $scope.viewLoaded = false;
+      searchListView();
+   };
 
-    $scope.enterSearch = function() {
-        $scope.viewLoaded = false;
-        searchListView();
-    };
+   function makeSearch() {
+      if ($scope.options.filter !== null && $scope.options.filter !== undefined) {
+         $scope.options.pageNumber = 1;
+         //$scope.actionInProgress = true;
+         $scope.reloadView($scope.contentId);
+      }
+   }
 
-    function makeSearch() {
-        if ($scope.options.filter !== null && $scope.options.filter !== undefined) {
-            $scope.options.pageNumber = 1;
-            //$scope.actionInProgress = true;
-            $scope.reloadView($scope.contentId);
-        }
-    }
+   $scope.isAnythingSelected = function () {
+      if ($scope.selection.length === 0) {
+         return false;
+      } else {
+         return true;
+      }
+   };
 
-    $scope.isAnythingSelected = function() {
-       if ($scope.selection.length === 0) {
-          return false;
-       } else {
-          return true;
-       }
-    };
-
-    $scope.selectedItemsCount = function() {
+   $scope.selectedItemsCount = function () {
       return $scope.selection.length;
-    };
+   };
 
-    $scope.clearSelection = function() {
+   $scope.clearSelection = function () {
       listViewHelper.clearSelection($scope.listViewResultSet.items, $scope.folders, $scope.selection);
+   };
+
+   $scope.getIcon = function (entry) {
+      return iconHelper.convertFromLegacyIcon(entry.icon);
+   };
+
+   function serial(selected, fn, getStatusMsg, index) {
+      return fn(selected, index).then(function (content) {
+         index++;
+         $scope.bulkStatus = getStatusMsg(index, selected.length);
+         return index < selected.length ? serial(selected, fn, getStatusMsg, index) : content;
+      }, function (err) {
+         var reload = index > 0;
+         showNotificationsAndReset(err, reload);
+         return err;
+      });
+   }
+
+   function applySelected(fn, getStatusMsg, getSuccessMsg, confirmMsg) {
+      var selected = $scope.selection;
+      if (selected.length === 0)
+         return;
+      if (confirmMsg && !confirm(confirmMsg))
+         return;
+
+      $scope.actionInProgress = true;
+      $scope.bulkStatus = getStatusMsg(0, selected.length);
+
+      return serial(selected, fn, getStatusMsg, 0).then(function (result) {
+         // executes once the whole selection has been processed
+         // in case of an error (caught by serial), result will be the error
+         if (!(result.data && angular.isArray(result.data.notifications)))
+            showNotificationsAndReset(result, true, getSuccessMsg(selected.length));
+      });
+   }
+
+    $scope.delete = function() {
+        var confirmDeleteText = "";
+
+        localizationService.localize("defaultdialogs_confirmdelete")
+            .then(function(value) {
+                confirmDeleteText = value;
+
+                var attempt =
+                    applySelected(
+                        function(selected, index) { return deleteItemCallback(getIdCallback(selected[index])); },
+                        function(count, total) {
+                            var key = (total === 1 ? "bulk_deletedItemOfItem" : "bulk_deletedItemOfItems");
+                            return localizationService.localize(key, [count, total]);
+                        },
+                        function(total) {
+                            var key = (total === 1 ? "bulk_deletedItem" : "bulk_deletedItems");
+                            return localizationService.localize(key, [total]);
+                        },
+                        confirmDeleteText + "?");
+                if (attempt) {
+                    attempt.then(function() {
+                        //executes if all is successful, let's sync the tree
+                        var activeNode = appState.getTreeState("selectedNode");
+                        if (activeNode) {
+                            navigationService.reloadNode(activeNode);
+                        }
+                    });
+                }
+            });
     };
 
-    $scope.getIcon = function(entry) {
-        return iconHelper.convertFromLegacyIcon(entry.icon);
-    };
-
-    function serial(selected, fn, getStatusMsg, index) {
-        return fn(selected, index).then(function (content) {
-            index++;
-            $scope.bulkStatus = getStatusMsg(index, selected.length);
-            return index < selected.length ? serial(selected, fn, getStatusMsg, index) : content;
-        }, function (err) {
-            var reload = index > 0;
-            showNotificationsAndReset(err, reload);
-            return err;
-        });
-    }
-
-    function applySelected(fn, getStatusMsg, getSuccessMsg, confirmMsg) {
-        var selected = $scope.selection;
-        if (selected.length === 0)
-            return;
-        if (confirmMsg && !confirm(confirmMsg))
-            return;
-
-        $scope.actionInProgress = true;
-        $scope.bulkStatus = getStatusMsg(0, selected.length);
-
-        serial(selected, fn, getStatusMsg, 0).then(function (result) {
-            // executes once the whole selection has been processed
-            // in case of an error (caught by serial), result will be the error
-            if (!(result.data && angular.isArray(result.data.notifications)))
-                showNotificationsAndReset(result, true, getSuccessMsg(selected.length));
-        });
-    }
-
-    $scope.delete = function () {
+   $scope.publish = function () {
         applySelected(
-            function (selected, index) { return deleteItemCallback(getIdCallback(selected[index])); },
-            function (count, total) { return "Deleted " + count + " out of " + total + " item" + (total > 1 ? "s" : ""); },
-            function (total) { return "Deleted " + total + " item" + (total > 1 ? "s" : ""); },
-            "Sure you want to delete?");
-    };
-
-    $scope.publish = function () {
-        applySelected(
-            function (selected, index) { return contentResource.publishById(getIdCallback(selected[index])); },
-            function (count, total) { return "Published " + count + " out of " + total + " item" + (total > 1 ? "s" : ""); },
-            function (total) { return "Published " + total + " item" + (total > 1 ? "s" : ""); });
-    };
+                function (selected, index) { return contentResource.publishById(getIdCallback(selected[index])); },
+                function (count, total) {
+                    var key = (total === 1 ? "bulk_publishedItemOfItem" : "bulk_publishedItemOfItems");
+                    return localizationService.localize(key, [count, total]);
+                },
+                function (total) {
+                    var key = (total === 1 ? "bulk_publishedItem" : "bulk_publishedItems");
+                    return localizationService.localize(key, [total]);
+                });
+   };
 
     $scope.unpublish = function() {
         applySelected(
-            function (selected, index) { return contentResource.unPublish(getIdCallback(selected[index])); },
-            function (count, total) { return "Unpublished " + count + " out of " + total + " item" + (total > 1 ? "s" : ""); },
-            function (total) { return "Unpublished " + total + " item" + (total > 1 ? "s" : ""); });
+            function(selected, index) { return contentResource.unPublish(getIdCallback(selected[index])); },
+            function(count, total) {
+                var key = (total === 1 ? "bulk_unpublishedItemOfItem" : "bulk_unpublishedItemOfItems");
+                return localizationService.localize(key, [count, total]);
+            },
+            function(total) {
+                var key = (total === 1 ? "bulk_unpublishedItem" : "bulk_unpublishedItems");
+                return localizationService.localize(key, [total]);
+            });
     };
 
     $scope.move = function() {
-      $scope.moveDialog = {};
-      $scope.moveDialog.title = "Move";
-      $scope.moveDialog.section = $scope.entityType;
-      $scope.moveDialog.currentNode = $scope.contentId;
-      $scope.moveDialog.view = "move";
-      $scope.moveDialog.show = true;
+        $scope.moveDialog = {};
+        $scope.moveDialog.title = localizationService.localize("general_move");
+        $scope.moveDialog.section = $scope.entityType;
+        $scope.moveDialog.currentNode = $scope.contentId;
+        $scope.moveDialog.view = "move";
+        $scope.moveDialog.show = true;
 
-      $scope.moveDialog.submit = function(model) {
+        $scope.moveDialog.submit = function(model) {
 
-         if(model.target) {
-            performMove(model.target);
-         }
+            if (model.target) {
+                performMove(model.target);
+            }
 
-         $scope.moveDialog.show = false;
-         $scope.moveDialog = null;
-      };
+            $scope.moveDialog.show = false;
+            $scope.moveDialog = null;
+        };
 
-      $scope.moveDialog.close = function(oldModel) {
-         $scope.moveDialog.show = false;
-         $scope.moveDialog = null;
-      };
+        $scope.moveDialog.close = function(oldModel) {
+            $scope.moveDialog.show = false;
+            $scope.moveDialog = null;
+        };
 
     };
 
-    function performMove(target) {
 
-      applySelected(
-          function(selected, index) {return contentResource.move({parentId: target.id, id: getIdCallback(selected[index])}); },
-          function(count, total) {return "Moved " + count + " out of " + total + " item" + (total > 1 ? "s" : ""); },
-          function(total) {return "Moved " + total + " item" + (total > 1 ? "s" : ""); });
-    }
+   function performMove(target) {
 
-    $scope.copy = function() {
+       //NOTE: With the way this applySelected/serial works, I'm not sure there's a better way currently to return 
+       // a specific value from one of the methods, so we'll have to try this way. Even though the first method
+       // will fire once per every node moved, the destination path will be the same and we need to use that to sync.
+       var newPath = null;
+       applySelected(
+               function(selected, index) {
+                   return contentResource.move({ parentId: target.id, id: getIdCallback(selected[index]) })
+                       .then(function(path) {
+                           newPath = path;
+                           return path;
+                       });
+               },
+               function(count, total) {
+                   var key = (total === 1 ? "bulk_movedItemOfItem" : "bulk_movedItemOfItems");
+                   return localizationService.localize(key, [count, total]);
+               },
+               function(total) {
+                   var key = (total === 1 ? "bulk_movedItem" : "bulk_movedItems");
+                   return localizationService.localize(key, [total]);
+               })
+           .then(function() {
+               //executes if all is successful, let's sync the tree
+               if (newPath) {
+
+                   //we need to do a double sync here: first refresh the node where the content was moved,
+                   // then refresh the node where the content was moved from
+                   navigationService.syncTree({
+                           tree: target.nodeType,
+                           path: newPath,
+                           forceReload: true,
+                           activate: false
+                       })
+                       .then(function(args) {
+                           //get the currently edited node (if any)
+                           var activeNode = appState.getTreeState("selectedNode");
+                           if (activeNode) {
+                               navigationService.reloadNode(activeNode);
+                           }
+                       });
+               }
+           });
+   }
+
+   $scope.copy = function () {
       $scope.copyDialog = {};
-      $scope.copyDialog.title = "Copy";
+      $scope.copyDialog.title = localizationService.localize("general_copy");
       $scope.copyDialog.section = $scope.entityType;
       $scope.copyDialog.currentNode = $scope.contentId;
       $scope.copyDialog.view = "copy";
       $scope.copyDialog.show = true;
 
-      $scope.copyDialog.submit = function(model) {
-         if(model.target) {
+      $scope.copyDialog.submit = function (model) {
+         if (model.target) {
             performCopy(model.target, model.relateToOriginal);
          }
 
@@ -12647,184 +13835,245 @@ function listViewController($rootScope, $scope, $routeParams, $injector, $cookie
          $scope.copyDialog = null;
       };
 
-      $scope.copyDialog.close = function(oldModel) {
+      $scope.copyDialog.close = function (oldModel) {
          $scope.copyDialog.show = false;
          $scope.copyDialog = null;
       };
 
-    };
+   };
 
-    function performCopy(target, relateToOriginal) {
+   function performCopy(target, relateToOriginal) {
       applySelected(
-          function(selected, index) {return contentResource.copy({parentId: target.id, id: getIdCallback(selected[index]), relateToOriginal: relateToOriginal}); },
-          function(count, total) {return "Copied " + count + " out of " + total + " item" + (total > 1 ? "s" : ""); },
-          function(total) {return "Copied " + total + " item" + (total > 1 ? "s" : ""); });
-    }
+             function (selected, index) { return contentResource.copy({ parentId: target.id, id: getIdCallback(selected[index]), relateToOriginal: relateToOriginal }); },
+             function (count, total) {
+                 var key = (total === 1 ? "bulk_copiedItemOfItem" : "bulk_copiedItemOfItems");
+                 return localizationService.localize(key, [count, total]);
+             },
+             function (total) {
+                 var key = (total === 1 ? "bulk_copiedItem" : "bulk_copiedItems");
+                 return localizationService.localize(key, [total]);
+             });
+   }
 
-    function getCustomPropertyValue(alias, properties) {
-        var value = '';
-        var index = 0;
-        var foundAlias = false;
-        for (var i = 0; i < properties.length; i++) {
-            if (properties[i].alias == alias) {
-                foundAlias = true;
-                break;
-            }
-            index++;
-        }
+   function getCustomPropertyValue(alias, properties) {
+      var value = '';
+      var index = 0;
+      var foundAlias = false;
+      for (var i = 0; i < properties.length; i++) {
+         if (properties[i].alias == alias) {
+            foundAlias = true;
+            break;
+         }
+         index++;
+      }
 
-        if (foundAlias) {
-            value = properties[index].value;
-        }
+      if (foundAlias) {
+         value = properties[index].value;
+      }
 
-        return value;
-    }
+      return value;
+   }
 
-    /** This ensures that the correct value is set for each item in a row, we don't want to call a function during interpolation or ng-bind as performance is really bad that way */
-    function setPropertyValues(result) {
+   /** This ensures that the correct value is set for each item in a row, we don't want to call a function during interpolation or ng-bind as performance is really bad that way */
+   function setPropertyValues(result) {
 
-        //set the edit url
-        result.editPath = createEditUrlCallback(result);
+      //set the edit url
+      result.editPath = createEditUrlCallback(result);
 
-        _.each($scope.options.includeProperties, function (e, i) {
+      _.each($scope.options.includeProperties, function (e, i) {
 
-            var alias = e.alias;
+         var alias = e.alias;
 
-            // First try to pull the value directly from the alias (e.g. updatedBy)
-            var value = result[alias];
+         // First try to pull the value directly from the alias (e.g. updatedBy)
+         var value = result[alias];
 
-            // If this returns an object, look for the name property of that (e.g. owner.name)
-            if (value === Object(value)) {
-                value = value['name'];
-            }
+         // If this returns an object, look for the name property of that (e.g. owner.name)
+         if (value === Object(value)) {
+            value = value['name'];
+         }
 
-            // If we've got nothing yet, look at a user defined property
-            if (typeof value === 'undefined') {
-                value = getCustomPropertyValue(alias, result.properties);
-            }
+         // If we've got nothing yet, look at a user defined property
+         if (typeof value === 'undefined') {
+            value = getCustomPropertyValue(alias, result.properties);
+         }
 
-            // If we have a date, format it
-            if (isDate(value)) {
-                value = value.substring(0, value.length - 3);
-            }
+         // If we have a date, format it
+         if (isDate(value)) {
+            value = value.substring(0, value.length - 3);
+         }
 
-            // set what we've got on the result
-            result[alias] = value;
-        });
+         // set what we've got on the result
+         result[alias] = value;
+      });
 
 
-    }
+   }
 
-    function isDate(val) {
-        if (angular.isString(val)) {
-            return val.match(/^(\d{4})\-(\d{2})\-(\d{2})\ (\d{2})\:(\d{2})\:(\d{2})$/);
-        }
-        return false;
-    }
+   function isDate(val) {
+      if (angular.isString(val)) {
+         return val.match(/^(\d{4})\-(\d{2})\-(\d{2})\ (\d{2})\:(\d{2})\:(\d{2})$/);
+      }
+      return false;
+   }
 
-    function initView() {
-        //default to root id if the id is undefined
-        var id = $routeParams.id;
-        if(id === undefined){
-            id = -1;
-        }
+   function initView() {
+      //default to root id if the id is undefined
+      var id = $routeParams.id;
+      if (id === undefined) {
+         id = -1;
+      }
 
-        $scope.listViewAllowedTypes = getContentTypesCallback(id);
+      $scope.listViewAllowedTypes = getContentTypesCallback(id);
 
-        $scope.contentId = id;
-        $scope.isTrashed = id === "-20" || id === "-21";
+      $scope.contentId = id;
+      $scope.isTrashed = id === "-20" || id === "-21";
 
-        $scope.options.allowBulkPublish = $scope.options.allowBulkPublish && !$scope.isTrashed;
-        $scope.options.allowBulkUnpublish = $scope.options.allowBulkUnpublish && !$scope.isTrashed;
+      $scope.options.allowBulkPublish = $scope.options.allowBulkPublish && !$scope.isTrashed;
+      $scope.options.allowBulkUnpublish = $scope.options.allowBulkUnpublish && !$scope.isTrashed;
 
-        $scope.options.bulkActionsAllowed = $scope.options.allowBulkPublish ||
-            $scope.options.allowBulkUnpublish ||
-            $scope.options.allowBulkCopy ||
-            $scope.options.allowBulkMove ||
-            $scope.options.allowBulkDelete;
+      $scope.options.bulkActionsAllowed = $scope.options.allowBulkPublish ||
+             $scope.options.allowBulkUnpublish ||
+             $scope.options.allowBulkCopy ||
+             $scope.options.allowBulkMove ||
+             $scope.options.allowBulkDelete;
 
-        $scope.reloadView($scope.contentId);
-    }
+      $scope.reloadView($scope.contentId);
+   }
 
-    function getLocalizedKey(alias) {
+   function getLocalizedKey(alias) {
 
-        switch (alias) {
-            case "sortOrder":
-                return "general_sort";
-            case "updateDate":
-                return "content_updateDate";
-            case "updater":
-                return "content_updatedBy";
-            case "createDate":
-                return "content_createDate";
-            case "owner":
-                return "content_createBy";
-            case "published":
-                return "content_isPublished";
-            case "contentTypeAlias":
-                //TODO: Check for members
-                return $scope.entityType === "content" ? "content_documentType" : "content_mediatype";
-            case "email":
-                return "general_email";
-            case "username":
-                return "general_username";
-        }
-        return alias;
-    }
+      switch (alias) {
+         case "sortOrder":
+            return "general_sort";
+         case "updateDate":
+            return "content_updateDate";
+         case "updater":
+            return "content_updatedBy";
+         case "createDate":
+            return "content_createDate";
+         case "owner":
+            return "content_createBy";
+         case "published":
+            return "content_isPublished";
+         case "contentTypeAlias":
+            //TODO: Check for members
+            return $scope.entityType === "content" ? "content_documentType" : "content_mediatype";
+         case "email":
+            return "general_email";
+         case "username":
+            return "general_username";
+      }
+      return alias;
+   }
 
-    function getItemKey(itemId) {
-        for (var i = 0; i < $scope.listViewResultSet.items.length; i++) {
-            var item = $scope.listViewResultSet.items[i];
-            if (item.id === itemId) {
-                return item.key;
-            }
-        }
-    }
+   function getItemKey(itemId) {
+      for (var i = 0; i < $scope.listViewResultSet.items.length; i++) {
+         var item = $scope.listViewResultSet.items[i];
+         if (item.id === itemId) {
+            return item.key;
+         }
+      }
+   }
 
-    //GO!
-    initView();
+   //GO!
+   initView();
 }
 
 
 angular.module("umbraco").controller("Umbraco.PropertyEditors.ListViewController", listViewController);
 
-function sortByPreValsController($rootScope, $scope, localizationService) {
+function sortByPreValsController($rootScope, $scope, localizationService, editorState, listViewPrevalueHelper) {
+    //Get the prevalue from the correct place
+    function getPrevalues() {
+        if (editorState.current.preValues) {
+            return editorState.current.preValues;
+        }
+        else {
+            return listViewPrevalueHelper.getPrevalues();
+        }
+    }
 
-    $scope.sortByFields = [
-        { value: "SortOrder", key: "general_sort" },
-        { value: "Name", key: "general_name" },
-        { value: "VersionDate", key: "content_updateDate" },
-        { value: "Updater", key: "content_updatedBy" },
-        { value: "CreateDate", key: "content_createDate" },
-        { value: "Owner", key: "content_createBy" },
-        { value: "ContentTypeAlias", key: "content_documentType" },
-        { value: "Published", key: "content_isPublished" },
-        { value: "Email", key: "general_email" },
-        { value: "Username", key: "general_username" }
-    ];
-    
-    //now we'll localize these strings, for some reason the directive doesn't work inside of the select group with an ng-model declared
-    _.each($scope.sortByFields, function (e, i) {
-        localizationService.localize(e.key).then(function (v) {
-            e.name = v;
+    //Watch the prevalues
+    $scope.$watch(function () {
+            return _.findWhere(getPrevalues(), { key: "includeProperties" }).value;
+    }, function () {
+        populateFields();
+    }, true); //Use deep watching, otherwise we won't pick up header changes
 
-            switch (e.value) {
-                case "Updater":
-                    e.name += " (Content only)";
-                    break;
-                case "Published":
-                    e.name += " (Content only)";
-                    break;
-                case "Email":
-                    e.name += " (Members only)";
-                    break;
-                case "Username":
-                    e.name += " (Members only)";
-                    break;
+    function populateFields() {
+        // Helper to find a particular value from the list of sort by options
+        function findFromSortByFields(value) {
+            return _.find($scope.sortByFields, function (e) {
+                return e.value.toLowerCase() === value.toLowerCase();
+            });
+        }
+
+        // Get list of properties assigned as columns of the list view
+        var propsPreValue = _.findWhere(getPrevalues(), { key: "includeProperties" });
+
+        // Populate list of options for the default sort (all the columns plus then node name)
+        $scope.sortByFields = [];
+        $scope.sortByFields.push({ value: "name", name: "Name", isSystem: 1 });
+        if (propsPreValue != undefined) {
+            for (var i = 0; i < propsPreValue.value.length; i++) {
+                var value = propsPreValue.value[i];
+                $scope.sortByFields.push({
+                    value: value.alias,
+                    name: value.header,
+                    isSystem: value.isSystem
+                });
             }
-        });
-    });
+        }
 
+        // Localize the system fields, for some reason the directive doesn't work inside of the select group with an ng-model declared
+        var systemFields = [
+            { value: "SortOrder", key: "general_sort" },
+            { value: "Name", key: "general_name" },
+            { value: "VersionDate", key: "content_updateDate" },
+            { value: "Updater", key: "content_updatedBy" },
+            { value: "CreateDate", key: "content_createDate" },
+            { value: "Owner", key: "content_createBy" },
+            { value: "ContentTypeAlias", key: "content_documentType" },
+            { value: "Published", key: "content_isPublished" },
+            { value: "Email", key: "general_email" },
+            { value: "Username", key: "general_username" }
+        ];
+        _.each(systemFields, function (e) {
+            localizationService.localize(e.key).then(function (v) {
+
+                var sortByListValue = findFromSortByFields(e.value);
+                if (sortByListValue) {
+                    sortByListValue.name = v;
+                    switch (e.value) {
+                        case "Updater":
+                            e.name += " (Content only)";
+                            break;
+                        case "Published":
+                            e.name += " (Content only)";
+                            break;
+                        case "Email":
+                            e.name += " (Members only)";
+                            break;
+                        case "Username":
+                            e.name += " (Members only)";
+                            break;
+                    }
+                }
+            });
+        });
+
+        // Check existing model value is available in list and ensure a value is set
+        var existingValue = findFromSortByFields($scope.model.value);
+        if (existingValue) {
+            // Set the existing value
+            // The old implementation pre Umbraco 7.5 used PascalCase aliases, this uses camelCase, so this ensures that any previous value is set
+            $scope.model.value = existingValue.value;
+        }
+        else {
+            // Existing value not found, set to first value
+            $scope.model.value = $scope.sortByFields[0].value;
+        }
+    }
 }
 
 
@@ -13025,9 +14274,11 @@ function MarkdownEditorController($scope, $element, assetsService, dialogService
                     });
 
                     editor2.hooks.set("onPreviewRefresh", function () {
-                        angularHelper.getCurrentForm($scope).$setDirty();
-                        // We must manually update the model as there is no way to hook into the markdown editor events without editing that code.
-                        $scope.model.value = $("textarea", $element).val();
+                        // We must manually update the model as there is no way to hook into the markdown editor events without exstensive edits to the library.
+                        if ($scope.model.value !== $("textarea", $element).val()) {
+                            angularHelper.getCurrentForm($scope).$setDirty();
+                            $scope.model.value = $("textarea", $element).val();
+                        }
                     });
 
                 }, 200);
@@ -13048,6 +14299,7 @@ angular.module('umbraco').controller("Umbraco.PropertyEditors.MediaPickerControl
         //check the pre-values for multi-picker
         var multiPicker = $scope.model.config.multiPicker && $scope.model.config.multiPicker !== '0' ? true : false;
         var onlyImages = $scope.model.config.onlyImages && $scope.model.config.onlyImages !== '0' ? true : false;
+        var disableFolderSelect = $scope.model.config.disableFolderSelect && $scope.model.config.disableFolderSelect !== '0' ? true : false;
 
         if (!$scope.model.config.startNodeId) {
             userService.getCurrentUser().then(function (userData) {
@@ -13110,6 +14362,7 @@ angular.module('umbraco').controller("Umbraco.PropertyEditors.MediaPickerControl
                startNodeId: $scope.model.config.startNodeId,
                multiPicker: multiPicker,
                onlyImages: onlyImages,
+               disableFolderSelect: disableFolderSelect,
                show: true,
                submit: function(model) {
 
