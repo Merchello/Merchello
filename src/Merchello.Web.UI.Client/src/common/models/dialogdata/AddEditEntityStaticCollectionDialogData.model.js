@@ -6,7 +6,7 @@
  * @description
  *  A dialog data object for adding or editing Static Collection objects
  */
-function AddEditEntityStaticCollectionDialog() {
+var AddEditEntityStaticCollectionDialog = function () {
     var self = this;
     self.entityType = '';
     self.collectionKeys = [];
@@ -15,7 +15,9 @@ function AddEditEntityStaticCollectionDialog() {
 AddEditEntityStaticCollectionDialog.prototype = (function() {
 
     function exists(key) {
-        if (this.collectionKeys.length === 0) return false;
+        if (this.collectionKeys.length === 0) {
+            return false;
+        }
         var found = _.find(this.collectionKeys, function(k) {
             return k === key;
         });

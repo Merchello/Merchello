@@ -99,7 +99,9 @@
         /// </returns>
         protected static string GetShipmentRateQuoteCacheKey(IShipment shipment, IShippingGatewayMethod shippingGatewayMethod)
         {
-            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, shippingGatewayMethod.ShipMethod.Key, shipment.VersionKey);
+            var address = shipment.GetDestinationAddress();
+            var args = string.Format("{0}.{1}", address.Region.Replace(" ", string.Empty), address.CountryCode);
+            return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, shippingGatewayMethod.ShipMethod.Key, shipment.VersionKey, args);
         }
 
         /// <summary>

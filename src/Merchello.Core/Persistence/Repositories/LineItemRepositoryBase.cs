@@ -6,6 +6,7 @@
 
     using Models;
 
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.SqlSyntax;
@@ -33,7 +34,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        protected LineItemRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        protected LineItemRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {            
         }

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
+    using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Models.Rdbms;
 
     using Umbraco.Core.Persistence.Repositories;
@@ -11,7 +12,7 @@
     /// <summary>
     /// Defines the product variant repository
     /// </summary>
-    internal interface IProductVariantRepository : IRepositoryQueryable<Guid, IProductVariant> 
+    internal interface IProductVariantRepository : IRepositoryQueryable<Guid, IProductVariant>, IBulkOperationRepository<IProductVariant>
     {
         /// <summary>
         /// Returns <see cref="IProductVariant"/> given the product and the collection of attribute ids that defines the<see cref="IProductVariant"/>
@@ -44,6 +45,40 @@
         IEnumerable<IProductVariant> GetByProductKey(Guid productKey);
 
         /// <summary>
+        /// Gets the <see cref="ProductVariantCollection"/> for a given product.
+        /// </summary>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductVariantCollection"/>.
+        /// </returns>
+        ProductVariantCollection GetProductVariantCollection(Guid productKey);
+
+
+        /// <summary>
+        /// Gets the <see cref="DetachedContentCollection{IProductVariantDetachedContent}"/> for the collection.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DetachedContentCollection{IProductVariantDetachedContent}"/>.
+        /// </returns>
+        DetachedContentCollection<IProductVariantDetachedContent> GetDetachedContentCollection(Guid productVariantKey);
+
+        /// <summary>
+        /// Gets the category inventory collection.
+        /// </summary>
+        /// <param name="productVariantKey">
+        /// The product variant key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CatalogInventoryCollection"/>.
+        /// </returns>
+        CatalogInventoryCollection GetCategoryInventoryCollection(Guid productVariantKey);
+
+        /// <summary>
         /// Gets a collection of <see cref="IProductVariant"/> objects associated with a given warehouse 
         /// </summary>
         /// <param name="warehouseKey">The 'unique' id of the warehouse</param>
@@ -69,7 +104,24 @@
         ///// </param>
         //void DeleteAllDetachedContentForCulture(string cultureName);
 
+        /// <summary>
+        /// Saves the catalog inventory.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        /// <remarks>
+        /// This merely asserts that an association between the warehouse and the variant has been made
+        /// </remarks>
+        void SaveCatalogInventory(IProductVariant productVariant);
 
+        /// <summary>
+        /// Safely saves the detached content selection.
+        /// </summary>
+        /// <param name="productVariant">
+        /// The product variant.
+        /// </param>
+        void SaveDetachedContents(IProductVariant productVariant);
 
         #region Filter Queries
 

@@ -12,8 +12,8 @@ angular.module('merchello.services').service('entityCollectionHelper',
                         return "Customer";
                     default :
                         return "EntityCollection";
-                };
-            }
+                }
+            };
         }]);
 
 

@@ -29,7 +29,7 @@
             this.paymentKey = payment.key;
             this.paymentMethodKey = payment.paymentMethodKey;
             this.paymentMethodName = payment.paymentMethodName;
-            this.payment = payment
+            this.payment = payment;
         }
 
         //// helper method to set required associated invoice info

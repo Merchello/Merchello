@@ -1,0 +1,86 @@
+<div class="product-option-list" data-ng-show="preValuesLoaded">
+
+    <div class="control-group umb-control-group">
+
+        <div class="merchello-section-label">
+            <localize key="merchelloProductOptions_editOptions"></localize>
+        </div>
+        <div class="merchello-controls merchello-list-view umb-listview">
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <td data-ng-show="queryResult.items.length > 1 && !sharedOnly"></td>
+                    <td><localize key="merchelloTableCaptions_optionName" /></td>
+                    <td><localize key="merchelloTableCaptions_optionUi" /></td>
+                    <td><localize key="merchelloTableCaptions_optionValues" /></td>
+                    <td><localize key="merchelloTableCaptions_shared" /></td>
+                    <td>
+                        <form class="pull-right ng-pristine ng-valid" novalidate data-ng-show="hasFilter">
+                            <i class="icon-search" data-ng-click="enterSearch($event)"></i>
+                            <input type="text" data-ng-model="options.filter" on-keyup="search()" prevent-enter-submit no-dirty-check class="ng-pristine ng-valid">
+                        </form>
+                    </td>
+                </tr>
+                </thead>
+                <tbody data-ui-sortable="sortableOptions" data-ng-model="queryResult.items" data-ng-show="queryResult.totalItems > 0" >
+                <tr class="merchello-icon-container" data-ng-class="{ sortable : !isShared  }" class="sortable" data-ng-repeat="option in queryResult.items">
+                    <td data-ng-show="queryResult.items.length > 1 && !sharedOnly">
+                        <merchello-sort-icon data-ng-if="queryResult.items.length > 1 && !sharedOnly"></merchello-sort-icon>
+                    </td>
+                    <td><a prevent-default data-ng-click="edit(option)">{{getColumnValue('name', option)}}</a></td>
+                    <td>{{ option.uiOption }}</td>
+                    <td data-ng-bind="getColumnValue('values', option)"></td>
+                    <td data-ng-bind="getColumnValue('shared', option)"></td>
+                    <td class="text-right">
+                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(option)" do-edit="edit(option)" do-delete="delete(option)"></merchello-icon-bar>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody data-ng-hide="queryResult.totalItems > 0" >
+                    <td colspan="6" data-ng-bind-html-unsafe="noResults">
+
+                    </td>
+                </tbody>
+                <tfoot ng-show="pagination.length > 1">
+                <tr>
+                    <th colspan="6">
+                        <div class="pull-left">
+                        </div>
+                        <div class="pagination pagination-right">
+                            <ul>
+                                <li ng-class="{disabled:options.pageNumber <= 1}">
+                                    <a href="#" ng-click="prev()" prevent-default>
+                                        <localize key="general_previous">Previous</localize>
+                                    </a>
+                                </li>
+
+                                <li ng-repeat="pgn in pagination"
+                                    ng-class="{active:pgn.isActive}">
+
+                                    <a href="#" ng-click="goToPage(pgn.val - 1)" prevent-default
+                                       ng-bind="pgn.name ? pgn.name : pgn.val"
+                                       ng-if="pgn.val != '...'"></a>
+                                    <span ng-bind="pgn.val" ng-if="pgn.val == '...'"></span>
+                                </li>
+
+                                <li ng-class="{disabled:options.pageNumber >= listViewResultSet.totalPages}">
+                                    <a href="#" ng-click="next()" prevent-default>
+                                        <localize key="general_next">Next</localize>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+
+            <div class="text-center">
+                <merchello-add-icon do-add="add()"></merchello-add-icon>
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,9 +1,13 @@
 ﻿namespace Merchello.Core.Cache
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Gateways.Shipping;
 
     using Merchello.Core.Checkout;
+    using Merchello.Core.Persistence.Querying;
 
     using Models;
 
@@ -126,16 +130,26 @@
             return string.Format("merchello.shippingateway.shipmethods.{0}", providerKey);
         }
 
+
         /// <summary>
         /// Returns a cache key intended for ShippingGatewayProviders rate quotes
         /// </summary>
-        /// <param name="shipmentKey">The shipment key</param>
-        /// <param name="shipMethodKey">The ship method key</param>
-        /// <param name="versionKey">The version key</param>
+        /// <param name="shipmentKey">
+        /// The shipment key
+        /// </param>
+        /// <param name="shipMethodKey">
+        /// The ship method key
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key
+        /// </param>
+        /// <param name="addressArgs">
+        /// The address arguments - usually the country code and the region.
+        /// </param>
         /// <returns>
         /// The shipping rate quote cache key
         /// </returns>
-        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey)
+        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey, string addressArgs)
         {
             return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey, versionKey);
         }
@@ -157,6 +171,26 @@
         {
             return string.Format("{0}.{1}", typeof(TEntity).Name, key);
         }
+
+        internal static string GetPagedKeysCacheKey<TDto>(
+            string methodName,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            IDictionary<string, string> args = null)
+        {
+            var hash = string.Format("{0}.{1}.{2}.{3}.{4}", methodName, page, itemsPerPage, orderExpression, sortDirection);
+            if (args != null)
+            {
+                hash = args.Aggregate(hash, (current, item) => current + string.Format(".{0}-{1}", item.Key, item.Value));
+            }
+
+            hash = hash.GetHashCode().ToString();
+
+            return string.Format("{0}.{1}", typeof(TDto), hash);
+        }
+
 
         /// <summary>
         /// Returns the cache key used to store the Umbraco lang file.

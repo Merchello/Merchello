@@ -1,6 +1,0 @@
-﻿{
-	javascript : [
-		'~/App_Plugins/Merchello.PayPal/merchello.paypal.controller.js',
-		'~/App_Plugins/Merchello.PayPal/merchello.paypal.paymentmethod.controller.js'
-	]
-}

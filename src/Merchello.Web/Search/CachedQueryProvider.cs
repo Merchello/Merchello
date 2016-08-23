@@ -47,7 +47,7 @@
         /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
         /// </summary>
         public CachedQueryProvider()
-            : this(MerchelloContext.Current.Services, true)
+            : this(MerchelloContext.Current, true)
         {            
         }
 
@@ -60,16 +60,31 @@
         /// <param name="enableDataModifiers">
         /// A value indicating whether or not to enable any data modifiers.
         /// </param>
+        [Obsolete("Use the constructor that passes the MerchelloContext")]
         public CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers)
-            : this(serviceContext, enableDataModifiers, DetachedValuesConversionType.Db)
+            : this(MerchelloContext.Current, enableDataModifiers, DetachedValuesConversionType.Db)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
         /// </summary>
-        /// <param name="serviceContext">
-        /// The service context.
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        public CachedQueryProvider(IMerchelloContext merchelloContext, bool enableDataModifiers)
+            : this(merchelloContext, enableDataModifiers, DetachedValuesConversionType.Db)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedQueryProvider"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchelloContext context.
         /// </param>
         /// <param name="enableDataModifiers">
         /// The enable data modifiers.
@@ -77,12 +92,12 @@
         /// <param name="conversionType">
         /// The conversion type.
         /// </param>
-        internal CachedQueryProvider(IServiceContext serviceContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+        internal CachedQueryProvider(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
-            Mandate.ParameterNotNull(serviceContext, "ServiceContext is not initialized");
+            Mandate.ParameterNotNull(merchelloContext, "MerchelloContext is not initialized");
             _enableDataModifiers = enableDataModifiers;
             _conversionType = conversionType;
-            InitializeProvider(serviceContext);
+            InitializeProvider(merchelloContext);
         }
 
         /// <summary>
@@ -123,22 +138,22 @@
         /// <summary>
         /// The initialize provider.
         /// </summary>
-        /// <param name="serviceContext">
-        /// The service context.
+        /// <param name="merchelloContext">
+        /// The merchello context.
         /// </param>
-        private void InitializeProvider(IServiceContext serviceContext)
+        private void InitializeProvider(IMerchelloContext merchelloContext)
         {
             if (_customerQuery == null)
-            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(serviceContext.CustomerService, _enableDataModifiers));
+            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext, _enableDataModifiers));
 
             if (_invoiceQuery == null)
-            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(serviceContext.InvoiceService, _enableDataModifiers));
+            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext, _enableDataModifiers));
 
             if (_orderQuery == null)
-            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(serviceContext.OrderService, _enableDataModifiers));
+            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext, _enableDataModifiers));
 
             if (_productQuery == null)
-            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(serviceContext.ProductService, _enableDataModifiers, _conversionType));
+            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(merchelloContext, _enableDataModifiers, _conversionType));
         }
     }
 }

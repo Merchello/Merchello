@@ -1,12 +1,18 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Merchello.FastTrack.Models.FastTrackCheckoutAddressModel>
+﻿@inherits Merchello.Web.Mvc.MerchelloViewPage<Merchello.FastTrack.Models.FastTrackCheckoutAddressModel>
 @using System.Web.Mvc.Html
 @using Merchello.FastTrack.Controllers
 @using Merchello.FastTrack.Ui
+@using Merchello.Web
 @using Merchello.Web.Models.Ui
 @using Merchello.Web.Store.Localization
+@using Merchello.Web.Workflow
 @using Umbraco.Web
 @{
-    Model.SuccessRedirectUrl = ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShipRateQuote).Url;
+    var hasShippableItems = CurrentCustomer.Basket().HasShippableItems();
+
+    Model.SuccessRedirectUrl = hasShippableItems ? 
+        ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShipRateQuote).Url : 
+        ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.PaymentMethod).Url;
 }
 
 <h3>Shipping Address</h3>
@@ -46,7 +52,11 @@
         </div>
         <div class="col-md-6 form-group">
             @Html.LabelFor(x => x.Region)
-            @Html.TextBoxFor(x => x.Region, new { @class = "form-control" })
+            @Html.TextBoxFor(x => x.Region, new { @class = "form-control", data_muivalue = "region", @style = "display:none;" })
+            <select class="form-control" data-muiaction="updateregion">
+                <option>@StoreFormsResource.PleaseSelect</option>
+            </select>
+            @Html.ValidationMessageFor(x => x.Region)
         </div>
     </div>
     <div class="row">
@@ -57,7 +67,7 @@
         </div>
         <div class="col-md-6 form-group">
             @Html.LabelFor(x => x.CountryCode)
-            @Html.DropDownListFor(x => x.CountryCode, Model.Countries, StoreFormsResource.PleaseSelect, new { @class = "form-control" })
+            @Html.DropDownListFor(x => x.CountryCode, Model.Countries, StoreFormsResource.PleaseSelect, new { @class = "form-control", data_muiaction = "populateregion" })
             @Html.ValidationMessageFor(x => x.CountryCode)
         </div>
     </div>

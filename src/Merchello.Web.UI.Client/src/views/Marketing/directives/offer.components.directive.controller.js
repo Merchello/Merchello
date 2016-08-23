@@ -48,7 +48,6 @@ angular.module('merchello').controller('Merchello.Directives.OfferComponentsDire
             // if these are constraints, enable the sort
             if ($scope.componentType === 'Constraint') {
                 $scope.sortableOptions.disabled = false;
-                console.info($scope.sortableOptions);
             }
         }
 

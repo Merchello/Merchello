@@ -291,7 +291,7 @@
                 productResource.copyProduct(dialogData.product, dialogData.name, dialogData.sku).then(function(result) {
                     notificationsService.success("Product copied");
                     $timeout(function() {
-                        $location.url("/merchello/merchello/productedit/" + result.key);
+                        $location.url("/merchello/merchello/productedit/" + result.key, true);
                     }, 1000);
                 });
             }

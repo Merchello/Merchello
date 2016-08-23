@@ -20,6 +20,25 @@ angular.module('merchello.directives').directive('merchelloSaveIcon', function(l
     }
 });
 
+angular.module('merchello.directives').directive('merchelloSortIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-navigation"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('actions_sort').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
 // the add icon
 angular.module('merchello.directives').directive('merchelloAddIcon', function(localizationService) {
     return {
@@ -127,4 +146,28 @@ angular.module('merchello.directives').directive('merchelloMoveIcon', function(l
     }
 });
 
+// the Create button that emulates Umbraoc's directive
+angular.module('merchello.directives').directive('merchelloCreateButton', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doCreate: '&',
+            links: '='     // JSON format { text: [text], url: [url] }
+        },
+        template: '<div class="btn-group">' +
+        '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
+        '<localize key="actions_create">Create</localize>' +
+        '<span class="caret"></span>' +
+        '</a>' +
+        '<ul class="dropdown-menu">' +
+        '<li>' +
+        '<a href="#">' + '' + '</a>' +
+        '</li>' +
+        '</ul></div>',
+        link: function(scope, elm, attr) {
+
+        }
+    }
+});
 

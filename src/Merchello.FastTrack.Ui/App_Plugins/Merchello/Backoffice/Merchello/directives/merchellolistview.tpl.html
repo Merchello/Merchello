@@ -6,7 +6,7 @@
         <thead>
         <tr>
             <td data-ng-repeat="col in config.columns">
-                <a href="#" data-ng-click="sort(col.name, !col.resultColumn)" prevent-default data-ng-class="{sortable : !col.resultColumn }">
+                <a href="#" data-ng-click="sort(col.name, !col.resultColumn)" prevent-default data-ng-class="{sortable : !col.resultColumn }" data-ng-hide="col.localizeKey === ''">
                     <localize key="{{ col.localizeKey }}" />
                     <i class="icon" ng-class="{'icon-navigation-up': isSortDirection(col.name, 'asc'), 'icon-navigation-down': isSortDirection(col.name, 'desc')}"></i>
                 </a>

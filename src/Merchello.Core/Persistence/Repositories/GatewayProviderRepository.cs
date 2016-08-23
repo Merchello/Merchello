@@ -39,7 +39,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public GatewayProviderRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+        public GatewayProviderRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
             : base(work, cache, logger, sqlSyntax)
         { 
         }

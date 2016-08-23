@@ -14,7 +14,7 @@
     /// <summary>
     /// The Merchello ServiceContext, which provides access to the following services:
     /// <see cref="ICustomerService"/>, <see cref="IGatewayProviderService"/>, <see cref="IInvoiceService"/>, <see cref="IItemCacheService"/> 
-    /// <see cref="IOrderService"/>, <see cref="IPaymentService"/>, <see cref="IProductService"/>, <see cref="IProductVariantService"/>,
+    /// <see cref="IOrderService"/>, <see cref="IPaymentService"/>, <see cref="IProductService"/>, <see cref="IProductOptionService"/>, <see cref="IProductVariantService"/>,
     /// <see cref="IStoreSettingService"/>, <see cref="IShipmentService"/>, and <see cref="IWarehouseService"/>
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
@@ -128,6 +128,11 @@
         private Lazy<IProductService> _productService;
 
         /// <summary>
+        /// The product option service.
+        /// </summary>
+        private Lazy<IProductOptionService> _productOptionService;
+
+        /// <summary>
         /// The product variant service.
         /// </summary>
         private Lazy<IProductVariantService> _productVariantService;
@@ -167,6 +172,9 @@
         /// </summary>
         private Lazy<IWarehouseCatalogService> _warehouseCatalogService;
 
+        /// <summary>
+        /// The <see cref="RepositoryFactory"/>.
+        /// </summary>
         private readonly RepositoryFactory _repositoryFactory;
 
         #endregion
@@ -316,6 +324,17 @@
         public IProductService ProductService
         {
             get { return _productService.Value; }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductOptionService"/>.
+        /// </summary>
+        public IProductOptionService ProductOptionService
+        {
+            get
+            {
+                return _productOptionService.Value; 
+            }
         }
 
         /// <summary>
@@ -537,6 +556,9 @@
 
             if (_productService == null)
                 _productService = new Lazy<IProductService>(() => new ProductService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory, _productVariantService.Value));
+
+            if (_productOptionService == null)
+                _productOptionService = new Lazy<IProductOptionService>(() => new ProductOptionService(DatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));
 
             if (_storeSettingsService == null)
                 _storeSettingsService = new Lazy<IStoreSettingService>(() => new StoreSettingService(dbDatabaseUnitOfWorkProvider, repositoryFactory, logger, eventMessagesFactory));

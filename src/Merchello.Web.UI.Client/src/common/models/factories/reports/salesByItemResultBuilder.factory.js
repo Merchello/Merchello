@@ -19,10 +19,10 @@ angular.module('merchello.models').factory('salesByItemResultBuilder',
                     }
                 } else {
                     models = genericModelBuilder.transform(jsonResult, Constructor);
-                    models.productVariant = productVariantDisplayBuilder.transform(jsonResult[i].productVariant);
+                    models.productVariant = productVariantDisplayBuilder.transform(jsonResult.productVariant);
                     models.totals = resultCurrencyValueBuilder.transform(jsonResult.totals);
                 }
                 return models;
             }
         };
-}])
+}]);

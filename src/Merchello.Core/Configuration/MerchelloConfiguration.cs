@@ -138,6 +138,17 @@
         }
 
         /// <summary>
+        /// Gets the option UI settings.
+        /// </summary>
+        public IEnumerable<KeyValuePair<string, string>> OptionUiSettings
+        {
+            get
+            {
+                return this.Section.OptionUi.AllSettings().Select(x => new KeyValuePair<string, string>(x.Value, x.Alias));
+            }
+        }
+
+        /// <summary>
         /// Gets the customer member types.
         /// </summary>
         public IEnumerable<string> CustomerMemberTypes

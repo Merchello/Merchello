@@ -873,6 +873,7 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
             scope: {
                 entityType: '@',
                 selectedContentType: '=',
+                setSelectedContentTypeKey: '=?',
                 showSave: '=?',
                 save: '&'
             },
@@ -904,7 +905,19 @@ angular.module('merchello.directives').directive('detachedContentTypeSelect',
                 function loadDetachedContentTypes() {
                     detachedContentResource.getDetachedContentTypeByEntityType(scope.entityType).then(function(results) {
                         scope.detachedContentTypes = detachedContentTypeDisplayBuilder.transform(results);
+
+                        if (('setSelectedContentTypeKey' in attr)) {
+                            var fnd = _.find(scope.detachedContentTypes, function(dtc) {
+                               return dtc.key === scope.setSelectedContentTypeKey;
+                            });
+
+                            if (fnd) {
+                                scope.selectedContentType = fnd;
+                            }
+                        }
+
                         scope.loaded = true;
+
                     });
                 }
 
@@ -946,7 +959,7 @@ angular.module('merchello.directives').directive('contentTypeDropDown',
         },
         template:
         '<div class="control-group">' +
-        '<label><localize key="merchelloDetachedContent_productContentTypes" /></label>' +
+        '<label><localize key="merchelloDetachedContent_contentTypes" /></label>' +
         '<select class="span11" data-ng-model="selectedContentType" data-ng-options="ct.name for ct in contentTypes track by ct.key" data-ng-change="emitChanged()" data-ng-show="loaded">' +
             '<option value="">{{ noSelection }}</option>' +
         '</select>' +
@@ -1204,11 +1217,34 @@ angular.module('merchello.directives').directive('merchelloTabs', [function() {
         restrict: 'E',
         replace: true,
         scope: {
-            tabs: '='
+            tabs: '=',
+            widthCss: '=?'
         },
-        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/html/merchellotabs.tpl.html'
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/html/merchellotabs.tpl.html',
+        link: function(scope, elm, attr) {
+
+            scope.span = 'span12';
+
+            if('widthCss' in attr) {
+                scope.span = scope.widthCss;
+            }
+        }
     };
 }]);
+
+angular.module('merchello.directives').directive('merchEnter', function() {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.merchEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 angular.module('merchello.directives').directive('merchelloDateRangeButton',
     function($filter, settingsResource, dialogService, dateHelper) {
@@ -1403,6 +1439,25 @@ angular.module('merchello.directives').directive('merchelloSaveIcon', function(l
     }
 });
 
+angular.module('merchello.directives').directive('merchelloSortIcon', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+        },
+        template: '<span class="merchello-icons">' +
+        '<a class="merchello-icon" title="{{title}}" prevent-default>' +
+        '<i class="icon icon-navigation"></i>' +
+        '</a></span>',
+        link: function(scope, elm, attr) {
+            scope.title = '';
+            localizationService.localize('actions_sort').then(function(value) {
+                scope.title = value;
+            });
+        }
+    }
+});
+
 // the add icon
 angular.module('merchello.directives').directive('merchelloAddIcon', function(localizationService) {
     return {
@@ -1510,6 +1565,30 @@ angular.module('merchello.directives').directive('merchelloMoveIcon', function(l
     }
 });
 
+// the Create button that emulates Umbraoc's directive
+angular.module('merchello.directives').directive('merchelloCreateButton', function(localizationService) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            doCreate: '&',
+            links: '='     // JSON format { text: [text], url: [url] }
+        },
+        template: '<div class="btn-group">' +
+        '<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">' +
+        '<localize key="actions_create">Create</localize>' +
+        '<span class="caret"></span>' +
+        '</a>' +
+        '<ul class="dropdown-menu">' +
+        '<li>' +
+        '<a href="#">' + '' + '</a>' +
+        '</li>' +
+        '</ul></div>',
+        link: function(scope, elm, attr) {
+
+        }
+    }
+});
 
 
 angular.module('merchello.directives').directive('merchelloListView',
@@ -1639,6 +1718,7 @@ angular.module('merchello.directives').directive('merchelloListView',
                         scope.listViewResultSet.items = queryResult.items;
                         scope.listViewResultSet.totalItems = queryResult.totalItems;
                         scope.listViewResultSet.totalPages = queryResult.totalPages;
+
 
                         scope.pagination = [];
 
@@ -1976,26 +2056,27 @@ angular.module('merchello.directives').directive('merchelloViewEditor',
             scope: { option: '=' },
             template:
             '<div class="tags">' +
-            '<a ng-repeat="(idx, choice) in option.choices | orderBy:\'sortOrder\'" class="tag" ng-click="remove(idx)">{{choice.name}}</a>' +
+            '<a ng-repeat="(idx, choice) in option.choices | orderBy:\'sortOrder\'" class="tag" ng-click="remove(choice.key)">{{choice.name}}</a>' +
             '</div>' +
             '<input type="text" placeholder="Add a choice..." ng-model="newChoiceName" /> ' +
             '<merchello-add-icon do-add="add()"></merchello-add-icon>',
-            link: function ($scope, $element) {
-                // FIXME: this is lazy and error-prone
-                // this is the option name input
-                var input = angular.element($element.children()[1]);
+            link: function (scope, $element) {
 
+                var input = angular.element($element.children()[1]);
+                
                 // This adds the new tag to the tags array
-                $scope.add = function () {
-                    if ($scope.newChoiceName.length > 0) {
-                        $scope.option.addAttributeChoice($scope.newChoiceName);
-                        $scope.newChoiceName = "";
+                scope.add = function () {
+                    if (scope.newChoiceName.length > 0) {
+                        scope.option.addAttributeChoice(scope.newChoiceName);
+                        scope.newChoiceName = "";
                     }
                 };
 
                 // This is the ng-click handler to remove an item
-                $scope.remove = function (idx) {
-                    $scope.option.removeAttributeChoice(idx);
+                scope.remove = function (key) {
+                   scope.option.choices = _.reject(scope.option.choices, function(c) {
+                      return c.key === key;
+                   });
                 };
 
                 // Capture all keypresses
@@ -2003,9 +2084,11 @@ angular.module('merchello.directives').directive('merchelloViewEditor',
                     // But we only care when Enter was pressed
                     if (event.keyCode == 13) {
                         // There's probably a better way to handle this...
-                        $scope.add();
+                        scope.add();
                     }
                 });
+
+
 
             }
         };
@@ -2219,6 +2302,827 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
         controller: 'Merchello.Directives.ShipCountryGatewaysProviderDirectiveController'
     };
 });
+angular.module('merchello.directives').directive("productOptionsAddEdit",
+    ['$timeout', '$q', 'eventsService', 'dialogService', 'productOptionResource', 'productAttributeDisplayBuilder',
+    function($timeout, $q, eventsService, dialogService, productOptionResource, productAttributeDisplayBuilder) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            option: '=',
+            doSave: '&'
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.addedit.tpl.html',
+        link: function (scope, elm, attr) {
+
+            scope.contentType = undefined;
+            scope.choiceName = '';
+            scope.wasFormSubmitted = false;
+            scope.ready = false;
+            scope.counts = undefined;
+            scope.uiOptions = [];
+            scope.selectedUiOption = {};
+
+            scope.selectedAttribute = {
+                current: undefined,
+                previous: undefined,
+                isSet: false
+            }
+
+            productOptionResource.getOptionUiSettings().then(function(data) {
+                scope.uiOptions = data;
+                scope.selectedUiOption = _.find(scope.uiOptions, function(ui) {
+                   return ui.key === scope.option.uiOption;
+                });
+
+                if (scope.option.key === '') {
+                    scope.ready = true;
+                } else {
+                    productOptionResource.getUseCounts(scope.option).then(function(counts) {
+                        scope.counts = counts;
+
+                        scope.ready = true;
+                    });
+                }
+            });
+
+
+
+
+            if (scope.option.choices.length > 0) {
+                scope.selectedAttribute.current = _.find(scope.option.choices, function(c) {
+                   if (c.isDefaultChoice) {
+                       return c;
+                   }
+                });
+
+                if (scope.selectedAttribute.current) {
+                    scope.selectedAttribute.previous = scope.selectedAttribute.current;
+                } else {
+                    scope.selectedAttribute.current = scope.selectedAttribute.previous = scope.option.choices[0];
+                }
+            }
+
+            eventsService.on('merchNewProductOptionSave', function(name, args) {
+                validate(args);
+            });
+
+
+
+            // adds a choice to the dialog data collection of choicds
+            scope.addChoice = function() {
+
+                if (scope.choiceName !== '') {
+                    var choice = productAttributeDisplayBuilder.createDefault();
+                    choice.name = scope.choiceName;
+                    choice.sku = scope.choiceName.replace(/\W+/g, " ").replace(/\s+/g, '-').toLocaleLowerCase();
+                    choice.sortOrder = scope.option.choices.length + 1;
+
+                    if (scope.option.choices.length === 0) {
+                        choice.isDefaultChoice = true;
+                        scope.selectedAttribute.current = scope.selectedAttribute.previous = choice;
+                    }
+
+                    var exists = _.find(scope.option.choices, function(c) { return c.sku === choice.sku; });
+                    if (exists === undefined) {
+                        scope.option.choices.push(choice);
+                    }
+                }
+
+                scope.choiceName = '';
+            };
+
+            // removes a choice from the dialog data collection of choices
+            scope.remove = function(idx) {
+                if (scope.option.choices.length > idx) {
+                    var remover = scope.option.choices[idx];
+                    var sort = remover.sortOrder;
+                    var wasSelected = remover.isDefaultChoice;
+                    scope.option.choices.splice(idx, 1);
+                    _.each(scope.option.choices, function(c) {
+                        if (c.sortOrder > sort) {
+                            c.sortOrder -= 1;
+                        }
+                    });
+
+                    if (wasSelected) {
+                        if(scope.option.choices.length > 0) {
+                            scope.option.choices[0].isDefaultChoice = true;
+                            scope.selectedAttribute.current = scope.selectedAttribute.previous = scope.option.choices[0];
+                        }
+                    }
+                }
+            };
+
+            scope.showDelete = function(choice) {
+
+              if (scope.counts) {
+                  var fnd = _.find(scope.counts.choices, function(cc) {
+                      return cc.key === choice.key;
+                  });
+                  if (fnd) {
+                      return fnd.useCount === 0;
+                  } else {
+                      return true;
+                  }
+              } else {
+                  return false;
+              }
+            };
+
+
+            // sets the default choice property
+            scope.setSelectedChoice = function() {
+                scope.selectedAttribute.previous.isDefaultChoice = false;
+                scope.selectedAttribute.current.isDefaultChoice = true;
+                scope.selectedAttribute.previous = scope.selectedAttribute.current;
+            };
+
+
+            scope.addDetachedContent = function(choice) {
+                var dialogData = {
+                    choice: choice,
+                    contentType: scope.contentType
+                };
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.choicecontent.html',
+                    show: true,
+                    callback: processDetachedContentSave,
+                    dialogData: dialogData
+                });
+            }
+
+            // Saves an option
+
+            scope.sortableOptions = {
+                start : function(e, ui) {
+                    ui.item.data('start', ui.item.index());
+                },
+                stop: function (e, ui) {
+                    var choice = ui.item.scope().choice;
+                    var start = ui.item.data('start'),
+                        end =  ui.item.index();
+                    for(var i = 0; i < scope.option.choices.length; i++) {
+                        scope.option.choices[i].sortOrder = i + 1;
+                    }
+                },
+                disabled: false,
+                cursor: "move"
+            }
+
+            function processDetachedContentSave(dialogData) {
+                scope.option.choices = _.reject(scope.option.choices, function(c) { return c.key === dialogData.choice.key; });
+                scope.option.choices.push(dialogData.choice);
+                scope.option.choices = _.sortBy(scope.option.choices, 'sortOrder');
+            }
+
+            function validate(args) {
+                if (scope.productOptionForm.$valid && scope.option.choices.length > 0) {
+                    if (scope.contentType) {
+                        scope.option.detachedContentTypeKey = scope.contentType.key;
+                    } else {
+                        scope.option.detachedContentTypeKey = '';
+                    }
+
+                    if (scope.selectedUiOption) {
+                        scope.option.uiOption = scope.selectedUiOption.key;
+                    } else {
+                        scope.option.uiOption = '';
+                    }
+
+
+                    args.valid = true;
+
+                } else {
+                    scope.wasFormSubmitted = true;
+                }
+            };
+
+
+        }
+    };
+}]);
+
+angular.module('merchello.directives').directive('productOptionsAssociateShared',
+    ['$q', '$timeout', 'localizationService', 'eventsService', 'productOptionResource', 'queryDisplayBuilder', 'queryResultDisplayBuilder',
+        'productOptionDisplayBuilder',
+    function($q, $timeout, localizationService, eventsService, productOptionResource, queryDisplayBuilder, queryResultDisplayBuilder,
+        productOptionDisplayBuilder) {
+
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                option: '=',
+                exclude: '=?',
+                sharedOptionsEditor: '=?'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.associateshared.tpl.html',
+            link: function (scope, elm, attr) {
+
+                scope.defaultChoice = {};
+                scope.wasFormSubmitted = false;
+                scope.noResults = '';
+                scope.ready = false;
+
+                scope.optionSelected = false;
+                scope.selectedChoices = [];
+                scope.pagination = [];
+
+                scope.defaultChoice = {
+                    current: undefined,
+                    previous: undefined,
+                    isSet: false
+                };
+
+                scope.productOption = {};
+                scope.sharedOption = {};
+
+                scope.queryResult = queryResultDisplayBuilder.createDefault();
+
+                scope.options = {
+                    currentPage: 1,
+                    orderDirection: 'asc',
+                    orderBy: 'name',
+                    itemsPerPage: 5,
+                    filter: ''
+                };
+
+
+                var values = '';
+
+                eventsService.on('merchSharedProductOptionSave', function(name, args) {
+                    validate(args);
+                });
+
+
+                // init shared option editor
+                if(('sharedOptionsEditor' in attr) && scope.sharedOptionsEditor) {
+
+                    scope.productOption = scope.option;
+                    productOptionResource.getByKey(scope.option.key).then(function(po) {
+                        po.sortOrder = scope.option.sortOrder;
+                        po.useName = scope.option.useName;
+                       scope.sharedOption = po;
+
+                        scope.optionSelected = true;
+
+                        _.each(scope.sharedOption.choices, function(soc) {
+
+                            // find the previously selected choice
+                            var fnd = _.find(scope.productOption.choices, function(poc) {
+                                return poc.key === soc.key;
+                            });
+
+
+                            if (fnd) {
+                                soc.selected = true;
+                                scope.selectedChoices.push(soc.key);
+                                if (fnd.isDefaultChoice) {
+                                    scope.defaultChoice.current = soc;
+                                    scope.defaultChoice.previous = soc;
+                                    scope.defaultChoice.isSet = true;
+                                }
+                                ensureDefaultChoice();
+                            } else {
+                                soc.selected = false;
+                            }
+                        });
+
+                        scope.ready = true;
+                    });
+                } else {
+                    scope.ready = true;
+                }
+
+
+                scope.prev = function() {
+                    if (scope.options.currentPage - 1 > 0) {
+                        scope.options.currentPage--;
+                        scope.search();
+                    }
+                }
+
+                scope.goToPage = function(pageNumber) {
+                    scope.options.currentPage = pageNumber + 1;
+                    scope.search();
+                }
+
+                scope.next = function() {
+                    if (scope.options.currentPage < scope.queryResult.totalPages) {
+                        scope.options.currentPage++;
+                        scope.search();
+                    }
+                };
+
+                scope.enterSearch = function($event) {
+                    $($event.target).next().focus();
+                }
+
+                scope.search = function() {
+                    var query = queryDisplayBuilder.createDefault();
+                    query.currentPage = scope.options.currentPage - 1;
+                    query.itemsPerPage = scope.options.itemsPerPage;
+                    query.sortBy = scope.options.orderBy;
+                    query.sortDirection = scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+                    query.addFilterTermParam(scope.options.filter);
+
+                    productOptionResource.searchOptions(query).then(function(results) {
+                       scope.queryResult = results;
+                        scope.ready = true;
+
+                        scope.pagination = [];
+
+                        //list 10 pages as per normal
+                        if (scope.queryResult.totalPages <= 10) {
+                            for (var i = 0; i < scope.queryResult.totalPages; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.currentPage == (i + 1)
+                                });
+                            }
+                        }
+                        else {
+                            //if there is more than 10 pages, we need to do some fancy bits
+
+                            //get the max index to start
+                            var maxIndex = scope.queryResult.totalPages - 10;
+                            //set the start, but it can't be below zero
+                            var start = Math.max(scope.options.currentPage - 5, 0);
+                            //ensure that it's not too far either
+                            start = Math.min(maxIndex, start);
+
+                            for (var i = start; i < (10 + start) ; i++) {
+                                scope.pagination.push({
+                                    val: (i + 1),
+                                    isActive: scope.options.currentPage == (i + 1)
+                                });
+                            }
+
+                            //now, if the start is greater than 0 then '1' will not be displayed, so do the elipses thing
+                            if (start > 0) {
+                                scope.pagination.unshift({ name: "First", val: 1, isActive: false }, {val: "...",isActive: false});
+                            }
+
+                            //same for the end
+                            if (start < maxIndex) {
+                                scope.pagination.push({ val: "...", isActive: false }, { name: "Last", val: scope.queryResult.totalPages, isActive: false });
+                            }
+                        }
+                    });
+
+                }
+
+                scope.getColumnValue = function(propName, option) {
+                    switch(propName) {
+                        case 'name':
+                            if (option.shared && !scope.isShared) {
+                                return option.useName + ' (' + option.name + ')';
+                            } else {
+                                return option.name;
+                            }
+                        case 'values':
+                            return option.choices.length + ' ' + values;
+                    }
+                }
+
+                scope.removeOption = function() {
+                    scope.sharedOption = {};
+                    scope.selectedChoices = [];
+                    scope.optionSelected = false;
+                }
+
+                scope.showAdd = function(option) {
+                    if (scope.exclude) {
+                        var fnd = _.find(scope.exclude, function(key) {
+                           return key === option.key;
+                        });
+                        return !fnd;
+                    }
+                    return true;
+                }
+
+                scope.selectOption = function(option) {
+                    scope.sharedOption = option;
+                    scope.selectedChoices = [];
+                    _.each(scope.sharedOption.choices, function(c) {
+                       c.selected = true;
+                        scope.selectedChoices.push(c.key);
+
+                        if (c.isDefaultChoice) {
+
+                            scope.defaultChoice.current = c;
+                            scope.defaultChoice.previous = c;
+                            scope.defaultChoice.isSet = true;
+                        }
+                    });
+
+                    scope.optionSelected = true;
+                }
+
+                scope.toggleChoice = function(idx) {
+                    scope.sharedOption.choices[idx].selected = !scope.sharedOption.choices[idx].selected;
+                }
+
+                scope.addRemoveChoice = function(choice) {
+
+                    var fnd = _.find(scope.selectedChoices, function(sc) { return sc === choice.key;});
+                    if (fnd) {
+                        scope.selectedChoices = _.reject(scope.selectedChoices, function(c) { return c === choice.key; });
+                        if (choice.isDefaultChoice) {
+                            // reset default choice
+                            scope.defaultChoice.choice = undefined;
+                            scope.defaultChoice.previous = undefined;
+                            scope.defaultChoice.isSet = false;
+                            choice.isDefaultChoice = false;
+                            ensureDefaultChoice();
+                        }
+                    } else {
+
+                        scope.selectedChoices.push(choice.key);
+                        // sets the default choice in the case where the selectedChoices array was originally empty
+                        ensureDefaultChoice();
+                    }
+                }
+
+                // validates that a choice can be selected
+                scope.validateDefaultChoice = function() {
+                    if (ensureDefaultChoice()) {
+                        var fnd = _.find(scope.selectedChoices, function(sc) { return sc === scope.defaultChoice.current.key;});
+                        if (fnd) {
+                            scope.defaultChoice.previous.isDefaultChoice = false;
+                            scope.defaultChoice.previous = scope.defaultChoice.current;
+                        } else {
+                            scope.defaultChoice.current = scope.defaultChoice.previous;
+                        }
+                        scope.defaultChoice.current.isDefaultChoice = true;
+                    } else {
+                        // should never get here as there should be no options rendered
+                        var err = new Error('defaultChoice has has not been set and there was an attempt to change the default choice.  This should not be possible!');
+                        throw err;
+                    }
+                }
+
+                // ensures an option choice is available to be selected.
+                function ensureDefaultChoice() {
+                    // assert there is a default
+                    if (scope.defaultChoice.isSet) {
+                        return true;
+                    }
+
+                    if (!scope.defaultChoice.isSet && scope.selectedChoices.length > 0) {
+                        // handles legacy no previous default setting
+
+                        // find the first selected choice
+                        var choice = _.find(scope.sharedOption.choices, function(c) {
+                           var exists = _.find(scope.selectedChoices, function(key) {
+                             return key === c.key;
+                           });
+                            if (exists) {
+                                return c;
+                            }
+                        });
+
+                        if (choice) {
+                            //var choice = scope.sharedOption.choices[0];
+                            scope.defaultChoice.current = choice;
+                            scope.defaultChoice.previous = choice;
+                            scope.defaultChoice.isSet = true;
+
+                            _.each(scope.sharedOption.choices, function(c) {
+                                c.isDefaultChoice = c.key === choice.key;
+                            });
+
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+                function init() {
+                    $q.all([
+                        localizationService.localize('merchelloTableCaptions_optionValues'),
+                        localizationService.localize('merchelloProductOptions_noSharedProductOptions')
+                    ]).then(function(data) {
+                        values = data[0];
+                        scope.noResults = data[1];
+                        scope.loaded = true;
+                    });
+
+                    scope.search();
+                }
+
+                function createAssociatedOption() {
+
+                    // todo - hashkeys sometimes don't map here
+                    var option = angular.extend(scope.option, scope.sharedOption);
+
+
+                    option.choices = _.filter(option.choices, function(oc) {
+                       var exists = _.find(scope.selectedChoices, function (sc) {
+                          return sc === oc.key;
+                       });
+
+                        if (exists) {
+                            // wait for the hashkeys
+                            return oc;
+                        }
+                    });
+
+
+                    return option;
+                }
+
+                function validate(args) {
+                    if (scope.productOptionForm.$valid) {
+                        scope.option = createAssociatedOption();
+                        args.valid = true;
+                    } else {
+                        scope.wasFormSubmitted = true;
+                    }
+
+                };
+
+                init();
+            }
+        };
+
+    }]);
+
+angular.module('merchello.directives').directive('productOptionsList', [
+    '$q', 'localizationService', 'eventsService', 'dialogService', 'queryDisplayBuilder', 'queryResultDisplayBuilder', 'productOptionDisplayBuilder',
+    function($q, localizationService, eventsService, dialogService, queryDisplayBuilder, queryResultDisplayBuilder, productOptionDisplayBuilder) {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            load: '&',
+            doAdd: '&',
+            doEdit: '&',
+            doDelete: '&',
+            sharedOnly: '=?',
+            showFilter: '=?',
+            preValuesLoaded: '='
+        },
+        templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/productoptions.list.tpl.html',
+        link: function(scope, elm, attr) {
+
+            scope.loaded = false;
+            scope.totalItems = 0;
+            scope.isReady = false;
+            scope.noResults = '';
+            scope.options = {
+                pageSize: 10,
+                currentPage: 1,
+                filter: '',
+                orderBy: 'name',
+                orderDirection: 'asc'
+            };
+            scope.isShared = false;
+            scope.hasFilter = false;
+            scope.queryResult = queryResultDisplayBuilder.createDefault();
+
+            /// PRIVATE
+
+            var yes = '';
+            var no = '';
+            var values = '';
+
+            var onAdd = 'merchelloProductOptionOnAddOpen';
+
+            scope.getColumnValue = function(propName, option) {
+                switch(propName) {
+                    case 'name':
+                        if (option.shared && !scope.isShared) {
+                            return option.useName + ' (' + option.name + ')';
+                        } else {
+                            return option.name;
+                        }
+                    case 'shared':
+                        return option.shared ? yes + ' (' + option.shareCount + ')' : no;
+                    case 'values':
+                        return option.choices.length + ' ' + values;
+                }
+            }
+
+            scope.delete = function(option) {
+
+                var dialogData = {
+                    name: '',
+                    option: option
+                };
+                dialogData.name = option.name;
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                    show: true,
+                    callback: processDeleteOption,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.showDelete = function(option) {
+                return option.shared ? option.shareCount === 0 || !scope.isShared : true;
+            }
+
+            scope.add = function() {
+                var dialogData = {
+                    option: productOptionDisplayBuilder.createDefault(),
+                    showTabs: !scope.sharedOnly,
+                    productKey: '',
+                    exclude: scope.isShared ? [] : _.pluck(
+                        _.filter(scope.queryResult.items,
+                            function(o) {
+                                if (o.shared) { return o; }
+                            }), 'key')
+                };
+
+                dialogData.option.shared = scope.sharedOnly !== undefined;
+
+                eventsService.emit(onAdd, dialogData);
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.add.html',
+                    show: true,
+                    callback: processAddOption,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.edit = function(option) {
+                var clone = productOptionDisplayBuilder.createDefault();
+                clone = angular.extend(clone, option);
+
+                clone.choices = _.sortBy(clone.choices, 'sortOrder');
+
+                var dialogData = {
+                    option: clone,
+                    showTabs: false,
+                    productKey: '',
+                    sharedOptionEditor: !scope.isShared && option.shared
+                }
+
+
+                eventsService.emit(onAdd, dialogData);
+
+                dialogService.open({
+                    template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/productoption.edit.html',
+                    show: true,
+                    callback: processEditOption,
+                    dialogData: dialogData
+                });
+            }
+
+            scope.enterSearch = function($event) {
+                $($event.target).next().focus();
+            }
+
+            scope.next = function() {
+                if (scope.options.currentPage < scope.queryResult.totalPages) {
+                    scope.options.currentPage++;
+                    scope.search();
+                }
+            };
+
+            scope.goToPage = function(pageNumber) {
+                scope.options.currentPage = pageNumber + 1;
+                scope.search();
+            }
+
+            scope.prev = function() {
+                if (scope.options.currentPage - 1 > 0) {
+                    scope.options.currentPage--;
+                    scope.search();
+                }
+            }
+
+            scope.sortableOptions = {
+                start : function(e, ui) {
+                    ui.item.data('start', ui.item.index());
+                },
+                stop: function (e, ui) {
+                    var choice = ui.item.scope().choice;
+                    var start = ui.item.data('start'),
+                        end =  ui.item.index();
+                    for(var i = 0; i < scope.queryResult.items.length; i++) {
+                        scope.queryResult.items[i].sortOrder = i + 1;
+                    }
+                },
+                disabled: true,
+                cursor: "move"
+            }
+
+            function processDeleteOption(dialogData) {
+                scope.doDelete()(dialogData.option);
+            }
+
+            function processAddOption(dialogData) {
+                scope.doAdd()(dialogData.option);
+            }
+
+            function processEditOption(dialogData) {
+                scope.doEdit()(dialogData.option);
+            }
+
+            function init() {
+
+                scope.isShared = ('sharedOnly' in attr);
+                scope.hasFilter = ('showFilter' in attr);
+
+                scope.sortableOptions.disabled = scope.isShared;
+                var noResultsKey = scope.isShared ? 'noSharedProductOptions' : 'noProductOptions';
+
+                $q.all([
+                    localizationService.localize('general_yes'),
+                    localizationService.localize('general_no'),
+                    localizationService.localize('merchelloTableCaptions_optionValues'),
+                    localizationService.localize('merchelloProductOptions_' + noResultsKey)
+                ]).then(function(data) {
+                    yes = data[0];
+                    no = data[1];
+                    values = data[2];
+                    scope.noResults = data[3];
+                    scope.loaded = true;
+                });
+
+                scope.$watch('preValuesLoaded', function(nv, ov) {
+                   if (nv === true) {
+                       scope.isReady = true;
+                   } else {
+                       scope.isReady = false;
+                   }
+
+                   if (scope.isReady) {
+                       scope.search();
+                   }
+                });
+            }
+
+            scope.search = function() {
+
+                var page = scope.options.currentPage - 1;
+                var perPage = scope.options.pageSize;
+                var sortBy = scope.options.orderBy;
+                var sortDirection = scope.options.orderDirection === 'asc' ? 'Ascending' : 'Descending';
+                var query = queryDisplayBuilder.createDefault();
+                query.currentPage = page;
+                query.itemsPerPage = perPage;
+                query.sortBy = sortBy;
+                query.sortDirection = sortDirection;
+                query.addFilterTermParam(scope.options.filter);
+
+                scope.load()(query).then(function(result) {
+
+                    scope.queryResult = result;
+
+                    scope.pagination = [];
+
+                    //list 10 pages as per normal
+                    if (scope.queryResult.totalPages <= 10) {
+                        for (var i = 0; i < scope.queryResult.totalPages; i++) {
+                            scope.pagination.push({
+                                val: (i + 1),
+                                isActive: scope.options.currentPage == (i + 1)
+                            });
+                        }
+                    }
+                    else {
+                        //if there is more than 10 pages, we need to do some fancy bits
+
+                        //get the max index to start
+                        var maxIndex = scope.queryResult.totalPages - 10;
+                        //set the start, but it can't be below zero
+                        var start = Math.max(scope.options.currentPage - 5, 0);
+                        //ensure that it's not too far either
+                        start = Math.min(maxIndex, start);
+
+                        for (var i = start; i < (10 + start) ; i++) {
+                            scope.pagination.push({
+                                val: (i + 1),
+                                isActive: scope.options.currentPage == (i + 1)
+                            });
+                        }
+
+                        //now, if the start is greater than 0 then '1' will not be displayed, so do the elipses thing
+                        if (start > 0) {
+                            scope.pagination.unshift({ name: "First", val: 1, isActive: false }, {val: "...",isActive: false});
+                        }
+
+                        //same for the end
+                        if (start < maxIndex) {
+                            scope.pagination.push({ val: "...", isActive: false }, { name: "Last", val: scope.queryResult.totalPages, isActive: false });
+                        }
+                    }
+                });
+            }
+
+            init();
+        }
+    }
+}]);
+
     /**
      * @ngdoc controller
      * @name productOptionsManage
@@ -2243,6 +3147,7 @@ angular.module('merchello.directives').directive('shipCountryGatewayProviders', 
                 $scope.rebuildVariants = false;
                 $scope.addOption = addOption;
                 $scope.removeOption = removeOption;
+
 
                 /**
                  * @ngdoc method

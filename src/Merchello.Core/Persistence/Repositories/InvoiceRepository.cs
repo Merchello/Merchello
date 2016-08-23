@@ -64,7 +64,7 @@
         /// </param>
         public InvoiceRepository(
             IDatabaseUnitOfWork work,
-            IRuntimeCacheProvider cache,
+            CacheHelper cache,
             IInvoiceLineItemRepository invoiceLineItemRepository,
             IOrderRepository orderRepository,
             INoteRepository noteRepository,

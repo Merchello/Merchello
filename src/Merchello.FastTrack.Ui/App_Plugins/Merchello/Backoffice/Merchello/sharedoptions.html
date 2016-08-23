@@ -1,0 +1,26 @@
+<div ng-controller="Merchello.Backoffice.SharedProductOptionsController" ng-show="loaded">
+    <umb-panel>
+        <umb-header>
+            <div class="span7">
+                <div class="umb-headline-editor-wrapper">
+                    <h1><localize key="merchelloTabs_sharedProductOptions" /></h1>
+                </div>
+            </div>
+            <div class="span5">
+
+            </div>
+            <merchello-tabs tabs="tabs"></merchello-tabs>
+        </umb-header>
+
+        <merchello-panel>
+
+            <div class="merchello-pane" data-ng-show="preValuesLoaded">
+
+                <h4><localize key="merchelloProductOptions_manageShared">Manage Shared Product Options</localize></h4>
+                <product-options-list shared-only="sharedOnly" load="load" do-add="add" do-delete="delete" do-edit="edit" pre-values-loaded="preValuesLoaded" show-filter></product-options-list>
+
+            </div>
+        </merchello-panel>
+
+    </umb-panel>
+</div>

@@ -3049,11 +3049,16 @@ function iconHelper($q, $timeout) {
         },
         formatContentTypeIcons: function (contentTypes) {
             for (var i = 0; i < contentTypes.length; i++) {
-                contentTypes[i].icon = this.convertFromLegacyIcon(contentTypes[i].icon);
+                if (!contentTypes[i].icon) {
+                    //just to be safe (e.g. when focus was on close link and hitting save)
+                    contentTypes[i].icon = "icon-document"; // default icon
+                } else {
+                    contentTypes[i].icon = this.convertFromLegacyIcon(contentTypes[i].icon);
+                }
 
                 //couldnt find replacement
                 if(contentTypes[i].icon.indexOf(".") > 0){
-                     contentTypes[i].icon = "icon-document-dashed-line";   
+                     contentTypes[i].icon = "icon-document-dashed-line";
                 }
             }
             return contentTypes;
@@ -3068,6 +3073,10 @@ function iconHelper($q, $timeout) {
         },
         /** If the icon is legacy */
         isLegacyIcon: function (icon) {
+            if(!icon) {
+                return false;
+            }
+
             if(icon.startsWith('..')){
                 return false;
             }
@@ -3998,13 +4007,12 @@ function keyboardService($window, $timeout) {
 
         function setSorting(field, allow, options) {
             if (allow) {
-                options.orderBy = field;
-
-                if (options.orderDirection === "desc") {
-                    options.orderDirection = "asc";
-                } else {
+                if (options.orderBy === field && options.orderDirection === 'asc') {
                     options.orderDirection = "desc";
+                } else {
+                    options.orderDirection = "asc";
                 }
+                options.orderBy = field;
             }
         }
 
@@ -4069,6 +4077,91 @@ function keyboardService($window, $timeout) {
 
 
 })();
+
+/**
+ @ngdoc service
+ * @name umbraco.services.listViewPrevalueHelper
+ *
+ *
+ * @description
+ * Service for accessing the prevalues of a list view being edited in the inline list view editor in the doctype editor
+ */
+(function () {
+    'use strict';
+
+    function listViewPrevalueHelper() {
+
+        var prevalues = [];
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewPrevalueHelper#getPrevalues
+        * @methodOf umbraco.services.listViewPrevalueHelper
+        *
+        * @description
+        * Set the collection of prevalues
+        */
+
+        function getPrevalues() {
+            return prevalues;
+        }
+
+        /**
+        * @ngdoc method
+        * @name umbraco.services.listViewPrevalueHelper#setPrevalues
+        * @methodOf umbraco.services.listViewPrevalueHelper
+        *
+        * @description
+        * Changes the current layout used by the listview to the layout passed in. Stores selection in localstorage
+        *
+        * @param {Array} values Array of prevalues
+        */
+
+        function setPrevalues(values) {
+            prevalues = values;
+        }
+
+        
+
+        var service = {
+
+            getPrevalues: getPrevalues,
+            setPrevalues: setPrevalues
+
+        };
+
+        return service;
+
+    }
+
+
+    angular.module('umbraco.services').factory('listViewPrevalueHelper', listViewPrevalueHelper);
+
+
+})();
+
+/**
+ * @ngdoc service
+ * @name umbraco.services.localizationService
+ *
+ * @requires $http
+ * @requires $q
+ * @requires $window
+ * @requires $filter
+ *
+ * @description
+ * Application-wide service for handling localization
+ *
+ * ##usage
+ * To use, simply inject the localizationService into any controller that needs it, and make
+ * sure the umbraco.services module is accesible - which it should be by default.
+ *
+ * <pre>
+ *    localizationService.localize("area_key").then(function(value){
+ *        element.html(value);
+ *    });
+ * </pre>
+ */
 
 angular.module('umbraco.services')
 .factory('localizationService', function ($http, $q, eventsService, $window, $filter, userService) {
@@ -4150,7 +4243,17 @@ angular.module('umbraco.services')
             return deferred.promise;
         },
 
-        //helper to tokenize and compile a localization string
+        /**
+         * @ngdoc method
+         * @name umbraco.services.localizationService#tokenize
+         * @methodOf umbraco.services.localizationService
+         *
+         * @description
+         * Helper to tokenize and compile a localization string
+         * @param {String} value the value to tokenize
+         * @param {Object} scope the $scope object 
+         * @returns {String} tokenized resource string
+         */
         tokenize: function (value, scope) {
             if (value) {
                 var localizer = value.split(':');
@@ -4167,7 +4270,17 @@ angular.module('umbraco.services')
             return value;
         },
 
-        // checks the dictionary for a localized resource string
+        /**
+         * @ngdoc method
+         * @name umbraco.services.localizationService#localize
+         * @methodOf umbraco.services.localizationService
+         *
+         * @description
+         * Checks the dictionary for a localized resource string
+         * @param {String} value the area/key to localize
+         * @param {Array} tokens if specified this array will be sent as parameter values 
+         * @returns {String} localized resource string
+         */
         localize: function (value, tokens) {
             return service.initLocalizedResources().then(function (dic) {
                 var val = _lookup(value, tokens, dic);
@@ -8200,16 +8313,14 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
                     }
                     
                 }
-                else {
 
-                    //return an error object including the error message for UI
-                    deferred.reject({
-                        errorMsg: result.errorMsg,
-                        data: result.data,
-                        status: result.status
-                    });
+                //return an error object including the error message for UI
+                deferred.reject({
+                    errorMsg: result.errorMsg,
+                    data: result.data,
+                    status: result.status
+                });
 
-                }
 
             });
 
@@ -8296,15 +8407,14 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
                         }
                         
                     }
-                    else {
-
-                        //return an error object including the error message for UI
-                        deferred.reject({
-                            errorMsg: 'An error occurred',
-                            data: data,
-                            status: status
-                        });
-                    }
+                    
+                    //return an error object including the error message for UI
+                    deferred.reject({
+                        errorMsg: 'An error occurred',
+                        data: data,
+                        status: status
+                    });
+                   
 
                 });
 
@@ -8368,6 +8478,7 @@ function umbRequestHelper($http, $q, umbDataFormatter, angularHelper, dialogServ
     };
 }
 angular.module('umbraco.services').factory('umbRequestHelper', umbRequestHelper);
+
 angular.module('umbraco.services')
     .factory('userService', function ($rootScope, eventsService, $q, $location, $log, securityRetryQueue, authResource, dialogService, $timeout, angularHelper, $http) {
 
@@ -8581,7 +8692,7 @@ angular.module('umbraco.services')
                         return result;
                     });
             },
-
+          
             /** Logs the user out 
              */
             logout: function () {
@@ -8641,6 +8752,102 @@ angular.module('umbraco.services')
     });
 
 /*Contains multiple services for various helper tasks */
+function versionHelper() {
+
+    return {
+
+        //see: https://gist.github.com/TheDistantSea/8021359
+        versionCompare: function(v1, v2, options) {
+            var lexicographical = options && options.lexicographical,
+                zeroExtend = options && options.zeroExtend,
+                v1parts = v1.split('.'),
+                v2parts = v2.split('.');
+
+            function isValidPart(x) {
+                return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+            }
+
+            if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+                return NaN;
+            }
+
+            if (zeroExtend) {
+                while (v1parts.length < v2parts.length) {
+                    v1parts.push("0");
+                }
+                while (v2parts.length < v1parts.length) {
+                    v2parts.push("0");
+                }
+            }
+
+            if (!lexicographical) {
+                v1parts = v1parts.map(Number);
+                v2parts = v2parts.map(Number);
+            }
+
+            for (var i = 0; i < v1parts.length; ++i) {
+                if (v2parts.length === i) {
+                    return 1;
+                }
+
+                if (v1parts[i] === v2parts[i]) {
+                    continue;
+                }
+                else if (v1parts[i] > v2parts[i]) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
+            }
+
+            if (v1parts.length !== v2parts.length) {
+                return -1;
+            }
+
+            return 0;
+        }
+    };
+}
+angular.module('umbraco.services').factory('versionHelper', versionHelper);
+
+function dateHelper() {
+
+    return {
+        
+        convertToServerStringTime: function(momentLocal, serverOffsetMinutes, format) {
+
+            //get the formatted offset time in HH:mm (server time offset is in minutes)
+            var formattedOffset = (serverOffsetMinutes > 0 ? "+" : "-") +
+                moment()
+                .startOf('day')
+                .minutes(Math.abs(serverOffsetMinutes))
+                .format('HH:mm');
+
+            var server = moment.utc(momentLocal).utcOffset(formattedOffset);
+            return server.format(format ? format : "YYYY-MM-DD HH:mm:ss");
+        },
+
+        convertToLocalMomentTime: function (strVal, serverOffsetMinutes) {
+
+            //get the formatted offset time in HH:mm (server time offset is in minutes)
+            var formattedOffset = (serverOffsetMinutes > 0 ? "+" : "-") +
+                moment()
+                .startOf('day')
+                .minutes(Math.abs(serverOffsetMinutes))
+                .format('HH:mm');
+
+            //convert to the iso string format
+            var isoFormat = moment(strVal).format("YYYY-MM-DDTHH:mm:ss") + formattedOffset;
+
+            //create a moment with the iso format which will include the offset with the correct time
+            // then convert it to local time
+            return moment.parseZone(isoFormat).local();
+        }
+
+    };
+}
+angular.module('umbraco.services').factory('dateHelper', dateHelper);
 
 function packageHelper(assetsService, treeService, eventsService, $templateCache) {
 

@@ -54,7 +54,7 @@
         {            
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+            var merchello = new MerchelloHelper(MerchelloContext.Current, false);
 
             var productService = this.PreTestDataWorker.ProductService;
 
@@ -112,7 +112,7 @@
         {
             //// Arrange
 
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+            var merchello = new MerchelloHelper(MerchelloContext.Current, false);
 
             var productService = this.PreTestDataWorker.ProductService;
 
@@ -140,7 +140,7 @@
         public void Can_Retrieve_A_ProductVariant_From_The_Index()
         {
             //// Arrange
-            var merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+            var merchello = new MerchelloHelper(MerchelloContext.Current, false);
 
             var productService = this.PreTestDataWorker.ProductService;
 

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.Migrations
 {
+    using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence.Migrations;
     using Umbraco.Core.Persistence.SqlSyntax;
@@ -12,8 +13,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloMigrationBase"/> class.
         /// </summary>
+        protected MerchelloMigrationBase()
+            : this(ApplicationContext.Current.DatabaseContext.SqlSyntax, Umbraco.Core.Logging.Logger.CreateWithDefaultLog4NetConfiguration())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloMigrationBase"/> class.
+        /// </summary>
         /// <param name="sqlSyntax">
-        /// The sql syntax.
+        /// The SQL syntax.
         /// </param>
         /// <param name="logger">
         /// The logger.
@@ -22,10 +31,5 @@
             : base(sqlSyntax, logger)
         {
         }
-
-        /// <summary>
-        /// The context.
-        /// </summary>
-        internal IMigrationContext Context;
     }
 }

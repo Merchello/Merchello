@@ -69,6 +69,16 @@
             param.value = term;
             addParameter.call(this, param);
         }
+        
+        function addSharedOptionOnlyParam(sharedOnly) {
+            if (sharedOnly === undefined || sharedOnly === true) {
+                return;
+            }
+            var param = new QueryParameterDisplay();
+            param.fieldName = 'sharedOnly';
+            param.value = 'false';
+            addParameter.call(this, param);
+        }
 
         function applyInvoiceQueryDefaults() {
             this.sortBy = 'invoiceNumber';
@@ -84,7 +94,8 @@
             applyInvoiceQueryDefaults: applyInvoiceQueryDefaults,
             addInvoiceDateParam: addInvoiceDateParam,
             addFilterTermParam: addFilterTermParam,
-            hasCollectionKeyParam: hasCollectionKeyParam
+            hasCollectionKeyParam: hasCollectionKeyParam,
+            addSharedOptionOnlyParam: addSharedOptionOnlyParam
         };
     }());
 

@@ -43,7 +43,13 @@ namespace Merchello.Tests.IntegrationTests.TestHelpers
 
             //AutoMapperMappings.CreateMappings();
             var logger = Logger.CreateWithDefaultLog4NetConfiguration();
-            var serviceContext = new ServiceContext(new RepositoryFactory(logger, sqlSyntax), new PetaPocoUnitOfWorkProvider(logger), logger, new TransientMessageFactory());
+
+            var cache = new CacheHelper(
+                new ObjectCacheRuntimeCacheProvider(),
+                new StaticCacheProvider(),
+                new NullCacheProvider());
+
+            var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, sqlSyntax), new PetaPocoUnitOfWorkProvider(logger), logger, new TransientMessageFactory());
 
             _dbPreTestDataWorker = new DbPreTestDataWorker(serviceContext);
 

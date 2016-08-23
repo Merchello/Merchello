@@ -30,32 +30,32 @@
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "store" ContentType.
             /// </summary>
-            private const string ContentTypeAliasStore = "store";
+            private const string ContentTypeAliasStore = "ftStore";
 
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "basket" ContentType.
             /// </summary>
-            private const string ContentTypeAliasBasket = "basket";
+            private const string ContentTypeAliasBasket = "ftBasket";
 
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "catalog" ContentType.
             /// </summary>
-            private const string ContentTypeAliasCatalog = "catalog";
+            private const string ContentTypeAliasCatalog = "ftCatalog";
 
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "checkout" ContentTypes
             /// </summary>
-            private const string ContentTypeAliasCheckout = "checkout";
+            private const string ContentTypeAliasCheckout = "ftCheckout";
 
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "receipt" ContentType.
             /// </summary>
-            private const string ContentTypeAliasReceipt = "receipt";
+            private const string ContentTypeAliasReceipt = "ftReceipt";
 
             /// <summary>
             /// The Umbraco ContentTypeAlias for the "account" ContentType.
             /// </summary>
-            private const string ContentTypeAliasAccount = "account";
+            private const string ContentTypeAliasAccount = "ftAccount";
 
             #endregion
 
@@ -157,7 +157,7 @@
             {
                 var catalog = GetCatalog();
 
-                return catalog.FirstChild(x => x.GetPropertyValue<ProductContentListView>("products").CollectionKey == collectionKey);
+                return catalog.FirstChild(x => x.GetDataValueAsGuid("products") == collectionKey);
             }
         }
 

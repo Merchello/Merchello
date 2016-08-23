@@ -21,6 +21,20 @@ angular.module('merchello.services').service('merchelloListViewHelper',
                 ]
             },
 
+            // TODO remove this
+            productoption: {
+                columns: [
+                    { name: 'name', localizeKey: 'merchelloTableCaptions_optionName' },
+                    { name: 'uiOption', localizeKey: 'merchelloTableCaptions_optionUi' },
+                    { name: 'choices', localizeKey: 'merchelloTableCaptions_optionValues', resultColumn: true },
+                    { name: 'shared', localizeKey: 'merchelloTableCaptions_shared' },
+                    { name: 'sharedCount', localizeKey: 'merchelloTableCaptions_sharedCount' }
+                ],
+                pageSize: 10,
+                orderBy: 'name',
+                orderDirection: 'asc'
+            },
+
             customer:  {
                 columns: [
                     { name: 'loginName', localizeKey: 'merchelloCustomers_loginName' },

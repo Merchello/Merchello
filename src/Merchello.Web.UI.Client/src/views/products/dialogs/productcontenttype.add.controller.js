@@ -14,15 +14,16 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
             $scope.contentType = {};
             $scope.name = '';
             $scope.description = '';
-
+            $scope.associateType = 'Product';
             var eventName = 'merchello.contenttypedropdown.changed';
 
             $scope.save = function() {
                 $scope.wasFormSubmitted = true;
                 if ($scope.productContentTypeForm.name.$valid && $scope.contentType.key) {
+
                     var dtc = detachedContentTypeDisplayBuilder.createDefault();
                     dtc.umbContentType = $scope.contentType;
-                    dtc.entityType = 'Product';
+                    dtc.entityType = $scope.associateType;
                     dtc.name = $scope.name;
                     dtc.description = $scope.description;
 
@@ -37,6 +38,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.AddProductCont
             }
 
             function init() {
+
                 eventsService.on(eventName, onSelectionChanged);
             }
 

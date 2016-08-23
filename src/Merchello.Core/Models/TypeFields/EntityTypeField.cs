@@ -108,6 +108,14 @@
         }
 
         /// <summary>
+        /// Gets the product option entity type field.
+        /// </summary>
+        public ITypeField ProductOption
+        {
+            get { return GetTypeField(EntityType.ProductOption); }
+        }
+
+        /// <summary>
         /// Gets the shipment entity type field
         /// </summary>
         public ITypeField Shipment
@@ -152,6 +160,7 @@
             AddUpdateCache(EntityType.Order, new TypeField("Order", "Order", Constants.TypeFieldKeys.Entity.OrderKey));
             AddUpdateCache(EntityType.Payment, new TypeField("Payment", "Payment", Constants.TypeFieldKeys.Entity.PaymentKey));
             AddUpdateCache(EntityType.Product, new TypeField("Product", "Product", Constants.TypeFieldKeys.Entity.ProductKey));
+            AddUpdateCache(EntityType.ProductOption, new TypeField("ProductOption", "ProductOption", Constants.TypeFieldKeys.Entity.ProductOptionKey));
             AddUpdateCache(EntityType.Shipment, new TypeField("Shipment", "Shipment", Constants.TypeFieldKeys.Entity.ShipmentKey));
             AddUpdateCache(EntityType.Warehouse, new TypeField("Warehouse", "Warehouse", Constants.TypeFieldKeys.Entity.WarehouseKey));
             AddUpdateCache(EntityType.WarehouseCatalog, new TypeField("WarehouseCatalog", "WarehouseCatalog", Constants.TypeFieldKeys.Entity.WarehouseCatalogKey));

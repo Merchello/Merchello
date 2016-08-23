@@ -70,7 +70,12 @@
         /// Gets the <see cref="IProductService"/>
         /// </summary>
         IProductService ProductService { get; }
-        
+
+        /// <summary>
+        /// Gets the <see cref="IProductOptionService"/>.
+        /// </summary>
+        IProductOptionService ProductOptionService { get; }
+
         /// <summary>
         /// Gets the <see cref="IProductVariantService"/>
         /// </summary>

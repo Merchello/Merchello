@@ -1,5 +1,0 @@
-﻿{
-	javascript : [
-		'~/App_Plugins/Merchello.Avalara/Dialogs/avatax.provider.configuration.controller.js'
-	]
-}

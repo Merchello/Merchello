@@ -29,6 +29,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductVariantFactory"/> class.
         /// </summary>
+        public ProductVariantFactory()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductVariantFactory"/> class.
+        /// </summary>
         /// <param name="productAttributes">
         /// The product attributes.
         /// </param>

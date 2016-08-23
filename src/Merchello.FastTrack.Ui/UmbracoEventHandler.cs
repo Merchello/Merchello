@@ -4,9 +4,12 @@
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Gateways.Payment;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
+    using Umbraco.Core.Logging;
+    using Umbraco.Core.Models;
     using Umbraco.Core.Services;
 
     /// <summary>
@@ -57,6 +60,7 @@
         public void OnApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
         }
+
 
         //// Event handler methods
 

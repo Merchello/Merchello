@@ -5,13 +5,12 @@ namespace Merchello.Web.Models.ContentEditing.Content
     using Umbraco.Web.Models.ContentEditing;
 
     /// <summary>
-    /// The detached content save item.
+    /// Saves a display item's detached content.
     /// </summary>
     /// <typeparam name="TDisplay">
     /// The type of display object
     /// </typeparam>
     public abstract class DetachedContentSaveItem<TDisplay> : IHaveUploadedFiles
-        where TDisplay : ProductDisplayBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DetachedContentSaveItem{TDisplay}"/> class.
@@ -26,10 +25,6 @@ namespace Merchello.Web.Models.ContentEditing.Content
         /// </summary>
         public TDisplay Display { get; set; }
 
-        /// <summary>
-        /// Gets or sets the culture name.
-        /// </summary>
-        public string CultureName { get; set; }
 
         /// <summary>
         /// Gets the uploaded files.

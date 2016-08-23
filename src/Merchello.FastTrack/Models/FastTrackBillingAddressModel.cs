@@ -35,7 +35,7 @@
         /// </summary>
         [Display(ResourceType = typeof(StoreFormsResource), Name = "LabelEmailAddress")]
         [Required(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "RequiredEmailAddress")]
-        [EmailAddress(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "InvalidEmailAddress")]
+        [EmailAddress(ErrorMessageResourceType = typeof(StoreFormsResource), ErrorMessageResourceName = "InvalidEmailAddress", ErrorMessage = null)]
         public override string Email { get; set; }
 
         /// <summary>

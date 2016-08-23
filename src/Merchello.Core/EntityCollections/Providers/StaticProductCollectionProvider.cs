@@ -62,6 +62,9 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
+        /// <remarks>
+        /// 
+        /// </remarks>
         protected override Page<IProduct> PerformGetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending)
         {
             return this.MerchelloContext.Services.ProductService.GetFromCollection(

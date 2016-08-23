@@ -29,6 +29,13 @@
         public Guid OptionKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the name for the option when a shared option is used on a product.
+        /// </summary>
+        [Column("useName")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string UseName { get; set; }
+
+        /// <summary>
         /// Gets or sets the sort order.
         /// </summary>
         [Column("sortOrder")]

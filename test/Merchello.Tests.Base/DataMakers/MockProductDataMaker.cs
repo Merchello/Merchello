@@ -89,21 +89,24 @@ namespace Merchello.Tests.Base.DataMakers
                                 Key = Guid.Empty,
                                 Name = "Blue",
                                 Sku = "blue",
-                                SortOrder = 0
+                                SortOrder = 0,
+                                DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>()
                             },
                             new ProductAttributeDisplay()
                             {
                                 Key = Guid.Empty,
                                 Name = "Red",
                                 Sku = "red",
-                                SortOrder = 1
+                                SortOrder = 1,
+                                DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>()
                             },
                             new ProductAttributeDisplay()
                             {
                                 Key = Guid.Empty,
                                 Name = "Green",
                                 Sku = "green",
-                                SortOrder = 2
+                                SortOrder = 2,
+                                DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>()
                             }
                         },
                         SortOrder = 0
@@ -120,21 +123,24 @@ namespace Merchello.Tests.Base.DataMakers
                                 Key = Guid.Empty,
                                 Name = "Small",
                                 Sku = "small",
-                                SortOrder = 0
+                                SortOrder = 0,
+                                DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>()
                             },
                             new ProductAttributeDisplay()
                             {
                                 Key = Guid.Empty,
                                 Name = "Medium",
                                 Sku = "medium",
-                                SortOrder = 1
+                                SortOrder = 1,
+                                DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>()
                             },
                             new ProductAttributeDisplay()
                             {
                                 Key = Guid.Empty,
                                 Name = "Large",
                                 Sku = "large",
-                                SortOrder = 2
+                                SortOrder = 2,
+                                DetachedDataValues = Enumerable.Empty<KeyValuePair<string, string>>()
                             }
                         },
                         SortOrder = 1

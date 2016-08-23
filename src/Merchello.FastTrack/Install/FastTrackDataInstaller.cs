@@ -72,6 +72,11 @@
         private readonly IDictionary<string, string> _media = new Dictionary<string, string>();
 
         /// <summary>
+        /// The shared product options.
+        /// </summary>
+        private readonly IDictionary<string, IProductOption> _sharedOptions = new Dictionary<string, IProductOption>();
+
+        /// <summary>
         /// The member type.
         /// </summary>
         private IMemberType _memberType;
@@ -87,7 +92,7 @@
         {
             _services = ApplicationContext.Current.Services;
 
-            var templates = new[] { "Product", "Payment", "PaymentMethod", "BillingAddress", "ShipRateQuote", "ShippingAddress" };
+            var templates = new[] { "ftProduct", "ftPayment", "ftPaymentMethod", "ftBillingAddress", "ftShipRateQuote", "ftShippingAddress" };
 
             _templates = ApplicationContext.Current.Services.FileService.GetTemplates(templates);
         }
@@ -105,6 +110,9 @@
 
             MultiLogHelper.Info<FastTrackDataInstaller>("Adding example media");
             this.AddExampleMedia();
+
+            MultiLogHelper.Info<FastTrackDataInstaller>("Adding shared options");
+            this.CreateSharedOptions();
 
             // Adds the Merchello Data
             MultiLogHelper.Info<FastTrackDataInstaller>("Starting to add example FastTrack data");
@@ -195,7 +203,7 @@
 
             MultiLogHelper.Info<FastTrackDataInstaller>("Installing store root node");
 
-            var storeRoot = _services.ContentService.CreateContent("Store", -1, "store");
+            var storeRoot = _services.ContentService.CreateContent("Store", -1, "ftStore");
 
             storeRoot.SetValue("storeName", "FastTrack Store");
             storeRoot.SetValue("brief", @"<p>Example store which has been developed to help get you up and running quickly with Merchello. 
@@ -209,21 +217,21 @@
             LogHelper.Info<FastTrackDataInstaller>("Adding example category page");
 
             // Create the root T-Shirt category
-            var catalog = _services.ContentService.CreateContent("Catalog", storeRoot.Id, "catalog");
+            var catalog = _services.ContentService.CreateContent("Catalog", storeRoot.Id, "ftCatalog");
 
             catalog.SetValue("categories", _collections[CollectionMainCategories].ToString());
             _services.ContentService.SaveAndPublishWithStatus(catalog);
 
             // Create the sun categories
-            var funnyTShirts = _services.ContentService.CreateContent("Funny T-Shirts", catalog.Id, "category");
+            var funnyTShirts = _services.ContentService.CreateContent("Funny T-Shirts", catalog.Id, "ftCategory");
             funnyTShirts.SetValue("products", _collections[CollectionFunny].ToString());
             _services.ContentService.SaveAndPublishWithStatus(funnyTShirts);
 
-            var geekyTShirts = _services.ContentService.CreateContent("Geeky T-Shirts", catalog.Id, "category");
+            var geekyTShirts = _services.ContentService.CreateContent("Geeky T-Shirts", catalog.Id, "ftCategory");
             geekyTShirts.SetValue("products", _collections[CollectionGeeky].ToString());
             _services.ContentService.SaveAndPublishWithStatus(geekyTShirts);
 
-            var sadTShirts = _services.ContentService.CreateContent("Sad T-Shirts", catalog.Id, "category");
+            var sadTShirts = _services.ContentService.CreateContent("Sad T-Shirts", catalog.Id, "ftCategory");
             sadTShirts.SetValue("products", _collections[CollectionSad].ToString());
             _services.ContentService.SaveAndPublishWithStatus(sadTShirts);
 
@@ -231,41 +239,41 @@
 
             MultiLogHelper.Info<FastTrackDataInstaller>("Adding example eCommerce workflow pages");
 
-            var basket = _services.ContentService.CreateContent("Basket", storeRoot.Id, "basket");
+            var basket = _services.ContentService.CreateContent("Basket", storeRoot.Id, "ftBasket");
             _services.ContentService.SaveAndPublishWithStatus(basket);
 
-            var checkout = _services.ContentService.CreateContent("Checkout", storeRoot.Id, "checkout");
-            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "BillingAddress");
+            var checkout = _services.ContentService.CreateContent("Checkout", storeRoot.Id, "ftCheckout");
+            checkout.Template = _templates.FirstOrDefault(x => x.Alias == "ftBillingAddress");
             checkout.SetValue("checkoutStage", "BillingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkout);
 
-            var checkoutShipping = _services.ContentService.CreateContent("Shipping Address", checkout.Id, "checkout");
-            checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ShippingAddress");
+            var checkoutShipping = _services.ContentService.CreateContent("Shipping Address", checkout.Id, "ftCheckout");
+            checkoutShipping.Template = _templates.FirstOrDefault(x => x.Alias == "ftShippingAddress");
             checkoutShipping.SetValue("checkoutStage", "ShippingAddress");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipping);
 
-            var checkoutShipRateQuote = _services.ContentService.CreateContent("Ship Rate Quote", checkout.Id, "checkout");
-            checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ShipRateQuote");
+            var checkoutShipRateQuote = _services.ContentService.CreateContent("Ship Rate Quote", checkout.Id, "ftCheckout");
+            checkoutShipRateQuote.Template = _templates.FirstOrDefault(x => x.Alias == "ftShipRateQuote");
             checkoutShipRateQuote.SetValue("checkoutStage", "ShipRateQuote");
             _services.ContentService.SaveAndPublishWithStatus(checkoutShipRateQuote);
 
-            var checkoutPaymentMethod = _services.ContentService.CreateContent("Payment Method", checkout.Id, "checkout");
-            checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "PaymentMethod");
+            var checkoutPaymentMethod = _services.ContentService.CreateContent("Payment Method", checkout.Id, "ftCheckout");
+            checkoutPaymentMethod.Template = _templates.FirstOrDefault(x => x.Alias == "ftPaymentMethod");
             checkoutPaymentMethod.SetValue("checkoutStage", "PaymentMethod");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPaymentMethod);
 
-            var checkoutPayment = _services.ContentService.CreateContent("Payment", checkout.Id, "checkout");
-            checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "Payment");
+            var checkoutPayment = _services.ContentService.CreateContent("Payment", checkout.Id, "ftCheckout");
+            checkoutPayment.Template = _templates.FirstOrDefault(x => x.Alias == "ftPayment");
             checkoutPayment.SetValue("checkoutStage", "Payment");
             _services.ContentService.SaveAndPublishWithStatus(checkoutPayment);
 
-            var receipt = _services.ContentService.CreateContent("Receipt", storeRoot.Id, "receipt");
+            var receipt = _services.ContentService.CreateContent("Receipt", storeRoot.Id, "ftReceipt");
             _services.ContentService.SaveAndPublishWithStatus(receipt);
 
-            var login = _services.ContentService.CreateContent("Login", storeRoot.Id, "login");
+            var login = _services.ContentService.CreateContent("Login", storeRoot.Id, "ftLogin");
             _services.ContentService.SaveAndPublishWithStatus(login);
 
-            var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "account");
+            var account = _services.ContentService.CreateContent("Account", storeRoot.Id, "ftAccount");
             _services.ContentService.SaveAndPublishWithStatus(account);
 
 
@@ -279,7 +287,31 @@
             return storeRoot;
         }
 
+        /// <summary>
+        /// Creates shared options.
+        /// </summary>
+        private void CreateSharedOptions()
+        {
+            var productOptionService = MerchelloContext.Current.Services.ProductOptionService;
 
+            var size = new ProductOption("Size") { Shared = true, UiOption = "select" };
+            size.Choices.Add(new ProductAttribute("Small", "sm") { SortOrder = 1, IsDefaultChoice = false });
+            size.Choices.Add(new ProductAttribute("Medium", "md") { SortOrder = 2, IsDefaultChoice = false });
+            size.Choices.Add(new ProductAttribute("Large", "lg") { SortOrder = 3, IsDefaultChoice = true });
+            size.Choices.Add(new ProductAttribute("X-Large", "xl") { SortOrder = 4, IsDefaultChoice = false });
+
+            var colour = new ProductOption("Colour") { Shared = true, UiOption = "select" };
+            colour.Choices.Add(new ProductAttribute("White", "white") { SortOrder = 1, IsDefaultChoice = false });
+            colour.Choices.Add(new ProductAttribute("Black", "black") { SortOrder = 2, IsDefaultChoice = false });
+            colour.Choices.Add(new ProductAttribute("Grey", "grey") { SortOrder = 3, IsDefaultChoice = true });
+            colour.Choices.Add(new ProductAttribute("Blue", "blue") { SortOrder = 4, IsDefaultChoice = false });
+
+            productOptionService.Save(size);
+            productOptionService.Save(colour);
+
+            _sharedOptions.Add("size", size);
+            _sharedOptions.Add("colour", colour);
+        }
 
         /// <summary>
         /// The add merchello data.
@@ -400,7 +432,7 @@
             // Add the detached content type
             LogHelper.Info<FastTrackDataInstaller>("Getting information for detached content");
 
-            var contentType = _services.ContentTypeService.GetContentType("product");
+            var contentType = _services.ContentTypeService.GetContentType("ftProduct");
             var detachedContentTypeService =
                 ((Core.Services.ServiceContext)merchelloServices).DetachedContentTypeService;
             var detachedContentType = detachedContentTypeService.CreateDetachedContentType(
@@ -424,7 +456,7 @@
                                                 <p>Ham hock spare ribs cow turducken porchetta corned beef, pastrami leberkas biltong meatloaf bacon shankle ribeye beef ribs. Picanha ham hock chicken 
                                                         biltong, ground round jowl meatloaf bacon short ribs tongue shoulder.</p>""";
 
-            var template = _templates.FirstOrDefault(x => x.Alias == "Product");
+            var template = _templates.FirstOrDefault(x => x.Alias == "ftProduct");
             var templateId = template != null ? template.Id : 0;
 
             LogHelper.Info<FastTrackDataInstaller>("Adding an example product - Despite Shirt");
@@ -677,14 +709,10 @@
         /// </param>
         private void AddOptionsToProduct(IProduct product)
         {
-            product.ProductOptions.Add(new ProductOption("Color"));
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Blue", "Blue"));
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Red", "Red"));
-            product.ProductOptions.First(x => x.Name == "Color").Choices.Add(new ProductAttribute("Green", "Green"));
-            product.ProductOptions.Add(new ProductOption("Size"));
-            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Small", "Small"));
-            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Medium", "Medium"));
-            product.ProductOptions.First(x => x.Name == "Size").Choices.Add(new ProductAttribute("Large", "Large"));
+            foreach (var option in _sharedOptions)
+            {
+                product.ProductOptions.Add(option.Value);
+            }
         }
 
         /// <summary>

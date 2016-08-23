@@ -14,7 +14,7 @@
     /// <summary>
     /// Insert new merchello setting default extended content culture.
     /// </summary>
-    [Migration("1.11.0", "1.12.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
+    [Migration("1.11.0", "1.12.0", 2, MerchelloConfiguration.MerchelloMigrationName)]
     public class InsertNewMerchelloSettingDefaultExtendedContentCulture : IMerchelloMigration
     {
          /// <summary>

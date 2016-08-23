@@ -1,0 +1,11 @@
+@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{ var selection = CurrentPage.Children.Where("Visible").OrderBy("Name"); }
+@* OrderBy() takes the property to sort by *@
+
+<ul>
+    @foreach (var item in selection)
+    {
+        <li><a href="@item.Url">@item.Name</a></li>
+    }
+</ul>

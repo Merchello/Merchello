@@ -41,7 +41,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public EntityCollectionRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public EntityCollectionRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
         }
@@ -65,9 +65,8 @@
                     .Append("WHERE [merchProduct2EntityCollection].[productKey] = @pkey", new { @pkey = productKey })
                     .Append(")");
             var dtos = Database.Fetch<EntityCollectionDto>(sql);
-            var factory = new EntityCollectionFactory();
 
-            return dtos.Select(factory.BuildEntity);
+            return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
         }
 
         /// <summary>
@@ -88,10 +87,10 @@
                 .Append("FROM [merchInvoice2EntityCollection]")
                 .Append("WHERE [merchInvoice2EntityCollection].[invoiceKey] = @ikey", new { @ikey = invoiceKey })
                 .Append(")");
-                    var dtos = Database.Fetch<EntityCollectionDto>(sql);
-                    var factory = new EntityCollectionFactory();
 
-            return dtos.Select(factory.BuildEntity);
+
+            var dtos = Database.Fetch<EntityCollectionDto>(sql);
+            return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
         }
 
         /// <summary>
@@ -112,10 +111,12 @@
                 .Append("FROM [merchCustomer2EntityCollection]")
                 .Append("WHERE [merchCustomer2EntityCollection].[customerKey] = @ckey", new { @ckey = customerKey })
                 .Append(")");
-                        var dtos = Database.Fetch<EntityCollectionDto>(sql);
-                        var factory = new EntityCollectionFactory();
 
-                        return dtos.Select(factory.BuildEntity);
+            var dtos = Database.Fetch<EntityCollectionDto>(sql);
+            return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
+            //var factory = new EntityCollectionFactory();
+
+            //return dtos.Select(factory.BuildEntity);
         }
 
         /// <summary>
@@ -217,11 +218,10 @@
             }
             else
             {
-                var factory = new EntityCollectionFactory();
                 var dtos = Database.Fetch<EntityCollectionDto>(GetBaseQuery(false));
                 foreach (var dto in dtos)
                 {
-                    yield return factory.BuildEntity(dto);
+                    yield return Get(dto.Key);
                 }
             }
         }

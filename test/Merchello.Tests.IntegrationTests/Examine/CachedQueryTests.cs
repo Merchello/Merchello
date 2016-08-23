@@ -39,7 +39,7 @@
                 start = start.AddDays(1);
             }
 
-            _merchello = new MerchelloHelper(MerchelloContext.Current.Services, false);
+            _merchello = new MerchelloHelper(MerchelloContext.Current, false);
         }
 
         [Test]

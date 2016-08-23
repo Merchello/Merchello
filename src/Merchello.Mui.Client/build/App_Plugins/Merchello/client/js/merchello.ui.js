@@ -14,8 +14,8 @@ var MUI = (function() {
     // If DEBUG_MODE is true allows messages to be written to the console
     // THESE SHOULD be set to false before deploying to production!!!!!
     var DEBUG_MODE = {
-        events: true,
-        console: true
+        events: false,
+        console: false
     };
 
     // Private members
@@ -306,7 +306,8 @@ MUI.Services.Braintree = {
 MUI.AddItem = {
 
     events : [
-        { alias: 'added', name: 'AddItem.added' }
+        { alias: 'added', name: 'AddItem.added' },
+        { alias: 'tableCreated', name: 'AddItem.tableCreated' }
     ],
 
     addItemSuccess: 'Successfully added item to basket',
@@ -365,10 +366,12 @@ MUI.AddItem = {
                             $.each(tbl.rows, function(rindx, dataRow) {
                                 pdt.rows.push($.extend(new MUI.AddItem.ProductDataTableRow(), dataRow));
                             });
+                            MUI.emit('AddItem.tableCreated', pdt);
                             MUI.AddItem.dataTables.push(pdt);
                             //MUI.AddItem.bind.controls(pdt);
                         });
                     }
+
 
                     // find all of the AddItem forms
                     MUI.AddItem.bind.forms();
@@ -440,12 +443,13 @@ MUI.AddItem = {
                    $(o).change(function() {
                        // TODO filter lists to ensure all choices are available
                        MUI.AddItem.updateVariantPricing(frm, key);
+                       MUI.AddItem.ensureInventorySettings(frm, key);
                    });
                 });
             }
             // initial pricing (on load)
             MUI.AddItem.updateVariantPricing(frm, key);
-
+            MUI.AddItem.ensureInventorySettings(frm, key);
         }
     },
 
@@ -468,32 +472,51 @@ MUI.AddItem = {
             return;
         }
 
-        // get all of the options associated with this product so we can
-        // find the matching data row in the product data table
-        var options = MUI.AddItem.getOptionsForProduct(frm, key);
+        var row = MUI.AddItem.findProductDataTableRow(frm, key);
 
-        if (options.length > 0) {
-            // get the current selections
-            var keys = [];
-            $.each(options, function(idx, o) {
-               keys.push($(o).val());
-            });
+        if (row !== undefined) {
 
-            var pdt = MUI.AddItem.getProductDataTable(key);
-            if (pdt !== undefined) {
-                if (keys.length > 0) {
-                    var row = pdt.getRowByMatchKeys(keys);
-                    if (row !== undefined) {
-                        // update the price
-                        var html = '';
-                        if (row.onSale) {
-                            html = "<span class='sale-price'>" + row.formattedSalePrice + "</span> <span class='original-price'>" + row.formattedPrice + "</span>";
-                        } else {
-                            html = "<span>" + row.formattedPrice + "</span>";
-                        }
+            // update the price
+            var html = '';
+            if (row.onSale) {
+                html = "<span class='sale-price'>" + row.formattedSalePrice + "</span> <span class='original-price'>" + row.formattedPrice + "</span>";
+            } else {
+                html = "<span>" + row.formattedPrice + "</span>";
+            }
 
-                        $(appendTo).html(html);
+            $(appendTo).html(html);
+        }
+
+    },
+
+    ensureInventorySettings: function(frm, key) {
+        var row = MUI.AddItem.findProductDataTableRow(frm, key);
+        if (row !== undefined) {
+            var appendTo = $(frm).find('[data-muiinv="' + row.productKey + '"]');
+            if (appendTo.length > 0) {
+
+                var showBtn = row.outOfStockPurchase || row.inventoryCount > 0;
+
+                var html = '';
+                if (row.inventoryCount > 0) {
+                    html = MUI.Settings.Labels.InStock.replace('@0', row.inventoryCount);
+                } else {
+
+                    if (row.outOfStockPurchase) {
+                        html = MUI.Settings.Labels.OutOfStockAllowPurchase;
+                    } else {
+                        html = MUI.Settings.Labels.OutOfStock;
                     }
+                    html = "<span>" + html + "</span>";
+                }
+
+                $(appendTo).html(html);
+                var btn = $(frm).find(':submit');
+
+                if (showBtn) {
+                    $(btn).show();
+                } else {
+                    $(btn).hide();
                 }
             }
         }
@@ -512,6 +535,30 @@ MUI.AddItem = {
         } else {
             return [];
         }
+    },
+
+    findProductDataTableRow: function(frm, key) {
+        // get all of the options associated with this product so we can
+        // find the matching data row in the product data table
+        var options = MUI.AddItem.getOptionsForProduct(frm, key);
+
+        var row = undefined;
+        if (options.length > 0) {
+            // get the current selections
+            var keys = [];
+            $.each(options, function (idx, o) {
+                keys.push($(o).val());
+            });
+
+            var pdt = MUI.AddItem.getProductDataTable(key);
+            if (pdt !== undefined) {
+                if (keys.length > 0) {
+                    row = pdt.getRowByMatchKeys(keys);
+                }
+            }
+        }
+
+        return row;
     },
 
     // Gets the data table
@@ -1103,7 +1150,94 @@ MUI.Checkout.Address = {
     addressType: '',
     
     init: function() {
-        
+        if (MUI.Settings.Endpoints.countryRegionApi === undefined || MUI.Settings.Endpoints.countryRegionApi === '') return;
+
+        var frm = $('[data-muistage="BillingAddress"]');
+
+        if (frm.length > 0) {
+            MUI.Checkout.Address.addressType = "Billing";
+            MUI.Checkout.Address.bind.form(frm[0]);
+            var countryddl = frm.find(':input[data-muiaction="populateregion"]');
+            //if country not selected, set to default
+            if (countryddl.val().length == 0) {
+                if (MUI.Settings.Defaults.BillingCountryCode.length > 0) {
+                    countryddl.val(MUI.Settings.Defaults.BillingCountryCode);
+                }
+            }
+            MUI.Checkout.Address.populateRegion(countryddl);
+
+        } else {
+            frm = $('[data-muistage="ShippingAddress"]');
+            if (frm.length > 0) {
+                MUI.Checkout.Address.addressType = "Shipping";
+                MUI.Checkout.Address.bind.form(frm[0]);
+                var countryddl = frm.find(':input[data-muiaction="populateregion"]');
+                //if country not selected, set to default
+                if (countryddl.val().length == 0) {
+                    if (MUI.Settings.Defaults.ShippingCountryCode.length > 0) {
+                        countryddl.val(MUI.Settings.Defaults.ShippingCountryCode);
+                    }
+                }
+                MUI.Checkout.Address.populateRegion(countryddl);
+            }
+        }
+    },
+
+    bind: {
+
+        form: function (frm) {
+            // Watch for changes in the input fields
+            $(frm).find(':input[data-muiaction="populateregion"]').change(function () {
+                MUI.Checkout.Address.populateRegion($(this));
+            });
+
+            $(frm).find(':input[data-muiaction="updateregion"]').change(function () {
+                var frmRef = $(this).closest('form');
+                //keep the select list and the region textbox in sync
+                frmRef.find(':input[data-muivalue="region"]').val(frmRef.find(':input[data-muiaction="updateregion"]').val());
+            });
+        }
+    },
+
+    populateRegion: function (countryCode) {
+        var frmRef = countryCode.closest('form');
+        // post the country to get the regions for that country
+        var url = MUI.Settings.Endpoints.countryRegionApi + 'PostGetRegionsForCountry?countryCode=' + countryCode.val();
+        $.ajax({
+            type: 'POST',
+            url: url
+        }).then(function (results) {
+            var regionddl = frmRef.find(':input[data-muiaction="updateregion"]');
+            var regiontb = frmRef.find(':input[data-muivalue="region"]');
+            if (results.length > 0) {
+                //remove all but the first option
+                $('option', regionddl).not(':eq(0)').remove();
+                $.each(results, function (idx, item) {
+                    regionddl.append($("<option></option>").attr("value", item.code).text(item.name));
+                });
+                //if region already defined and is present in the drop down, select it
+                if (regiontb.val().length > 0 && regionddl.find('option[value="' + regiontb.val() + '"]').length > 0) {//and it exists in the drop down) {
+                    //set ddl to current value
+                    regionddl.val(regiontb.val());
+                }
+                else {
+                    regiontb.val('');
+                }
+                //show region ddl and hide region textbox
+                regionddl.show();
+                regiontb.hide();
+                //$('#UseForShipping').attr('disabled', false);
+            }
+            else {
+                //hide region ddl and show region textbox
+                regionddl.hide();
+                regiontb.val('').show();
+                //also, if there is no region then billing and shipping must be different??
+                //$('#UseForShipping').prop('checked', false).attr('disabled', true);
+            }
+        }, function (err) {
+            MUI.Logger.captureError(err);
+        });
     }
     
     

@@ -10,6 +10,8 @@
     using global::Examine.Providers;
     using global::Examine.SearchCriteria;
 
+    using Merchello.Core.Cache;
+    using Merchello.Web.Caching;
     using Merchello.Web.Models.Querying;
 
     using Umbraco.Core;
@@ -56,6 +58,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedQueryBase{TEntity,TDisplay}"/> class.
         /// </summary>
+        /// <param name="cacheHelper">
+        /// The <see cref="CacheHelper"/>.
+        /// </param>
         /// <param name="service">
         /// The service.
         /// </param>
@@ -69,6 +74,7 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </param>
         protected CachedQueryBase(
+            CacheHelper cacheHelper,
             IPageCachedService<TEntity> service, 
             BaseIndexProvider indexProvider, 
             BaseSearchProvider searchProvider, 
@@ -77,12 +83,13 @@
             Mandate.ParameterNotNull(service, "service");
             Mandate.ParameterNotNull(indexProvider, "indexProvider");
             Mandate.ParameterNotNull(searchProvider, "searchProvider");
+            Mandate.ParameterNotNull(cacheHelper, "cacheHelper");
 
             _service = service;
             _indexProvider = indexProvider;
             _searchProvider = searchProvider;
             _enableDataModifiers = enableDataModifiers;
-
+            this.PagedKeyCache = new PagedKeyQueryCache(cacheHelper);
             _resultFactory = new Lazy<QueryResultFactory<TDisplay>>(() => new QueryResultFactory<TDisplay>(PerformMapSearchResultToDisplayObject, GetDisplayObject));
         }
 
@@ -126,6 +133,11 @@
                 return _service;
             }
         }
+
+        /// <summary>
+        /// Gets the <see cref="CacheHelper"/>.
+        /// </summary>
+        protected IPagedKeyQueryCache PagedKeyCache { get; private set; }
 
         /// <summary>
         /// Gets the key field in index.

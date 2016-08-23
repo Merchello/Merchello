@@ -39,7 +39,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public NoteRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public NoteRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
         }
@@ -109,9 +109,9 @@
 
             var factory = new NoteFactory();
 
-            var customer = factory.BuildEntity(dto);
+            var note = factory.BuildEntity(dto);
 
-            return customer;
+            return note;
         }
 
         /// <summary>

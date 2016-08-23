@@ -5,6 +5,7 @@ namespace Merchello.Web.Models.Ui.Rendering
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Services;
     using Merchello.Web.Models.VirtualContent;
@@ -136,7 +137,7 @@ namespace Merchello.Web.Models.Ui.Rendering
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            return merchelloHelper.TypedProductContentFromCollection(
+            return merchelloHelper.Query.Product.TypedProductContentFromCollection(
                 value.CollectionKey,
                 page,
                 itemsPerPage,
@@ -158,7 +159,12 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// </returns>
         internal static IEnumerable<ProductCollection> Collections(this IProductContent product, IMerchelloContext merchelloContext)
         {
-            var collections = ((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey(product.Key);
+            var collections = GetProductEntityCollections(
+                MerchelloContext.Current,
+                product.Key,
+                ((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey);
+                
+                //((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey(product.Key);
 
             return collections.Select(col => new ProductCollection(col));
         }
@@ -175,7 +181,8 @@ namespace Merchello.Web.Models.Ui.Rendering
         private static IEnumerable<ProductCollection> GetChildren(this ProductCollection value)
         {
             var service = MerchelloContext.Current.Services.EntityCollectionService;
-            var children = ((EntityCollectionService)service).GetChildren(value.CollectionKey);
+            var children = GetCollectionChildCollections(MerchelloContext.Current, value.CollectionKey, ((EntityCollectionService)service).GetChildren);
+            //var children = ((EntityCollectionService)service).GetChildren(value.CollectionKey);
             return children.Select(x => new ProductCollection(x));
         }
 
@@ -198,5 +205,34 @@ namespace Merchello.Web.Models.Ui.Rendering
 
             return new ProductCollection(collection);
         }
+
+        //// -- TODO these are quick request cache fixes that should be looked at as something more permanent
+        //// in later version
+
+
+        private static IEnumerable<IEntityCollection> GetProductEntityCollections(IMerchelloContext context, Guid productKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)
+        {
+            var cacheKey = string.Format("{0}.productEntityCollections", productKey);
+
+            var collections = (IEnumerable<IEntityCollection>)context.Cache.RequestCache.GetCacheItem(cacheKey);
+            if (collections != null) return collections;
+
+            return
+                (IEnumerable<IEntityCollection>)
+                context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(productKey));
+        }
+
+        private static IEnumerable<IEntityCollection> GetCollectionChildCollections(IMerchelloContext context, Guid collectionKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)
+        {
+            var cacheKey = string.Format("{0}.entityCollectionChildCollection", collectionKey);
+
+            var collections = (IEnumerable<IEntityCollection>)context.Cache.RequestCache.GetCacheItem(cacheKey);
+            if (collections != null) return collections;
+
+            return
+                (IEnumerable<IEntityCollection>)
+                context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(collectionKey));
+        }
+        
     }
 }

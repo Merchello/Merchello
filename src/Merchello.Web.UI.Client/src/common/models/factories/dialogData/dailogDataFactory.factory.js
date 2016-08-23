@@ -171,6 +171,10 @@ angular.module('merchello.models').factory('dialogDataFactory',
             return new EditDetachedContentTypeDialogData();
         }
 
+        function createAddDetachedContentTypeDialogData() {
+            return new AddDetachedContentTypeDialogData();
+        }
+
         /*----------------------------------------------------------------------------------------
         Property Editors
         -------------------------------------------------------------------------------------------*/
@@ -213,6 +217,7 @@ angular.module('merchello.models').factory('dialogDataFactory',
             createSelectOfferProviderDialogData: createSelectOfferProviderDialogData,
             createConfigureOfferComponentDialogData: createConfigureOfferComponentDialogData,
             createAddEditEntityStaticCollectionDialog: createAddEditEntityStaticCollectionDialog,
-            createEditDetachedContentTypeDialogData: createEditDetachedContentTypeDialogData
+            createEditDetachedContentTypeDialogData: createEditDetachedContentTypeDialogData,
+            createAddDetachedContentTypeDialogData: createAddDetachedContentTypeDialogData
         };
 }]);

@@ -145,17 +145,19 @@
 
             var logger = GetMultiLogger();
 
-            var serviceContext = new ServiceContext(new RepositoryFactory(logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
+            var cache = ApplicationContext.Current == null
+                ? new CacheHelper(
+                        new ObjectCacheRuntimeCacheProvider(),
+                        new StaticCacheProvider(),
+                        new NullCacheProvider())
+                : ApplicationContext.Current.ApplicationCache;
+
+
+            var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
 
             InitializeLoggerResolver(logger);
 
-            var cache = ApplicationContext.Current == null
-                            ? new CacheHelper(
-                                    new ObjectCacheRuntimeCacheProvider(),
-                                    new StaticCacheProvider(),
-                                    new NullCacheProvider())
-                            : ApplicationContext.Current.ApplicationCache;
 
             InitializeGatewayResolver(serviceContext, cache);
             

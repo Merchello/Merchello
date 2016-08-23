@@ -9,6 +9,7 @@
                     <ul class="dropdown-menu">
                         <li><a data-ng-click="changePrices()"><localize key="merchelloProductEdit_changePrices" /></a></li>
                         <li><a data-ng-click="updateInventory()"><localize key="merchelloProductEdit_updateInventory" /></a></li>
+                        <li><a data-ng-click="toggleTracksInventory()"><localize key="merchelloProductEdit_toggleTracksInventory" /></a></li>
                         <li><a data-ng-click="toggleOnSale()"><localize key="merchelloProductEdit_toggleOnSale" /></a></li>
                         <li><a data-ng-click="toggleAvailable()"><localize key="merchelloProductEdit_toggleAvailable" /></a></li>
                     </ul>
@@ -16,10 +17,8 @@
             </th>
         </tr>
         <tr>
-            <th>&nbsp;</th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
-            <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'"
-                data-ng-click="changeSortOrder(option.name)" data-ng-class="{'sorted': sortProperty == option.name}">
-                <i data-ng-class="{'icon-navigation-up': sortProperty == option.name, 'icon-navigation-down': sortProperty == ('-' + option.name)}"></i>
+            <th><input type="checkbox" data-ng-model="checkAll" data-ng-click="toggleChecks()" /></th> <!-- Swaps out the current TR with headings in it for the bulk action TR -->
+            <th data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">
                 {{option.name}}
             </th>
             <th data-ng-click="changeSortOrder('sku')" data-ng-class="{'sorted': sortProperty == 'sku'}">
@@ -54,7 +53,12 @@
             data-ng-class="{active: variant.selected}"
             data-ng-click="toggleAVariant(variant)">
             <td><input type="checkbox" data-ng-model="variant.selected" data-ng-change="toggleAVariant(variant)" /></td>
-            <td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td>
+
+            <!--
+            td data-ng-repeat="attribute in variant.attributes | orderBy:'optionOrder'">{{attribute.name}}</td
+            -->
+            <td data-ng-repeat="option in product.productOptions | orderBy:'sortOrder'">{{ getVariantAttributeForOption(variant, option)}}</td>
+
             <td>{{variant.sku}}</td>
             <!-- availability -->
             <td data-ng-hide="variant.available"><localize key="general_no" /></td>

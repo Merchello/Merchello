@@ -9,7 +9,7 @@
 var ConfigureOfferComponentDialogData = function() {
     var self = this;
     self.component = {};
-}
+};
 
 ConfigureOfferComponentDialogData.prototype = (function() {
 
@@ -24,7 +24,7 @@ ConfigureOfferComponentDialogData.prototype = (function() {
     return {
         setValue: setValue,
         getValue: getValue
-    }
+    };
 }());
 
 angular.module('merchello.models').constant('ConfigureOfferComponentDialogData');

@@ -1,10 +1,16 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+
+    using Merchello.Core.Logging;
+
     using Models.EntityBase;
     using Models.Rdbms;
-    using Querying;    
+    using Querying;
+
+    using Umbraco.Core;
     using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
@@ -41,7 +47,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        protected PagedRepositoryBase(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+        protected PagedRepositoryBase(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
             : base(work, cache, logger, sqlSyntax)
         {
         }
@@ -136,6 +142,40 @@
         public abstract Page<Guid> SearchKeys(string searchTerm, long page, long itemsPerPage, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// Gets the cache key for Request caching paged collections.
+        /// </summary>
+        /// <param name="methodName">
+        /// The method name.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <param name="args">
+        /// The args.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        protected static string GetPagedDtoCacheKey(string methodName,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending,
+            IDictionary<string, string> args = null)
+        {
+            return Core.Cache.CacheKeys.GetPagedKeysCacheKey<TDto>(methodName, page, itemsPerPage, orderExpression, sortDirection, args);
+        }
+
+        /// <summary>
         /// Get the paged keys.
         /// </summary>
         /// <param name="page">
@@ -158,6 +198,7 @@
         /// </returns>
         protected virtual Page<Guid> GetPagedKeys(long page, long itemsPerPage, Sql sql, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {            
+            
             var p = GetDtoPage(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return new Page<Guid>()
@@ -222,6 +263,17 @@
                 TotalPages = dtoPage.TotalPages,
                 Items = dtoPage.Items.Select(x => Get(x.Key)).ToList()
             };
-        } 
+        }
+
+        protected Page<Guid> TryGetCachedPageOfKeys(string cacheKey)
+        {
+          
+            return (Page<Guid>)RequestCache.GetCacheItem(cacheKey);
+        }
+
+        protected Page<Guid> CachePageOfKeys(string cacheKey, Page<Guid> result)
+        {
+            return (Page<Guid>)RequestCache.GetCacheItem(cacheKey, () => result);
+        }
     }
 }

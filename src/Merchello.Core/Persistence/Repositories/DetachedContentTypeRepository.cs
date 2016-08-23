@@ -39,7 +39,7 @@
         /// <param name="sqlSyntax">
         /// The SQL Syntax.
         /// </param>
-        public DetachedContentTypeRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
+        public DetachedContentTypeRepository(IDatabaseUnitOfWork work, CacheHelper cache, ILogger logger, ISqlSyntaxProvider sqlSyntax)
             : base(work, cache, logger, sqlSyntax)
         {
         }
@@ -158,6 +158,7 @@
         {
             var list = new List<string>
                 {
+                    "UPDATE merchProductOption SET detachedContentTypeKey = NULL WHERE detachedContentTypeKey = @Key",
                     "DELETE FROM merchProductVariantDetachedContent WHERE merchProductVariantDetachedContent.detachedContentTypeKey = @Key",
                     "DELETE FROM merchDetachedContentType WHERE merchDetachedContentType.pk = @Key"
                 };

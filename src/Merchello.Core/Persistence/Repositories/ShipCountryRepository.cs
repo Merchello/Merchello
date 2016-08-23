@@ -48,7 +48,7 @@
         /// <param name="sqlSyntax">
         /// The SQL syntax.
         /// </param>
-        public ShipCountryRepository(IDatabaseUnitOfWork work, IRuntimeCacheProvider cache, IStoreSettingService storeSettingService, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
+        public ShipCountryRepository(IDatabaseUnitOfWork work, CacheHelper cache, IStoreSettingService storeSettingService, ILogger logger, ISqlSyntaxProvider sqlSyntax) 
             : base(work, cache, logger, sqlSyntax)
         {
             Mandate.ParameterNotNull(storeSettingService, "settingsService");
