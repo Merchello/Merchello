@@ -673,6 +673,8 @@
     <Content Include="App_Plugins\FastTrack\Views\Partials\InvalidCheckoutStage.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\Shared\_RequireJsSubmitBtn.cshtml" />
     <Content Include="App_Plugins\FastTrack\Views\web.config" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\ChangePasswordForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\ForgotPasswordForm.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />
@@ -745,6 +747,8 @@
     <Content Include="Views\ftShippingAddress.cshtml" />
     <Content Include="Views\ftShipRateQuote.cshtml" />
     <Content Include="Views\ftCheckout.cshtml" />
+    <Content Include="Views\ftChangePassword.cshtml" />
+    <Content Include="Views\ftForgotPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

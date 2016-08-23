@@ -219,7 +219,6 @@
   </data>
   <data name="LabelRegion" xml:space="preserve">
     <value>State / Province / Region</value>
-    <comment> </comment>
   </data>
   <data name="LabelRememberMe" xml:space="preserve">
     <value>Remember me</value>
@@ -314,5 +313,13 @@
   <data name="RequiredUsername" xml:space="preserve">
     <value>Username is required</value>
     <comment>Error message for a required username field</comment>
+  </data>
+  <data name="LabelOldPassword" xml:space="preserve">
+    <value>Current Password</value>
+    <comment>Label for the old password</comment>
+  </data>
+  <data name="RequiredOldPassword" xml:space="preserve">
+    <value>Current Password is required</value>
+    <comment>Error message for a required old password field</comment>
   </data>
 </root>
