@@ -2141,15 +2141,22 @@ Use this directive to construct a header inside the main editor window.
                 scope.dialogModel = {
                     view: "iconpicker",
                     show: true,
-                    submit: function(model) {
-                        if (model.color) {
-                            scope.icon = model.icon + " " + model.color;
-                        } else {
-                            scope.icon = model.icon;
-                        }
+                    submit: function (model) {
 
-                        // set form to dirty
-                        ctrl.$setDirty();
+                        /* ensure an icon is selected, because on focus on close button
+                           or an element in background no icon is submitted. So don't clear/update existing icon/preview.
+                        */
+                        if (model.icon) {
+
+                            if (model.color) {
+                                scope.icon = model.icon + " " + model.color;
+                            } else {
+                                scope.icon = model.icon;
+                            }
+
+                            // set form to dirty
+                            ctrl.$setDirty();
+                        }
 
                         scope.dialogModel.show = false;
                         scope.dialogModel = null;
@@ -3528,6 +3535,7 @@ angular.module("umbraco.directives")
                                     await.push(stylesheetResource.getRulesByName(stylesheet).then(function (rules) {
                                         angular.forEach(rules, function (rule) {
                                           var r = {};
+                                          var split = "";
                                           r.title = rule.name;
                                           if (rule.selector[0] === ".") {
                                               r.inline = "span";
@@ -3538,6 +3546,14 @@ angular.module("umbraco.directives")
                                               // since only one element can have one id.
                                               r.inline = "span";
                                               r.attributes = { id: rule.selector.substring(1) };
+                                          }else if (rule.selector[0] !== "." && rule.selector.indexOf(".") > -1) {
+                                              split = rule.selector.split(".");
+                                              r.block = split[0];
+                                              r.classes = rule.selector.substring(rule.selector.indexOf(".") + 1).replace(".", " ");
+                                          }else if (rule.selector[0] !== "#" && rule.selector.indexOf("#") > -1) {
+                                              split = rule.selector.split("#");
+                                              r.block = split[0];
+                                              r.classes = rule.selector.substring(rule.selector.indexOf("#") + 1);
                                           }else {
                                               r.block = rule.selector;
                                           }
@@ -4378,6 +4394,13 @@ angular.module("umbraco.directives")
 
 angular.module("umbraco.directives")
 
+    /**
+    * @ngdoc directive
+    * @name umbraco.directives.directive:localize
+    * @restrict EA
+    * @function
+    * @description Localize directive
+    **/
     .directive('localize', function ($log, localizationService) {
         return {
             restrict: 'E',
@@ -4419,6 +4442,7 @@ angular.module("umbraco.directives")
         };
 
     });
+
 /**
  * @ngdoc directive
  * @name umbraco.directives.directive:umbNotifications
@@ -5875,7 +5899,7 @@ angular.module("umbraco.directives")
         //TODO: Remove more of the binding from this template and move the DOM manipulation to be manually done in the link function,
         // this will greatly improve performance since there's potentially a lot of nodes being rendered = a LOT of watches!
 
-        template: '<li ng-class="{\'current\': (node == currentNode)}" on-right-click="altSelect(node, $event)">' +
+        template: '<li ng-class="{\'current\': (node == currentNode), \'has-children\': node.hasChildren}" on-right-click="altSelect(node, $event)">' +
             '<div ng-class="getNodeCssClass(node)" ng-swipe-right="options(node, $event)" >' +
             //NOTE: This ins element is used to display the search icon if the node is a container/listview and the tree is currently in dialog
             //'<ins ng-if="tree.enablelistviewsearch && node.metaData.isContainer" class="umb-tree-node-search icon-search" ng-click="searchNode(node, $event)" alt="searchAltText"></ins>' + 
@@ -5913,14 +5937,13 @@ angular.module("umbraco.directives")
                     //set the padding
                     .css("padding-left", (node.level * 20) + "px");
 
-                //remove first 'ins' if there is no children
-                //show/hide last 'ins' depending on children
+                //toggle visibility of last 'ins' depending on children
+                //visibility still ensure the space is "reserved", so both nodes with and without children are aligned.
                 if (!node.hasChildren) {
-                    element.find("ins:first").remove();
-                    element.find("ins").last().hide();
+                    element.find("ins").last().css("visibility", "hidden");
                 }
                 else {
-                    element.find("ins").last().show();
+                    element.find("ins").last().css("visibility", "visible");
                 }
 
                 var icon = element.find("i:first");
@@ -6123,7 +6146,6 @@ function treeSearchBox(localizationService, searchService, $q) {
 
                     //a canceler exists, so perform the cancelation operation and reset
                     if (canceler) {
-                        console.log("CANCELED!");
                         canceler.resolve();
                         canceler = $q.defer();
                     }
@@ -6324,6 +6346,79 @@ angular.module("umbraco.directives")
             }
         };
     });
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbAvatar
+@restrict E
+@scope
+
+@description
+Use this directive to render an avatar.
+
+<h3>Markup example</h3>
+<pre>
+	<div ng-controller="My.Controller as vm">
+
+        <umb-avatar
+            size="xs"
+            img-src="{{vm.avatar[0].value}}"
+            img-srcset="{{vm.avatar[1].value}} 2x, {{vm.avatar[2].value}} 3x">
+        </umb-avatar>
+
+	</div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+	(function () {
+		"use strict";
+
+		function Controller() {
+
+            var vm = this;
+
+            vm.avatar = [
+                { value: "assets/logo.png" },
+                { value: "assets/logo@2x.png" },
+                { value: "assets/logo@3x.png" }
+            ];
+
+        }
+
+		angular.module("umbraco").controller("My.Controller", Controller);
+
+	})();
+</pre>
+
+@param {string} size (<code>attribute</code>): The size of the avatar (xs, s, m, l, xl).
+@param {string} img-src (<code>attribute</code>): The image source to the avatar.
+@param {string} img-srcset (<code>atribute</code>): Reponsive support for the image source.
+**/
+
+(function() {
+    'use strict';
+
+    function AvatarDirective() {
+
+        var directive = {
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'views/components/umb-avatar.html',
+            scope: {
+                size: "@",
+                imgSrc: "@",
+                imgSrcset: "@"
+            }
+        };
+
+        return directive;
+
+    }
+
+    angular.module('umbraco.directives').directive('umbAvatar', AvatarDirective);
+
+})();
 
 /**
 @ngdoc directive
@@ -8164,6 +8259,157 @@ angular.module("umbraco.directives")
 
 })();
 
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbLightbox
+@restrict E
+@scope
+
+@description
+<p>Use this directive to open a gallery in a lightbox overlay.</p>
+
+<h3>Markup example</h3>
+<pre>
+    <div ng-controller="My.Controller as vm">
+
+        <div class="my-gallery">
+            <a href="" ng-repeat="image in images" ng-click="vm.openLightbox($index, images)">
+                <img ng-src="image.source" />
+            </a>
+        </div>
+
+        <umb-lightbox
+            ng-if="vm.lightbox.show"
+            items="vm.lightbox.items"
+            active-item-index="vm.lightbox.activeIndex"
+            on-close="vm.closeLightbox">
+        </umb-lightbox>
+
+    </div>
+</pre>
+
+<h3>Controller example</h3>
+<pre>
+    (function () {
+
+        "use strict";
+
+        function Controller() {
+
+            var vm = this;
+
+            vm.images = [
+                {
+                    "source": "linkToImage"
+                },
+                {
+                    "source": "linkToImage"
+                }
+            ]
+
+            vm.openLightbox = openLightbox;
+            vm.closeLightbox = closeLightbox;
+
+            function openLightbox(itemIndex, items) {
+                vm.lightbox = {
+                    show: true,
+                    items: items,
+                    activeIndex: itemIndex
+                };
+            }
+
+            function closeLightbox() {
+                vm.lightbox.show = false;
+                vm.lightbox = null;
+            }
+
+        }
+
+        angular.module("umbraco").controller("My.Controller", Controller);
+    })();
+</pre>
+
+@param {array} items Array of gallery items.
+@param {callback} onClose Callback when the lightbox is closed.
+@param {number} activeItemIndex Index of active item.
+**/
+
+
+(function() {
+    'use strict';
+
+    function LightboxDirective() {
+
+        function link(scope, el, attr, ctrl) {
+
+
+            function activate() {
+
+                var eventBindings = [];
+
+                el.appendTo("body");
+
+                // clean up
+                scope.$on('$destroy', function() {
+                    // unbind watchers
+                    for (var e in eventBindings) {
+                        eventBindings[e]();
+                    }
+                });
+            }
+
+            scope.next = function() {
+
+                var nextItemIndex = scope.activeItemIndex + 1;
+
+                if( nextItemIndex < scope.items.length) {
+                    scope.items[scope.activeItemIndex].active = false;
+                    scope.items[nextItemIndex].active = true;
+                    scope.activeItemIndex = nextItemIndex;
+                }
+            };
+
+            scope.prev = function() {
+
+                var prevItemIndex = scope.activeItemIndex - 1;
+
+                if( prevItemIndex >= 0) {
+                    scope.items[scope.activeItemIndex].active = false;
+                    scope.items[prevItemIndex].active = true;
+                    scope.activeItemIndex = prevItemIndex;
+                }
+
+            };
+
+            scope.close = function() {
+                if(scope.onClose) {
+                    scope.onClose();
+                }
+            };
+
+            activate();
+
+        }
+
+        var directive = {
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'views/components/umb-lightbox.html',
+            scope: {
+                items: '=',
+                onClose: "=",
+                activeItemIndex: "="
+            },
+            link: link
+        };
+
+        return directive;
+    }
+
+    angular.module('umbraco.directives').directive('umbLightbox', LightboxDirective);
+
+})();
+
 (function() {
    'use strict';
 
@@ -8205,7 +8451,7 @@ angular.module("umbraco.directives")
 (function() {
   'use strict';
 
-  function ListViewSettingsDirective(contentTypeResource, dataTypeResource, dataTypeHelper) {
+  function ListViewSettingsDirective(contentTypeResource, dataTypeResource, dataTypeHelper, listViewPrevalueHelper) {
 
     function link(scope, el, attr, ctrl) {
 
@@ -8224,6 +8470,7 @@ angular.module("umbraco.directives")
 
               scope.dataType = dataType;
 
+              listViewPrevalueHelper.setPrevalues(dataType.preValues);
               scope.customListViewCreated = checkForCustomListView();
 
             });
@@ -8672,6 +8919,22 @@ Use this directive to generate a thumbnail grid of media items.
                 if (!item.isFolder) {
                     item.thumbnail = mediaHelper.resolveFile(item, true);
                     item.image = mediaHelper.resolveFile(item, false);
+
+                    var fileProp = _.find(item.properties, function (v) {
+                        return (v.alias === "umbracoFile");
+                    });
+
+                    if (fileProp && fileProp.value) {
+                        item.file = fileProp.value;
+                    }
+
+                    var extensionProp = _.find(item.properties, function (v) {
+                        return (v.alias === "umbracoExtension");
+                    });
+
+                    if (extensionProp && extensionProp.value) {
+                        item.extension = extensionProp.value;
+                    }
                 }
             }
 
@@ -9010,6 +9273,48 @@ Use this directive to generate a pagination.
 
 })();
 
+
+/**
+@ngdoc directive
+@name umbraco.directives.directive:umbProgressBar
+@restrict E
+@scope
+
+@description
+Use this directive to generate a progress bar.
+
+<h3>Markup example</h3>
+<pre>
+    <umb-progress-bar
+        percentage="60">
+    </umb-progress-bar>
+</pre>
+
+@param {number} percentage (<code>attribute</code>): The progress in percentage.
+**/
+
+(function() {
+    'use strict';
+
+    function ProgressBarDirective() {
+
+        var directive = {
+            restrict: 'E',
+            replace: true,
+            templateUrl: 'views/components/umb-progress-bar.html',
+            scope: {
+                percentage: "@"
+            }
+        };
+
+        return directive;
+
+    }
+
+    angular.module('umbraco.directives').directive('umbProgressBar', ProgressBarDirective);
+
+})();
+
 /**
 @ngdoc directive
 @name umbraco.directives.directive:umbStickyBar
@@ -9165,50 +9470,50 @@ Use this directive make an element sticky and follow the page when scrolling.
 
 })();
 
-(function() {
+(function () {
    'use strict';
 
    function TableDirective() {
 
       function link(scope, el, attr, ctrl) {
 
-         scope.clickItem = function(item, $event) {
-            if(scope.onClick) {
+         scope.clickItem = function (item, $event) {
+            if (scope.onClick) {
                scope.onClick(item);
                $event.stopPropagation();
             }
          };
 
-        scope.selectItem = function(item, $index, $event) {
-            if(scope.onSelect) {
+         scope.selectItem = function (item, $index, $event) {
+            if (scope.onSelect) {
                scope.onSelect(item, $index, $event);
                $event.stopPropagation();
             }
-        };
+         };
 
-        scope.selectAll = function($event) {
-            if(scope.onSelectAll) {
-                scope.onSelectAll($event);
+         scope.selectAll = function ($event) {
+            if (scope.onSelectAll) {
+               scope.onSelectAll($event);
             }
-        };
+         };
 
-        scope.isSelectedAll = function() {
-            if(scope.onSelectedAll && scope.items && scope.items.length > 0) {
-                return scope.onSelectedAll();
+         scope.isSelectedAll = function () {
+            if (scope.onSelectedAll && scope.items && scope.items.length > 0) {
+               return scope.onSelectedAll();
             }
-        };
+         };
 
-        scope.isSortDirection = function (col, direction) {
+         scope.isSortDirection = function (col, direction) {
             if (scope.onSortingDirection) {
-                return scope.onSortingDirection(col, direction);
+               return scope.onSortingDirection(col, direction);
             }
-        };
+         };
 
-        scope.sort = function(field, allow) {
-            if(scope.onSort) {
-                scope.onSort(field, allow);
+         scope.sort = function (field, allow, isSystem) {
+            if (scope.onSort) {
+               scope.onSort(field, allow, isSystem);
             }
-        };
+         };
 
       }
 
@@ -9682,6 +9987,68 @@ function umbSingleFileUpload($compile) {
 
 angular.module('umbraco.directives').directive("umbSingleFileUpload", umbSingleFileUpload);
 /**
+ * Konami Code directive for AngularJS
+ * @version v0.0.1
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
+angular.module('umbraco.directives')
+  .directive('konamiCode', ['$document', function ($document) {
+      var konamiKeysDefault = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+
+      return {
+          restrict: 'A',
+          link: function (scope, element, attr) {
+
+              if (!attr.konamiCode) {
+                  throw ('Konami directive must receive an expression as value.');
+              }
+
+              // Let user define a custom code.
+              var konamiKeys = attr.konamiKeys || konamiKeysDefault;
+              var keyIndex = 0;
+
+              /**
+               * Fired when konami code is type.
+               */
+              function activated() {
+                  if ('konamiOnce' in attr) {
+                      stopListening();
+                  }
+                  // Execute expression.
+                  scope.$eval(attr.konamiCode);
+              }
+
+              /**
+               * Handle keydown events.
+               */
+              function keydown(e) {
+                  if (e.keyCode === konamiKeys[keyIndex++]) {
+                      if (keyIndex === konamiKeys.length) {
+                          keyIndex = 0;
+                          activated();
+                      }
+                  } else {
+                      keyIndex = 0;
+                  }
+              }
+
+              /**
+               * Stop to listen typing.
+               */
+              function stopListening() {
+                  $document.off('keydown', keydown);
+              }
+
+              // Start listening to key typing.
+              $document.on('keydown', keydown);
+
+              // Stop listening when scope is destroyed.
+              scope.$on('$destroy', stopListening);
+          }
+      };
+  }]);
+/**
 * @ngdoc directive
 * @name umbraco.directives.directive:noDirtyCheck
 * @restrict A
@@ -9936,6 +10303,16 @@ function valEmail(valEmailExpression) {
                 }
             };
 
+            //if there is an attribute: type="email" then we need to remove those formatters and parsers
+            if (attrs.type === "email") {
+                //we need to remove the existing parsers = the default angular one which is created by
+                // type="email", but this has a regex issue, so we'll remove that and add our custom one
+                ctrl.$parsers.pop();
+                //we also need to remove the existing formatter - the default angular one will not render
+                // what it thinks is an invalid email address, so it will just be blank
+                ctrl.$formatters.pop();
+            }
+            
             ctrl.$parsers.push(patternValidator);
         }
     };
@@ -9943,7 +10320,8 @@ function valEmail(valEmailExpression) {
 
 angular.module('umbraco.directives.validation')
     .directive("valEmail", valEmail)
-    .factory('valEmailExpression', function() {
+    .factory('valEmailExpression', function () {
+        //NOTE: This is the fixed regex which is part of the newer angular
         return {
             EMAIL_REGEXP: /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
         };
@@ -10425,6 +10803,45 @@ function valRegex() {
 }
 angular.module('umbraco.directives.validation').directive("valRegex", valRegex);
 
+(function() {
+  'use strict';
+
+  function ValRequireComponentDirective() {
+
+    function link(scope, el, attr, ngModel) {
+
+      var unbindModelWatcher = scope.$watch(function () {
+        return ngModel.$modelValue;
+      }, function(newValue) {
+
+        if(newValue === undefined || newValue === null || newValue === "") {
+          ngModel.$setValidity("valRequiredComponent", false);
+        } else {
+          ngModel.$setValidity("valRequiredComponent", true);
+        }
+
+      });
+
+      // clean up
+      scope.$on('$destroy', function(){
+        unbindModelWatcher();
+      });
+
+    }
+
+    var directive = {
+      require: 'ngModel',
+      restrict: "A",
+      link: link
+    };
+
+    return directive;
+  }
+
+  angular.module('umbraco.directives').directive('valRequireComponent', ValRequireComponentDirective);
+
+})();
+
 /**
     * @ngdoc directive
     * @name umbraco.directives.directive:valServer
@@ -10585,6 +11002,56 @@ function valServerField(serverValidationManager) {
 }
 angular.module('umbraco.directives.validation').directive("valServerField", valServerField);
 
+/**
+* @ngdoc directive
+* @name umbraco.directives.directive:valSubView
+* @restrict A
+* @description Used to show validation warnings for a editor sub view to indicate that the section content has validation errors in its data.
+* In order for this directive to work, the valFormManager directive must be placed on the containing form.
+**/
+(function() {
+  'use strict';
+
+  function valSubViewDirective() {
+
+    function link(scope, el, attr, ctrl) {
+
+      var valFormManager = ctrl[1];
+      scope.subView.hasError = false;
+
+      //listen for form validation changes
+      valFormManager.onValidationStatusChanged(function (evt, args) {
+          if (!args.form.$valid) {
+
+             var subViewContent = el.find(".ng-invalid");
+
+             if (subViewContent.length > 0) {
+                 scope.subView.hasError = true;
+             } else {
+                 scope.subView.hasError = false;
+             }
+
+          }
+          else {
+             scope.subView.hasError = false;
+          }
+      });
+
+    }
+
+    var directive = {
+      require: ['^form', '^valFormManager'],
+      restrict: "A",
+      link: link
+    };
+
+    return directive;
+  }
+
+  angular.module('umbraco.directives').directive('valSubView', valSubViewDirective);
+
+})();
+
 
 /**
 * @ngdoc directive
@@ -10724,156 +11191,5 @@ angular.module('umbraco.directives.validation')
 		priority : 1	
 	};
 });
-/**
- * Konami Code directive for AngularJS
- * @version v0.0.1
- * @license MIT License, http://www.opensource.org/licenses/MIT
- */
-
-angular.module('umbraco.directives')
-  .directive('konamiCode', ['$document', function ($document) {
-      var konamiKeysDefault = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
-
-      return {
-          restrict: 'A',
-          link: function (scope, element, attr) {
-
-              if (!attr.konamiCode) {
-                  throw ('Konami directive must receive an expression as value.');
-              }
-
-              // Let user define a custom code.
-              var konamiKeys = attr.konamiKeys || konamiKeysDefault;
-              var keyIndex = 0;
-
-              /**
-               * Fired when konami code is type.
-               */
-              function activated() {
-                  if ('konamiOnce' in attr) {
-                      stopListening();
-                  }
-                  // Execute expression.
-                  scope.$eval(attr.konamiCode);
-              }
-
-              /**
-               * Handle keydown events.
-               */
-              function keydown(e) {
-                  if (e.keyCode === konamiKeys[keyIndex++]) {
-                      if (keyIndex === konamiKeys.length) {
-                          keyIndex = 0;
-                          activated();
-                      }
-                  } else {
-                      keyIndex = 0;
-                  }
-              }
-
-              /**
-               * Stop to listen typing.
-               */
-              function stopListening() {
-                  $document.off('keydown', keydown);
-              }
-
-              // Start listening to key typing.
-              $document.on('keydown', keydown);
-
-              // Stop listening when scope is destroyed.
-              scope.$on('$destroy', stopListening);
-          }
-      };
-  }]);
-(function() {
-  'use strict';
-
-  function ValRequireComponentDirective() {
-
-    function link(scope, el, attr, ngModel) {
-
-      var unbindModelWatcher = scope.$watch(function () {
-        return ngModel.$modelValue;
-      }, function(newValue) {
-
-        if(newValue === undefined || newValue === null || newValue === "") {
-          ngModel.$setValidity("valRequiredComponent", false);
-        } else {
-          ngModel.$setValidity("valRequiredComponent", true);
-        }
-
-      });
-
-      // clean up
-      scope.$on('$destroy', function(){
-        unbindModelWatcher();
-      });
-
-    }
-
-    var directive = {
-      require: 'ngModel',
-      restrict: "A",
-      link: link
-    };
-
-    return directive;
-  }
-
-  angular.module('umbraco.directives').directive('valRequireComponent', ValRequireComponentDirective);
-
-})();
-
-/**
-* @ngdoc directive
-* @name umbraco.directives.directive:valSubView
-* @restrict A
-* @description Used to show validation warnings for a editor sub view to indicate that the section content has validation errors in its data.
-* In order for this directive to work, the valFormManager directive must be placed on the containing form.
-**/
-(function() {
-  'use strict';
-
-  function valSubViewDirective() {
-
-    function link(scope, el, attr, ctrl) {
-
-      var valFormManager = ctrl[1];
-      scope.subView.hasError = false;
-
-      //listen for form validation changes
-      valFormManager.onValidationStatusChanged(function (evt, args) {
-          if (!args.form.$valid) {
-
-             var subViewContent = el.find(".ng-invalid");
-
-             if (subViewContent.length > 0) {
-                 scope.subView.hasError = true;
-             } else {
-                 scope.subView.hasError = false;
-             }
-
-          }
-          else {
-             scope.subView.hasError = false;
-          }
-      });
-
-    }
-
-    var directive = {
-      require: ['^form', '^valFormManager'],
-      restrict: "A",
-      link: link
-    };
-
-    return directive;
-  }
-
-  angular.module('umbraco.directives').directive('valSubView', valSubViewDirective);
-
-})();
-
 
 })();
