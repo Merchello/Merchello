@@ -116,6 +116,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to save an entity collection');
                 },
+                saveSpecifiedFilterCollection : function(collection) {
+                    var url = baseUrl + 'PutSpecifiedFilterCollection';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            collection
+                        ),
+                        'Failed to save speficed entity collection');
+                },
                 addEntityToCollections: function(entityKey, collectionKeys) {
                     var url = baseUrl + 'PostAddEntityToCollections';
                     var data = [];

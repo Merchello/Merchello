@@ -27,7 +27,7 @@
         {
             return !source.AttributeCollections.Any() ? 
                 Enumerable.Empty<EntityCollectionDisplay>() : 
-                source.AttributeCollections.Select(x => x.ToEntityCollectionDisplay());
+                source.AttributeCollections.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
     }
 }

@@ -599,10 +599,8 @@
                 if (op.Key.Equals(Guid.Empty))
                 {
                     var ec = _entityCollectionService.CreateEntityCollection(op.EntityType, op.ProviderKey, op.Name);
-                    if (collection.ParentKey != null)
-                    {
-                        ec.ParentKey = collection.ParentKey;
-                    }
+
+                    ec.ParentKey = op.ParentKey ?? collection.Key;
 
                     operations.Add(ec);
                 }
