@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Gateways.Shipping
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Models;
@@ -61,7 +62,7 @@
                     {
                         rateQuote = attempt.Result;
 
-                        RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(Shipment, gwShipMethod), () => rateQuote);
+                        RuntimeCache.GetCacheItem(GetShipmentRateQuoteCacheKey(Shipment, gwShipMethod), () => rateQuote, TimeSpan.FromMinutes(5));
                     }
                 }
 

@@ -19,7 +19,7 @@
         "",  // cannot authorize a payment
         "",  // cannot authorize capture since we don't have their user/pass
         "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.voidpayment.html",
-        "~/App_Plugins/MerchelloProviders/views/dialogs/braintree.standard.refundpayment.html",
+        "~/App_Plugins/MerchelloProviders/views/dialogs/refundpayment.confirm.html",
         "")]
     public class PayPalOneTimeTransactionPaymentGatewayMethod : BraintreeStandardPaymentGatewayBase, IPayPalOneTimeTransactionPaymentGatewayMethod
     {
