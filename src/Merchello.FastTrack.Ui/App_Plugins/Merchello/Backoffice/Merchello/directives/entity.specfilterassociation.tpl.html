@@ -1,0 +1,10 @@
+<div class="entity-filter-association span3 clearfix">
+    <h4>{{ collection.name }}</h4>
+    <ul>
+        <li data-ng-repeat="att in collection.attributeCollections">
+            <label>
+            <input type="checkbox" data-ng-model="att.selected" data-ng-click="save(att)" /> {{ att.name }}
+            </label>
+        </li>
+    </ul>
+</div>

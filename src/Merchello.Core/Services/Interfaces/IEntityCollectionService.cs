@@ -183,13 +183,17 @@
         /// </returns>
         IEnumerable<IEntityCollection> GetByProviderKey(Guid providerKey);
 
+    
         /// <summary>
         /// The get all.
         /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        IEnumerable<IEntityCollection> GetAll();
+        IEnumerable<IEntityCollection> GetAll(params Guid[] keys);
 
         /// <summary>
         /// The get children.
@@ -238,14 +242,41 @@
         /// <summary>
         /// The get root level entity collections.
         /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections(EntityType entityType, Guid providerKey);
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
         /// <param name="entityTfKey">
-        /// The entity tf key.
+        /// The entity type field key.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
         IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey);
 
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey, Guid providerKey);
 
         /// <summary>
         /// Gets a Page of collections from collection.
