@@ -358,14 +358,17 @@
         /// <summary>
         /// The get all.
         /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        public IEnumerable<IEntityCollection> GetAll()
+        public IEnumerable<IEntityCollection> GetAll(params Guid[] keys)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetAll();
+                return repository.GetAll(keys);
             }
         }
 
@@ -441,6 +444,24 @@
         /// <summary>
         /// The get root level entity collections.
         /// </summary>
+        /// <param name="entityType">
+        /// The entity type.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(EntityType entityType, Guid providerKey)
+        {
+            return this.GetRootLevelEntityCollections(
+                EnumTypeFieldConverter.EntityType.GetTypeField(entityType).TypeKey, providerKey);
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
         /// <param name="entityTfKey">
         /// The entity type field key.
         /// </param>
@@ -452,6 +473,27 @@
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null && x.EntityTfKey == entityTfKey);
+                return repository.GetByQuery(query);
+            }
+        }
+
+        /// <summary>
+        /// The get root level entity collections.
+        /// </summary>
+        /// <param name="entityTfKey">
+        /// The entity type field key.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntityCollection> GetRootLevelEntityCollections(Guid entityTfKey, Guid providerKey)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ParentKey == null && x.EntityTfKey == entityTfKey && x.ProviderKey == providerKey);
                 return repository.GetByQuery(query);
             }
         }
@@ -656,22 +698,27 @@
             return collection;
         }
 
+
         /// <summary>
         /// The get entity collections by product key.
         /// </summary>
         /// <param name="productKey">
         /// The product key.
         /// </param>
+        /// <param name="isFilter">
+        /// A value indicating whether the query should be for filter collections or standard "static" collections
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        internal IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
+        internal IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey, bool isFilter = false)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetEntityCollectionsByProductKey(productKey);                
+                return repository.GetEntityCollectionsByProductKey(productKey, isFilter);                
             }
         }
+
 
         /// <summary>
         /// The get entity collections by invoice key.
@@ -726,6 +773,48 @@
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
                 return repository.GetEntitySpecificationCollectionsByProviderKeys(keys.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        internal IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsContainingProduct(IEnumerable<Guid> keys, Guid productKey)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetSpecifiedFilterCollectionsContainingProduct(keys.ToArray(), productKey);
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        internal IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsNotContainingProduct(IEnumerable<Guid> keys, Guid productKey)
+        {
+            using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetSpecifiedFilterCollectionsNotContainingProduct(keys.ToArray(), productKey);
             }
         }
 
