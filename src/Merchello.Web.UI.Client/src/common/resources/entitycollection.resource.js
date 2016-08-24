@@ -48,11 +48,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         }),
                         'Failed to get entity collection by the parentKey');
                 },
-                getEntityCollectionsByEntity : function (entity, entityType) {
+                getEntityCollectionsByEntity : function (entity, entityType, isFilter) {
+                    if (isFilter === undefined) {
+                        isFilter = false;
+                    }
                     var url = baseUrl + 'PostGetEntityCollectionsByEntity';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
-                            { key: entity.key, entityType: entityType }
+                            { key: entity.key, entityType: entityType, isFilter: isFilter }
                         ),
                         'Failed to get entity collections for entity');
                 },
@@ -84,6 +87,24 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         }),
                         'Failed to get specified filter attribute provider by the entityType');
                 },
+                getSpecifiedFilterCollectionsContainingProduct : function(entityType, entityKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetSpecifiedFilterCollectionsContainingProduct',
+                            method: "GET",
+                            params: { entityType: entityType, entityKey: entityKey}
+                        }),
+                        'Failed to get specified filter attribute provider by the entityType');
+                },
+                getSpecifiedFilterCollectionsNotContainingProduct : function(entityType, entityKey) {
+                    return umbRequestHelper.resourcePromise(
+                        $http({
+                            url: baseUrl + 'GetSpecifiedFilterCollectionsNotContainingProduct',
+                            method: "GET",
+                            params: { entityType: entityType, entityKey: entityKey}
+                        }),
+                        'Failed to get specified filter attribute provider by the entityType');
+                },
                 getDefaultEntityCollectionProviders : function() {
                     return umbRequestHelper.resourcePromise(
                         $http({
@@ -102,6 +123,8 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 addEntityCollection : function(entityCollection) {
                     var url = baseUrl + 'PostAddEntityCollection';
+                    entityCollection.extendedData = entityCollection.extendedData.toArray();
+
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             entityCollection
@@ -110,6 +133,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 saveEntityCollection : function(collection) {
                     var url = baseUrl + 'PutEntityCollection';
+                    collection.extendedData = collection.extendedData.toArray();
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             collection
@@ -118,6 +142,10 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 saveSpecifiedFilterCollection : function(collection) {
                     var url = baseUrl + 'PutSpecifiedFilterCollection';
+                    collection.extendedData = collection.extendedData.toArray();
+                    _.each(collection.attributeCollections, function(ac) {
+                       ac.extendedData = ac.extendedData.toArray();
+                    });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             collection
@@ -143,6 +171,14 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                             { entityKey: entityKey, collectionKey: collectionKey }
                         ),
                         'Failed to add an entity to a collection');
+                },
+                associateEntityWithFilterCollections: function (entityKey, collectionKeys) {
+                    var url = baseUrl + 'PostAssociateEntityWithFilterCollections';
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(url,
+                            { entityKey: entityKey, collectionKeys: collectionKeys }
+                        ),
+                        'Failed to associate an entity with filter collections');
                 },
                 removeEntityFromCollections : function(entityKey, collectionKeys) {
                     var url = baseUrl + 'DeleteEntityFromCollections';
@@ -184,6 +220,9 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 },
                 updateSortOrders : function(entityCollections) {
                     var url = baseUrl + 'PutUpdateSortOrders';
+                    _.each(entityCollections, function(ec) {
+                       ec.extendedData = ec.extendedData.toArray();
+                    });
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             entityCollections

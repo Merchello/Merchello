@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
+    using System.Collections.Specialized;
     using System.Reflection;
     using System.Runtime.Serialization;
 
@@ -43,6 +44,16 @@
         private static readonly PropertyInfo SortOrderSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, int>(x => x.SortOrder);
 
         /// <summary>
+        /// The extended data changed selector.
+        /// </summary>
+        private static readonly PropertyInfo ExtendedDataChangedSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, ExtendedDataCollection>(x => x.ExtendedData);
+
+        /// <summary>
+        /// The is filter selector.
+        /// </summary>
+        private static readonly PropertyInfo IsFilterSelector = ExpressionHelper.GetPropertyInfo<EntityCollection, bool>(x => x.IsFilter);
+
+        /// <summary>
         /// The entity type field key.
         /// </summary>
         private Guid _entityTfKey;
@@ -66,6 +77,16 @@
         /// The sort order.
         /// </summary>
         private int _sortOrder;
+
+        /// <summary>
+        /// The <see cref="ExtendedDataCollection"/>.
+        /// </summary>
+        private ExtendedDataCollection _extendedData;
+
+        /// <summary>
+        /// Gets a value indicating whether the collection is represented as a filter.
+        /// </summary>
+        private bool _isFilter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollection"/> class.
@@ -168,7 +189,7 @@
         }
 
         /// <summary>
-        /// Gets the sort order.
+        /// Gets or sets the sort order.
         /// </summary>
         [DataMember]
         public int SortOrder
@@ -213,6 +234,62 @@
                    _prodiverKey,
                    ProviderKeySelector);
             }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is filter.
+        /// </summary>
+        [DataMember]
+        public bool IsFilter
+        {
+            get
+            {
+                return _isFilter;
+            }
+
+            set
+            {
+                SetPropertyValueAndDetectChanges(
+                   o =>
+                   {
+                       _isFilter = value;
+                       return _isFilter;
+                   },
+                   _isFilter,
+                   IsFilterSelector);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the extended data collection.
+        /// </summary>
+        [DataMember]
+        public ExtendedDataCollection ExtendedData
+        {
+            get
+            {
+                return _extendedData;
+            }
+
+            internal set
+            {
+                _extendedData = value;
+                _extendedData.CollectionChanged += ExtendedDataChanged;
+            }
+        }
+
+        /// <summary>
+        /// The extended data changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ExtendedDataChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(ExtendedDataChangedSelector);
         }
     }
 }

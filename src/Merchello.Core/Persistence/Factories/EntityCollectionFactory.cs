@@ -22,12 +22,18 @@
         /// </returns>
         public IEntityCollection BuildEntity(EntityCollectionDto dto)
         {
+            var extendedData = string.IsNullOrEmpty(dto.ExtendedData) ? 
+                new ExtendedDataCollection() : 
+                new ExtendedDataCollection(dto.ExtendedData);
+
             var collection = new EntityCollection(dto.EntityTfKey, dto.ProviderKey)
                 {
                     Key = dto.Key,
                     ParentKey = dto.ParentKey,
                     Name = dto.Name,
                     SortOrder = dto.SortOrder,
+                    IsFilter = dto.IsFilter,
+                    ExtendedData = extendedData,
                     CreateDate = dto.CreateDate,
                     UpdateDate = dto.UpdateDate
                 };
@@ -56,6 +62,8 @@
                     Name = entity.Name,
                     SortOrder = entity.SortOrder,
                     ProviderKey = entity.ProviderKey,
+                    ExtendedData = entity.ExtendedData.SerializeToXml(),
+                    IsFilter = entity.IsFilter,
                     CreateDate = entity.CreateDate,
                     UpdateDate = entity.UpdateDate
                 };

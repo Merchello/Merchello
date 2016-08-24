@@ -164,8 +164,6 @@ namespace Merchello.Web.Models.Ui.Rendering
                 product.Key,
                 ((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey);
                 
-                //((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey(product.Key);
-
             return collections.Select(col => new ProductCollection(col));
         }
 
@@ -181,8 +179,9 @@ namespace Merchello.Web.Models.Ui.Rendering
         private static IEnumerable<ProductCollection> GetChildren(this ProductCollection value)
         {
             var service = MerchelloContext.Current.Services.EntityCollectionService;
+
             var children = GetCollectionChildCollections(MerchelloContext.Current, value.CollectionKey, ((EntityCollectionService)service).GetChildren);
-            //var children = ((EntityCollectionService)service).GetChildren(value.CollectionKey);
+
             return children.Select(x => new ProductCollection(x));
         }
 
@@ -209,8 +208,25 @@ namespace Merchello.Web.Models.Ui.Rendering
         //// -- TODO these are quick request cache fixes that should be looked at as something more permanent
         //// in later version
 
-
-        private static IEnumerable<IEntityCollection> GetProductEntityCollections(IMerchelloContext context, Guid productKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)
+        /// <summary>
+        /// Gets the entity collections or entity filter collections for a product.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <param name="fetch">
+        /// The fetch.
+        /// </param>
+        /// <param name="isFilter">
+        /// The is filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// </returns>
+        private static IEnumerable<IEntityCollection> GetProductEntityCollections(IMerchelloContext context, Guid productKey, Func<Guid, bool, IEnumerable<IEntityCollection>> fetch, bool isFilter = false)
         {
             var cacheKey = string.Format("{0}.productEntityCollections", productKey);
 
@@ -219,7 +235,7 @@ namespace Merchello.Web.Models.Ui.Rendering
 
             return
                 (IEnumerable<IEntityCollection>)
-                context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(productKey));
+                context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(productKey, isFilter));
         }
 
         private static IEnumerable<IEntityCollection> GetCollectionChildCollections(IMerchelloContext context, Guid collectionKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)

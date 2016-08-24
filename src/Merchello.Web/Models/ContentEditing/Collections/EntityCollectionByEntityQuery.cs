@@ -26,5 +26,11 @@
         [DataMember(Name = "entityType")]
         [JsonConverter(typeof(StringEnumConverter))]
         public EntityType EntityType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is filter.
+        /// </summary>
+        [DataMember(Name = "isFilter")]
+        public bool IsFilter { get; set; }
     }
 }

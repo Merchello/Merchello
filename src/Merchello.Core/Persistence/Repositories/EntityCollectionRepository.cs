@@ -53,10 +53,13 @@
         /// <param name="productKey">
         /// The product key.
         /// </param>
+        /// <param name="isFilter">
+        /// A value indicating whether or not to this should return collections that represent filters.
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
         /// </returns>
-        public IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey)
+        public IEnumerable<IEntityCollection> GetEntityCollectionsByProductKey(Guid productKey, bool isFilter = false)
         {
             var sql =
                 this.GetBaseQuery(false)
@@ -64,7 +67,9 @@
                     .Append("SELECT DISTINCT([entityCollectionKey])")
                     .Append("FROM [merchProduct2EntityCollection]")
                     .Append("WHERE [merchProduct2EntityCollection].[productKey] = @pkey", new { @pkey = productKey })
-                    .Append(")");
+                    .Append(")")
+                    .Append("AND [merchEntityCollection].[isFilter] = @isfilter", new { @isfilter = isFilter });
+
             var dtos = Database.Fetch<EntityCollectionDto>(sql);
 
             return dtos.DistinctBy(x => x.Key).Select(x => Get(x.Key));
@@ -187,12 +192,75 @@
         public IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(Guid[] keys)
         {
             var sql = new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                .Where<EntityCollectionDto>(x => x.ParentKey == null)
                 .Where("providerKey IN (@keys)", new { @keys = keys });
 
             var matches = Database.Fetch<KeyDto>(sql);
 
             return !matches.Any() ? 
                 Enumerable.Empty<IEntitySpecifiedFilterCollection>() : 
+                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsContainingProduct(Guid[] keys, Guid productKey)
+        {
+            var sql =
+                new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                    .Where("providerKey IN (@keys)", new { @keys = keys })
+                    .Append(" AND [merchEntityCollection].[pk] IN (")
+                    .Append("SELECT DISTINCT(entityCollectionKey)")
+                    .Append("FROM	merchProduct2EntityCollection")
+                    .Append("WHERE productKey = @prodKey", new { @prodKey = productKey })
+                    .Append(")");
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ?
+                Enumerable.Empty<IEntitySpecifiedFilterCollection>() :
+                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
+        }
+
+        /// <summary>
+        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// with a product
+        /// </summary>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <param name="productKey">
+        /// The product key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// </returns>
+        public IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsNotContainingProduct(Guid[] keys, Guid productKey)
+        {
+            var sql =
+                new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
+                    .Where("providerKey IN (@keys)", new { @keys = keys })
+                    .Append(" AND [merchEntityCollection].[pk] NOT IN (")
+                    .Append("SELECT DISTINCT(entityCollectionKey)")
+                    .Append("FROM	merchProduct2EntityCollection")
+                    .Append("WHERE productKey = @prodKey", new { @prodKey = productKey })
+                    .Append(")");
+
+            var matches = Database.Fetch<KeyDto>(sql);
+
+            return !matches.Any() ?
+                Enumerable.Empty<IEntitySpecifiedFilterCollection>() :
                 matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
         }
 
@@ -212,6 +280,11 @@
         /// </remarks>
         public IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key)
         {
+            var cacheKey = Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(key);
+            var cached = (IEntitySpecifiedFilterCollection)RuntimeCache.GetCacheItem(cacheKey);
+
+            if (cached != null) return cached;
+
             var collection = Get(key);
             if (collection == null) return null;
             var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
@@ -223,7 +296,7 @@
                 specCollection.AttributeCollections.Add(child);
             }
 
-            return specCollection;
+            return (IEntitySpecifiedFilterCollection)RuntimeCache.GetCacheItem(cacheKey, () => specCollection);
         }
 
         /// <summary>
@@ -349,6 +422,20 @@
         }
 
         /// <summary>
+        /// The persist deleted item.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        protected override void PersistDeletedItem(IEntityCollection entity)
+        {
+            base.PersistDeletedItem(entity);
+
+            if (entity.ParentKey != null)
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(entity.ParentKey.Value));
+        }
+
+        /// <summary>
         /// The persist new item.
         /// </summary>
         /// <param name="entity">
@@ -371,6 +458,9 @@
             Database.Insert(dto);
             entity.Key = dto.Key;
             entity.ResetDirtyProperties();
+
+            if (entity.ParentKey != null)
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -389,6 +479,8 @@
             Database.Update(dto);
 
             entity.ResetDirtyProperties();
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityCollection>(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(entity.Key));
         }
     }
 }

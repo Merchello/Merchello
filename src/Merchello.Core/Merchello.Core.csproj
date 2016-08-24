@@ -653,6 +653,7 @@
     <Compile Include="Persistence\Migrations\MerchelloMigrationBase.cs" />
     <Compile Include="Persistence\Migrations\MerchelloMigrationContext.cs" />
     <Compile Include="Persistence\Migrations\MigrationResolver.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargerVersionTwoThreeZero\AddEntityCollectionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
