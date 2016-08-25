@@ -130,16 +130,26 @@
             return string.Format("merchello.shippingateway.shipmethods.{0}", providerKey);
         }
 
+
         /// <summary>
         /// Returns a cache key intended for ShippingGatewayProviders rate quotes
         /// </summary>
-        /// <param name="shipmentKey">The shipment key</param>
-        /// <param name="shipMethodKey">The ship method key</param>
-        /// <param name="versionKey">The version key</param>
+        /// <param name="shipmentKey">
+        /// The shipment key
+        /// </param>
+        /// <param name="shipMethodKey">
+        /// The ship method key
+        /// </param>
+        /// <param name="versionKey">
+        /// The version key
+        /// </param>
+        /// <param name="addressArgs">
+        /// The address arguments - usually the country code and the region.
+        /// </param>
         /// <returns>
         /// The shipping rate quote cache key
         /// </returns>
-        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey)
+        internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey, string addressArgs)
         {
             return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey, versionKey);
         }

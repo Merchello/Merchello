@@ -218,8 +218,8 @@
     <comment>Label for the postal code</comment>
   </data>
   <data name="LabelRegion" xml:space="preserve">
-    <value>State or Province</value>
-    <comment>Label for the region or province field</comment>
+    <value>State / Province / Region</value>
+    <comment> </comment>
   </data>
   <data name="LabelRememberMe" xml:space="preserve">
     <value>Remember me</value>

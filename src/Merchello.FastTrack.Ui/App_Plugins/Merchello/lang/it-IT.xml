@@ -34,6 +34,7 @@
     <key alias="gateways">Gateway Providers</key>
   </area>
   <area alias="merchelloTabs">
+    <key alias="productFilterSpecs">Filter Specifications</key>
     <key alias="productListing">Product Listing</key>
     <key alias="product">Product</key>
     <key alias="productVariants">Product Variants</key>

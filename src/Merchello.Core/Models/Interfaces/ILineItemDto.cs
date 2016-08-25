@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Merchello.Core.Models.Rdbms
+﻿namespace Merchello.Core.Models.Rdbms
 {
+    using System;
+
     /// <summary>
     /// Defines a LineItemDto
     /// </summary>

@@ -189,6 +189,361 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
   }
 });
 
+angular.module('merchello.directives').directive('entitySpecFilterAssociation',
+    function(entityCollectionResource) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                preValuesLoaded: '=',
+                collection: '=',
+                entityType: '=',
+                doSave: '&',
+                autoSave: '=?'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.specfilterassociation.tpl.html',
+            link: function (scope, elm, attr) {
+
+                var auto = ('autoSave' in attr && 'doSave' in attr) ? scope.autoSave : false;
+
+                console.info(scope.doSave);
+
+                // this is used directly from the embedded directive not when the directive is used in a dialog
+                scope.save = function(att) {
+                    if (!auto) return;
+                    console.info(scope.doSave);
+                    console.info(scope.collection);
+                    console.info(att);
+                    scope.doSave()(scope.collection, att);
+                }
+
+            }
+        }
+});
+
+angular.module('merchello.directives').directive('entitySpecFilterList', [
+    '$q', 'localizationService', 'eventsService', 'dialogService', 'entityCollectionResource', 'entityCollectionDisplayBuilder',
+    'entityCollectionProviderDisplayBuilder',
+    function($q, localizationService, eventsService, dialogService, entityCollectionResource, entityCollectionDisplayBuilder,
+             entityCollectionProviderDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                load: '&',
+                doAdd: '&',
+                doEdit: '&',
+                entityType: '=',
+                preValuesLoaded: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/entity.specificationfilterlist.tpl.html',
+            link: function(scope, elm, attr) {
+
+                scope.loaded = false;
+                scope.noResults = '';
+                scope.collections = [];
+                scope.providers = [];
+
+                /// PRIVATE
+                var yes = '';
+                var no = '';
+                var attributes = '';
+
+
+                scope.getColumnValue = function(col, spec) {
+                    switch (col) {
+                        case 'name':
+                            return spec.name;
+                        case 'attributes':
+                            return spec.attributeCollections.length + ' ' + attributes;
+                    };
+                }
+
+                scope.delete = function(collection) {
+                    var dialogData = {
+                        name: collection.name,
+                        collection: collection
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
+                        show: true,
+                        callback: processDeleteOption,
+                        dialogData: dialogData
+                    });
+                }
+
+                scope.add = function() {
+                    var dialogData = {
+                        providers: scope.providers,
+                        entityType: scope.entityType,
+                        selectedProvider: undefined,
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/select.specattributecollectionprovider.html',
+                        show: true,
+                        callback: openAddCollection,
+                        dialogData: dialogData
+                    });
+                }
+
+                scope.edit = function(collection) {
+                    // first we need to get the provider assigned to the filter attribute collections (child collections)
+                    entityCollectionResource.getEntitySpecifiedFilterCollectionAttributeProvider(collection.key)
+                        .then(function(result) {
+
+                            var provider = entityCollectionProviderDisplayBuilder.transform(result);
+                            var attributeTemplate = entityCollectionDisplayBuilder.createDefault();
+                            attributeTemplate.providerKey = provider.key;
+                            attributeTemplate.parentKey = collection.key;
+                            attributeTemplate.entityType = scope.entityType;
+                            attributeTemplate.entityTfKey = provider.entityTfKey;
+                            attributeTemplate.isFilter = true;
+
+                            var clone = angular.extend(entityCollectionDisplayBuilder.createDefault(), collection);
+                            var collections = clone.attributeCollections;
+                            clone.attributeCollections = [];
+                            angular.forEach(collections, function(ac) {
+                               var atclone = angular.extend(entityCollectionDisplayBuilder.createDefault(), ac);
+                                clone.attributeCollections.push(atclone);
+                            });
+
+                            var dialogData = {
+                                provider: provider,
+                                specCollection: clone,
+                                attributeTemplate: attributeTemplate,
+                                entityType: scope.entityType
+                            };
+
+                            var template = provider.dialogEditorView.editorView !== '' ?
+                                provider.dialogEditorView.editorView : '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specfilterattributecollection.addedit.html';
+
+
+                            dialogService.open({
+                                template: template,
+                                show: true,
+                                callback: processEditOption,
+                                dialogData: dialogData
+                            });
+                    });
+
+                }
+
+                function openAddCollection(provider) {
+                    var collection = entityCollectionDisplayBuilder.createDefault()
+                    collection.entityType = scope.entityType;
+                    collection.entityTfKey = provider.entityTfKey;
+                    collection.providerKey = provider.key;
+                    collection.isFilter = true;
+                    var dialogData = {
+                        attribute: collection
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specfiltercollection.add.html',
+                        show: true,
+                        callback: processAddAttribute,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processDeleteOption(dialogData) {
+                    entityCollectionResource.deleteEntityCollection(dialogData.collection.key).then(function(result) {
+                        load();
+                    });
+                }
+
+                function processAddAttribute(dialogData) {
+                    scope.doAdd()(dialogData.attribute);
+                }
+
+                function processEditOption(dialogData) {
+                    scope.doEdit()(dialogData.specCollection);
+                }
+
+                function init() {
+
+                    $q.all([
+                        localizationService.localize('general_yes'),
+                        localizationService.localize('general_no'),
+                        localizationService.localize('merchelloTableCaptions_filterSpecAttributes'),
+                        localizationService.localize('merchelloSpecFilters_noSpecFilters'),
+                        entityCollectionResource.getEntitySpecifiedFilterCollectionProviders(scope.entityType)
+                    ]).then(function(data) {
+                        yes = data[0];
+                        no = data[1];
+                        attributes = data[2];
+                        scope.noResults = data[3];
+                        scope.providers = entityCollectionProviderDisplayBuilder.transform(data[4]);
+                    });
+
+                    scope.$watch('preValuesLoaded', function(nv, ov) {
+                        if (nv === true) {
+                            scope.isReady = true;
+                        } else {
+                            scope.isReady = false;
+                        }
+
+                        if (scope.isReady) {
+                            load();
+                        }
+                    });
+                }
+
+                function load() {
+                    entityCollectionResource.getEntitySpecifiedFilterCollections(scope.entityType).then(function(results) {
+                        scope.collections = entityCollectionDisplayBuilder.transform(results);
+                        scope.loaded = true;
+                    });
+
+                }
+
+                init();
+            }
+        }
+    }]);
+
+angular.module('merchello.directives').directive('entitySpecifiedFilters',
+    function($q, dialogService, entityCollectionResource, entityCollectionDisplayBuilder) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                preValuesLoaded: '=',
+                entity: '=',
+                entityType: '='
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.specifiedfilters.tpl.html',
+            link: function(scope, elm, attr) {
+
+                scope.ready = false;
+                scope.available = [];
+                scope.associated = [];
+                scope.currentFilters = [];
+
+                scope.addOrRemove = function(collection, att) {
+                    if (att.selected) {
+                        entityCollectionResource.addEntityToCollection(scope.entity.key, att.key);
+                    } else {
+                        var others = _.filter(collection.attributeCollections, function(ac) {
+                           if (ac.selected && ac.key !== att.key) return ac;
+                        });
+                        var promises = [];
+                        promises.push(entityCollectionResource.removeEntityFromCollection(scope.entity.key, att.key));
+                        if (others.length === 0) {
+                            promises.push(entityCollectionResource.removeEntityFromCollection(scope.entity.key, collection.key));
+                        }
+                        $q.all(promises).then(function(result) {
+                           load();
+                        });
+                    }
+                }
+
+                scope.associateFilters = function() {
+
+                        var dialogData = {
+                            available: getAvailableClone(),
+                            associate: []
+                        };
+
+                        dialogService.open({
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.pick.specfiltercollections.html',
+                            show: true,
+                            callback: addAssociation,
+                            dialogData: dialogData
+                        });
+                }
+
+                function addAssociation(associations) {
+                    console.info(associations);
+                    if (!angular.isArray(associations)) return;
+                    if (associations.length > 0) {
+                        scope.ready = false;
+                        entityCollectionResource.associateEntityWithFilterCollections(scope.entity.key, associations).then(function(result) {
+                            load();
+                        });
+                    }
+                }
+
+                function init() {
+                    scope.$watch('preValuesLoaded', function(nv, ov) {
+                       if (nv === true) {
+                           load();
+                       }
+                    });
+                }
+
+                function load() {
+                    $q.all([
+                        entityCollectionResource.getSpecifiedFilterCollectionsContainingProduct(scope.entityType, scope.entity.key),
+                        entityCollectionResource.getSpecifiedFilterCollectionsNotContainingProduct(scope.entityType, scope.entity.key),
+                        entityCollectionResource.getEntityCollectionsByEntity(scope.entity, scope.entityType, true)
+
+                    ])
+                    .then(function(data) {
+                        scope.associated = entityCollectionDisplayBuilder.transform(data[0]);
+                        scope.available = entityCollectionDisplayBuilder.transform(data[1]);
+                        scope.currentFilters = entityCollectionDisplayBuilder.transform(data[2]);
+
+                        // keep the directive hidden if there is nothing to do
+                        if (scope.associated.length > 0 || scope.available.length > 0) {
+
+                            // add the selected property to each of the attribute collections
+
+                            // associated filters
+                            angular.forEach(scope.associated, function(asf) {
+                                // the root collection that represents the filter group
+                                asf.selected = true;
+
+                                angular.forEach(asf.attributeCollections, function(asfac) {
+                                    var fnd = _.find(scope.currentFilters, function(current) { return current.key === asfac.key; });
+                                    asfac.selected = fnd !== undefined;
+                                });
+                            });
+
+                            // available filters
+                            angular.forEach(scope.available, function(avf) {
+                                avf.selected = false;
+                                angular.forEach(avf.attributeCollections, function(avfac) {
+                                   avfac.selected = false;
+                                });
+                            });
+
+                            scope.ready = true;
+                        }
+                    });
+
+                }
+
+                function getAvailableClone() {
+                    var clone = [];
+                    angular.forEach(scope.available, function(av) {
+
+                        var avcopy = cloneCollection(av);
+                        avcopy.attributeCollections = [];
+                        angular.forEach(av.attributeCollections, function(avac) {
+                            avcopy.attributeCollections.push(cloneCollection(avac));
+                        });
+                        clone.push(avcopy);
+                    });
+
+                    return clone;
+
+                    function cloneCollection(collection) {
+                        var tmp = entityCollectionDisplayBuilder.createDefault();
+                        var copy = angular.extend(tmp, collection);
+                        return copy;
+                    }
+                }
+
+
+                //
+                init();
+            }
+        }
+        });
+
 /**
  * @ngdoc directive
  * @name static-collection-tree-picker

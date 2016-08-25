@@ -126,15 +126,19 @@
             }
 
 			// SD: Not a very elegant solution to the problem of discovering the size of an existing column
+			// Should perhaps look to refactor this into something reusable
 	        var merchAppliedPaymentDescriptionSize =
 		        this._database.ExecuteScalar<int>(
 			        "SELECT character_maximum_length FROM information_schema.columns WHERE table_name = 'merchAppliedPayment' AND column_name = 'description'");
-			if (merchAppliedPaymentDescriptionSize != 500)			
+					
+            if (!this.ValidColumns.Contains("merchEntityCollection,isFilter")
+                || !this.ValidColumns.Contains("merchEntityCollection,extendedData") 
+				|| merchAppliedPaymentDescriptionSize != 500)
 			{
 				return new Version(2, 2, 0);
 	        }
 
-	        //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
+	        // If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
                  && this.TableDefinitions.SelectMany(definition => definition.Columns).All(x => this.ValidColumns.Contains(x.Name))))

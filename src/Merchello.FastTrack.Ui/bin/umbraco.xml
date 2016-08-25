@@ -6,9 +6,9 @@
     <members>
         <member name="M:Umbraco.Web.ApplicationContextExtensions.RestartApplicationPool(Umbraco.Core.ApplicationContext,System.Web.HttpContextBase)">
             <summary>
-            This will restart the application pool
+            Restarts the application pool by unloading the application domain.
             </summary>
-            <param name="appContext"> </param>
+            <param name="appContext"></param>
             <param name="http"></param>
         </member>
         <member name="T:Umbraco.Web.BatchedDatabaseServerMessengerStartup">
@@ -118,6 +118,355 @@
             Returns the currently logged in Umbraco User
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Editors.GravatarController">
+            <summary>
+            API controller used for getting Gravatar urls
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheck">
+            <summary>
+            The abstract health check class
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.HealthCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.HealthCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.Rectify">
+            <summary>
+            Rectifies this check.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.Rectify(System.String)">
+            <summary>
+            Rectifies this check with a provided value.
+            </summary>
+            <param name="value">Value provided</param>
+            <returns></returns>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.FilePath">
+            <summary>
+            Gets the config file path.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.XPath">
+            <summary>
+            Gets XPath statement to the config element to check.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.Values">
+            <summary>
+            Gets the values to compare against.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.CurrentValue">
+            <summary>
+            Gets the current value
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.ProvidedValue">
+            <summary>
+            Gets the provided value
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.ValueComparisonType">
+            <summary>
+            Gets the comparison type for checking the value.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.FileName">
+            <summary>
+            Gets the name of the file.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.AbsoluteFilePath">
+            <summary>
+            Gets the absolute file path.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.CheckSuccessMessage">
+            <summary>
+            Gets the message for when the check has succeeded.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.CheckErrorMessage">
+            <summary>
+            Gets the message for when the check has failed.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.RectifySuccessMessage">
+            <summary>
+            Gets the rectify success message.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.CanRectify">
+            <summary>
+            Gets a value indicating whether this check can be rectified automatically.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.Checks.Config.AbstractConfigCheck.CanRectifyWithValue">
+            <summary>
+            Gets a value indicating whether this check can be rectified automatically if a value is provided.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Config.ConfigurationService.#ctor(System.String,System.String)">
+            <param name="configFilePath">The absolute file location of the configuration file</param>
+            <param name="xPath">The XPath to select the value</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Config.ConfigurationService.GetConfigurationValue">
+            <summary>
+            Gets a value from a given configuration file with the given XPath  
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Config.ConfigurationService.UpdateConfigFile(System.String)">
+            <summary>
+            Updates a value in a given configuration file with the given XPath  
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Services.SmtpCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Services.SmtpCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Permissions.FolderAndFilePermissionsCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Permissions.FolderAndFilePermissionsCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Security.ExcessiveHeadersCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Security.ExcessiveHeadersCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Security.ClickJackingCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Security.ClickJackingCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.HealthCheckAction.#ctor">
+            <summary>
+            Empty ctor used for serialization
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.HealthCheckAction.#ctor(System.String,System.Guid)">
+            <summary>
+            Default ctor
+            </summary>
+            <param name="alias"></param>
+            <param name="healthCheckId"></param>
+        </member>
+        <member name="F:Umbraco.Web.HealthCheck.HealthCheckAction._name">
+            <summary>
+            The name of the action - this is used to name the fix button
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckAction.Alias">
+            <summary>
+            The alias of the action - this is used by the Health Check instance to execute the action
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckAction.HealthCheckId">
+            <summary>
+            The Id of the Health Check instance
+            </summary>
+            <remarks>
+            This is used to find the Health Check instance to execute this action
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckAction.ActionParameters">
+            <summary>
+            This could be used if the status has a custom view that specifies some parameters to be sent to the server
+            when an action needs to be executed
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckAction.Description">
+            <summary>
+            The description of the action - this is used to give a description before executing the action
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckAction.ValueRequired">
+            <summary>
+            Indicates if a value is required to rectify the issue
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckAction.ProvidedValue">
+            <summary>
+            Provides a value to rectify the issue
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheckAttribute">
+            <summary>
+            Metadata attribute for Health checks
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheckContext">
+            <summary>
+            Context exposing all services that could be required for health check classes to perform and/or fix their checks
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheckController">
+            <summary>
+            The API controller used to display the health check info and execute any actions
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.HealthCheckController.GetAllHealthChecks">
+            <summary>
+            Gets a grouped list of health checks, but doesn't actively check the status of each health check.
+            </summary>
+            <returns>Returns a collection of anonymous objects representing each group.</returns>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheckResolver">
+            <summary>
+            Resolves all health check instances
+            </summary>
+            <remarks>
+            Each instance scoped to the lifespan of the http request
+            </remarks>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckResolver.HealthChecks">
+            <summary>
+            Returns all health check instances
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheckResolver.HealthCheckServiceProvider">
+            <summary>
+            This will ctor the HealthCheck instances
+            </summary>
+            <remarks>
+            This is like a super crappy DI - in v8 we have real DI
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.HealthCheckStatus">
+            <summary>
+            The status returned for a health check when it performs it check
+            TODO: This model will be used in the WebApi result so needs attributes for JSON usage
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckStatus.Message">
+            <summary>
+            The status message
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckStatus.Description">
+            <summary>
+            The status description if one is necessary
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckStatus.View">
+            <summary>
+            This is optional but would allow a developer to specify a path to an angular html view
+            in order to either show more advanced information and/or to provide input for the admin
+            to configure how an action is executed
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckStatus.ResultType">
+            <summary>
+            The status type
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.HealthCheck.HealthCheckStatus.Actions">
+            <summary>
+            The potential actions to take (in any)
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Security.HttpsCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.Security.HttpsCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.HealthCheck.Checks.DataIntegrity.XmlDataIntegrityHealthCheck">
+            <summary>
+            This moves the functionality from the XmlIntegrity check dashboard into a health check
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.DataIntegrity.XmlDataIntegrityHealthCheck.GetStatus">
+            <summary>
+            Get the status for this health check
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.DataIntegrity.XmlDataIntegrityHealthCheck.ExecuteAction(Umbraco.Web.HealthCheck.HealthCheckAction)">
+            <summary>
+            Executes the action and returns it's status
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.DataIntegrity.XmlDataIntegrityHealthCheck.CheckMedia">
+            <summary>
+            Checks the cmsContentXml table to see if the number of entries for media matches the number of media entities
+            </summary>
+            <returns></returns>
+            <remarks>
+            Further to just counting the data integrity, this also checks if the XML stored in the cmsContentXml table contains the correct
+            GUID identifier. In older versions of Umbraco, the GUID is not persisted to the content cache, that will cause problems in newer
+            versions of Umbraco, so the xml table would need a rebuild.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.HealthCheck.Checks.DataIntegrity.XmlDataIntegrityHealthCheck.CheckContent">
+            <summary>
+            Checks the cmsContentXml table to see if the number of entries for content matches the number of published content entities
+            </summary>
+            <returns></returns>
+            <remarks>
+            Further to just counting the data integrity, this also checks if the XML stored in the cmsContentXml table contains the correct
+            GUID identifier. In older versions of Umbraco, the GUID is not persisted to the content cache, that will cause problems in newer
+            versions of Umbraco, so the xml table would need a rebuild.
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.IHttpContextAccessor">
             <summary>
             Used to retrieve the HttpContext
@@ -159,12 +508,20 @@
             we will load the rest of the server vars after the user is authenticated.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.HtmlHelperBackOfficeExtensions.AngularExternalLoginInfoValuesScript(System.Web.Mvc.HtmlHelper,System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:Umbraco.Web.HtmlHelperBackOfficeExtensions.AngularValueExternalLoginInfoScript(System.Web.Mvc.HtmlHelper,System.Collections.Generic.IEnumerable{System.String})">
             <summary>
-            Used to render the script that will pass in the angular externalLoginInfo service on page load
+            Used to render the script that will pass in the angular "externalLoginInfo" service/value on page load
             </summary>
             <param name="html"></param>
             <param name="externalLoginErrors"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.HtmlHelperBackOfficeExtensions.AngularValueResetPasswordCodeInfoScript(System.Web.Mvc.HtmlHelper,System.Object)">
+            <summary>
+            Used to render the script that will pass in the angular "resetPasswordCodeInfo" service/value on page load
+            </summary>
+            <param name="html"></param>
+            <param name="val"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.Install.Models.InstallSetupStep`1">
@@ -387,6 +744,12 @@
             Model used to save a member type
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Models.ContentEditing.PostedFiles">
+            <summary>
+            This is used for the response of PostAddFile so that we can analyze the response in a filter and remove the 
+            temporary files that were created.
+            </summary>
+        </member>
         <member name="F:Umbraco.Web.Models.ContentEditing.PropertyGroupBasic.GenericPropertiesGroupId">
             <summary>
             Gets the special generic properties tab identifier.
@@ -416,6 +779,21 @@
              A default msg 
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Models.LocalPackageInstallModel">
+            <summary>
+            A model that represents uploading a local package
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.LocalPackageInstallModel.IsCompatible">
+            <summary>
+            A flag to determine if this package is compatible to be installed
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.LocalPackageInstallModel.UmbracoVersion">
+            <summary>
+            The minimum umbraco version that this package is pinned to
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Models.Mapping.ContentTypeModelMapperExtensions">
             <summary>
             Used as a shared way to do the underlying mapping for content types base classes
@@ -436,6 +814,11 @@
             <param name="mapping"></param>
             <param name="applicationContext"></param>
             <returns></returns>        
+        </member>
+        <member name="T:Umbraco.Web.Models.PackageInstallResult">
+            <summary>
+            Model that is returned when a package is totally finished installing
+            </summary>
         </member>
         <member name="T:Umbraco.Web.Models.PublishedContentWithKeyBase">
             <summary>
@@ -590,6 +973,23 @@
             </returns>
             <param name="controllerContext">The controller context.</param><param name="methodInfo">Information about the action method.</param>
         </member>
+        <member name="T:Umbraco.Web.Mvc.UmbracoRequireHttpsAttribute">
+            <summary>
+            If umbracoUseSSL property in web.config is set to true, this filter will redirect any http access to https.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.UmbracoRequireHttpsAttribute.HandleNonHttpsRequest(System.Web.Mvc.AuthorizationContext)">
+            <summary>
+            If umbracoUseSSL is true and we have a non-HTTPS request, handle redirect.
+            </summary>
+            <param name="filterContext">Filter context</param>
+        </member>
+        <member name="M:Umbraco.Web.Mvc.UmbracoRequireHttpsAttribute.OnAuthorization(System.Web.Mvc.AuthorizationContext)">
+            <summary>
+            Check to see if HTTPS is currently being used if umbracoUseSSL is true.
+            </summary>
+            <param name="filterContext">Filter context</param>
+        </member>
         <member name="T:Umbraco.Web.Mvc.ValidateMvcAngularAntiForgeryTokenAttribute">
             <summary>
             A filter to check for the csrf token based on Angular's standard approach
@@ -599,6 +999,129 @@
             
             If the authentication type is cookie based, then this filter will execute, otherwise it will be disabled
             </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Profiling.StartupWebProfilerProvider">
+            <summary>
+            This is a custom MiniProfiler WebRequestProfilerProvider (which is generally the default) that allows
+            us to profile items during app startup - before an HttpRequest is created
+            </summary>
+            <remarks>
+            Once the boot phase is changed to StartupPhase.Request then the base class (default) provider will handle all
+            profiling data and this sub class no longer performs any logic.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.BootComplete">
+            <summary>
+            Executed once the application boot process is complete and changes the phase to Request
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.Stop(System.Boolean)">
+            <summary>
+            Executed when a profiling operation is completed
+            </summary>
+            <param name="discardResults"></param>
+            <remarks>
+            This checks if the bootup phase is None, if so, it just calls the base class, otherwise it checks
+            if a profiler is active (i.e. in startup), then sets the phase to None so that the base class will be used
+            for all subsequent calls.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.Start(StackExchange.Profiling.ProfileLevel)">
+            <summary>
+            Executed when a profiling operation is started
+            </summary>
+            <param name="level"></param>
+            <returns></returns>
+            <remarks>
+            This checks if the startup phase is not None, if this is the case and the current profiler is NULL
+            then this sets the startup profiler to be active. Otherwise it just calls the base class Start method.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.StartupWebProfilerProvider.GetCurrentProfiler">
+            <summary>
+            This returns the current profiler
+            </summary>
+            <returns></returns>
+            <remarks> 
+            If the boot phase is not None, then this will return the startup profiler (this), otherwise
+            returns the base class
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Profiling.StartupWebProfilerProvider.StartupPhase">
+            <summary>
+            Used to determine which phase the boot process is in
+            </summary>
+        </member>
+        <member name="T:Umbraco.Web.Profiling.WebProfiler">
+            <summary>
+            A profiler used for web based activity based on the MiniProfiler framework
+            </summary>    
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.#ctor">
+            <summary>
+            Constructor
+            </summary>        
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.UmbracoApplicationApplicationInit(System.Object,System.EventArgs)">
+            <summary>
+            Handle the Init event o fthe UmbracoApplication which allows us to subscribe to the HttpApplication events
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.UmbracoApplicationEndRequest(System.Object,System.EventArgs)">
+            <summary>
+            Handle the begin request event
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.UmbracoApplicationBeginRequest(System.Object,System.EventArgs)">
+            <summary>
+            Handle the end request event
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.Render">
+            <summary>
+            Render the UI to display the profiler 
+            </summary>
+            <returns></returns>
+            <remarks>
+            Generally used for HTML displays
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.Step(System.String)">
+            <summary>
+            Profile a step
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+            <remarks>
+            Use the 'using(' syntax
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.Start">
+            <summary>
+            Start the profiler
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.Stop(System.Boolean)">
+            <summary>
+            Start the profiler
+            </summary>
+            <remarks>
+            set discardResults to false when you want to abandon all profiling, this is useful for 
+            when someone is not authenticated or you want to clear the results based on some other mechanism.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Profiling.WebProfiler.TryGetRequest(System.Object)">
+            <summary>
+            Gets the request object from the app instance if it is available
+            </summary>
+            <param name="sender">The application object</param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.PropertyEditors.DecimalPropertyEditor.CreateValueEditor">
             <summary>
@@ -621,6 +1144,57 @@
             Used to strongly type the value for the image cropper
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Routing.RedirectTrackingEventHandler">
+            <summary>
+            Implements an Application Event Handler for managing redirect urls tracking.
+            </summary>
+            <remarks>
+            <para>when content is renamed or moved, we want to create a permanent 301 redirect from it's old url</para>
+            <para>not managing domains because we don't know how to do it - changing domains => must create a higher level strategy using rewriting rules probably</para>
+            <para>recycle bin = moving to and from does nothing: to = the node is gone, where would we redirect? from = same</para>
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Web.Routing.RedirectTrackingEventHandler.ApplicationStarting(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:Umbraco.Web.Routing.RedirectTrackingEventHandler.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:Umbraco.Web.Routing.RedirectTrackingEventHandler.ContentService_Publishing(Umbraco.Core.Publishing.IPublishingStrategy,Umbraco.Core.Events.PublishEventArgs{Umbraco.Core.Models.IContent})">
+            <summary>
+            Before the items are published, we need to get it's current URL before it changes
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Umbraco.Web.Routing.RedirectTrackingEventHandler.PageCacheRefresher_CacheUpdated(Umbraco.Web.Cache.PageCacheRefresher,Umbraco.Core.Cache.CacheRefresherEventArgs)">
+            <summary>
+            Executed when the cache updates, which means we can know what the new URL is for a given document
+            </summary>
+            <param name="sender"></param>
+            <param name="cacheRefresherEventArgs"></param>
+        </member>
+        <member name="M:Umbraco.Web.Routing.RedirectTrackingEventHandler.GetPublishedCache">
+            <summary>
+            Gets the current request cache to persist the values between handlers
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Routing.RedirectTrackingEventHandler.OldRoutes">
+            <summary>
+            Tracks a documents URLs during publishing in the current request
+            </summary>
+        </member>
+        <member name="P:Umbraco.Web.Routing.RedirectTrackingEventHandler.RequestCache">
+            <summary>
+            Gets the current request cache to persist the values between handlers
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Editors.RedirectUrlManagementController.IsEnabled">
+            <summary>
+            Returns true/false of whether redirect tracking is enabled or not
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Umbraco.Web.RequestLifespanMessagesFactory">
             <summary>
             Stores the instance of EventMessages in the current request so all events will share the same instance
@@ -635,6 +1209,36 @@
             <remarks>
             This is useful when working on async threads since the UmbracoContext is not copied over explicitly
             </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Routing.ContentFinderByRedirectUrl">
+            <summary>
+            Provides an implementation of <see cref="T:Umbraco.Web.Routing.IContentFinder"/> that handles page url rewrites
+            that are stored when moving, saving, or deleting a node.
+            </summary>
+            <remarks>
+            <para>Assigns a permanent redirect notification to the request.</para>
+            </remarks>
+        </member>
+        <member name="T:Umbraco.Web.Routing.IContentFinder">
+            <summary>
+            Provides a method to try to find and assign an Umbraco document to a <c>PublishedContentRequest</c>.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.Routing.IContentFinder.TryFindContent(Umbraco.Web.Routing.PublishedContentRequest)">
+            <summary>
+            Tries to find and assign an Umbraco document to a <c>PublishedContentRequest</c>.
+            </summary>
+            <param name="contentRequest">The <c>PublishedContentRequest</c>.</param>
+            <returns>A value indicating whether an Umbraco document was found and assigned.</returns>
+            <remarks>Optionally, can also assign the template or anything else on the document request, although that is not required.</remarks>
+        </member>
+        <member name="M:Umbraco.Web.Routing.ContentFinderByRedirectUrl.TryFindContent(Umbraco.Web.Routing.PublishedContentRequest)">
+            <summary>
+            Tries to find and assign an Umbraco document to a <c>PublishedContentRequest</c>.
+            </summary>
+            <param name="contentRequest">The <c>PublishedContentRequest</c>.</param>
+            <returns>A value indicating whether an Umbraco document was found and assigned.</returns>
+            <remarks>Optionally, can also assign the template or anything else on the document request, although that is not required.</remarks>
         </member>
         <member name="T:Umbraco.Web.Scheduling.ILatchedBackgroundTask">
             <summary>
@@ -1013,6 +1617,12 @@
             <summary>
             Gets the current tree alias from the attribute assigned to it.
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Trees.PackagesTreeController.CreateRootNode(System.Net.Http.Formatting.FormDataCollection)">
+            <summary>
+            Helper method to create a root model for a tree
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Security.OwinExtensions.TryGetHttpContext(Microsoft.Owin.IOwinContext)">
             <summary>
@@ -2156,6 +2766,19 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Editors.AuthenticationController.PostRequestPasswordReset(Umbraco.Web.Models.RequestPasswordResetModel)">
+            <summary>
+            Processes a password reset request.  Looks for a match on the provided email address
+            and if found sends an email with a link to reset it
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.AuthenticationController.PostSetPassword(Umbraco.Web.Models.SetPasswordModel)">
+            <summary>
+            Processes a set password request.  Validates the request and sets a new password.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.AuthenticationController.PostLogout">
             <summary>
             Logs the current user out
@@ -2450,7 +3073,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Web.Editors.ContentController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Web.Editors.ContentController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Gets the children for the content id passed in
             </summary>
@@ -2848,6 +3471,66 @@
             <param name="suffix"></param>
             <returns></returns>
         </member>
+        <member name="T:Umbraco.Web.Editors.PackageInstallController">
+            <summary>
+            A controller used for installing packages and managing all of the data in the packages section in the back office
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Umbraco.Web.Editors.PackageInstallController.ValidateInstalled(System.String,System.String)" -->
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.PerformUninstall(umbraco.cms.businesslogic.packager.InstalledPackage)">
+            <summary>
+            SORRY :( I didn't have time to put this in a service somewhere - the old packager did this all manually too
+            </summary>
+            <param name="pack"></param>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.GetInstalled">
+            <summary>
+            Returns all installed packages - only shows their latest versions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.DeleteCreatedPackage(System.Int32)">
+            <summary>
+            Deletes a created package
+            </summary>
+            <param name="packageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.Fetch(System.String)">
+            <summary>
+            Gets the package from Our to install
+            </summary>
+            <param name="packageGuid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.Import(Umbraco.Web.Models.PackageInstallModel)">
+            <summary>
+            Extracts the package zip and gets the packages information
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.InstallFiles(Umbraco.Web.Models.PackageInstallModel)">
+            <summary>
+            Installs the package files
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.InstallData(Umbraco.Web.Models.PackageInstallModel)">
+            <summary>
+            Installs the packages data/business logic
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Editors.PackageInstallController.CleanUp(Umbraco.Web.Models.PackageInstallModel)">
+            <summary>
+            Cleans up the package installation
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.Editors.UserController.#ctor">
             <summary>
             Constructor
@@ -3104,6 +3787,13 @@
             <summary>
             This step is purely here to show the button to commence the upgrade
             </summary>
+        </member>
+        <member name="M:Umbraco.Web.Install.InstallSteps.UpgradeStep.CurrentVersion">
+            <summary>
+            Gets the Current Version of the Umbraco Site before an upgrade
+            by using the last/most recent Umbraco Migration that has been run
+            </summary>
+            <returns>A SemVersion of the latest Umbraco DB Migration run</returns>
         </member>
         <member name="T:Umbraco.Web.Install.InstallSteps.NewInstallStep">
             <summary>
@@ -3466,6 +4156,16 @@
             Useful when returning a custom value editor when your property editor is attributed, it ensures the attribute
             values are copied across to your custom value editor.
             </summary>
+        </member>
+        <member name="T:Umbraco.Web.PropertyEditors.GridPropertyEditor.GridPropertyEditorApplicationStartup">
+            <summary>
+            we're using a sub -class because this has the logic to prevent it from executing if the application is not configured
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.GridPropertyEditor.GridPropertyEditorApplicationStartup.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <summary>
+            We're going to bind to the Examine events so we can ensure grid data is index nicely.
+            </summary>        
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.ValueConverters.MacroContainerValueConverter">
             <summary>
@@ -4058,6 +4758,11 @@
             Used when a node is send to translation
             </summary>
         </member>
+        <member name="T:Umbraco.Web.Models.Mapping.DashboardModelsMapper">
+            <summary>
+            A model mapper used to map models for the various dashboards
+            </summary>
+        </member>
         <member name="T:Umbraco.Web.Models.Mapping.MacroModelMapper">
             <summary>
             Declares model mappings for macros.
@@ -4211,15 +4916,6 @@
             A custom validator to ensure that all values in the list are unique
             </summary>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.ImageCropperPropertyEditor.#cctor">
-            <summary>
-            We're going to bind to the MediaService Saving event so that we can populate the umbracoFile size, type, etc... label fields
-            if we find any attached to the current media item.
-            </summary>
-            <remarks>
-            I think this kind of logic belongs on this property editor, I guess it could exist elsewhere but it all has to do with the cropper.
-            </remarks>
-        </member>
         <member name="M:Umbraco.Web.PropertyEditors.ImageCropperPropertyEditor.CreateValueEditor">
             <summary>
             Creates our custom value editor
@@ -4244,6 +4940,17 @@
             </summary>
             <param name="sender"></param>
             <param name="e"></param>
+        </member>
+        <member name="T:Umbraco.Web.PropertyEditors.ImageCropperPropertyEditor.FileUploadPropertyEditorApplicationStartup">
+            <summary>
+            we're using a sub -class because this has the logic to prevent it from executing if the application is not configured
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.ImageCropperPropertyEditor.FileUploadPropertyEditorApplicationStartup.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <summary>
+            We're going to bind to the MediaService Saving event so that we can populate the umbracoFile size, type, etc... label fields
+            if we find any attached to the current media item.
+            </summary>
         </member>
         <member name="M:Umbraco.Web.PropertyEditors.ImageCropperPropertyValueEditor.ConvertDbToEditor(Umbraco.Core.Models.Property,Umbraco.Core.Models.PropertyType,Umbraco.Core.Services.IDataTypeService)">
             <summary>
@@ -4962,11 +5669,19 @@
         </member>
         <member name="M:Umbraco.Web.PropertyEditors.LabelPropertyEditor.LabelPreValueEditor.ConvertDbToEditor(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
             <summary>
-            Chuck all the values into one field so devs can see what is stored there - we want this in case we've converted a legacy proeprty editor over to a label
-            we should still show the pre-values stored for the data type.
+            Other than for the pre-value fields defined on this property editor, chuck all the values into one field so devs can see what is stored there.
+            We want this in case we've converted a legacy property editor over to a label as we should still show the pre-values stored for the data type.
             </summary>
             <param name="defaultPreVals"></param>
             <param name="persistedPreVals"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.LabelPropertyEditor.LabelPreValueEditor.ConvertEditorToDb(System.Collections.Generic.IDictionary{System.String,System.Object},Umbraco.Core.Models.PreValueCollection)">
+            <summary>
+            When saving we want to avoid saving an empty "legacy property editor values" field if there are none.
+            </summary>
+            <param name="editorValue"></param>
+            <param name="currentValue"></param>
             <returns></returns>
         </member>
         <member name="T:Umbraco.Web.PublishedContentQuery">
@@ -5382,6 +6097,31 @@
             </param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext,Microsoft.Owin.Security.Cookies.CookieAuthenticationOptions,Owin.PipelineStage)">
+            <summary>
+            Ensures that the UmbracoBackOfficeAuthenticationMiddleware is assigned to the pipeline
+            </summary>
+            <param name="app"></param>
+            <param name="appContext"></param>
+            <param name="cookieOptions">Custom auth cookie options can be specified to have more control over the cookie authentication logic</param>
+            <param name="stage">
+            Configurable pipeline stage
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.SetBackOfficeUserManagerType``2(Owin.IAppBuilder)">
+            <summary>
+            This registers the exact type of the user manager in owin so we can extract it
+            when required in order to extract the user manager instance
+            </summary>
+            <typeparam name="TManager"></typeparam>
+            <typeparam name="TUser"></typeparam>
+            <param name="app"></param>
+            <remarks>
+            This is required because a developer can specify a custom user manager and due to generic types the key name will registered
+            differently in the owin context
+            </remarks> 
+        </member>
         <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.UseUmbracoBackOfficeExternalCookieAuthentication(Owin.IAppBuilder,Umbraco.Core.ApplicationContext)">
             <summary>
             Ensures that the cookie middleware for validating external logins is assigned to the pipeline with the correct
@@ -5432,10 +6172,11 @@
             is added as a secondary identity to the current IPrincipal so it can be used to Authorize the previewed document.
             </remarks>
         </member>
-        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.CreateCookieAuthOptions(System.String[])">
+        <member name="M:Umbraco.Web.Security.Identity.AppBuilderExtensions.CreateUmbracoCookieAuthOptions(Owin.IAppBuilder,System.String[])">
             <summary>
             Create the default umb cookie auth options
             </summary>
+            <param name="app"></param>
             <param name="explicitPaths"></param>
             <returns></returns>
         </member>
@@ -7685,6 +8426,18 @@
             A filter to set the csrf cookie token based on angular conventions
             </summary>
         </member>
+        <member name="T:Umbraco.Web.WebApi.Filters.UmbracoWebApiRequireHttpsAttribute">
+            <summary>
+            If umbracoUseSSL property in web.config is set to true, this filter will redirect any http access to https.
+            </summary>
+            <remarks>
+            This will only redirect Head/Get requests, otherwise will respond with text
+            
+            References: 
+            http://issues.umbraco.org/issue/U4-8542
+            https://blogs.msdn.microsoft.com/carlosfigueira/2012/03/09/implementing-requirehttps-with-asp-net-web-api/
+            </remarks>
+        </member>
         <member name="T:Umbraco.Web.WebApi.Filters.UmbracoTreeAuthorizeAttribute">
             <summary>
             Ensures that the current user has access to the application for which the specified tree(s) belongs
@@ -7706,23 +8459,6 @@
             If the user has access to the application that the treeAlias is specified in, they will be authorized.
             Multiple trees may be specified.
             </param>
-        </member>
-        <member name="T:Umbraco.Web.WebApi.Filters.UmbracoUseHttps">
-            <summary>
-            If umbracoUseSSL property in web.config is set to true, this filter will redirect any http access to https.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.WebApi.Filters.UmbracoUseHttps.HandleNonHttpsRequest(System.Web.Mvc.AuthorizationContext)">
-            <summary>
-            If umbracoUseSSL is true and we have a non-HTTPS request, handle redirect.
-            </summary>
-            <param name="filterContext">Filter context</param>
-        </member>
-        <member name="M:Umbraco.Web.WebApi.Filters.UmbracoUseHttps.OnAuthorization(System.Web.Mvc.AuthorizationContext)">
-            <summary>
-            Check to see if HTTPS is currently being used if umbracoUseSSL is true.
-            </summary>
-            <param name="filterContext">Filter context</param>
         </member>
         <member name="T:Umbraco.Web.WebApi.Filters.ValidateAngularAntiForgeryTokenAttribute">
             <summary>
@@ -7997,19 +8733,6 @@
             Provides an implementation of <see cref="T:Umbraco.Web.Routing.IContentFinder"/> that runs legacy <c>INotFoundHandler</c> in "last chance" situation.
             </summary>
         </member>
-        <member name="T:Umbraco.Web.Routing.IContentFinder">
-            <summary>
-            Provides a method to try to find and assign an Umbraco document to a <c>PublishedContentRequest</c>.
-            </summary>
-        </member>
-        <member name="M:Umbraco.Web.Routing.IContentFinder.TryFindContent(Umbraco.Web.Routing.PublishedContentRequest)">
-            <summary>
-            Tries to find and assign an Umbraco document to a <c>PublishedContentRequest</c>.
-            </summary>
-            <param name="contentRequest">The <c>PublishedContentRequest</c>.</param>
-            <returns>A value indicating whether an Umbraco document was found and assigned.</returns>
-            <remarks>Optionally, can also assign the template or anything else on the document request, although that is not required.</remarks>
-        </member>
         <member name="M:Umbraco.Web.Routing.ContentLastChanceFinderByNotFoundHandlers.TryFindContent(Umbraco.Web.Routing.PublishedContentRequest)">
             <summary>
             Tries to find and assign an Umbraco document to a <c>PublishedContentRequest</c>.
@@ -8096,16 +8819,18 @@
             Returns the avilable compositions for this content type
             This has been wrapped in a dto instead of simple parameters to support having multiple parameters in post request body
             </summary>
-            <param name="contentTypeId"></param>
-            <param name="filterContentTypes">
+            <param name="filter.contentTypeId"></param>
+            <param name="filter.ContentTypes">
             This is normally an empty list but if additional content type aliases are passed in, any content types containing those aliases will be filtered out
             along with any content types that have matching property types that are included in the filtered content types
             </param>
-            <param name="filterPropertyTypes">
+            <param name="filter.PropertyTypes">
             This is normally an empty list but if additional property type aliases are passed in, any content types that have these aliases will be filtered out.
             This is required because in the case of creating/modifying a content type because new property types being added to it are not yet persisted so cannot
             be looked up via the db, they need to be passed in.
             </param>
+            <param name="filter">
+            Filter applied when resolving compositions</param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.Editors.MediaTypeController.GetAll">
@@ -8521,15 +9246,6 @@
             </summary>
             <typeparam name="TPersisted"></typeparam>
         </member>
-        <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.#cctor">
-            <summary>
-            We're going to bind to the MediaService Saving event so that we can populate the umbracoFile size, type, etc... label fields
-            if we find any attached to the current media item.
-            </summary>
-            <remarks>
-            I think this kind of logic belongs on this property editor, I guess it could exist elsewhere but it all has to do with the upload field.
-            </remarks>
-        </member>
         <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.CreateValueEditor">
             <summary>
             Creates our custom value editor
@@ -8575,6 +9291,17 @@
             <param name="editorValue"></param>
             <param name="currentValue"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.FileUploadPropertyEditorApplicationStartup">
+            <summary>
+            we're using a sub -class because this has the logic to prevent it from executing if the application is not configured
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.PropertyEditors.FileUploadPropertyEditor.FileUploadPropertyEditorApplicationStartup.ApplicationStarted(Umbraco.Core.UmbracoApplicationBase,Umbraco.Core.ApplicationContext)">
+            <summary>
+            We're going to bind to the MediaService Saving event so that we can populate the umbracoFile size, type, etc... label fields
+            if we find any attached to the current media item.
+            </summary>
         </member>
         <member name="T:Umbraco.Web.PropertyEditors.FileUploadPropertyValueEditor">
             <summary>
@@ -9185,10 +9912,10 @@
         </member>
         <member name="M:Umbraco.Web.Editors.BackOfficeController.RenderDefaultOrProcessExternalLoginAsync(System.Func{System.Web.Mvc.ActionResult},System.Func{System.Web.Mvc.ActionResult})">
             <summary>
-            Used by Default and AuthorizeUpgrade to render as per normal if there's no external login info, otherwise
-            process the external login info.
+            Used by Default and AuthorizeUpgrade to render as per normal if there's no external login info, 
+            otherwise process the external login info.
             </summary>
-            <returns></returns>
+            <returns></returns>       
         </member>
         <member name="M:Umbraco.Web.Editors.BackOfficeController.GetApplicationState">
             <summary>
@@ -9472,6 +10199,14 @@
             A model representing a content item to be displayed in the back office
             </summary>    
         </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ContentItemDisplay.AllowPreview">
+            <summary>
+            Determines whether previewing is allowed for this node
+            </summary>
+            <remarks>
+            By default this is true but by using events developers can toggle this off for certain documents if there is nothing to preview
+            </remarks>
+        </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.ContentItemDisplay.AllowedActions">
             <summary>
             The allowed 'actions' based on the user's permissions - Create, Update, Publish, Send to publish
@@ -9519,6 +10254,14 @@
             <summary>
             Represents a content property to be saved
             </summary>
+        </member>
+        <member name="P:Umbraco.Web.Models.ContentEditing.ContentPropertyBasic.Id">
+            <summary>
+            This is the cmsPropertyData ID
+            </summary>
+            <remarks>
+            This is not really used for anything
+            </remarks>
         </member>
         <member name="P:Umbraco.Web.Models.ContentEditing.ContentPropertyBasic.PropertyEditor">
             <summary>
@@ -9777,11 +10520,9 @@
         </member>
         <member name="M:Umbraco.Web.Models.DynamicPublishedContent.Site">
             <summary>
-            A shortcut method for AncestorOrSelf(1)
+            Gets the 'site' content for this content.
             </summary>
-            <returns>
-            The site homepage
-            </returns>
+            <returns>The 'site' content ie AncestorOrSelf(1).</returns>
         </member>
         <member name="T:Umbraco.Web.Models.DynamicPublishedContentList">
             <summary>
@@ -12486,7 +13227,7 @@
             Returns the root media objects
             </summary>
         </member>
-        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Web.Editors.MediaController.GetChildren(System.Int32,System.Int32,System.Int32,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Returns the child media objects
             </summary>
@@ -12557,12 +13298,6 @@
             <param name="nodeId">The content to lookup, if the contentItem is not specified</param>
             <param name="media">Specifies the already resolved content item to check against, setting this ignores the nodeId</param>
             <returns></returns>
-        </member>
-        <member name="T:Umbraco.Web.Editors.MediaController.PostedFiles">
-            <summary>
-            This is used for the response of PostAddFile so that we can analyze the response in a filter and remove the 
-            temporary files that were created.
-            </summary>
         </member>
         <member name="T:Umbraco.Web.UrlHelperRenderExtensions">
             <summary>
@@ -12967,6 +13702,14 @@
             </summary>
             <param name="request"></param>
             <param name="errorMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.CreateNotificationSuccessResponse(System.Net.Http.HttpRequestMessage,System.String)">
+            <summary>
+            Creates a succressful response with notifications in the result to be displayed in the UI
+            </summary>
+            <param name="request"></param>
+            <param name="successMessage"></param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Web.WebApi.HttpRequestMessageExtensions.CreateValidationErrorResponse(System.Net.Http.HttpRequestMessage,System.Web.Http.ModelBinding.ModelStateDictionary)">
@@ -13716,6 +14459,14 @@
             <para>Children are sorted by their sortOrder.</para>
             </remarks>
         </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.Children(Umbraco.Core.Models.IPublishedContent,System.String[])">
+            <summary>
+            Gets the children of the content, of any of the specified types.
+            </summary>
+            <param name="content">The content.</param>
+            <param name="alias">One or more content type alias.</param>
+            <returns>The children of the content, of any of the specified types.</returns>
+        </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.Children``1(Umbraco.Core.Models.IPublishedContent)">
             <summary>
             Gets the children of the content, of a given content type.
@@ -13742,6 +14493,13 @@
             <param name="content">The content.</param>
             <param name="contentTypeAliasFilter">An optional content type alias.</param>
             <returns>The children of the content.</returns>
+        </member>
+        <member name="M:Umbraco.Web.PublishedContentExtensions.Site(Umbraco.Core.Models.IPublishedContent)">
+            <summary>
+            Gets the 'site' content for this content.
+            </summary>
+            <param name="content">The content.</param>
+            <returns>The 'site' content ie AncestorOrSelf(1).</returns>
         </member>
         <member name="M:Umbraco.Web.PublishedContentExtensions.GetCulture(Umbraco.Core.Models.IPublishedContent,System.Uri)">
             <summary>
@@ -18326,6 +19084,14 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.GetDictionaryValue(System.String,System.String)">
+            <summary>
+            Returns the dictionary value for the key specified, and if empty returns the specified default fall back value
+            </summary>
+            <param name="key">key of dictionary item</param>
+            <param name="altText">fall back text if dictionary item is empty - Name altText to match Umbraco.Field</param>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.IsProtected(System.String)">
             <summary>
             Check if a document object is protected by the "Protect Pages" functionality in umbraco
@@ -18338,7 +19104,7 @@
             Check if the current user has access to a document
             </summary>
             <param name="path">The full path of the document object to check</param>
-            <returns>True if the current user has access or if the current document isn't protected</returns>        
+            <returns>True if the current user has access or if the current document isn't protected</returns>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.GetCurrentMember">
             <summary>
@@ -18377,7 +19143,7 @@
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.NiceUrlWithDomain(System.Int32)">
             <summary>
-            This method will always add the domain to the path if the hostnames are set up correctly. 
+            This method will always add the domain to the path if the hostnames are set up correctly.
             </summary>
             <param name="nodeId">Identifier for the node that should be returned</param>
             <returns>String with a friendly url with full domain from a node</returns>
@@ -18389,21 +19155,63 @@
             <param name="contentId">The content identifier.</param>
             <returns>The absolute url for the content.</returns>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Object)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The unique identifier, or the key, of the content item.</param>
+            <returns>The content, or null of the content item is not in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Int32)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The unique identifier of the content item.</param>
+            <returns>The content, or null of the content item is not in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Guid)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The key of the content item.</param>
+            <returns>The content, or null of the content item is not in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.String)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The unique identifier, or the key, of the content item.</param>
+            <returns>The content, or null of the content item is not in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Object[])">
+            <summary>
+            Gets content items from the cache.
+            </summary>
+            <param name="ids">The unique identifiers, or the keys, of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+            <remarks>Does not support mixing identifiers and keys.</remarks>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Int32[])">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Guid[])">
+            <summary>
+            Gets content items from the cache.
+            </summary>
+            <param name="ids">The keys of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.String[])">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers, or the keys, of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+            <remarks>Does not support mixing identifiers and keys.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.TypedContent(System.Collections.Generic.IEnumerable{System.Object})">
             <summary>
@@ -18429,53 +19237,72 @@
             <returns>The existing contents corresponding to the identifiers.</returns>
             <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Object)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The unique identifier, or the key, of the content item.</param>
+            <returns>The content, or DynamicNull of the content item is not in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Int32)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The unique identifier of the content item.</param>
+            <returns>The content, or DynamicNull of the content item is not in the cache.</returns>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Content(System.String)">
+            <summary>
+            Gets a content item from the cache.
+            </summary>
+            <param name="id">The unique identifier, or the key, of the content item.</param>
+            <returns>The content, or DynamicNull of the content item is not in the cache.</returns>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Object[])">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers, or the keys, of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+            <remarks>Does not support mixing identifiers and keys.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Int32[])">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Content(System.String[])">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers, or the keys, of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+            <remarks>Does not support mixing identifiers and keys.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Collections.Generic.IEnumerable{System.Object})">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers, or the keys, of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+            <remarks>Does not support mixing identifiers and keys.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.Content(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
-            Gets the contents corresponding to the identifiers.
+            Gets content items from the cache.
             </summary>
-            <param name="ids">The content identifiers.</param>
-            <returns>The existing contents corresponding to the identifiers.</returns>
-            <remarks>If an identifier does not match an existing content, it will be missing in the returned value.</remarks>
+            <param name="ids">The unique identifiers, or the keys, of the content items.</param>
+            <returns>The content items that were found in the cache.</returns>
+            <remarks>Does not support mixing identifiers and keys.</remarks>
         </member>
         <member name="M:Umbraco.Web.UmbracoHelper.TypedMedia(System.Object)">
             <summary>
@@ -18484,7 +19311,7 @@
             <param name="id"></param>
             <returns></returns>
             <remarks>
-            We accept an object type because GetPropertyValue now returns an 'object', we still want to allow people to pass 
+            We accept an object type because GetPropertyValue now returns an 'object', we still want to allow people to pass
             this result in to this method.
             This method will throw an exception if the value is not of type int or string.
             </remarks>
@@ -18633,6 +19460,91 @@
             <param name="text">The text to create a hash from</param>
             <returns>Md5 has of the string</returns>
         </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.StripHtml(System.Web.IHtmlString,System.String[])">
+            <summary>
+            Strips all html tags from a given string, all contents of the tags will remain.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.StripHtml(Umbraco.Core.Dynamics.DynamicNull,System.String[])">
+            <summary>
+            Strips all html tags from a given string, all contents of the tags will remain.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.StripHtml(System.String,System.String[])">
+            <summary>
+            Strips all html tags from a given string, all contents of the tags will remain.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Coalesce(System.Object[])">
+            <summary>
+            Will take the first non-null value in the collection and return the value of it.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Concatenate(System.Object[])">
+            <summary>
+            Will take the first non-null value in the collection and return the value of it.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Join(System.String,System.Object[])">
+            <summary>
+            Joins any number of int/string/objects into one string and seperates them with the string seperator parameter.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(System.Web.IHtmlString,System.Int32)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(System.Web.IHtmlString,System.Int32,System.Boolean)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(System.Web.IHtmlString,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(Umbraco.Core.Dynamics.DynamicNull,System.Int32)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(Umbraco.Core.Dynamics.DynamicNull,System.Int32,System.Boolean)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(Umbraco.Core.Dynamics.DynamicNull,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(System.String,System.Int32)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.Truncate(System.String,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Truncates a string to a given length, can add a elipsis at the end (...). Method checks for open html tags, and makes sure to close them
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.If(System.Boolean,System.String,System.String)">
+            <summary>
+            If the test is true, the string valueIfTrue will be returned, otherwise the valueIfFalse will be returned.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Web.UmbracoHelper.If(System.Boolean,System.String)">
+            <summary>
+            If the test is true, the string valueIfTrue will be returned, otherwise the valueIfFalse will be returned.
+            </summary>
+        </member>
         <member name="M:Umbraco.Web.UmbracoHelper.CreateEncryptedRouteString(System.String,System.String,System.String,System.Object)">
             <summary>
             This is used in methods like BeginUmbracoForm and SurfaceAction to generate an encrypted string which gets submitted in a request for which
@@ -18680,17 +19592,17 @@
             </summary>
         </member>
         <member name="P:Umbraco.Web.UmbracoHelper.AssignedContentItem">
-            <summary>
-            Returns the current IPublishedContent item assigned to the UmbracoHelper
-            </summary>
-            <remarks>
-            Note that this is the assigned IPublishedContent item to the UmbracoHelper, this is not necessarily the Current IPublishedContent item
-            being rendered. This IPublishedContent object is contextual to the current UmbracoHelper instance.
+             <summary>
+             Returns the current IPublishedContent item assigned to the UmbracoHelper
+             </summary>
+             <remarks>
+             Note that this is the assigned IPublishedContent item to the UmbracoHelper, this is not necessarily the Current IPublishedContent item
+             being rendered. This IPublishedContent object is contextual to the current UmbracoHelper instance.
             
-            In some cases accessing this property will throw an exception if there is not IPublishedContent assigned to the Helper
-            this will only ever happen if the Helper is constructed with an UmbracoContext and it is not a front-end request
-            </remarks>
-            <exception cref="T:System.InvalidOperationException">Thrown if the UmbracoHelper is constructed with an UmbracoContext and it is not a front-end request</exception>
+             In some cases accessing this property will throw an exception if there is not IPublishedContent assigned to the Helper
+             this will only ever happen if the Helper is constructed with an UmbracoContext and it is not a front-end request
+             </remarks>
+             <exception cref="T:System.InvalidOperationException">Thrown if the UmbracoHelper is constructed with an UmbracoContext and it is not a front-end request</exception>
         </member>
         <member name="P:Umbraco.Web.UmbracoHelper.CultureDictionary">
             <summary>
@@ -18749,15 +19661,16 @@
             <param name="xmlNode">The Xml node.</param>
             <param name="isPreviewing">A value indicating whether the published content is being previewed.</param>
         </member>
-        <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedContent.#ctor(System.Xml.XmlNode,System.Boolean,System.Boolean)">
+        <member name="M:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedContent.Get(System.Xml.XmlNode,System.Boolean)">
             <summary>
-            Initializes a new instance of the <c>XmlPublishedContent</c> class with an Xml node,
-            and a value indicating whether to lazy-initialize the instance.
+            Gets an IPublishedContent corresponding to an Xml cache node.
             </summary>
-            <param name="xmlNode">The Xml node.</param>
-            <param name="isPreviewing">A value indicating whether the published content is being previewed.</param>
-            <param name="lazyInitialize">A value indicating whether to lazy-initialize the instance.</param>
-            <remarks>Lazy-initializationg is NOT thread-safe.</remarks>
+            <param name="node">The Xml node.</param>
+            <param name="isPreviewing">A value indicating whether we are previewing or not.</param>
+            <returns>The IPublishedContent corresponding to the Xml cache node.</returns>
+            <remarks>Maintains a per-request cache of IPublishedContent items in order to make
+            sure that we create only one instance of each for the duration of a request. The
+            returned IPublishedContent is a model, if models are enabled.</remarks>
         </member>
         <member name="T:Umbraco.Web.PublishedCache.XmlPublishedCache.XmlPublishedProperty">
             <summary>
@@ -19675,6 +20588,22 @@
             the response should use the specified code and description. The code and description will or will
             not be used, in due time.</remarks>
         </member>
+        <member name="F:Umbraco.Web.Routing.PublishedContentRequest._cacheability">
+            <summary>
+            Gets or sets the <c>System.Web.HttpCacheability</c>
+            </summary>
+            <remarks>Is set to <c>System.Web.HttpCacheability.Private</c>  by default, which is the ASP.NET default.</remarks>
+        </member>
+        <member name="F:Umbraco.Web.Routing.PublishedContentRequest._cacheExtensions">
+            <summary>
+            Gets or sets a list of Extensions to append to the Response.Cache object
+            </summary>
+        </member>
+        <member name="F:Umbraco.Web.Routing.PublishedContentRequest._headers">
+            <summary>
+            Gets or sets a dictionary of Headers to append to the Response object
+            </summary>
+        </member>
         <member name="E:Umbraco.Web.Routing.PublishedContentRequest.Preparing">
             <summary>
             Triggers before the published content request is prepared.
@@ -19939,11 +20868,6 @@
             Load content from database
             </summary>
         </member>
-        <member name="M:umbraco.content.GetCacheFileUpdateTime">
-            <summary>
-            Adds a task to the xml cache file persister
-            </summary>
-        </member>
         <member name="M:umbraco.content.FireBeforeUpdateDocumentCache(umbraco.cms.businesslogic.web.Document,umbraco.cms.businesslogic.DocumentCacheEventArgs)">
             <summary>
             Fires the before document cache.
@@ -19986,23 +20910,9 @@
             <param name="sender">The sender.</param>
             <param name="e">The <see cref="T:umbraco.cms.businesslogic.RefreshContentEventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:umbraco.content.FireAfterContentCacheDatabaseLoadXmlString(System.String@,umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs)">
-            <summary>
-            Fires the before when creating the document cache from database
-            </summary>
-            <param name="node">The sender.</param>
-            <param name="e">The <see cref="T:umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs"/> instance containing the event data.</param>
-        </member>
         <member name="M:umbraco.content.FireBeforeContentCacheLoadNode(System.Xml.XmlNode,umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs)">
             <summary>
             Fires the before when creating the document cache from database
-            </summary>
-            <param name="node">The sender.</param>
-            <param name="e">The <see cref="T:umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:umbraco.content.FireAfterContentCacheLoadNodeFromDatabase(System.Xml.XmlNode,umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs)">
-            <summary>
-            Fires the after loading document cache xml node from database
             </summary>
             <param name="node">The sender.</param>
             <param name="e">The <see cref="T:umbraco.cms.businesslogic.ContentCacheLoadNodeEventArgs"/> instance containing the event data.</param>
@@ -20047,19 +20957,9 @@
             Occurs when [after refresh content].
             </summary>
         </member>
-        <member name="E:umbraco.content.AfterContentCacheDatabaseLoadXmlString">
-            <summary>
-            Occurs when [after loading the xml string from the database].
-            </summary>
-        </member>
         <member name="E:umbraco.content.BeforeContentCacheLoadNode">
             <summary>
             Occurs when [before when creating the document cache from database].
-            </summary>
-        </member>
-        <member name="E:umbraco.content.AfterContentCacheLoadNodeFromDatabase">
-            <summary>
-            Occurs when [after loading document cache xml node from database].
             </summary>
         </member>
         <member name="E:umbraco.content.BeforePublishNodeToContentCache">
@@ -20755,11 +21655,11 @@
             <summary>
             Sends an e-mail using the System.Net.Mail.MailMessage object
             </summary>
-            <param name="FromMail">The sender of the e-mail</param>
-            <param name="ToMail">The recipient of the e-mail</param>
-            <param name="Subject">E-mail subject</param>
-            <param name="Body">The complete content of the e-mail</param>
-            <param name="IsHtml">Set to true when using Html formatted mails</param>
+            <param name="fromMail">The sender of the e-mail</param>
+            <param name="toMail">The recipient(s) of the e-mail, add multiple email addresses by using a semicolon between them</param>
+            <param name="subject">E-mail subject</param>
+            <param name="body">The complete content of the e-mail</param>
+            <param name="isHtml">Set to true when using Html formatted mails</param>
         </member>
         <member name="M:umbraco.library.GetRandom(System.Int32)">
             <summary> 
@@ -28937,6 +29837,15 @@
         <member name="F:umbraco.cms.presentation.user.PermissionEditor.JsInclude1">
             <summary>
             JsInclude1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:umbraco.cms.presentation.user.PermissionEditor.JsInclude2">
+            <summary>
+            JsInclude2 control.
             </summary>
             <remarks>
             Auto-generated field.

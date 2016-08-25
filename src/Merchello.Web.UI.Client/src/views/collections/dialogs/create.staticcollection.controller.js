@@ -54,7 +54,6 @@ angular.module('merchello')
                     collection.entityTfKey = $scope.provider.entityTfKey;
                     collection.entityType = $scope.provider.entityType;
                     collection.parentKey = $scope.dialogData.parentKey;
-
                     collection.name = $scope.name;
                     var promise = entityCollectionResource.addEntityCollection(collection);
                     promise.then(function() {

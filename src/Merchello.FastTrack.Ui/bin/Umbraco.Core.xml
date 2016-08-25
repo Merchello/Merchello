@@ -819,7 +819,7 @@
         </member>
         <member name="T:Umbraco.Core.Cache.ICacheProvider">
             <summary>
-            An abstract class for implementing a basic cache provider
+            An interface for implementing a basic cache provider
             </summary>
         </member>
         <member name="M:Umbraco.Core.Cache.ICacheProvider.ClearAllCache">
@@ -914,6 +914,9 @@
             <summary>
             A cache provider that caches items in the HttpContext.Items
             </summary>
+            <remarks>
+            If the Items collection is null, then this provider has no effect
+            </remarks>
         </member>
         <member name="T:Umbraco.Core.Cache.IPayloadCacheRefresher">
             <summary>
@@ -986,8 +989,12 @@
         </member>
         <member name="T:Umbraco.Core.Cache.ObjectCacheRuntimeCacheProvider">
             <summary>
+            Represents a cache provider that caches item in a <see cref="F:Umbraco.Core.Cache.ObjectCacheRuntimeCacheProvider.MemoryCache"/>.
             A cache provider that wraps the logic of a System.Runtime.Caching.ObjectCache
             </summary>
+            <remarks>The <see cref="F:Umbraco.Core.Cache.ObjectCacheRuntimeCacheProvider.MemoryCache"/> is created with name "in-memory". That name is
+            used to retrieve configuration options. It does not identify the memory cache, i.e.
+            each instance of this class has its own, independent, memory cache.</remarks>
         </member>
         <member name="T:Umbraco.Core.Cache.IRuntimeCacheProvider">
             <summary>
@@ -1051,6 +1058,11 @@
             <typeparam name="TInstance">The actual cache refresher type.</typeparam>
             <remarks>Ensures that the correct events are raised when cache refreshing occurs.</remarks>
         </member>
+        <member name="T:Umbraco.Core.Cache.NullCacheProvider">
+            <summary>
+            Represents a cache provider that does not cache anything.
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Cache.SingleItemsOnlyRepositoryCachePolicy`2">
             <summary>
             A caching policy that ignores all caches for GetAll - it will only cache calls for individual items
@@ -1105,7 +1117,7 @@
         </member>
         <member name="T:Umbraco.Core.Cache.StaticCacheProvider">
             <summary>
-            A cache provider that statically caches everything in an in memory dictionary
+            Represents a cache provider that statically caches item in a concurrent dictionary.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Cache.TypedCacheRefresherBase`2">
@@ -1694,6 +1706,21 @@
             Constants all the identifiers within the Umbraco core.
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.Examine.InternalMemberIndexer">
+            <summary>
+            The alias of the internal member indexer
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Examine.InternalIndexer">
+            <summary>
+            The alias of the internal content indexer
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Examine.ExternalIndexer">
+            <summary>
+            The alias of the external content indexer
+            </summary>
+        </member>
         <member name="F:Umbraco.Core.Constants.Examine.InternalMemberSearcher">
             <summary>
             The alias of the internal member searcher
@@ -1702,6 +1729,11 @@
         <member name="F:Umbraco.Core.Constants.Examine.InternalSearcher">
             <summary>
             The alias of the internal content searcher
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Examine.ExternalSearcher">
+            <summary>
+            The alias of the external content searcher
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.Icons.ContentType">
@@ -1807,6 +1839,11 @@
         <member name="F:Umbraco.Core.Constants.Trees.DataTypes">
             <summary>
             alias for the datatype tree.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.Trees.Packages">
+            <summary>
+            alias for the packages tree
             </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.Trees.Dictionary">
@@ -2037,7 +2074,7 @@
         <member name="F:Umbraco.Core.Constants.PropertyEditors.InternalGenericPropertiesPrefix">
             <summary>
             Used to prefix generic properties that are internal content properties
-            </summary>            
+            </summary>
         </member>
         <member name="F:Umbraco.Core.Constants.PropertyEditors.CheckBoxList">
             <summary>
@@ -2399,6 +2436,12 @@
             Alias for the email address property editor
             </summary>
         </member>
+        <member name="F:Umbraco.Core.Constants.PropertyEditors.PreValueKeys.DataValueType">
+            <summary>
+            Pre-value name used to indicate a field that can be used to override the database field to which data for the associated
+            property is saved
+            </summary>
+        </member>
         <member name="T:Umbraco.Core.Constants.PropertyTypeGroups">
             <summary>
             Defines the identifiers for property-type groups conventions that are used within the Umbraco core.
@@ -2562,6 +2605,11 @@
         <member name="F:Umbraco.Core.Constants.ObjectTypes.MemberTypeGuid">
             <summary>
             Guid for a Member Type object.
+            </summary>
+        </member>
+        <member name="F:Umbraco.Core.Constants.ObjectTypes.LockObjectGuid">
+            <summary>
+            Guid for a Lock object.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Constants.System">
@@ -2812,11 +2860,6 @@
             has been added to the web.config.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.DatabaseContext.DetermineSqlServerVersion">
-            <summary>
-            Set the lazy resolution of determining the SQL server version if that is the db type we're using
-            </summary>
-        </member>
         <member name="M:Umbraco.Core.DatabaseContext.UpgradeSchemaAndData(Umbraco.Core.Services.IMigrationEntryService)">
             <summary>
             This assumes all of the previous checks are done!
@@ -2902,6 +2945,23 @@
             </summary>
             <param name="dt"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.DecimalExtensions">
+            <summary>
+            Provides extension methods for System.Decimal.
+            </summary>
+            <remarks>See System.Decimal on MSDN and also 
+            http://stackoverflow.com/questions/4298719/parse-decimal-and-filter-extra-0-on-the-right/4298787#4298787.
+            </remarks>
+        </member>
+        <member name="M:Umbraco.Core.DecimalExtensions.Normalize(System.Decimal)">
+            <summary>
+            Gets the normalized value.
+            </summary>
+            <param name="value">The value to normalize.</param>
+            <returns>The normalized value.</returns>
+            <remarks>Normalizing changes the scaling factor and removes trailing zeroes,
+            so 1.2500m comes out as 1.25m.</remarks>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Umbraco.Core.DictionaryExtensions" -->
         <member name="M:Umbraco.Core.DictionaryExtensions.GetOrCreate``2(System.Collections.Generic.IDictionary{``0,``1},``0)">
@@ -3938,24 +3998,69 @@
             </summary>
         </member>
         <member name="T:Umbraco.Core.Logging.AsyncForwardingAppenderBase">
-            <remarks>
-            Based on https://github.com/cjbhaines/Log4Net.Async
-            </remarks>
+            <summary>
+            Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Logging.AsyncForwardingAppenderBase.HttpContext">
+            <summary>
+            Returns HttpContext.Current
+            </summary>
         </member>
         <member name="P:Umbraco.Core.Logging.AsyncForwardingAppenderBase.InternalLoggerName">
             <summary>
             The logger name that will be used for logging internal errors.
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Logging.ImageProcessorLogger">
+            <summary>
+            A logger for explicitly logging ImageProcessor exceptions.
+            <remarks>
+            Creating this logger is enough for ImageProcessor to find and replace its in-built debug logger
+            without any additional configuration required. This class currently has to be public in order 
+            to do so.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Logging.ImageProcessorLogger.Log``1(System.String,System.String,System.Int32)">
+            <summary>
+            Logs the specified message as an error.
+            </summary>
+            <typeparam name="T">The type calling the logger.</typeparam>
+            <param name="text">The message to log.</param>
+            <param name="callerName">The property or method name calling the log.</param>
+            <param name="lineNumber">The line number where the method is called.</param>
+        </member>
+        <member name="M:Umbraco.Core.Logging.ImageProcessorLogger.Log(System.Type,System.String,System.String,System.Int32)">
+            <summary>
+            Logs the specified message as an error.
+            </summary>
+            <param name="type">The type calling the logger.</param>
+            <param name="text">The message to log.</param>
+            <param name="callerName">The property or method name calling the log.</param>
+            <param name="lineNumber">The line number where the method is called.</param>
+        </member>
+        <member name="T:Umbraco.Core.Logging.IQueue`1">
+            <summary>
+            Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:Umbraco.Core.Logging.LoggingEventContext">
             <remarks>
-            Based on https://github.com/cjbhaines/Log4Net.Async
+            Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
             </remarks>
         </member>
         <member name="T:Umbraco.Core.Logging.LoggingEventHelper">
             <remarks>
-            Based on https://github.com/cjbhaines/Log4Net.Async
+            Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
             </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Logging.RingBuffer`1">
+            <summary>
+            Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
+            </summary>
+            <typeparam name="T"></typeparam>
         </member>
         <member name="M:Umbraco.Core.Logging.OwinLogger.WriteCore(System.Diagnostics.TraceEventType,System.Int32,System.Object,System.Exception,System.Func{System.Object,System.Exception,System.String})">
             <summary>
@@ -3977,7 +4082,7 @@
             An asynchronous appender based on <see cref="T:System.Collections.Concurrent.BlockingCollection`1"/>
             </summary>
             <remarks>
-            Based on https://github.com/cjbhaines/Log4Net.Async
+            Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
             </remarks>
         </member>
         <member name="M:Umbraco.Core.Logging.ParallelForwardingAppender.SubscriberLoop">
@@ -4086,34 +4191,34 @@
             obstruct the saving of a new or updated entity.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase.SetPropertyValueAndDetectChanges``1(System.Func{``0,``0},``0,System.Reflection.PropertyInfo)">
+        <member name="M:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase.SetPropertyValueAndDetectChanges``1(``0,``0@,System.Reflection.PropertyInfo)">
             <summary>
             Used by inheritors to set the value of properties, this will detect if the property value actually changed and if it did
             it will ensure that the property has a dirty flag set.
             </summary>
-            <param name="setValue"></param>
-            <param name="value"></param>
+            <param name="newVal"></param>
+            <param name="origVal"></param>
             <param name="propertySelector"></param>
             <returns>returns true if the value changed</returns>
             <remarks>
-            This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we 
-            save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set 
+            This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we
+            save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set
             to the same value, so it's really not dirty.
             </remarks>
         </member>
-        <member name="M:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase.SetPropertyValueAndDetectChanges``1(System.Func{``0,``0},``0,System.Reflection.PropertyInfo,System.Collections.Generic.IEqualityComparer{``0})">
+        <member name="M:Umbraco.Core.Models.EntityBase.TracksChangesEntityBase.SetPropertyValueAndDetectChanges``1(``0,``0@,System.Reflection.PropertyInfo,System.Collections.Generic.IEqualityComparer{``0})">
             <summary>
             Used by inheritors to set the value of properties, this will detect if the property value actually changed and if it did
             it will ensure that the property has a dirty flag set.
             </summary>
-            <param name="setValue"></param>
-            <param name="value"></param>
+            <param name="newVal"></param>
+            <param name="origVal"></param>
             <param name="propertySelector"></param>
             <param name="comparer">The equality comparer to use</param>
             <returns>returns true if the value changed</returns>
             <remarks>
-            This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we 
-            save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set 
+            This is required because we don't want a property to show up as "dirty" if the value is the same. For example, when we
+            save a document type, nearly all properties are flagged as dirty just because we've 'reset' them, but they are all set
             to the same value, so it's really not dirty.
             </remarks>
         </member>
@@ -4774,6 +4879,32 @@
             <para>The recursive syntax (eg "_title") is _not_ supported here.</para>
             <para>The alias is case-insensitive.</para>
             </remarks>
+        </member>
+        <member name="T:Umbraco.Core.Models.IRedirectUrl">
+            <summary>
+            Represents a redirect url.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IRedirectUrl.ContentId">
+            <summary>
+            Gets or sets the identifier of the content item.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IRedirectUrl.ContentKey">
+            <summary>
+            Gets or sets the unique key identifying the content item.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IRedirectUrl.CreateDateUtc">
+            <summary>
+            Gets or sets the redirect url creation date.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.IRedirectUrl.Url">
+            <summary>
+            Gets or sets the redirect url route.
+            </summary>
+            <remarks>Is a proper Umbraco route eg /path/to/foo or 123/path/tofoo.</remarks>
         </member>
         <member name="T:Umbraco.Core.Sync.IServerAddress">
             <summary>
@@ -5924,6 +6055,16 @@
         <member name="T:Umbraco.Core.Persistence.Migrations.IMigration">
             <summary>
             Marker interface for database migrations
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenFiveZero.RemoveStylesheetDataAndTablesAgain">
+            <summary>
+            This is here to re-remove these tables, we dropped them in 7.3 but new installs created them again so we're going to re-drop them
+            </summary>
+        </member>
+        <member name="T:Umbraco.Core.Persistence.Migrations.Upgrades.TargetVersionSevenFiveZero.UpdateUniqueIndexOnCmsPropertyData">
+            <summary>
+            See: http://issues.umbraco.org/issue/U4-8522
             </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.Mappers.TaskTypeMapper">
@@ -7145,6 +7286,79 @@
             Do not cache anything
             </summary>
         </member>
+        <member name="T:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository">
+            <summary>
+            Defines the <see cref="T:Umbraco.Core.Models.IRedirectUrl"/> repository.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.Get(System.String,System.Guid)">
+            <summary>
+            Gets a redirect url.
+            </summary>
+            <param name="url">The Umbraco redirect url route.</param>
+            <param name="contentKey">The content unique key.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.Delete(System.Guid)">
+            <summary>
+            Deletes a redirect url.
+            </summary>
+            <param name="id">The redirect url identifier.</param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.DeleteAll">
+            <summary>
+            Deletes all redirect urls.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.DeleteContentUrls(System.Guid)">
+            <summary>
+            Deletes all redirect urls for a given content.
+            </summary>
+            <param name="contentKey">The content unique key.</param>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.GetMostRecentUrl(System.String)">
+            <summary>
+            Gets the most recent redirect url corresponding to an Umbraco redirect url route.
+            </summary>
+            <param name="url">The Umbraco redirect url route.</param>
+            <returns>The most recent redirect url corresponding to the route.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.GetContentUrls(System.Guid)">
+            <summary>
+            Gets all redirect urls for a content item.
+            </summary>
+            <param name="contentKey">The content unique key.</param>
+            <returns>All redirect urls for the content item.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.GetAllUrls(System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all redirect urls.
+            </summary>
+            <param name="pageIndex">The page index.</param>
+            <param name="pageSize">The page size.</param>
+            <param name="total">The total count of redirect urls.</param>
+            <returns>The redirect urls.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.GetAllUrls(System.Int32,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all redirect urls below a given content item.
+            </summary>
+            <param name="rootContentId">The content unique identifier.</param>
+            <param name="pageIndex">The page index.</param>
+            <param name="pageSize">The page size.</param>
+            <param name="total">The total count of redirect urls.</param>
+            <returns>The redirect urls.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IRedirectUrlRepository.SearchUrls(System.String,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Searches for all redirect urls that contain a given search term in their URL property.
+            </summary>
+            <param name="searchTerm">The term to search for.</param>
+            <param name="pageIndex">The page index.</param>
+            <param name="pageSize">The page size.</param>
+            <param name="total">The total count of redirect urls.</param>
+            <returns>The redirect urls.</returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IDeleteMediaFilesRepository.DeleteMediaFiles(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Called to remove all files associated with entities when an entity is permanently deleted
@@ -7346,7 +7560,13 @@
             Creates a successful unpublish status
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Security.BackOfficeClaimsIdentityFactory.CreateAsync(Microsoft.AspNet.Identity.UserManager{Umbraco.Core.Models.Identity.BackOfficeIdentityUser,System.Int32},Umbraco.Core.Models.Identity.BackOfficeIdentityUser,System.String)">
+        <member name="T:Umbraco.Core.Security.IBackOfficeUserPasswordChecker">
+            <summary>
+            Used by the BackOfficeUserManager to check the username/password which allows for developers to more easily 
+            set the logic for this procedure.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Security.BackOfficeClaimsIdentityFactory`1.CreateAsync(Microsoft.AspNet.Identity.UserManager{`0,System.Int32},`0,System.String)">
             <summary>
             Create a ClaimsIdentity from a user
             </summary>
@@ -7385,6 +7605,15 @@
             <summary>
             Generic Back office user manager
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Security.BackOfficeUserManager`1.InitUserManager(Umbraco.Core.Security.BackOfficeUserManager{`0},Umbraco.Core.Security.MembershipProviderBase,Microsoft.Owin.Security.DataProtection.IDataProtectionProvider)">
+            <summary>
+            Initializes the user manager with the correct options
+            </summary>
+            <param name="manager"></param>
+            <param name="membershipProvider"></param>
+            <param name="dataProtectionProvider"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Security.BackOfficeUserManager`1.CheckPasswordAsync(`0,System.String)">
             <summary>
@@ -7445,6 +7674,22 @@
             <param name="membershipProvider"></param>
             <param name="options"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Security.BackOfficeUserManagerMarker`2">
+            <summary>
+            This class is only here due to the fact that IOwinContext Get / Set only work in generics, if they worked 
+            with regular 'object' then we wouldn't have to use this work around but because of that we have to use this 
+            class to resolve the 'real' type of the registered user manager
+            </summary>
+            <typeparam name="TManager"></typeparam>
+            <typeparam name="TUser"></typeparam>
+        </member>
+        <member name="T:Umbraco.Core.Security.IBackOfficeUserManagerMarker">
+            <summary>
+            This interface is only here due to the fact that IOwinContext Get / Set only work in generics, if they worked 
+            with regular 'object' then we wouldn't have to use this work around but because of that we have to use this 
+            class to resolve the 'real' type of the registered user manager
+            </summary>
         </member>
         <member name="T:Umbraco.Core.Security.BackOfficeUserPasswordCheckerResult">
             <summary>
@@ -7683,16 +7928,28 @@
             <param name="user"/><param name="enabled"/>
             <returns/>
         </member>
-        <member name="T:Umbraco.Core.Security.IBackOfficeUserPasswordChecker">
-            <summary>
-            Used by the BackOfficeUserManager to check the username/password which allows for developers to more easily 
-            set the logic for this procedure.
-            </summary>
-        </member>
         <member name="T:Umbraco.Core.Security.MembershipPasswordHasher">
             <summary>
             A custom password hasher that conforms to the current password hashing done in Umbraco
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Security.OwinExtensions.GetBackOfficeSignInManager(Microsoft.Owin.IOwinContext)">
+            <summary>
+            Gets the back office sign in manager out of OWIN
+            </summary>
+            <param name="owinContext"></param>
+            <returns></returns>        
+        </member>
+        <member name="M:Umbraco.Core.Security.OwinExtensions.GetBackOfficeUserManager(Microsoft.Owin.IOwinContext)">
+            <summary>
+            Gets the back office user manager out of OWIN
+            </summary>
+            <param name="owinContext"></param>
+            <returns></returns>
+            <remarks>
+            This is required because to extract the user manager we need to user a custom service since owin only deals in generics and 
+            developers could register their own user manager types
+            </remarks> 
         </member>
         <member name="T:Umbraco.Core.Serialization.NoTypeConverterJsonConverter`1">
             <summary>
@@ -7864,6 +8121,107 @@
             </summary>
             <param name="ctype"></param>
             <returns></returns>
+        </member>
+        <member name="T:Umbraco.Core.Models.RedirectUrl">
+            <summary>
+            Implements <see cref="T:Umbraco.Core.Models.IRedirectUrl"/>.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Models.RedirectUrl.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Umbraco.Core.Models.RedirectUrl"/> class.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Models.RedirectUrl.ContentId">
+            <inheritdoc />
+        </member>
+        <member name="P:Umbraco.Core.Models.RedirectUrl.ContentKey">
+            <inheritdoc />
+        </member>
+        <member name="P:Umbraco.Core.Models.RedirectUrl.CreateDateUtc">
+            <inheritdoc />
+        </member>
+        <member name="P:Umbraco.Core.Models.RedirectUrl.Url">
+            <inheritdoc />
+        </member>
+        <member name="T:Umbraco.Core.Services.IRedirectUrlService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.Register(System.String,System.Guid)">
+            <summary>
+            Registers a redirect url.
+            </summary>
+            <param name="url">The Umbraco url route.</param>
+            <param name="contentKey">The content unique key.</param>
+            <remarks>Is a proper Umbraco route eg /path/to/foo or 123/path/tofoo.</remarks>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.DeleteContentRedirectUrls(System.Guid)">
+            <summary>
+            Deletes all redirect urls for a given content.
+            </summary>
+            <param name="contentKey">The content unique key.</param>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.Delete(Umbraco.Core.Models.IRedirectUrl)">
+            <summary>
+            Deletes a redirect url.
+            </summary>
+            <param name="redirectUrl">The redirect url to delete.</param>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.Delete(System.Guid)">
+            <summary>
+            Deletes a redirect url.
+            </summary>
+            <param name="id">The redirect url identifier.</param>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.DeleteAll">
+            <summary>
+            Deletes all redirect urls.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.GetMostRecentRedirectUrl(System.String)">
+            <summary>
+            Gets the most recent redirect urls corresponding to an Umbraco redirect url route.
+            </summary>
+            <param name="url">The Umbraco redirect url route.</param>
+            <returns>The most recent redirect urls corresponding to the route.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.GetContentRedirectUrls(System.Guid)">
+            <summary>
+            Gets all redirect urls for a content item.
+            </summary>
+            <param name="contentKey">The content unique key.</param>
+            <returns>All redirect urls for the content item.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.GetAllRedirectUrls(System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all redirect urls.
+            </summary>
+            <param name="pageIndex">The page index.</param>
+            <param name="pageSize">The page size.</param>
+            <param name="total">The total count of redirect urls.</param>
+            <returns>The redirect urls.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.GetAllRedirectUrls(System.Int32,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Gets all redirect urls below a given content item.
+            </summary>
+            <param name="rootContentId">The content unique identifier.</param>
+            <param name="pageIndex">The page index.</param>
+            <param name="pageSize">The page size.</param>
+            <param name="total">The total count of redirect urls.</param>
+            <returns>The redirect urls.</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IRedirectUrlService.SearchRedirectUrls(System.String,System.Int64,System.Int32,System.Int64@)">
+            <summary>
+            Searches for all redirect urls that contain a given search term in their URL property.
+            </summary>
+            <param name="searchTerm">The term to search for.</param>
+            <param name="pageIndex">The page index.</param>
+            <param name="pageSize">The page size.</param>
+            <param name="total">The total count of redirect urls.</param>
+            <returns>The redirect urls.</returns>
         </member>
         <member name="E:Umbraco.Core.Services.DomainService.Deleting">
             <summary>
@@ -11265,6 +11623,9 @@
             <summary>
             Represents the version name of SQL server (i.e. the year 2008, 2005, etc...)
             </summary>
+            <remarks>
+            see: https://support.microsoft.com/en-us/kb/321185
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviderExtensions.GetQuotedColumn(Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider,System.String,System.String)">
             <summary>
@@ -11275,7 +11636,7 @@
             <param name="columnName"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviderExtensions.GetDeleteSubquery(Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider,System.String,System.String,Umbraco.Core.Persistence.Sql)">
+        <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviderExtensions.GetDeleteSubquery(Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider,System.String,System.String,Umbraco.Core.Persistence.Sql,Umbraco.Core.Persistence.SqlSyntax.WhereInType)">
             <summary>
             This is used to generate a delete query that uses a sub-query to select the data, it is required because there's a very particular syntax that
             needs to be used to work for all servers: MySql, SQLCE and MSSQL
@@ -15309,7 +15670,7 @@
             <param name="entity"></param>
             <param name="tagRepo"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedResultsByQuery``2(Umbraco.Core.Persistence.Querying.IQuery{`1},System.Int64,System.Int32,System.Int64@,System.Tuple{System.String,System.String},System.Func{Umbraco.Core.Persistence.Sql,System.Collections.Generic.IEnumerable{`1}},System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Func{System.Tuple{System.String,System.Object[]}})">
+        <member name="M:Umbraco.Core.Persistence.Repositories.VersionableRepositoryBase`2.GetPagedResultsByQuery``2(Umbraco.Core.Persistence.Querying.IQuery{`1},System.Int64,System.Int32,System.Int64@,System.Tuple{System.String,System.String},System.Func{Umbraco.Core.Persistence.Sql,System.Collections.Generic.IEnumerable{`1}},System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.Func{System.Tuple{System.String,System.Object[]}})">
             <summary>
             A helper method for inheritors to get the paged results by query in a way that minimizes queries
             </summary>
@@ -15324,6 +15685,7 @@
             <param name="processQuery">A callback to process the query result</param>
             <param name="orderBy">The order by column</param>
             <param name="orderDirection">The order direction.</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <returns></returns>
             <exception cref="T:System.ArgumentNullException">orderBy</exception>
         </member>
@@ -15407,6 +15769,12 @@
             <param name="id">Id of the <see cref="!:TEntity"/> object to delete versions from</param>
             <param name="versionDate">Latest version date</param>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.BuildXmlCache">
+            <summary>
+            This builds the Xml document used for the XML cache
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.CountPublished">
             <summary>
             Get the count of published items
@@ -15465,7 +15833,7 @@
             <param name="content"></param>
             <param name="xml"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.IContentRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent})">
             <summary>
             Gets paged content results
             </summary>
@@ -15475,8 +15843,15 @@
             <param name="totalRecords">Total records query would return without paging</param>
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
-            <param name="filter">Search text filter</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter"></param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.BuildXmlCache">
+            <summary>
+            This builds the Xml document used for the XML cache
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.AssignEntityPermission(Umbraco.Core.Models.IContent,System.Char,System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
@@ -15506,7 +15881,7 @@
             <param name="content"></param>
             <param name="xml"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.ContentRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent})">
             <summary>
             Gets paged content results
             </summary>
@@ -15516,6 +15891,7 @@
             <param name="totalRecords">Total records query would return without paging</param>
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
@@ -15756,7 +16132,7 @@
             <param name="content"></param>
             <param name="xml"></param>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.IMediaRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMedia},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.IMediaRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMedia},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Gets paged media results
             </summary>
@@ -15766,6 +16142,7 @@
             <param name="totalRecords">Total records query would return without paging</param>
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IMedia"/> objects</returns>
         </member>
@@ -15814,17 +16191,18 @@
             <param name="query"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.IMemberRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMember},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.IMemberRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMember},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Gets paged member results
             </summary>
-            <param name="query"></param>
-            <param name="pageIndex"></param>
-            <param name="pageSize"></param>
-            <param name="totalRecords"></param>
-            <param name="orderBy"></param>
-            <param name="orderDirection"></param>
-            <param name="filter"></param>
+            <param name="query">The query.</param>
+            <param name="pageIndex">Index of the page.</param>
+            <param name="pageSize">Size of the page.</param>
+            <param name="totalRecords">The total records.</param>
+            <param name="orderBy">The order by column</param>
+            <param name="orderDirection">The order direction.</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search query</param>
             <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Persistence.Repositories.IMemberRepository.AddOrUpdateContentXml(Umbraco.Core.Models.IMember,System.Func{Umbraco.Core.Models.IMember,System.Xml.Linq.XElement})">
@@ -15943,7 +16321,7 @@
             Represents a repository for doing CRUD operations for <see cref="T:Umbraco.Core.Models.IMedia"/>
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMedia},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.MediaRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMedia},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Gets paged media results
             </summary>
@@ -15953,6 +16331,7 @@
             <param name="totalRecords">Total records query would return without paging</param>
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IMedia"/> objects</returns>
         </member>
@@ -16016,19 +16395,20 @@
             <param name="groupName"></param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMember},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
+        <member name="M:Umbraco.Core.Persistence.Repositories.MemberRepository.GetPagedResultsByQuery(Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IMember},System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
             <summary>
             Gets paged member results
             </summary>
             <param name="query">
             The where clause, if this is null all records are queried
             </param>
-            <param name="pageIndex"></param>
-            <param name="pageSize"></param>
-            <param name="totalRecords"></param>
-            <param name="orderBy"></param>
-            <param name="orderDirection"></param>
-            <param name="filter"></param>
+            <param name="pageIndex">Index of the page.</param>
+            <param name="pageSize">Size of the page.</param>
+            <param name="totalRecords">The total records.</param>
+            <param name="orderBy">The order by column</param>
+            <param name="orderDirection">The order direction.</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search query</param>
             <returns></returns>
             <remarks>
             The query supplied will ONLY work with data specifically on the cmsMember table because we are using PetaPoco paging (SQL paging)
@@ -16365,17 +16745,17 @@
             Represents an SqlSyntaxProvider for Sql Server
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider.GetVersionName(Umbraco.Core.Persistence.Database)">
+            <summary>
+            Gets/sets the version of the current SQL server instance
+            </summary>
+        </member>
         <member name="M:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider.GetDefaultConstraintsPerColumn(Umbraco.Core.Persistence.Database)">
             <summary>
             SQL Server stores default values assigned to columns as constraints, it also stores them with named values, this is the only
             server type that does this, therefore this method doesn't exist on any other syntax provider
             </summary>
             <returns></returns>
-        </member>
-        <member name="P:Umbraco.Core.Persistence.SqlSyntax.SqlServerSyntaxProvider.VersionName">
-            <summary>
-            Gets/sets the version of the current SQL server instance
-            </summary>
         </member>
         <member name="T:Umbraco.Core.Persistence.SqlSyntax.SqlSyntaxProviderAttribute">
             <summary>
@@ -16425,6 +16805,19 @@
             this object instead of the base PetaPoco database object.
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.Persistence.Database.BuildSqlDbSpecificPagingQuery(Umbraco.Core.Persistence.Database.DBType,System.Int64,System.Int64,System.String,System.String,System.String,System.Object[]@,System.String@)">
+            <summary>
+            NOTE: This is a custom mod of PetaPoco!! This builds the paging sql for different db providers
+            </summary>
+            <param name="sql"></param>
+            <param name="sqlSelectRemoved"></param>
+            <param name="sqlOrderBy"></param>
+            <param name="args"></param>
+            <param name="sqlPage"></param>
+            <param name="databaseType"></param>
+            <param name="skip"></param>
+            <param name="take"></param>
+        </member>
         <member name="M:Umbraco.Core.Persistence.Database.MultiPocoFactory.CallDelegate(System.Int32,System.Data.IDataReader)">
             <summary>
             Calls the delegate at the specified index and returns its values
@@ -16467,6 +16860,20 @@
             <summary>
             Used for testing
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Persistence.UmbracoDatabase.BuildSqlDbSpecificPagingQuery(Umbraco.Core.Persistence.Database.DBType,System.Int64,System.Int64,System.String,System.String,System.String,System.Object[]@,System.String@)">
+            <summary>
+            We are overriding this in the case that we are using SQL Server 2012+ so we can make paging more efficient than the default PetaPoco paging
+            see: http://issues.umbraco.org/issue/U4-8837
+            </summary>
+            <param name="sql"></param>
+            <param name="sqlSelectRemoved"></param>
+            <param name="sqlOrderBy"></param>
+            <param name="args"></param>
+            <param name="sqlPage"></param>
+            <param name="databaseType"></param>
+            <param name="skip"></param>
+            <param name="take"></param>
         </member>
         <member name="P:Umbraco.Core.Persistence.UmbracoDatabase.InstanceId">
             <summary>
@@ -16769,80 +17176,6 @@
             <summary>
             Gets the current profiler
             </summary>
-        </member>
-        <member name="T:Umbraco.Core.Profiling.WebProfiler">
-            <summary>
-            A profiler used for web based activity based on the MiniProfiler framework
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.#ctor">
-            <summary>
-            Constructor
-            </summary>
-            <remarks>
-            Binds to application events to enable the MiniProfiler
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.UmbracoApplicationApplicationInit(System.Object,System.EventArgs)">
-            <summary>
-            Handle the Init event o fthe UmbracoApplication which allows us to subscribe to the HttpApplication events
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.UmbracoApplicationEndRequest(System.Object,System.EventArgs)">
-            <summary>
-            Handle the begin request event
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.UmbracoApplicationBeginRequest(System.Object,System.EventArgs)">
-            <summary>
-            Handle the end request event
-            </summary>
-            <param name="sender"></param>
-            <param name="e"></param>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.Render">
-            <summary>
-            Render the UI to display the profiler 
-            </summary>
-            <returns></returns>
-            <remarks>
-            Generally used for HTML displays
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.Step(System.String)">
-            <summary>
-            Profile a step
-            </summary>
-            <param name="name"></param>
-            <returns></returns>
-            <remarks>
-            Use the 'using(' syntax
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.Start">
-            <summary>
-            Start the profiler
-            </summary>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.Stop(System.Boolean)">
-            <summary>
-            Start the profiler
-            </summary>
-            <remarks>
-            set discardResults to false when you want to abandon all profiling, this is useful for 
-            when someone is not authenticated or you want to clear the results based on some other mechanism.
-            </remarks>
-        </member>
-        <member name="M:Umbraco.Core.Profiling.WebProfiler.TryGetRequest(System.Object)">
-            <summary>
-            Gets the request object from the app instance if it is available
-            </summary>
-            <param name="sender">The application object</param>
-            <returns></returns>
         </member>
         <member name="T:Umbraco.Core.PropertyEditors.DelimitedManifestValueValidator">
             <summary>
@@ -17351,7 +17684,7 @@
         </member>
         <member name="M:Umbraco.Core.PropertyEditors.PropertyValueEditor.GetDatabaseType">
             <summary>
-            Returns the true DataTypeDatabaseType from the string representation ValueType
+            Returns the true DataTypeDatabaseType from the string representation ValueType.
             </summary>
             <returns></returns>
         </member>
@@ -18130,10 +18463,6 @@
             <summary>
             Enum of the various DbTypes for which the Property values are stored
             </summary>
-            <remarks>
-            Object is added to support complex values from PropertyEditors, 
-            but will be saved under the Ntext column.
-            </remarks>
         </member>
         <member name="T:Umbraco.Core.Models.DataTypeDefinition">
             <summary>
@@ -18411,10 +18740,13 @@
         </member>
         <member name="M:Umbraco.Core.Models.PropertyType.IsPropertyTypeValid(System.Object)">
             <summary>
-            Validates the Value from a Property according to its type
+            Gets a value indicating whether the value is of the expected type
+            for the property, and can be assigned to the property "as is".
             </summary>
-            <param name="value"></param>
-            <returns>True if valid, otherwise false</returns>
+            <param name="value">The value.</param>
+            <returns>True if the value is of the expected type for the property,
+            and can be assigned to the property "as is". Otherwise, false, to indicate
+            that some conversion is required.</returns>
         </member>
         <member name="M:Umbraco.Core.Models.PropertyType.IsPropertyValueValid(System.Object)">
             <summary>
@@ -19191,6 +19523,8 @@
             <summary>
             Based on https://github.com/cjbhaines/Log4Net.Async
             which is based on code by Chris Haines http://cjbhaines.wordpress.com/2012/02/13/asynchronous-log4net-appenders/
+            This is an old/deprecated logger and has been superceded by ParallelForwardingAppender which is included in Umbraco and 
+            also by AsyncForwardingAppender in the Log4Net.Async library.
             </summary>
         </member>
         <member name="M:Umbraco.Core.Logging.LoggingTaskExtension.LogErrors(System.Threading.Tasks.Task,System.Action{System.String,System.Exception})">
@@ -19386,9 +19720,29 @@
             TypeName of the property of the macro
             </summary>
         </member>
+        <member name="T:Umbraco.Core.ObjectExtensions">
+            <summary>
+            Provides object extension methods.
+            </summary>
+        </member>
+        <member name="M:Umbraco.Core.ObjectExtensions.AsEnumerableOfOne``1(``0)">
+            <summary>
+            
+            </summary>
+            <param name="input"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Umbraco.Core.ObjectExtensions.DisposeIfDisposable(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="input"></param>
+        </member>
         <member name="M:Umbraco.Core.ObjectExtensions.SafeCast``1(System.Object)">
             <summary>
-            Provides a shortcut way of safely casting an input when you cannot guarantee the <typeparam name="T"></typeparam> is an instance type (i.e., when the C# AS keyword is not applicable)
+            Provides a shortcut way of safely casting an input when you cannot guarantee the <typeparamref name="T"/> is
+            an instance type (i.e., when the C# AS keyword is not applicable).
             </summary>
             <typeparam name="T"></typeparam>
             <param name="input">The input.</param>
@@ -19404,8 +19758,8 @@
         </member>
         <member name="M:Umbraco.Core.ObjectExtensions.TryConvertTo(System.Object,System.Type)">
             <summary>
-            Tries to convert the input object to the output type using TypeConverters. If the destination type is a superclass of the input type,
-            if will use <see cref="M:System.Convert.ChangeType(System.Object,System.Type)"/>.
+            Tries to convert the input object to the output type using TypeConverters. If the destination
+            type is a superclass of the input type, if will use <see cref="M:System.Convert.ChangeType(System.Object,System.Type)"/>.
             </summary>
             <param name="input">The input.</param>
             <param name="destinationType">Type of the destination.</param>
@@ -19876,6 +20230,14 @@
             <summary>
             Used to perform scheduled publishing/unpublishing
             </summary>
+        </member>
+        <member name="M:Umbraco.Core.Publishing.ScheduledPublisher.CheckPendingAndProcess">
+            <summary>
+            Processes scheduled operations
+            </summary>
+            <returns>
+            Returns the number of items successfully completed
+            </returns>
         </member>
         <member name="T:Umbraco.Core.Models.Section">
             <summary>
@@ -20561,6 +20923,12 @@
             Defines the ContentService, which is an easy access to operations involving <see cref="T:Umbraco.Core.Models.IContent"/>
             </summary>
         </member>
+        <member name="M:Umbraco.Core.Services.IContentService.BuildXmlCache">
+            <summary>
+            This builds the Xml document used for the XML cache
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IContentService.RebuildXmlStructures(System.Int32[])">
             <summary>
             Rebuilds all xml content in the cmsContentXml table for all documents
@@ -20666,6 +21034,20 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.IContentService.GetPagedChildren(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Children from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IContentService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
@@ -20677,6 +21059,34 @@
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
             <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Descendants from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IContentService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent})">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Descendants from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter"></param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
         <member name="M:Umbraco.Core.Services.IContentService.GetVersions(System.Int32)">
@@ -21254,6 +21664,20 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.ContentService.GetPagedChildren(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Children from</param>
+            <param name="pageIndex">Page index (zero based)</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalChildren">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.ContentService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
@@ -21265,6 +21689,34 @@
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
             <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns> 
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Descendants from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalChildren">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>        
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,Umbraco.Core.Persistence.Querying.IQuery{Umbraco.Core.Models.IContent})">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Descendants from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalChildren">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentService.GetChildrenByName(System.Int32,System.String)">
@@ -21658,6 +22110,12 @@
             <param name="userId"></param>
             <param name="raiseEvents"></param>
             <returns>True if sorting succeeded, otherwise False</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.ContentService.BuildXmlCache">
+            <summary>
+            This builds the Xml document used for the XML cache
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.ContentService.RebuildXmlStructures(System.Int32[])">
             <summary>
@@ -24072,6 +24530,20 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.IMediaService.GetPagedChildren(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Children from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.IMediaService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
@@ -24082,6 +24554,20 @@
             <param name="totalRecords">Total records query would return without paging</param>
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IMediaService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Descendants from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalRecords">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
@@ -24470,10 +24956,25 @@
             <param name="pageIndex">Current page index</param>
             <param name="pageSize">Size of the page</param>
             <param name="totalRecords">Total number of records found (out)</param>
-            <param name="orderBy"></param>
-            <param name="orderDirection"></param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
             <param name="memberTypeAlias"></param>
-            <param name="filter"></param>
+            <param name="filter">Search text filter</param>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.IMemberService.GetAll(System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String,System.String)">
+            <summary>
+            Gets a list of paged <see cref="T:Umbraco.Core.Models.IMember"/> objects
+            </summary>
+            <remarks>An <see cref="T:Umbraco.Core.Models.IMember"/> can be of type <see cref="T:Umbraco.Core.Models.IMember"/> </remarks>
+            <param name="pageIndex">Current page index</param>
+            <param name="pageSize">Size of the page</param>
+            <param name="totalRecords">Total number of records found (out)</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="memberTypeAlias"></param>
+            <param name="filter">Search text filter</param>
             <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
         </member>
         <member name="M:Umbraco.Core.Services.IMemberService.CreateMember(System.String,System.String,System.String,System.String)">
@@ -24730,6 +25231,18 @@
             Sends the notifications for the specified user regarding the specified node and action.
             </summary>
             <param name="entity"></param>
+            <param name="operatingUser"></param>
+            <param name="action"></param>
+            <param name="actionName"></param>
+            <param name="http"></param>
+            <param name="createSubject"></param>
+            <param name="createBody"></param>
+        </member>
+        <member name="M:Umbraco.Core.Services.INotificationService.SendNotifications(Umbraco.Core.Models.Membership.IUser,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.EntityBase.IUmbracoEntity},System.String,System.String,System.Web.HttpContextBase,System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String},System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String})">
+            <summary>
+            Sends the notifications for the specified user regarding the specified nodes and action.
+            </summary>
+            <param name="entities"></param>
             <param name="operatingUser"></param>
             <param name="action"></param>
             <param name="actionName"></param>
@@ -26000,6 +26513,20 @@
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
+        <member name="M:Umbraco.Core.Services.MediaService.GetPagedChildren(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IMedia"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Children from</param>
+            <param name="pageIndex">Page index (zero based)</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalChildren">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
         <member name="M:Umbraco.Core.Services.MediaService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.String)">
             <summary>
             Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
@@ -26010,6 +26537,20 @@
             <param name="totalChildren">Total records query would return without paging</param>
             <param name="orderBy">Field to order by</param>
             <param name="orderDirection">Direction to order by</param>
+            <param name="filter">Search text filter</param>
+            <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
+        </member>
+        <member name="M:Umbraco.Core.Services.MediaService.GetPagedDescendants(System.Int32,System.Int64,System.Int32,System.Int64@,System.String,Umbraco.Core.Persistence.DatabaseModelDefinitions.Direction,System.Boolean,System.String)">
+            <summary>
+            Gets a collection of <see cref="T:Umbraco.Core.Models.IContent"/> objects by Parent Id
+            </summary>
+            <param name="id">Id of the Parent to retrieve Descendants from</param>
+            <param name="pageIndex">Page number</param>
+            <param name="pageSize">Page size</param>
+            <param name="totalChildren">Total records query would return without paging</param>
+            <param name="orderBy">Field to order by</param>
+            <param name="orderDirection">Direction to order by</param>
+            <param name="orderBySystemField">Flag to indicate when ordering by system field</param>
             <param name="filter">Search text filter</param>
             <returns>An Enumerable list of <see cref="T:Umbraco.Core.Models.IContent"/> objects</returns>
         </member>
@@ -26738,6 +27279,21 @@
             Currently this will only work for Content entities!
             </remarks>
         </member>
+        <member name="M:Umbraco.Core.Services.NotificationService.SendNotifications(Umbraco.Core.Models.Membership.IUser,System.Collections.Generic.IEnumerable{Umbraco.Core.Models.EntityBase.IUmbracoEntity},System.String,System.String,System.Web.HttpContextBase,System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String},System.Func{Umbraco.Core.Models.Membership.IUser,System.String[],System.String})">
+            <summary>
+            Sends the notifications for the specified user regarding the specified node and action.
+            </summary>
+            <param name="entities"></param>
+            <param name="operatingUser"></param>
+            <param name="action"></param>
+            <param name="actionName"></param>
+            <param name="http"></param>
+            <param name="createSubject"></param>
+            <param name="createBody"></param>
+            <remarks>
+            Currently this will only work for Content entities!
+            </remarks>
+        </member>
         <member name="M:Umbraco.Core.Services.NotificationService.GetUserNotifications(Umbraco.Core.Models.Membership.IUser)">
             <summary>
             Gets the notifications for the user
@@ -26755,6 +27311,14 @@
             <remarks>
             Notifications are inherited from the parent so any child node will also have notifications assigned based on it's parent (ancestors)
             </remarks>
+        </member>
+        <member name="M:Umbraco.Core.Services.NotificationService.FilterUserNotificationsByPath(System.Collections.Generic.IEnumerable{Umbraco.Core.Models.Notification},System.String)">
+            <summary>
+            Filters a userNotifications collection by a path
+            </summary>
+            <param name="userNotifications"></param>
+            <param name="path"></param>
+            <returns></returns>
         </member>
         <member name="M:Umbraco.Core.Services.NotificationService.GetEntityNotifications(Umbraco.Core.Models.EntityBase.IEntity)">
             <summary>
@@ -27631,7 +28195,7 @@
             <see cref="T:Umbraco.Core.Services.IFileService"/>, <see cref="T:Umbraco.Core.Services.ILocalizationService"/> and <see cref="T:Umbraco.Core.Services.IMediaService"/>.
             </summary>
         </member>
-        <member name="M:Umbraco.Core.Services.ServiceContext.#ctor(Umbraco.Core.Services.IContentService,Umbraco.Core.Services.IMediaService,Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.IFileService,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IPackagingService,Umbraco.Core.Services.IEntityService,Umbraco.Core.Services.IRelationService,Umbraco.Core.Services.IMemberGroupService,Umbraco.Core.Services.IMemberTypeService,Umbraco.Core.Services.IMemberService,Umbraco.Core.Services.IUserService,Umbraco.Core.Services.ISectionService,Umbraco.Core.Services.IApplicationTreeService,Umbraco.Core.Services.ITagService,Umbraco.Core.Services.INotificationService,Umbraco.Core.Services.ILocalizedTextService,Umbraco.Core.Services.IAuditService,Umbraco.Core.Services.IDomainService,Umbraco.Core.Services.ITaskService,Umbraco.Core.Services.IMacroService,Umbraco.Core.Services.IPublicAccessService,Umbraco.Core.Services.IExternalLoginService,Umbraco.Core.Services.IMigrationEntryService)">
+        <member name="M:Umbraco.Core.Services.ServiceContext.#ctor(Umbraco.Core.Services.IContentService,Umbraco.Core.Services.IMediaService,Umbraco.Core.Services.IContentTypeService,Umbraco.Core.Services.IDataTypeService,Umbraco.Core.Services.IFileService,Umbraco.Core.Services.ILocalizationService,Umbraco.Core.Services.IPackagingService,Umbraco.Core.Services.IEntityService,Umbraco.Core.Services.IRelationService,Umbraco.Core.Services.IMemberGroupService,Umbraco.Core.Services.IMemberTypeService,Umbraco.Core.Services.IMemberService,Umbraco.Core.Services.IUserService,Umbraco.Core.Services.ISectionService,Umbraco.Core.Services.IApplicationTreeService,Umbraco.Core.Services.ITagService,Umbraco.Core.Services.INotificationService,Umbraco.Core.Services.ILocalizedTextService,Umbraco.Core.Services.IAuditService,Umbraco.Core.Services.IDomainService,Umbraco.Core.Services.ITaskService,Umbraco.Core.Services.IMacroService,Umbraco.Core.Services.IPublicAccessService,Umbraco.Core.Services.IExternalLoginService,Umbraco.Core.Services.IMigrationEntryService,Umbraco.Core.Services.IRedirectUrlService)">
             <summary>
             public ctor - will generally just be used for unit testing all items are optional and if not specified, the defaults will be used
             </summary>
@@ -27660,6 +28224,7 @@
             <param name="publicAccessService"></param>
             <param name="externalLoginService"></param>
             <param name="migrationEntryService"></param>
+            <param name="redirectUrlService"></param>
         </member>
         <member name="M:Umbraco.Core.Services.ServiceContext.#ctor(Umbraco.Core.Persistence.RepositoryFactory,Umbraco.Core.Persistence.UnitOfWork.IDatabaseUnitOfWorkProvider,Umbraco.Core.Persistence.UnitOfWork.IUnitOfWorkProvider,Umbraco.Core.Publishing.BasePublishingStrategy,Umbraco.Core.CacheHelper,Umbraco.Core.Logging.ILogger,Umbraco.Core.Events.IEventMessagesFactory)">
             <summary>
@@ -27801,6 +28366,11 @@
         <member name="P:Umbraco.Core.Services.ServiceContext.MemberGroupService">
             <summary>
             Gets the MemberGroupService
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Services.ServiceContext.RedirectUrlService">
+            <summary>
+            Gets the RedirectUrlService.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Services.TagExtractor">
@@ -28735,6 +29305,9 @@
             <remarks>
             Thread safety: this is NOT thread safe. Because it is NOT meant to run multi-threaded.
             </remarks>
+            <returns>
+            Returns the number of processed instructions
+            </returns>
         </member>
         <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.PruneOldInstructions">
             <summary>
@@ -28750,9 +29323,14 @@
             <summary>
             Ensure that the last instruction that was processed is still in the database.
             </summary>
-            <remarks>If the last instruction is not in the database anymore, then the messenger
+            <remarks>
+            If the last instruction is not in the database anymore, then the messenger
             should not try to process any instructions, because some instructions might be lost,
-            and it should instead cold-boot.</remarks>
+            and it should instead cold-boot.
+            However, if the last synced instruction id is '0' and there are '0' records, then this indicates
+            that it's a fresh site and no user actions have taken place, in this circumstance we do not want to cold
+            boot. See: http://issues.umbraco.org/issue/U4-8627
+            </remarks>
         </member>
         <member name="M:Umbraco.Core.Sync.DatabaseServerMessenger.ReadLastSynced">
             <summary>
@@ -28821,6 +29399,11 @@
         <member name="P:Umbraco.Core.Sync.DatabaseServerMessengerOptions.ThrottleSeconds">
             <summary>
             The number of seconds to wait between each sync operations.
+            </summary>
+        </member>
+        <member name="P:Umbraco.Core.Sync.DatabaseServerMessengerOptions.PruneThrottleSeconds">
+            <summary>
+            The number of seconds to wait between each prune operations.
             </summary>
         </member>
         <member name="T:Umbraco.Core.Sync.DatabaseServerRegistrarOptions">
@@ -31200,14 +31783,6 @@
             <param name="compareTo">The compare to.</param>
             <returns></returns>
         </member>
-        <member name="M:Umbraco.Core.StringExtensions.IsGuid(System.String,System.Boolean)">
-            <summary>
-            Determines if the string is a Guid
-            </summary>
-            <param name="str"></param>
-            <param name="withHyphens"></param>
-            <returns></returns>
-        </member>
         <member name="M:Umbraco.Core.StringExtensions.ParseInto``1(System.String)">
             <summary>
             Tries to parse a string into the supplied type by finding and using the Type's "Parse" method
@@ -31227,6 +31802,13 @@
         <member name="M:Umbraco.Core.StringExtensions.ToMd5(System.String)">
             <summary>
             Converts the string to MD5
+            </summary>
+            <param name="stringToConvert">referrs to itself</param>
+            <returns>the md5 hashed string</returns>
+        </member>
+        <member name="M:Umbraco.Core.StringExtensions.ToSHA1(System.String)">
+            <summary>
+            Converts the string to SHA1
             </summary>
             <param name="stringToConvert">referrs to itself</param>
             <returns>the md5 hashed string</returns>
@@ -31854,6 +32436,15 @@
             The XmlHelper class contains general helper methods for working with xml in umbraco.
             </summary>
         </member>
+        <member name="M:Umbraco.Core.XmlHelper.SetAttribute(System.Xml.XmlDocument,System.Xml.XmlNode,System.String,System.String)">
+            <summary>
+            Creates or sets an attribute on the XmlNode if an Attributes collection is available
+            </summary>
+            <param name="xml"></param>
+            <param name="n"></param>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
         <member name="M:Umbraco.Core.XmlHelper.IsXmlWhitespace(System.String)">
             <summary>
             Gets a value indicating whether a specified string contains only xml whitespace characters.
@@ -31958,6 +32549,16 @@
             <param name="value">The node value.</param>
             <returns>a XmlNode</returns>
         </member>
+        <member name="M:Umbraco.Core.XmlHelper.SetTextNode(System.Xml.XmlDocument,System.Xml.XmlNode,System.String,System.String)">
+            <summary>
+            Sets or Creates a text XmlNode with the specified name and value
+            </summary>
+            <param name="xd">The xmldocument.</param>
+            <param name="parent">The node to set or create the child text node on</param>
+            <param name="name">The node name.</param>
+            <param name="value">The node value.</param>
+            <returns>a XmlNode</returns>
+        </member>
         <member name="M:Umbraco.Core.XmlHelper.AddCDataNode(System.Xml.XmlDocument,System.String,System.String)">
             <summary>
             Creates a cdata XmlNode with the specified name and value
@@ -31966,6 +32567,16 @@
             <param name="name">The node name.</param>
             <param name="value">The node value.</param>
             <returns>A XmlNode</returns>
+        </member>
+        <member name="M:Umbraco.Core.XmlHelper.SetCDataNode(System.Xml.XmlDocument,System.Xml.XmlNode,System.String,System.String)">
+            <summary>
+            Sets or Creates a cdata XmlNode with the specified name and value
+            </summary>
+            <param name="xd">The xmldocument.</param>
+            <param name="parent">The node to set or create the child text node on</param>
+            <param name="name">The node name.</param>
+            <param name="value">The node value.</param>
+            <returns>a XmlNode</returns>
         </member>
         <member name="M:Umbraco.Core.XmlHelper.GetNodeValue(System.Xml.XmlNode)">
             <summary>

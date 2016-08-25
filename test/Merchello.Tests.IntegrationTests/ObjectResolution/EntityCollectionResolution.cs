@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Tests.IntegrationTests.ObjectResolution
 {
+    using System.Linq;
+
     using Merchello.Core.EntityCollections;
     using Merchello.Core.EntityCollections.Providers;
     using Merchello.Tests.Base.TestHelpers;
@@ -10,6 +12,39 @@
     [TestFixture]
     public class EntityCollectionResolution : MerchelloAllInTestBase
     {
+        /// <summary>
+        /// Test shows a key can be resolved from the attribute based on the type of provider
+        /// </summary>
+        [Test]
+        public void Can_Resolve_ProductSpecificationCollectionProvider_Key()
+        {
+            //// Arrange
+            var expected = Core.Constants.ProviderKeys.EntityCollection.ProductSpecificationCollectionKey;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var key = resolver.GetProviderKey<ProductSpecifiedFilterCollectionProvider>();
+
+            //// Assert
+            Assert.AreEqual(expected, key);
+        }
+
+        [Test]
+        public void Can_Resolve_ProductSpecificationCollectionProviders_Keys()
+        {
+            //// Arrange
+            var expected = 1;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var keys = resolver.GetProviderKeys<IEntitySpecifiedFilterCollectionProvider>();
+            if (!keys.Any()) Assert.Fail("No keys returned");
+            var psp = keys.First();
+
+            //// Assert
+            Assert.AreEqual(expected, keys.Count());
+            Assert.AreEqual(psp, Core.Constants.ProviderKeys.EntityCollection.ProductSpecificationCollectionKey);
+        }
 
         /// <summary>
         /// Test shows a key can be resolved from the attribute based on the type of provider

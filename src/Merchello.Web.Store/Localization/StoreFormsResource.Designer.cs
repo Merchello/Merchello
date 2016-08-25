@@ -286,7 +286,7 @@ namespace Merchello.Web.Store.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to State or Province.
+        ///   Looks up a localized string similar to State / Province / Region.
         /// </summary>
         public static string LabelRegion {
             get {

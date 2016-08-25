@@ -1,0 +1,12 @@
+﻿<div>
+    <p>Enter a numeric value</p>
+
+    <input name="myInput" type="text" ng-model="model.value" class="umb-textstring span7 textstring"
+        required
+        val-regex="^\d*$"
+        val-server="value" />
+
+    <span class="help-inline" val-msg-for="myInput" val-toggle-msg="required">Required!</span>
+    <span class="help-inline" val-msg-for="myInput" val-toggle-msg="valRegex">The value entered is not a number</span>
+    <span class="help-inline" val-msg-for="myInput" val-toggle-msg="valServer">A server error occurred</span>
+</div>

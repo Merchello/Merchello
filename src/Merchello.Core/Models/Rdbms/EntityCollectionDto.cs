@@ -53,7 +53,21 @@
         /// </summary>
         [Column("providerKey")]
         public Guid ProviderKey { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is filter.
+        /// </summary>
+        [Column("isFilter")]
+        public bool IsFilter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extended data.
+        /// </summary>
+        [Column("extendedData")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        public string ExtendedData { get; set; }
+
         /// <summary>
         /// Gets or sets the update date.
         /// </summary>
