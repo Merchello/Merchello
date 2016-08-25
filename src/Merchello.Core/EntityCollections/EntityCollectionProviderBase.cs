@@ -120,7 +120,7 @@
         /// The sort direction.
         /// </param>
         /// <returns>
-        /// The <see cref="Page{Object"/>.
+        /// The <see cref="Page{Object}"/>.
         /// </returns>
         public abstract Page<object> GetPagedEntities(long page, long itemsPerPage, string sortBy = "", SortDirection sortDirection = SortDirection.Ascending);
 
@@ -232,7 +232,7 @@
         /// <returns>
         /// The <see cref="IEntityCollection"/>.
         /// </returns>
-        private IEntityCollection GetInstance()
+        protected virtual IEntityCollection GetInstance()
         {
             var cacheKey = string.Format("merch.entitycollection.{0}", CollectionKey);
             var provider = Cache.GetCacheItem(cacheKey);

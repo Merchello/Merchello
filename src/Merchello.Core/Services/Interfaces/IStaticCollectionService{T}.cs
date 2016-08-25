@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Services
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Interfaces;
@@ -98,6 +99,20 @@
         bool ExistsInCollection(Guid entityKey, Guid collectionKey);
 
         /// <summary>
+        /// Returns true if the entity exists in the at least one of the static collections.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool ExistsInCollection(Guid entityKey, IEnumerable<Guid> collectionKeys);
+
+        /// <summary>
         /// Gets an entity from a collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -126,6 +141,35 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
+        /// Gets distinct entities from a multiple collection.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<T> GetFromCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending);
+        
+
+        /// <summary>
         /// Gets an entity from a collection filtered by a search term
         /// </summary>
         /// <param name="collectionKey">
@@ -151,6 +195,39 @@
         /// </returns>
         Page<T> GetFromCollection(
             Guid collectionKey,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending);
+
+
+        /// <summary>
+        /// Gets an entity from multiple collections filtered by a search term
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// A collection of collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{T}"/>.
+        /// </returns>
+        Page<T> GetFromCollections(
+            IEnumerable<Guid> collectionKeys,
             string searchTerm,
             long page,
             long itemsPerPage,

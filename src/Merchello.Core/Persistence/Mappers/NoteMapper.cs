@@ -26,6 +26,8 @@
             CacheMap<Note, NoteDto>(src => src.Key, dto => dto.Key);
             CacheMap<Note, NoteDto>(src => src.EntityKey, dto => dto.EntityKey);
             CacheMap<Note, NoteDto>(src => src.EntityTfKey, dto => dto.EntityTfKey);
+            CacheMap<Note, NoteDto>(src => src.Author, dto => dto.Author);
+            CacheMap<Note, NoteDto>(src => src.InternalOnly, dto => dto.InternalOnly);
             CacheMap<Note, NoteDto>(src => src.Message, dto => dto.Message);
             CacheMap<Note, NoteDto>(src => src.CreateDate, dto => dto.CreateDate);
             CacheMap<Note, NoteDto>(src => src.UpdateDate, dto => dto.UpdateDate);

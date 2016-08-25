@@ -21,4 +21,19 @@
         [DataMember(Name = "collectionKey")]
         public Guid CollectionKey { get; set; }
     }
+
+    public class Entity2FilterCollectionsModel
+    {
+        /// <summary>
+        /// Gets or sets the entity key.
+        /// </summary>
+        [DataMember(Name = "entityKey")]
+        public Guid EntityKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the collection key.
+        /// </summary>
+        [DataMember(Name = "collectionKeys")]
+        public Guid[] CollectionKeys { get; set; }
+    }
 }

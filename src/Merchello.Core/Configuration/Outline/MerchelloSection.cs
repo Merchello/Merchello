@@ -76,6 +76,17 @@
             get { return (SettingsCollection)this["optionUi"]; }
         }
 
+        /// <summary>
+        /// Gets the EntitySpecificationCollection configurations.
+        /// </summary>
+        [ConfigurationProperty("entitySpecificationCollectionAttributes", IsRequired = true)]
+        public EntitySpecificationCollectionAttributesElement EntitySpecificationCollections
+        {
+            get
+            {
+                return (EntitySpecificationCollectionAttributesElement)this["entitySpecificationCollectionAttributes"];
+            }
+        }
 
         /// <summary>
         /// Gets the checkout context settings collection

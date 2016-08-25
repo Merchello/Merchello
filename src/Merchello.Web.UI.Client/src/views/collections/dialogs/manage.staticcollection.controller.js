@@ -78,6 +78,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             var promise = entityCollectionResource.getByKey($scope.collectionKey);
             promise.then(function(collection) {
                 $scope.collection = entityCollectionDisplayBuilder.transform(collection);
+                console.info($scope.collection);
                 loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to load the collection ' + reason);

@@ -17,6 +17,10 @@ namespace Merchello.Core.Persistence.Mappers
 
             CacheMap<ProductOption, ProductOptionDto>(src => src.Key, dto => dto.Key);
             CacheMap<ProductOption, ProductOptionDto>(src => src.Name, dto => dto.Name);
+            CacheMap<ProductOption, ProductOptionDto>(src => src.DetachedContentTypeKey, dto => dto.DetachedContentTypeKey);
+            CacheMap<ProductOption, ProductOptionDto>(src => src.Required, dto => dto.Required);
+            CacheMap<ProductOption, ProductOptionDto>(src => src.Shared, dto => dto.Shared);
+            CacheMap<ProductOption, ProductOptionDto>(src => src.UiOption, dto => dto.UiOption);
             CacheMap<ProductOption, ProductOptionDto>(src => src.UpdateDate, dto => dto.UpdateDate);
             CacheMap<ProductOption, ProductOptionDto>(src => src.CreateDate, dto => dto.CreateDate);
         }

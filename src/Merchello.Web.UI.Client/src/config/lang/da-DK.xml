@@ -23,6 +23,7 @@
     <key alias="gateways">Gateway udbydere</key>
   </area>
   <area alias="merchelloTabs">
+    <key alias="productFilterSpecs">Filter Specifications</key>
     <key alias="productListing">Produkt lister</key>
     <key alias="product">Produkter</key>
     <key alias="productVariants">Produkt varianter</key>

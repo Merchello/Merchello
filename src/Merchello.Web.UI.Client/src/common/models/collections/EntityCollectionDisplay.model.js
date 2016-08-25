@@ -15,7 +15,11 @@ var EntityCollectionDisplay = function() {
     self.entityTypeField = {};
     self.providerKey = '';
     self.name = '';
+    self.isFilter = false;
+    self.extendedData = {};
     self.sortOrder = 0;
 };
 
+
 angular.module('merchello.models').constant('EntityCollectionDisplay', EntityCollectionDisplay);
+

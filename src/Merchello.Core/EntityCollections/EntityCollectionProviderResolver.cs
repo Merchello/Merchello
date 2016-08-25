@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Merchello.Core.Logging;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Services;
@@ -79,10 +80,39 @@
         /// </returns>
         public Guid GetProviderKey(Type type)
         {
-            var foundType = _instanceTypes.FirstOrDefault(type.IsAssignableFrom);
-            return foundType != null
-                ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key :
-                Guid.Empty;
+            return GetProviderKeys(type).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
+        public IEnumerable<Guid> GetProviderKeys<T>()
+        {
+            return GetProviderKeys(typeof(T));
+        }
+
+        /// <summary>
+        /// Gets the provider keys for a given type.
+        /// </summary>
+        /// <param name="type">
+        /// The type of the provider.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Guid}"/>.
+        /// </returns>
+        public IEnumerable<Guid> GetProviderKeys(Type type)
+        {
+            var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
+            var foundArray = foundTypes as Type[] ?? foundTypes.ToArray();
+            return foundArray.Any()
+                ? foundArray.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key) :
+                Enumerable.Empty<Guid>();
         }
 
         /// <summary>
@@ -96,8 +126,21 @@
         /// </returns>
         public EntityCollectionProviderAttribute GetProviderAttribute<T>()
         {
-            var foundType = _instanceTypes.FirstOrDefault(typeof(T).IsAssignableFrom);
-            return foundType != null ? foundType.GetCustomAttribute<EntityCollectionProviderAttribute>(false) : null;
+            return GetProviderAttributes<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The type of the provider
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionProviderAttribute}"/>.
+        /// </returns>
+        public IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes<T>()
+        {
+            return GetProviderAttribute(typeof(T));
         }
 
         /// <summary>
@@ -152,6 +195,38 @@
 
             var nullReference = new NullReferenceException("EntityCollectionProvider could not be resolved for the collection.");
             return Attempt<EntityCollectionProviderBase>.Fail(nullReference);
+        }
+
+        /// <summary>
+        /// Gets the provider attribute for providers responsible for specified filter attribute collections.
+        /// </summary>
+        /// <param name="collectionKey">
+        /// The collection key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        public EntityCollectionProviderAttribute GetProviderAttributeForSpecifiedFilterAttributeCollection(Guid collectionKey)
+        {
+            var attempt = GetProviderForCollection(collectionKey);
+            if (!attempt.Success)
+            {
+                MultiLogHelper.WarnWithException<EntityCollectionProviderResolver>(
+                    "Failed to retreive provider for collection",
+                    attempt.Exception);
+
+                return null;
+            }
+
+            var provider = attempt.Result as IEntitySpecifiedFilterCollectionProvider;
+            if (provider == null)
+            {
+                var nullRef = new NullReferenceException("Provider found did not implement IEntitySpecifiedFilterProvider");
+                MultiLogHelper.WarnWithException<EntityCollectionProviderResolver>("Invalid type", nullRef);
+                return null;
+            }
+
+            return GetProviderAttribute(provider.AttributeProviderType).FirstOrDefault();
         }
 
         /// <summary>
@@ -217,7 +292,25 @@
             {
                 LogHelper.Info<EntityCollectionProviderResolver>("Failed to remove provider associated with collect " + collectionKey + " from cache");
             }
-        }        
+        }
+
+        /// <summary>
+        /// Gets the provider attributes of providers with matching types
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{EntityCollectionProviderAttribute}"/>.
+        /// </returns>
+        private IEnumerable<EntityCollectionProviderAttribute> GetProviderAttribute(Type type)
+        {
+            var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
+            var typesArray = foundTypes as Type[] ?? foundTypes.ToArray();
+            return typesArray.Any() ?
+                typesArray.Select(x => x.GetCustomAttribute<EntityCollectionProviderAttribute>(false))
+                : Enumerable.Empty<EntityCollectionProviderAttribute>();
+        }
 
         /// <summary>
         /// The create instance.

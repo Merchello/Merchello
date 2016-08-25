@@ -181,12 +181,12 @@
         /// <summary>
         /// Gets or sets the self managed entity collection provider collections.
         /// </summary>
-        [ConfigurationProperty("selfManagedEntityCollectionProviders", IsRequired = false), ConfigurationCollection(typeof(SelfManagedEntityCollectionProviderCollection), AddItemName = "entityCollectionProvider")]
-        public SelfManagedEntityCollectionProviderCollection SelfManagedEntityCollectionProviderCollections
+        [ConfigurationProperty("selfManagedEntityCollectionProviders", IsRequired = false), ConfigurationCollection(typeof(EntityCollectionProviderCollection), AddItemName = "entityCollectionProvider")]
+        public EntityCollectionProviderCollection SelfManagedEntityCollectionProviderCollections
         {
             get
             {
-                return (SelfManagedEntityCollectionProviderCollection)this["selfManagedEntityCollectionProviders"];
+                return (EntityCollectionProviderCollection)this["selfManagedEntityCollectionProviders"];
             }
 
             set

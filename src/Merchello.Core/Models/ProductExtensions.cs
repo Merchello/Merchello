@@ -284,11 +284,15 @@
             MerchelloContext.Current.Services.ProductService.RemoveFromCollection(product.Key, collectionKey);
         }
 
+
         /// <summary>
         /// Returns static collections containing the product.
         /// </summary>
         /// <param name="product">
         /// The product.
+        /// </param>
+        /// <param name="isFilter">
+        /// A flag to indicate whether this request is for standard or filter collections
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IEntityCollection}"/>.
@@ -298,13 +302,14 @@
         /// which would be really excessive database calls.
         /// TODO need to decide how to cache these to provide that functionality
         /// </remarks>
-        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IProduct product)
+        internal static IEnumerable<IEntityCollection> GetCollectionsContaining(this IProduct product, bool isFilter = false)
         {
             if (!MerchelloContext.HasCurrent) return Enumerable.Empty<IEntityCollection>();
             return
                 ((EntityCollectionService)MerchelloContext.Current.Services.EntityCollectionService)
-                    .GetEntityCollectionsByProductKey(product.Key);
+                    .GetEntityCollectionsByProductKey(product.Key, isFilter);
         }
+
 
         #endregion
 

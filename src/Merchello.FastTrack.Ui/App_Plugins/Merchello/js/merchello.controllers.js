@@ -1453,7 +1453,6 @@ angular.module('merchello')
                     collection.entityTfKey = $scope.provider.entityTfKey;
                     collection.entityType = $scope.provider.entityType;
                     collection.parentKey = $scope.dialogData.parentKey;
-
                     collection.name = $scope.name;
                     var promise = entityCollectionResource.addEntityCollection(collection);
                     promise.then(function() {
@@ -1598,6 +1597,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Mana
             var promise = entityCollectionResource.getByKey($scope.collectionKey);
             promise.then(function(collection) {
                 $scope.collection = entityCollectionDisplayBuilder.transform(collection);
+                console.info($scope.collection);
                 loadEntities();
             }, function(reason) {
                 notificationsService.error('Failed to load the collection ' + reason);
@@ -1816,8 +1816,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
             treeService.getTree({section: 'merchello'}).then(function(tree) {
                 var root = tree.root;
                 var treeId = getTreeId();
-                
-                console.info(treeId);
+
                 $scope.pickerRootNode = _.find(root.children, function (child) {
                     return child.id === treeId;
                 });
@@ -1839,6 +1838,18 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
 
         // intitialize
         init();
+}]);
+
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SelectSpecAttributeProviderController',
+    ['$scope',
+    function($scope) {
+
+        $scope.loaded = true;
+
+        $scope.setSelection = function(provider) {
+            $scope.submit(provider);
+        }
+
 }]);
 
 /**
@@ -1892,6 +1903,7 @@ angular.module('merchello')
                 parentPromise.then(function(collections) {
                     var transformed = [];
                     if (!angular.isArray(collections)) {
+                        collections.sortOrder = 0;
                         transformed.push(entityCollectionDisplayBuilder.transform(collections));
                     } else {
                         transformed = entityCollectionDisplayBuilder.transform(collections);
@@ -1916,7 +1928,6 @@ angular.module('merchello')
                     } else {
                         $scope.entityCollections = entityCollectionDisplayBuilder.transform(collections);
                     }
-                    console.info(treeService._getTreeCache());
                     $scope.loaded = true;
                 });
             }
@@ -1934,6 +1945,8 @@ angular.module('merchello')
                 for(var i = 0; i < $scope.entityCollections.length; i++) {
                     $scope.entityCollections[i].sortOrder = i;
                 }
+
+
                 // save updated sort orders
                 var promise = entityCollectionResource.updateSortOrders($scope.entityCollections);
                 promise.then(function() {
@@ -1958,7 +1971,7 @@ angular.module('merchello')
             // Sortable available offers
             /// -------------------------------------------------------------------
 
-            $scope.sortableOptions = {
+            $scope.sortableCollections = {
                 start : function(e, ui) {
                     ui.item.data('start', ui.item.index());
                 },
@@ -1976,6 +1989,85 @@ angular.module('merchello')
         }]);
 
 
+
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecFilterAttributeCollectionAddController',
+    ['$scope', 'entityCollectionDisplayBuilder',
+    function($scope, entityCollectionDisplayBuilder) {
+
+        $scope.loaded = true;
+
+        $scope.attributeName = '';
+        $scope.wasFormSubmitted = false;
+
+        $scope.save = function() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.collectionForm.name.$valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+
+        $scope.addAttribute = function() {
+            // first we need to clone the template so it can be reused (not modified)
+            var attribute = angular.extend(entityCollectionDisplayBuilder.createDefault(), $scope.dialogData.attributeTemplate);
+            attribute.name = $scope.attributeName;
+
+            var exists = _.find($scope.dialogData.specCollection.attributeCollections, function(c) { return c.name === attribute.name; });
+            if (!exists) {
+                attribute.sortOrder = $scope.dialogData.specCollection.attributeCollections.length === 0 ?
+                    0 :
+                    $scope.dialogData.specCollection.attributeCollections.length;
+
+                $scope.dialogData.specCollection.attributeCollections.push(attribute);
+            }
+
+            $scope.attributeName = '';
+
+        }
+
+        // removes a choice from the dialog data collection of choices
+        $scope.remove = function(idx) {
+            if ($scope.dialogData.specCollection.attributeCollections.length > idx) {
+                var remover = $scope.dialogData.specCollection.attributeCollections[idx];
+                var sort = remover.sortOrder;
+                $scope.dialogData.specCollection.attributeCollections.splice(idx, 1);
+                _.each($scope.dialogData.specCollection.attributeCollections, function(c) {
+                    if (c.sortOrder > sort) {
+                        c.sortOrder -= 1;
+                    }
+                });
+            }
+        };
+
+        $scope.sortableAttributes = {
+            start : function(e, ui) {
+                ui.item.data('start', ui.item.index());
+            },
+            stop: function (e, ui) {
+                var start = ui.item.data('start'),
+                    end =  ui.item.index();
+                for(var i = 0; i < $scope.dialogData.specCollection.attributeCollections.length; i++) {
+                    $scope.dialogData.specCollection.attributeCollections[i].sortOrder = i + 1;
+                }
+            },
+            disabled: false,
+            cursor: "move"
+        }
+}]);
+
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecFilterCollectionAddController',
+['$scope',
+    function($scope) {
+
+    $scope.wasFormSubmitted = false;
+
+    $scope.save = function() {
+        $scope.wasFormSubmitted = true;
+        if ($scope.collectionForm.name.$valid) {
+            $scope.submit($scope.dialogData)
+        }
+    }
+
+}]);
 
 angular.module('merchello').controller('Merchello.Directives.EntityStaticCollectionsDirectiveController',
     ['$scope', 'notificationsService', 'dialogService', 'entityCollectionHelper', 'entityCollectionResource', 'dialogDataFactory', 'entityCollectionDisplayBuilder',
@@ -6582,6 +6674,36 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.ProductCopyCon
         }
 }]);
 
+angular.module('merchello').controller('Merchello.Product.Dialogs.PickSpecFilterCollectionsController',
+    ['$scope',
+    function($scope) {
+
+
+        $scope.save = function() {
+            // collections that have been modified will have attribute collections marked selected
+
+            angular.forEach($scope.dialogData.available, function(collection) {
+                setIntendedAssociations(collection);
+            });
+
+            $scope.submit($scope.dialogData.associate);
+        }
+
+        function setIntendedAssociations(collection) {
+            var atts = _.filter(collection.attributeCollections, function(att) {
+                if (att.selected) return att;
+            });
+
+            if (atts && atts.length > 0) {
+                // we have to add the spec collection itself to be associated for certain system queries
+                $scope.dialogData.associate.push(collection.key);
+                angular.forEach(atts, function(a) {
+                   $scope.dialogData.associate.push(a.key);
+                });
+            }
+        }
+}]);
+
 /**
  * @ngdoc controller
  * @name Merchello.Product.Dialogs.AddProductContentTypeController
@@ -8023,6 +8145,43 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             // Initialize the controller
             init();
     }]);
+angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecificationListController',
+    ['$scope', 'entityCollectionResource', 'merchelloTabsFactory',
+    function($scope, entityCollectionResource, merchelloTabsFactory) {
+
+        $scope.loaded = false;
+        $scope.preValuesLoaded = false;
+
+        $scope.entityType = 'Product';
+
+        $scope.tabs = [];
+
+        $scope.add = function(collection) {
+            $scope.preValuesLoaded = false;
+            entityCollectionResource.addEntityCollection(collection).then(function(result) {
+                $scope.preValuesLoaded = true;
+            });
+        }
+
+        $scope.edit = function(collection) {
+            $scope.preValuesLoaded = false;
+            entityCollectionResource.saveSpecifiedFilterCollection(collection).then(function(result) {
+                $scope.preValuesLoaded = true;
+            });
+        }
+
+        function init() {
+
+            $scope.tabs = merchelloTabsFactory.createProductListTabs();
+            $scope.tabs.setActive('productfilterspecs');
+
+            $scope.loaded = true;
+            $scope.preValuesLoaded = true;
+        }
+
+        init();
+}]);
+
     /**
      * @ngdoc controller
      * @name Merchello.Backoffice.ProductListController

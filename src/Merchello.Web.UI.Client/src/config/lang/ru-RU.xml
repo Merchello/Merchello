@@ -70,8 +70,8 @@
     <key alias="private">Приватный</key>
     <key alias="increase">Увеличить</key>
     <key alias="decrease">Уменьшить</key>
-    <key alias="associateWith">Associate with</key>
-    <key alias="shared">Shared</key>
+    <key alias="associateWith">Связать с</key>
+    <key alias="shared">Совместное</key>
   </area>
   <area alias="merchelloTree">
     <key alias="products">Товары</key>
@@ -83,6 +83,7 @@
     <key alias="gateways">Провайдеры</key>
   </area>
   <area alias="merchelloTabs">
+    <key alias="productFilterSpecs">Параметры фильтров</key>
     <key alias="productListing">Список товаров</key>
     <key alias="productContentTypes">Типы документов</key>
     <key alias="product">Товар</key>
@@ -111,8 +112,8 @@
     <key alias="salesOverTime">Продажи за период</key>
     <key alias="salesByItem">Продажи по товарам</key>
     <key alias="abandonedBasket">Брошенные корзины</key>
-    <key alias="contentTypes">Content Types</key>
-    <key alias="sharedProductOptions">Shared Product Options</key>
+    <key alias="contentTypes">Типы документов</key>
+    <key alias="sharedProductOptions">Совместные свойства товаров</key>
   </area>
   <area alias="merchelloReports">
     <key alias="anonymousBaskets">Анонимные корзины</key>
@@ -176,7 +177,7 @@
   </area>
   <area alias="merchelloValidation">
     <key alias="nameFieldRequired">Наименование является обязательным</key>
-    <key alias="contentTypeRequired">Тип документа является обязательным</key>
+    <key alias="contentTypeRequired">Тип документов является обязательным</key>
     <key alias="noteMessageRequired">Поле заметок является обязательным</key>
   </area>
   <area alias="merchelloTableCaptions">
@@ -186,11 +187,11 @@
     <key alias="endDate">По дату</key>
     <key alias="active">Активно</key>
     <key alias="sortOrder">Порядок</key>
-    <key alias="optionName">Option Name</key>
-    <key alias="optionUi">Option UI</key>
-    <key alias="optionValues">Option Values</key>
-    <key alias="shared">Shared</key>
-    <key alias="sharedCount">Shared Count</key>
+    <key alias="optionName">Название свойства</key>
+    <key alias="optionUi">Внешний вид</key>
+    <key alias="optionValues">Значения свойства</key>
+    <key alias="shared">Совместное</key>
+    <key alias="sharedCount">К-во совмещений</key>
   </area>
   <area alias="merchelloProducts">
     <key alias="emptyProductCollection">В этом списке сейчас нет ни одного товара</key>
@@ -202,55 +203,55 @@
     <key alias="newProductSku">Задайте артикул товара</key>
   </area>
   <area alias="merchelloProductOptions">
-    <key alias="newOption">New Option</key>
-    <key alias="sharedOption">Shared Options</key>
+    <key alias="newOption">Новое свойство</key>
+    <key alias="sharedOption">Совместные свойства</key>
     <key alias="editOptions">
       <![CDATA[
-      <strong>Edit Options</strong>
-      <small>Edit or add options, which will auto-update your variants</small>
+      <strong>Изменение свойств</strong>
+      <small>Измените или добавьте свойства, которые автоматически обновят все варианты товара</small>
       ]]>
     </key>
-    <key alias="sharedCount">Share Count</key>
-    <key alias="manageShared">Manage Shared Product Options</key>
+    <key alias="sharedCount">К-во совмещений</key>
+    <key alias="manageShared">Управление совместными свойствами</key>
     <key alias="noSharedProductOptions">
       <![CDATA[
-      <h5>You have not setup any shared product options</h5>
+      <h5>Вы не задали ни одного совместного свойства для товаров</h5>
       ]]>
     </key>
     <key alias="noProductOptions">
       <![CDATA[
-      <h5>You have not setup any options for this product</h5>
+      <h5>Вы не задали ни одного свойства для этого товара</h5>
       ]]>
     </key>
   </area>
   <area alias="merchelloDetachedContent">
-    <key alias="selectContentType">Выберите тип документа</key>
-    <key alias="contentTypes">Content Types</key>
-    <key alias="associateContentType">Associate Content Type</key>
+    <key alias="selectContentType">Выберите тип документов</key>
+    <key alias="contentTypes">Типы документов</key>
+    <key alias="associateContentType">Связать с типом документов</key>
     <key alias="productContentTypes">Типы документов для товаров</key>
     <key alias="slug">Ключ URL</key>
-    <key alias="slugDescription">Ключи URL явлются фрагментами адреса страницы товара.</key>
+    <key alias="slugDescription">Ключи URL являются фрагментами адреса страницы товара.</key>
     <key alias="selectTemplate">Выбрать шаблон страницы Umbraco</key>
     <key alias="canBeRendered">Разрешить отображение этого содержимого.</key>
     <key alias="productContentTypesInfo">Типы документов (типы контента) Umbraco, которые могут быть сопоставлены товарам и вариантам товаров Merchello.</key>
-    <key alias="productContentType">Тип документа товара</key>
-    <key alias="umbracoContentTypeName">Тип документа</key>
+    <key alias="productContentType">Тип документов для товара</key>
+    <key alias="umbracoContentTypeName">Тип документов</key>
     <key alias="umbracoContentTypeAlias">Алиас</key>
     <key alias="tabs">Вкладки</key>
     <key alias="noDetachedContentTypes">
       <![CDATA[
-      <h5>Товарам не сопоставлен ни один тип документа</h5>
-      <p>Сопоставление может быть сделано через контекстое меню товаров.</p>
+      <h5>Товарам не сопоставлен ни один тип документов</h5>
+      <p>Сопоставление может быть сделано через контекстное меню товаров.</p>
       ]]>
     </key>
     <key alias="noProductContentType"><![CDATA[
-      <h5>Вы не выбрали тип документа для товаров</h5>
+      <h5>Вы не выбрали тип документов для товаров</h5>
     ]]></key>
-    <key alias="productOptionContentTypes">Product Option Content Types</key>
-    <key alias="productOptionContentType">Option Content Type</key>
+    <key alias="productOptionContentTypes">Типы документов для свойства</key>
+    <key alias="productOptionContentType">Тип документов для свойства</key>
     <key alias="noProductOptionContentType">
       <![CDATA[
-      <h5>You have not selected a product option content type</h5>
+      <h5>Вы не выбрали тип документов для свойства товара</h5>
     ]]>
     </key>
     <key alias="deleteWarning"><![CDATA[
@@ -259,7 +260,7 @@
     <key alias="removeDetachedContent">Удалить расширенные свойства</key>
     <key alias="removeDetachedContentWarning"><![CDATA[
     Удаление расширенных свойств НЕ удаляет сам товар или его вариант. Используйте эту операцию, если хотите
-    удалить или изменить сопоставленный товару тип документа Umbraco. Эта операция удалит расширенные свойства для ВСЕХ языков.
+    удалить или изменить сопоставленный товару тип документов Umbraco. Эта операция удалит расширенные свойства для ВСЕХ языков.
     ]]></key>
   </area>
   <area alias="merchelloSales">
@@ -338,7 +339,7 @@
     <key alias="customerBasket">
       <![CDATA[
       Покупательская корзина
-      <small>Товары, находящиеся в козине сейчас</small>
+      <small>Товары, находящиеся в корзине сейчас</small>
       ]]>
     </key>
     <key alias="customerWishlist">
@@ -359,7 +360,7 @@
     <key alias="offerInfo">Установки предложения</key>
     <key alias="configOffer">Настроить данное предложение</key>
     <key alias="offerType">Тип предложения</key>
-    <key alias="mustUniqueOfferCode">Коды предлоений не должны повторяться.</key>
+    <key alias="mustUniqueOfferCode">Коды предложений не должны повторяться.</key>
     <key alias="offerSetExpires">Установить временные рамки предложения.</key>
     <key alias="offerNeverExpires">Без окончания.</key>
     <key alias="offerValidDates">Даты действия</key>
@@ -384,7 +385,7 @@
     <key alias="sku">Артикул</key>
     <key alias="costOfGoods">Стоимость</key>
     <key alias="baseSku">Базовый артикул</key>
-    <key alias="barcode">Штрихкод</key>
+    <key alias="barcode">Штрих-код</key>
     <key alias="manufacturer">Производитель</key>
     <key alias="manufacturerModel">Модель по каталогу производителя</key>
     <key alias="variantInfo">Информация о варианте</key>
@@ -402,7 +403,7 @@
     <key alias="addVariant">Добавить вариант</key>
     <key alias="addVariantSub">Это будет новым вариантом товара %0%.</key>
     <key alias="addOption">Добавить еще одно свойство</key>
-    <key alias="addOptions">Добавить свойство к данному варианту и произвести авто-заполнение этого свойтсва для всех других вариантов</key>
+    <key alias="addOptions">Добавить свойство к данному варианту и произвести авто-заполнение этого свойства для всех других вариантов</key>
     <key alias="deleteProduct">Удалить товар</key>
     <key alias="deleteVariant">Удалить вариант</key>
     <key alias="toggleOnSale">Распродажа</key>
@@ -418,15 +419,15 @@
     <key alias="optionValueExamples">(например, Красный, Зеленый, Синий)</key>
     <key alias="hasDigitalDownload">Данный вариант содержит цифровые товары</key>
     <key alias="hasOptions">У данного варианта есть свойства (такие как цвет и размер)</key>
-    <key alias="isTaxable">Данный вариант олагается налогом</key>
+    <key alias="isTaxable">Данный вариант облагается налогом</key>
     <key alias="isShippable">Для данного варианта доступна доставка</key>
     <key alias="isOnSale">Данный вариант находится в распродаже</key>
     <key alias="isAvailable">Данный вариант имеется в наличии и доступен покупателям</key>
     <key alias="noProduct">У Вас пока нет ни одного товара.</key>
-    <key alias="newProductPrompt">Создать новый товар сейчас? Достаточно нажать на конопку 'Новый товар'.</key>
+    <key alias="newProductPrompt">Создать новый товар сейчас? Достаточно нажать на кнопку 'Новый товар'.</key>
     <key alias="limitSelect">Чисто товаров для показа</key>
     <key alias="mustUniqueSku">Должен иметь уникальный артикул</key>
-    <key alias="inventoryWarning"><![CDATA[<p>ВАЖНО: если Вы выбираете сценарий отслеживания остатков, то остатки нужно установить вручную для каждого варианта товара (из списка ниже) после сохранния данонго товара. Однако, Вы можете установить величину базового остатка по-умолчанию, который применится ко <strong>всем вариантам товара</strong>.</p>]]></key>
+    <key alias="inventoryWarning"><![CDATA[<p>ВАЖНО: если Вы выбираете сценарий отслеживания остатков, то остатки нужно установить вручную для каждого варианта товара (из списка ниже), после сохранения данного товара. Однако, Вы можете установить величину базового остатка по-умолчанию, которая будет применена ко <strong>всем вариантам товара</strong>.</p>]]></key>
     <key alias="startingInventoryWarning"><![CDATA[(Будет установлен начальный остаток для <strong>всех вариантов товара</strong> на <strong>всех складах</strong>)]]></key>
     <key alias="productOnSale">Распродажа</key>
     <key alias="allowOutOfStockPurchase">Разрешить продажу товара 'не в наличии'</key>
@@ -491,7 +492,7 @@
     <key alias="salesTax">Налог</key>
     <key alias="authorized">Авторизован</key>
     <key alias="captured">Получен</key>
-    <key alias="paymentHistory"> История оплат</key>
+    <key alias="paymentHistory"> История платежей</key>
     <key alias="saleHistory">История продаж</key>
     <key alias="paymentHistoryHelper">Записи состояния для одного или нескольких платежей</key>
     <key alias="paymentProcessedBy">Платеж произведен через:</key>
@@ -526,7 +527,7 @@
       <key alias="editWarehouseHelper" >Изменить данные о складе</key>
       <key alias="editWarehouse" >Изменить склад</key>
       <key alias="shippingMethods" >Способы доставки</key>
-      <key alias="shippingMethodsHelper" >Добавить способы доставки в имеющийся регион или создать новвй регион</key>
+      <key alias="shippingMethodsHelper" >Добавить способы доставки в имеющийся регион или создать новый регион</key>
       <key alias="addCountry" >Добавить страну</key>
       <key alias="addCatalog">Добавить каталог</key>
       <key alias="selectCatalog">Выбрать каталог</key>
@@ -549,7 +550,7 @@
     <key alias="enterProduct">Укажите наименование товара</key>
     <key alias="enterOrder">Начните набирать номер заказа или наименование...</key>to
     <key alias="addStyle">Добавить стиль...</key>
-    <key alias="enterOffer">Укажите название спецпредложения</key>
+    <key alias="enterOffer">Укажите название спец. предложения</key>
   </area>
 
   <area alias="merchelloSettings">
@@ -568,7 +569,7 @@
     <key alias="globalShippable">Все товары продаются с доставкой</key>
     <key alias="globalTrackInventory"><![CDATA[Отслеживать количество для всех товаров и вариантов]]></key>
     <key alias="globalShippingIsTaxable">Стоимость доставки облагается налогом</key>
-    <key alias="globalTaxationApplication">Установить правила наогообложения</key>
+    <key alias="globalTaxationApplication">Установить правила налогообложения</key>
     <key alias="defaultCultureName">Культура (язык) по-умолчанию</key>
   </area>
 
@@ -685,7 +686,7 @@
     <key alias="payment" >Платеж</key>
     <key alias="addPaymentMethod" >Добавить метод</key>
     <key alias="resourceType" >Тип ресурса:</key>
-    <key alias="deletePayment" >Удалитьметод оплаты</key>
+    <key alias="deletePayment" >Удалить метод оплаты</key>
     <key alias="paymentMethod">Метод оплаты</key>
   </area>
   <area alias="merchelloPaymentMethod">
@@ -702,7 +703,7 @@
     <key alias="enterProductName">Задайте наименование вара</key>
     <key alias="dragAndReorder">Измените порядок свойств и вариантов перетаскиванием</key>
     <key alias="reorderVariants">Пересортировать</key>
-    <key alias="dragAndReorderHelper">Еслои Вы пересортируете свойства и варианты, изменится порядок их отображения в магазине. Перетаскивайте свойства (напр. цет или размер) вертикально, а варианты (напр. мужской или женский) горизонтально.</key>
+    <key alias="dragAndReorderHelper">Если Вы пересортируете свойства и варианты, изменится порядок их отображения в магазине. Перетаскивайте свойства (напр. 'цвет' или 'размер') вертикально, а варианты (напр. 'мужской' или 'женский') горизонтально.</key>
     <key alias="changePrices">Изменить цены</key>
     <key alias="updateInventory">Обновить количество</key>
     <key alias="toggleAvailable">Товар доступен</key>
@@ -731,7 +732,7 @@
     <key alias="notificationSalesConfirmation">Письмо о подтверждении покупки отослано %0%</key>
     <key alias="paymentCaptured">Успешно получена %0% %1%</key>
     <key alias="paymentAuthorize">Успешно авторизованы для получения %0% %1%</key>
-    <key alias="paymentVoided">Полатеж обнулен</key>
+    <key alias="paymentVoided">Платеж обнулен</key>
     <key alias="paymentDeclined">Платеж отклонен</key>
     <key alias="paymentRefunded">Мы вернули %0% %1% платежа</key>
     <key alias="invoiceDeleted">Счет %0% был удален</key>

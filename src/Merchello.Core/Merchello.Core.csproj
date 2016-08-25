@@ -359,11 +359,12 @@
     <Compile Include="Configuration\Outline\CurrencyFormatCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />
     <Compile Include="Configuration\Outline\CustomerElement.cs" />
+    <Compile Include="Configuration\Outline\EntityCollectionProviderCollection.cs" />
     <Compile Include="Configuration\Outline\EntityCollectionProviderElement.cs" />
+    <Compile Include="Configuration\Outline\EntitySpecificationCollectionAttributesElement.cs" />
     <Compile Include="Configuration\Outline\PluggableCollection.cs" />
     <Compile Include="Configuration\Outline\PluggableObjectElement.cs" />
     <Compile Include="Configuration\Outline\RouteElement.cs" />
-    <Compile Include="Configuration\Outline\SelfManagedEntityCollectionProviderCollection.cs" />
     <Compile Include="Configuration\Outline\StrategyElement.cs" />
     <Compile Include="Configuration\Outline\TreeCollection.cs" />
     <Compile Include="Configuration\Outline\ReplacementCollection.cs" />
@@ -385,7 +386,10 @@
     <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
     <Compile Include="EntityCollections\ICachedQueryableEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\IEntitySpecifiedFilterCollectionProvider.cs" />
+    <Compile Include="EntityCollections\IProductSpecificationCollectionProvider.cs" />
     <Compile Include="EntityCollections\IQueryableEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\ProductSpecifiedFilterCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\Providers\DynamicFulfilledOrderCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\DynamicOpenOrderCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\DynamicUnfulfilledOrderCollectionProvider.cs" />
@@ -394,6 +398,7 @@
     <Compile Include="EntityCollections\Providers\DynamicUnpaidInvoiceCollectionProvider.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EntityCollections\Providers\ProductSpecifiedFilterCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticCustomerCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticEntityCollectionCollectionProvider.cs">
       <SubType>Code</SubType>
@@ -468,6 +473,8 @@
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityBase\DeployableEntity.cs" />
     <Compile Include="Models\EntityCollection.cs" />
+    <Compile Include="Models\EntitySpecifiedFilterCollection.cs" />
+    <Compile Include="Models\Interfaces\IEntitySpecifiedFilterCollection.cs" />
     <Compile Include="Models\Interfaces\IHasNotes.cs" />
     <Compile Include="Models\Interfaces\INote.cs" />
     <Compile Include="Models\Note.cs" />
@@ -557,6 +564,7 @@
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
+    <Compile Include="Models\SpecifiedFilterAttributeCollection.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />
@@ -618,6 +626,7 @@
     <Compile Include="Observation\MonitorForAttribute.cs" />
     <Compile Include="Observation\Unsubscriber.cs" />
     <Compile Include="PathHelper.cs" />
+    <Compile Include="Persistence\DatabaseExtensions.cs" />
     <Compile Include="Persistence\Factories\EntityUseCountFactory.cs" />
     <Compile Include="Persistence\Factories\NoteFactory.cs" />
     <Compile Include="Persistence\Factories\AuditLogFactory.cs" />
@@ -646,6 +655,7 @@
     <Compile Include="Persistence\Migrations\MerchelloMigrationBase.cs" />
     <Compile Include="Persistence\Migrations\MerchelloMigrationContext.cs" />
     <Compile Include="Persistence\Migrations\MigrationResolver.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeZero\AddEntityCollectionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\AddEntityCollectionTypeField.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateCustomer2EntityCollectionTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneElevenZero\CreateInvoice2EntityCollectionTable.cs" />
@@ -662,6 +672,7 @@
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateDetachedPublishedContentTypeTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\CreateProductVariantDetachedContentTable.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionOneTwelveZero\InsertNewMerchelloSettingDefaultExtendedContentCulture.cs" />
+    <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoThreeZero\AlterAppliedPaymentDescriptionFieldSize.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProduct2ProductOptionColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductAttributeColumns.cs" />
     <Compile Include="Persistence\Migrations\Upgrades\TargetVersionTwoTwoZero\AddProductOptionColumns.cs" />

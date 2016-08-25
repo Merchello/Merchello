@@ -830,6 +830,26 @@
         }
 
         /// <summary>
+        /// Returns true if the entity exists in the at least one of the static collections.
+        /// </summary>
+        /// <param name="entityKey">
+        /// The entity key.
+        /// </param>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool ExistsInCollection(Guid entityKey, IEnumerable<Guid> collectionKeys)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.ExistsInCollection(entityKey, collectionKeys.ToArray());
+            }
+        }
+
+        /// <summary>
         /// The get invoices from collection.
         /// </summary>
         /// <param name="collectionKey">
@@ -861,6 +881,45 @@
             {
                 return repository.GetFromCollection(
                     collectionKey,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets distinct customers from multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{IInvoice}"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(
+                    collectionKeys.ToArray(),
                     page,
                     itemsPerPage,
                     this.ValidateSortByField(sortBy),
@@ -904,6 +963,50 @@
             {
                 return repository.GetFromCollection(
                     collectionKey,
+                    searchTerm,
+                    page,
+                    itemsPerPage,
+                    this.ValidateSortByField(sortBy),
+                    sortDirection);
+            }
+        }
+
+        /// <summary>
+        /// Gets distinct filtered customers from multiple collections.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection key.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page"/>.
+        /// </returns>
+        public Page<ICustomer> GetFromCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateCustomerRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetFromCollection(
+                    collectionKeys.ToArray(),
                     searchTerm,
                     page,
                     itemsPerPage,

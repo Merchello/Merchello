@@ -4,13 +4,18 @@
 
     using Merchello.Core;
     using Merchello.Core.Configuration;
+    using Merchello.Core.Events;
     using Merchello.Core.Gateways.Payment;
+    using Merchello.Core.Models;
+    using Merchello.Core.Services;
     using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Models;
     using Umbraco.Core.Services;
+
+    using Notification = Merchello.Core.Notification;
 
     /// <summary>
     /// Registers Umbraco event handlers.
@@ -46,7 +51,36 @@
             ProductContentFactory.Initializing += ProductContentFactoryOnInitializing;
 
             MemberService.Saved += MemberServiceSaved;
+
+            // ShipmentService.StatusChanged += ShipmentServiceStatusChanged;
         }
+
+        ///// <summary>
+        ///// Example shipment shipped / delivered notification handler
+        ///// </summary>
+        ///// <param name="sender">
+        ///// The sender.
+        ///// </param>
+        ///// <param name="e">
+        ///// The <see cref="StatusChangeEventArgs{IShipment}"/>
+        ///// </param>
+        //private void ShipmentServiceStatusChanged(IShipmentService sender, StatusChangeEventArgs<IShipment> e)
+        //{
+        //    var validKeys = new[] 
+        //                    {
+        //                        Core.Constants.DefaultKeys.ShipmentStatus.Delivered,
+        //                        Core.Constants.DefaultKeys.ShipmentStatus.Shipped
+        //                    };
+            
+        //    foreach (var shipment in e.StatusChangedEntities)
+        //    {
+        //        if (!validKeys.Contains(shipment.ShipmentStatus.Key)) continue;
+
+        //        LogHelper.Info<UmbracoEventHandler>(string.Format("Raising notification trigger for shippment no. {0}", shipment.ShipmentNumber));
+
+        //        Notification.Trigger("OrderShipped", shipment, Core.Observation.Topic.Notifications);
+        //    }
+        //}
 
         /// <summary>
         /// Handles Umbraco Started.
