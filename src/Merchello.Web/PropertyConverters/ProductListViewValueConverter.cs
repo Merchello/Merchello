@@ -75,7 +75,7 @@
             try
             {
                 var key = new Guid(collectionKey);
-                return new ProductContentListView(key, merchello.TypedProductContentFromCollection(key));
+                return new ProductContentListView(key, merchello.Query.Product.TypedProductContentFromCollection(key));
             }
             catch (Exception ex)
             {
