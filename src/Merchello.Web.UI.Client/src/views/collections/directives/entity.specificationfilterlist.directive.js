@@ -20,6 +20,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 scope.noResults = '';
                 scope.collections = [];
                 scope.providers = [];
+                scope.hideDeletes = [];
 
                 /// PRIVATE
                 var yes = '';
@@ -52,7 +53,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
 
                 scope.add = function() {
                     var dialogData = {
-                        providers: scope.providers,
+                        providers: getValidProviders(),
                         entityType: scope.entityType,
                         selectedProvider: undefined,
                     };
@@ -153,6 +154,11 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                         attributes = data[2];
                         scope.noResults = data[3];
                         scope.providers = entityCollectionProviderDisplayBuilder.transform(data[4]);
+                        scope.hideDeletes = _.pluck(
+                                                _.filter(scope.providers, function(p) {
+                                                    if (p.managesUniqueCollection) return p;
+                                                }),
+                                            'key');
                     });
 
                     scope.$watch('preValuesLoaded', function(nv, ov) {
@@ -167,6 +173,28 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                         }
                     });
                 }
+
+                scope.showDelete = function(spec) {
+
+                    return !_.find(scope.hideDeletes, function(k) { return k === spec.providerKey; });
+                }
+
+                function getValidProviders() {
+                    // providers that manage a unique collection may only ever be added once and should
+                    // be automatically added by the bootstrapping
+                    return _.filter(scope.providers, function(p) {
+
+                        var usedByCollection = _.find(scope.collections, function (c) {
+                           return c.providerKey === p.key;
+                        });
+
+                        // this is valid
+                        if (!usedByCollection || (usedByCollection && !p.managesUniqueCollection)) {
+                            return p;
+                        }
+                    });
+                }
+
 
                 function load() {
                     entityCollectionResource.getEntitySpecifiedFilterCollections(scope.entityType).then(function(results) {

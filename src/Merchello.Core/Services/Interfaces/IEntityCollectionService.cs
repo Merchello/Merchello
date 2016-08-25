@@ -327,5 +327,14 @@
         /// The <see cref="bool"/>.
         /// </returns>
         bool HasChildEntityCollections(Guid collectionKey);
+
+        /// <summary>
+        /// Gets the count of collections managed by a provider
+        /// </summary>
+        /// <param name="providerKey">The provider key</param>
+        /// <returns>
+        /// The count of collections managed by a provider
+        /// </returns>
+        int CollectionCountManagedByProvider(Guid providerKey);
     }
 }

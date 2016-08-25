@@ -166,6 +166,8 @@
         /// </returns>
         public IEnumerable<Type> GetProviderTypesForEntityType(EntityType entityType)
         {
+            this.EnsureInitialized();
+
             return
                 _instanceTypes.Where(
                     x =>
@@ -305,6 +307,8 @@
         /// </returns>
         private IEnumerable<EntityCollectionProviderAttribute> GetProviderAttribute(Type type)
         {
+            this.EnsureInitialized();
+
             var foundTypes = _instanceTypes.Where(type.IsAssignableFrom);
             var typesArray = foundTypes as Type[] ?? foundTypes.ToArray();
             return typesArray.Any() ?
@@ -365,6 +369,22 @@
         }
 
         /// <summary>
+        /// Ensures the provider.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool EnusureUniqueProvider(Guid providerKey)
+        {
+            //if (_entityCollectionProviderCache.Any(x => x.Value.GetCustomAttribute<EntityCollectionProviderAttribute>(false).Key == providerKey)) return false;
+           
+            return _merchelloContext.Services.EntityCollectionService.CollectionCountManagedByProvider(providerKey) <= 1;
+        }
+
+        /// <summary>
         /// Initializes the resolver.
         /// </summary>
         private void Initialize()
@@ -397,12 +417,16 @@
             foreach (var reg in unregistered)
             {
                 var att = reg.GetCustomAttribute<EntityCollectionProviderAttribute>(false);
-                var collection = ((EntityCollectionService)_merchelloContext.Services.EntityCollectionService).CreateEntityCollectionWithKey(
-                    att.EntityTfKey,
-                    att.Key,
-                    att.Name);
 
-                this.AddOrUpdateCache(collection.Key, reg);
+                if (EnusureUniqueProvider(att.Key))
+                {
+                    var collection = ((EntityCollectionService)_merchelloContext.Services.EntityCollectionService).CreateEntityCollectionWithKey(
+                        att.EntityTfKey,
+                        att.Key,
+                        att.Name);
+
+                    this.AddOrUpdateCache(collection.Key, reg);
+                }
             }
 
             IsInitialized = true;

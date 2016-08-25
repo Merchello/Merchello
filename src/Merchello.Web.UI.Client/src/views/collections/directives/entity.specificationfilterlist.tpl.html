@@ -20,7 +20,7 @@
                     <td><a prevent-default data-ng-click="edit(spec)">{{getColumnValue('name', spec)}}</a></td>
                     <td data-ng-bind="getColumnValue('attributes', spec)"></td>
                     <td class="text-right">
-                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="true" do-edit="edit(spec)" do-delete="delete(spec)"></merchello-icon-bar>
+                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(spec)" do-edit="edit(spec)" do-delete="delete(spec)"></merchello-icon-bar>
                     </td>
                 </tr>
                 </tbody>

@@ -406,6 +406,7 @@
     <Compile Include="EntityCollections\Providers\StaticInvoiceCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticProductCollectionProvider.cs" />
     <Compile Include="EntityCollections\QueryableEntityCollectionProviderBase.cs" />
+    <Compile Include="EntityCollections\StaticProductCollectionProviderBase.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Events\InitializedEventArgs.cs" />
     <Compile Include="Events\InitializingEventArgs.cs" />
