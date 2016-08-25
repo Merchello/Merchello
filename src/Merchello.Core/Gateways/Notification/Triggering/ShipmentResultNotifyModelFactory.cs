@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Gateways.Notification.Triggering
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core.Models;
@@ -61,12 +62,20 @@
         /// <param name="shipment">
         /// The shipment.
         /// </param>
+        /// <param name="contacts">
+        /// The collection of contact addresses
+        /// </param>
         /// <returns>
         /// The <see cref="IShipmentResultNotifyModel"/>.
         /// </returns>
-        public IShipmentResultNotifyModel Build(IShipment shipment)
+        public IShipmentResultNotifyModel Build(IShipment shipment, IEnumerable<string> contacts)
         {
-            var notifyModel = new ShipmentResultNotifyModel() { Shipment = shipment };
+            var notifyModel = new ShipmentResultNotifyModel()
+                                  {
+                                      Shipment = shipment,
+                                      Contacts = contacts == null ? new string[] { } : contacts.ToArray()
+                                    };
+
             var item = shipment.Items.FirstOrDefault(x => !x.ContainerKey.Equals(Guid.Empty));
             if (item != null)
             {

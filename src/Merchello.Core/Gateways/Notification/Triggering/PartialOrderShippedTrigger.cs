@@ -33,7 +33,7 @@
         {
             if (model == null || !model.Items.Any()) return;
 
-            var notifyModel = _factory.Value.Build(model);
+            var notifyModel = _factory.Value.Build(model, contacts);
 
             NotifyMonitors(notifyModel);
         }
