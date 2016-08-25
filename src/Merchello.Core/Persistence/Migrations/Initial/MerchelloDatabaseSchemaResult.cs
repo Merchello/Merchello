@@ -9,6 +9,7 @@
     using Merchello.Core.Persistence.DatabaseModelDefinitions;
 
     using Umbraco.Core;
+    using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Migrations.Initial;
 
     using Constants = Merchello.Core.Constants;
@@ -18,11 +19,23 @@
     /// </summary>
     public class MerchelloDatabaseSchemaResult : DatabaseSchemaResult
     {
+		/// <summary>
+		/// The <see cref="Database"/>.
+		/// </summary>
+		private readonly Database _database;
 
-        /// <summary>
-        /// Gets or sets the merchello errors.
-        /// </summary>
-        public IEnumerable<Tuple<string, string>> MerchelloErrors 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MerchelloDatabaseSchemaResult"/> class.
+		/// </summary>
+		public MerchelloDatabaseSchemaResult()
+	    {
+		    this._database = ApplicationContext.Current.DatabaseContext.Database;
+		}
+
+		/// <summary>
+		/// Gets or sets the merchello errors.
+		/// </summary>
+		public IEnumerable<Tuple<string, string>> MerchelloErrors 
         {
             get
             {
@@ -112,8 +125,16 @@
                 return new Version(2, 1, 0);
             }
 
+			// SD: Not a very elegant solution to the problem of discovering the size of an existing column
+	        var merchAppliedPaymentDescriptionSize =
+		        this._database.ExecuteScalar<int>(
+			        "SELECT character_maximum_length FROM information_schema.columns WHERE table_name = 'merchAppliedPayment' AND column_name = 'description'");
+			if (merchAppliedPaymentDescriptionSize != 500)			
+			{
+				return new Version(2, 2, 0);
+	        }
 
-            //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
+	        //// If Errors is empty or if TableDefinitions tables + columns correspond to valid tables + columns then we're at current version
             if (this.MerchelloErrors.Any() == false ||
                 (this.TableDefinitions.All(x => this.ValidTables.Contains(x.Name))
                  && this.TableDefinitions.SelectMany(definition => definition.Columns).All(x => this.ValidColumns.Contains(x.Name))))
