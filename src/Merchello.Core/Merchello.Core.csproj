@@ -389,6 +389,7 @@
     <Compile Include="EntityCollections\IEntitySpecifiedFilterCollectionProvider.cs" />
     <Compile Include="EntityCollections\IProductSpecificationCollectionProvider.cs" />
     <Compile Include="EntityCollections\IQueryableEntityCollectionProvider.cs" />
+    <Compile Include="EntityCollections\ProductSpecifiedFilterCollectionProviderBase.cs" />
     <Compile Include="EntityCollections\Providers\DynamicFulfilledOrderCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\DynamicOpenOrderCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\DynamicUnfulfilledOrderCollectionProvider.cs" />
