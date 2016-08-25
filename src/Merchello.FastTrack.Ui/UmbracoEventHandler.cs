@@ -52,35 +52,35 @@
 
             MemberService.Saved += MemberServiceSaved;
 
-            ShipmentService.StatusChanged += ShipmentServiceStatusChanged;
+            // ShipmentService.StatusChanged += ShipmentServiceStatusChanged;
         }
 
-        /// <summary>
-        /// Example shipment shipped / delivered notification handler
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The <see cref="StatusChangeEventArgs{IShipment}"/>
-        /// </param>
-        private void ShipmentServiceStatusChanged(IShipmentService sender, StatusChangeEventArgs<IShipment> e)
-        {
-            var validKeys = new[] 
-                            {
-                                Core.Constants.DefaultKeys.ShipmentStatus.Delivered,
-                                Core.Constants.DefaultKeys.ShipmentStatus.Shipped
-                            };
+        ///// <summary>
+        ///// Example shipment shipped / delivered notification handler
+        ///// </summary>
+        ///// <param name="sender">
+        ///// The sender.
+        ///// </param>
+        ///// <param name="e">
+        ///// The <see cref="StatusChangeEventArgs{IShipment}"/>
+        ///// </param>
+        //private void ShipmentServiceStatusChanged(IShipmentService sender, StatusChangeEventArgs<IShipment> e)
+        //{
+        //    var validKeys = new[] 
+        //                    {
+        //                        Core.Constants.DefaultKeys.ShipmentStatus.Delivered,
+        //                        Core.Constants.DefaultKeys.ShipmentStatus.Shipped
+        //                    };
             
-            foreach (var shipment in e.StatusChangedEntities)
-            {
-                if (!validKeys.Contains(shipment.ShipmentStatus.Key)) continue;
+        //    foreach (var shipment in e.StatusChangedEntities)
+        //    {
+        //        if (!validKeys.Contains(shipment.ShipmentStatus.Key)) continue;
 
-                LogHelper.Info<UmbracoEventHandler>(string.Format("Raising notification trigger for shippment no. {0}", shipment.ShipmentNumber));
+        //        LogHelper.Info<UmbracoEventHandler>(string.Format("Raising notification trigger for shippment no. {0}", shipment.ShipmentNumber));
 
-                Notification.Trigger("OrderShipped", shipment, Core.Observation.Topic.Notifications);
-            }
-        }
+        //        Notification.Trigger("OrderShipped", shipment, Core.Observation.Topic.Notifications);
+        //    }
+        //}
 
         /// <summary>
         /// Handles Umbraco Started.
