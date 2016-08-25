@@ -1,9 +1,8 @@
-﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargerVersionTwoThreeZero
+﻿namespace Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoThreeZero
 {
     using System.Linq;
 
     using Merchello.Core.Configuration;
-    using Merchello.Core.Persistence.Migrations.Upgrades.TargetVersionTwoTwoZero;
 
     using Umbraco.Core;
     using Umbraco.Core.Persistence.DatabaseAnnotations;
@@ -21,7 +20,7 @@
         public override void Up()
         {
             var database = ApplicationContext.Current.DatabaseContext.Database;
-            var columns = SqlSyntax.GetColumnsInSchema(database).ToArray();
+            var columns = this.SqlSyntax.GetColumnsInSchema(database).ToArray();
 
             // 'isFilter' column
             if (
@@ -30,10 +29,10 @@
                     x.TableName.InvariantEquals("merchEntityCollection") && x.ColumnName.InvariantEquals("extendedData"))
                 == false)
             {
-                Logger.Info(typeof(AddEntityCollectionColumns), "Adding extendData column to merchEntityCollection table.");
+                this.Logger.Info(typeof(AddEntityCollectionColumns), "Adding extendData column to merchEntityCollection table.");
 
-                var textType = SqlSyntax.GetSpecialDbType(SpecialDbTypes.NTEXT);
-                Create.Column("extendedData").OnTable("merchEntityCollection").AsCustom(textType).Nullable();
+                var textType = this.SqlSyntax.GetSpecialDbType(SpecialDbTypes.NTEXT);
+                this.Create.Column("extendedData").OnTable("merchEntityCollection").AsCustom(textType).Nullable();
             }
 
             // 'isFilter' column
@@ -41,10 +40,10 @@
                   x => x.TableName.InvariantEquals("merchEntityCollection") && x.ColumnName.InvariantEquals("isFilter"))
               == false)
             {
-                Logger.Info(typeof(AddEntityCollectionColumns), "Adding isFilter column to merchEntityCollection table.");
+                this.Logger.Info(typeof(AddEntityCollectionColumns), "Adding isFilter column to merchEntityCollection table.");
 
                 //// Add the new 'isDefaultChoice' column
-                Create.Column("isFilter").OnTable("merchEntityCollection").AsBoolean().WithDefaultValue(false);
+                this.Create.Column("isFilter").OnTable("merchEntityCollection").AsBoolean().WithDefaultValue(false);
             }
         }
 

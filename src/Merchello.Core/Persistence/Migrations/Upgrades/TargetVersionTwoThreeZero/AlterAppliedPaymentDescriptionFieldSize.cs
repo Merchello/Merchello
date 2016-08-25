@@ -16,21 +16,27 @@
 	/// </remarks>
 	/// <seealso cref="Umbraco.Core.Persistence.Migrations.MigrationBase" />
 	/// <seealso cref="Merchello.Core.Persistence.Migrations.IMerchelloMigration" />
-	[Migration("2.3.0", 0, MerchelloConfiguration.MerchelloMigrationName)]
+	[Migration("2.3.0", 1, MerchelloConfiguration.MerchelloMigrationName)]
 	public class AlterAppliedPaymentDescriptionFieldSize : MerchelloMigrationBase, IMerchelloMigration
 	{
 		/// <summary>
 		/// Updates the column size
 		/// </summary>
-		/// <exception cref="System.NotImplementedException"></exception>
 		public override void Up()
 		{
 			var database = ApplicationContext.Current.DatabaseContext.Database;
+            
 			var databaseSchemaHelper = new DatabaseSchemaHelper(database, this.Logger, this.SqlSyntax);
 			if (databaseSchemaHelper.TableExist("merchAppliedPayment"))
 			{
-				// Update the column to allow for 500 characters instead of 255 which proved too small
-				Alter.Table("merchAppliedPayment").AlterColumn("description").AsString(500).NotNullable();
+                // Add another assertion that the field size has not already been changed to 500 
+                // and some other migration failed which flagged the version to 2.2.0 or earlier
+			    var size = database.GetDbTableColumnSize("merchAppliedPayment", "description");
+
+                if (size == 500) return;
+
+                // Update the column to allow for 500 characters instead of 255 which proved too small
+                Alter.Table("merchAppliedPayment").AlterColumn("description").AsString(500).NotNullable();
 			}
 		}
 

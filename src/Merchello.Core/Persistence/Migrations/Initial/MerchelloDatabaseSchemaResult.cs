@@ -62,7 +62,7 @@
         /// <remarks>
         /// These can be helpful when determining the Merchello Version
         /// </remarks>
-        internal IEnumerable<StoreSettingDto> StoreSettings { get; set; } 
+        internal IEnumerable<StoreSettingDto> StoreSettings { get; set; }
 
         /// <summary>
         /// Determines the version of the currently installed database.
@@ -71,6 +71,9 @@
         /// A <see cref="Version"/> with Major and Minor values for 
         /// non-empty database, otherwise "0.0.0" for empty databases.
         /// </returns>
+        /// <remarks>
+        /// TODO these checks could be moved into a task chain for easier maintenance
+        /// </remarks>
         public new Version DetermineInstalledVersion()
         {
             //// If (ValidTables.Count == 0) database is empty and we return -> new Version(0, 0, 0);
@@ -127,9 +130,9 @@
 
 			// SD: Not a very elegant solution to the problem of discovering the size of an existing column
 			// Should perhaps look to refactor this into something reusable
-	        var merchAppliedPaymentDescriptionSize =
-		        this._database.ExecuteScalar<int>(
-			        "SELECT character_maximum_length FROM information_schema.columns WHERE table_name = 'merchAppliedPayment' AND column_name = 'description'");
+            // RSS: Added a DatabaseExtensions class and moved SD code into extension method GetDbTableColumnSize using 
+            // parameratized SQL query  
+            var merchAppliedPaymentDescriptionSize = _database.GetDbTableColumnSize("merchAppliedPayment", "description");
 					
             if (!this.ValidColumns.Contains("merchEntityCollection,isFilter")
                 || !this.ValidColumns.Contains("merchEntityCollection,extendedData") 
