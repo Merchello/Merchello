@@ -11,9 +11,9 @@
     public interface ICustomerSalesHistory : IEnumerable<InvoiceDisplay>
     {
         /// <summary>
-        /// Gets or sets the customer key.
+        /// Gets the customer key.
         /// </summary>
-        Guid CustomerKey { get; set; }
+        Guid CustomerKey { get; }
 
         /// <summary>
         /// Gets the total outstanding.

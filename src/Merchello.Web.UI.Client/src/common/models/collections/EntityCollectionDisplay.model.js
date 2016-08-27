@@ -21,5 +21,26 @@ var EntityCollectionDisplay = function() {
 };
 
 
+EntityCollectionDisplay.prototype = (function() {
+
+    function clone() {
+        var clone = angular.extend(new EntityCollectionDisplay(), this);
+        if (clone.attributeCollections) {
+            var collections = clone.attributeCollections;
+            clone.attributeCollections = [];
+            angular.forEach(collections, function(ac) {
+                var atclone = angular.extend(new EntityCollectionDisplay(), ac);
+                clone.attributeCollections.push(atclone);
+            });
+        }
+        return clone;
+    }
+
+    return {
+      clone: clone
+    };
+}());
+
+
 angular.module('merchello.models').constant('EntityCollectionDisplay', EntityCollectionDisplay);
 

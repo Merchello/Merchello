@@ -20,6 +20,7 @@
     /// </summary>
     public static class EntityCollectionExtensions
     {
+
         /// <summary>
         /// Gets the <see cref="EntityType"/> managed by the collection.
         /// </summary>

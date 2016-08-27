@@ -22,6 +22,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 scope.providers = [];
                 scope.hideDeletes = [];
 
+
                 /// PRIVATE
                 var yes = '';
                 var no = '';
@@ -37,6 +38,10 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     };
                 }
 
+                scope.showDelete = function(spec) {
+                    return !_.find(scope.hideDeletes, function(k) { return k === spec.providerKey; });
+                }
+
                 scope.delete = function(collection) {
                     var dialogData = {
                         name: collection.name,
@@ -46,7 +51,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/delete.confirmation.html',
                         show: true,
-                        callback: processDeleteOption,
+                        callback: processDeleteCollection,
                         dialogData: dialogData
                     });
                 }
@@ -79,17 +84,9 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                             attributeTemplate.entityTfKey = provider.entityTfKey;
                             attributeTemplate.isFilter = true;
 
-                            var clone = angular.extend(entityCollectionDisplayBuilder.createDefault(), collection);
-                            var collections = clone.attributeCollections;
-                            clone.attributeCollections = [];
-                            angular.forEach(collections, function(ac) {
-                               var atclone = angular.extend(entityCollectionDisplayBuilder.createDefault(), ac);
-                                clone.attributeCollections.push(atclone);
-                            });
-
                             var dialogData = {
                                 provider: provider,
-                                specCollection: clone,
+                                specCollection: collection.clone(),
                                 attributeTemplate: attributeTemplate,
                                 entityType: scope.entityType
                             };
@@ -99,13 +96,37 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
 
 
                             dialogService.open({
-                                template: template,
+                                template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specfilterattributecollection.addedit.html',
                                 show: true,
-                                callback: processEditOption,
+                                callback: processEditCollection,
                                 dialogData: dialogData
                             });
                     });
 
+                }
+
+                scope.openSort = function() {
+                    var clones = [];
+                    angular.forEach(scope.collections, function(c) {
+                        clones.push(c.clone());
+                    });
+
+                    var dialogData = {
+                        collections: clones
+                    };
+
+                    dialogService.open({
+                        template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/sort.specfiltercollections.html',
+                        show: true,
+                        callback: processSortCollections,
+                        dialogData: dialogData
+                    });
+                }
+
+                function processSortCollections(collections) {
+                    entityCollectionResource.updateSortOrders(collections).then(function() {
+                       load();
+                    });
                 }
 
                 function openAddCollection(provider) {
@@ -121,22 +142,40 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     dialogService.open({
                         template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/specfiltercollection.add.html',
                         show: true,
-                        callback: processAddAttribute,
+                        callback: processAddCollection,
                         dialogData: dialogData
                     });
                 }
 
-                function processDeleteOption(dialogData) {
-                    entityCollectionResource.deleteEntityCollection(dialogData.collection.key).then(function(result) {
-                        load();
+                function processDeleteCollection(dialogData) {
+                    var remover = dialogData.collection;
+                    var updateSorts = _.filter(scope.collections, function (c) {
+                       if (c.sortOrder > remover.sortOrder) {
+                           c.sortOrder = c.sortOrder - 1;
+                           return c;
+                       }
+                    });
+                    scope.collections = _.reject(scope.collections, function (rem) { return rem.key === remover.key });
+
+                    var promises = [entityCollectionResource.deleteEntityCollection(remover.key)];
+
+                    if (updateSorts.length > 0) {
+                        promises.push(entityCollectionResource.updateSortOrders(updateSorts));
+                    }
+
+                    $q.all(promises).then(function() {
+                       load();
                     });
                 }
 
-                function processAddAttribute(dialogData) {
-                    scope.doAdd()(dialogData.attribute);
+                function processAddCollection(dialogData) {
+                    var collection = dialogData.attribute;
+                    collection.sortOrder = scope.collections.length;
+                    console.info(collection);
+                    scope.doAdd()(collection);
                 }
 
-                function processEditOption(dialogData) {
+                function processEditCollection(dialogData) {
                     scope.doEdit()(dialogData.specCollection);
                 }
 
@@ -154,11 +193,12 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                         attributes = data[2];
                         scope.noResults = data[3];
                         scope.providers = entityCollectionProviderDisplayBuilder.transform(data[4]);
-                        scope.hideDeletes = _.pluck(
-                                                _.filter(scope.providers, function(p) {
-                                                    if (p.managesUniqueCollection) return p;
-                                                }),
-                                            'key');
+                        scope.hideDeletes =
+                            _.pluck(
+                                _.filter(scope.providers, function(p) {
+                                    if (p.managesUniqueCollection) return p;
+                                }),
+                            'key');
                     });
 
                     scope.$watch('preValuesLoaded', function(nv, ov) {
@@ -174,10 +214,6 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     });
                 }
 
-                scope.showDelete = function(spec) {
-
-                    return !_.find(scope.hideDeletes, function(k) { return k === spec.providerKey; });
-                }
 
                 function getValidProviders() {
                     // providers that manage a unique collection may only ever be added once and should
@@ -196,12 +232,14 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 }
 
 
+
+
                 function load() {
                     entityCollectionResource.getEntitySpecifiedFilterCollections(scope.entityType).then(function(results) {
                         scope.collections = entityCollectionDisplayBuilder.transform(results);
+                        console.info(scope.collections);
                         scope.loaded = true;
                     });
-
                 }
 
                 init();

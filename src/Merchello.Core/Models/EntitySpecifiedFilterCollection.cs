@@ -26,6 +26,7 @@
             this.Name = collection.Name;
             this.IsFilter = collection.IsFilter;
             this.ExtendedData = collection.ExtendedData;
+            this.SortOrder = collection.SortOrder;
             this.AttributeCollections = new SpecifiedFilterAttributeCollection();
             this.ResetDirtyProperties();
         }

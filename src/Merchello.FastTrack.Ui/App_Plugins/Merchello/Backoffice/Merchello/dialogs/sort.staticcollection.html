@@ -4,12 +4,14 @@
         <table class="table entity-collection-table">
             <thead>
             <tr>
+                <th></th>
                 <th><localize key="merchelloTableCaptions_name" /></th>
                 <th><localize key="merchelloTableCaptions_sortOrder" /></th>
             </tr>
             </thead>
             <tbody data-ng-show="entityCollections.length > 0" ui-sortable="sortableCollections" data-ng-model="entityCollections">
             <tr class="entity-collections sortable" data-ng-repeat="collection in entityCollections">
+                <td><merchello-sort-icon></merchello-sort-icon></td>
                 <td>{{ collection.name }}</td>
                 <td>{{ collection.sortOrder }}</td>
             </tr>

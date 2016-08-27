@@ -15,7 +15,6 @@ angular.module('merchello.directives').directive('entitySpecFilterAssociation',
 
                 var auto = ('autoSave' in attr && 'doSave' in attr) ? scope.autoSave : false;
 
-                console.info(scope.doSave);
 
                 // this is used directly from the embedded directive not when the directive is used in a dialog
                 scope.save = function(att) {
