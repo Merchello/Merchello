@@ -6,6 +6,8 @@
 
     using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Core.Models;
+    using Merchello.Core.Models.Interfaces;
     using Merchello.Web.Models.Ui;
     using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Models.VirtualContent;

@@ -28,7 +28,7 @@
             {
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(ms, obj);
-                ms.Position = 0;
+                ms.Seek(0, SeekOrigin.Begin);
 
                 return (T)formatter.Deserialize(ms);
             }

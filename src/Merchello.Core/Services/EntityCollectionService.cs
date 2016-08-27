@@ -566,6 +566,22 @@
         }
 
         /// <summary>
+        /// Gets the count of collections managed by a provider
+        /// </summary>
+        /// <param name="providerKey">The provider key</param>
+        /// <returns>
+        /// The count of collections managed by a provider
+        /// </returns>
+        public int CollectionCountManagedByProvider(Guid providerKey)
+        {
+            using (var repostitory = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
+            {
+                var query = Query<IEntityCollection>.Builder.Where(x => x.ProviderKey == providerKey);
+                return repostitory.Count(query);
+            }
+        }
+
+        /// <summary>
         /// Determines if a collection exists.
         /// </summary>
         /// <param name="key">
@@ -839,7 +855,6 @@
                 return repository.GetEntitySpecificationCollection(key);
             }
         }
-
 
         /// <summary>
         /// The validate sort by field.

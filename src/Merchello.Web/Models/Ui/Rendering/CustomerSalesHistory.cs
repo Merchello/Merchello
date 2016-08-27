@@ -40,9 +40,9 @@
         }
 
         /// <summary>
-        /// Gets or sets the customer key.
+        /// Gets the customer key.
         /// </summary>
-        public Guid CustomerKey { get; set; }
+        public Guid CustomerKey { get; internal set; }
 
         /// <summary>
         /// Gets the total purchases.

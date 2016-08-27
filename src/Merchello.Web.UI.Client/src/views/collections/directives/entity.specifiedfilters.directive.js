@@ -50,7 +50,6 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                 }
 
                 function addAssociation(associations) {
-                    console.info(associations);
                     if (!angular.isArray(associations)) return;
                     if (associations.length > 0) {
                         scope.ready = false;

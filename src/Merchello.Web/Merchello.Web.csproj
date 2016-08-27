@@ -375,6 +375,8 @@
     <Compile Include="Models\Ui\IWishListModel.cs" />
     <Compile Include="Models\Ui\Rendering\CustomerSalesHistory.cs" />
     <Compile Include="Models\Ui\Rendering\ICustomerSalesHistory.cs" />
+    <Compile Include="Models\Ui\Rendering\IFilterCollection.cs" />
+    <Compile Include="Models\Ui\Rendering\IProductFilter.cs" />
     <Compile Include="Models\Ui\Rendering\ProductCollection.cs" />
     <Compile Include="Models\Ui\Async\AsyncResponse.cs" />
     <Compile Include="Models\Ui\Async\IEmitsBasketItemCount.cs" />
@@ -402,6 +404,8 @@
     <Compile Include="Models\Ui\PaymentAttemptViewData.cs" />
     <Compile Include="Models\Ui\Rendering\ProductCollectionExtensions.cs" />
     <Compile Include="Models\Ui\Rendering\ProductContentListView.cs" />
+    <Compile Include="Models\Ui\Rendering\ProductFilter.cs" />
+    <Compile Include="Models\Ui\Rendering\ProductFilterGroup.cs" />
     <Compile Include="Models\Ui\UiModelExtensions.cs" />
     <Compile Include="Models\VirtualContent\IProductAttributeContent.cs" />
     <Compile Include="Models\VirtualContent\IProductOptionWrapper.cs" />

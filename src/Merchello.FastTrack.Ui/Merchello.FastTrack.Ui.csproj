@@ -808,6 +808,7 @@
     <Content Include="Views\Partials\Grid\Bootstrap2.cshtml" />
     <Content Include="Views\Merchello\Notification\OrderConfirmation.cshtml" />
     <Content Include="Views\Merchello\Notification\OrderShipped.cshtml" />
+    <Content Include="Views\Partials\CategoryFilterCollections.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

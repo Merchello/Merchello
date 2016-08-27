@@ -265,7 +265,7 @@
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
             var collections = ((EntityCollectionService)_entityCollectionService).GetEntitySpecificationCollectionsByProviderKeys(keys);
             
-            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.Name);
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
 
         /// <summary>
@@ -286,12 +286,12 @@
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<IProductSpecifiedFilterCollectionProvider>();
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductSpecifiedFilterCollectionProvider>();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
             var collections = ((EntityCollectionService)_entityCollectionService).GetSpecifiedFilterCollectionsContainingProduct(new[] { key }, entityKey);
 
-            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.Name);
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
 
         /// <summary>
@@ -312,12 +312,12 @@
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<IProductSpecifiedFilterCollectionProvider>();
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductSpecifiedFilterCollectionProvider>();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
             var collections = ((EntityCollectionService)_entityCollectionService).GetSpecifiedFilterCollectionsNotContainingProduct(new[] { key }, entityKey);
 
-            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.Name);
+            return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
 
         /// <summary>
@@ -756,21 +756,19 @@
             var collectionsArray = collections.ToArray();
             if (!collectionsArray.Any()) return Enumerable.Empty<EntityCollectionDisplay>();
 
-            var first = collectionsArray.FirstOrDefault();
-            if (first != null)
+            var existing = _entityCollectionService.GetAll(collectionsArray.Select(x => x.Key).ToArray()).ToArray();
+
+            var updates = new List<IEntityCollection>();
+
+            foreach (var update in collectionsArray)
             {
-                var parentKey = first.ParentKey;
-                var existing = parentKey == null
-                                   ? _entityCollectionService.GetRootLevelEntityCollections(first.EntityType)
-                                   : _entityCollectionService.GetChildren(parentKey.Value);
-
-                var updates =
-                    collectionsArray.Where(x => existing.Any(y => y.SortOrder != x.SortOrder && y.Key == x.Key));
-                    
-
-                _entityCollectionService.Save(updates.Select(x => x.ToEntityCollection(existing.FirstOrDefault(y => y.Key == x.Key))));
+                var match = existing.FirstOrDefault(x => x.Key == update.Key);
+                if (match == null) continue;
+                updates.Add(update.ToEntityCollection(match));
             }
-         
+
+            _entityCollectionService.Save(updates);
+
 
             return collectionsArray;
         }
