@@ -208,7 +208,7 @@
         /// <returns>
         /// The <see cref="EntityCollectionProviderAttribute"/>.
         /// </returns>
-        public EntityCollectionProviderAttribute GetProviderAttributeForSpecifiedFilterAttributeCollection(Guid collectionKey)
+        public EntityCollectionProviderAttribute GetProviderAttributeForFilter(Guid collectionKey)
         {
             var attempt = GetProviderForCollection(collectionKey);
             if (!attempt.Success)
@@ -220,15 +220,15 @@
                 return null;
             }
 
-            var provider = attempt.Result as IEntitySpecifiedFilterCollectionProvider;
+            var provider = attempt.Result as IEntityFilterGroupProvider;
             if (provider == null)
             {
-                var nullRef = new NullReferenceException("Provider found did not implement IEntitySpecifiedFilterProvider");
+                var nullRef = new NullReferenceException("Provider found did not implement IEntityFilterProvider");
                 MultiLogHelper.WarnWithException<EntityCollectionProviderResolver>("Invalid type", nullRef);
                 return null;
             }
 
-            return GetProviderAttribute(provider.AttributeProviderType).FirstOrDefault();
+            return GetProviderAttribute(provider.FilterProviderType).FirstOrDefault();
         }
 
         /// <summary>

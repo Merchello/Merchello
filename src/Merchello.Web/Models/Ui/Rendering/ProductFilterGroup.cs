@@ -17,12 +17,12 @@
         /// <param name="collection">
         /// The collection.
         /// </param>
-        public ProductFilterGroup(IEntitySpecifiedFilterCollection collection)
+        public ProductFilterGroup(IEntityFilterGroup collection)
         {
             this.Key = collection.Key;
             this.Name = collection.Name;
             this.SortOrder = collection.SortOrder;
-            this.Initialize(collection.AttributeCollections);
+            this.Initialize(collection.Filters);
         }
 
         /// <summary>

@@ -6,13 +6,13 @@
     /// <summary>
     /// The entity specification collection display.
     /// </summary>
-    [DataContract(Name = "entitySpecificationCollectionDisplay", Namespace = "")]
-    public class EntitySpecifiedFilterCollectionDisplay : EntityCollectionDisplay
+    [DataContract(Name = "entityFilterGroupDisplay", Namespace = "")]
+    public class EntityFilterGroupDisplay : EntityCollectionDisplay
     {
         /// <summary>
         /// Gets or sets the attribute collections.
         /// </summary>
-        [DataMember(Name = "attributeCollections")]
-        public IEnumerable<EntityCollectionDisplay> AttributeCollections { get; set; } 
+        [DataMember(Name = "filters")]
+        public IEnumerable<EntityCollectionDisplay> Filters { get; set; } 
     }
 }

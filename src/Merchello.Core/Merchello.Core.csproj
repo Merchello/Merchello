@@ -386,10 +386,10 @@
     <Compile Include="EntityCollections\IEntityCollectionProvider{T}.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
     <Compile Include="EntityCollections\ICachedQueryableEntityCollectionProvider.cs" />
-    <Compile Include="EntityCollections\IEntitySpecifiedFilterCollectionProvider.cs" />
-    <Compile Include="EntityCollections\IProductSpecificationCollectionProvider.cs" />
+    <Compile Include="EntityCollections\IEntityFilterProvider.cs" />
+    <Compile Include="EntityCollections\IProductFilterProvider.cs" />
     <Compile Include="EntityCollections\IQueryableEntityCollectionProvider.cs" />
-    <Compile Include="EntityCollections\ProductSpecifiedFilterCollectionProviderBase.cs" />
+    <Compile Include="EntityCollections\ProductFilterProviderBase.cs" />
     <Compile Include="EntityCollections\Providers\DynamicFulfilledOrderCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\DynamicOpenOrderCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\DynamicUnfulfilledOrderCollectionProvider.cs" />
@@ -398,7 +398,7 @@
     <Compile Include="EntityCollections\Providers\DynamicUnpaidInvoiceCollectionProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EntityCollections\Providers\ProductSpecifiedFilterCollectionProvider.cs" />
+    <Compile Include="EntityCollections\Providers\ProductFilterProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticCustomerCollectionProvider.cs" />
     <Compile Include="EntityCollections\Providers\StaticEntityCollectionCollectionProvider.cs">
       <SubType>Code</SubType>
@@ -474,8 +474,8 @@
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityBase\DeployableEntity.cs" />
     <Compile Include="Models\EntityCollection.cs" />
-    <Compile Include="Models\EntitySpecifiedFilterCollection.cs" />
-    <Compile Include="Models\Interfaces\IEntitySpecifiedFilterCollection.cs" />
+    <Compile Include="Models\EntityFilterGroup.cs" />
+    <Compile Include="Models\Interfaces\IEntityFilterGroup.cs" />
     <Compile Include="Models\Interfaces\IHasNotes.cs" />
     <Compile Include="Models\Interfaces\INote.cs" />
     <Compile Include="Models\Note.cs" />
@@ -565,7 +565,7 @@
     <Compile Include="Models\Rdbms\CustomerIndexDto.cs" />
     <Compile Include="Models\Rdbms\IPageableDto.cs" />
     <Compile Include="Models\Rdbms\ShipmentStatusDto.cs" />
-    <Compile Include="Models\SpecifiedFilterAttributeCollection.cs" />
+    <Compile Include="Models\EntityFilterCollection.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="NotificationExtensions.cs" />
     <Compile Include="Observation\IMonitor.cs" />

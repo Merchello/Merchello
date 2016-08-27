@@ -4345,15 +4345,15 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                     var collections = [];
                     if (angular.isArray(jsonResult)) {
                         for(var i = 0; i < jsonResult.length; i++) {
-                            var attCols = undefined;
-                            if (jsonResult[i].attributeCollections) {
-                                attCols = this.transform(jsonResult[i].attributeCollections);
+                            var filters = undefined;
+                            if (jsonResult[i].filters) {
+                                filters = this.transform(jsonResult[i].filters);
                             }
                             var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
                             collection.extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
-                            if (attCols) {
-                                collection.attributeCollections = attCols;
+                            if (filters) {
+                                collection.filters = filters;
                             }
                             collections.push(collection);
                         }
@@ -4361,8 +4361,8 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                         collections = genericModelBuilder.transform(jsonResult, Constructor);
                         collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
                         collections.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        if (jsonResult.attributeCollections) {
-                            collections.attributeCollections = this.transform(jsonResult.attributeCollections);
+                        if (jsonResult.filters) {
+                            collections.filters = this.transform(jsonResult.filters);
                         }
                     }
                     return collections;
@@ -5136,7 +5136,7 @@ angular.module('merchello.models').factory('merchelloTabsFactory',
                 var tabs = new Constructor();
                 tabs.addTab('productlist', 'merchelloTabs_productListing', '#/merchello/merchello/productlist/manage');
                 tabs.addTab('sharedoptions', 'merchelloTabs_sharedProductOptions', '#/merchello/merchello/sharedoptions/manage');
-                tabs.addTab('productfilterspecs', 'merchelloTabs_productFilterSpecs', '#/merchello/merchello/productfilterspecs/manage');
+                tabs.addTab('filtergroups', 'merchelloTabs_filterGroups', '#/merchello/merchello/productfiltergroups/manage');
                 tabs.addTab('contentTypeList', 'merchelloTabs_contentTypes', '#/merchello/merchello/productcontenttypelist/manage');
                 return tabs;
             }

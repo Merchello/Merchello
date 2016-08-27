@@ -10,9 +10,9 @@
     using Merchello.Web.Models.ContentEditing.Collections;
 
     /// <summary>
-    /// A AutoMapper value resolver for mapping <see cref="SpecifiedFilterAttributeCollection"/> to <see cref="IEnumerable{EntityCollectionDisplay}"/>.
+    /// A AutoMapper value resolver for mapping <see cref="EntityFilterCollection"/> to <see cref="IEnumerable{EntityCollectionDisplay}"/>.
     /// </summary>
-    public class SpecificationCollectionAttributeCollectionsValueResolver : ValueResolver<IEntitySpecifiedFilterCollection, IEnumerable<EntityCollectionDisplay>>
+    public class EntityFilterGroupFiltersValueResolver : ValueResolver<IEntityFilterGroup, IEnumerable<EntityCollectionDisplay>>
     {
         /// <summary>
         /// The resolve core.
@@ -23,11 +23,11 @@
         /// <returns>
         /// The <see cref="IEnumerable{EntityCollectionDisplay}"/>.
         /// </returns>
-        protected override IEnumerable<EntityCollectionDisplay> ResolveCore(IEntitySpecifiedFilterCollection source)
+        protected override IEnumerable<EntityCollectionDisplay> ResolveCore(IEntityFilterGroup source)
         {
-            return !source.AttributeCollections.Any() ? 
+            return !source.Filters.Any() ? 
                 Enumerable.Empty<EntityCollectionDisplay>() : 
-                source.AttributeCollections.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
+                source.Filters.Select(x => x.ToEntityCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
     }
 }

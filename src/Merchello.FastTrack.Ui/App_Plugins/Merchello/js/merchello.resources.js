@@ -501,7 +501,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 getEntitySpecifiedFilterCollections : function(entityType) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecifiedFilterCollections',
+                            url: baseUrl + 'GetEntityFilterGroups',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
@@ -511,7 +511,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
 
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionProviders',
+                            url: baseUrl + 'GetEntityFilterGroupProviders',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
@@ -520,7 +520,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 getEntitySpecifiedFilterCollectionAttributeProvider : function(collectionKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionAttributeProvider',
+                            url: baseUrl + 'GetEntityFilterGroupFilterProvider',
                             method: "GET",
                             params: { key: collectionKey}
                         }),
@@ -529,7 +529,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 getSpecifiedFilterCollectionsContainingProduct : function(entityType, entityKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetSpecifiedFilterCollectionsContainingProduct',
+                            url: baseUrl + 'GetEntityFilterGroupsContaining',
                             method: "GET",
                             params: { entityType: entityType, entityKey: entityKey}
                         }),
@@ -538,7 +538,7 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                 getSpecifiedFilterCollectionsNotContainingProduct : function(entityType, entityKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetSpecifiedFilterCollectionsNotContainingProduct',
+                            url: baseUrl + 'GetEntityFilterGroupsNotContaining',
                             method: "GET",
                             params: { entityType: entityType, entityKey: entityKey}
                         }),

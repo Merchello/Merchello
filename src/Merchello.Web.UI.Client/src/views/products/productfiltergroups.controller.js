@@ -1,4 +1,4 @@
-angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecificationListController',
+angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroupsController',
     ['$scope', 'entityCollectionResource', 'merchelloTabsFactory',
     function($scope, entityCollectionResource, merchelloTabsFactory) {
 
@@ -26,7 +26,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
         function init() {
 
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
-            $scope.tabs.setActive('productfilterspecs');
+            $scope.tabs.setActive('filtergroups');
 
             $scope.loaded = true;
             $scope.preValuesLoaded = true;

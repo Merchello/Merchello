@@ -16,10 +16,10 @@
     /// <summary>
     /// A base class for Product based Specified Filter Collections Providers.
     /// </summary>
-    public abstract class ProductSpecifiedFilterCollectionProviderBase : CachedQueryableEntityCollectionProviderBase<IProduct>, IProductSpecifiedFilterCollectionProvider
+    public abstract class ProductFilterGroupProviderBase : CachedQueryableEntityCollectionProviderBase<IProduct>, IProductFilterGroupProvider
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductSpecifiedFilterCollectionProviderBase"/> class.
+        /// Initializes a new instance of the <see cref="ProductFilterGroupProviderBase"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="MerchelloContext"/>.
@@ -27,7 +27,7 @@
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
-        protected ProductSpecifiedFilterCollectionProviderBase(IMerchelloContext merchelloContext, Guid collectionKey)
+        protected ProductFilterGroupProviderBase(IMerchelloContext merchelloContext, Guid collectionKey)
             : base(merchelloContext, collectionKey)
         {
         }
@@ -35,7 +35,7 @@
         /// <summary>
         /// Gets the attribute provider type.
         /// </summary>
-        public virtual Type AttributeProviderType
+        public virtual Type FilterProviderType
         {
             get
             {
@@ -44,13 +44,13 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// Gets the <see cref="IEntityFilterGroup"/>.
         /// </summary>
-        public new virtual IEntitySpecifiedFilterCollection EntityCollection
+        public new virtual IEntityFilterGroup EntityGroup
         {
             get
             {
-                return (IEntitySpecifiedFilterCollection)base.EntityCollection;
+                return (IEntityFilterGroup)base.EntityCollection;
             }
         }
 
@@ -65,9 +65,9 @@
         /// </returns>
         protected override bool PerformExists(IProduct entity)
         {
-            if (!EntityCollection.AttributeCollections.Any()) return false;
+            if (!this.EntityGroup.Filters.Any()) return false;
 
-            var keys = EntityCollection.AttributeCollections.Select(x => x.Key);
+            var keys = this.EntityGroup.Filters.Select(x => x.Key);
 
             return MerchelloContext.Services.ProductService.ExistsInCollection(entity.Key, keys);
         }
@@ -264,13 +264,13 @@
         /// </returns>
         protected virtual IEnumerable<Guid> GetAttributeCollectionKeys()
         {
-            if (!EntityCollection.AttributeCollections.Any())
+            if (!this.EntityGroup.Filters.Any())
             {
-                MultiLogHelper.Info<ProductSpecifiedFilterCollectionProvider>("ProductSpecificationCollection does not have any child collections. Returning null.");
+                MultiLogHelper.Info<ProductFilterGroupProvider>("ProductSpecificationCollection does not have any child collections. Returning null.");
                 return null;
             }
 
-            return EntityCollection.AttributeCollections.Select(x => x.Key);
+            return this.EntityGroup.Filters.Select(x => x.Key);
         }
     }
 }

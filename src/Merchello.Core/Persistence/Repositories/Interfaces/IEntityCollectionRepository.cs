@@ -80,7 +80,7 @@
         Page<IEntityCollection> GetPage(long page, long itemsPerPage, IQuery<IEntityCollection> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys.
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys.
         /// </summary>
         /// <param name="keys">
         /// The keys.
@@ -89,15 +89,15 @@
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
         /// <remarks>
-        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
-        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as the special filter group.
+        /// However, it merely builds a filter group using whatever collection and it's children - so Service should definitely
         /// have this as an internal method until we can refactor
         /// </remarks>
-        IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(Guid[] keys);
+        IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsByProviderKeys(Guid[] keys);
 
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are associated
         /// with a product
         /// </summary>
         /// <param name="keys">
@@ -109,10 +109,10 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
-        IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsContainingProduct(Guid[] keys, Guid productKey);
+        IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsContainingProduct(Guid[] keys, Guid productKey);
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
         /// with a product
         /// </summary>
         /// <param name="keys">
@@ -124,22 +124,22 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
-        IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsNotContainingProduct(Guid[] keys, Guid productKey);
+        IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsNotContainingProduct(Guid[] keys, Guid productKey);
 
         /// <summary>
-        ///  Gets <see cref="IEntitySpecifiedFilterCollection"/> by it's key.
+        ///  Gets <see cref="IEntityFilterGroup"/> by it's key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// The <see cref="IEntityFilterGroup"/>.
         /// </returns>
         /// <remarks>
-        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
-        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as the special filter group.
+        /// However, it merely builds a filter group using whatever collection and it's children - so Service should definitely
         /// have this as an internal method until we can refactor
         /// </remarks>
-        IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key);
+        IEntityFilterGroup GetEntityFilterGroup(Guid key);
     }
 }

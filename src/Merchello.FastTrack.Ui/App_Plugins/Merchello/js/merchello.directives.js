@@ -189,38 +189,7 @@ angular.module('merchello.directives').directive('entityCollectionTitleBar', fun
   }
 });
 
-angular.module('merchello.directives').directive('entitySpecFilterAssociation',
-    function(entityCollectionResource) {
-        return {
-            restrict: 'E',
-            replace: true,
-            scope: {
-                preValuesLoaded: '=',
-                collection: '=',
-                entityType: '=',
-                doSave: '&',
-                autoSave: '=?'
-            },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.specfilterassociation.tpl.html',
-            link: function (scope, elm, attr) {
-
-                var auto = ('autoSave' in attr && 'doSave' in attr) ? scope.autoSave : false;
-
-
-                // this is used directly from the embedded directive not when the directive is used in a dialog
-                scope.save = function(att) {
-                    if (!auto) return;
-                    console.info(scope.doSave);
-                    console.info(scope.collection);
-                    console.info(att);
-                    scope.doSave()(scope.collection, att);
-                }
-
-            }
-        }
-});
-
-angular.module('merchello.directives').directive('entitySpecFilterList', [
+angular.module('merchello.directives').directive('entityFilterGroupList', [
     '$q', 'localizationService', 'eventsService', 'dialogService', 'entityCollectionResource', 'entityCollectionDisplayBuilder',
     'entityCollectionProviderDisplayBuilder',
     function($q, localizationService, eventsService, dialogService, entityCollectionResource, entityCollectionDisplayBuilder,
@@ -235,7 +204,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 entityType: '=',
                 preValuesLoaded: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/entity.specificationfilterlist.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/entity.filtergrouplist.tpl.html',
             link: function(scope, elm, attr) {
 
                 scope.loaded = false;
@@ -248,15 +217,15 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 /// PRIVATE
                 var yes = '';
                 var no = '';
-                var attributes = '';
+                var filterLabel = '';
 
 
                 scope.getColumnValue = function(col, spec) {
                     switch (col) {
                         case 'name':
                             return spec.name;
-                        case 'attributes':
-                            return spec.attributeCollections.length + ' ' + attributes;
+                        case 'filters':
+                            return spec.filters.length + ' ' + filterLabel;
                     };
                 }
 
@@ -406,13 +375,13 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     $q.all([
                         localizationService.localize('general_yes'),
                         localizationService.localize('general_no'),
-                        localizationService.localize('merchelloTableCaptions_filterSpecAttributes'),
+                        localizationService.localize('merchelloTableCaptions_filters'),
                         localizationService.localize('merchelloSpecFilters_noSpecFilters'),
                         entityCollectionResource.getEntitySpecifiedFilterCollectionProviders(scope.entityType)
                     ]).then(function(data) {
                         yes = data[0];
                         no = data[1];
-                        attributes = data[2];
+                        filterLabel = data[2];
                         scope.noResults = data[3];
                         scope.providers = entityCollectionProviderDisplayBuilder.transform(data[4]);
                         scope.hideDeletes =
@@ -468,6 +437,37 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
             }
         }
     }]);
+
+angular.module('merchello.directives').directive('entitySpecFilterAssociation',
+    function(entityCollectionResource) {
+        return {
+            restrict: 'E',
+            replace: true,
+            scope: {
+                preValuesLoaded: '=',
+                collection: '=',
+                entityType: '=',
+                doSave: '&',
+                autoSave: '=?'
+            },
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.specfilterassociation.tpl.html',
+            link: function (scope, elm, attr) {
+
+                var auto = ('autoSave' in attr && 'doSave' in attr) ? scope.autoSave : false;
+
+
+                // this is used directly from the embedded directive not when the directive is used in a dialog
+                scope.save = function(att) {
+                    if (!auto) return;
+                    console.info(scope.doSave);
+                    console.info(scope.collection);
+                    console.info(att);
+                    scope.doSave()(scope.collection, att);
+                }
+
+            }
+        }
+});
 
 angular.module('merchello.directives').directive('entitySpecifiedFilters',
     function($q, dialogService, entityCollectionResource, entityCollectionDisplayBuilder) {

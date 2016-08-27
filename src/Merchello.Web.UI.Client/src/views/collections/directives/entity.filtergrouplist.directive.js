@@ -1,4 +1,4 @@
-angular.module('merchello.directives').directive('entitySpecFilterList', [
+angular.module('merchello.directives').directive('entityFilterGroupList', [
     '$q', 'localizationService', 'eventsService', 'dialogService', 'entityCollectionResource', 'entityCollectionDisplayBuilder',
     'entityCollectionProviderDisplayBuilder',
     function($q, localizationService, eventsService, dialogService, entityCollectionResource, entityCollectionDisplayBuilder,
@@ -13,7 +13,7 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 entityType: '=',
                 preValuesLoaded: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/entity.specificationfilterlist.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/directives/entity.filtergrouplist.tpl.html',
             link: function(scope, elm, attr) {
 
                 scope.loaded = false;
@@ -26,15 +26,15 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                 /// PRIVATE
                 var yes = '';
                 var no = '';
-                var attributes = '';
+                var filterLabel = '';
 
 
                 scope.getColumnValue = function(col, spec) {
                     switch (col) {
                         case 'name':
                             return spec.name;
-                        case 'attributes':
-                            return spec.attributeCollections.length + ' ' + attributes;
+                        case 'filters':
+                            return spec.filters.length + ' ' + filterLabel;
                     };
                 }
 
@@ -184,13 +184,13 @@ angular.module('merchello.directives').directive('entitySpecFilterList', [
                     $q.all([
                         localizationService.localize('general_yes'),
                         localizationService.localize('general_no'),
-                        localizationService.localize('merchelloTableCaptions_filterSpecAttributes'),
+                        localizationService.localize('merchelloTableCaptions_filters'),
                         localizationService.localize('merchelloSpecFilters_noSpecFilters'),
                         entityCollectionResource.getEntitySpecifiedFilterCollectionProviders(scope.entityType)
                     ]).then(function(data) {
                         yes = data[0];
                         no = data[1];
-                        attributes = data[2];
+                        filterLabel = data[2];
                         scope.noResults = data[3];
                         scope.providers = entityCollectionProviderDisplayBuilder.transform(data[4]);
                         scope.hideDeletes =

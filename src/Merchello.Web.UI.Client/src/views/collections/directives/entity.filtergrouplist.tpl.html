@@ -14,19 +14,19 @@
                 <thead>
                 <tr>
                     <td>
-                        <a  data-ng-show="collections.length > 0" data-ng-click="openSort()" class="sort-icon" prevent-default><localize key="merchelloTableCaptions_filterSpecName" /></a>
-                        <span data-ng-hide="collections.length > 0"><localize key="merchelloTableCaptions_filterSpecName" /></span>
+                        <a  data-ng-show="collections.length > 0" data-ng-click="openSort()" class="sort-icon" prevent-default><localize key="merchelloTableCaptions_filterGroup" /></a>
+                        <span data-ng-hide="collections.length > 0"><localize key="merchelloTableCaptions_filterGroup" /></span>
                     </td>
-                    <td><localize key="merchelloTableCaptions_filterSpecAttributes" /></td>
+                    <td><localize key="merchelloTableCaptions_filters" /></td>
                     <td></td>
                 </tr>
                 </thead>
                 <tbody  data-ng-show="collections.length > 0">
-                <tr class="merchello-icon-container" data-ng-repeat="spec in collections">
-                    <td><a prevent-default data-ng-click="edit(spec)">{{getColumnValue('name', spec)}}</a></td>
-                    <td data-ng-bind="getColumnValue('attributes', spec)"></td>
+                <tr class="merchello-icon-container" data-ng-repeat="group in collections">
+                    <td><a prevent-default data-ng-click="edit(group)">{{getColumnValue('name', group)}}</a></td>
+                    <td data-ng-bind="getColumnValue('filters', group)"></td>
                     <td class="text-right">
-                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(spec)" do-edit="edit(spec)" do-delete="delete(spec)"></merchello-icon-bar>
+                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(group)" do-edit="edit(group)" do-delete="delete(group)"></merchello-icon-bar>
                     </td>
                 </tr>
                 </tbody>

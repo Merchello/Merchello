@@ -11,7 +11,7 @@
     /// <summary>
     /// The specified filter attribute collection.
     /// </summary>
-    public class SpecifiedFilterAttributeCollection : KeyedCollection<Guid, IEntityCollection>
+    public class EntityFilterCollection : KeyedCollection<Guid, IEntityCollection>
     {
         /// <summary>
         /// The _add locker.
