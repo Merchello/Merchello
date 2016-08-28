@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D921B972-B572-487F-AF14-613713E1B4E7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Merchello.Core</RootNamespace>
+    <AssemblyName>Merchello.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\EntityBase\IEntity.cs" />
+    <Compile Include="Models\EntityBase\ITracksDirty.cs" />
+    <Compile Include="Models\EntityBase\IVersionTaggedEntity.cs" />
+    <Compile Include="Models\ExtendedDataCollection.cs" />
+    <Compile Include="Models\Interfaces\IAddress.cs" />
+    <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
+    <Compile Include="Models\Interfaces\IAppliedPayment.cs" />
+    <Compile Include="Models\Interfaces\IAuditLog.cs" />
+    <Compile Include="Models\Interfaces\ICatalogInventory.cs" />
+    <Compile Include="Models\Interfaces\ICountry.cs" />
+    <Compile Include="Models\Interfaces\ICountryBase.cs" />
+    <Compile Include="Models\Interfaces\ICurrency.cs" />
+    <Compile Include="Models\Interfaces\ICurrencyFormat.cs" />
+    <Compile Include="Models\Interfaces\ICustomer.cs" />
+    <Compile Include="Models\Interfaces\ICustomerAddress.cs" />
+    <Compile Include="Models\Interfaces\ICustomerBase.cs" />
+    <Compile Include="Models\Interfaces\IDataModifierData.cs" />
+    <Compile Include="Models\Interfaces\IDataModifierLog.cs" />
+    <Compile Include="Models\Interfaces\IDigitalMedia.cs" />
+    <Compile Include="Models\Interfaces\IEntityCollection.cs" />
+    <Compile Include="Models\Interfaces\IEntityFilterGroup.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProviderMethod.cs" />
+    <Compile Include="Models\Interfaces\IGatewayProviderSettings.cs" />
+    <Compile Include="Models\Interfaces\IHasEntityTypeField.cs" />
+    <Compile Include="Models\Interfaces\IHasExtendedData.cs" />
+    <Compile Include="Models\Interfaces\IHasNotes.cs" />
+    <Compile Include="Models\Interfaces\IInvoice.cs" />
+    <Compile Include="Models\Interfaces\IInvoiceLineItem.cs" />
+    <Compile Include="Models\Interfaces\IInvoiceStatus.cs" />
+    <Compile Include="Models\Interfaces\IItemCache.cs" />
+    <Compile Include="Models\Interfaces\IItemCacheLineItem.cs" />
+    <Compile Include="Models\Interfaces\ILineItem.cs" />
+    <Compile Include="Models\Interfaces\ILineItemContainer.cs" />
+    <Compile Include="Models\Interfaces\ILineItemDto.cs" />
+    <Compile Include="Models\Interfaces\ILineItemVisitor.cs" />
+    <Compile Include="Models\Interfaces\IModifiableProductVariantData.cs" />
+    <Compile Include="Models\Interfaces\INote.cs" />
+    <Compile Include="Models\Interfaces\INotificationMessage.cs" />
+    <Compile Include="Models\Interfaces\INotificationMethod.cs" />
+    <Compile Include="Models\Interfaces\INotifyStatus.cs" />
+    <Compile Include="Models\Interfaces\IOfferRedeemed.cs" />
+    <Compile Include="Models\Interfaces\IOfferSettings.cs" />
+    <Compile Include="Models\Interfaces\IOrder.cs" />
+    <Compile Include="Models\Interfaces\IOrderByField.cs" />
+    <Compile Include="Models\Interfaces\IOrderLineItem.cs" />
+    <Compile Include="Models\Interfaces\IOrderStatus.cs" />
+    <Compile Include="Models\Interfaces\IPayment.cs" />
+    <Compile Include="Models\Interfaces\IPaymentMethod.cs" />
+    <Compile Include="Models\Interfaces\IProduct.cs" />
+    <Compile Include="Models\Interfaces\IProductAttribute.cs" />
+    <Compile Include="Models\Interfaces\IProductBase.cs" />
+    <Compile Include="Models\Interfaces\IProductOption.cs" />
+    <Compile Include="Models\Interfaces\IProductVariant.cs" />
+    <Compile Include="Models\Interfaces\IProvince.cs" />
+    <Compile Include="Models\Interfaces\IShipCountry.cs" />
+    <Compile Include="Models\Interfaces\IShipment.cs" />
+    <Compile Include="Models\Interfaces\IShipmentStatus.cs" />
+    <Compile Include="Models\Interfaces\IShipMethod.cs" />
+    <Compile Include="Models\Interfaces\IShipProvince.cs" />
+    <Compile Include="Models\Interfaces\IShipRateTier.cs" />
+    <Compile Include="Models\Interfaces\IStoreSetting.cs" />
+    <Compile Include="Models\Interfaces\ITaxMethod.cs" />
+    <Compile Include="Models\Interfaces\ITaxProvince.cs" />
+    <Compile Include="Models\Interfaces\IVisitor{T}.cs" />
+    <Compile Include="Models\Interfaces\IWarehouse.cs" />
+    <Compile Include="Models\Interfaces\IWarehouseCatalog.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeFieldMapperEnumerations.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
