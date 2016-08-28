@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Attempt.cs" />
-    <Compile Include="AttemptOfT.cs" />
+    <Compile Include="Attempt{T}.cs" />
     <Compile Include="Constants-ActivatorTypes.cs" />
     <Compile Include="Constants-ExtendedDataKeys.cs" />
     <Compile Include="Constants-Keys.cs" />

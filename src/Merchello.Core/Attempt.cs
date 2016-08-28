@@ -5,6 +5,7 @@ namespace Merchello.Core
     /// <summary>
     /// Provides ways to create attempts.
     /// </summary>
+    /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/Attempt.cs"/>
     public static class Attempt
     {
         /// <summary>

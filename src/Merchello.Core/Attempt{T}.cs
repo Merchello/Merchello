@@ -6,9 +6,38 @@ namespace Merchello.Core
     /// Represents the result of an operation attempt.
     /// </summary>
     /// <typeparam name="T">The type of the attempted operation result.</typeparam>
+    /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/Attempt%7BT%7D.cs"/>
     [Serializable]
 	public struct Attempt<T>
 	{
+        /// <summary>
+        /// optimize, use a singleton failed attempt
+        /// </summary>
+        private static readonly Attempt<T> Failed = new Attempt<T>(false, default(T), null);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Attempt{T}"/> struct.
+        /// </summary>
+        /// <param name="success">
+        /// The success.
+        /// </param>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <param name="exception">
+        /// The exception.
+        /// </param>
+        /// <remarks>
+        /// Use Succeed() or Fail() methods to create attempts
+        /// </remarks>
+        private Attempt(bool success, T result, Exception exception)
+        {
+            this.Success = success;
+            this.Result = result;
+            this.Exception = exception;
+        }
+
+
         /// <summary>
         /// Gets a value indicating whether this <see cref="Attempt{T}"/> was successful.
         /// </summary>
@@ -23,17 +52,6 @@ namespace Merchello.Core
         /// Gets the attempt result.
         /// </summary>
         public T Result { get; }
-
-        // optimize, use a singleton failed attempt
-		private static readonly Attempt<T> Failed = new Attempt<T>(false, default(T), null);
-
-        // private - use Succeed() or Fail() methods to create attempts
-        private Attempt(bool success, T result, Exception exception)
-        {
-            this.Success = success;
-            this.Result = result;
-            this.Exception = exception;
-        }
 
         /// <summary>
         /// Creates a successful attempt.
@@ -116,10 +134,10 @@ namespace Merchello.Core
         }
 
         /// <summary>
-        /// Implicity operator to check if the attempt was successful without having to access the 'success' property
+        /// Implicitly operator to check if the attempt was successful without having to access the 'success' property
         /// </summary>
-        /// <param name="a"></param>
-        /// <returns></returns>
+        /// <param name="a">The attempt</param>
+        /// <returns>A value indicating whether or not the attempt was successful</returns>
         public static implicit operator bool(Attempt<T> a)
         {
             return a.Success;
