@@ -13,14 +13,54 @@
     /// </summary>
     public class OrderCollection : NotifiyCollectionBase<Guid, IOrder>
     {
+        /// <summary>
+        /// The thread locker.
+        /// </summary>
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
 
-        protected override Guid GetKeyForItem(IOrder item)
+        /// <summary>
+        /// Gets the collection index of the key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public override int IndexOfKey(Guid key)
         {
-            return item.Key;
+            for (var i = 0; i < Count; i++)
+            {
+                if (this[i].Key == key)
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
+        //// TODO Review Equals implementation
 
+        /// <summary>
+        /// Determines if collections are equivalent based on item keys.
+        /// </summary>
+        /// <param name="compare">
+        /// The compare.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool Equals(OrderCollection compare)
+        {
+            return Count == compare.Count && compare.All(item => Contains(item.Key));
+        }
+
+        /// <summary>
+        /// Adds an item to the collection.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
         internal new void Add(IOrder item)
         {
             using (new WriteLock(_addLocker))
@@ -40,23 +80,18 @@
             }
         }
 
-        public override int IndexOfKey(Guid key)
+        /// <summary>
+        /// Gets the key for the item in the collection.
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        protected override Guid GetKeyForItem(IOrder item)
         {
-            for (var i = 0; i < Count; i++)
-            {
-                if (this[i].Key == key)
-                {
-                    return i;
-                }
-            }
-            return -1;
+            return item.Key;
         }
-
-        public bool Equals(OrderCollection compare)
-        {
-            return Count == compare.Count && compare.All(item => Contains(item.Key));
-        }
-
-
     }
 }

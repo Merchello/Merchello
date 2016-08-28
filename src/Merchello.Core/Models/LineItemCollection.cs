@@ -3,13 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
     using System.Linq;
-    using System.Net.Configuration;
     using System.Runtime.Serialization;
     using System.Threading;
-    using System.Xml;
 
     using Merchello.Core.Events;
     using Merchello.Core.Threading;
@@ -19,8 +15,6 @@
     /// </summary>
     [Serializable]
     [CollectionDataContract(IsReference = true)]
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Reviewed. Suppression is OK here.")]
-    [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Reviewed. Suppression is OK here.")] 
     public class LineItemCollection : NotifiyCollectionBase<string, ILineItem>
     {
         /// <summary>
