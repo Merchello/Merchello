@@ -11,6 +11,9 @@
     using System.Threading;
     using System.Xml;
 
+    using Merchello.Core.Events;
+    using Merchello.Core.Threading;
+
     /// <summary>
     /// Represents a Collection of <see cref="T"/> objects
     /// </summary>
@@ -20,19 +23,10 @@
     [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Reviewed. Suppression is OK here.")] 
     public class LineItemCollection : NotifiyCollectionBase<string, ILineItem>
     {
-        #region Fields
-
         /// <summary>
         /// The add locker.
         /// </summary>
         private readonly ReaderWriterLockSlim _addLocker = new ReaderWriterLockSlim();
-
-        /// <summary>
-        /// The on add.
-        /// </summary>
-        private Action OnAdd;
-
-#endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LineItemCollection"/> class.
@@ -123,7 +117,10 @@
         /// </param>
         public void Add(IEnumerable<ILineItem> items)
         {
-            items.ForEach(this.Add);
+            foreach (var item in items)
+            {
+                this.Add(item);
+            }
         }
 
         /// <summary>
@@ -161,14 +158,9 @@
 
                 if (this.ValidateAdd != null) if (!this.ValidateAdd(item)) return;
 
-                if (AddingItem != null)
-                {
-                    AddingItem.Invoke(this, new AddItemEventArgs(item));    
-                }
-                
-                base.Add(item);
+                this.AddingItem?.Invoke(this, new AddItemEventArgs(item));
 
-                this.OnAdd.IfNotNull(x => x.Invoke());
+                base.Add(item);
 
                 this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
             }

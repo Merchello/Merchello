@@ -1,12 +1,15 @@
 ﻿namespace Merchello.Core.Models.Interfaces
 {
+    //// REFACTOR move this out of the models namespace
+    //// BREAKING 
+    
     /// <summary>
     /// The Visitor interface.
     /// </summary>
     /// <typeparam name="TItem">
     /// The type item that will be visited
     /// </typeparam>
-    public interface IVisitor<TItem>
+    public interface IVisitor<in TItem>
     {
         /// <summary>
         /// Executes the "visit"

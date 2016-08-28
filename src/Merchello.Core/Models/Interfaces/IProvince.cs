@@ -1,20 +1,22 @@
-﻿using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Runtime.Serialization;
+
+    /// <summary>
+    /// Defines a state, region or province reference.
+    /// </summary>
     public interface IProvince
     {
         /// <summary>
-        /// The name of the province
+        /// Gets the name of the province
         /// </summary>
         [DataMember]
         string Name { get; }
 
         /// <summary>
-        /// The two letter province code
+        /// Gets the two letter province code
         /// </summary>
         [DataMember]
         string Code { get; }
-
     }
 }

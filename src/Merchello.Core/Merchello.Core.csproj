@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -41,7 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Attempt.cs" />
+    <Compile Include="AttemptOfT.cs" />
+    <Compile Include="Constants-ActivatorTypes.cs" />
+    <Compile Include="Constants-ExtendedDataKeys.cs" />
+    <Compile Include="Constants-Keys.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DisposableObject.cs" />
+    <Compile Include="Ensure.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
     <Compile Include="Events\CancellableEventArgs.cs" />
     <Compile Include="Events\CancellableObjectEventArgs{T}.cs" />
@@ -65,11 +77,19 @@
     <Compile Include="Events\TransientMessageFactory.cs" />
     <Compile Include="Events\UpdateItemEventArgs.cs" />
     <Compile Include="Events\ValidationEventArgs.cs" />
+    <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
+    <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
+    <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
+    <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
+    <Compile Include="Models\DetachedContent\IDetachedContent.cs" />
+    <Compile Include="Models\DetachedContent\IDetachedContentType.cs" />
+    <Compile Include="Models\DetachedContent\IProductVariantDetachedContent.cs" />
     <Compile Include="Models\EntityBase\IEntity.cs" />
     <Compile Include="Models\EntityBase\ITracksDirty.cs" />
     <Compile Include="Models\EntityBase\IVersionTaggedEntity.cs" />
     <Compile Include="Models\EntityFilterCollection.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs" />
+    <Compile Include="Models\ExtendedDataExtensions.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
     <Compile Include="Models\Interfaces\IAppliedPayment.cs" />
@@ -99,7 +119,15 @@
     <Compile Include="Models\Interfaces\IItemCacheLineItem.cs" />
     <Compile Include="Models\Interfaces\ILineItem.cs" />
     <Compile Include="Models\Interfaces\ILineItemContainer.cs" />
-    <Compile Include="Models\Interfaces\ILineItemDto.cs" />
+    <Compile Include="Models\OfferComponentDefinitionCollection.cs" />
+    <Compile Include="Models\ProductAttributeCollection.cs" />
+    <Compile Include="Models\ProductOptionCollection.cs" />
+    <Compile Include="Models\ProductVariantCollection.cs" />
+    <Compile Include="Models\ProvinceCollection.cs" />
+    <Compile Include="Models\Rdbms\IEntityDto.cs" />
+    <Compile Include="Models\Rdbms\IExtendedDataDto.cs" />
+    <Compile Include="Models\Rdbms\IKeyDto.cs" />
+    <Compile Include="Models\Rdbms\ILineItemDto.cs" />
     <Compile Include="Models\Interfaces\ILineItemVisitor.cs" />
     <Compile Include="Models\Interfaces\IModifiableProductVariantData.cs" />
     <Compile Include="Models\Interfaces\INote.cs" />
@@ -137,8 +165,13 @@
     <Compile Include="Models\OrderCollection.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="Threading\WriteLock.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
