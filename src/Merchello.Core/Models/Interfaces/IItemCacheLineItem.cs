@@ -4,5 +4,6 @@
     /// Marker interface for ICustomerItemCacheLineItem
     /// </summary>
     public interface IItemCacheLineItem : ILineItem
-    { }
+    {
+    }
 }

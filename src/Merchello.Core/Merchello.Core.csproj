@@ -41,9 +41,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisposableObject.cs" />
+    <Compile Include="Events\AddItemEventArgs.cs" />
+    <Compile Include="Events\CancellableEventArgs.cs" />
+    <Compile Include="Events\CancellableObjectEventArgs{T}.cs" />
+    <Compile Include="Events\ConvertEventArgs.cs" />
+    <Compile Include="Events\DatabaseCreationEventArgs.cs" />
+    <Compile Include="Events\EventMessage.cs" />
+    <Compile Include="Events\EventMessages.cs" />
+    <Compile Include="Events\EventMessageType.cs" />
+    <Compile Include="Events\FormatterEventArgs.cs" />
+    <Compile Include="Events\IEventMessagesFactory.cs" />
+    <Compile Include="Events\InitializedEventArgs.cs" />
+    <Compile Include="Events\InitializingEventArgs.cs" />
+    <Compile Include="Events\MerchelloMigrationEventArgs.cs" />
+    <Compile Include="Events\NewEventArgs.cs" />
+    <Compile Include="Events\NotificationEventArgs.cs" />
+    <Compile Include="Events\ObjectEventArgs.cs" />
+    <Compile Include="Events\ObservationChannelEventArgs.cs" />
+    <Compile Include="Events\PaymentAttemptEventArgs.cs" />
+    <Compile Include="Events\SalesPreparationEventArgs.cs" />
+    <Compile Include="Events\StatusChangeEventArgs.cs" />
+    <Compile Include="Events\TransientMessageFactory.cs" />
+    <Compile Include="Events\UpdateItemEventArgs.cs" />
+    <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="Models\EntityBase\IEntity.cs" />
     <Compile Include="Models\EntityBase\ITracksDirty.cs" />
     <Compile Include="Models\EntityBase\IVersionTaggedEntity.cs" />
+    <Compile Include="Models\EntityFilterCollection.cs" />
     <Compile Include="Models\ExtendedDataCollection.cs" />
     <Compile Include="Models\Interfaces\IAddress.cs" />
     <Compile Include="Models\Interfaces\IAnonymousCustomer.cs" />
@@ -107,7 +132,12 @@
     <Compile Include="Models\Interfaces\IVisitor{T}.cs" />
     <Compile Include="Models\Interfaces\IWarehouse.cs" />
     <Compile Include="Models\Interfaces\IWarehouseCatalog.cs" />
+    <Compile Include="Models\LineItemCollection.cs" />
+    <Compile Include="Models\NotifiyCollectionBase.cs" />
+    <Compile Include="Models\OrderCollection.cs" />
+    <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Threading\WriteLock.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

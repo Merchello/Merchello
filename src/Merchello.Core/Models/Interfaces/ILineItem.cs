@@ -1,11 +1,9 @@
 ﻿namespace Merchello.Core.Models
 {
     using System;
-    using System.Diagnostics;
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Models.TypeFields;
 
     /// <summary>
     /// Defines a Line Item
@@ -13,56 +11,59 @@
     public interface ILineItem : IHasExtendedData, IEntity
     {
         /// <summary>
-        /// The key of the container collection
+        /// Gets or sets the key of the container collection
         /// </summary>
         [DataMember]
         Guid ContainerKey { get; set; }
 
         /// <summary>
-        /// The line item type field key (<see cref="ITypeField"/>.TypeKey) for the registry item
+        /// Gets or sets the line item type field key for the item
         /// </summary>
         [DataMember]
         Guid LineItemTfKey { get; set; }
 
         /// <summary>
-        /// The sku for the line item
+        /// Gets or sets the sku for the line item
         /// </summary>
         [DataMember]
         string Sku { get; set; }
 
         /// <summary>
-        /// The name for the line item
+        /// Gets or sets the name for the line item
         /// </summary>
         [DataMember]
         string Name { get; set; }
 
         /// <summary>
-        /// The Quantity for the line item
+        /// Gets or sets the quantity for the line item
         /// </summary>
         [DataMember]
         int Quantity { get; set; }
 
         /// <summary>
-        /// The price for the line item
+        /// Gets or sets the price for the line item
         /// </summary>
         [DataMember]
         decimal Price { get; set; }
 
         /// <summary>
-        /// True/false indicating whether or not this line item has been exported to an external system
+        /// Gets or sets a value indicating whether or not this line item has been exported to an external system
         /// </summary>
+        /// <remarks>
+        /// Not by Merchello internally and can be safely used for custom implementations
+        /// </remarks>
         [DataMember]
         bool Exported { get; set; }
 
 
         /// <summary>
-        /// The line item type
+        /// Gets the <see cref="LineItemType"/>
         /// </summary>
         [DataMember]
         LineItemType LineItemType { get; }
 
         /// <summary>
-        /// The total price of the line item (quantity * price)
+        /// Gets the total price of the line item (quantity * price)
         /// </summary>
         [IgnoreDataMember]
         decimal TotalPrice { get; }
@@ -70,7 +71,7 @@
         /// <summary>
         /// Accept for visitor operations
         /// </summary>
-        /// <param name="vistor"><see cref="ILineItemVisitor"/></param>
+        /// <param name="vistor">The <see cref="ILineItemVisitor"/> class to be accepted</param>
         void Accept(ILineItemVisitor vistor);
     }
 }
