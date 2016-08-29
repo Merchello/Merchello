@@ -1,4 +1,4 @@
-<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SortSpecFilterCollectionsController">
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SortFilterGroupsController">
     <div class="umb-modalcolumn-header">
         <h4>Sort {{ dialogData.collection.entityType}} Filter Collection</h4>
 
@@ -10,7 +10,7 @@
             <thead>
             <tr>
                 <th data-ng-show="dialogData.collections.length > 1"></th>
-                <th><localize key="merchelloTableCaptions_filterSpecName" /></th>
+                <th><localize key="merchelloTableCaptions_filterGroup" /></th>
             </tr>
             </thead>
             <tbody data-ui-sortable="sortableCollections" data-ng-model="dialogData.collections">

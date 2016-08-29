@@ -1,0 +1,27 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SelectFilterProviderController" data-ng-show="loaded">
+    <div class="umb-modalcolumn-header">
+        <h4>Select {{ dialogData.entityType }} Provider</h4>
+    </div>
+    <div class="control-group row-fluid" style="padding: 1em">
+        <table class="table settings-table">
+            <tr>
+                <th colspan="2">Collection Provider</th>
+            </tr>
+            <tr data-ng-repeat="provider in dialogData.providers">
+                <td class="col-xs-9 span9">{{provider.name}}</td>
+                <td class="col-xs-2 span2 text-right"><button type="button" class="btn btn-primary" data-ng-click="setSelection(provider)"><localize key="merchelloButtons_select" /></button> </td>
+            </tr>
+        </table>
+        <div class="umb-panel-footer">
+            <div class="umb-el-wrap umb-panel-buttons">
+                <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                    <a href data-ng-click="close()" class="btn btn-link">
+                        <localize key="general_cancel">Cancel</localize>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

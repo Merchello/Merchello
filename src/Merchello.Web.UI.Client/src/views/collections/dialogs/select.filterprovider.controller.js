@@ -1,4 +1,4 @@
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SelectSpecAttributeProviderController',
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SelectFilterProviderController',
     ['$scope',
     function($scope) {
 

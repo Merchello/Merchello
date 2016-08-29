@@ -2,7 +2,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickSpecFilter
     ['$scope',
     function($scope) {
 
-
         $scope.save = function() {
             // collections that have been modified will have attribute collections marked selected
 
@@ -14,7 +13,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickSpecFilter
         }
 
         function setIntendedAssociations(collection) {
-            var atts = _.filter(collection.attributeCollections, function(att) {
+            var atts = _.filter(collection.filters, function(att) {
                 if (att.selected) return att;
             });
 

@@ -1,4 +1,4 @@
-angular.module('merchello.directives').directive('entitySpecifiedFilters',
+angular.module('merchello.directives').directive('entityFilterGroups',
     function($q, dialogService, entityCollectionResource, entityCollectionDisplayBuilder) {
         return {
             restrict: 'E',
@@ -8,7 +8,7 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                 entity: '=',
                 entityType: '='
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.specifiedfilters.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.filtergroups.tpl.html',
             link: function(scope, elm, attr) {
 
                 scope.ready = false;
@@ -20,7 +20,7 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                     if (att.selected) {
                         entityCollectionResource.addEntityToCollection(scope.entity.key, att.key);
                     } else {
-                        var others = _.filter(collection.attributeCollections, function(ac) {
+                        var others = _.filter(collection.filters, function(ac) {
                            if (ac.selected && ac.key !== att.key) return ac;
                         });
                         var promises = [];
@@ -42,7 +42,7 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                         };
 
                         dialogService.open({
-                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.pick.specfiltercollections.html',
+                            template: '/App_Plugins/Merchello/Backoffice/Merchello/Dialogs/product.pick.filtergroups.html',
                             show: true,
                             callback: addAssociation,
                             dialogData: dialogData
@@ -53,7 +53,7 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                     if (!angular.isArray(associations)) return;
                     if (associations.length > 0) {
                         scope.ready = false;
-                        entityCollectionResource.associateEntityWithFilterCollections(scope.entity.key, associations).then(function(result) {
+                        entityCollectionResource.associateEntityWithFilters(scope.entity.key, associations).then(function(result) {
                             load();
                         });
                     }
@@ -69,8 +69,8 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
 
                 function load() {
                     $q.all([
-                        entityCollectionResource.getSpecifiedFilterCollectionsContainingProduct(scope.entityType, scope.entity.key),
-                        entityCollectionResource.getSpecifiedFilterCollectionsNotContainingProduct(scope.entityType, scope.entity.key),
+                        entityCollectionResource.getEntityFilterGroupsContaining(scope.entityType, scope.entity.key),
+                        entityCollectionResource.getEntityFilterGroupsNotContaining(scope.entityType, scope.entity.key),
                         entityCollectionResource.getEntityCollectionsByEntity(scope.entity, scope.entityType, true)
 
                     ])
@@ -89,7 +89,7 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                                 // the root collection that represents the filter group
                                 asf.selected = true;
 
-                                angular.forEach(asf.attributeCollections, function(asfac) {
+                                angular.forEach(asf.filters, function(asfac) {
                                     var fnd = _.find(scope.currentFilters, function(current) { return current.key === asfac.key; });
                                     asfac.selected = fnd !== undefined;
                                 });
@@ -98,7 +98,7 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                             // available filters
                             angular.forEach(scope.available, function(avf) {
                                 avf.selected = false;
-                                angular.forEach(avf.attributeCollections, function(avfac) {
+                                angular.forEach(avf.filters, function(avfac) {
                                    avfac.selected = false;
                                 });
                             });
@@ -110,24 +110,12 @@ angular.module('merchello.directives').directive('entitySpecifiedFilters',
                 }
 
                 function getAvailableClone() {
-                    var clone = [];
-                    angular.forEach(scope.available, function(av) {
-
-                        var avcopy = cloneCollection(av);
-                        avcopy.attributeCollections = [];
-                        angular.forEach(av.attributeCollections, function(avac) {
-                            avcopy.attributeCollections.push(cloneCollection(avac));
-                        });
-                        clone.push(avcopy);
+                    var clones = [];
+                    angular.forEach(scope.available, function(filter) {
+                        clones.push(filter.clone());
                     });
 
-                    return clone;
-
-                    function cloneCollection(collection) {
-                        var tmp = entityCollectionDisplayBuilder.createDefault();
-                        var copy = angular.extend(tmp, collection);
-                        return copy;
-                    }
+                    return clones;
                 }
 
 

@@ -529,7 +529,7 @@
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage PostAssociateEntityWithFilterCollections(Entity2FilterCollectionsModel model)
+        public HttpResponseMessage PostAssociateEntityWithFilters(Entity2FilterCollectionsModel model)
         {
             var collections = _entityCollectionService.GetAll(model.CollectionKeys).ToArray();
 
@@ -655,7 +655,7 @@
         }
 
         /// <summary>
-        /// Saves a SpecifiedEntityCollection.
+        /// Saves an entity filter group.
         /// </summary>
         /// <param name="collection">
         /// The collection.
@@ -664,7 +664,7 @@
         /// The <see cref="EntityFilterGroupDisplay"/>.
         /// </returns>
         [HttpPut, HttpPost]
-        public EntityFilterGroupDisplay PutSpecifiedFilterCollection(EntityFilterGroupDisplay collection)
+        public EntityFilterGroupDisplay PutEntityFilterGroup(EntityFilterGroupDisplay collection)
         {
             var currentVersion = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroup(collection.Key);
             if (currentVersion == null) throw new NullReferenceException("Collection was not found");

@@ -18,7 +18,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroups
 
         $scope.edit = function(collection) {
             $scope.preValuesLoaded = false;
-            entityCollectionResource.saveSpecifiedFilterCollection(collection).then(function(result) {
+            entityCollectionResource.putEntityFilterGroup(collection).then(function(result) {
                 $scope.preValuesLoaded = true;
             });
         }

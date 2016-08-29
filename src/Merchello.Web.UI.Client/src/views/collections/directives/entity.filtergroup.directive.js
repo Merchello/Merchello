@@ -1,5 +1,5 @@
-angular.module('merchello.directives').directive('entitySpecFilterAssociation',
-    function(entityCollectionResource) {
+angular.module('merchello.directives').directive('entityFilterGroup',
+    function() {
         return {
             restrict: 'E',
             replace: true,
@@ -10,7 +10,7 @@ angular.module('merchello.directives').directive('entitySpecFilterAssociation',
                 doSave: '&',
                 autoSave: '=?'
             },
-            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.specfilterassociation.tpl.html',
+            templateUrl: '/App_Plugins/Merchello/Backoffice/Merchello/Directives/entity.filtergroup.tpl.html',
             link: function (scope, elm, attr) {
 
                 var auto = ('autoSave' in attr && 'doSave' in attr) ? scope.autoSave : false;
@@ -18,10 +18,8 @@ angular.module('merchello.directives').directive('entitySpecFilterAssociation',
 
                 // this is used directly from the embedded directive not when the directive is used in a dialog
                 scope.save = function(att) {
-                    if (!auto) return;
-                    console.info(scope.doSave);
-                    console.info(scope.collection);
                     console.info(att);
+                    if (!auto) return;
                     scope.doSave()(scope.collection, att);
                 }
 

@@ -1,6 +1,6 @@
 <div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SpecFilterCollectionAddController">
     <div class="umb-modalcolumn-header">
-        <h4>Add {{ dialogData.collection.entityType}} Attribute Collection</h4>
+        <h4>Add {{ dialogData.collection.entityType}} Filter Group</h4>
 
         <!-- Tabs for Variants & Options -->
     </div>
@@ -10,7 +10,7 @@
         <form name="collectionForm" id="collectionForm">
             <div class="form-group row-fluid">
                 <label for="name"><localize key="general_name" />:</label>
-                <input name="name" type="text" class="span6" data-ng-model="dialogData.attribute.name" required />
+                <input name="name" type="text" class="span6" data-ng-model="dialogData.filterGroup.name" required />
                 <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
             </div>
 

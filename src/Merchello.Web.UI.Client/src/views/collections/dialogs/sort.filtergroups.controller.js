@@ -1,4 +1,4 @@
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SortSpecFilterCollectionsController',
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SortFilterGroupsController',
 ['$scope',
    function($scope) {
 

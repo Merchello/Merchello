@@ -1,0 +1,41 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.SortFilterGroupsController">
+    <div class="umb-modalcolumn-header">
+        <h4>Sort {{ dialogData.collection.entityType}} Filter Collection</h4>
+
+        <!-- Tabs for Variants & Options -->
+    </div>
+    <div class="umb-panel-body with-header with-footer">
+
+        <table class="table table-striped col-xs-6 span6" data-ng-show="dialogData.collections.length > 0">
+            <thead>
+            <tr>
+                <th data-ng-show="dialogData.collections.length > 1"></th>
+                <th><localize key="merchelloTableCaptions_filterGroup" /></th>
+            </tr>
+            </thead>
+            <tbody data-ui-sortable="sortableCollections" data-ng-model="dialogData.collections">
+            <tr data-ng-repeat="collection in dialogData.collections" class="sortable">
+                <td data-ng-show="dialogData.collections.length > 1">
+                    <merchello-sort-icon data-ng-if="dialogData.collections.length > 1"></merchello-sort-icon>
+                </td>
+                <td><input type="text" data-ng-model="collection.name" /></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary" data-ng-click="submit(dialogData.collections)">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
