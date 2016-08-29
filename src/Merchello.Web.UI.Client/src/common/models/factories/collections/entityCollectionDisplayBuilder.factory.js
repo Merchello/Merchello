@@ -19,15 +19,15 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                     var collections = [];
                     if (angular.isArray(jsonResult)) {
                         for(var i = 0; i < jsonResult.length; i++) {
-                            var attCols = undefined;
-                            if (jsonResult[i].attributeCollections) {
-                                attCols = this.transform(jsonResult[i].attributeCollections);
+                            var filters = undefined;
+                            if (jsonResult[i].filters) {
+                                filters = this.transform(jsonResult[i].filters);
                             }
                             var collection = genericModelBuilder.transform(jsonResult[ i ], Constructor);
                             collection.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult[ i ].entityTypeField );
                             collection.extendedData = extendedDataDisplayBuilder.transform(jsonResult[i].extendedData);
-                            if (attCols) {
-                                collection.attributeCollections = attCols;
+                            if (filters) {
+                                collection.filters = filters;
                             }
                             collections.push(collection);
                         }
@@ -35,8 +35,8 @@ angular.module('merchello.models').factory('entityCollectionDisplayBuilder',
                         collections = genericModelBuilder.transform(jsonResult, Constructor);
                         collections.entityTypeField = typeFieldDisplayBuilder.transform(jsonResult.entityTypeField );
                         collections.extendedData = extendedDataDisplayBuilder.transform(jsonResult.extendedData);
-                        if (jsonResult.attributeCollections) {
-                            collections.attributeCollections = this.transform(jsonResult.attributeCollections);
+                        if (jsonResult.filters) {
+                            collections.filters = this.transform(jsonResult.filters);
                         }
                     }
                     return collections;

@@ -23,7 +23,7 @@
             var resolver = EntityCollectionProviderResolver.Current;
 
             //// Act
-            var key = resolver.GetProviderKey<ProductSpecifiedFilterCollectionProvider>();
+            var key = resolver.GetProviderKey<ProductFilterGroupProvider>();
 
             //// Assert
             Assert.AreEqual(expected, key);
@@ -37,7 +37,7 @@
             var resolver = EntityCollectionProviderResolver.Current;
 
             //// Act
-            var keys = resolver.GetProviderKeys<IEntitySpecifiedFilterCollectionProvider>();
+            var keys = resolver.GetProviderKeys<IEntityFilterGroupProvider>();
             if (!keys.Any()) Assert.Fail("No keys returned");
             var psp = keys.First();
 

@@ -108,7 +108,7 @@
         Attempt<EntityCollectionProviderBase> GetProviderForCollection(Guid collectionKey);
 
         /// <summary>
-        /// Gets the provider attribute for providers responsible for specified filter attribute collections.
+        /// Gets the provider attribute for providers responsible for filter group's filters.
         /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
@@ -116,7 +116,7 @@
         /// <returns>
         /// The <see cref="EntityCollectionProviderAttribute"/>.
         /// </returns>
-        EntityCollectionProviderAttribute GetProviderAttributeForSpecifiedFilterAttributeCollection(Guid collectionKey);
+        EntityCollectionProviderAttribute GetProviderAttributeForFilter(Guid collectionKey);
 
         /// <summary>
         /// The get provider for collection.

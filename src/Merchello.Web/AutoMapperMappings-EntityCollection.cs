@@ -31,7 +31,7 @@
                     opt =>
                         opt.ResolveUsing<EntityCollectionNullableParentKeyResolver>().ConstructedBy(() => new EntityCollectionNullableParentKeyResolver()));
 
-            AutoMapper.Mapper.CreateMap<IEntitySpecifiedFilterCollection, EntitySpecifiedFilterCollectionDisplay>()
+            AutoMapper.Mapper.CreateMap<IEntityFilterGroup, EntityFilterGroupDisplay>()
                 .ForMember(
                     dest => dest.EntityTypeField,
                     opt =>
@@ -45,9 +45,9 @@
                     opt =>
                     opt.ResolveUsing<ExtendedDataResolver>().ConstructedBy(() => new ExtendedDataResolver()))
                 .ForMember(
-                     dest => dest.AttributeCollections,
+                     dest => dest.Filters,
                      opt =>
-                        opt.ResolveUsing<SpecificationCollectionAttributeCollectionsValueResolver>().ConstructedBy(() => new SpecificationCollectionAttributeCollectionsValueResolver()));
+                        opt.ResolveUsing<EntityFilterGroupFiltersValueResolver>().ConstructedBy(() => new EntityFilterGroupFiltersValueResolver()));
 
             AutoMapper.Mapper.CreateMap<EntityCollectionProviderAttribute, EntityCollectionProviderDisplay>()
                 .ForMember(

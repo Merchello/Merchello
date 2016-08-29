@@ -771,29 +771,24 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys.
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys.
         /// </summary>
         /// <param name="keys">
         /// The keys.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntitySpecificationCollection}"/>.
+        /// The <see cref="IEnumerable{IEntityFilterGroup}"/>.
         /// </returns>
-        /// <remarks>
-        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
-        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
-        /// have this as an internal method until we can refactor
-        /// </remarks>
-        internal IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(IEnumerable<Guid> keys)
+        internal IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsByProviderKeys(IEnumerable<Guid> keys)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetEntitySpecificationCollectionsByProviderKeys(keys.ToArray());
+                return repository.GetEntityFilterGroupsByProviderKeys(keys.ToArray());
             }
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
         /// with a product
         /// </summary>
         /// <param name="keys">
@@ -803,18 +798,18 @@
         /// The product key.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// The <see cref="IEnumerable{IEntityFilterGroup}"/>.
         /// </returns>
-        internal IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsContainingProduct(IEnumerable<Guid> keys, Guid productKey)
+        internal IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsContainingProduct(IEnumerable<Guid> keys, Guid productKey)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetSpecifiedFilterCollectionsContainingProduct(keys.ToArray(), productKey);
+                return repository.GetEntityFilterGroupsContainingProduct(keys.ToArray(), productKey);
             }
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
         /// with a product
         /// </summary>
         /// <param name="keys">
@@ -824,35 +819,30 @@
         /// The product key.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
+        /// The <see cref="IEnumerable{IEntityFilterGroup}"/>.
         /// </returns>
-        internal IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsNotContainingProduct(IEnumerable<Guid> keys, Guid productKey)
+        internal IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsNotContainingProduct(IEnumerable<Guid> keys, Guid productKey)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetSpecifiedFilterCollectionsNotContainingProduct(keys.ToArray(), productKey);
+                return repository.GetEntityFilterGroupsNotContainingProduct(keys.ToArray(), productKey);
             }
         }
 
         /// <summary>
-        /// Gets <see cref="IEntitySpecifiedFilterCollection"/> by it's key.
+        /// Gets <see cref="IEntityFilterGroup"/> by it's key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// The <see cref="IEntityFilterGroup"/>.
         /// </returns>
-        /// <remarks>
-        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
-        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
-        /// have this as an internal method until we can refactor
-        /// </remarks>
-        internal IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key)
+        internal IEntityFilterGroup GetEntityFilterGroup(Guid key)
         {
             using (var repository = RepositoryFactory.CreateEntityCollectionRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetEntitySpecificationCollection(key);
+                return repository.GetEntityFilterGroup(key);
             }
         }
 

@@ -1517,6 +1517,85 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Dele
         init();
     }]);
 
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecFilterCollectionAddController',
+['$scope',
+    function($scope) {
+
+    $scope.wasFormSubmitted = false;
+
+    $scope.save = function() {
+        $scope.wasFormSubmitted = true;
+        if ($scope.collectionForm.name.$valid) {
+            $scope.submit($scope.dialogData)
+        }
+    }
+
+}]);
+
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.FilterGroupAddEditFilterController',
+    ['$scope', 'entityCollectionDisplayBuilder',
+    function($scope, entityCollectionDisplayBuilder) {
+
+        $scope.loaded = true;
+
+        $scope.filterName = '';
+        $scope.wasFormSubmitted = false;
+
+        $scope.save = function() {
+            $scope.wasFormSubmitted = true;
+            if ($scope.collectionForm.name.$valid) {
+                $scope.submit($scope.dialogData);
+            }
+        }
+
+        $scope.addFilter = function() {
+            // first we need to clone the template so it can be reused (not modified)
+            var filter = angular.extend(entityCollectionDisplayBuilder.createDefault(), $scope.dialogData.filterTemplate);
+            filter.name = $scope.filterName;
+
+            var exists = _.find($scope.dialogData.filterGroup.filters, function(c) { return c.name === filter.name; });
+            if (!exists) {
+                filter.sortOrder = $scope.dialogData.filterGroup.filters.length === 0 ?
+                    0 :
+                    $scope.dialogData.filterGroup.filters.length;
+
+                $scope.dialogData.filterGroup.filters.push(filter);
+            }
+
+            $scope.filterName = '';
+
+        }
+
+        // removes a choice from the dialog data collection of choices
+        $scope.remove = function(idx) {
+            if ($scope.dialogData.filterGroup.filters.length > idx) {
+                var remover = $scope.dialogData.filterGroup.filters[idx];
+                var sort = remover.sortOrder;
+                $scope.dialogData.filterGroup.filters.splice(idx, 1);
+                _.each($scope.dialogData.filterGroup.filters, function(c) {
+                    if (c.sortOrder > sort) {
+                        c.sortOrder -= 1;
+                    }
+                });
+            }
+        };
+
+        $scope.sortableFilters = {
+            start : function(e, ui) {
+                ui.item.data('start', ui.item.index());
+            },
+            stop: function (e, ui) {
+                var start = ui.item.data('start'),
+                    end =  ui.item.index();
+                for(var i = 0; i < $scope.dialogData.filterGroup.filters.length; i++) {
+                    $scope.dialogData.filterGroup.filters[i].sortOrder = i + 1;
+                }
+            },
+            disabled: false,
+            cursor: "move"
+        }
+}]);
+
 
 angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.ManageStaticCollectionController',
     ['$scope',  'treeService', 'notificationsService', 'navigationService', 'assetsService', 'entityCollectionHelper', 'merchelloTabsFactory',
@@ -1840,7 +1919,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickStaticColl
         init();
 }]);
 
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SelectSpecAttributeProviderController',
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SelectFilterProviderController',
     ['$scope',
     function($scope) {
 
@@ -1852,7 +1931,7 @@ angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.Sele
 
 }]);
 
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SortSpecFilterCollectionsController',
+angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SortFilterGroupsController',
 ['$scope',
    function($scope) {
 
@@ -2011,85 +2090,6 @@ angular.module('merchello')
         }]);
 
 
-
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecFilterAttributeCollectionAddController',
-    ['$scope', 'entityCollectionDisplayBuilder',
-    function($scope, entityCollectionDisplayBuilder) {
-
-        $scope.loaded = true;
-
-        $scope.attributeName = '';
-        $scope.wasFormSubmitted = false;
-
-        $scope.save = function() {
-            $scope.wasFormSubmitted = true;
-            if ($scope.collectionForm.name.$valid) {
-                $scope.submit($scope.dialogData);
-            }
-        }
-
-        $scope.addAttribute = function() {
-            // first we need to clone the template so it can be reused (not modified)
-            var attribute = angular.extend(entityCollectionDisplayBuilder.createDefault(), $scope.dialogData.attributeTemplate);
-            attribute.name = $scope.attributeName;
-
-            var exists = _.find($scope.dialogData.specCollection.attributeCollections, function(c) { return c.name === attribute.name; });
-            if (!exists) {
-                attribute.sortOrder = $scope.dialogData.specCollection.attributeCollections.length === 0 ?
-                    0 :
-                    $scope.dialogData.specCollection.attributeCollections.length;
-
-                $scope.dialogData.specCollection.attributeCollections.push(attribute);
-            }
-
-            $scope.attributeName = '';
-
-        }
-
-        // removes a choice from the dialog data collection of choices
-        $scope.remove = function(idx) {
-            if ($scope.dialogData.specCollection.attributeCollections.length > idx) {
-                var remover = $scope.dialogData.specCollection.attributeCollections[idx];
-                var sort = remover.sortOrder;
-                $scope.dialogData.specCollection.attributeCollections.splice(idx, 1);
-                _.each($scope.dialogData.specCollection.attributeCollections, function(c) {
-                    if (c.sortOrder > sort) {
-                        c.sortOrder -= 1;
-                    }
-                });
-            }
-        };
-
-        $scope.sortableAttributes = {
-            start : function(e, ui) {
-                ui.item.data('start', ui.item.index());
-            },
-            stop: function (e, ui) {
-                var start = ui.item.data('start'),
-                    end =  ui.item.index();
-                for(var i = 0; i < $scope.dialogData.specCollection.attributeCollections.length; i++) {
-                    $scope.dialogData.specCollection.attributeCollections[i].sortOrder = i + 1;
-                }
-            },
-            disabled: false,
-            cursor: "move"
-        }
-}]);
-
-angular.module('merchello').controller('Merchello.EntityCollections.Dialogs.SpecFilterCollectionAddController',
-['$scope',
-    function($scope) {
-
-    $scope.wasFormSubmitted = false;
-
-    $scope.save = function() {
-        $scope.wasFormSubmitted = true;
-        if ($scope.collectionForm.name.$valid) {
-            $scope.submit($scope.dialogData)
-        }
-    }
-
-}]);
 
 angular.module('merchello').controller('Merchello.Directives.EntityStaticCollectionsDirectiveController',
     ['$scope', 'notificationsService', 'dialogService', 'entityCollectionHelper', 'entityCollectionResource', 'dialogDataFactory', 'entityCollectionDisplayBuilder',
@@ -6700,7 +6700,6 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickSpecFilter
     ['$scope',
     function($scope) {
 
-
         $scope.save = function() {
             // collections that have been modified will have attribute collections marked selected
 
@@ -6712,7 +6711,7 @@ angular.module('merchello').controller('Merchello.Product.Dialogs.PickSpecFilter
         }
 
         function setIntendedAssociations(collection) {
-            var atts = _.filter(collection.attributeCollections, function(att) {
+            var atts = _.filter(collection.filters, function(att) {
                 if (att.selected) return att;
             });
 
@@ -8167,7 +8166,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductDetachedCont
             // Initialize the controller
             init();
     }]);
-angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecificationListController',
+angular.module('merchello').controller('Merchello.Backoffice.ProductFilterGroupsController',
     ['$scope', 'entityCollectionResource', 'merchelloTabsFactory',
     function($scope, entityCollectionResource, merchelloTabsFactory) {
 
@@ -8187,7 +8186,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
 
         $scope.edit = function(collection) {
             $scope.preValuesLoaded = false;
-            entityCollectionResource.saveSpecifiedFilterCollection(collection).then(function(result) {
+            entityCollectionResource.putEntityFilterGroup(collection).then(function(result) {
                 $scope.preValuesLoaded = true;
             });
         }
@@ -8195,7 +8194,7 @@ angular.module('merchello').controller('Merchello.Backoffice.ProductFilterSpecif
         function init() {
 
             $scope.tabs = merchelloTabsFactory.createProductListTabs();
-            $scope.tabs.setActive('productfilterspecs');
+            $scope.tabs.setActive('filtergroups');
 
             $scope.loaded = true;
             $scope.preValuesLoaded = true;

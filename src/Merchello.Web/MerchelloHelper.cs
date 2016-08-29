@@ -110,6 +110,16 @@
             get { return _queryProvider.Value; }
         }
 
+        //public ICachedFilterProvider Filters
+        //{
+            
+        //}
+
+        //public ICachedCollectionProvider Colletions
+        //{
+            
+        //}
+
         /// <summary>
         /// Gets the <see cref="IValidationHelper"/>.
         /// </summary>

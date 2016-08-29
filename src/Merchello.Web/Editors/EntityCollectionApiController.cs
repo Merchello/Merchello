@@ -148,7 +148,7 @@
         }
 
         /// <summary>
-        /// Gets the entity specification collection providers for a given type of entity.
+        /// Gets the entity filter group providers for a given type of entity.
         /// </summary>
         /// <param name="entityType">
         /// The entity type.
@@ -157,12 +157,12 @@
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         [HttpGet]
-        public IEnumerable<EntityCollectionProviderDisplay> GetEntitySpecifiedFilterCollectionProviders(EntityType entityType)
+        public IEnumerable<EntityCollectionProviderDisplay> GetEntityFilterGroupProviders(EntityType entityType)
         {
             if (entityType != EntityType.Product) throw new NotImplementedException("Only Product types have been implemented");
 
             return
-                _resolver.GetProviderAttributes<IProductSpecifiedFilterCollectionProvider>()
+                _resolver.GetProviderAttributes<IProductFilterGroupProvider>()
                     .Select(x => x.ToEntityCollectionProviderDisplay());
         }
 
@@ -176,10 +176,10 @@
         /// The <see cref="EntityCollectionProviderDisplay"/>.
         /// </returns>
         [HttpGet]
-        public EntityCollectionProviderDisplay GetEntitySpecifiedFilterCollectionAttributeProvider(Guid key)
+        public EntityCollectionProviderDisplay GetEntityFilterGroupFilterProvider(Guid key)
         {
             var att = 
-                _resolver.GetProviderAttributeForSpecifiedFilterAttributeCollection(key);
+                _resolver.GetProviderAttributeForFilter(key);
 
             if (att == null) throw new NullReferenceException("Could not find Attribute Provider");
 
@@ -256,20 +256,20 @@
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         [HttpGet]
-        public IEnumerable<EntitySpecifiedFilterCollectionDisplay> GetEntitySpecifiedFilterCollections(EntityType entityType)
+        public IEnumerable<EntityFilterGroupDisplay> GetEntityFilterGroups(EntityType entityType)
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntitySpecifiedFilterCollectionProvider>();
+            var keys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntityFilterGroupProvider>();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
-            var collections = ((EntityCollectionService)_entityCollectionService).GetEntitySpecificationCollectionsByProviderKeys(keys);
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsByProviderKeys(keys);
             
             return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
         /// with a product
         /// </summary>
         /// <param name="entityType">
@@ -282,20 +282,20 @@
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
         [HttpGet]
-        public IEnumerable<EntitySpecifiedFilterCollectionDisplay> GetSpecifiedFilterCollectionsContainingProduct(EntityType entityType, Guid entityKey)
+        public IEnumerable<EntityFilterGroupDisplay> GetEntityFilterGroupsContaining(EntityType entityType, Guid entityKey)
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductSpecifiedFilterCollectionProvider>();
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductFilterGroupProvider>();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
-            var collections = ((EntityCollectionService)_entityCollectionService).GetSpecifiedFilterCollectionsContainingProduct(new[] { key }, entityKey);
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsContainingProduct(new[] { key }, entityKey);
 
             return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
         /// with a product
         /// </summary>
         /// <param name="entityType">
@@ -308,14 +308,14 @@
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
         [HttpGet]
-        public IEnumerable<EntitySpecifiedFilterCollectionDisplay> GetSpecifiedFilterCollectionsNotContainingProduct(EntityType entityType, Guid entityKey)
+        public IEnumerable<EntityFilterGroupDisplay> GetEntityFilterGroupsNotContaining(EntityType entityType, Guid entityKey)
         {
             if (entityType != EntityType.Product) throw new NotImplementedException();
 
-            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductSpecifiedFilterCollectionProvider>();
+            var key = EntityCollectionProviderResolver.Current.GetProviderKey<ProductFilterGroupProvider>();
 
             // TODO service call will need to be updated to respect entity type if ever opened up to other entity types
-            var collections = ((EntityCollectionService)_entityCollectionService).GetSpecifiedFilterCollectionsNotContainingProduct(new[] { key }, entityKey);
+            var collections = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroupsNotContainingProduct(new[] { key }, entityKey);
 
             return collections.Select(c => c.ToEntitySpecificationCollectionDisplay()).OrderBy(x => x.SortOrder);
         }
@@ -529,7 +529,7 @@
         /// The <see cref="HttpResponseMessage"/>.
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage PostAssociateEntityWithFilterCollections(Entity2FilterCollectionsModel model)
+        public HttpResponseMessage PostAssociateEntityWithFilters(Entity2FilterCollectionsModel model)
         {
             var collections = _entityCollectionService.GetAll(model.CollectionKeys).ToArray();
 
@@ -655,18 +655,18 @@
         }
 
         /// <summary>
-        /// Saves a SpecifiedEntityCollection.
+        /// Saves an entity filter group.
         /// </summary>
         /// <param name="collection">
         /// The collection.
         /// </param>
         /// <returns>
-        /// The <see cref="EntitySpecifiedFilterCollectionDisplay"/>.
+        /// The <see cref="EntityFilterGroupDisplay"/>.
         /// </returns>
         [HttpPut, HttpPost]
-        public EntitySpecifiedFilterCollectionDisplay PutSpecifiedFilterCollection(EntitySpecifiedFilterCollectionDisplay collection)
+        public EntityFilterGroupDisplay PutEntityFilterGroup(EntityFilterGroupDisplay collection)
         {
-            var currentVersion = ((EntityCollectionService)_entityCollectionService).GetEntitySpecificationCollection(collection.Key);
+            var currentVersion = ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroup(collection.Key);
             if (currentVersion == null) throw new NullReferenceException("Collection was not found");
 
             // update the root (filter) collection
@@ -676,9 +676,9 @@
             _entityCollectionService.Save(filter);
 
             var removers =
-                currentVersion.AttributeCollections.Where(
+                currentVersion.Filters.Where(
                     x =>
-                    collection.AttributeCollections.Where(adds => !adds.Key.Equals(Guid.Empty)).All(y => y.Key != x.Key));
+                    collection.Filters.Where(adds => !adds.Key.Equals(Guid.Empty)).All(y => y.Key != x.Key));
 
             // remove the removers
             foreach (var rm in removers)
@@ -689,7 +689,7 @@
             var operations = new List<IEntityCollection>();
 
             // new attribute collections
-            foreach (var op in collection.AttributeCollections)
+            foreach (var op in collection.Filters)
             {
                 if (op.Key.Equals(Guid.Empty))
                 {
@@ -713,7 +713,7 @@
 
 
             return
-                ((EntityCollectionService)_entityCollectionService).GetEntitySpecificationCollection(collection.Key)
+                ((EntityCollectionService)_entityCollectionService).GetEntityFilterGroup(collection.Key)
                     .ToEntitySpecificationCollectionDisplay();
         }
 

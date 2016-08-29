@@ -59,47 +59,52 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to get entity collections for entity');
                 },
-                getEntitySpecifiedFilterCollections : function(entityType) {
+                // getEntitySpecifiedFilterCollections
+                getEntityFilterGroups : function(entityType) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecifiedFilterCollections',
+                            url: baseUrl + 'GetEntityFilterGroups',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
                         'Failed to get entity specified filter by the entityType');
                 },
-                getEntitySpecifiedFilterCollectionProviders : function(entityType) {
+                // getEntitySpecifiedFilterCollectionProviders
+                getEntityFilterGroupProviders : function(entityType) {
 
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionProviders',
+                            url: baseUrl + 'GetEntityFilterGroupProviders',
                             method: "GET",
                             params: { entityType: entityType}
                         }),
                         'Failed to get entity specified filter providers by the entityType');
                 },
-                getEntitySpecifiedFilterCollectionAttributeProvider : function(collectionKey) {
+                // getEntitySpecifiedFilterCollectionAttributeProvider
+                getEntityFilterGroupFilterProvider : function(collectionKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetEntitySpecifiedFilterCollectionAttributeProvider',
+                            url: baseUrl + 'GetEntityFilterGroupFilterProvider',
                             method: "GET",
                             params: { key: collectionKey}
                         }),
                         'Failed to get specified filter attribute provider by the entityType');
                 },
-                getSpecifiedFilterCollectionsContainingProduct : function(entityType, entityKey) {
+                // getSpecifiedFilterCollectionsContainingProduct
+                getEntityFilterGroupsContaining : function(entityType, entityKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetSpecifiedFilterCollectionsContainingProduct',
+                            url: baseUrl + 'GetEntityFilterGroupsContaining',
                             method: "GET",
                             params: { entityType: entityType, entityKey: entityKey}
                         }),
                         'Failed to get specified filter attribute provider by the entityType');
                 },
-                getSpecifiedFilterCollectionsNotContainingProduct : function(entityType, entityKey) {
+                // getSpecifiedFilterCollectionsNotContainingProduct
+                getEntityFilterGroupsNotContaining : function(entityType, entityKey) {
                     return umbRequestHelper.resourcePromise(
                         $http({
-                            url: baseUrl + 'GetSpecifiedFilterCollectionsNotContainingProduct',
+                            url: baseUrl + 'GetEntityFilterGroupsNotContaining',
                             method: "GET",
                             params: { entityType: entityType, entityKey: entityKey}
                         }),
@@ -140,10 +145,11 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to save an entity collection');
                 },
-                saveSpecifiedFilterCollection : function(collection) {
-                    var url = baseUrl + 'PutSpecifiedFilterCollection';
+                //saveSpecifiedFilterCollection
+                putEntityFilterGroup : function(collection) {
+                    var url = baseUrl + 'PutEntityFilterGroup';
                     collection.extendedData = collection.extendedData.toArray();
-                    _.each(collection.attributeCollections, function(ac) {
+                    _.each(collection.filters, function(ac) {
                        ac.extendedData = ac.extendedData.toArray();
                     });
                     return umbRequestHelper.resourcePromise(
@@ -172,8 +178,9 @@ angular.module('merchello.resources').factory('entityCollectionResource',
                         ),
                         'Failed to add an entity to a collection');
                 },
-                associateEntityWithFilterCollections: function (entityKey, collectionKeys) {
-                    var url = baseUrl + 'PostAssociateEntityWithFilterCollections';
+                // associateEntityWithFilterCollections
+                associateEntityWithFilters: function (entityKey, collectionKeys) {
+                    var url = baseUrl + 'PostAssociateEntityWithFilters';
                     return umbRequestHelper.resourcePromise(
                         $http.post(url,
                             { entityKey: entityKey, collectionKeys: collectionKeys }

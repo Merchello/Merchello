@@ -1,0 +1,65 @@
+<div class="umb-panel merchello-side-panel" ng-controller="Merchello.EntityCollections.Dialogs.FilterGroupAddEditFilterController">
+    <div class="umb-modalcolumn-header">
+        <h4>Edit {{ dialogData.collection.entityType}} Filter Collection</h4>
+
+        <!-- Tabs for Variants & Options -->
+    </div>
+    <form name="collectionForm" id="collectionForm">
+    <div class="umb-panel-body with-header with-footer">
+
+
+            <div class="form-group row-fluid">
+                <label for="name"><localize key="general_name" />:</label>
+                <input name="name" type="text" class="span6" data-ng-model="dialogData.filterGroup.name" required />
+                <div class="error" data-ng-show="collectionForm.name.$invalid && wasFormSubmitted"><localize key="merchelloValidation_nameFieldRequired" /></div>
+            </div>
+
+
+
+        <div class="control-group">
+
+            <h5>Filters</h5>
+
+            <label for="filterName"><localize key="general_name" /></label><br />
+            <input type="text" name="filterName" data-ng-model="filterName" merch-enter="addFilter()" /> <merchello-add-icon do-add="addAttribute()"></merchello-add-icon>
+
+        </div>
+
+        <table class="table settings-table col-xs-6 span6" data-ng-show="dialogData.filterGroup.filters.length > 0">
+            <thead>
+            <tr>
+                <th data-ng-show="dialogData.filterGroup.filters.length > 1"></th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody data-ui-sortable="sortableFilters" data-ng-model="dialogData.filterGroup.filters">
+            <tr data-ng-repeat="filter in dialogData.filterGroup.filters" class="sortable">
+                <td data-ng-show="dialogData.filterGroup.filters.length > 1">
+                    <merchello-sort-icon data-ng-if="dialogData.filterGroup.filters.length > 1"></merchello-sort-icon>
+                </td>
+                <td><input type="text" data-ng-model="filter.name" /></td>
+                <td>
+                    <merchello-delete-icon do-delete="remove($index)" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar pull-right">
+
+                <a href data-ng-click="close()" class="btn btn-link">
+                    <localize key="general_cancel">Cancel</localize>
+                </a>
+
+                <button class="btn btn-primary" data-ng-click="save()">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

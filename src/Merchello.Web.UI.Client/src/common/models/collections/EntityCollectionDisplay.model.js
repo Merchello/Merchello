@@ -25,12 +25,12 @@ EntityCollectionDisplay.prototype = (function() {
 
     function clone() {
         var clone = angular.extend(new EntityCollectionDisplay(), this);
-        if (clone.attributeCollections) {
-            var collections = clone.attributeCollections;
-            clone.attributeCollections = [];
+        if (clone.filters) {
+            var collections = clone.filters;
+            clone.filters = [];
             angular.forEach(collections, function(ac) {
                 var atclone = angular.extend(new EntityCollectionDisplay(), ac);
-                clone.attributeCollections.push(atclone);
+                clone.filters.push(atclone);
             });
         }
         return clone;

@@ -176,7 +176,7 @@
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys.
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys.
         /// </summary>
         /// <param name="keys">
         /// The keys.
@@ -185,11 +185,11 @@
         /// The <see cref="IEnumerable{IEntitySpecificationCollection}"/>.
         /// </returns>
         /// <remarks>
-        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
-        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as the special filter group.
+        /// However, it merely builds a filter group using whatever collection and it's children - so Service should definitely
         /// have this as an internal method until we can refactor
         /// </remarks>
-        public IEnumerable<IEntitySpecifiedFilterCollection> GetEntitySpecificationCollectionsByProviderKeys(Guid[] keys)
+        public IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsByProviderKeys(Guid[] keys)
         {
             var sql = new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
                 .Where<EntityCollectionDto>(x => x.ParentKey == null)
@@ -198,12 +198,12 @@
             var matches = Database.Fetch<KeyDto>(sql);
 
             return !matches.Any() ? 
-                Enumerable.Empty<IEntitySpecifiedFilterCollection>() : 
-                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
+                Enumerable.Empty<IEntityFilterGroup>() : 
+                matches.Select(x => this.GetEntityFilterGroup(x.Key)).Where(x => x != null);
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are associated
         /// with a product
         /// </summary>
         /// <param name="keys">
@@ -215,7 +215,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
-        public IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsContainingProduct(Guid[] keys, Guid productKey)
+        public IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsContainingProduct(Guid[] keys, Guid productKey)
         {
             var sql =
                 new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
@@ -229,12 +229,12 @@
             var matches = Database.Fetch<KeyDto>(sql);
 
             return !matches.Any() ?
-                Enumerable.Empty<IEntitySpecifiedFilterCollection>() :
-                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
+                Enumerable.Empty<IEntityFilterGroup>() :
+                matches.Select(x => this.GetEntityFilterGroup(x.Key)).Where(x => x != null);
         }
 
         /// <summary>
-        /// Gets a collection of <see cref="IEntitySpecifiedFilterCollection"/> by a collection of keys that are not associated
+        /// Gets a collection of <see cref="IEntityFilterGroup"/> by a collection of keys that are not associated
         /// with a product
         /// </summary>
         /// <param name="keys">
@@ -246,7 +246,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IEntitySpecifiedFilterCollection}"/>.
         /// </returns>
-        public IEnumerable<IEntitySpecifiedFilterCollection> GetSpecifiedFilterCollectionsNotContainingProduct(Guid[] keys, Guid productKey)
+        public IEnumerable<IEntityFilterGroup> GetEntityFilterGroupsNotContainingProduct(Guid[] keys, Guid productKey)
         {
             var sql =
                 new Sql("SELECT pk").From<EntityCollectionDto>(SqlSyntax)
@@ -260,28 +260,28 @@
             var matches = Database.Fetch<KeyDto>(sql);
 
             return !matches.Any() ?
-                Enumerable.Empty<IEntitySpecifiedFilterCollection>() :
-                matches.Select(x => this.GetEntitySpecificationCollection(x.Key)).Where(x => x != null);
+                Enumerable.Empty<IEntityFilterGroup>() :
+                matches.Select(x => this.GetEntityFilterGroup(x.Key)).Where(x => x != null);
         }
 
         /// <summary>
-        /// Gets <see cref="IEntitySpecifiedFilterCollection"/> by it's key.
+        /// Gets <see cref="IEntityFilterGroup"/> by it's key.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="IEntitySpecifiedFilterCollection"/>.
+        /// The <see cref="IEntityFilterGroup"/>.
         /// </returns>
         /// <remarks>
-        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as a specification collection.
-        /// However, it merely builds a spec collection using whatever collection and it's children - so Service should definitely
+        /// TODO this is pretty brittle since it assumes the collection will be intended to be used as the special filter group.
+        /// However, it merely builds a filter group using whatever collection and it's children - so Service should definitely
         /// have this as an internal method until we can refactor
         /// </remarks>
-        public IEntitySpecifiedFilterCollection GetEntitySpecificationCollection(Guid key)
+        public IEntityFilterGroup GetEntityFilterGroup(Guid key)
         {
-            var cacheKey = Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(key);
-            var cached = (IEntitySpecifiedFilterCollection)RuntimeCache.GetCacheItem(cacheKey);
+            var cacheKey = Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(key);
+            var cached = (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey);
 
             if (cached != null) return cached;
 
@@ -290,13 +290,13 @@
             var query = Querying.Query<IEntityCollection>.Builder.Where(x => x.ParentKey == key);
             var children = GetByQuery(query);
 
-            var specCollection = new EntitySpecifiedFilterCollection(collection);
+            var filterGroup = new EntityFilterGroup(collection);
             foreach (var child in children)
             {
-                specCollection.AttributeCollections.Add(child);
+                filterGroup.Filters.Add(child);
             }
 
-            return (IEntitySpecifiedFilterCollection)RuntimeCache.GetCacheItem(cacheKey, () => specCollection);
+            return (IEntityFilterGroup)RuntimeCache.GetCacheItem(cacheKey, () => filterGroup);
         }
 
         /// <summary>
@@ -432,7 +432,7 @@
             base.PersistDeletedItem(entity);
 
             if (entity.ParentKey != null)
-                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(entity.ParentKey.Value));
+                RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -460,7 +460,7 @@
             entity.ResetDirtyProperties();
 
             if (entity.ParentKey != null)
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(entity.ParentKey.Value));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.ParentKey.Value));
         }
 
         /// <summary>
@@ -480,7 +480,7 @@
 
             entity.ResetDirtyProperties();
             RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityCollection>(entity.Key));
-            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntitySpecifiedFilterCollection>(entity.Key));
+            RuntimeCache.ClearCacheItem(Cache.CacheKeys.GetEntityCacheKey<IEntityFilterGroup>(entity.Key));
         }
     }
 }

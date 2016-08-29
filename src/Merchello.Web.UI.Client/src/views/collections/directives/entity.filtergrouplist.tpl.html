@@ -1,0 +1,48 @@
+<div data-ng-show="preValuesLoaded">
+
+    <div class="control-group umb-control-group">
+
+        <div class="merchello-section-label">
+            <localize key="merchelloSpecFilters_editSpecFilter"></localize>
+        </div>
+        <div class="merchello-controls merchello-list-view umb-listview">
+
+
+            <!-- button data-ng-hide="hideSortButton" data-ng-click="updateSorts()" class="btn btn-success"><localize key="buttons_save" /></button -->
+
+            <table class="table table-striped spec-filter-list">
+                <thead>
+                <tr>
+                    <td>
+                        <a  data-ng-show="collections.length > 0" data-ng-click="openSort()" class="sort-icon" prevent-default><localize key="merchelloTableCaptions_filterGroup" /></a>
+                        <span data-ng-hide="collections.length > 0"><localize key="merchelloTableCaptions_filterGroup" /></span>
+                    </td>
+                    <td><localize key="merchelloTableCaptions_filters" /></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody  data-ng-show="collections.length > 0">
+                <tr class="merchello-icon-container" data-ng-repeat="group in collections">
+                    <td><a prevent-default data-ng-click="edit(group)">{{getColumnValue('name', group)}}</a></td>
+                    <td data-ng-bind="getColumnValue('filters', group)"></td>
+                    <td class="text-right">
+                        <merchello-icon-bar show-add="false" show-edit="true" show-delete="showDelete(group)" do-edit="edit(group)" do-delete="delete(group)"></merchello-icon-bar>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody data-ng-hide="collections.length > 0" >
+                <td colspan="3" data-ng-bind-html-unsafe="noResults">
+
+                </td>
+                </tbody>
+
+            </table>
+
+            <div class="text-center">
+                <merchello-add-icon do-add="add()"></merchello-add-icon>
+            </div>
+        </div>
+    </div>
+
+
+</div>
