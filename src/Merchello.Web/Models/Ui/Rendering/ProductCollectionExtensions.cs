@@ -2,13 +2,11 @@ namespace Merchello.Web.Models.Ui.Rendering
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
-    using Merchello.Core.Services;
     using Merchello.Web.Models.VirtualContent;
+    using Merchello.Web.Services;
 
     /// <summary>
     /// The product collection extensions.
@@ -24,7 +22,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="ProductCollection"/>.
         /// </returns>
-        public static ProductCollection Parent(this ProductCollection value)
+        public static IProductCollection Parent(this IProductCollection value)
         {
             return value.ParentKey == null ? 
                        null : 
@@ -40,7 +38,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="IEnumerable{ProductCollectionr}"/>.
         /// </returns>
-        public static IEnumerable<ProductCollection> Children(this ProductCollection value)
+        public static IEnumerable<IProductCollection> Children(this IProductCollection value)
         {
             return GetChildren(value);
         }
@@ -54,7 +52,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        public static IEnumerable<IProductContent> GetProducts(this ProductCollection value)
+        public static IEnumerable<IProductContent> GetProducts(this IProductCollection value)
         {
             return value.GetProducts(1, long.MaxValue);
         }
@@ -81,7 +79,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
         public static IEnumerable<IProductContent> GetProducts(
-            this ProductCollection value,
+            this IProductCollection value,
             long page,
             long itemsPerPage,
             string sortBy = "",
@@ -100,7 +98,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="IEnumerable{ProductCollection}"/>.
         /// </returns>
-        public static IEnumerable<ProductCollection> Collections(this IProductContent product)
+        public static IEnumerable<IProductCollection> Collections(this IProductContent product)
         {
             return product.Collections(MerchelloContext.Current);
         }
@@ -130,7 +128,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
         internal static IEnumerable<IProductContent> GetProducts(
-            this ProductCollection value,
+            this IProductCollection value,
             MerchelloHelper merchelloHelper,
             long page,
             long itemsPerPage,
@@ -138,7 +136,7 @@ namespace Merchello.Web.Models.Ui.Rendering
             SortDirection sortDirection = SortDirection.Ascending)
         {
             return merchelloHelper.Query.Product.TypedProductContentFromCollection(
-                value.CollectionKey,
+                value.Key,
                 page,
                 itemsPerPage,
                 sortBy,
@@ -157,14 +155,9 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="IEnumerable{ProductCollection}"/>.
         /// </returns>
-        internal static IEnumerable<ProductCollection> Collections(this IProductContent product, IMerchelloContext merchelloContext)
+        internal static IEnumerable<IProductCollection> Collections(this IProductContent product, IMerchelloContext merchelloContext)
         {
-            var collections = GetProductEntityCollections(
-                MerchelloContext.Current,
-                product.Key,
-                ((EntityCollectionService)merchelloContext.Services.EntityCollectionService).GetEntityCollectionsByProductKey);
-                
-            return collections.Select(col => new ProductCollection(col));
+            return GetProxyService(merchelloContext).GetCollectionsContainingProduct(product.Key);
         }
 
         /// <summary>
@@ -176,13 +169,9 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="IEnumerable{ProductCollection}"/>.
         /// </returns>
-        private static IEnumerable<ProductCollection> GetChildren(this ProductCollection value)
+        private static IEnumerable<IProductCollection> GetChildren(this IProductCollection value)
         {
-            var service = MerchelloContext.Current.Services.EntityCollectionService;
-
-            var children = GetCollectionChildCollections(MerchelloContext.Current, value.CollectionKey, ((EntityCollectionService)service).GetChildren);
-
-            return children.Select(x => new ProductCollection(x));
+            return GetProxyService(MerchelloContext.Current).GetChildCollections(value.Key);
         }
 
         /// <summary>
@@ -194,60 +183,24 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="ProductCollection"/>.
         /// </returns>
-        private static ProductCollection GetByKey(Guid key)
+        private static IProductCollection GetByKey(Guid key)
         {
-            var service = MerchelloContext.Current.Services.EntityCollectionService;
-            var collection = service.GetByKey(key);
-
-            if (collection == null) return null;
-            if (collection.EntityTfKey != Core.Constants.TypeFieldKeys.Entity.ProductKey) return null;
-
-            return new ProductCollection(collection);
+            return GetProxyService(MerchelloContext.Current).GetByKey(key);
         }
 
-        //// -- TODO these are quick request cache fixes that should be looked at as something more permanent
-        //// in later version
 
         /// <summary>
-        /// Gets the entity collections or entity filter collections for a product.
+        /// Gets the <see cref="IProductCollectionService"/>.
         /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <param name="productKey">
-        /// The product key.
-        /// </param>
-        /// <param name="fetch">
-        /// The fetch.
-        /// </param>
-        /// <param name="isFilter">
-        /// The is filter.
+        /// <param name="merchelloContext">
+        /// The merchello context.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable{IEntityCollection}"/>.
+        /// The <see cref="IProductCollectionService"/>.
         /// </returns>
-        private static IEnumerable<IEntityCollection> GetProductEntityCollections(IMerchelloContext context, Guid productKey, Func<Guid, bool, IEnumerable<IEntityCollection>> fetch, bool isFilter = false)
+        private static IProductCollectionService GetProxyService(IMerchelloContext merchelloContext)
         {
-            var cacheKey = string.Format("{0}.productEntityCollections", productKey);
-
-            var collections = (IEnumerable<IEntityCollection>)context.Cache.RequestCache.GetCacheItem(cacheKey);
-            if (collections != null) return collections;
-
-            return
-                (IEnumerable<IEntityCollection>)
-                context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(productKey, isFilter));
-        }
-
-        private static IEnumerable<IEntityCollection> GetCollectionChildCollections(IMerchelloContext context, Guid collectionKey, Func<Guid, IEnumerable<IEntityCollection>> fetch)
-        {
-            var cacheKey = string.Format("{0}.entityCollectionChildCollection", collectionKey);
-
-            var collections = (IEnumerable<IEntityCollection>)context.Cache.RequestCache.GetCacheItem(cacheKey);
-            if (collections != null) return collections;
-
-            return
-                (IEnumerable<IEntityCollection>)
-                context.Cache.RequestCache.GetCacheItem(cacheKey, () => fetch.Invoke(collectionKey));
+            return ProxyEntityServiceResolver.Current.Instance<ProductCollectionService>(new object[] { merchelloContext });
         }
         
     }

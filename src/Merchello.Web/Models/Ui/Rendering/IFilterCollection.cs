@@ -6,13 +6,8 @@
     /// <summary>
     /// Defines a product filter group
     /// </summary>
-    public interface IProductFilterGroup
+    public interface IProductFilterGroup : IEntityProxy
     {
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        Guid Key { get; }
-
         /// <summary>
         /// Gets the name.
         /// </summary>

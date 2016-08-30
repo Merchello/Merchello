@@ -80,13 +80,13 @@
 var collections = product.Collections().ToArray();
 if (collections.Any())
 {
-    var pages = new List<Tuple<ProductCollection, IPublishedContent>>();
+    var pages = new List<Tuple<IProductCollection, IPublishedContent>>();
     foreach (var col in collections)
     {
-        var page = ExampleUiHelper.Content.GetCategoryPageForCollection(col.CollectionKey);
+        var page = ExampleUiHelper.Content.GetCategoryPageForCollection(col.Key);
         if (page != null)
         {
-            pages.Add(new Tuple<ProductCollection, IPublishedContent>(col, page));
+            pages.Add(new Tuple<IProductCollection, IPublishedContent>(col, page));
         }
     }
     var needsComma = false;

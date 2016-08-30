@@ -373,6 +373,7 @@
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Ensure.cs" />
     <Compile Include="EntityCollections\CachedEntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\CachedQueryableEntityCollectionProviderBase{T}.cs" />
     <Compile Include="EntityCollections\EntityCollectionBaseExtensions.cs" />

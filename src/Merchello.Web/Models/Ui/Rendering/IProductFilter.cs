@@ -1,25 +1,9 @@
 namespace Merchello.Web.Models.Ui.Rendering
 {
-    using System;
-
     /// <summary>
-    /// Defines a product filter.
+    /// Marker interface for product filters.
     /// </summary>
-    public interface IProductFilter
+    public interface IProductFilter : IEntityCollectionProxy
     {
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        Guid Key { get; }
-
-        /// <summary>
-        /// Gets the provider key.
-        /// </summary>
-        Guid ProviderKey { get; }
-
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        string Name { get; }
     }
 }
