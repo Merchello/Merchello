@@ -115,7 +115,7 @@
                     return obj as T;
                 }
 
-                throw new Exception($"ActivatorHelper failed to instantiate class of type {type.Name}");
+                throw new Exception("ActivatorHelper failed to instantiate class of type {type.Name}");
             }
             catch (Exception ex)
             {

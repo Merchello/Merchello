@@ -42,7 +42,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <summary>
         /// Gets the sort order.
         /// </summary>
-        public int SortOrder { get; }
+        public int SortOrder { get; private set; }
 
         /// <summary>
         /// Gets the provider key.
