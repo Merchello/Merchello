@@ -6,7 +6,7 @@
     Layout = "FastTrack.cshtml";
 
     var title = Model.Categories == null ? Model.Name : Model.Categories.Name;
-    var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<ProductCollection>();
+    var categories = Model.Categories != null ? Model.Categories.Children().ToArray() : Enumerable.Empty<IProductCollection>();
 }
 
 @Html.Partial("_Headline")
@@ -28,11 +28,11 @@
     </div>
 }
 
-@helper CategoryLink(ProductCollection category)
+@helper CategoryLink(IProductCollection category)
 {
-if (category.CollectionKey != Guid.Empty)
+if (category.Key != Guid.Empty)
 {
-    var page = ExampleUiHelper.Content.GetCategoryPageForCollection(category.CollectionKey);
+    var page = ExampleUiHelper.Content.GetCategoryPageForCollection(category.Key);
     if (page != null)
     {
             <h4><a href="@page.Url">@category.Name</a></h4>

@@ -53,7 +53,9 @@
         /// </param>
         private void Initialize(IEnumerable<IEntityCollection> attributes)
         {
-            this.Filters = attributes.Select(x => new ProductFilter(x)).OrderBy(x => x.SortOrder);
+            this.Filters = attributes
+                .Where(x => x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.ProductKey)
+                .Select(x => new ProductFilter(x)).OrderBy(x => x.SortOrder);
         }
     }
 }

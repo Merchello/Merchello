@@ -14,6 +14,7 @@
     /// <summary>
     /// A helper class that provides many useful methods and functionality for using Merchello in templates
     /// </summary>
+    //// REFACTOR this class is not technically a "helper" class since it has to be instantiated. 
     public class MerchelloHelper
     {
         /// <summary>
