@@ -338,7 +338,11 @@
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            var pagedKeys = ((ProductService)Service).GetKeysFromCollection(collectionKeys, page, itemsPerPage, sortBy, sortDirection);
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+             
+            var pagedKeys = ((ProductService)Service).GetKeysFromCollection(keys, page, itemsPerPage, sortBy, sortDirection);
 
             return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
