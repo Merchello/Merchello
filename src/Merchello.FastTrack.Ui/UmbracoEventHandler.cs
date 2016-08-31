@@ -145,7 +145,6 @@
 
                 customer.FirstName = member.GetValue<string>("firstName") ?? string.Empty;
                 customer.LastName = member.GetValue<string>("lastName") ?? string.Empty;
-                customer.Email = member.Username;
 
                 customerService.Save(customer);
             }

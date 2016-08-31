@@ -1,18 +1,22 @@
-﻿@model IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent>
+﻿@using Merchello.Core
+@model IEnumerable<Merchello.Web.Models.VirtualContent.IProductContent>
     
 
 <section class="product-box-list">
 
     @if (Model.Any())
     {
-        <div class="row">
-            @foreach (var product in Model)
-            {
-                <div class="col-md-4">
-                    @Html.Partial("_ProductBox", product)
-                </div>
-            }
-        </div>
+        foreach (var row in Model.ToArray().Split(3))
+        {
+            <div class="row">
+                @foreach (var product in row)
+                {
+                    <div class="col-md-4">
+                        @Html.Partial("_ProductBox", product)
+                    </div>
+                }
+            </div>
+        }
     }
     else
     {
