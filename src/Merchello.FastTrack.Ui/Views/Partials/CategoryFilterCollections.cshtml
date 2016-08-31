@@ -1,7 +1,27 @@
 ﻿@using Merchello.Core
 @inherits Merchello.Web.Mvc.MerchelloViewPage<Guid>
 @{
+    var allCollections = Merchello.Collections.Product.GetAll();
+    var rootCollections = Merchello.Collections.Product.GetRootLevelCollections();
 
 }
 
 <h2>@Model.ToString()</h2>
+
+<h3>All Collections</h3>
+<ul>
+    @foreach (var c in allCollections)
+    {
+        <li>@c.Name</li>
+    }
+</ul>
+
+<h3>Root Collections</h3>
+<ul>
+    @foreach (var c in rootCollections)
+    {
+        <li>@c.Name</li>
+    }
+</ul>
+
+

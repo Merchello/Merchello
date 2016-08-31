@@ -115,7 +115,7 @@
                 }
             }
 
-            return string.Format("{0}{1}", GetPagedPrefix<TSender>(), sb.ToString().GetHashCode());
+            return string.Format("{0}{1}", GetPagedPrefix<TSender>(), sb.ToString());
         }
 
         /// <summary>

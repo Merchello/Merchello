@@ -1,4 +1,6 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
+﻿@using System.Web.Mvc.Html
+@using Merchello.Web
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
 @{
 	Layout = "FastTrack.cshtml";
 }
@@ -16,3 +18,24 @@
         </div>
     </div>
 </div>
+
+@{
+    var merchello = new MerchelloHelper();
+    var filterGroups = merchello.Filters.Product.GetAll();
+
+    var filters = filterGroups.Skip(1).Select(x => x.Filters.FirstOrDefault());
+    var keys = filters.Select(x => x.Key).ToArray();
+    var umm = keys.Select(x => x.ToString());
+    var list = string.Join(",", umm);
+
+    var products = merchello.Query.Product.TypedProductContentFromCollections(keys, 1, 10);
+}
+<p>@list</p>
+<ul>
+    @foreach (var f in filters)
+    {
+        <li>@f.Name</li>
+    }
+</ul>
+
+@Html.Partial("_ProductBoxList", products)

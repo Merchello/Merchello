@@ -11,6 +11,14 @@
     public interface IProductCollectionService : IEntityProxyService<IProductCollection>
     {
         /// <summary>
+        /// Gets the root level collections.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        IEnumerable<IProductCollection> GetRootLevelCollections();
+
+        /// <summary>
         /// Get collections containing product.
         /// </summary>
         /// <param name="productKey">

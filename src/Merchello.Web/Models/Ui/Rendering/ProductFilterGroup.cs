@@ -22,7 +22,7 @@
             this.Key = collection.Key;
             this.Name = collection.Name;
             this.SortOrder = collection.SortOrder;
-            this.Initialize(collection.Filters);
+            this.Initialize(collection.Filters, collection.ProviderKey);
         }
 
         /// <summary>
@@ -41,6 +41,11 @@
         public int SortOrder { get; private set; }
 
         /// <summary>
+        /// Gets information about the managing provider.
+        /// </summary>
+        public IProviderMeta ProviderMeta { get; private set; }
+
+        /// <summary>
         /// Gets the filters.
         /// </summary>
         public IEnumerable<IProductFilter> Filters { get; private set; }
@@ -48,14 +53,17 @@
         /// <summary>
         /// Initializes the model.
         /// </summary>
-        /// <param name="attributes">
+        /// <param name="filters">
         /// The actual filter collections.
         /// </param>
-        private void Initialize(IEnumerable<IEntityCollection> attributes)
+        /// <param name="providerKey">The key for the provider responsible for managing this filter</param>
+        private void Initialize(IEnumerable<IEntityCollection> filters, Guid providerKey)
         {
-            this.Filters = attributes
-                .Where(x => x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.ProductKey)
+            this.Filters = filters
+                .Where(x => x.EntityTfKey == Core.Constants.TypeFieldKeys.Entity.ProductKey && x.IsFilter)
                 .Select(x => new ProductFilter(x)).OrderBy(x => x.SortOrder);
+
+            this.ProviderMeta = new ProviderMeta(providerKey);
         }
     }
 }

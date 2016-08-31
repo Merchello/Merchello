@@ -5,7 +5,9 @@
     using Core;
     using Core.Services;
 
+    using Merchello.Core.EntityCollections;
     using Merchello.Core.ValueConverters;
+    using Merchello.Web.Services;
     using Merchello.Web.Validation;
 
     using Search;
@@ -31,7 +33,6 @@
         /// A value indicating whether or not data modifiers are enabled.
         /// </summary>
         private readonly bool _enableDataModifiers;
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
@@ -95,13 +96,54 @@
         /// The conversion type for detached values.
         /// </param>
         internal MerchelloHelper(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
+            : this(merchelloContext, enableDataModifiers, conversionType, ProxyEntityServiceResolver.Current, EntityCollectionProviderResolver.Current)
         {
-            Mandate.ParameterNotNull(merchelloContext, "ServiceContext cannot be null");
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="enableDataModifiers">
+        /// The enable data modifiers.
+        /// </param>
+        /// <param name="conversionType">
+        /// The conversion type.
+        /// </param>
+        /// <param name="proxyServiceResolver">
+        /// The proxy service resolver.
+        /// </param>
+        /// <param name="collectionProviderResolver">
+        /// The <see cref="IEntityCollectionProviderResolver"/>
+        /// </param>
+        internal MerchelloHelper(
+            IMerchelloContext merchelloContext,
+            bool enableDataModifiers,
+            DetachedValuesConversionType conversionType,
+            IProxyEntityServiceResolver proxyServiceResolver,
+            IEntityCollectionProviderResolver collectionProviderResolver)
+        {
+            Ensure.ParameterNotNull(merchelloContext, "ServiceContext cannot be null");
+            Ensure.ParameterNotNull(proxyServiceResolver, "The IProxyEntityServicerResolver was null");
+            Ensure.ParameterNotNull(collectionProviderResolver, "The IEntityCollectionProviderResolver was null");
             _enableDataModifiers = enableDataModifiers;
             _queryProvider = new Lazy<ICachedQueryProvider>(() => new CachedQueryProvider(merchelloContext, _enableDataModifiers, conversionType));
             _validationHelper = new Lazy<IValidationHelper>(() => new ValidationHelper());
+
+            this.Initialize(merchelloContext, proxyServiceResolver, collectionProviderResolver);
         }
+
+        /// <summary>
+        /// Gets the <see cref="ICollectionManager"/>.
+        /// </summary>
+        public ICollectionManager Collections { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="IFilterGroupManager"/>.
+        /// </summary>
+        public IFilterGroupManager Filters { get; private set; }
 
         /// <summary>
         /// Gets the <see cref="ICachedQueryProvider"/>
@@ -110,16 +152,6 @@
         {
             get { return _queryProvider.Value; }
         }
-
-        //public ICachedFilterProvider Filters
-        //{
-            
-        //}
-
-        //public ICachedCollectionProvider Colletions
-        //{
-            
-        //}
 
         /// <summary>
         /// Gets the <see cref="IValidationHelper"/>.
@@ -147,5 +179,23 @@
             return CurrencyHelper.FormatCurrency(amount);
         }
 
+        /// <summary>
+        /// Initializes the MerchelloHelper.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        /// <param name="proxyServiceResolver">
+        /// The resolver.
+        /// </param>
+        /// <param name="collectionProviderResolver">
+        /// The collection Provider Resolver.
+        /// </param>
+        private void Initialize(IMerchelloContext merchelloContext, IProxyEntityServiceResolver proxyServiceResolver, IEntityCollectionProviderResolver collectionProviderResolver)
+        {
+            this.Collections = new CollectionManager(merchelloContext, proxyServiceResolver);
+
+            this.Filters = new FilterGroupManager(merchelloContext, proxyServiceResolver, collectionProviderResolver);
+        }
     }
 }

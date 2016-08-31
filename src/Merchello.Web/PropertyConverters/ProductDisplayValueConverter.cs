@@ -15,6 +15,7 @@
     /// </summary>
     [PropertyValueType(typeof(ProductDisplay))]
     [PropertyValueCache(PropertyCacheValue.All, PropertyCacheLevel.Content)]
+    [Obsolete("Use IProductContent properties")]
     public class ProductDisplayValueConverter : PropertyValueConverterBase
     {
         /// <summary>

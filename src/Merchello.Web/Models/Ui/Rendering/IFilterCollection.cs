@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Web.Models.Ui.Rendering
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -17,6 +16,11 @@
         /// Gets the sort order.
         /// </summary>
         int SortOrder { get; }
+
+        /// <summary>
+        /// Gets the information about the managing provider.
+        /// </summary>
+        IProviderMeta ProviderMeta { get; }
 
         /// <summary>
         /// Gets the product filters.

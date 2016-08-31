@@ -182,7 +182,7 @@
         /// </returns>
         public MerchelloDatabaseSchemaResult ValidateSchema()
         {
-            var result = new MerchelloDatabaseSchemaResult
+            var result = new MerchelloDatabaseSchemaResult(_database)
             {
                 DbIndexDefinitions = SqlSyntaxContext.SqlSyntaxProvider.GetDefinedIndexes(_database)
                     .Select(x => new DbIndexDefinition()

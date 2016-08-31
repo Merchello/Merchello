@@ -200,7 +200,7 @@
                 /// <summary>
                 /// Gets the product specification collection key.
                 /// </summary>
-                public static Guid ProductSpecificationCollectionKey
+                public static Guid EntityFilterGroupProviderKey
                 {
                     get
                     {

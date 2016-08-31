@@ -56,6 +56,17 @@
         IEnumerable<Guid> GetProviderKeys(Type type);
 
         /// <summary>
+        /// Gets the provider attribute by the key specified within the attribute.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        EntityCollectionProviderAttribute GetProviderAttributeByProviderKey(Guid key);
+
+        /// <summary>
         /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
         /// </summary>
         /// <typeparam name="T">
@@ -76,6 +87,7 @@
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         IEnumerable<EntityCollectionProviderAttribute> GetProviderAttributes<T>();
+
 
         /// <summary>
         /// Gets the provider attributes for all resolved types.

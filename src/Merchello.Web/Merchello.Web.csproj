@@ -374,6 +374,7 @@
     <Compile Include="Models\Ui\IItemCacheModel.cs" />
     <Compile Include="Models\Ui\IWishListModel.cs" />
     <Compile Include="Models\Ui\Rendering\CustomerSalesHistory.cs" />
+    <Compile Include="Models\Ui\Rendering\IProviderMeta.cs" />
     <Compile Include="Models\Ui\Rendering\ICustomerSalesHistory.cs" />
     <Compile Include="Models\Ui\Rendering\IEntityProxy.cs" />
     <Compile Include="Models\Ui\Rendering\IFilterCollection.cs" />
@@ -410,6 +411,7 @@
     <Compile Include="Models\Ui\Rendering\EntityCollectionProxyBase.cs" />
     <Compile Include="Models\Ui\Rendering\ProductFilter.cs" />
     <Compile Include="Models\Ui\Rendering\ProductFilterGroup.cs" />
+    <Compile Include="Models\Ui\Rendering\ProviderMeta.cs" />
     <Compile Include="Models\Ui\UiModelExtensions.cs" />
     <Compile Include="Models\VirtualContent\IProductAttributeContent.cs" />
     <Compile Include="Models\VirtualContent\IProductOptionWrapper.cs" />
@@ -556,10 +558,16 @@
     <Compile Include="PropertyConverters\ProductCollectionValueConverter.cs" />
     <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
     <Compile Include="PropertyEditors\ProductCollectionPicker.cs" />
+    <Compile Include="Search\CollectionManager.cs" />
+    <Compile Include="Search\FilterGroupManager.cs" />
+    <Compile Include="Search\ICollectionManager.cs" />
+    <Compile Include="Search\IFilterGroupManager.cs" />
+    <Compile Include="Search\ProxyServiceManagerBase.cs" />
     <Compile Include="Services\EntityCollectionProxyServiceBase.cs" />
     <Compile Include="Services\IEntityProxyService.cs" />
     <Compile Include="Services\IProductCollectionService.cs" />
     <Compile Include="Services\IProductFilterGroupService.cs" />
+    <Compile Include="Services\IProxyEntityServiceResolver.cs" />
     <Compile Include="Services\ProductCollectionService.cs" />
     <Compile Include="Services\ProductFilterGroupService.cs" />
     <Compile Include="Services\ProxyEntityServiceResolver.cs" />

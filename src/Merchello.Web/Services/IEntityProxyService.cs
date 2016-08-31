@@ -15,6 +15,14 @@
         where TProxy : IEntityProxy
     {
         /// <summary>
+        /// Gets a collection of provider responsible for managing entity collections that can be queries by this service.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProviderInfo}"/>.
+        /// </returns>
+        IEnumerable<IProviderMeta> GetProviders();
+
+        /// <summary>
         /// Gets the proxy entity by it's Key.
         /// </summary>
         /// <param name="key">
