@@ -5,9 +5,12 @@
     using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Models.Ui.Rendering;
+
+    using Umbraco.Core.Cache;
 
     /// <summary>
     /// A service responsible for retrieving <see cref="ProductCollection"/>.
@@ -17,12 +20,53 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductCollectionService"/> class.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello context.
+        /// <param name="entityCollectionService">
+        /// The entity collection service.
         /// </param>
-        public ProductCollectionService(IMerchelloContext merchelloContext)
-            : base(merchelloContext)
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        public ProductCollectionService(IEntityCollectionService entityCollectionService, ICacheProvider cache)
+            : base(entityCollectionService, cache)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductCollectionService"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
+        internal ProductCollectionService(IMerchelloContext merchelloContext)
+            : this(merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
+        {
+        }
+
+        /// <summary>
+        /// Gets the root level collections.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        public IEnumerable<IProductCollection> GetRootLevelCollections()
+        {
+            // REFACTOR we need more specific queries that create a distinction between filters and collections
+            // The service call may return filter collections too if they don't have parents
+            // but they will get removed in the mapping.
+            return Map(Service.GetRootLevelEntityCollections(EntityType.Product));
+        }
+
+        /// <summary>
+        /// Gets a collection of provider responsible for managing entity collections that can be queries by this service.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProviderInfo}"/>.
+        /// </returns>
+        public IEnumerable<IProviderMeta> GetProviders()
+        {
+            var atts = EntityCollectionProviderResolver.Current.GetProviderAttributes<IProductCollectionProvider>();
+
+            return atts.Select(x => new ProviderMeta(x));
         }
 
         /// <summary>
@@ -112,7 +156,7 @@
         /// </returns>
         private static IProductCollection Map(IEntityCollection collection)
         {
-            return collection.EntityTfKey == Constants.TypeFieldKeys.Entity.ProductKey ?
+            return collection.EntityTfKey == Constants.TypeFieldKeys.Entity.ProductKey && !collection.IsFilter ?
                 new ProductCollection(collection) :
                 null;
         }
@@ -128,7 +172,7 @@
         /// </returns>
         private static IEnumerable<IProductCollection> Map(IEnumerable<IEntityCollection> collections)
         {
-            return collections.Where(x => x != null).Select(Map);
+            return collections.Select(Map).Where(x => x != null);
         }
     }
 }

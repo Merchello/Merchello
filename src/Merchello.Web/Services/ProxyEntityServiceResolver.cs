@@ -14,7 +14,7 @@
     /// A resolver to ensure there is one instance of a proxy service per request.
     /// </summary>
     //// REFACTOR remove this class in V3 and use container with request lifeftime scope
-    internal class ProxyEntityServiceResolver
+    internal class ProxyEntityServiceResolver : IProxyEntityServiceResolver
     {
         /// <summary>
         /// The _cache.
@@ -129,7 +129,7 @@
         /// </returns>
         private string GetCacheKey(Type service, string suffix = "")
         {
-            return string.Format("{0}.{1}{2}", typeof(ProxyEntityServiceResolver), service, suffix).GetHashCode().ToString();
+            return string.Format("{0}.{1}{2}", typeof(ProxyEntityServiceResolver), service, suffix);
         }
 
         /// <summary>

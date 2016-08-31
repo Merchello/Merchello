@@ -2,6 +2,7 @@ namespace Merchello.Web.Models.Ui.Rendering
 {
     using System;
 
+    using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
@@ -18,10 +19,11 @@ namespace Merchello.Web.Models.Ui.Rendering
         protected EntityCollectionProxyBase(IEntityCollection collection)
         {
             this.Key = collection.Key;
-            this.ProviderKey = collection.ProviderKey;
             this.ParentKey = collection.ParentKey;
             this.SortOrder = collection.SortOrder;
             this.Name = collection.Name;
+
+            this.Initialize(collection.ProviderKey);
         }
 
         /// <summary>
@@ -45,8 +47,24 @@ namespace Merchello.Web.Models.Ui.Rendering
         public int SortOrder { get; private set; }
 
         /// <summary>
+        /// Gets the provider meta.
+        /// </summary>
+        public IProviderMeta ProviderMeta { get; private set; }
+
+        /// <summary>
         /// Gets the provider key.
         /// </summary>
         internal Guid ProviderKey { get; private set; }
+
+        /// <summary>
+        /// The initialize.
+        /// </summary>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        private void Initialize(Guid providerKey)
+        {
+            this.ProviderMeta = new ProviderMeta(providerKey);
+        }
     }
 }

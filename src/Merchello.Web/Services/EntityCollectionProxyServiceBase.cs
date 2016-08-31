@@ -13,14 +13,18 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProxyServiceBase"/> class.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello context.
+        /// <param name="entityCollectionService">
+        /// The services.
         /// </param>
-        protected EntityCollectionProxyServiceBase(IMerchelloContext merchelloContext)
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        protected EntityCollectionProxyServiceBase(IEntityCollectionService entityCollectionService, ICacheProvider cache)
         {
-            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
-            this.Service = merchelloContext.Services.EntityCollectionService;
-            this.Cache = merchelloContext.Cache.RequestCache;
+            Ensure.ParameterNotNull(entityCollectionService, "The EntityCollectionService was null");
+            Ensure.ParameterNotNull(cache, "The Cache was null");
+            this.Service = entityCollectionService;
+            this.Cache = cache;
         }
 
         /// <summary>

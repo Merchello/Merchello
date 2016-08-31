@@ -388,6 +388,7 @@
     <Compile Include="EntityCollections\IEntityCollectionProviderResolver.cs" />
     <Compile Include="EntityCollections\ICachedQueryableEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\IEntityFilterProvider.cs" />
+    <Compile Include="EntityCollections\IProductCollectionProvider.cs" />
     <Compile Include="EntityCollections\IProductFilterProvider.cs" />
     <Compile Include="EntityCollections\IQueryableEntityCollectionProvider.cs" />
     <Compile Include="EntityCollections\ProductFilterProviderBase.cs" />

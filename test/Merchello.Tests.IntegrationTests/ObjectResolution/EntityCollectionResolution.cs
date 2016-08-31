@@ -16,10 +16,10 @@
         /// Test shows a key can be resolved from the attribute based on the type of provider
         /// </summary>
         [Test]
-        public void Can_Resolve_ProductSpecificationCollectionProvider_Key()
+        public void Can_Resolve_ProductFilterGroupProvider_Key()
         {
             //// Arrange
-            var expected = Core.Constants.ProviderKeys.EntityCollection.ProductSpecificationCollectionKey;
+            var expected = Core.Constants.ProviderKeys.EntityCollection.EntityFilterGroupProviderKey;
             var resolver = EntityCollectionProviderResolver.Current;
 
             //// Act
@@ -30,7 +30,7 @@
         }
 
         [Test]
-        public void Can_Resolve_ProductSpecificationCollectionProviders_Keys()
+        public void Can_Resolve_IEntityFilterGroupProvider_Keys()
         {
             //// Arrange
             var expected = 1;
@@ -39,11 +39,28 @@
             //// Act
             var keys = resolver.GetProviderKeys<IEntityFilterGroupProvider>();
             if (!keys.Any()) Assert.Fail("No keys returned");
-            var psp = keys.First();
+            var key = keys.First();
 
             //// Assert
             Assert.AreEqual(expected, keys.Count());
-            Assert.AreEqual(psp, Core.Constants.ProviderKeys.EntityCollection.ProductSpecificationCollectionKey);
+            Assert.AreEqual(key, Core.Constants.ProviderKeys.EntityCollection.EntityFilterGroupProviderKey);
+        }
+
+        [Test]
+        public void Can_Resolve_IProductCollectionProvider_Keys()
+        {
+            //// Arrange
+            var expected = 1;
+            var resolver = EntityCollectionProviderResolver.Current;
+
+            //// Act
+            var keys = resolver.GetProviderKeys<IProductCollectionProvider>();
+            if (!keys.Any()) Assert.Fail("No keys returned");
+            var key = keys.First();
+
+            //// Assert
+            Assert.AreEqual(expected, keys.Count());
+            Assert.AreEqual(key, Core.Constants.ProviderKeys.EntityCollection.StaticProductCollectionProviderKey);
         }
 
         /// <summary>

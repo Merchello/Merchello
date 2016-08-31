@@ -24,12 +24,24 @@
 		/// </summary>
 		private readonly Database _database;
 
-		/// <summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloDatabaseSchemaResult"/> class.
+        /// </summary>
+        public MerchelloDatabaseSchemaResult()
+            : this(ApplicationContext.Current.DatabaseContext.Database)
+        {
+        }
+
+        /// <summary>
 		/// Initializes a new instance of the <see cref="MerchelloDatabaseSchemaResult"/> class.
 		/// </summary>
-		public MerchelloDatabaseSchemaResult()
-	    {
-		    this._database = ApplicationContext.Current.DatabaseContext.Database;
+		/// <param name="database">
+		/// The database.
+		/// </param>
+		public MerchelloDatabaseSchemaResult(Database database)
+		{
+		    Ensure.ParameterNotNull(database, "database");
+		    this._database = database;
 		}
 
 		/// <summary>

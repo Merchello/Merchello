@@ -965,11 +965,23 @@
             sql.Append("SELECT *")
               .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
-               .Append("SELECT DISTINCT([productKey])")
+               .Append("SELECT [productKey]")
                .Append("FROM [merchProduct2EntityCollection]")
                .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append("GROUP BY productKey")
+               .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
+
+            //var sql = new Sql();
+            //sql.Append("SELECT *")
+            //  .Append("FROM [merchProductVariant]")
+            //   .Append("WHERE [merchProductVariant].[productKey] IN (")
+            //   .Append("SELECT DISTINCT([productKey])")
+            //   .Append("FROM [merchProduct2EntityCollection]")
+            //   .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+            //   .Append(")")
+            //   .Append("AND [merchProductVariant].[master] = 1");
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 

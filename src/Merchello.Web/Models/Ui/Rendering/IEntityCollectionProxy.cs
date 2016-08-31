@@ -21,5 +21,10 @@
         /// Gets the sort order.
         /// </summary>
         int SortOrder { get; }
+
+        /// <summary>
+        /// Gets information about the managing provider.
+        /// </summary>
+        IProviderMeta ProviderMeta { get; }
     }
 }

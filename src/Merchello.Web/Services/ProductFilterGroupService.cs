@@ -10,6 +10,8 @@
     using Merchello.Core.Services;
     using Merchello.Web.Models.Ui.Rendering;
 
+    using Umbraco.Core.Cache;
+
     /// <summary>
     /// Represents a ProductFilterGroupService.
     /// </summary>
@@ -23,13 +25,46 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilterGroupService"/> class.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The <see cref="IMerchelloContext"/>.
+        /// <param name="entityCollectionService">
+        /// The  <see cref="IEntityCollectionService"/>.
         /// </param>
-        public ProductFilterGroupService(IMerchelloContext merchelloContext)
-            : base(merchelloContext)
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        public ProductFilterGroupService(IEntityCollectionService entityCollectionService, ICacheProvider cache)
+            : this(entityCollectionService, cache, EntityCollectionProviderResolver.Current)
         {
-            this.Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductFilterGroupService"/> class.
+        /// </summary>
+        /// <param name="entityCollectionService">
+        /// The <see cref="IEntityCollectionService"/>.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        /// <param name="resolver">
+        /// The resolver.
+        /// </param>
+        public ProductFilterGroupService(IEntityCollectionService entityCollectionService, ICacheProvider cache, EntityCollectionProviderResolver resolver)
+            : base(entityCollectionService, cache)
+        {
+            this.Initialize(resolver);
+        }
+
+        /// <summary>
+        /// Gets a collection of provider responsible for managing entity collections that can be queries by this service.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProviderInfo}"/>.
+        /// </returns>
+        public IEnumerable<IProviderMeta> GetProviders()
+        {
+            var atts = EntityCollectionProviderResolver.Current.GetProviderAttributes<IProductFilterGroupProvider>();
+
+            return atts.Select(x => new ProviderMeta(x));
         }
 
         /// <summary>
@@ -127,7 +162,7 @@
         /// </returns>
         private static IProductFilterGroup Map(IEntityFilterGroup group)
         {
-            return group.EntityTfKey == Constants.TypeFieldKeys.Entity.ProductKey ?
+            return group.EntityTfKey == Constants.TypeFieldKeys.Entity.ProductKey && group.IsFilter ?
                 new ProductFilterGroup(group) :
                 null;
         }
@@ -144,15 +179,15 @@
         /// </returns>
         private static IEnumerable<IProductFilterGroup> Map(IEnumerable<IEntityFilterGroup> groups)
         {
-            return groups.Where(x => x != null).Select(Map);
+            return groups.Select(Map).Where(x => x != null);
         }
 
         /// <summary>
         /// Initializes the service.
         /// </summary>
-        private void Initialize()
+        private void Initialize(EntityCollectionProviderResolver resolver)
         {
-            _filterProviderKeys = EntityCollectionProviderResolver.Current.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
+            _filterProviderKeys = resolver.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
         }
     }
 }

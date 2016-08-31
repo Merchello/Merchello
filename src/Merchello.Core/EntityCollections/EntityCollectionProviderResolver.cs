@@ -116,6 +116,20 @@
         }
 
         /// <summary>
+        /// Gets the provider attribute by the key specified within the attribute.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EntityCollectionProviderAttribute"/>.
+        /// </returns>
+        public EntityCollectionProviderAttribute GetProviderAttributeByProviderKey(Guid key)
+        {
+            return GetProviderAttributes().FirstOrDefault(x => x.Key == key);
+        }
+
+        /// <summary>
         /// Gets the <see cref="EntityCollectionProviderAttribute"/> from the provider of type T.
         /// </summary>
         /// <typeparam name="T">

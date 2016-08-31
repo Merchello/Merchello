@@ -186,8 +186,6 @@
                 hash = args.Aggregate(hash, (current, item) => current + string.Format(".{0}-{1}", item.Key, item.Value));
             }
 
-            hash = hash.GetHashCode().ToString();
-
             return string.Format("{0}.{1}", typeof(TDto), hash);
         }
 
