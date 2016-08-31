@@ -22,6 +22,6 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x => x.SuccessRedirectUrl)
         <a href="@ExampleUiHelper.CheckoutWorkflow.GetPageForStage(CheckoutStage.ShipRateQuote).Url" class="btn btn-default">Back</a>
-        <input type="submit" class="btn btn-default pull-right" value="Save" />
+        <input type="submit" class="btn btn-default pull-right" value="Next" />
     </div>
 }
