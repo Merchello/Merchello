@@ -9,6 +9,7 @@
       <Value>Umbraco's</Value>
       <Value>YouTrack</Value>
       <Value>sku</Value>
+      <Value>clusivity</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

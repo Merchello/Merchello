@@ -179,6 +179,7 @@
             return CurrencyHelper.FormatCurrency(amount);
         }
 
+
         /// <summary>
         /// Initializes the MerchelloHelper.
         /// </summary>

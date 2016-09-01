@@ -246,36 +246,6 @@
             return TypedProductContentPageFromCollection(collectionKey, page, itemsPerPage, sortBy, sortDirection).Items;
         }
 
-        /// <summary>
-        /// Gets the typed <see cref="IProductContent"/> for a collection.
-        /// </summary>
-        /// <param name="collectionKeys">
-        /// The collection of collection keys.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductContent}"/>.
-        /// </returns>
-        public IEnumerable<IProductContent> TypedProductContentFromCollections(
-            IEnumerable<Guid> collectionKeys,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            return TypedProductContentPageFromCollections(collectionKeys, page, itemsPerPage, sortBy, sortDirection).Items;
-        }
 
         /// <summary>
         /// Gets a <see cref="PagedCollection{IProductContent}"/>.
@@ -308,43 +278,6 @@
             var pagedKeys = GetCollectionPagedKeys(collectionKey, page, itemsPerPage, sortBy, sortDirection);
 
             return _cache.GetPagedCollectionByCacheKey(pagedKeys, sortBy);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="PagedCollection{IProductContent}"/>.
-        /// </summary>
-        /// <param name="collectionKeys">
-        /// The collection of collection keys.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="itemsPerPage">
-        /// The items per page.
-        /// </param>
-        /// <param name="sortBy">
-        /// The sort by.
-        /// </param>
-        /// <param name="sortDirection">
-        /// The sort direction.
-        /// </param>
-        /// <returns>
-        /// The <see cref="PagedCollection"/>.
-        /// </returns>
-        public PagedCollection<IProductContent> TypedProductContentPageFromCollections(
-            IEnumerable<Guid> collectionKeys,
-            long page,
-            long itemsPerPage,
-            string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
-        {
-            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
-
-            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
-             
-            var pagedKeys = ((ProductService)Service).GetKeysFromCollection(keys, page, itemsPerPage, sortBy, sortDirection);
-
-            return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
 
         /// <summary>
@@ -470,6 +403,162 @@
                 _cache.GetPagedCollectionByCacheKey(
                     pagedKeys ?? _productService.GetPagedKeys(term, page, itemsPerPage, sortBy, sortDirection),
                     sortBy);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection of collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that exists in every collection referenced.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection of collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search Term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypedProductContentPageThatExistInAllCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysThatExistInAllCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypeProductContentPageThatNotInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
+        }
+
+        /// <summary>
+        /// Gets a <see cref="PagedCollection{IProductContent}"/> that does not exists in any of the collections referenced..
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="searchTerm">
+        /// The search Term.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="PagedCollection"/>.
+        /// </returns>
+        public PagedCollection<IProductContent> TypeProductContentPageThatNotInAnyCollections(
+            IEnumerable<Guid> collectionKeys,
+            string searchTerm,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
+            var keys = collectionKeys as Guid[] ?? collectionKeys.ToArray();
+
+            if (!keys.Any()) return PagedCollection<IProductContent>.Empty();
+
+            var pagedKeys = ((ProductService)Service).GetKeysNotInAnyCollections(keys, searchTerm, page, itemsPerPage, sortBy, sortDirection);
+
+            return _cache.MapPagedCollection(pagedKeys, sortBy);
         }
 
         /// <summary>

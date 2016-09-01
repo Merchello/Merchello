@@ -15,7 +15,6 @@
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Workflow.CustomerItemCache;
 
-    using Umbraco.Core;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
 

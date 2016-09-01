@@ -19,6 +19,8 @@
     using Umbraco.Core.Persistence.Querying;
     using Umbraco.Core.Persistence.SqlSyntax;
 
+    // REFACTOR request based caching should be either all done in .Web services or all done here in a base class
+
     /// <summary>
     /// The product repository.
     /// </summary>
@@ -87,7 +89,7 @@
         /// The <see cref="Page"/>.
         /// </returns>
         /// <remarks>
-        //// TODO this is a total hack and needs to be thought through a bit better.  IQuery is a worthless parameter here
+        //// REFACTOR IQuery is a worthless parameter here
         /// </remarks>
         public override Page<IProduct> GetPage(long page, long itemsPerPage, IQuery<IProduct> query, string orderExpression, SortDirection sortDirection = SortDirection.Descending)
         {
@@ -940,7 +942,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<Guid> GetKeysFromCollection(
+        public Page<Guid> GetKeysThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -972,16 +974,6 @@
                .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                .Append(")")
                .Append("AND [merchProductVariant].[master] = 1");
-
-            //var sql = new Sql();
-            //sql.Append("SELECT *")
-            //  .Append("FROM [merchProductVariant]")
-            //   .Append("WHERE [merchProductVariant].[productKey] IN (")
-            //   .Append("SELECT DISTINCT([productKey])")
-            //   .Append("FROM [merchProduct2EntityCollection]")
-            //   .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
-            //   .Append(")")
-            //   .Append("AND [merchProductVariant].[master] = 1");
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
@@ -1049,7 +1041,7 @@
             return CachePageOfKeys(cacheKey, pagedKeys);
         }
 
-        public Page<Guid> GetKeysFromCollection(
+        public Page<Guid> GetKeysThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -1079,6 +1071,8 @@
                 .Append(
                     "WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)",
                     new { @eckey = collectionKeys })
+                .Append("GROUP BY productKey")
+                .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                 .Append(")");
 
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
@@ -1142,7 +1136,28 @@
             return CachePageOfKeys(cacheKey, pagedKeys);
         }
 
-        public Page<Guid> GetKeysNotInCollection(
+        /// <summary>
+        /// Gets the page of product keys that do not exist in any of the collections with keys passed.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// The items per page.
+        /// </param>
+        /// <param name="orderExpression">
+        /// The order expression.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Page{Guid}"/>.
+        /// </returns>
+        public Page<Guid> GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -1238,7 +1253,7 @@
             return CachePageOfKeys(cacheKey, pagedKeys);
         }
 
-        public Page<Guid> GetKeysNotInCollection(
+        public Page<Guid> GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -1336,14 +1351,14 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetFromCollection(
+        public Page<IProduct> GetProductsThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetKeysFromCollection(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IProduct>()
             {
@@ -1423,7 +1438,7 @@
         /// <returns>
         /// The <see cref="Page{IProduct}"/>.
         /// </returns>
-        public Page<IProduct> GetFromCollection(
+        public Page<IProduct> GetProductsThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -1431,7 +1446,7 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = GetKeysFromCollection(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IProduct>()
             {

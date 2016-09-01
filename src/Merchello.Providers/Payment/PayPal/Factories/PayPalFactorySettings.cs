@@ -1,12 +1,6 @@
 ﻿namespace Merchello.Providers.Payment.PayPal.Factories
 {
-    using System;
-    using System.Web;
-
     using Merchello.Core;
-    using Merchello.Core.Logging;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// Setting for the <see cref="PayPalPaymentDetailsTypeFactory"/>.

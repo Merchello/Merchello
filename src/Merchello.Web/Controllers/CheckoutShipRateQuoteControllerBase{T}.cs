@@ -5,12 +5,9 @@
     using System.Web.Mvc;
 
     using Merchello.Core;
-    using Merchello.Core.Gateways;
-    using Merchello.Core.Models;
     using Merchello.Web.Factories;
     using Merchello.Web.Models.Ui;
-
-    using Umbraco.Core;
+    
 
     /// <summary>
     /// The checkout ship rate quote controller.
@@ -57,7 +54,7 @@
             CheckoutContextSettingsFactory contextSettingsFactory)
             : base(contextSettingsFactory)
         {
-            Mandate.ParameterNotNull(checkoutShipRateQuoteFactory, "checkoutShipRateQuoteFactory");
+            Ensure.ParameterNotNull(checkoutShipRateQuoteFactory, "checkoutShipRateQuoteFactory");
             this.CheckoutShipRateQuoteFactory = checkoutShipRateQuoteFactory;
         }
 

@@ -926,7 +926,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetFromCollections(
+        public Page<IInvoice> GetProductsThatExistInAllCollections(
             IEnumerable<Guid> collectionKeys,
             long page,
             long itemsPerPage,
@@ -935,7 +935,7 @@
         {
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetFromCollection(
+                return repository.GetProductsThatExistInAllCollections(
                     collectionKeys.ToArray(),
                     page,
                     itemsPerPage,
@@ -1012,7 +1012,7 @@
         /// <returns>
         /// The <see cref="Page"/>.
         /// </returns>
-        public Page<IInvoice> GetFromCollections(
+        public Page<IInvoice> GetProductsThatExistInAllCollections(
             IEnumerable<Guid> collectionKeys,
             string searchTerm,
             long page,
@@ -1022,7 +1022,7 @@
         {
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetFromCollection(
+                return repository.GetProductsThatExistInAllCollections(
                     collectionKeys.ToArray(),
                     searchTerm,
                     page,

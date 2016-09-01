@@ -99,7 +99,7 @@
             var keys = GetAttributeCollectionKeys();
 
             return keys != null ?
-                MerchelloContext.Services.ProductService.GetFromCollections(keys, page, itemsPerPage, sortBy, sortDirection) :
+                MerchelloContext.Services.ProductService.GetProductsThatExistInAllCollections(keys, page, itemsPerPage, sortBy, sortDirection) :
                 null;
         }
 
@@ -131,7 +131,7 @@
 
             return keys != null ?
                 ((ProductService)MerchelloContext.Services.ProductService)
-                    .GetKeysFromCollection(keys, page, itemsPerPage, sortBy, sortDirection) :
+                    .GetKeysThatExistInAllCollections(keys, page, itemsPerPage, sortBy, sortDirection) :
                     null;
         }
 
@@ -168,7 +168,7 @@
             var keys = GetAttributeCollectionKeys();
 
             return keys != null
-                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysFromCollection(
+                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysThatExistInAllCollections(
                            keys,
                            args["searchTerm"].ToString(),
                            page,
@@ -205,7 +205,7 @@
             var keys = GetAttributeCollectionKeys();
 
             return keys != null
-                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysNotInCollection(
+                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysNotInAnyCollections(
                            keys,
                            page,
                            itemsPerPage,
@@ -246,7 +246,7 @@
             var keys = GetAttributeCollectionKeys();
 
             return keys != null
-                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysNotInCollection(
+                       ? ((ProductService)MerchelloContext.Services.ProductService).GetKeysNotInAnyCollections(
                            keys,
                            args["searchTerm"].ToString(),
                            page,

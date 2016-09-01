@@ -19,7 +19,6 @@
 
     using Newtonsoft.Json;
 
-    using Umbraco.Core;
 
     /// <summary>
     /// A base controller used for Basket implementations.
@@ -97,9 +96,9 @@
             AddItemModelFactory<TAddItem> addItemFactory,
             BasketModelFactory<TBasketModel, TBasketItemModel> basketModelFactory)
         {
-            Mandate.ParameterNotNull(basketModelFactory, "basketModelFactory");
-            Mandate.ParameterNotNull(addItemFactory, "addItemFactory");
-            Mandate.ParameterNotNull(addItemExtendedDataFactory, "addItemExtendedDataFactory");
+            Ensure.ParameterNotNull(basketModelFactory, "basketModelFactory");
+            Ensure.ParameterNotNull(addItemFactory, "addItemFactory");
+            Ensure.ParameterNotNull(addItemExtendedDataFactory, "addItemExtendedDataFactory");
 
             this._basketModelFactory = basketModelFactory;
             this._addItemFactory = addItemFactory;

@@ -161,7 +161,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        Page<T> GetFromCollections(
+        Page<T> GetProductsThatExistInAllCollections(
             IEnumerable<Guid> collectionKeys,
             long page,
             long itemsPerPage,
@@ -226,7 +226,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        Page<T> GetFromCollections(
+        Page<T> GetProductsThatExistInAllCollections(
             IEnumerable<Guid> collectionKeys,
             string searchTerm,
             long page,

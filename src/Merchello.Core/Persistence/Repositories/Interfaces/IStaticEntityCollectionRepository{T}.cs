@@ -114,7 +114,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        Page<Guid> GetKeysFromCollection(
+        Page<Guid> GetKeysThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -177,7 +177,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        Page<Guid> GetKeysFromCollection(
+        Page<Guid> GetKeysThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -234,7 +234,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        Page<Guid> GetKeysNotInCollection(
+        Page<Guid> GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -297,7 +297,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        Page<Guid> GetKeysNotInCollection(
+        Page<Guid> GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -354,7 +354,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        Page<T> GetFromCollection(
+        Page<T> GetProductsThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -417,7 +417,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        Page<T> GetFromCollection(
+        Page<T> GetProductsThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
