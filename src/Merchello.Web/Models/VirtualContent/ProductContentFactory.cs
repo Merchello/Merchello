@@ -2,26 +2,21 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.Logging;
     using Merchello.Core.Models.DetachedContent;
     using Merchello.Core.Services;
-    using Merchello.Web.Caching;
     using Merchello.Web.Models.ContentEditing;
-
-    using umbraco.cms.businesslogic.web;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
     using Umbraco.Core.Models;
     using Umbraco.Core.Models.PublishedContent;
     using Umbraco.Web;
-    using Umbraco.Web.Routing;
 
     using Constants = Merchello.Core.Constants;
+    using StringExtensions = Merchello.Core.StringExtensions;
 
     /// <summary>
     /// Represents a ProductContentFactory.
@@ -183,7 +178,7 @@
 
             _parentCulture = _parent != null ? _parent.GetCulture().Name : string.Empty;
 
-            _defaultStoreLanguage = _parentCulture.IsNullOrWhiteSpace() ?
+            _defaultStoreLanguage = StringExtensions.IsNullOrWhiteSpace(this._parentCulture) ?
                 _storeSettingService.GetByKey(Constants.StoreSettingKeys.DefaultExtendedContentCulture).Value :
                 _parentCulture;
 

@@ -558,10 +558,17 @@
     <Compile Include="PropertyConverters\ProductCollectionValueConverter.cs" />
     <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
     <Compile Include="PropertyEditors\ProductCollectionPicker.cs" />
+    <Compile Include="QueryBuilderExtensions.cs" />
     <Compile Include="Search\CollectionManager.cs" />
+    <Compile Include="QueryBuilderEnumerations.cs" />
     <Compile Include="Search\FilterGroupManager.cs" />
+    <Compile Include="Search\ICacheQueryBuilder.cs" />
     <Compile Include="Search\ICollectionManager.cs" />
     <Compile Include="Search\IFilterGroupManager.cs" />
+    <Compile Include="Search\IProductContentQuery.cs" />
+    <Compile Include="Search\IProductContentQueryBuilder.cs" />
+    <Compile Include="Search\ProductContentQuery.cs" />
+    <Compile Include="Search\ProductContentQueryBuilder.cs" />
     <Compile Include="Search\ProxyServiceManagerBase.cs" />
     <Compile Include="Services\EntityCollectionProxyServiceBase.cs" />
     <Compile Include="Services\IEntityProxyService.cs" />

@@ -323,7 +323,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        public Page<Guid> GetKeysFromCollection(
+        public Page<Guid> GetKeysThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -339,7 +339,9 @@
                 .Append(
                     "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
                     new { @eckeys = collectionKeys })
-                .Append(")");
+               .Append("GROUP BY invoiceKey")
+               .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
+               .Append(")"); 
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
@@ -412,7 +414,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        public Page<Guid> GetKeysFromCollection(
+        public Page<Guid> GetKeysThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -427,6 +429,8 @@
                 .Append(
                     "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
                     new { @eckeys = collectionKeys })
+                .Append("GROUP BY invoiceKey")
+                .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
                 .Append(")");
 
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
@@ -495,7 +499,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<Guid> GetKeysNotInCollection(
+        public Page<Guid> GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -584,7 +588,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<Guid> GetKeysNotInCollection(
+        public Page<Guid> GetKeysNotInAnyCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -665,14 +669,14 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetFromCollection(
+        public Page<IInvoice> GetProductsThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetKeysFromCollection(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IInvoice>()
             {
@@ -752,7 +756,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetFromCollection(
+        public Page<IInvoice> GetProductsThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
@@ -760,7 +764,7 @@
             string orderExpression,
             SortDirection sortDirection = SortDirection.Descending)
         {
-            var p = this.GetKeysFromCollection(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
+            var p = this.GetKeysThatExistInAllCollections(collectionKeys, term, page, itemsPerPage, orderExpression, sortDirection);
 
             return new Page<IInvoice>()
             {

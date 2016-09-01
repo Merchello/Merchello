@@ -1,5 +1,6 @@
 ﻿@using System.Web.Mvc.Html
 @using Merchello.Web
+@using Merchello.Web.Search
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<FtCategory>
 @{
 	Layout = "FastTrack.cshtml";
@@ -9,17 +10,18 @@
 
 <div class="container-fluid">
 
-    <div class="row">
+    @Html.Partial("_ProductBoxList", Model.Products)
+    @*<div class="row">
         <div class="col-md-2">
             @Html.Partial("CategoryFilterCollections", Model.Products.CollectionKey)
         </div>
         <div class="col-md-10">
             @Html.Partial("_ProductBoxList", Model.Products)
         </div>
-    </div>
+    </div>*@
 </div>
 
-@{
+@*@{
     var merchello = new MerchelloHelper();
     var filterGroups = merchello.Filters.Product.GetAll();
 
@@ -28,7 +30,10 @@
     var umm = keys.Select(x => x.ToString());
     var list = string.Join(",", umm);
 
-    var products = merchello.Query.Product.TypedProductContentFromCollections(keys, 1, 10);
+    var query = merchello.ProductQueryBuilder()
+        .ConstrainBy(filters)
+        .ConstrainByCollectionKey(Model.Products.CollectionKey)
+        .OrderBy(ProductSortField.Price);
 }
 <p>@list</p>
 <ul>
@@ -38,4 +43,4 @@
     }
 </ul>
 
-@Html.Partial("_ProductBoxList", products)
+@Html.Partial("_ProductBoxList", query.Execute().Items)*@

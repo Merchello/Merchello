@@ -6,13 +6,34 @@
 
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Models.VirtualContent;
+    using Merchello.Web.Search;
 
     /// <summary>
     /// Extension methods for the <see cref="MerchelloHelper"/>
     /// </summary>
     public static class MerchelloHelperExtensions
     {
+        #region QueryBuilders
+
+        /// <summary>
+        /// Gets the <see cref="IProductContentQueryBuilder"/>.
+        /// </summary>
+        /// <param name="merchello">
+        /// The <see cref="MerchelloHelper"/>.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductContentQueryBuilder"/>.
+        /// </returns>
+        public static IProductContentQueryBuilder ProductQueryBuilder(this MerchelloHelper merchello)
+        {
+            return new ProductContentQueryBuilder(merchello.Query.Product);
+        }
+        
+
+        #endregion
+
         #region Typed IProductContent Queries 
 
         /// <summary>

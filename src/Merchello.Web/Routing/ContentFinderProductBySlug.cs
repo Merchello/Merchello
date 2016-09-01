@@ -4,7 +4,6 @@
     using Merchello.Core.Configuration;
     using Merchello.Web.Models.VirtualContent;
 
-    using Umbraco.Core;
     using Umbraco.Web.Routing;
 
     /// <summary>

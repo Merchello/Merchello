@@ -1,8 +1,7 @@
 ﻿namespace Merchello.Core
 {
+    using System;
     using System.Globalization;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// The string extensions.
@@ -37,6 +36,30 @@
             return value.Replace("/", "\\");
         }
 
+
+        public static string TrimStart(this string value, string forRemoving)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            if (string.IsNullOrEmpty(forRemoving)) return value;
+
+            while (value.StartsWith(forRemoving, StringComparison.InvariantCultureIgnoreCase))
+            {
+                value = value.Substring(forRemoving.Length);
+            }
+            return value;
+        }
+
+        public static string EnsureStartsWith(this string input, string toStartWith)
+        {
+            if (input.StartsWith(toStartWith)) return input;
+            return toStartWith + input.TrimStart(toStartWith);
+        }
+
+        public static string EnsureStartsWith(this string input, char value)
+        {
+            return input.StartsWith(value.ToString(CultureInfo.InvariantCulture)) ? input : value + input;
+        }
+
         /// <summary>
         /// Ensures a string both starts and ends with a character.
         /// </summary>
@@ -52,6 +75,16 @@
         public static string EnsureStartsAndEndsWith(this string input, char value)
         {
             return input.EnsureStartsWith(value).EnsureEndsWith(value);
+        }
+
+        public static string EnsureEndsWith(this string input, char value)
+        {
+            return input.EndsWith(value.ToString(CultureInfo.InvariantCulture)) ? input : input + value;
+        }
+
+        public static string EnsureEndsWith(this string input, string toEndWith)
+        {
+            return input.EndsWith(toEndWith.ToString(CultureInfo.InvariantCulture)) ? input : input + toEndWith;
         }
 
         /// <summary>
@@ -104,6 +137,19 @@
         public static string EnsureNotStartsOrEndsWith(this string input, char value)
         {
             return input.EnsureNotStartsWith(value).EnsureNotEndsWith(value);
+        }
+
+        /// <summary>Is null or white space.</summary>
+        /// <param name="str">The str.</param>
+        /// <returns>The is null or white space.</returns>
+        public static bool IsNullOrWhiteSpace(this string str)
+        {
+            return (str == null) || (str.Trim().Length == 0);
+        }
+
+        public static string IfNullOrWhiteSpace(this string str, string defaultValue)
+        {
+            return str.IsNullOrWhiteSpace() ? defaultValue : str;
         }
     }
 }
