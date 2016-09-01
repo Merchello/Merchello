@@ -1,8 +1,8 @@
-﻿namespace Merchello.FastTrack.Ui
+﻿namespace Merchello.FastTrack.Configuration
 {
     using System;
     using System.Configuration;
-    using Merchello.Core.Logging;
+    using Core.Logging;
 
     /// <summary>
     /// Provides quick access to the FastTrack configuration section.

@@ -1,4 +1,4 @@
-﻿namespace Merchello.FastTrack.Ui
+﻿namespace Merchello.FastTrack.Configuration
 {
     using System.Configuration;
     using Core.Configuration.Outline;

@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using Configuration;
     using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui;
 
