@@ -5,6 +5,7 @@
 
     using Merchello.Core.Logging;
     using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models.VirtualContent;
 
     using Umbraco.Core;
     using Umbraco.Core.Models.PublishedContent;
@@ -63,15 +64,20 @@
 
             if (collectionKey.IsNullOrWhiteSpace())
             {
-                var defaultCollection = merchello.Query.Product.TypedProductContentSearch(1, 10);
-                    
-                return new ProductContentListView(Guid.Empty, defaultCollection);
+                var query = merchello.ProductContentQuery().Page(1).ItemsPerPage(10).OrderBy(ProductSortField.Name);
+                
+               //var defaultCollection = merchello.Query.Product.TypedProductContentSearch(1, 10);
+
+                return new ProductContentListView(Guid.Empty, query.Execute().Items);
             }
 
             try
             {
                 var key = new Guid(collectionKey);
-                return new ProductContentListView(key, merchello.Query.Product.TypedProductContentFromCollection(key));
+
+                var query = merchello.ProductContentQuery().Page(1).ItemsPerPage(long.MaxValue).ConstrainByCollectionKey(key);
+
+                return new ProductContentListView(key, query.Execute().Items);
             }
             catch (Exception ex)
             {

@@ -935,7 +935,7 @@
         {
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductsThatExistInAllCollections(
+                return repository.GetEntitiesThatExistInAllCollections(
                     collectionKeys.ToArray(),
                     page,
                     itemsPerPage,
@@ -1022,7 +1022,7 @@
         {
             using (var repository = RepositoryFactory.CreateInvoiceRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductsThatExistInAllCollections(
+                return repository.GetEntitiesThatExistInAllCollections(
                     collectionKeys.ToArray(),
                     searchTerm,
                     page,

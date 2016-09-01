@@ -11,7 +11,7 @@
     /// <summary>
     /// Represents a product filter query.
     /// </summary>
-    internal class ProductContentQuery : IProductContentQuery<IProductContent>
+    internal class ProductContentQuery : ICmsContentQuery<IProductContent>
     {
         /// <summary>
         /// The <see cref="ICachedProductQuery"/>.
@@ -74,7 +74,7 @@
         /// <summary>
         /// Gets or sets a setting for specifying how the query should treat collection clusivity in specified collections and filters.
         /// </summary>
-        public FilterQueryClusivity FilterQueryClusivity { get; set; }
+        public CollectionClusivity CollectionClusivity { get; set; }
 
         /// <summary>
         /// Executes the query.
@@ -86,25 +86,34 @@
         {
             var hasCollections = CollectionKeys != null && CollectionKeys.Any();
 
-            if (hasCollections)
+
+            if (!hasCollections)
             {
-                if (HasSearchTerm)
-                {
-                    return FilterQueryClusivity == FilterQueryClusivity.ExistsInAllCollectionsAndFilters
-                               ? _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection)
-                               : _query.TypeProductContentPageThatNotInAnyCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection);
-                }
-                else
-                {
-                    return FilterQueryClusivity == FilterQueryClusivity.ExistsInAllCollectionsAndFilters
-                      ? _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection)
-                      : _query.TypeProductContentPageThatNotInAnyCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
-                }
+                return HasSearchTerm
+                  ? _query.TypedProductContentSearchPaged(SearchTerm, Page, ItemsPerPage, SortBy, SortDirection)
+                  : _query.TypedProductContentSearchPaged(Page, ItemsPerPage, SortBy, SortDirection);
             }
 
-            return HasSearchTerm
-                       ? _query.TypedProductContentSearchPaged(SearchTerm, Page, ItemsPerPage, SortBy, SortDirection)
-                       : _query.TypedProductContentSearchPaged(Page, ItemsPerPage, SortBy, SortDirection);
+            switch (this.CollectionClusivity)
+            {
+                case CollectionClusivity.DoesNotExistInAnyCollectionsAndFilters:
+
+                    return HasSearchTerm ?
+                        _query.TypedProductContentPageThatNotInAnyCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
+                        _query.TypedProductContentPageThatNotInAnyCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+
+                case CollectionClusivity.ExistsInAnyCollectionOrFilter:
+
+                    return HasSearchTerm ?
+                        _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
+                        _query.TypedProductContentPageThatExistsInAnyCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+
+                case CollectionClusivity.ExistsInAllCollectionsAndFilters:
+                default:
+                    return HasSearchTerm ?
+                        _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, SearchTerm, Page, ItemsPerPage, SortBy, SortDirection) :
+                        _query.TypedProductContentPageThatExistInAllCollections(CollectionKeys, Page, ItemsPerPage, SortBy, SortDirection);
+            }
         }
     }
 }

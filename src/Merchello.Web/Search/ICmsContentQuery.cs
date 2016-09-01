@@ -4,6 +4,7 @@
 
     using Merchello.Core.Persistence.Querying;
     using Merchello.Web.Models;
+    using Merchello.Web.Models.VirtualContent;
 
     /// <summary>
     /// Defines a product filter query.
@@ -11,7 +12,8 @@
     /// <typeparam name="TResult">
     /// The type expected in the query result
     /// </typeparam>
-    internal interface IProductContentQuery<TResult>
+    public interface ICmsContentQuery<TResult>
+        where TResult : ICmsContent
     {
         /// <summary>
         /// Gets a value indicating whether has the query has a search term.
@@ -51,7 +53,7 @@
         /// <summary>
         ///  Gets or sets a setting for specifying how the query should treat a products inclusion in specified collections and filters.
         /// </summary>
-        FilterQueryClusivity FilterQueryClusivity { get; set; }
+        CollectionClusivity CollectionClusivity { get; set; }
 
         /// <summary>
         /// Performs the query.
