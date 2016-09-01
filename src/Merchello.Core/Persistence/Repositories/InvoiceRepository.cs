@@ -608,6 +608,47 @@
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+                .Append("FROM [merchInvoice]")
+                .Append("WHERE [merchInvoice].[pk] IN (")
+                .Append("SELECT DISTINCT([invoiceKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckeys = collectionKeys })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = BuildInvoiceSearchSql(term);
+            sql.Append("AND [merchInvoice].[pk] IN (")
+                .Append("SELECT DISTINCT([invoiceKey])")
+                .Append("FROM [merchInvoice2EntityCollection]")
+                .Append(
+                    "WHERE [merchInvoice2EntityCollection].[entityCollectionKey] IN (@eckeys)",
+                    new { @eckey = collectionKeys })
+                .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
         /// <summary>
         /// Gets invoices from collection.
         /// </summary>
@@ -669,7 +710,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetProductsThatExistInAllCollections(
+        public Page<IInvoice> GetEntitiesThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -756,7 +797,7 @@
         /// <returns>
         /// The <see cref="Page{IInvoice}"/>.
         /// </returns>
-        public Page<IInvoice> GetProductsThatExistInAllCollections(
+        public Page<IInvoice> GetEntitiesThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,

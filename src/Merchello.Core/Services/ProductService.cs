@@ -780,7 +780,7 @@
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductsThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -856,7 +856,7 @@
         {
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
-                return repository.GetProductsThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+                return repository.GetEntitiesThatExistInAllCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
 
@@ -1161,6 +1161,34 @@
                 return repository.GetKeysNotInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
             }
         }
+
+        internal Page<Guid> GetKeysThatExistInAnyCollections(
+           IEnumerable<Guid> collectionKeys,
+           long page,
+           long itemsPerPage,
+           string sortBy = "",
+           SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
+        internal Page<Guid> GetKeysThatExistInAnyCollections(
+           IEnumerable<Guid> collectionKeys,
+           string searchTerm,
+           long page,
+           long itemsPerPage,
+           string sortBy = "",
+           SortDirection sortDirection = SortDirection.Descending)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.GetKeysThatExistInAnyCollections(collectionKeys.ToArray(), searchTerm, page, itemsPerPage, this.ValidateSortByField(sortBy), sortDirection);
+            }
+        }
+
 
         #region Filtering
 

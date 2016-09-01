@@ -4,9 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
-    using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Models.VirtualContent;
     using Merchello.Web.Search;
 
@@ -26,7 +24,7 @@
         /// <returns>
         /// The <see cref="IProductContentQueryBuilder"/>.
         /// </returns>
-        public static IProductContentQueryBuilder ProductQueryBuilder(this MerchelloHelper merchello)
+        public static IProductContentQueryBuilder ProductContentQuery(this MerchelloHelper merchello)
         {
             return new ProductContentQueryBuilder(merchello.Query.Product);
         }

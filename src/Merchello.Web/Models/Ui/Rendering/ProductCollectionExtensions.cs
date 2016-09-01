@@ -85,9 +85,42 @@ namespace Merchello.Web.Models.Ui.Rendering
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
+            
+            return value.GetProductsPaged(page, itemsPerPage, sortBy, sortDirection).Items;
+        }
+
+        /// <summary>
+        /// Gets the paged collection of products in the collection.
+        /// </summary>
+        /// <param name="value">
+        /// The <see cref="ProductCollection"/>.
+        /// </param>
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="itemsPerPage">
+        /// Number of items per page.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort field.
+        /// </param>
+        /// <param name="sortDirection">
+        /// The sort direction.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductContent}"/>.
+        /// </returns>
+        public static PagedCollection<IProductContent> GetProductsPaged(
+            this IProductCollection value,
+            long page,
+            long itemsPerPage,
+            string sortBy = "",
+            SortDirection sortDirection = SortDirection.Ascending)
+        {
             var merchelloHelper = new MerchelloHelper();
             return value.GetProducts(merchelloHelper, page, itemsPerPage, sortBy, sortDirection);
         }
+
 
         /// <summary>
         /// Gets a collection of <see cref="ProductCollection"/> that contain the product.
@@ -127,7 +160,7 @@ namespace Merchello.Web.Models.Ui.Rendering
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        internal static IEnumerable<IProductContent> GetProducts(
+        internal static PagedCollection<IProductContent> GetProducts(
             this IProductCollection value,
             MerchelloHelper merchelloHelper,
             long page,
@@ -135,13 +168,37 @@ namespace Merchello.Web.Models.Ui.Rendering
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            return merchelloHelper.Query.Product.TypedProductContentFromCollection(
-                value.Key,
-                page,
-                itemsPerPage,
-                sortBy,
-                sortDirection);
+            ProductSortField order;
+            switch (sortBy.ToLowerInvariant())
+            {
+                case "price":
+                    order = ProductSortField.Price;
+                    break;
+                case "sku":
+                    order = ProductSortField.Sku;
+                    break;
+                case "name":
+                default:
+                    order = ProductSortField.Name;
+                    break;
+            }
+
+            return
+                merchelloHelper.ProductContentQuery()
+                    .Page(page)
+                    .ConstrainBy(value)
+                    .ItemsPerPage(itemsPerPage)
+                    .OrderBy(order, sortDirection)
+                    .Execute();
+
+            ////return merchelloHelper.Query.Product.TypedProductContentFromCollection(
+            ////    value.Key,
+            ////    page,
+            ////    itemsPerPage,
+            ////    sortBy,
+            ////    sortDirection);
         }
+
 
         /// <summary>
         /// Returns a collection of ProductCollection for a given product.

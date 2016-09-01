@@ -524,6 +524,43 @@
             return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
         }
 
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = new Sql();
+            sql.Append("SELECT *")
+              .Append("FROM [merchCustomer]")
+               .Append("WHERE [merchCustomer].[pk] IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
+        public Page<Guid> GetKeysThatExistInAnyCollections(
+            Guid[] collectionKeys,
+            string term,
+            long page,
+            long itemsPerPage,
+            string orderExpression,
+            SortDirection sortDirection = SortDirection.Descending)
+        {
+            var sql = this.BuildCustomerSearchSql(term);
+            sql.Append("AND [merchCustomer].[pk] IN (")
+               .Append("SELECT DISTINCT([customerKey])")
+               .Append("FROM [merchCustomer2EntityCollection]")
+               .Append("WHERE [merchCustomer2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append(")");
+
+            return GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
+        }
+
         /// <summary>
         /// Gets entity from collection.
         /// </summary>
@@ -585,7 +622,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
-        public Page<ICustomer> GetProductsThatExistInAllCollections(
+        public Page<ICustomer> GetEntitiesThatExistInAllCollections(
             Guid[] collectionKeys,
             long page,
             long itemsPerPage,
@@ -671,7 +708,7 @@
         /// <returns>
         /// The <see cref="Page{Guid}"/>.
         /// </returns>
-        public Page<ICustomer> GetProductsThatExistInAllCollections(
+        public Page<ICustomer> GetEntitiesThatExistInAllCollections(
             Guid[] collectionKeys,
             string term,
             long page,
