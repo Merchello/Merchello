@@ -44,9 +44,15 @@
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Attempt.cs" />
     <Compile Include="Attempt{T}.cs" />
-    <Compile Include="Constants-ActivatorTypes.cs" />
-    <Compile Include="Constants-ExtendedDataKeys.cs" />
-    <Compile Include="Constants-Keys.cs" />
+    <Compile Include="Constants-ActivatorTypes.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-ExtendedDataKeys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Keys.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="Ensure.cs" />
@@ -168,6 +174,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cache\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
