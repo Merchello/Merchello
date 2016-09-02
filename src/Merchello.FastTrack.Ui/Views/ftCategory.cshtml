@@ -11,36 +11,4 @@
 <div class="container-fluid">
 
     @Html.Partial("_ProductBoxList", Model.Products)
-    @*<div class="row">
-        <div class="col-md-2">
-            @Html.Partial("CategoryFilterCollections", Model.Products.CollectionKey)
-        </div>
-        <div class="col-md-10">
-            @Html.Partial("_ProductBoxList", Model.Products)
-        </div>
-    </div>*@
 </div>
-
-@*@{
-    var merchello = new MerchelloHelper();
-    var filterGroups = merchello.Filters.Product.GetAll();
-
-    var filters = filterGroups.Skip(1).Select(x => x.Filters.FirstOrDefault());
-    var keys = filters.Select(x => x.Key).ToArray();
-    var umm = keys.Select(x => x.ToString());
-    var list = string.Join(",", umm);
-
-    var query = merchello.ProductQueryBuilder()
-        .ConstrainBy(filters)
-        .ConstrainByCollectionKey(Model.Products.CollectionKey)
-        .OrderBy(ProductSortField.Price);
-}
-<p>@list</p>
-<ul>
-    @foreach (var f in filters)
-    {
-        <li>@f.Name</li>
-    }
-</ul>
-
-@Html.Partial("_ProductBoxList", query.Execute().Items)*@

@@ -406,7 +406,7 @@
     <Compile Include="Models\Ui\IProductDataTableRow.cs" />
     <Compile Include="Models\Ui\IMerchelloViewData.cs" />
     <Compile Include="Models\Ui\PaymentAttemptViewData.cs" />
-    <Compile Include="Models\Ui\Rendering\ProductCollectionExtensions.cs" />
+    <Compile Include="ProductCollectionExtensions.cs" />
     <Compile Include="Models\Ui\Rendering\ProductContentListView.cs" />
     <Compile Include="Models\Ui\Rendering\EntityCollectionProxyBase.cs" />
     <Compile Include="Models\Ui\Rendering\ProductFilter.cs" />

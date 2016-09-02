@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Models.Ui.Rendering
 {
+    using System;
+
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>

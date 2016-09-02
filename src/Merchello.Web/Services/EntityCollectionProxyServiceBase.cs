@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Services
 {
+    using System;
+
     using Merchello.Core;
     using Merchello.Core.Services;
 
@@ -36,5 +38,22 @@
         /// Gets the service.
         /// </summary>
         protected IEntityCollectionService Service { get; private set; }
+
+        /// <summary>
+        /// Gets the cache key for request caching.
+        /// </summary>
+        /// <param name="methodName">
+        /// The method name.
+        /// </param>
+        /// <param name="keys">
+        /// The keys.
+        /// </param>
+        /// <returns>
+        /// The cacheKey.
+        /// </returns>
+        protected string GetCacheKey(string methodName, params Guid[] keys)
+        {
+            return string.Format("{0}.{1}.{2}", methodName, this.GetType(), string.Join(string.Empty, keys));
+        }
     }
 }

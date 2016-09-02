@@ -372,6 +372,7 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
+    <Compile Include="DataStructures\TreeNode.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Ensure.cs" />
     <Compile Include="EntityCollections\CachedEntityCollectionProviderBase{T}.cs" />

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Merchello.Core.DataStructures;
     using Merchello.Web.Models.Ui.Rendering;
 
     /// <summary>
@@ -17,6 +18,14 @@
         /// The <see cref="IEnumerable{IProductCollection}"/>.
         /// </returns>
         IEnumerable<IProductCollection> GetRootLevelCollections();
+
+        /// <summary>
+        /// Gets the root level collections as trees.
+        /// </summary>
+        /// <returns>
+        /// The collection <see cref="TreeNode{IProductCollection}"/>.
+        /// </returns>
+        IEnumerable<TreeNode<IProductCollection>> GetRootLevelCollectionTrees();
 
         /// <summary>
         /// Get collections containing product.
@@ -40,6 +49,7 @@
         /// The <see cref="IEnumerable{IProductCollection}"/>.
         /// </returns>
         IEnumerable<IProductCollection> GetChildCollections(Guid collectionKey);
+
 
         /// <summary>
         /// Get collections not containing a product.

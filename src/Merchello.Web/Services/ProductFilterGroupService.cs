@@ -78,6 +78,7 @@
         /// </returns>
         public IProductFilterGroup GetByKey(Guid key)
         {
+            // This will be in the Runtime Cache from the underlying service
             return Map(((EntityCollectionService)Service).GetEntityFilterGroup(key));
         }
 
@@ -92,6 +93,11 @@
         /// </returns>
         public IEnumerable<IProductFilterGroup> GetAll(params Guid[] keys)
         {
+            var cacheKey = GetCacheKey("GetAll", keys);
+
+            var filterGroups = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
+            if (filterGroups != null) return filterGroups;
+
             var collections = ((EntityCollectionService)Service).GetEntityFilterGroupsByProviderKeys(_filterProviderKeys);
 
             return Map(keys.Any() ? 
@@ -110,10 +116,10 @@
         /// </returns>
         public IEnumerable<IProductFilterGroup> GetFilterGroupsContainingProduct(Guid productKey)
         {
-            var cacheKey = string.Format("{0}.productfiltergroupcontaining", productKey);
+            var cacheKey = GetCacheKey("GetFilterGroupsContainingProduct", productKey);
 
-            var filterGroup = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
-            if (filterGroup != null) return filterGroup;
+            var filterGroups = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
+            if (filterGroups != null) return filterGroups;
 
             return
                 (IEnumerable<IProductFilterGroup>)
@@ -136,7 +142,7 @@
         /// </returns>
         public IEnumerable<IProductFilterGroup> GetFilterGroupsNotContainingProduct(Guid productKey)
         {
-            var cacheKey = string.Format("{0}.productfiltergroupnotcontaining", productKey);
+            var cacheKey = GetCacheKey("GetFilterGroupsNotContainingProduct", productKey);
 
             var filterGroup = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
             if (filterGroup != null) return filterGroup;
@@ -185,7 +191,10 @@
         /// <summary>
         /// Initializes the service.
         /// </summary>
-        private void Initialize(EntityCollectionProviderResolver resolver)
+        /// <param name="resolver">
+        /// The <see cref="IEntityCollectionProviderResolver"/>.
+        /// </param>
+        private void Initialize(IEntityCollectionProviderResolver resolver)
         {
             _filterProviderKeys = resolver.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
         }
