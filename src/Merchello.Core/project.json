@@ -1,12 +1,20 @@
 {
   "dependencies": {
-    "Newtonsoft.Json": "8.0.*"
+    "AutoMapper": "5.1.1",
+    "LightInject": "4.1.0",
+    "LightInject.Annotation": "1.0.0.4",
+    "log4net": "2.0.5",
+    "MiniProfiler": "3.2.0.157",
+    "Newtonsoft.Json": "8.0.*",
+    "NPoco": "3.4.1",
+    "semver": "2.0.4",
+    "SqlServerCE" : "4.0.0.1"
   },
   "frameworks": {
     "net461": {}
   },
   "runtimes": {
-    "win-anycpu": {},
-    "win": {}
+    "win": {},
+    "win-anycpu": { }
   }
 }
