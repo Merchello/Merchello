@@ -102,6 +102,8 @@
                         // convert to a LineItem of the same type for use in the CheckoutPrepartion collection
                         context.ItemCache.AddItem(item.AsLineItemOf<ItemCacheLineItem>());
                     }
+
+                    merchelloContext.Services.ItemCacheService.Save(context.ItemCache);
                 }
             }
 

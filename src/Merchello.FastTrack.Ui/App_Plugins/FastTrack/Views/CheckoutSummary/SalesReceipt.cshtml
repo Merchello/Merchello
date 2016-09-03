@@ -88,7 +88,16 @@
                                         break;
                                 }</td>
                                 <td>@(item.LineItemType != LineItemType.Discount ? item.Name : item.Sku)</td>
-                                <td colspan="3" class="text-right">@item.Total().AsFormattedCurrency()</td>
+                                <td colspan="3" class="text-right">
+                                    @if (item.LineItemType == LineItemType.Discount)
+                                    {
+                                        <span>(@item.Total().AsFormattedCurrency())</span>
+                                    }
+                                    else
+                                    {
+                                        @item.Total().AsFormattedCurrency()
+                                    }
+                                </td>
                             </tr>
                         }
                         <tfoot>

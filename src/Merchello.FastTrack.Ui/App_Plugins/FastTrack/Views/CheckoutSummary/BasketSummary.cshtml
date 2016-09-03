@@ -26,9 +26,10 @@
                         </thead>
                         @foreach (var item in Model.Items)
                         {
+                            var isProduct = item.Product != null;
                             <tr>
                                 <td>
-                                    @if (item.Product.HasValue("image"))
+                                    @if (isProduct && item.Product.HasValue("image"))
                                     {
                                         var mediaId = item.Product.GetPropertyValue<string>("image");
                                         var image = Umbraco.TypedMedia(mediaId);

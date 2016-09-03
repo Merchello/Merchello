@@ -221,7 +221,7 @@
 
         #endregion
 
-        #region lineitemoffer      
+        #region line item offer      
 
         /// <summary>
         /// Attempts to apply the constraints against the offer.
