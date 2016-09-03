@@ -225,7 +225,7 @@
         /// <returns>
         /// The <see cref="ICheckoutContext"/> associated with the customer checkout
         /// </returns>
-        public static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey, ICheckoutContextSettings settings)
+        internal static ICheckoutContext CreateCheckoutContext(IMerchelloContext merchelloContext, ICustomerBase customer, Guid versionKey, ICheckoutContextSettings settings)
         {
             var cache = merchelloContext.Cache.RuntimeCache;
             var cacheKey = MakeCacheKey(customer, versionKey);

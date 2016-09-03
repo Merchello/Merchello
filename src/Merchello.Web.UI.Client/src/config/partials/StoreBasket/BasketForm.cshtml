@@ -28,48 +28,62 @@
         @for (var i = 0; i < Model.Items.Count(); i++)
         {
             var product = Model.Items[i].Product;
-            if (product != null)
-            {
-                <tr>
-                    <td class="image">
-                        @Html.HiddenFor(model => Model.Items[i].Key)
+            var isProduct = product != null;
 
+            <tr>
+                <td class="image">
+                    @Html.HiddenFor(model => Model.Items[i].Key)
 
-                        @{
-                            // This is a property reference to a content type on the default starter kit
-                            // and may need to change for site specific implementations.  Example!
-                            if (product.HasValue("image"))
-                            {
-                                var mediaId = product.GetPropertyValue<string>("image");
-                                var image = Umbraco.TypedMedia(mediaId);
-
-                                <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20" /></a>
-                            }
-                            <a href="@product.Url">
-                                <span>@product.Name</span>
-                                @foreach(var choice in Model.Items[i].CustomerOptionChoices)
-                                {
-                                    <span class="option-choice">@choice.Key - @choice.Value</span>
-                                }
-                            </a>
-                        }
-
-                    </td>
-                    <td>@Model.Items[i].Amount.AsFormattedCurrency()</td>
-                    <td>@Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min="1", data_muiaction="updatequantity" })</td>
-                    <td data-muivalue="linetotal">@Model.Items[i].Total().AsFormattedCurrency()</td>
-                    <td class="text-right">
-                        @if (Model.WishListEnabled)
+                    @if (isProduct)
+                    {
+                        // This is a property reference to a content type on the default starter kit
+                        // and may need to change for site specific implementations.  Example!
+                        if (product.HasValue("image"))
                         {
-                            // the 'area' parameter in the route values should match the PluginController attribute alias
-                            @Html.ActionLink("Wish List +", "MoveItemToWishList", "StoreBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+                            var mediaId = product.GetPropertyValue<string>("image");
+                            var image = Umbraco.TypedMedia(mediaId);
+
+                            <a href="@product.Url"><img src="@image.GetCropUrl(width: 20)" alt="@product.Name" width="20"/></a>
                         }
+                        <a href="@product.Url">
+                            <span>@product.Name</span>
+                            @foreach (var choice in Model.Items[i].CustomerOptionChoices)
+                            {
+                                <span class="option-choice">@choice.Key - @choice.Value</span>
+                            }
+                        </a>
+                    }
+                    else
+                    {
+                        // not a product (custom implementation) so just put the name here
+                        <span>@Model.Items[i].Name</span>
+                    }
+                </td>
+                <td>@Model.Items[i].Amount.AsFormattedCurrency()</td>
+                <td>
+                    @if (isProduct)
+                    {
+                        @Html.TextBoxFor(model => Model.Items[i].Quantity, new { @type = "number", min = "1", data_muiaction = "updatequantity" })
+                    }
+                    else
+                    {
+                        // assume this can't be changed if it is not a product
+                        @Html.HiddenFor(model => Model.Items[i].Quantity)
+                    }
+                </td>
+                <td data-muivalue="linetotal">@Model.Items[i].Total().AsFormattedCurrency()</td>
+                <td class="text-right">
+                    @if (Model.WishListEnabled && isProduct) // only products can be added to the wishlist
+                    {
+                        // the 'area' parameter in the route values should match the PluginController attribute alias
+                        @Html.ActionLink("Wish List +", "MoveItemToWishList", "StoreBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, successRedirectId = currentPage.Id }, new { @class = "btn btn-info" })
+                    }
 
-                        @Html.ActionLink("Remove", "RemoveBasketItem", "StoreBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
-                    </td>
-                </tr>
+                    @Html.ActionLink("Remove", "RemoveBasketItem", "StoreBasket", new { area = "Merchello", lineItemKey = Model.Items[i].Key, redirectId = currentPage.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
 
-            }
+
         }
         <tr>
             <td colspan="3" class="text-right"><strong>Sub Total</strong></td>
