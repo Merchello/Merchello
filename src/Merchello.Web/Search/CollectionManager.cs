@@ -3,21 +3,17 @@
     using System;
 
     using Merchello.Core;
-    using Merchello.Core.Services;
-    using Merchello.Web.Services;
-
-    using Umbraco.Core.Cache;
 
     /// <summary>
     /// Represents a collection manager.
     /// </summary>
-    internal class CollectionManager : ProxyServiceManagerBase, ICollectionManager
+    internal class CollectionManager : ProxyQueryManagerBase, ICollectionManager
     {
 
         /// <summary>
-        /// Lazy for access to the <see cref="IProductCollectionService"/>.
+        /// Lazy for access to the <see cref="IProductCollectionQuery"/>.
         /// </summary>
-        private Lazy<IProductCollectionService> _productCollectionService;
+        private Lazy<IProductCollectionQuery> _productCollectionService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionManager"/> class.
@@ -25,19 +21,19 @@
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>
         /// </param>
-        /// <param name="proxyServiceResolver">
+        /// <param name="queryManager">
         /// The resolver.
         /// </param>
-        public CollectionManager(IMerchelloContext merchelloContext, IProxyEntityServiceResolver proxyServiceResolver)
-            : base(merchelloContext, proxyServiceResolver)
+        public CollectionManager(IMerchelloContext merchelloContext, IProxyQueryManager queryManager)
+            : base(merchelloContext, queryManager)
         {
             this.Initialize();
         }
 
         /// <summary>
-        /// Gets the <see cref="IProductCollectionService"/>.
+        /// Gets the <see cref="IProductCollectionQuery"/>.
         /// </summary>
-        public IProductCollectionService Product
+        public IProductCollectionQuery Product
         {
             get
             {
@@ -50,7 +46,7 @@
         /// </summary>
         private void Initialize()
         {
-            this._productCollectionService = new Lazy<IProductCollectionService>(() => this.Resolver.Instance<ProductCollectionService>(new object[] { this.Services.EntityCollectionService, this.Cache }));
+            this._productCollectionService = new Lazy<IProductCollectionQuery>(() => this.QueryManager.Instance<ProductCollectionQuery>(new object[] { this.Services.EntityCollectionService, this.Cache }));
         }
     }
 }

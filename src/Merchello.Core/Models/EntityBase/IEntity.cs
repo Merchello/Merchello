@@ -7,13 +7,13 @@
     /// Defines an Entity.
     /// Entities should always have an Id, Created and Modified date
     /// </summary>
-    public interface IEntity : ITracksDirty
+    public interface IEntity : IHasKeyId, ITracksDirty
     {
         /// <summary>
         /// Gets or sets the GUID based Id
         /// </summary>
         [DataMember]
-        Guid Key { get; set; }
+        new Guid Key { get; set; }
 
         /// <summary>
         /// Gets or sets the Created Date

@@ -162,7 +162,7 @@
             if (entityType != EntityType.Product) throw new NotImplementedException("Only Product types have been implemented");
 
             return
-                _resolver.GetProviderAttributes<IProductFilterGroupProvider>()
+                _resolver.GetProviderAttributes<IProductEntityFilterGroupProvider>()
                     .Select(x => x.ToEntityCollectionProviderDisplay());
         }
 

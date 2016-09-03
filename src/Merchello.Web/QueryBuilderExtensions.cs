@@ -5,6 +5,7 @@
 
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Web.Models;
     using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Search;
 

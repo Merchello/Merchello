@@ -372,6 +372,12 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
+    <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
+    <Compile Include="Trees\ITreeNodeVisitor.cs" />
+    <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
+    <Compile Include="Trees\TreeNode.cs" />
+    <Compile Include="Trees\TreeNodeExtensions.cs" />
+    <Compile Include="Trees\TreeNodeFactory{T}.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Ensure.cs" />
     <Compile Include="EntityCollections\CachedEntityCollectionProviderBase{T}.cs" />
@@ -475,6 +481,8 @@
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollectionExtensions.cs" />
     <Compile Include="Models\EntityBase\DeployableEntity.cs" />
+    <Compile Include="Models\EntityBase\IHasKeyId.cs" />
+    <Compile Include="Models\Interfaces\IHasParent.cs" />
     <Compile Include="Models\EntityCollection.cs" />
     <Compile Include="Models\EntityFilterGroup.cs" />
     <Compile Include="Models\Interfaces\IEntityFilterGroup.cs" />
@@ -1336,6 +1344,7 @@
     <Compile Include="Observation\ITriggerResolver.cs" />
     <Compile Include="Observation\TriggerBase.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Trees\TreeNodeVistorBase.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Models\TypeFields\ProductTypeField.cs" />
     <Compile Include="Models\Rdbms\TypeFieldDto.cs" />

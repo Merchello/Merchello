@@ -54,7 +54,7 @@
             var resolver = EntityCollectionProviderResolver.Current;
 
             //// Act
-            var keys = resolver.GetProviderKeys<IProductCollectionProvider>();
+            var keys = resolver.GetProviderKeys<IProductEntityCollectionProvider>();
             if (!keys.Any()) Assert.Fail("No keys returned");
             var key = keys.First();
 
