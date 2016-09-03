@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{D921B972-B572-487F-AF14-613713E1B4E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web", "Merchello.Web\Merchello.Web.csproj", "{9DCEAC26-70C0-4B2F-88F5-FD2A2E2A30DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Web.Umbraco", "Merchello.Web.Umbraco\Merchello.Web.Umbraco.csproj", "{F121FE06-B3E5-4ADA-A280-4454F446BBCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D921B972-B572-487F-AF14-613713E1B4E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D921B972-B572-487F-AF14-613713E1B4E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D921B972-B572-487F-AF14-613713E1B4E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DCEAC26-70C0-4B2F-88F5-FD2A2E2A30DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DCEAC26-70C0-4B2F-88F5-FD2A2E2A30DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DCEAC26-70C0-4B2F-88F5-FD2A2E2A30DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DCEAC26-70C0-4B2F-88F5-FD2A2E2A30DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F121FE06-B3E5-4ADA-A280-4454F446BBCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F121FE06-B3E5-4ADA-A280-4454F446BBCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F121FE06-B3E5-4ADA-A280-4454F446BBCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F121FE06-B3E5-4ADA-A280-4454F446BBCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
