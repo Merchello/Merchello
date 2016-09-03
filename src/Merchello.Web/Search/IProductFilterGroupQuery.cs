@@ -1,14 +1,14 @@
-﻿namespace Merchello.Web.Services
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models;
 
     /// <summary>
     /// Defines a ProductFilterGroupService.
     /// </summary>
-    public interface IProductFilterGroupService : IEntityProxyService<IProductFilterGroup>
+    public interface IProductFilterGroupQuery : IEntityProxyQuery<IProductFilterGroup>
     {
         /// <summary>
         /// Gets a collection of <see cref="IProductFilterGroup"/> that has at least one filter that contains a product with key passed as parameter.

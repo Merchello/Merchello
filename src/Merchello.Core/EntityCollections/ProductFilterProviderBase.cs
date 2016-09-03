@@ -16,7 +16,7 @@
     /// <summary>
     /// A base class for Product based Specified Filter Collections Providers.
     /// </summary>
-    public abstract class ProductFilterGroupProviderBase : CachedQueryableEntityCollectionProviderBase<IProduct>, IProductFilterGroupProvider
+    public abstract class ProductFilterGroupProviderBase : CachedQueryableEntityCollectionProviderBase<IProduct>, IProductEntityFilterGroupProvider
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilterGroupProviderBase"/> class.

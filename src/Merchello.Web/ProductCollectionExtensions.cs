@@ -3,15 +3,16 @@ namespace Merchello.Web
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
 
     using Merchello.Core;
-    using Merchello.Core.DataStructures;
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Trees;
     using Merchello.Web.Models;
     using Merchello.Web.Models.Ui.Rendering;
     using Merchello.Web.Models.VirtualContent;
-    using Merchello.Web.Services;
+    using Merchello.Web.Search;
 
     /// <summary>
     /// The product collection extensions.
@@ -40,12 +41,134 @@ namespace Merchello.Web
         /// <param name="value">
         /// The <see cref="ProductCollection"/>.
         /// </param>
+        /// <param name="predicate">
+        /// An optional lambda expression
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{ProductCollectionr}"/>.
         /// </returns>
-        public static IEnumerable<IProductCollection> Children(this IProductCollection value)
+        public static IEnumerable<IProductCollection> Children(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate = null)
         {
-            return GetChildren(value);
+            return value.AsTreeNode().Children.Values(predicate);
+        }
+
+        /// <summary>
+        /// Gets the siblings of the <see cref="IProductCollection"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// An optional lambda expression
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        public static IEnumerable<IProductCollection> Siblings(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate = null)
+        {
+            return value.AsTreeNode().Siblings().Values(predicate);
+        }
+
+        /// <summary>
+        /// Gets the siblings of the <see cref="IProductCollection"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// An optional lambda expression
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        public static IEnumerable<IProductCollection> Ancestors(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate = null)
+        {
+            return value.AsTreeNode().Ancestors().Values(predicate);
+        }
+
+        /// <summary>
+        /// Gets the first ancestor matching the expression
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// The predicate.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductCollection"/>.
+        /// </returns>
+        public static IProductCollection Ancestor(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate)
+        {
+            return value.AsTreeNode().Ancestors().Values(predicate).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the siblings of the <see cref="IProductCollection"/> including itself.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// An optional lambda expression
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        public static IEnumerable<IProductCollection> AncestorsOrSelf(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate = null)
+        {
+            return value.AsTreeNode().AncestorsOrSelf().Values(predicate);
+        }
+
+        /// <summary>
+        /// Gets the first descendant matching the expression
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// The predicate.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IProductCollection"/>.
+        /// </returns>
+        public static IProductCollection Descendant(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate)
+        {
+            return value.AsTreeNode().Descendants().Values(predicate).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the descendants of the <see cref="IProductCollection"/>.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// An optional lambda expression
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        public static IEnumerable<IProductCollection> Descendants(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate = null)
+        {
+            return value.AsTreeNode().Descendants().Values(predicate);
+        }
+
+        /// <summary>
+        /// Gets the descendants of the <see cref="IProductCollection"/> including itself.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="predicate">
+        /// The predicate.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductCollection}"/>.
+        /// </returns>
+        public static IEnumerable<IProductCollection> DescendantsOrSelf(this IProductCollection value, Expression<Func<IProductCollection, bool>> predicate = null)
+        {
+            return value.AsTreeNode().DescendantsOrSelf().Values(predicate);
         }
 
         /// <summary>
@@ -90,7 +213,6 @@ namespace Merchello.Web
             string sortBy = "",
             SortDirection sortDirection = SortDirection.Ascending)
         {
-            
             return value.GetProductsPaged(page, itemsPerPage, sortBy, sortDirection).Items;
         }
 
@@ -138,20 +260,7 @@ namespace Merchello.Web
         /// </returns>
         public static IEnumerable<IProductCollection> Collections(this IProductContent product)
         {
-            return product.Collections(MerchelloContext.Current);
-        }
-
-        public static IEnumerable<IProductCollection> Ancestors(this IProductCollection collection)
-        {
-            var tree = collection.GetTreeContaining();
-            if (tree == null) return Enumerable.Empty<IProductCollection>();
-            throw new NotImplementedException();
-        }
-
-        public static IEnumerable<IProductCollection> Descendants(this IProductCollection collection)
-        {
-            var tree = collection.GetTreeContaining();
-            throw new NotImplementedException();
+            return Query().GetCollectionsContainingProduct(product.Key);
         }
 
 
@@ -209,128 +318,9 @@ namespace Merchello.Web
                     .ItemsPerPage(itemsPerPage)
                     .OrderBy(order, sortDirection)
                     .Execute();
-
-            ////return merchelloHelper.Query.Product.TypedProductContentFromCollection(
-            ////    value.Key,
-            ////    page,
-            ////    itemsPerPage,
-            ////    sortBy,
-            ////    sortDirection);
         }
 
-        /// <summary>
-        /// Returns a collection of ProductCollection for a given product.
-        /// </summary>
-        /// <param name="product">
-        /// The product.
-        /// </param>
-        /// <param name="merchelloContext">
-        /// The merchello context.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{ProductCollection}"/>.
-        /// </returns>
-        internal static IEnumerable<IProductCollection> Collections(this IProductContent product, IMerchelloContext merchelloContext)
-        {
-            return GetProxyService(merchelloContext).GetCollectionsContainingProduct(product.Key);
-        }
-
-        /// <summary>
-        /// Loads a collection of all <see cref="IProductCollection"/> into a collection of instantiated trees.
-        /// </summary>
-        /// <param name="tree">
-        /// The tree.
-        /// </param>
-        /// <param name="allCollections">
-        /// The all collections.
-        /// </param>
-        /// <returns>
-        /// The <see cref="TreeNode{IProductCollection}"/>.
-        /// </returns>
-        internal static TreeNode<IProductCollection> Load(this TreeNode<IProductCollection> tree, IEnumerable<IProductCollection> allCollections)
-        {
-            var collections = allCollections as IProductCollection[] ?? allCollections.ToArray();
-            var children = collections.Where(x => x.ParentKey == tree.Value.Key);
-            tree.AddChildren(children.ToArray());
-            foreach (var child in tree.Children)
-            {
-                child.Load(collections);
-            }
-
-            return tree;
-        }
-
-        internal static TreeNode<IProductCollection> DepthFirstSearch(
-            this TreeNode<IProductCollection> tree, 
-            IProductCollection collection,
-            TreeNode<IProductCollection> start = null)
-        {
-            TreeNode<IProductCollection> found = null;
-            var visited = new HashSet<TreeNode<IProductCollection>>();
-            var stack = new Stack<TreeNode<IProductCollection>>();
-            if (start == null) start = tree;
-
-            stack.Push(start);
-
-            while (stack.Count != 0 && found == null)
-            {
-                var current = stack.Pop();
-                if (current.Value.Key == collection.Key)
-                {
-                    found = current;
-                }
-                else
-                {
-                    if (!visited.Add(current))
-                        continue;
-
-                    var children = current.Children.Where(x => visited.All(y => y.Value.Key != x.Value.Key));
-
-                    // If you don't care about the left-to-right order, remove the Reverse
-                    foreach (var child in children.Reverse())
-                        stack.Push(child);
-                }
-            }
-
-            return found;
-        }
-
-        /// <summary>
-        /// The get tree containing.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// The <see cref="TreeNode{IProductCollection}"/>.
-        /// </returns>
-        internal static TreeNode<IProductCollection> GetTreeContaining(this IProductCollection value)
-        {
-            var trees = GetProxyService(MerchelloContext.Current).GetRootLevelCollectionTrees();
-            var tree = trees.FirstOrDefault(x => x.Flatten().Any(y => y.Key == value.Key));
-            if (tree != null) return tree;
-
-            MultiLogHelper.Warn(typeof(ProductCollectionExtensions), "Failed to find a tree containing the IProductCollection");
-
-            return null;
-        }
-
-        /// <summary>
-        /// Gets the child collections.
-        /// </summary>
-        /// <param name="value">
-        /// The <see cref="ProductCollection"/>.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{ProductCollection}"/>.
-        /// </returns>
-        private static IEnumerable<IProductCollection> GetChildren(this IProductCollection value)
-        {
-            return GetProxyService(MerchelloContext.Current).GetChildCollections(value.Key);
-        } 
         
-
-
         /// <summary>
         /// Gets the <see cref="ProductCollection"/> by it's key.
         /// </summary>
@@ -342,23 +332,70 @@ namespace Merchello.Web
         /// </returns>
         private static IProductCollection GetByKey(Guid key)
         {
-            return GetProxyService(MerchelloContext.Current).GetByKey(key);
+            return Query().GetByKey(key);
         }
-
 
         /// <summary>
-        /// Gets the <see cref="IProductCollectionService"/>.
+        /// Gets the <see cref="TreeNode{IProductCollection}"/>.
         /// </summary>
-        /// <param name="merchelloContext">
-        /// The merchello context.
+        /// <param name="value">
+        /// The value.
         /// </param>
         /// <returns>
-        /// The <see cref="IProductCollectionService"/>.
+        /// The <see cref="TreeNode{IProductCollection}"/>.
         /// </returns>
-        private static IProductCollectionService GetProxyService(IMerchelloContext merchelloContext)
+        /// <exception cref="NullReferenceException">
+        /// Throws a null reference exception if the collection could not be found in the cached collection tree.
+        /// </exception>
+        private static TreeNode<IProductCollection> AsTreeNode(this IProductCollection value)
         {
-            return ProxyEntityServiceResolver.Current.Instance<ProductCollectionService>(new object[] { merchelloContext });
+            var tree = TreeQuery().GetTreeByValue(value);
+            if (tree != null) return tree;
+
+            var nullRef = new NullReferenceException("The product collection was not found in Tree cache");
+            MultiLogHelper.Error(typeof(ProductCollectionExtensions), "Tree nod found for collection", nullRef);
+            throw nullRef;
         }
-        
+
+        /// <summary>
+        /// Gets the values from all nodes in the collection.
+        /// </summary>
+        /// <param name="nodes">
+        /// The collection of nodes.
+        /// </param>
+        /// <param name="predicate">
+        /// An optional lambda express 
+        /// </param>
+        /// <returns>
+        /// The collection <see cref="IProductCollection"/>.
+        /// </returns>
+        private static IEnumerable<IProductCollection> Values(this IEnumerable<TreeNode<IProductCollection>> nodes, Expression<Func<IProductCollection, bool>> predicate = null)
+        {
+            var values = nodes.Select(x => x.Value).AsQueryable();
+
+            return predicate != null ? values.Where(predicate) : values;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductCollectionQuery"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IProductCollectionQuery"/>.
+        /// </returns>
+        private static IProductCollectionQuery Query()
+        {
+            return ProxyQueryManager.Current.Instance<ProductCollectionQuery>();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IProductCollectionTreeQuery"/>.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IProductCollectionTreeQuery"/>.
+        /// </returns>
+        private static IProductCollectionTreeQuery TreeQuery()
+        {
+            return ProxyQueryManager.Current.Instance<ProductCollectionTreeQuery>();
+        }
     }
 }

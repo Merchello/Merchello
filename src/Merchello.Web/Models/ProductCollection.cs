@@ -1,8 +1,7 @@
-﻿namespace Merchello.Web.Models.Ui.Rendering
+﻿namespace Merchello.Web.Models
 {
-    using System;
-
     using Merchello.Core.Models.Interfaces;
+    using Merchello.Web.Models.Ui.Rendering;
 
     /// <summary>
     /// The product collection.

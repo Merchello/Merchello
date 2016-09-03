@@ -7,7 +7,7 @@
     using Merchello.Core.Marketing.Offer;
     using Merchello.Web.Pluggable;
     using Merchello.Web.Reporting;
-    using Merchello.Web.Services;
+    using Merchello.Web.Search;
     using Merchello.Web.Ui;
 
     using Umbraco.Core;
@@ -107,8 +107,8 @@
             if(!OfferComponentResolver.HasCurrent)
                 OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
 
-            if (!ProxyEntityServiceResolver.HasCurrent)
-                ProxyEntityServiceResolver.Current = new ProxyEntityServiceResolver(MerchelloContext.Current.Cache.RequestCache);
+            if (!ProxyQueryManager.HasCurrent)
+                ProxyQueryManager.Current = new ProxyQueryManager(MerchelloContext.Current.Cache.RequestCache);
         }
 
         /// <summary>

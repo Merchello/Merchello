@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Models.Ui.Rendering
+﻿namespace Merchello.Web.Models
 {
     using System;
 

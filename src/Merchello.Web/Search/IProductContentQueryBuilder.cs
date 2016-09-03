@@ -1,6 +1,6 @@
 ﻿namespace Merchello.Web.Search
 {
-    using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models;
     using Merchello.Web.Models.VirtualContent;
 
     /// <summary>

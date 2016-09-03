@@ -5,6 +5,7 @@
 
     using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Web.Models;
     using Merchello.Web.Models.Ui.Rendering;
 
     using Umbraco.Core.Models.PublishedContent;

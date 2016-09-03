@@ -1,9 +1,9 @@
-﻿namespace Merchello.Web.Services
+namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models;
 
     /// <summary>
     /// The EntityProxyService interface.
@@ -11,7 +11,7 @@
     /// <typeparam name="TProxy">
     /// The type of entity
     /// </typeparam>
-    public interface IEntityProxyService<out TProxy> : IEntityProxyService
+    public interface IEntityProxyQuery<out TProxy> : IEntityProxyQuery
         where TProxy : IEntityProxy
     {
         /// <summary>
@@ -20,7 +20,7 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProviderInfo}"/>.
         /// </returns>
-        IEnumerable<IProviderMeta> GetProviders();
+        IEnumerable<IProviderMeta> GetCollectionProviders();
 
         /// <summary>
         /// Gets the proxy entity by it's Key.
@@ -48,7 +48,7 @@
     /// <summary>
     /// Marker interface for entity proxy services.
     /// </summary>
-    public interface IEntityProxyService
+    public interface IEntityProxyQuery
     {
     }
 }

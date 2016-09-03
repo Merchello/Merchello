@@ -1,6 +1,8 @@
-﻿namespace Merchello.Web.Models.Ui.Rendering
+﻿namespace Merchello.Web.Models
 {
     using System.Collections.Generic;
+
+    using Merchello.Web.Models.Ui.Rendering;
 
     /// <summary>
     /// Defines a product filter group

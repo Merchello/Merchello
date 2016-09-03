@@ -3,7 +3,7 @@
     /// <summary>
     /// Marker interface for Product <see cref="IEntityCollectionProvider"/>.
     /// </summary>
-    public interface IProductCollectionProvider : IEntityCollectionProvider
+    public interface IProductEntityCollectionProvider : IEntityCollectionProvider
     {
     }
 }

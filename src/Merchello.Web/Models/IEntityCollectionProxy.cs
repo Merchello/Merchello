@@ -1,17 +1,15 @@
-﻿namespace Merchello.Web.Models.Ui.Rendering
+﻿namespace Merchello.Web.Models
 {
     using System;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models;
 
     /// <summary>
     /// Defines an entity collection proxy.
     /// </summary>
-    public interface IEntityCollectionProxy : IEntityProxy
+    public interface IEntityCollectionProxy : IHasParent, IEntityProxy
     {
-        /// <summary>
-        /// Gets the parent key.
-        /// </summary>
-        Guid? ParentKey { get; }
-
         /// <summary>
         /// Gets the collection name.
         /// </summary>

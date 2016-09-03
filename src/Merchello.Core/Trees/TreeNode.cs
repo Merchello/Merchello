@@ -1,8 +1,7 @@
-﻿namespace Merchello.Core.DataStructures
+﻿namespace Merchello.Core.Trees
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
 
     /// <summary>
@@ -11,7 +10,7 @@
     /// <typeparam name="T">
     /// The type of object
     /// </typeparam>
-    public class TreeNode<T>
+    internal class TreeNode<T>
     {
         /// <summary>
         /// The list of the children.
@@ -46,65 +45,8 @@
         {
             get
             {
-                return _children;
+                return this._children;
             }
-        }
-
-        /// <summary>
-        /// The add child.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// The <see cref="TreeNode{T}"/>.
-        /// </returns>
-        public TreeNode<T> AddChild(T value)
-        {
-            var node = new TreeNode<T>(value) { Parent = this };
-            _children.AddLast(node);
-            return node;
-        }
-
-        /// <summary>
-        /// Adds children to the tree.
-        /// </summary>
-        /// <param name="values">
-        /// The values.
-        /// </param>
-        /// <returns>
-        /// The <see cref="TreeNode{T}"/>.
-        /// </returns>
-        public TreeNode<T>[] AddChildren(params T[] values)
-        {
-            return values.Select(AddChild).ToArray();
-        }
-
-        /// <summary>
-        /// Removes a child from the tree.
-        /// </summary>
-        /// <param name="node">
-        /// The node.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool RemoveChild(TreeNode<T> node)
-        {
-            return _children.Remove(node);
-        }
-
-        /// <summary>
-        /// Performs an action on each node in the tree traversal.
-        /// </summary>
-        /// <param name="action">
-        /// The action.
-        /// </param>
-        public void Traverse(Action<T> action)
-        {
-            action(Value);
-            foreach (var child in _children)
-                child.Traverse(action);
         }
 
         /// <summary>
@@ -120,8 +62,81 @@
         {
             get
             {
-                if (_children.Count() >= i) return null;
-                return _children.ElementAt(i);
+                if (this._children.Count() >= i) return null;
+                return this._children.ElementAt(i);
+            }
+        }
+
+        /// <summary>
+        /// The add child.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TreeNode{T}"/>.
+        /// </returns>
+        public TreeNode<T> AddChild(T value)
+        {
+            var node = new TreeNode<T>(value) { Parent = this };
+            this._children.AddLast(node);
+            return node;
+        }
+
+        /// <summary>
+        /// Adds children to the tree.
+        /// </summary>
+        /// <param name="values">
+        /// The values.
+        /// </param>
+        /// <returns>
+        /// The <see cref="TreeNode{T}"/>.
+        /// </returns>
+        public TreeNode<T>[] AddChildren(params T[] values)
+        {
+            return values.Select(this.AddChild).ToArray();
+        }
+
+        /// <summary>
+        /// Removes a child from the tree.
+        /// </summary>
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool RemoveChild(TreeNode<T> node)
+        {
+            return this._children.Remove(node);
+        }
+
+        /// <summary>
+        /// Applies a visitor to each ancestor
+        /// </summary>
+        /// <param name="visitor">
+        /// The visitor.
+        /// </param>
+        public void Climb(ITreeNodeVisitor<T> visitor)
+        {
+            if (!visitor.Completed) visitor.Visit(this);
+            if (!visitor.Completed && this.Parent != null) Parent.Climb(visitor);
+        }
+
+        /// <summary>
+        /// Applies a visitor to each node in a traversal.
+        /// </summary>
+        /// <param name="visitor">
+        /// The action.
+        /// </param>
+        public void Traverse(ITreeNodeVisitor<T> visitor)
+        {
+            if (!visitor.Completed) visitor.Visit(this);
+
+            foreach (var child in this._children)
+            {
+                child.Traverse(visitor);
+                if (visitor.Completed) break;
             }
         }
 
@@ -133,7 +148,7 @@
         /// </returns>
         public IEnumerable<T> Flatten()
         {
-            return new[] { Value }.Union(_children.SelectMany(x => x.Flatten()));
+            return new[] { this.Value }.Union(this._children.SelectMany(x => x.Flatten()));
         }
     }
 }

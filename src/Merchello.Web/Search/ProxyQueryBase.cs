@@ -1,31 +1,25 @@
-﻿namespace Merchello.Web.Services
+﻿namespace Merchello.Web.Search
 {
     using System;
 
     using Merchello.Core;
-    using Merchello.Core.Services;
 
     using Umbraco.Core.Cache;
 
     /// <summary>
-    /// A base class for EntityCollection proxy services.
+    /// A base class for entity proxy queries.
     /// </summary>
-    internal abstract class EntityCollectionProxyServiceBase
+    internal abstract class ProxyQueryBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityCollectionProxyServiceBase"/> class.
+        /// Initializes a new instance of the <see cref="ProxyQueryBase"/> class.
         /// </summary>
-        /// <param name="entityCollectionService">
-        /// The services.
-        /// </param>
         /// <param name="cache">
         /// The cache.
         /// </param>
-        protected EntityCollectionProxyServiceBase(IEntityCollectionService entityCollectionService, ICacheProvider cache)
+        protected ProxyQueryBase(ICacheProvider cache)
         {
-            Ensure.ParameterNotNull(entityCollectionService, "The EntityCollectionService was null");
             Ensure.ParameterNotNull(cache, "The Cache was null");
-            this.Service = entityCollectionService;
             this.Cache = cache;
         }
 
@@ -33,11 +27,6 @@
         /// Gets the cache.
         /// </summary>
         protected ICacheProvider Cache { get; private set; }
-
-        /// <summary>
-        /// Gets the service.
-        /// </summary>
-        protected IEntityCollectionService Service { get; private set; }
 
         /// <summary>
         /// Gets the cache key for request caching.

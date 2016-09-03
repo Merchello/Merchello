@@ -1,15 +1,14 @@
-﻿namespace Merchello.Web.Services
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Core.DataStructures;
-    using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models;
 
     /// <summary>
-    /// Defines a service responsible for <see cref="IProductCollection"/>.
+    /// Responsible for <see cref="IProductCollection"/> queries.
     /// </summary>
-    public interface IProductCollectionService : IEntityProxyService<IProductCollection>
+    public interface IProductCollectionQuery : IEntityProxyQuery<IProductCollection>
     {
         /// <summary>
         /// Gets the root level collections.
@@ -18,14 +17,6 @@
         /// The <see cref="IEnumerable{IProductCollection}"/>.
         /// </returns>
         IEnumerable<IProductCollection> GetRootLevelCollections();
-
-        /// <summary>
-        /// Gets the root level collections as trees.
-        /// </summary>
-        /// <returns>
-        /// The collection <see cref="TreeNode{IProductCollection}"/>.
-        /// </returns>
-        IEnumerable<TreeNode<IProductCollection>> GetRootLevelCollectionTrees();
 
         /// <summary>
         /// Get collections containing product.

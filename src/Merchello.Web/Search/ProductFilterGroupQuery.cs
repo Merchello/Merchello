@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Services
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
@@ -8,14 +8,14 @@
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
-    using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models;
 
     using Umbraco.Core.Cache;
 
     /// <summary>
     /// Represents a ProductFilterGroupService.
     /// </summary>
-    internal class ProductFilterGroupService : EntityCollectionProxyServiceBase, IProductFilterGroupService
+    internal class ProductFilterGroupQuery : ProxyCollectionQueryBase, IProductFilterGroupQuery
     {
         /// <summary>
         /// Collection provider keys that designate a collection is a filter.
@@ -23,7 +23,26 @@
         private Guid[] _filterProviderKeys;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductFilterGroupService"/> class.
+        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
+        /// </summary>
+        public ProductFilterGroupQuery()
+            : this(MerchelloContext.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
+        /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello context.
+        /// </param>
+        public ProductFilterGroupQuery(IMerchelloContext merchelloContext)
+            : this(merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
+        {
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
         /// </summary>
         /// <param name="entityCollectionService">
         /// The  <see cref="IEntityCollectionService"/>.
@@ -31,13 +50,13 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public ProductFilterGroupService(IEntityCollectionService entityCollectionService, ICacheProvider cache)
+        public ProductFilterGroupQuery(IEntityCollectionService entityCollectionService, ICacheProvider cache)
             : this(entityCollectionService, cache, EntityCollectionProviderResolver.Current)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductFilterGroupService"/> class.
+        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
         /// </summary>
         /// <param name="entityCollectionService">
         /// The <see cref="IEntityCollectionService"/>.
@@ -48,7 +67,7 @@
         /// <param name="resolver">
         /// The resolver.
         /// </param>
-        public ProductFilterGroupService(IEntityCollectionService entityCollectionService, ICacheProvider cache, EntityCollectionProviderResolver resolver)
+        public ProductFilterGroupQuery(IEntityCollectionService entityCollectionService, ICacheProvider cache, EntityCollectionProviderResolver resolver)
             : base(entityCollectionService, cache)
         {
             this.Initialize(resolver);
@@ -60,9 +79,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProviderInfo}"/>.
         /// </returns>
-        public IEnumerable<IProviderMeta> GetProviders()
+        public IEnumerable<IProviderMeta> GetCollectionProviders()
         {
-            var atts = EntityCollectionProviderResolver.Current.GetProviderAttributes<IProductFilterGroupProvider>();
+            var atts = EntityCollectionProviderResolver.Current.GetProviderAttributes<Core.EntityCollections.IProductEntityFilterGroupProvider>();
 
             return atts.Select(x => new ProviderMeta(x));
         }
@@ -79,7 +98,7 @@
         public IProductFilterGroup GetByKey(Guid key)
         {
             // This will be in the Runtime Cache from the underlying service
-            return Map(((EntityCollectionService)Service).GetEntityFilterGroup(key));
+            return Map(((EntityCollectionService)this.Service).GetEntityFilterGroup(key));
         }
 
         /// <summary>
@@ -93,12 +112,12 @@
         /// </returns>
         public IEnumerable<IProductFilterGroup> GetAll(params Guid[] keys)
         {
-            var cacheKey = GetCacheKey("GetAll", keys);
+            var cacheKey = this.GetCacheKey("GetAll", keys);
 
-            var filterGroups = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
+            var filterGroups = (IEnumerable<IProductFilterGroup>)this.Cache.GetCacheItem(cacheKey);
             if (filterGroups != null) return filterGroups;
 
-            var collections = ((EntityCollectionService)Service).GetEntityFilterGroupsByProviderKeys(_filterProviderKeys);
+            var collections = ((EntityCollectionService)this.Service).GetEntityFilterGroupsByProviderKeys(this._filterProviderKeys);
 
             return Map(keys.Any() ? 
                             collections.Where(x => keys.Any(y => y == x.Key)) : 
@@ -116,18 +135,18 @@
         /// </returns>
         public IEnumerable<IProductFilterGroup> GetFilterGroupsContainingProduct(Guid productKey)
         {
-            var cacheKey = GetCacheKey("GetFilterGroupsContainingProduct", productKey);
+            var cacheKey = this.GetCacheKey("GetFilterGroupsContainingProduct", productKey);
 
-            var filterGroups = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
+            var filterGroups = (IEnumerable<IProductFilterGroup>)this.Cache.GetCacheItem(cacheKey);
             if (filterGroups != null) return filterGroups;
 
             return
                 (IEnumerable<IProductFilterGroup>)
-                Cache.GetCacheItem(
+                this.Cache.GetCacheItem(
                     cacheKey,
                     () =>
-                    Map(((EntityCollectionService)Service).GetEntityFilterGroupsContainingProduct(
-                        _filterProviderKeys,
+                    Map(((EntityCollectionService)this.Service).GetEntityFilterGroupsContainingProduct(
+                        this._filterProviderKeys,
                             productKey)));
         }
 
@@ -142,18 +161,18 @@
         /// </returns>
         public IEnumerable<IProductFilterGroup> GetFilterGroupsNotContainingProduct(Guid productKey)
         {
-            var cacheKey = GetCacheKey("GetFilterGroupsNotContainingProduct", productKey);
+            var cacheKey = this.GetCacheKey("GetFilterGroupsNotContainingProduct", productKey);
 
-            var filterGroup = (IEnumerable<IProductFilterGroup>)Cache.GetCacheItem(cacheKey);
+            var filterGroup = (IEnumerable<IProductFilterGroup>)this.Cache.GetCacheItem(cacheKey);
             if (filterGroup != null) return filterGroup;
 
             return
                 (IEnumerable<IProductFilterGroup>)
-                Cache.GetCacheItem(
+                this.Cache.GetCacheItem(
                     cacheKey,
                     () =>
-                    Map(((EntityCollectionService)Service).GetEntityFilterGroupsNotContainingProduct(
-                        _filterProviderKeys,
+                    Map(((EntityCollectionService)this.Service).GetEntityFilterGroupsNotContainingProduct(
+                        this._filterProviderKeys,
                             productKey)));
         }
 
@@ -196,7 +215,7 @@
         /// </param>
         private void Initialize(IEntityCollectionProviderResolver resolver)
         {
-            _filterProviderKeys = resolver.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
+            this._filterProviderKeys = resolver.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
         }
     }
 }

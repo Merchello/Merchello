@@ -1,6 +1,6 @@
-﻿namespace Merchello.Web.Models.Ui.Rendering
+﻿namespace Merchello.Web.Models
 {
-    using System;
+    using Merchello.Web.Models.Ui.Rendering;
 
     /// <summary>
     /// Marker interface for product collections.

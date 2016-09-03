@@ -1,4 +1,4 @@
-﻿namespace Merchello.Web.Services
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Linq;
@@ -8,13 +8,12 @@
 
     using Umbraco.Core;
     using Umbraco.Core.Cache;
-    using Umbraco.Core.Services;
 
     /// <summary>
     /// A resolver to ensure there is one instance of a proxy service per request.
     /// </summary>
     //// REFACTOR remove this class in V3 and use container with request lifeftime scope
-    internal class ProxyEntityServiceResolver : IProxyEntityServiceResolver
+    internal class ProxyQueryManager : IProxyQueryManager
     {
         /// <summary>
         /// The _cache.
@@ -22,7 +21,7 @@
         private readonly ICacheProvider _cache;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProxyEntityServiceResolver"/> class.
+        /// Initializes a new instance of the <see cref="ProxyQueryManager"/> class.
         /// </summary>
         /// <param name="cache">
         /// The <see cref="CacheHelper"/>.
@@ -30,7 +29,7 @@
         /// <remarks>
         /// Used for testing
         /// </remarks>
-        internal ProxyEntityServiceResolver(ICacheProvider cache)
+        internal ProxyQueryManager(ICacheProvider cache)
         {
             Mandate.ParameterNotNull(cache, "cache");
 
@@ -41,7 +40,7 @@
         /// <summary>
         /// Gets or sets the current singleton instance.
         /// </summary>
-        public static ProxyEntityServiceResolver Current { get; internal set; }
+        public static ProxyQueryManager Current { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether current has been set.
@@ -64,12 +63,12 @@
         /// The service.
         /// </returns>
         public TService Instance<TService>()
-            where TService : IEntityProxyService, new()
+            where TService : IEntityProxyQuery, new()
         {
             return
                 (TService)
                 this._cache.GetCacheItem(
-                    GetCacheKey(typeof(TService)),
+                    this.GetCacheKey(typeof(TService)),
                     () =>
                         {
                             try
@@ -80,7 +79,7 @@
                             catch (Exception ex)
                             {
                                 var logData = this.GetLoggerData<TService>();
-                                MultiLogHelper.Error<ProxyEntityServiceResolver>("Failed to instantiate service", ex, logData);
+                                MultiLogHelper.Error<ProxyQueryManager>("Failed to instantiate service", ex, logData);
                                 throw;
                             }
                         });
@@ -102,12 +101,12 @@
         /// Throws an exception if service cannot be resolved
         /// </exception>
         public TService Instance<TService>(object[] constructorArgumentValues)
-            where TService : class, IEntityProxyService
+            where TService : class, IEntityProxyQuery
         {
             //// We may need to manage separate instances of these services if the constructor arguments are different
             //// so that we can assert the values returned are what we expect.
             var suffix = string.Join(".", constructorArgumentValues.Select(x => x.ToString()));
-            var cacheKey = GetCacheKey(typeof(TService), suffix);
+            var cacheKey = this.GetCacheKey(typeof(TService), suffix);
 
             return (TService)this._cache.GetCacheItem(
                 cacheKey,
@@ -129,7 +128,7 @@
         /// </returns>
         private string GetCacheKey(Type service, string suffix = "")
         {
-            return string.Format("{0}.{1}{2}", typeof(ProxyEntityServiceResolver), service, suffix);
+            return string.Format("{0}.{1}{2}", typeof(ProxyQueryManager), service, suffix);
         }
 
         /// <summary>

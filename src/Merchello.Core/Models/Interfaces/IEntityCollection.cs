@@ -8,13 +8,13 @@
     /// <summary>
     /// The EntityCollection interface.
     /// </summary>
-    public interface IEntityCollection : IHasEntityTypeField, IHasExtendedData, IEntity
+    public interface IEntityCollection : IHasParent, IHasEntityTypeField, IHasExtendedData, IEntity
     {
         /// <summary>
         /// Gets or sets the parent key.
         /// </summary>
         [DataMember]
-        Guid? ParentKey { get; set; }
+        new Guid? ParentKey { get; set; }
 
         /// <summary>
         /// Gets the entity type.

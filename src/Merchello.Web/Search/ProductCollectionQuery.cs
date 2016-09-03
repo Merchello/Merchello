@@ -1,25 +1,32 @@
-﻿namespace Merchello.Web.Services
+﻿namespace Merchello.Web.Search
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Merchello.Core;
-    using Merchello.Core.DataStructures;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
-    using Merchello.Web.Models.Ui.Rendering;
+    using Merchello.Web.Models;
 
     using Umbraco.Core.Cache;
 
     /// <summary>
     /// A service responsible for retrieving <see cref="ProductCollection"/>.
     /// </summary>
-    internal class ProductCollectionService : EntityCollectionProxyServiceBase, IProductCollectionService
+    internal class ProductCollectionQuery : ProxyCollectionQueryBase, IProductCollectionQuery
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductCollectionService"/> class.
+        /// Initializes a new instance of the <see cref="ProductCollectionQuery"/> class.
+        /// </summary>
+        public ProductCollectionQuery()
+            : this(MerchelloContext.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductCollectionQuery"/> class.
         /// </summary>
         /// <param name="entityCollectionService">
         /// The entity collection service.
@@ -27,18 +34,18 @@
         /// <param name="cache">
         /// The cache.
         /// </param>
-        public ProductCollectionService(IEntityCollectionService entityCollectionService, ICacheProvider cache)
+        public ProductCollectionQuery(IEntityCollectionService entityCollectionService, ICacheProvider cache)
             : base(entityCollectionService, cache)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProductCollectionService"/> class.
+        /// Initializes a new instance of the <see cref="ProductCollectionQuery"/> class.
         /// </summary>
         /// <param name="merchelloContext">
         /// The <see cref="IMerchelloContext"/>.
         /// </param>
-        internal ProductCollectionService(IMerchelloContext merchelloContext)
+        internal ProductCollectionQuery(IMerchelloContext merchelloContext)
             : this(merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
         {
         }
@@ -51,39 +58,19 @@
         /// </returns>
         public IEnumerable<IProductCollection> GetRootLevelCollections()
         {
-            var cacheKey = GetCacheKey("GetRootLevelCollections");
-            var pc = Cache.GetCacheItem(cacheKey);
+            var cacheKey = this.GetCacheKey("GetRootLevelCollections");
+            var pc = this.Cache.GetCacheItem(cacheKey);
             if (pc != null) return (IEnumerable<IProductCollection>)pc;
 
             // REFACTOR we need more specific queries that create a distinction between filters and collections
             // The service call may return filter collections too if they don't have parents
             // but they will get removed in the mapping.
             return (IEnumerable<IProductCollection>)
-                    Cache.GetCacheItem(
+                    this.Cache.GetCacheItem(
                         cacheKey, 
-                        () => Map(Service.GetRootLevelEntityCollections()));
+                        () => Map(this.Service.GetRootLevelEntityCollections()));
         }
 
-        /// <summary>
-        /// Gets the root level collections as trees.
-        /// </summary>
-        /// <returns>
-        /// The collection <see cref="TreeNode{IProductCollection}"/>.
-        /// </returns>
-        public IEnumerable<TreeNode<IProductCollection>> GetRootLevelCollectionTrees()
-        {
-            var cacheKey = GetCacheKey("GetRootLevelCollectionTrees");
-            var trees = (IEnumerable<TreeNode<IProductCollection>>)Cache.GetCacheItem(cacheKey);
-            if (trees != null) return trees;
-
-            var collections = GetAll().ToArray();
-            var tl = collections
-                        .Where(x => x.ParentKey == null)
-                        .Select(root => new TreeNode<IProductCollection>(root)
-                        .Load(collections));
-
-            return (IEnumerable<TreeNode<IProductCollection>>)Cache.GetCacheItem(cacheKey, () => tl);
-        }
 
         /// <summary>
         /// Gets a collection of provider responsible for managing entity collections that can be queries by this service.
@@ -91,9 +78,9 @@
         /// <returns>
         /// The <see cref="IEnumerable{IProviderInfo}"/>.
         /// </returns>
-        public IEnumerable<IProviderMeta> GetProviders()
+        public IEnumerable<IProviderMeta> GetCollectionProviders()
         {
-            var atts = EntityCollectionProviderResolver.Current.GetProviderAttributes<IProductCollectionProvider>();
+            var atts = EntityCollectionProviderResolver.Current.GetProviderAttributes<Core.EntityCollections.IProductEntityCollectionProvider>();
 
             return atts.Select(x => new ProviderMeta(x));
         }
@@ -109,7 +96,7 @@
         /// </returns>
         public IProductCollection GetByKey(Guid key)
         {
-            var collection = Service.GetByKey(key);
+            var collection = this.Service.GetByKey(key);
             if (collection == null) return null;
 
             return collection.EntityTfKey != Constants.TypeFieldKeys.Entity.ProductKey 
@@ -128,15 +115,15 @@
         /// </returns>
         public IEnumerable<IProductCollection> GetAll(params Guid[] keys)
         {
-            var cacheKey = GetCacheKey("GetAll", keys);
-            var pc = Cache.GetCacheItem(cacheKey);
+            var cacheKey = this.GetCacheKey("GetAll", keys);
+            var pc = this.Cache.GetCacheItem(cacheKey);
             if (pc != null) return (IEnumerable<IProductCollection>)pc;
 
             return
                  (IEnumerable<IProductCollection>)
-                    Cache.GetCacheItem(
+                    this.Cache.GetCacheItem(
                         cacheKey,
-                        () => Map(Service.GetAll(keys)));
+                        () => Map(this.Service.GetAll(keys)));
         }
 
         /// <summary>
@@ -151,14 +138,14 @@
         /// TODO the Core service has inconsistent naming
         public IEnumerable<IProductCollection> GetCollectionsContainingProduct(Guid productKey)
         {
-            var cacheKey = GetCacheKey("GetCollectionsContainingProduct", productKey);
-            var pc = Cache.GetCacheItem(cacheKey);
+            var cacheKey = this.GetCacheKey("GetCollectionsContainingProduct", productKey);
+            var pc = this.Cache.GetCacheItem(cacheKey);
             if (pc != null) return (IEnumerable<IProductCollection>)pc;
             return
                 (IEnumerable<IProductCollection>)
-                Cache.GetCacheItem(
+                this.Cache.GetCacheItem(
                     cacheKey,
-                    () => Map(((EntityCollectionService)Service).GetEntityCollectionsByProductKey(productKey, false)));
+                    () => Map(((EntityCollectionService)this.Service).GetEntityCollectionsByProductKey(productKey, false)));
         }
 
         /// <summary>
@@ -172,14 +159,14 @@
         /// </returns>
         public IEnumerable<IProductCollection> GetChildCollections(Guid collectionKey)
         {
-            var cacheKey = GetCacheKey("GetChildCollections", collectionKey);
+            var cacheKey = this.GetCacheKey("GetChildCollections", collectionKey);
 
-            var collections = (IEnumerable<IProductCollection>)Cache.GetCacheItem(cacheKey);
+            var collections = (IEnumerable<IProductCollection>)this.Cache.GetCacheItem(cacheKey);
             if (collections != null) return collections;
 
             return
                 (IEnumerable<IProductCollection>)
-                Cache.GetCacheItem(cacheKey, () => Map(((EntityCollectionService)Service).GetChildren(collectionKey)));
+                this.Cache.GetCacheItem(cacheKey, () => Map(((EntityCollectionService)this.Service).GetChildren(collectionKey)));
         }
 
         /// <summary>
@@ -210,30 +197,6 @@
         private static IEnumerable<IProductCollection> Map(IEnumerable<IEntityCollection> collections)
         {
             return collections.Select(Map).Where(x => x != null);
-        }
-
-        /// <summary>
-        /// Ensures a tree is created in request cache.
-        /// </summary>
-        /// <param name="all">
-        /// The all.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{IProductCollection}"/>.
-        /// </returns>
-        private IEnumerable<TreeNode<IProductCollection>> BuildTrees(IEnumerable<IProductCollection> all)
-        {
-            var cacheKey = GetCacheKey("BuildTrees");
-            var trees = (IEnumerable<TreeNode<IProductCollection>>)Cache.GetCacheItem(cacheKey);
-            if (trees != null) return trees;
-
-            var collections = all as IProductCollection[] ?? all.ToArray();
-            var tl = collections
-                        .Where(x => x.ParentKey == null)
-                        .Select(root => new TreeNode<IProductCollection>(root)
-                        .Load(collections));
-
-            return (IEnumerable<TreeNode<IProductCollection>>)Cache.GetCacheItem(cacheKey, () => tl);
         }
     }
 }

@@ -1,11 +1,11 @@
-namespace Merchello.Web.Services
+namespace Merchello.Web.Search
 {
     using System;
 
     /// <summary>
     /// Defines a ProxyEntityServiceResolver.
     /// </summary>
-    internal interface IProxyEntityServiceResolver
+    internal interface IProxyQueryManager
     {
         /// <summary>
         /// Creates an instance of a service.
@@ -17,7 +17,7 @@ namespace Merchello.Web.Services
         /// The service.
         /// </returns>
         TService Instance<TService>()
-            where TService : IEntityProxyService, new();
+            where TService : IEntityProxyQuery, new();
 
         /// <summary>
         /// Creates an instance of a service with arguments
@@ -35,6 +35,6 @@ namespace Merchello.Web.Services
         /// Throws an exception if service cannot be resolved
         /// </exception>
         TService Instance<TService>(object[] constructorArgumentValues)
-            where TService : class, IEntityProxyService;
+            where TService : class, IEntityProxyQuery;
     }
 }
