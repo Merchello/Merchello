@@ -4,6 +4,8 @@
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
 
+    using Merchello.Core.Logging;
+
     using NPoco;
 
     //using Cache;
@@ -33,15 +35,15 @@
     {
         #region Fields
 
-        ///// <summary>
-        ///// The logger.
-        ///// </summary>
-        //private readonly ILogger _logger;
+        /// <summary>
+        /// The <see cref="ILogger"/>
+        /// </summary>
+        private readonly ILogger _logger;
 
-        ///// <summary>
-        ///// The timer.
-        ///// </summary>
-        //private DisposableTimer _timer;
+        /// <summary>
+        /// The timer.
+        /// </summary>
+        private DisposableTimer _timer;
 
         /// <summary>
         /// The is complete.
@@ -70,12 +72,12 @@
         /// <param name="sqlSyntaxProvider">
         /// The <see cref="ISqlSyntaxProvider"/>.
         /// </param>
-        internal CoreBootManager(object logger, object sqlSyntaxProvider)
+        internal CoreBootManager(ILogger logger, object sqlSyntaxProvider)
         {
             Ensure.ParameterNotNull(logger, "Logger");
             Ensure.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
 
-            //_logger = logger;
+            _logger = logger;
             //_sqlSyntaxProvider = sqlSyntaxProvider;
 
             SetUnitOfWorkProvider();

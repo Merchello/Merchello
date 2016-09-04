@@ -3,15 +3,6 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
-      "AutoMapper/5.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/AutoMapper.dll": {}
-        },
-        "runtime": {
-          "lib/net45/AutoMapper.dll": {}
-        }
-      },
       "LightInject/4.1.0": {
         "type": "package",
         "compile": {
@@ -33,16 +24,7 @@
           "lib/net45/LightInject.Annotation.dll": {}
         }
       },
-      "log4net/2.0.5": {
-        "type": "package",
-        "compile": {
-          "lib/net45-full/log4net.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/log4net.dll": {}
-        }
-      },
-      "MiniProfiler/3.2.0.157": {
+      "MiniProfiler/2.1.0": {
         "type": "package",
         "compile": {
           "lib/net40/MiniProfiler.dll": {}
@@ -89,15 +71,6 @@
       }
     },
     ".NETFramework,Version=v4.6.1/win": {
-      "AutoMapper/5.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/AutoMapper.dll": {}
-        },
-        "runtime": {
-          "lib/net45/AutoMapper.dll": {}
-        }
-      },
       "LightInject/4.1.0": {
         "type": "package",
         "compile": {
@@ -119,16 +92,7 @@
           "lib/net45/LightInject.Annotation.dll": {}
         }
       },
-      "log4net/2.0.5": {
-        "type": "package",
-        "compile": {
-          "lib/net45-full/log4net.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/log4net.dll": {}
-        }
-      },
-      "MiniProfiler/3.2.0.157": {
+      "MiniProfiler/2.1.0": {
         "type": "package",
         "compile": {
           "lib/net40/MiniProfiler.dll": {}
@@ -175,15 +139,6 @@
       }
     },
     ".NETFramework,Version=v4.6.1/win-anycpu": {
-      "AutoMapper/5.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/AutoMapper.dll": {}
-        },
-        "runtime": {
-          "lib/net45/AutoMapper.dll": {}
-        }
-      },
       "LightInject/4.1.0": {
         "type": "package",
         "compile": {
@@ -205,16 +160,7 @@
           "lib/net45/LightInject.Annotation.dll": {}
         }
       },
-      "log4net/2.0.5": {
-        "type": "package",
-        "compile": {
-          "lib/net45-full/log4net.dll": {}
-        },
-        "runtime": {
-          "lib/net45-full/log4net.dll": {}
-        }
-      },
-      "MiniProfiler/3.2.0.157": {
+      "MiniProfiler/2.1.0": {
         "type": "package",
         "compile": {
           "lib/net40/MiniProfiler.dll": {}
@@ -262,22 +208,6 @@
     }
   },
   "libraries": {
-    "AutoMapper/5.1.1": {
-      "sha512": "Q3uFSWccBUE1Q9BW88C6RO2Y/iFkPztTKK1ciyx1jhWPdOi5+pvzZ2EwcJKPiV0cr2EXZUWqQOsSpA5jVjfQBg==",
-      "type": "package",
-      "files": [
-        "AutoMapper.5.1.1.nupkg.sha512",
-        "AutoMapper.nuspec",
-        "lib/net45/AutoMapper.dll",
-        "lib/net45/AutoMapper.xml",
-        "lib/netstandard1.1/AutoMapper.dll",
-        "lib/netstandard1.1/AutoMapper.xml",
-        "lib/netstandard1.3/AutoMapper.dll",
-        "lib/netstandard1.3/AutoMapper.xml",
-        "lib/portable-net45+win8+wpa81/AutoMapper.dll",
-        "lib/portable-net45+win8+wpa81/AutoMapper.xml"
-      ]
-    },
     "LightInject/4.1.0": {
       "sha512": "1UbSpgstQZzGDE0sLto74uMpupEI/4olOyUkaCcL1F0Kn+57xDn8KJM8gGdNSG2MbTOhwJgyeyPt+ywipeD8Ew==",
       "type": "package",
@@ -330,35 +260,11 @@
         "lib/windowsphone8/LightInject.Annotation.xml"
       ]
     },
-    "log4net/2.0.5": {
-      "sha512": "AEqPZz+v+OikfnR2SqRVdQPnSaLq5y9Iz1CfRQZ9kTKPYCXHG6zYmDHb7wJotICpDLMr/JqokyjiqKAjUKp0ng==",
+    "MiniProfiler/2.1.0": {
+      "sha512": "uTw6C4g2bGVaeonKRDZnWK68t4KllcptOI/kBWlD2jCl2PJOOM0u6StbYw8pi01niPOsYKiQZYE9GsVKPmUXSg==",
       "type": "package",
       "files": [
-        "lib/net10-full/log4net.dll",
-        "lib/net10-full/log4net.xml",
-        "lib/net11-full/log4net.dll",
-        "lib/net11-full/log4net.xml",
-        "lib/net20-full/log4net.dll",
-        "lib/net20-full/log4net.xml",
-        "lib/net35-client/log4net.dll",
-        "lib/net35-client/log4net.xml",
-        "lib/net35-full/log4net.dll",
-        "lib/net35-full/log4net.xml",
-        "lib/net40-client/log4net.dll",
-        "lib/net40-client/log4net.xml",
-        "lib/net40-full/log4net.dll",
-        "lib/net40-full/log4net.xml",
-        "lib/net45-full/log4net.dll",
-        "lib/net45-full/log4net.xml",
-        "log4net.2.0.5.nupkg.sha512",
-        "log4net.nuspec"
-      ]
-    },
-    "MiniProfiler/3.2.0.157": {
-      "sha512": "oF44Erqo3kocAljh884cbwh7TnJz86kBLYMNh7cRHdzpB/A3ekq+HnBOd+v939GsneyUVqKtCIFXrMLbFOIVFQ==",
-      "type": "package",
-      "files": [
-        "MiniProfiler.3.2.0.157.nupkg.sha512",
+        "MiniProfiler.2.1.0.nupkg.sha512",
         "MiniProfiler.nuspec",
         "lib/net40/MiniProfiler.dll",
         "lib/net40/MiniProfiler.pdb",
@@ -429,14 +335,12 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "AutoMapper >= 5.1.1",
       "LightInject >= 4.1.0",
       "LightInject.Annotation >= 1.0.0.4",
-      "MiniProfiler >= 3.2.0.157",
+      "MiniProfiler >= 2.1.0",
       "NPoco >= 3.4.1",
       "Newtonsoft.Json >= 8.0.*",
-      "SqlServerCE >= 4.0.0.1",
-      "log4net >= 2.0.5"
+      "SqlServerCE >= 4.0.0.1"
     ],
     ".NETFramework,Version=v4.6.1": []
   }

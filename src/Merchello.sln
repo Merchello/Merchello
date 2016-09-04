@@ -17,6 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Integration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Unit", "..\tests\Merchello.Tests.Unit\Merchello.Tests.Unit.csproj", "{DD560559-1756-4030-9823-36AFB363575A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependency", "Dependency", "{46BDA924-5FFB-4D3F-9817-C9C6196EA82A}"
+	ProjectSection(SolutionItems) = preProject
+		Library\log4net.dll = Library\log4net.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

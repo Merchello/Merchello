@@ -14,6 +14,7 @@
       <Value>Umbraco's</Value>
       <Value>YouTrack</Value>
       <Value>Cms</Value>
+      <Value>asax</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
