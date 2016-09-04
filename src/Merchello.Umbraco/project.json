@@ -1,0 +1,18 @@
+﻿{
+  "dependencies": {
+    "AutoMapper": "5.1.1",
+    "LightInject": "4.1.0",
+    "LightInject.Annotation": "1.0.0.4",
+    "log4net": "2.0.5",
+    "MiniProfiler": "3.2.0.157",
+    "Newtonsoft.Json": "8.0.*",
+    "UmbracoCms.Core": "7.5.2"
+  },
+  "frameworks": {
+    "net461": {}
+  },
+  "runtimes": {
+    "win": {},
+    "win-anycpu": {}
+  }
+}
