@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,6 +84,13 @@
     <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="IBootManager.cs" />
     <Compile Include="IMerchelloContext.cs" />
+    <Compile Include="Integration\IAdapter.cs" />
+    <Compile Include="Logging\IExtendedLoggerData.cs" />
+    <Compile Include="Logging\IExtendedLoggerDataLogger.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\IMultiLogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggerExtensions.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
     <Compile Include="MerchelloBootstrapper.cs" />

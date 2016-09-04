@@ -13,6 +13,7 @@
       <Value>sku</Value>
       <Value>Umbraco's</Value>
       <Value>YouTrack</Value>
+      <Value>Cms</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

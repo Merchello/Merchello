@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Merchello.Core.Logging;
+
     //using Merchello.Core;
     //using Merchello.Core.Logging;
     //using Merchello.Core.Marketing.Offer;
@@ -52,7 +54,7 @@
         /// </param>
         /// QFIX-from -     (ILogger logger, ISqlSyntaxProvider sqlSyntax, bool isForTesting = false)
         /// QFIX-to -       (object logger, object sqlSyntax, bool isForTesting = false)
-        internal WebBootManager(object logger, object sqlSyntax, bool isForTesting = false)
+        internal WebBootManager(ILogger logger, object sqlSyntax, bool isForTesting = false)
             : base(logger, sqlSyntax)
         {
             _isForTesting = isForTesting;
