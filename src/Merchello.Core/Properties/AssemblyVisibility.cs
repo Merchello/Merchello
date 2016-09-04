@@ -1,0 +1,6 @@
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Web")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Web.Umbraco")]
+//[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Providers")]
+//[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Tests.Base")]
+//[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Tests.UnitTests")]
+//[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Merchello.Tests.IntegrationTests")]
