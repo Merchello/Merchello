@@ -9,7 +9,7 @@ namespace Merchello.Core
     using System.Reflection;
     using System.Xml;
 
-    using Merchello.Core.Plugins;
+    using Merchello.Core.Extensibility;
 
     /// <summary>
 	/// Provides object extension methods.

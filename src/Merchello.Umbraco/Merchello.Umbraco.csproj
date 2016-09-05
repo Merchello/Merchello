@@ -41,7 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\UmbracoLogger.cs" />
+    <Compile Include="Adapters\CacheHelperAdapter.cs" />
+    <Compile Include="Adapters\CacheProviderAdapter.cs" />
+    <Compile Include="Adapters\IUmbracoAdapter.cs" />
+    <Compile Include="Adapters\RuntimeCacheProviderAdapter.cs" />
+    <Compile Include="Adapters\LoggerAdapter.cs" />
     <Compile Include="Boot.cs" />
     <Compile Include="BootManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

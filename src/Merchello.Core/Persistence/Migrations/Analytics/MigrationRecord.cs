@@ -11,6 +11,7 @@
     /// in the merchello.config file
     /// '<merchello  enableInstallTracking="False" />' 
     /// </remarks>
+    [Serializable]
     internal class MigrationRecord
     {
         /// <summary>

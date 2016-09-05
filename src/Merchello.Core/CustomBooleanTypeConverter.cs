@@ -17,6 +17,7 @@ namespace Merchello.Core
 			{
 				return true;
 			}
+
 			return base.CanConvertFrom(context, sourceType);
 		}
 

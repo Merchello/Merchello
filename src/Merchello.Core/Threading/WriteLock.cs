@@ -8,6 +8,7 @@
     /// </summary>
     /// <remarks>
     /// Intended as an infrastructure class.
+    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/WriteLock.cs"/>
     public class WriteLock : IDisposable

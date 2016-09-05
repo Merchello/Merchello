@@ -7,7 +7,6 @@
 
     using Merchello.Core;
     using Merchello.Umbraco.Adapters;
-    using Merchello.Web;
 
     using global::Umbraco.Core;
 
@@ -46,14 +45,14 @@
 
             try
             {
-                var logger = new UmbracoLogger(ApplicationContext.Current.ProfilingLogger.Logger);
+                var logger = new LoggerAdapter(ApplicationContext.Current.ProfilingLogger.Logger);
 
                 // Initialize Merchello
-                //Log.Info("Attempting to initialize Merchello");
+                Log.Info("Attempting to initialize Merchello Umbraco Package");
 
                 MerchelloBootstrapper.Init(new BootManager(logger, null));
                 
-                //Log.Info("Initialization of Merchello complete");
+                Log.Info("Initialization of Merchello Umbraco Package complete");
             }
             catch (Exception ex)
             {
