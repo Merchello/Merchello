@@ -1,9 +1,7 @@
-﻿namespace Merchello.Web
+﻿namespace Merchello.Web.Boot
 {
-    using System;
-
+    using Merchello.Core.Boot;
     using Merchello.Core.Logging;
-
     //using Merchello.Core;
     //using Merchello.Core.Logging;
     //using Merchello.Core.Marketing.Offer;
@@ -14,50 +12,30 @@
     //using Umbraco.Core;
     //using Umbraco.Core.Logging;
     //using Umbraco.Core.Persistence.SqlSyntax;
-
-    using CoreBootManager = Merchello.Core.CoreBootManager;
-    using IBootManager = Merchello.Core.IBootManager;
+    using IBootManager = Merchello.Core.Boot.IBootManager;
 
     /// <summary>
     /// The web boot manager.
     /// </summary>
-    internal class WebBootManager : CoreBootManager
+    internal class WebBootManager : Core.Boot.CoreBootManager
     {
         /// <summary>
-        /// Designates if this boot manager is being used by a Test
-        /// </summary>
-        private readonly bool _isForTesting;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="WebBootManager"/> class. 
-        /// A boot strap class for the Merchello plugin which initializes all objects including the Web portion of the plugin
         /// </summary>
-        /// QFIX-from - base(LoggerResolver.Current.Logger, ApplicationContext.Current.DatabaseContext.SqlSyntax)
-        /// QFIX-to -   base(null, null)
         public WebBootManager()
-            : base(null, null)
+            : base(new CoreBootSettings())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebBootManager"/> class. 
-        /// Constructor for unit tests, ensures some resolvers are not initialized
         /// </summary>
-        /// <param name="logger">
-        /// The logger.
+        /// <param name="settings">
+        /// The <see cref="IWebBootSettings"/>.
         /// </param>
-        /// <param name="sqlSyntax">
-        /// The <see cref="ISqlSyntaxProvider"/>
-        /// </param>
-        /// <param name="isForTesting">
-        /// The is For Testing.
-        /// </param>
-        /// QFIX-from -     (ILogger logger, ISqlSyntaxProvider sqlSyntax, bool isForTesting = false)
-        /// QFIX-to -       (object logger, object sqlSyntax, bool isForTesting = false)
-        internal WebBootManager(ILogger logger, object sqlSyntax, bool isForTesting = false)
-            : base(logger, sqlSyntax)
+        internal WebBootManager(IWebBootSettings settings)
+            : base(settings)
         {
-            _isForTesting = isForTesting;
         }
 
 

@@ -1,17 +1,17 @@
-﻿using System;
-
-namespace Merchello.Core
+﻿namespace Merchello.Core.Boot
 {
+    using System;
+
     /// <summary>
-    /// The merchello bootstrapper.
+    /// Bootstraps Merchello.
     /// </summary>
     internal class MerchelloBootstrapper
     {
         /// <summary>
-        /// The init.
+        /// Initializes the Bootstrap process.
         /// </summary>
         /// <param name="bootManager">
-        /// The boot manager.
+        /// The <see cref="BootManagerBase"/>.
         /// </param>
         public static void Init(BootManagerBase bootManager)
         {

@@ -6,6 +6,7 @@
     /// Defines a logging service.
     /// </summary>
     /// REFACTOR - When code port has been completed, rename this interface to avoid naming ambiguity issues in IDE
+    /// UMBRACO_SRC
     public interface ILogger
     {
         /// <summary>

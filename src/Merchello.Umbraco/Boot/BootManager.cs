@@ -1,7 +1,7 @@
-﻿namespace Merchello.Umbraco
+﻿namespace Merchello.Umbraco.Boot
 {
     using Merchello.Core.Logging;
-    using Merchello.Web;
+    using Merchello.Web.Boot;
 
     /// <summary>
     /// Starts the Merchello Umbraco CMS Package.
@@ -12,26 +12,19 @@
         /// Initializes a new instance of the <see cref="BootManager"/> class.
         /// </summary>
         public BootManager()
-            : this(Logger.CreateWithDefaultLog4NetConfiguration(), null)
+            : this(new BootSettings())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BootManager"/> class.
         /// </summary>
-        /// <param name="logger">
-        /// The logger.
+        /// <param name="settings">
+        /// The <see cref="IBootSettings"/>.
         /// </param>
-        /// <param name="sqlSyntax">
-        /// The SQL syntax.
-        /// </param>
-        /// <param name="isForTesting">
-        /// The is for testing.
-        /// </param>
-        public BootManager(ILogger logger, object sqlSyntax, bool isForTesting = false)
-            : base(logger, sqlSyntax, isForTesting)
+        public BootManager(IBootSettings settings)
+            : base(settings)
         {
         }
-
     }
 }

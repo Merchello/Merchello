@@ -1,13 +1,11 @@
-﻿namespace Merchello.Core
+﻿namespace Merchello.Core.Boot
 {
     using System;
-    using System.Configuration;
-    using System.Diagnostics.CodeAnalysis;
 
     using Merchello.Core.Logging;
+    using Merchello.Core.Services;
 
     using NPoco;
-
     //using Cache;
     //using Configuration;
     //using Gateways;
@@ -20,8 +18,6 @@
 
     //using Observation;
     //using Persistence.UnitOfWork;
-    using Services;
-
 
     //using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
@@ -66,21 +62,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CoreBootManager"/> class.
         /// </summary>
-        /// <param name="logger">
-        /// The logger.
+        /// <param name="settings">
+        /// The settings.
         /// </param>
-        /// <param name="sqlSyntaxProvider">
-        /// The <see cref="ISqlSyntaxProvider"/>.
-        /// </param>
-        internal CoreBootManager(ILogger logger, object sqlSyntaxProvider)
+        internal CoreBootManager(ICoreBootSettings settings)
         {
-            Ensure.ParameterNotNull(logger, "Logger");
-            Ensure.ParameterNotNull(sqlSyntaxProvider, "sqlSyntaxProvider");
+            Ensure.ParameterNotNull(settings, nameof(settings));
 
-            _logger = logger;
+            this._logger = settings.Logger;
+            this.IsForTesting = settings.IsForTesting;
+
             //_sqlSyntaxProvider = sqlSyntaxProvider;
 
-            SetUnitOfWorkProvider();
+            this.SetUnitOfWorkProvider();
         }
 
         /// <summary>
@@ -94,9 +88,9 @@
         internal bool IsInitialized { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether or not this is a unit test
+        /// Gets a value indicating whether or not the boot manager is being used for testing.
         /// </summary>
-        internal bool IsUnitTest { get; set; }
+        internal bool IsForTesting { get; }
 
         ///// <summary>
         ///// Gets the logger.
@@ -131,10 +125,10 @@
         /// </exception>
         public override IBootManager Initialize()
         {
-            //if (IsInitialized)
-            //    throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
+            if (IsInitialized)
+                throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
 
-            //OnMerchelloInit();
+            OnMerchelloInit();
             
             //// create the service context for the MerchelloAppContext          
 
@@ -168,7 +162,7 @@
 
             //this.InitializeEntityCollectionProviderResolver(MerchelloContext.Current);
 
-            IsInitialized = true;   
+            this.IsInitialized = true;   
 
             return this;
         }
@@ -184,13 +178,13 @@
         /// </returns>
         public override IBootManager Startup(Action<IMerchelloContext> afterStartup)
         {
-            if (IsStarted)
+            if (this.IsStarted)
                 throw new InvalidOperationException("The boot manager has already been initialized");
 
             //if (afterStartup != null)
             //    afterStartup(MerchelloContext.Current);
 
-            IsStarted = true;
+            this.IsStarted = true;
 
             return this;
         }
@@ -206,7 +200,7 @@
         /// </returns>
         public override IBootManager Complete(Action<IMerchelloContext> afterComplete)
         {
-            if (_isComplete)
+            if (this._isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
             //if (afterComplete != null)
@@ -214,7 +208,7 @@
             //    afterComplete(MerchelloContext.Current);
             //}
 
-            _isComplete = true;
+            this._isComplete = true;
 
             return this;
         }

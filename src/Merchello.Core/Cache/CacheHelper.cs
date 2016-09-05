@@ -8,7 +8,7 @@
     /// </summary>
     /// FYI - this needs to remain internal so we can rely on CMS caching providers
     /// TODO REFACTOR rename this class after port has been completed
-    internal class CacheHelper
+    internal class CacheHelper : ICacheHelper
     {
         /// <summary>
         /// A <see cref="NullCacheProvider"/> for use with the request cache.

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core
+﻿namespace Merchello.Core.Boot
 {
     using System;
 

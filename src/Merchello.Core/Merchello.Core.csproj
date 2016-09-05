@@ -50,17 +50,40 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Attempt.cs" />
     <Compile Include="Attempt{T}.cs" />
-    <Compile Include="BootManagerBase.cs" />
+    <Compile Include="Boot\BootManagerBase.cs" />
+    <Compile Include="Boot\CoreBootSettings.cs" />
+    <Compile Include="Boot\ICoreBootSettings.cs" />
     <Compile Include="Cache\CacheHelper.cs" />
-    <Compile Include="Cache\CacheProviderExtensions.cs" />
-    <Compile Include="Cache\DictionaryCacheProviderBase.cs" />
-    <Compile Include="Cache\HttpRequestCacheProvider.cs" />
-    <Compile Include="Cache\HttpRuntimeCacheProvider.cs" />
+    <Compile Include="Cache\ICacheHelper.cs" />
+    <Compile Include="Cache\providers\CacheProviderExtensions.cs" />
+    <Compile Include="Cache\providers\DictionaryCacheProviderBase.cs" />
+    <Compile Include="Cache\providers\HttpRequestCacheProvider.cs" />
+    <Compile Include="Cache\providers\HttpRuntimeCacheProvider.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\IRuntimeCacheProvider.cs" />
-    <Compile Include="Cache\NullCacheProvider.cs" />
-    <Compile Include="Cache\ObjectCacheRuntimeCacheProvider.cs" />
-    <Compile Include="Cache\StaticCacheProvider.cs" />
+    <Compile Include="Cache\providers\NullCacheProvider.cs" />
+    <Compile Include="Cache\providers\ObjectCacheRuntimeCacheProvider.cs" />
+    <Compile Include="Cache\providers\StaticCacheProvider.cs" />
+    <Compile Include="Configuration\Sections\IBackOfficeSection.cs" />
+    <Compile Include="Configuration\Sections\ICheckoutContextSection.cs" />
+    <Compile Include="Configuration\Sections\ICheckoutSection.cs" />
+    <Compile Include="Configuration\Sections\ICollectionsSection.cs" />
+    <Compile Include="Configuration\Sections\ICustomersSection.cs" />
+    <Compile Include="Configuration\Sections\IFiltersSection.cs" />
+    <Compile Include="Configuration\Sections\IMerchelloConfigurationSection.cs" />
+    <Compile Include="Configuration\MerchelloConfig.cs" />
+    <Compile Include="Configuration\Sections\IMerchelloExtensibilitySection.cs" />
+    <Compile Include="Configuration\Sections\IMigrationsSection.cs" />
+    <Compile Include="Configuration\Sections\IProductsSection.cs" />
+    <Compile Include="Configuration\IRouteCulturePrefix.cs" />
+    <Compile Include="Configuration\Sections\IRoutingSection.cs" />
+    <Compile Include="Configuration\Sections\ISalesSection.cs" />
+    <Compile Include="Configuration\Sections\ITaskChainSection.cs" />
+    <Compile Include="Configuration\Sections\ITreesSection.cs" />
+    <Compile Include="Configuration\ITypeReference.cs" />
+    <Compile Include="Configuration\Sections\ITypeFieldsSection.cs" />
+    <Compile Include="Configuration\Sections\IViewsSection.cs" />
+    <Compile Include="Configuration\Sections\MerchelloConfigurationSection.cs" />
     <Compile Include="Configuration\Outline\ContentFinderCultureCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />
@@ -91,6 +114,8 @@
     <Compile Include="Configuration\Outline\TypeFieldCollection.cs" />
     <Compile Include="Configuration\Outline\TypeFieldDefinitionsElement.cs" />
     <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
+    <Compile Include="Configuration\Sections\MerchelloSettingsSection.cs" />
+    <Compile Include="Configuration\Sections\IMerchelloSettingsSection.cs" />
     <Compile Include="Constants-ActivatorTypes.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
@@ -101,12 +126,14 @@
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
-    <Compile Include="CoreBootManager.cs" />
+    <Compile Include="Boot\CoreBootManager.cs" />
     <Compile Include="CustomBooleanTypeConverter.cs" />
     <Compile Include="DelegateEqualityComparer.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IfExtensions.cs" />
+    <Compile Include="IntExtensions.cs" />
+    <Compile Include="Logging\AsyncForwardingAppenderBase.cs" />
     <Compile Include="Logging\DisposableTimer.cs" />
     <Compile Include="Ensure.cs" />
     <Compile Include="Events\AddItemEventArgs.cs" />
@@ -133,7 +160,7 @@
     <Compile Include="Events\UpdateItemEventArgs.cs" />
     <Compile Include="Events\ValidationEventArgs.cs" />
     <Compile Include="ExpressionHelper.cs" />
-    <Compile Include="IBootManager.cs" />
+    <Compile Include="Boot\IBootManager.cs" />
     <Compile Include="IMerchelloContext.cs" />
     <Compile Include="Integration\IAdapter.cs" />
     <Compile Include="IO\IOHelper.cs" />
@@ -144,14 +171,19 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\IMultiLogger.cs" />
     <Compile Include="Logging\IProfiler.cs" />
+    <Compile Include="Logging\IQueue.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggerExtensions.cs" />
+    <Compile Include="Logging\LoggingEventContext.cs" />
+    <Compile Include="Logging\LoggingEventHelper.cs" />
+    <Compile Include="Logging\ParallelForwardingAppender.cs" />
     <Compile Include="Logging\ProfileLogger.cs" />
     <Compile Include="Logging\ProfilerExtensions.cs" />
+    <Compile Include="Logging\RingBuffer.cs" />
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
-    <Compile Include="MerchelloBootstrapper.cs" />
+    <Compile Include="Boot\MerchelloBootstrapper.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\IDetachedContent.cs" />
@@ -236,6 +268,17 @@
     <Compile Include="Models\LineItemCollection.cs" />
     <Compile Include="Models\NotifiyCollectionBase.cs" />
     <Compile Include="Models\OrderCollection.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IAddressTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IAppliedPaymentTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ICustomTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IEntityTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IGatewayProviderTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IItemCacheTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ILineItemTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IPaymentMethodTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\IProductTypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ITypeField.cs" />
+    <Compile Include="Models\TypeFields\Interfaces\ITypeFieldMapper.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Extensibility\TypeFinder.cs" />
@@ -252,9 +295,12 @@
     <Compile Include="Threading\UpgradeableReadLock.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Cache\readme.md" />
     <None Include="project.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Configuration\Elements\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

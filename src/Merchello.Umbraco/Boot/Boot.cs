@@ -1,15 +1,13 @@
-﻿namespace Merchello.Umbraco
+﻿namespace Merchello.Umbraco.Boot
 {
     using System;
     using System.Reflection;
 
     using log4net;
 
-    using Merchello.Core;
-    using Merchello.Umbraco.Adapters;
+    using Merchello.Core.Boot;
 
     using global::Umbraco.Core;
-
 
     /// <summary>
     /// Handles Umbraco's Initialized event to start Merchello's bootstrap process.
@@ -19,7 +17,6 @@
     /// </remarks> 
     public partial class Boot : IApplicationEventHandler
     {
-
         /// <summary>
         /// A logger to log startup
         /// </summary>
@@ -45,18 +42,19 @@
 
             try
             {
-                var logger = new LoggerAdapter(ApplicationContext.Current.ProfilingLogger.Logger);
-
                 // Initialize Merchello
                 Log.Info("Attempting to initialize Merchello Umbraco Package");
 
-                MerchelloBootstrapper.Init(new BootManager(logger, null));
+                // Build the settings and adapt Umbraco singleton instances
+                var settings = GetBootSettings(applicationContext);
+
+                MerchelloBootstrapper.Init(new BootManager(settings));
                 
                 Log.Info("Initialization of Merchello Umbraco Package complete");
             }
             catch (Exception ex)
             {
-                // Log.Error("Initialization of Merchello failed", ex);
+                Log.Error("Initialization of Merchello failed", ex);
             }
         }
 

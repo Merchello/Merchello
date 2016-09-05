@@ -2,14 +2,26 @@
 {
     using Merchello.Core;
 
+    /// <summary>
+    /// Extension method to map <see cref="Attempt{T}"/> to Umbraco's <see>
+    ///         <cref>global::Umbraco.Core.Attempt{T}</cref>
+    ///       </see>.
+    /// </summary>
     internal static class UmbracoAttemptExtensions
     {
-        public static global::Umbraco.Core.Attempt<T> FU<T>(this Attempt<T> merchAttempt)
-        {
-            return merchAttempt.ForUmbraco<T>();
-        }
-
-        public static global::Umbraco.Core.Attempt<T> ForUmbraco<T>(this Attempt<T> merchAttempt)
+        /// <summary>
+        /// Maps Merchello's <see cref="Attempt{T}"/> to Umbraco's attempt.
+        /// </summary>
+        /// <param name="merchAttempt">
+        /// The Merchello <see cref="Attempt{T}"/>.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of the result
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Attempt"/>.
+        /// </returns>
+        public static global::Umbraco.Core.Attempt<T> ForUmb<T>(this Attempt<T> merchAttempt)
         {
             // TODO needs to be tested!!!
             return merchAttempt.Success
