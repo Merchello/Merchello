@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Configuration
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
 
     /// <summary>
@@ -30,20 +29,25 @@
         /// Gets the version comment (like beta or RC).
         /// </summary>
         /// <value>The version comment.</value>
-        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1500:CurlyBracketsForMultiLineStatementsMustNotShareLine", Justification = "Reviewed. Suppression is OK here.")]
-        public static string CurrentComment { get { return "0"; } }
+        public static string CurrentComment
+        {
+            get { return "0"; }
+        }
 
         /// <summary>
         /// Gets the assembly version.
         /// </summary>
         /// <remarks>
         /// Get the version of the Merchello by looking at a class in that dll
-        /// Had to do it like this due to medium trust issues, see: http://haacked.com/archive/2010/11/04/assembly-location-and-medium-trust.aspx
+        /// Had to do it like this due to medium trust issues
         /// </remarks>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        /// <seealso cref="http://haacked.com/archive/2010/11/04/assembly-location-and-medium-trust.aspx"/>
         public static string AssemblyVersion
         {
-            get { return new AssemblyName(typeof(MerchelloVersion).Assembly.FullName).Version.ToString(); }
+            get
+            {
+                return new AssemblyName(typeof(MerchelloVersion).Assembly.FullName).Version.ToString();
+            }
         }
     }
 }

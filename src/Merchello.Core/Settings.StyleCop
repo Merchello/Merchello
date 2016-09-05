@@ -15,6 +15,7 @@
       <Value>YouTrack</Value>
       <Value>Cms</Value>
       <Value>asax</Value>
+      <Value>dll</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
