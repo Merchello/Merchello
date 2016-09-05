@@ -64,6 +64,7 @@
     <Compile Include="Cache\providers\NullCacheProvider.cs" />
     <Compile Include="Cache\providers\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\providers\StaticCacheProvider.cs" />
+    <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="Configuration\Sections\IBackOfficeSection.cs" />
     <Compile Include="Configuration\Sections\ICheckoutContextSection.cs" />
     <Compile Include="Configuration\Sections\ICheckoutSection.cs" />

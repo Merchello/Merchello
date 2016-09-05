@@ -52,7 +52,7 @@
       <DependentUpon>Boot.cs</DependentUpon>
     </Compile>
     <Compile Include="Boot\Boot.cs" />
-    <Compile Include="Boot\BootManager.cs" />
+    <Compile Include="Boot\UmbracoBootManager.cs" />
     <Compile Include="Boot\BootSettings.cs" />
     <Compile Include="Boot\IBootSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
