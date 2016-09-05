@@ -50,6 +50,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6
 		..\build\build-grunt.cmd = ..\build\build-grunt.cmd
 		..\build\build.cmd = ..\build\build.cmd
 		..\build\Merchello.proj = ..\build\Merchello.proj
+		..\build\package.proj = ..\build\package.proj
 	EndProjectSection
 EndProject
 Global
