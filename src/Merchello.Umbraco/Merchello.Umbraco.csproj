@@ -46,6 +46,7 @@
     <Compile Include="Adapters\IUmbracoAdapter.cs" />
     <Compile Include="Adapters\RuntimeCacheProviderAdapter.cs" />
     <Compile Include="Adapters\LoggerAdapter.cs" />
+    <Compile Include="Adapters\UmbracoAttemptExtensions.cs" />
     <Compile Include="Boot.cs" />
     <Compile Include="BootManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
