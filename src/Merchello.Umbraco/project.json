@@ -3,7 +3,7 @@
     "LightInject": "4.1.0",
     "LightInject.Annotation": "1.0.0.4",
     "Newtonsoft.Json": "8.0.*",
-    "UmbracoCms.Core": "7.5.2"
+    "UmbracoCms.Core": "7.5.3"
   },
   "frameworks": {
     "net461": {}

@@ -1,7 +1,8 @@
 ﻿{
   "dependencies": {
     "Moq": "*",
-    "NUnit": "*"
+    "NUnit": "*",
+    "UmbracoCms.Core": "7.5.3"
   },
   "frameworks": {
     "net461": {}

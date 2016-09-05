@@ -353,7 +353,7 @@
           "lib/System.Data.SqlServerCe.dll": {}
         }
       },
-      "UmbracoCms.Core/7.5.2": {
+      "UmbracoCms.Core/7.5.3": {
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
           "ClientDependency": "[1.9.1, 2.0.0)",
@@ -787,7 +787,7 @@
           "lib/System.Data.SqlServerCe.dll": {}
         }
       },
-      "UmbracoCms.Core/7.5.2": {
+      "UmbracoCms.Core/7.5.3": {
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
           "ClientDependency": "[1.9.1, 2.0.0)",
@@ -1221,7 +1221,7 @@
           "lib/System.Data.SqlServerCe.dll": {}
         }
       },
-      "UmbracoCms.Core/7.5.2": {
+      "UmbracoCms.Core/7.5.3": {
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
           "ClientDependency": "[1.9.1, 2.0.0)",
@@ -1773,11 +1773,11 @@
         "x86/sqlcese40.dll"
       ]
     },
-    "UmbracoCms.Core/7.5.2": {
-      "sha512": "j5p6TD1trXQfSdHiY89MgUsvgyWuYnfHNDJAZ+iGkXy5zt0ScA2h4YMwlrv7oRGXGD+j5d0yXGPwik4Fm78XJA==",
+    "UmbracoCms.Core/7.5.3": {
+      "sha512": "DTo7+0LB14MxSmWwYbpZUwx5p/ouwkvuhI1VxgDTo58BnG4FSXvekYwB0z59vG1lbbO6LFvjfCjnIf36zoRkKQ==",
       "type": "package",
       "files": [
-        "UmbracoCms.Core.7.5.2.nupkg.sha512",
+        "UmbracoCms.Core.7.5.3.nupkg.sha512",
         "UmbracoCms.Core.nuspec",
         "lib/Microsoft.ApplicationBlocks.Data.dll",
         "lib/SQLCE4Umbraco.dll",
@@ -1838,7 +1838,7 @@
       "LightInject >= 4.1.0",
       "LightInject.Annotation >= 1.0.0.4",
       "Newtonsoft.Json >= 8.0.*",
-      "UmbracoCms.Core >= 7.5.2"
+      "UmbracoCms.Core >= 7.5.3"
     ],
     ".NETFramework,Version=v4.6.1": []
   }
