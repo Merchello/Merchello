@@ -86,7 +86,7 @@
         public abstract IEnumerable<IShipmentRateQuote> GetShipmentRateQuotes(bool tryGetCached = true);
 
         /// <summary>
-        /// Creates a cache key for caching <see cref="IShipmentRateQuote"/>s
+        /// Creates a cache key for caching <see cref="IShipmentRateQuote"/>
         /// </summary>
         /// <param name="shipment">
         /// The shipment.
@@ -100,7 +100,7 @@
         protected static string GetShipmentRateQuoteCacheKey(IShipment shipment, IShippingGatewayMethod shippingGatewayMethod)
         {
             var address = shipment.GetDestinationAddress();
-            var args = string.Format("{0}.{1}", address.Region.Replace(" ", string.Empty), address.CountryCode);
+            var args = string.Format("{0}.{1}", address.Region != null ? address.Region.Replace(" ", string.Empty) : string.Empty, address.CountryCode);
             return Cache.CacheKeys.ShippingGatewayProviderShippingRateQuoteCacheKey(shipment.Key, shippingGatewayMethod.ShipMethod.Key, shipment.VersionKey, args);
         }
 
