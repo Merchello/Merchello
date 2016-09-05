@@ -43,6 +43,15 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Umbraco.Ui.Client
 		SlnRelativePath = "Merchello.Umbraco.Ui.Client\"
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6-26C7-43A9-AB5C-A024F1598FBF}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\appveyor.yml = ..\build\appveyor.yml
+		..\build\build-appveyor.cmd = ..\build\build-appveyor.cmd
+		..\build\build-grunt.cmd = ..\build\build-grunt.cmd
+		..\build\build.cmd = ..\build\build.cmd
+		..\build\Merchello.proj = ..\build\Merchello.proj
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
