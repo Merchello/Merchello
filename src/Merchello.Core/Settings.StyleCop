@@ -16,6 +16,7 @@
       <Value>Cms</Value>
       <Value>asax</Value>
       <Value>dll</Value>
+      <Value>enum</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

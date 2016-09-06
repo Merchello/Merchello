@@ -1,7 +1,7 @@
 ﻿namespace Merchello.Core.Configuration.Sections
 {
     /// <summary>
-    /// Represents a configuration section used for product related configurations
+    /// Represents a configuration section for configurations related to Merchello "products". 
     /// </summary>
     public interface IProductsSection : IMerchelloConfigurationSection
     {

@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Core.Configuration.Sections
 {
     using System.Collections.Generic;
+    using System.Configuration;
 
+    using Merchello.Core.Configuration.Elements;
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
@@ -10,36 +12,84 @@
     /// <remarks>
     /// Responsible for the merchelloSettings.config
     /// </remarks>
-    public class MerchelloSettingsSection : MerchelloConfigurationSection, IMerchelloSettingsSection
+    internal class MerchelloSettingsSection : MerchelloConfigurationSection, IMerchelloSettingsSection
     {
         /// <inheritdoc/>
-        public IProductsSection Products { get; }
+        [ConfigurationProperty("defaultConnectionStringName", DefaultValue = "umbracoDbDSN", IsRequired = false)]
+        public string DefaultConnectionStringName
+        {
+            get { return (string)this["defaultConnectionStringName"]; }
+        }
 
         /// <inheritdoc/>
-        public ICheckoutSection Checkout { get; }
+        [ConfigurationProperty("enableInstallTracking", DefaultValue = true, IsRequired = false)]
+        public bool EnableInstallTracking
+        {
+            get { return (bool)this["enableInstallTracking"]; }
+        }
 
         /// <inheritdoc/>
-        public ISalesSection Sales { get; }
+        IVirtualContentRouting IMerchelloSettingsSection.VirtualContentRouting { get; }
 
         /// <inheritdoc/>
-        public ICustomersSection Customers { get; }
+        IEnumerable<ICurrencyFormat> IMerchelloSettingsSection.CurrencyFormats { get; }
+
+        /// <summary>
+        /// Gets the <see cref="IProductsSection"/>.
+        /// </summary>
+        IProductsSection IMerchelloSettingsSection.Products
+        {
+            get
+            {
+                return this.Products;
+            }
+        }
 
         /// <inheritdoc/>
-        public IFiltersSection Filters { get; }
+        ICheckoutSection IMerchelloSettingsSection.Checkout
+        {
+            get
+            {
+                return this.Checkout;
+            }
+        }
 
         /// <inheritdoc/>
-        public IBackOfficeSection BackOffice { get; }
+        ISalesSection IMerchelloSettingsSection.Sales { get; }
 
         /// <inheritdoc/>
-        public IMigrationsSection Migrations { get; }
+        ICustomersSection IMerchelloSettingsSection.Customers { get; }
 
         /// <inheritdoc/>
-        public IViewsSection Views { get; }
+        IFiltersSection IMerchelloSettingsSection.Filters { get; }
 
         /// <inheritdoc/>
-        public IRoutingSection Routing { get; }
+        IBackOfficeSection IMerchelloSettingsSection.BackOffice { get; }
 
         /// <inheritdoc/>
-        public IEnumerable<ICurrencyFormat> CurrencyFormats { get; }
+        IMigrationsSection IMerchelloSettingsSection.Migrations { get; }
+
+        /// <inheritdoc/>
+        IViewsSection IMerchelloSettingsSection.Views { get; }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("products", IsRequired = true)]
+        internal ProductsElement Products
+        {
+            get
+            {
+                return (ProductsElement)this["products"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("checkout", IsRequired = true)]
+        internal CheckoutElement Checkout
+        {
+            get
+            {
+                return (CheckoutElement)this["checkout"];
+            }
+        }
     }
 }

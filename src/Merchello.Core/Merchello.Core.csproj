@@ -64,6 +64,17 @@
     <Compile Include="Cache\providers\NullCacheProvider.cs" />
     <Compile Include="Cache\providers\ObjectCacheRuntimeCacheProvider.cs" />
     <Compile Include="Cache\providers\StaticCacheProvider.cs" />
+    <Compile Include="Configuration\CaseInsensitiveEnumConfigConverter.cs" />
+    <Compile Include="Configuration\CommaDelimitedConfigurationElement.cs" />
+    <Compile Include="Configuration\ContentFinderRouteBasePath.cs" />
+    <Compile Include="Configuration\Elements\CheckoutContextElement.cs" />
+    <Compile Include="Configuration\Elements\CheckoutElement.cs" />
+    <Compile Include="Configuration\Elements\VirtualContentRoutingElement.cs" />
+    <Compile Include="Configuration\InnerTextConfigurationElement.cs" />
+    <Compile Include="Configuration\OptionalCommaDelimitedConfigurationElement.cs" />
+    <Compile Include="Configuration\OptionalInnerTextConfigurationElement.cs" />
+    <Compile Include="Configuration\RawXmlConfigurationElement.cs" />
+    <Compile Include="Configuration\Sections\IMerchelloCountriesSection.cs" />
     <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="Configuration\Sections\IBackOfficeSection.cs" />
     <Compile Include="Configuration\Sections\ICheckoutContextSection.cs" />
@@ -75,9 +86,9 @@
     <Compile Include="Configuration\MerchelloConfig.cs" />
     <Compile Include="Configuration\Sections\IMerchelloExtensibilitySection.cs" />
     <Compile Include="Configuration\Sections\IMigrationsSection.cs" />
+    <Compile Include="Configuration\IContentFinderRouteBasePath.cs" />
     <Compile Include="Configuration\Sections\IProductsSection.cs" />
-    <Compile Include="Configuration\IRouteCulturePrefix.cs" />
-    <Compile Include="Configuration\Sections\IRoutingSection.cs" />
+    <Compile Include="Configuration\Sections\IVirtualContentRouting.cs" />
     <Compile Include="Configuration\Sections\ISalesSection.cs" />
     <Compile Include="Configuration\Sections\ITaskChainSection.cs" />
     <Compile Include="Configuration\Sections\ITreesSection.cs" />
@@ -117,6 +128,7 @@
     <Compile Include="Configuration\Outline\TypeFieldElement.cs" />
     <Compile Include="Configuration\Sections\MerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Sections\IMerchelloSettingsSection.cs" />
+    <Compile Include="Configuration\Elements\ProductsElement.cs" />
     <Compile Include="Constants-ActivatorTypes.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
@@ -299,9 +311,7 @@
     <None Include="Cache\readme.md" />
     <None Include="project.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configuration\Elements\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
