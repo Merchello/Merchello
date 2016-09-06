@@ -13,7 +13,7 @@
     public interface IMerchelloExtensibilitySection : IMerchelloConfigurationSection
     {
         /// <inheritdoc/>
-        ITypeFieldsSection CustomTypeFields { get; }
+        IBackOfficeSection BackOffice { get; }
 
         /// <summary>
         /// Gets the pluggable objects.
@@ -27,5 +27,8 @@
 
         /// <inheritdoc/>
         ITaskChainSection TaskChains { get; }
+
+        /// <inheritdoc/>
+        ITypeFieldsSection CustomTypeFields { get; }
     }
 }

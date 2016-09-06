@@ -41,17 +41,12 @@
         /// <inheritdoc/>
         IFiltersSection Filters { get; }
 
-        /// <inheritdoc/>
-        IBackOfficeSection BackOffice { get; }
 
         /// <inheritdoc/>
         IMigrationsSection Migrations { get; }
 
         /// <inheritdoc/>
-        IViewsSection Views { get; }
-
-        /// <inheritdoc/>
-        IVirtualContentRouting VirtualContentRouting { get; }
+        IMvcSection Mvc { get; }
 
         /// <summary>
         /// Gets the custom currency formats.

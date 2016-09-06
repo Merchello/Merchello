@@ -9,10 +9,8 @@
     using Merchello.Core.Models.Interfaces;
 
     /// <inheritdoc/>
-    internal class VirtualContentRoutingElement : RawXmlConfigurationElement, IVirtualContentRouting
+    internal class VirtualContentRoutingElement : RawXmlConfigurationElement, IVirtualContentRoutingSection
     {
-
-
         /// <inheritdoc/>
         public IEnumerable<IContentFinderRouteBasePath> SlugContentFinderRouteBasePath
         {
@@ -37,5 +35,6 @@
                 return basePaths;
             }
         }
+
     }
 }

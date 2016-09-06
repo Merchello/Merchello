@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Configuration.Sections
 {
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
 
@@ -69,22 +70,40 @@
         }
 
         /// <inheritdoc/>
-        IFiltersSection IMerchelloSettingsSection.Filters { get; }
+        IFiltersSection IMerchelloSettingsSection.Filters
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <inheritdoc/>
-        IBackOfficeSection IMerchelloSettingsSection.BackOffice { get; }
+        IMigrationsSection IMerchelloSettingsSection.Migrations
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <inheritdoc/>
-        IMigrationsSection IMerchelloSettingsSection.Migrations { get; }
+        IMvcSection IMerchelloSettingsSection.Mvc
+        {
+            get
+            {
+                return this.Mvc;
+            }
+        }
 
         /// <inheritdoc/>
-        IViewsSection IMerchelloSettingsSection.Views { get; }
-
-        /// <inheritdoc/>
-        IVirtualContentRouting IMerchelloSettingsSection.VirtualContentRouting { get; }
-
-        /// <inheritdoc/>
-        IEnumerable<ICurrencyFormat> IMerchelloSettingsSection.CurrencyFormats { get; }
+        IEnumerable<ICurrencyFormat> IMerchelloSettingsSection.CurrencyFormats
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         /// <inheritdoc/>
         [ConfigurationProperty("products", IsRequired = true)]
@@ -123,6 +142,16 @@
             get
             {
                 return (CustomersElement)this["customers"];
+            }
+        }
+
+        /// <inheritdoc />
+        [ConfigurationProperty("mvc", IsRequired = false)]
+        internal MvcElement Mvc
+        {
+            get
+            {
+                return (MvcElement)this["mvc"];
             }
         }
     }

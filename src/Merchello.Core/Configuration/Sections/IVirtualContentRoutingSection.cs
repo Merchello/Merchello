@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
 
-    using Merchello.Core.Models.Interfaces;
-
     /// <summary>
     /// Represents a configuration section for configurations related to the custom Merchello MVC routes.
     /// </summary>
-    public interface IVirtualContentRouting : IMerchelloConfigurationSection
+    public interface IVirtualContentRoutingSection : IMerchelloConfigurationSection
     {
         /// <inheritdoc/>
         IEnumerable<IContentFinderRouteBasePath> SlugContentFinderRouteBasePath { get; }
