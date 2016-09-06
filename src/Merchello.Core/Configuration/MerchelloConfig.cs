@@ -6,7 +6,8 @@
     using Merchello.Core.Configuration.Sections;
 
     /// <summary>
-    /// Provides access to configurations in the Merchello.config file.
+    /// Provides access to configurations in the Merchello configuration files.
+    /// <para>merchelloSettings.config, merchelloExtensibility.config and merchelloCountries.config</para>
     /// </summary>
     public class MerchelloConfig
     {

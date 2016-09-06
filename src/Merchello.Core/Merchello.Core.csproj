@@ -69,6 +69,9 @@
     <Compile Include="Configuration\ContentFinderRouteBasePath.cs" />
     <Compile Include="Configuration\Elements\CheckoutContextElement.cs" />
     <Compile Include="Configuration\Elements\CheckoutElement.cs" />
+    <Compile Include="Configuration\Elements\CustomersElement.cs" />
+    <Compile Include="Configuration\Elements\FiltersElement.cs" />
+    <Compile Include="Configuration\Elements\SalesElement.cs" />
     <Compile Include="Configuration\Elements\VirtualContentRoutingElement.cs" />
     <Compile Include="Configuration\InnerTextConfigurationElement.cs" />
     <Compile Include="Configuration\OptionalCommaDelimitedConfigurationElement.cs" />

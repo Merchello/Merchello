@@ -14,6 +14,8 @@
     /// </remarks>
     internal class MerchelloSettingsSection : MerchelloConfigurationSection, IMerchelloSettingsSection
     {
+        // advanced use attributes on the merchelloSettings.config root
+
         /// <inheritdoc/>
         [ConfigurationProperty("defaultConnectionStringName", DefaultValue = "umbracoDbDSN", IsRequired = false)]
         public string DefaultConnectionStringName
@@ -27,12 +29,6 @@
         {
             get { return (bool)this["enableInstallTracking"]; }
         }
-
-        /// <inheritdoc/>
-        IVirtualContentRouting IMerchelloSettingsSection.VirtualContentRouting { get; }
-
-        /// <inheritdoc/>
-        IEnumerable<ICurrencyFormat> IMerchelloSettingsSection.CurrencyFormats { get; }
 
         /// <summary>
         /// Gets the <see cref="IProductsSection"/>.
@@ -55,10 +51,22 @@
         }
 
         /// <inheritdoc/>
-        ISalesSection IMerchelloSettingsSection.Sales { get; }
+        ISalesSection IMerchelloSettingsSection.Sales
+        {
+            get
+            {
+                return this.Sales;
+            }
+        }
 
         /// <inheritdoc/>
-        ICustomersSection IMerchelloSettingsSection.Customers { get; }
+        ICustomersSection IMerchelloSettingsSection.Customers
+        {
+            get
+            {
+                return this.Customers;
+            }
+        }
 
         /// <inheritdoc/>
         IFiltersSection IMerchelloSettingsSection.Filters { get; }
@@ -73,11 +81,17 @@
         IViewsSection IMerchelloSettingsSection.Views { get; }
 
         /// <inheritdoc/>
+        IVirtualContentRouting IMerchelloSettingsSection.VirtualContentRouting { get; }
+
+        /// <inheritdoc/>
+        IEnumerable<ICurrencyFormat> IMerchelloSettingsSection.CurrencyFormats { get; }
+
+        /// <inheritdoc/>
         [ConfigurationProperty("products", IsRequired = true)]
         internal ProductsElement Products
         {
             get
-            {
+            { 
                 return (ProductsElement)this["products"];
             }
         }
@@ -89,6 +103,26 @@
             get
             {
                 return (CheckoutElement)this["checkout"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("sales", IsRequired = true)]
+        internal SalesElement Sales
+        {
+            get
+            {
+                return (SalesElement)this["sales"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("customers", IsRequired = true)]
+        internal CustomersElement Customers
+        {
+            get
+            {
+                return (CustomersElement)this["customers"];
             }
         }
     }
