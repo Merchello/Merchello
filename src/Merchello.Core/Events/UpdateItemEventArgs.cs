@@ -1,11 +1,5 @@
 ﻿namespace Merchello.Core.Events
 {
-    using System;
-
-    using Merchello.Core.Models;
-
-    using Umbraco.Core.Events;
-
     /// <summary>
     /// Event arguments for updating line items.
     /// </summary>
@@ -15,11 +9,6 @@
     public class UpdateItemEventArgs<T> : CancellableObjectEventArgs<T>
     {
         /// <summary>
-        /// The result.
-        /// </summary>
-        private readonly T _result;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UpdateItemEventArgs{T}"/> class.
         /// </summary>
         /// <param name="result">
@@ -28,18 +17,12 @@
         public UpdateItemEventArgs(T result)            
             : base(result, true)
         {
-            _result = result;
+            this.Result = result;
         }
 
         /// <summary>
         /// Gets the result.
         /// </summary>
-        public T Result
-        {
-            get
-            {
-                return _result;
-            }
-        }
+        public T Result { get; }
     }
 }

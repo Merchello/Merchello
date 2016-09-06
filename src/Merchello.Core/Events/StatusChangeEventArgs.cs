@@ -1,42 +1,74 @@
-﻿
-using System.Collections.Generic;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Events
+﻿namespace Merchello.Core.Events
 {
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// Defines the status changed event args.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of the event argument
+    /// </typeparam>
     public class StatusChangeEventArgs<T> : CancellableObjectEventArgs<IEnumerable<T>>
     {
         /// <summary>
-        /// Constructor for accepting multiple entities that are used in the status changing operation
+        /// Initializes a new instance of the <see cref="StatusChangeEventArgs{T}"/> class.
         /// </summary>
-        /// <param name="eventObject"></param>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
         public StatusChangeEventArgs(IEnumerable<T> eventObject)
             : base(eventObject)
-        { }
+        {
+        }
 
         /// <summary>
-        /// Constructor for accepting multiple entities that are used in the saving operation
+        /// Initializes a new instance of the <see cref="StatusChangeEventArgs{T}"/> class.
         /// </summary>
-        /// <param name="eventObject"></param>
-        /// <param name="canCancel"></param>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
+        /// <param name="canCancel">
+        /// The can cancel.
+        /// </param>
         public StatusChangeEventArgs(IEnumerable<T> eventObject, bool canCancel)
             : base(eventObject, canCancel)
-        { }
+        {
+        }
 
         /// <summary>
-        /// Constructor accepting a single entity reference
-        /// </summary
-        public StatusChangeEventArgs(T eventObject)
-            : base(new List<T> {eventObject})
-        { }
-
-        /// <summary>
-        /// Constructor accepting a single entity reference
+        /// Initializes a new instance of the <see cref="StatusChangeEventArgs{T}"/> class.
         /// </summary>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
+        public StatusChangeEventArgs(T eventObject)
+            : base(new List<T> { eventObject })
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatusChangeEventArgs{T}"/> class.
+        /// </summary>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
+        /// <param name="canCancel">
+        /// The can cancel.
+        /// </param>
         public StatusChangeEventArgs(T eventObject, bool canCancel)
             : base(new List<T> { eventObject }, canCancel)
-        { }
+        {
+        }
 
-        public IEnumerable<T> StatusChangedEntities { get { return EventObject; } }
+        /// <summary>
+        /// Gets the status changed entities.
+        /// </summary>
+        public IEnumerable<T> StatusChangedEntities
+        {
+            get
+            {
+                return EventObject;
+            }
+        }
     }
 }

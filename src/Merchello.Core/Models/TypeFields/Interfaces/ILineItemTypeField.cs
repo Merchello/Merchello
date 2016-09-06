@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
+    using Merchello.Core.Models.TypeFields.Interfaces;
+
     /// <summary>
-    /// The LineItemTypeField interface.
+    /// Represents a line item type field
     /// </summary>
     public interface ILineItemTypeField : ITypeFieldMapper<LineItemType>
     {

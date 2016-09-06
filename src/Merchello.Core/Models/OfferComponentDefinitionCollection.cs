@@ -5,8 +5,7 @@
     using System.Threading;
 
     using Merchello.Core.Marketing.Offer;
-
-    using Umbraco.Core;
+    using Merchello.Core.Threading;
 
     /// <summary>
     /// A collection of <see cref="OfferComponentConfiguration"/>s.

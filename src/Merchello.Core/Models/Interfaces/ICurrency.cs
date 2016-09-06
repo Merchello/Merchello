@@ -1,23 +1,26 @@
-﻿using System.Runtime.Serialization;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Runtime.Serialization;
+
+    /// <summary>
+    /// Defines currency.
+    /// </summary>
     public interface ICurrency
     {
         /// <summary>
-        /// The ISO Currency Code
+        /// Gets the ISO Currency Code
         /// </summary>
         [DataMember]
         string CurrencyCode { get; }
 
         /// <summary>
-        /// The Currency Symbol
+        /// Gets the Currency Symbol
         /// </summary>
         [DataMember]
         string Symbol { get; }
 
         /// <summary>
-        /// The Currency Name
+        /// Gets the Currency Name
         /// </summary>
         [DataMember]
         string Name { get; }

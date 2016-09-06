@@ -1,7 +1,9 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
+    using Merchello.Core.Models.TypeFields.Interfaces;
+
     /// <summary>
-    /// Defines the EntityTypeField.
+    /// Represents an entity type field
     /// </summary>
     public interface IEntityTypeField : ITypeFieldMapper<EntityType>
     {

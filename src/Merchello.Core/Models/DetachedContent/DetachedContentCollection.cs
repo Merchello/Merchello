@@ -6,8 +6,7 @@
     using System.Threading;
 
     using Merchello.Core.Models.Interfaces;
-
-    using Umbraco.Core;
+    using Merchello.Core.Threading;
 
     /// <summary>
     /// The detached content collection.
@@ -76,7 +75,10 @@
         /// </param>
         public void Add(IEnumerable<T> items)
         {
-            items.ForEach(this.Add);
+            foreach (var item in items.Where(x => x != null))
+            {
+                Add(item);
+            }
         }
 
         /// <summary>

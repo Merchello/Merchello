@@ -1,38 +1,39 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.Interfaces;
+
     /// <summary>
     /// Defines a Merchello ShipMethod object interface
     /// </summary>
     public interface IShipMethod : IGatewayProviderMethod
     {            
         /// <summary>
-        /// The name for the ShipMethod
+        /// Gets or sets the name for the method
         /// </summary>
         [DataMember]
-        string Name { get; set;}
+        string Name { get; set; }
 
         /// <summary>
-        /// The key associated with the gateway provider for the Ship Method
+        /// Gets the key associated with the gateway provider for the Ship Method
         /// </summary>
         [DataMember]
         Guid ProviderKey { get; }
             
         /// <summary>
-        /// The key associated with the ship country for the Ship Method
+        /// Gets the key associated with the ship country for the method
         /// </summary>
         [DataMember]
         Guid ShipCountryKey { get; }
             
         /// <summary>
-        /// The surcharge for the ShipMethod
+        /// Gets or sets the surcharge for the method
         /// </summary>
+        /// TODO this has not been implemented
         [DataMember]
-        decimal Surcharge { get; set;}
+        decimal Surcharge { get; set; }
             
         /// <summary>
         /// The service code (generally defined by the provider) for the ShipMethod

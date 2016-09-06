@@ -5,8 +5,6 @@
 
     using Merchello.Core.Models.EntityBase;
 
-    using Umbraco.Core.Persistence.DatabaseAnnotations;
-
     /// <summary>
     /// Defines a warehouse catalog
     /// </summary>
@@ -30,15 +28,12 @@
         /// Gets or sets the optional name or title of the catalog
         /// </summary>
         [DataMember]
-        [NullSetting(NullSetting = NullSettings.Null)]
         string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the optional description of the catalog
         /// </summary>
         [DataMember]
-        [Length(500)]
-        [NullSetting(NullSetting = NullSettings.Null)]
         string Description { get; set; }
     }
 }

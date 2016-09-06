@@ -1,25 +1,45 @@
-﻿using System.Collections.Generic;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Events
+﻿namespace Merchello.Core.Events
 {
     /// <summary>
-    /// Defines ObservationChannal event args
+    /// Defines ObservationChannel event args
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the event argument</typeparam>
     public class ObservationChannelEventArgs<T> : CancellableObjectEventArgs<T>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservationChannelEventArgs{T}"/> class.
+        /// </summary>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
         public ObservationChannelEventArgs(T eventObject)
             : base(eventObject)
-        { }
-
-        public ObservationChannelEventArgs(T eventObject, bool canCancel)
-            : base(eventObject, canCancel)
-        { }
+        {
+        }
 
         /// <summary>
-        /// The entity to be observered
+        /// Initializes a new instance of the <see cref="ObservationChannelEventArgs{T}"/> class.
         /// </summary>
-        public T ObservationEntity { get { return EventObject; } }
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
+        /// <param name="canCancel">
+        /// The can cancel.
+        /// </param>
+        public ObservationChannelEventArgs(T eventObject, bool canCancel)
+            : base(eventObject, canCancel)
+        {
+        }
+
+        /// <summary>
+        /// Gets the entity to be observed
+        /// </summary>
+        public T ObservationEntity
+        {
+            get
+            {
+                return EventObject;
+            }
+        }
     }
 }

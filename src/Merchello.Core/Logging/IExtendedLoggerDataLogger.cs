@@ -2,10 +2,12 @@
 {
     using System;
 
+    /// <summary>
+    /// Defines a ExtendedLoggerDataLogger.
+    /// </summary>
+    /// REFACTOR - change this name
     public interface IExtendedLoggerDataLogger
     {
-
-
         /// <summary>
         /// The error.
         /// </summary>

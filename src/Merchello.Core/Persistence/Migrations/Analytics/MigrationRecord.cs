@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.Migrations.Analytics
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Anonymous analytic data used to give the Merchello team an idea of how many installs there are.
@@ -12,7 +11,7 @@
     /// in the merchello.config file
     /// '<merchello  enableInstallTracking="False" />' 
     /// </remarks>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1603:DocumentationMustContainValidXml", Justification = "Reviewed. Suppression is OK here.")]
+    [Serializable]
     internal class MigrationRecord
     {
         /// <summary>

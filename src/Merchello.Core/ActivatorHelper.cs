@@ -4,10 +4,6 @@
     using System.Linq;
     using System.Reflection;
 
-    using Merchello.Core.Logging;
-
-    using Umbraco.Core;
-
     /// <summary>
     /// Helper methods for Activation
     /// </summary>
@@ -33,9 +29,9 @@
         /// <returns>An instantiated type of T</returns>
         public static T CreateInstance<T>(Type type, Type[] ctrArgs, object[] ctrValues)
         {
-            Mandate.ParameterNotNull(type, "type");
-            Mandate.ParameterNotNull(ctrArgs, "ctrArgs");
-            Mandate.ParameterNotNull(ctrValues, "ctrValues");
+            Ensure.ParameterNotNull(type, "type");
+            Ensure.ParameterNotNull(ctrArgs, "ctrArgs");
+            Ensure.ParameterNotNull(ctrValues, "ctrValues");
             
             var constructor = type.GetConstructor(ctrArgs);
             if (constructor == null) return default(T);
@@ -51,8 +47,8 @@
         /// <returns>The result of the <see cref="Attempt{T}"/> to instantiate the object</returns>
         public static Attempt<T> CreateInstance<T>(string typeName, object[] constructorArgumentValues) where T : class
         {
-            Mandate.ParameterNotNullOrEmpty(typeName, "typName");
-            Mandate.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
+            Ensure.ParameterNotNullOrEmpty(typeName, "typName");
+            Ensure.ParameterNotNull(constructorArgumentValues, "constructorParameterValues");
 
             return CreateInstance<T>(Type.GetType(typeName), constructorArgumentValues);
         }
@@ -87,46 +83,5 @@
                 return Attempt<T>.Fail(ex);
             }
         }
-
-
-        public static T CreateInstance<T>(object[] constructorArgs)
-          where T : class
-        {
-            var type = typeof(T);
-
-            const System.Reflection.BindingFlags BindingFlags =
-                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | BindingFlags.NonPublic;
-
-            var constructorArgumentTypes =
-                constructorArgs.Select(value => value.GetType()).ToList();
-
-            var constructor = type.GetConstructor(
-                BindingFlags,
-                null,
-                CallingConventions.Any,
-                constructorArgumentTypes.ToArray(),
-                null);
-
-            try
-            {
-                var obj = constructor.Invoke(constructorArgs);
-                if (obj is T)
-                {
-                    return obj as T;
-                }
-
-                throw new Exception("ActivatorHelper failed to instantiate class of type {type.Name}");
-            }
-            catch (Exception ex)
-            {
-                var logData = MultiLogger.GetBaseLoggingData();
-                logData.AddCategory("Helpers");
-
-                MultiLogHelper.Error(typeof(ActivatorHelper), "Failed to instantiate class", ex, logData);
-
-                throw;
-            }
-        }
-
-    }
+	}
 }

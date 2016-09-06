@@ -1,22 +1,24 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
+    using Merchello.Core.Models.TypeFields.Interfaces;
+
     /// <summary>
-    /// Defines a PaymentTypeField
+    /// Represents a payment method type field
     /// </summary>
     public interface IPaymentMethodTypeField : ITypeFieldMapper<PaymentMethodType>
     {
         /// <summary>
-        /// The cash type
+        /// Gets the cash type field
         /// </summary>
         ITypeField Cash { get; } 
 
         /// <summary>
-        /// The credit card type
+        /// Gets the credit card type field
         /// </summary>
         ITypeField CreditCard { get; }
 
         /// <summary>
-        /// The purchase order type
+        /// Gets the purchase order type field
         /// </summary>
         ITypeField PurchaseOrder { get; }
     }

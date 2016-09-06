@@ -4,7 +4,6 @@
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Services;
 
     /// <summary>
     /// Defines a Gateway Provider
@@ -39,7 +38,7 @@
         /// Gets a value indicating whether or not this provider is a "registered" and active provider.
         /// </summary>
         /// <remarks>
-        /// Any provider returned from the <see cref="GatewayProviderService"/> would be an active provider
+        /// Any provider returned from the service would be an active provider
         /// </remarks>
         bool Activated { get; }
 
