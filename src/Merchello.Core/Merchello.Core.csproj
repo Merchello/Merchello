@@ -210,6 +210,7 @@
     <Compile Include="Models\DetachedContent\IDetachedContentType.cs" />
     <Compile Include="Models\DetachedContent\IProductVariantDetachedContent.cs" />
     <Compile Include="Models\EntityBase\IEntity.cs" />
+    <Compile Include="Models\EntityBase\IHasKeyId.cs" />
     <Compile Include="Models\EntityBase\ITracksDirty.cs" />
     <Compile Include="Models\EntityBase\IVersionTaggedEntity.cs" />
     <Compile Include="Models\EntityFilterCollection.cs" />
@@ -237,6 +238,7 @@
     <Compile Include="Models\Interfaces\IHasEntityTypeField.cs" />
     <Compile Include="Models\Interfaces\IHasExtendedData.cs" />
     <Compile Include="Models\Interfaces\IHasNotes.cs" />
+    <Compile Include="Models\Interfaces\IHasParent.cs" />
     <Compile Include="Models\Interfaces\IInvoice.cs" />
     <Compile Include="Models\Interfaces\IInvoiceLineItem.cs" />
     <Compile Include="Models\Interfaces\IInvoiceStatus.cs" />
@@ -311,6 +313,14 @@
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Threading\WriteLock.cs" />
+    <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
+    <Compile Include="Trees\ITreeNodeVisitor.cs" />
+    <Compile Include="Trees\LambdaTreeNodeVisitor.cs" />
+    <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
+    <Compile Include="Trees\TreeNode.cs" />
+    <Compile Include="Trees\TreeNodeExtensions.cs" />
+    <Compile Include="Trees\TreeNodeFactory{T}.cs" />
+    <Compile Include="Trees\TreeNodeVistorBase.cs" />
     <Compile Include="TypeFieldMapperEnumerations.cs" />
     <Compile Include="Threading\UpgradeableReadLock.cs" />
   </ItemGroup>
