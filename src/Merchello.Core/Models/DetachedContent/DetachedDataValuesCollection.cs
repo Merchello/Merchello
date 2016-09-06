@@ -5,10 +5,8 @@
     using System.Collections.Specialized;
     using System.Linq;
 
-    using Umbraco.Core;
-
     /// <summary>
-    /// The detached data values collection.
+    /// A collection which contains CMS property data values.
     /// </summary>
     public class DetachedDataValuesCollection : ConcurrentDictionary<string, string>
     {
@@ -94,10 +92,7 @@
         /// </param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
-            if (CollectionChanged != null)
-            {
-                CollectionChanged(this, args);
-            }
+            this.CollectionChanged?.Invoke(this, args);
         }
 
         /// <summary>
@@ -108,8 +103,6 @@
         /// </param>
         private void Load(IEnumerable<KeyValuePair<string, string>> keyValues)
         {
-            // TODO the keyvalue pairs should never be empty but we need a hack fix to account for 
-            // a WebAPi deserialization when creating a new detached content item.
             foreach (var pair in keyValues.Where(x => !x.Key.IsNullOrWhiteSpace()))
             {
                 this.SetValue(pair.Key, pair.Value);

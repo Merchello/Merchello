@@ -1,0 +1,21 @@
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>dto</Value>
+      <Value>Lucene</Value>
+      <Value>merch</Value>
+      <Value>Merchello</Value>
+      <Value>Merchello's</Value>
+      <Value>PetaPoco</Value>
+      <Value>Queryable</Value>
+      <Value>Smtp</Value>
+      <Value>Umbraco</Value>
+      <Value>sku</Value>
+      <Value>Umbraco's</Value>
+      <Value>YouTrack</Value>
+      <Value>Cms</Value>
+      <Value>asax</Value>
+    </CollectionProperty>
+    <BooleanProperty Name="RulesEnabledByDefault">False</BooleanProperty>
+  </GlobalSettings>
+</StyleCopSettings>

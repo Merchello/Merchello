@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Runtime.Serialization;
 
-    using umbraco.webservices;
-
     /// <summary>
     /// Defines an invoice.
     /// </summary>

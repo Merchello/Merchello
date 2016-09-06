@@ -148,7 +148,7 @@
         /// Gets or sets the ship method associated with this shipment
         /// </summary>
         /// <remarks>
-        /// This is nullable in case a provider (and related shipmethods) is deleted and we want to maintain the shipment record
+        /// This is null in cases a where provider (and related ship methods) are deleted and we want to maintain the shipment record
         /// </remarks>
         [DataMember]
         Guid? ShipMethodKey { get; set; }

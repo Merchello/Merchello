@@ -1,21 +1,24 @@
-﻿using System;
-
-namespace Merchello.Core.Models.TypeFields
+﻿namespace Merchello.Core.Models.TypeFields.Interfaces
 {
+    using System;
+
+    /// <summary>
+    /// Represents a type field.
+    /// </summary>
     public interface ITypeField
     {
         /// <summary>
-        /// The unique alias of the TypeField
+        /// Gets the unique alias of the type field
         /// </summary>
         string Alias { get; }
 
         /// <summary>
-        /// The descriptive name of the TypeField
+        /// Gets the descriptive name of the type field
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// The key associated with the TypeField
+        /// Gets the key associated with the type field
         /// </summary>
         Guid TypeKey { get; }
     }

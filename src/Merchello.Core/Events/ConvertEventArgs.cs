@@ -1,47 +1,68 @@
-﻿using System.Collections.Generic;
-using Umbraco.Core.Events;
-
-namespace Merchello.Core.Events
+﻿namespace Merchello.Core.Events
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// EventArgs for Customer conversion
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">
+    /// The type of the event argument
+    /// </typeparam>
     public class ConvertEventArgs<T> : CancellableObjectEventArgs<IEnumerable<T>>
     {
         /// <summary>
-        /// Constructor accepting a single entity instance
+        /// Initializes a new instance of the <see cref="ConvertEventArgs{T}"/> class.
         /// </summary>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
         public ConvertEventArgs(T eventObject)
             : base(new List<T> { eventObject })
-        { }
-        
-        /// <summary>
-        /// Constructor accepting a single entity instance
-        /// </summary>
-        /// <param name="eventObject"></param>
-        /// <param name="canCancel"></param>
-        public ConvertEventArgs(T eventObject, bool canCancel)
-            : base(new List<T> { eventObject }, canCancel)
-        { }
+        {
+        }
 
         /// <summary>
-        /// Constructor accepting multiple entities that are used in the converting operation
+        /// Initializes a new instance of the <see cref="ConvertEventArgs{T}"/> class.
         /// </summary>
-        /// <param name="eventObject"></param>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
+        /// <param name="canCancel">
+        /// The can cancel.
+        /// </param>
+        public ConvertEventArgs(T eventObject, bool canCancel)
+            : base(new List<T> { eventObject }, canCancel)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConvertEventArgs{T}"/> class.
+        /// </summary>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
         public ConvertEventArgs(IEnumerable<T> eventObject)
             : base(eventObject)
-        { }
-  
+        {
+        }
+
         /// <summary>
-        /// Constructor accepting multiple entities that are used in the converting operation
+        /// Initializes a new instance of the <see cref="ConvertEventArgs{T}"/> class.
         /// </summary>
-        /// <param name="eventObject"></param>
-        /// <param name="canCancel"></param>
+        /// <param name="eventObject">
+        /// The event object.
+        /// </param>
+        /// <param name="canCancel">
+        /// The can cancel.
+        /// </param>
         public ConvertEventArgs(IEnumerable<T> eventObject, bool canCancel)
             : base(eventObject, canCancel)
-        { }
-  
+        {
+        }
+
+        /// <summary>
+        /// Gets the coverted entities.
+        /// </summary>
         public IEnumerable<T> CovertedEntities { get { return EventObject; } }
     }
 }

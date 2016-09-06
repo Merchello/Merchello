@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace Merchello.Core.Models.Interfaces
+﻿namespace Merchello.Core.Models.Interfaces
 {
+    using System;
     using System.Runtime.Serialization;
 
     using Merchello.Core.Models.EntityBase;
@@ -20,7 +19,7 @@ namespace Merchello.Core.Models.Interfaces
         Guid ProductVariantKey { get; set; }
 
         /// <summary>
-        /// Reference to an order
+        /// Gets or sets the reference to an order
         /// </summary>
         [DataMember]
         DateTime? FirstAccessed { get; set; }

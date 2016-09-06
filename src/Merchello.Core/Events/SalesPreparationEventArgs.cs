@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core.Events
 {
-    using Umbraco.Core.Events;
+
+    //// REFACTOR this should be CheckoutManagerEventArgs
+    //// BREAKING
 
     /// <summary>
     /// The sales preparation event args.

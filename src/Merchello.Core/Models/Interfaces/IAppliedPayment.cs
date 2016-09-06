@@ -1,9 +1,10 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     /// <summary>
     /// Defines a Merchello Transaction object interface
     /// </summary>
@@ -11,44 +12,47 @@ namespace Merchello.Core.Models
     {
             
         /// <summary>
-        /// The paymentId for the Transaction
+        /// Gets the paymentId for the Transaction
         /// </summary>
         [DataMember]
-        Guid PaymentKey { get;}
+        Guid PaymentKey { get; }
 
         /// <summary>
-        /// The id of the invoice associated with this transaction
+        /// Gets the id of the invoice associated with this transaction
         /// </summary>
         [DataMember]
         Guid InvoiceKey { get; }
             
         /// <summary>
-        /// The type field for the Applied Payment
+        /// Gets the type field for the Applied Payment
         /// </summary>
         [DataMember]
         Guid AppliedPaymentTfKey { get; }
             
         /// <summary>
-        /// The description for the Transaction
+        /// Gets or sets the description for the Transaction
         /// </summary>
         [DataMember]
-        string Description { get; set;}
+        string Description { get; set; }
             
         /// <summary>
-        /// The amount for the Transaction
+        /// Gets or sets the amount for the Transaction
         /// </summary>
         [DataMember]
-        decimal Amount { get; set;}
+        decimal Amount { get; set; }
             
         /// <summary>
-        /// The exported for the Transaction
+        /// Gets or sets a value indicating whether if this record has been exported
         /// </summary>
+        /// <remarks>
+        /// Not by Merchello internally and can be safely used for custom implementations
+        /// </remarks>
         [DataMember]
-        bool Exported { get; set;}
+        bool Exported { get; set; }
 
 
         /// <summary>
-        /// The transaction type associated with this transaction
+        /// Gets or sets the transaction type associated with this transaction
         /// </summary>
         [DataMember]
         AppliedPaymentType TransactionType { get; set; }

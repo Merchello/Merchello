@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-using Merchello.Core.Models.Interfaces;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     /// <summary>
     /// Defines a Merchello Warehouse object interface
     /// </summary>

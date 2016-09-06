@@ -1,11 +1,10 @@
 ﻿namespace Merchello.Core
 {
+    /// REFACTOR this should be moved out of the Core namespace
+
     /// <summary>
     /// Defines whether a rate adjustment should be a fixed numeric adjustment or calculated as a percentage
     /// </summary>
-    /// <remarks>
-    /// TODO this should be moved out of the Core namespace
-    /// </remarks>
     public enum RateAdjustmentType
     {
         /// <summary>

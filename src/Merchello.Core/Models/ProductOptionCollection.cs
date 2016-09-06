@@ -6,7 +6,7 @@
     using System.Runtime.Serialization;
     using System.Threading;
 
-    using Umbraco.Core;
+    using Merchello.Core.Threading;
 
     /// <summary>
     /// Defines a product option collection
@@ -52,6 +52,15 @@
             return this.Any(x => x.Name == name);
         }
 
+        /// <summary>
+        /// Gets the collection index of the key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         public override int IndexOfKey(Guid key)
         {
             for (var i = 0; i < Count; i++)

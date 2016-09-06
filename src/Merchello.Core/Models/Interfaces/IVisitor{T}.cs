@@ -1,5 +1,8 @@
 ﻿namespace Merchello.Core.Models.Interfaces
 {
+    //// REFACTOR move this out of the models namespace
+    //// BREAKING 
+    
     /// <summary>
     /// The Visitor interface.
     /// </summary>

@@ -1,17 +1,19 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
+    using Merchello.Core.Models.TypeFields.Interfaces;
+
     /// <summary>
     /// Defines an AddressTypeField
     /// </summary>
     public interface IAddressTypeField : ITypeFieldMapper<AddressType>
     {
         /// <summary>
-        /// The residential type
+        /// Gets the residential type
         /// </summary>
         ITypeField Shipping { get; }     
 
         /// <summary>
-        /// The commercial type
+        /// Gets the commercial type
         /// </summary>
         ITypeField Billing { get; }
     }

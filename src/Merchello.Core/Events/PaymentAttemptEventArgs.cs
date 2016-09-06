@@ -1,7 +1,5 @@
 ﻿namespace Merchello.Core.Events
 {
-    using Umbraco.Core.Events;
-
     /// <summary>
     /// The payment attempt args.
     /// </summary>

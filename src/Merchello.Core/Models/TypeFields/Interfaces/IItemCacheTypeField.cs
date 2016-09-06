@@ -1,25 +1,26 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
+    using Merchello.Core.Models.TypeFields.Interfaces;
+
     /// <summary>
-    /// Defines a BasketTypeField
+    /// Represents an item cache type field
     /// </summary>
     public interface IItemCacheTypeField : ITypeFieldMapper<ItemCacheType>
     {
      
         /// <summary>
-        /// The basket type
+        /// Gets the basket type field
         /// </summary>
         ITypeField Basket { get; }
 
         /// <summary>
-        /// The wishlist type
+        /// Gets the wish list type field
         /// </summary>
         ITypeField Wishlist { get; }
 
         /// <summary>
-        /// The checkout type
+        /// Gets the checkout type field
         /// </summary>
         ITypeField Checkout { get; }
-   
     }
 }

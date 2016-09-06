@@ -6,14 +6,13 @@
     using System.Runtime.Serialization;
     using System.Threading;
 
-    using Umbraco.Core;
+    using Merchello.Core.Threading;
 
     /// <summary>
     /// Defines a product attribute collection
     /// </summary>
     [Serializable]
     [CollectionDataContract(IsReference = true)]
-    [KnownType(typeof(ProductAttribute))]
     public class ProductAttributeCollection : NotifiyCollectionBase<Guid, IProductAttribute>
     {
         /// <summary>

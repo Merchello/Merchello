@@ -9,6 +9,8 @@
     using System.Xml;
     using System.Xml.Linq;
 
+    /// REFACTOR - M-1094
+
     /// <summary>
     /// Represents an ExtendedDataCollection
     /// </summary>
@@ -145,10 +147,7 @@
         /// </param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
-            if (CollectionChanged != null)
-            {
-                CollectionChanged(this, args);
-            }
+            this.CollectionChanged?.Invoke(this, args);
         }
 
         /// <summary>

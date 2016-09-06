@@ -5,8 +5,7 @@
     using System.Threading;
 
     using Merchello.Core.Models.Interfaces;
-
-    using Umbraco.Core;
+    using Merchello.Core.Threading;
 
     /// <summary>
     /// The specified filter attribute collection.

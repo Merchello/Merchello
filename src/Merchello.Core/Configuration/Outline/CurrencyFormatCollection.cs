@@ -7,10 +7,13 @@
     /// </summary>
     public class CurrencyFormatCollection : ConfigurationElementCollection
     {
-
         /// <summary>
         /// Default. Returns the CurrencyFormatElement with the index of index from the collection
         /// </summary>
+        /// <param name="index">The index</param>
+        /// <returns>
+        /// The <see cref="CurrencyFormatElement"/>
+        /// </returns>
         public CurrencyFormatElement this[object index]
         {
             get { return (CurrencyFormatElement)this.BaseGet(index); }

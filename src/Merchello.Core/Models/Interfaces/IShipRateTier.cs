@@ -1,34 +1,35 @@
-﻿using System;
-using System.Runtime.Serialization;
-using Merchello.Core.Models.EntityBase;
-
-namespace Merchello.Core.Models
+﻿namespace Merchello.Core.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    using Merchello.Core.Models.EntityBase;
+
     /// <summary>
     /// Defines a shipment rate tier
     /// </summary>
     public interface IShipRateTier : IEntity
     {
         /// <summary>
-        /// The 'unique' key of the ship method
+        /// Gets the 'unique' key of the ship method
         /// </summary>
         [DataMember]
         Guid ShipMethodKey { get; }
 
         /// <summary>
-        /// The low end of the range defined by this tier
+        /// Gets or sets the low end of the range defined by this tier
         /// </summary>
         [DataMember]
         decimal RangeLow { get; set; }
 
         /// <summary>
-        /// The high end of the range defined by this tier
+        /// Gets or sets the high end of the range defined by this tier
         /// </summary>
         [DataMember]
         decimal RangeHigh { get; set; }
 
         /// <summary>
-        /// The rate or cost for this range
+        /// Gets or sets the rate or cost for this range
         /// </summary>
         [DataMember]
         decimal Rate { get; set; }
