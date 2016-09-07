@@ -5,12 +5,11 @@
     using System.Linq;
 
     using Merchello.Core.Models.Interfaces;
-    using Merchello.Web.Models.Ui.Rendering;
 
     /// <summary>
     /// The product filter group.
     /// </summary>
-    internal class ProductFilterGroup : IProductFilterGroup
+    public class ProductFilterGroup : IProductFilterGroup
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilterGroup"/> class.
