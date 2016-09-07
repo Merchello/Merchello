@@ -1,4 +1,4 @@
-namespace Merchello.Core.Logging
+namespace Merchello.Core.Acquired.Logging
 {
     using log4net.Core;
 
@@ -6,6 +6,7 @@ namespace Merchello.Core.Logging
     /// Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
     /// </remarks>
     /// UMBRACO_SRC
+    /// REFACTOR-remove when Umbraco V8 released and NuGet reference to log4net
     internal sealed class LoggingEventContext
     {
         public LoggingEventContext(LoggingEvent loggingEvent, object httpContext)

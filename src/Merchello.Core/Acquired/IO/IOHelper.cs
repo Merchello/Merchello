@@ -1,20 +1,18 @@
-﻿namespace Merchello.Core.IO
+﻿namespace Merchello.Core.Acquired.IO
 {
     using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
     using System.Web;
     using System.Web.Hosting;
 
     using Merchello.Core;
 
-    public static class IOHelper
+    internal static class IOHelper
     {
         private static string _rootDir = "";
 

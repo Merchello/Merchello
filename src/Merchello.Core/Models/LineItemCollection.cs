@@ -7,8 +7,8 @@
     using System.Runtime.Serialization;
     using System.Threading;
 
+    using Merchello.Core.Acquired.Threading;
     using Merchello.Core.Events;
-    using Merchello.Core.Threading;
 
     /// <summary>
     /// Represents a Collection of <see cref="T"/> objects

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Cache
+﻿namespace Merchello.Core.Acquired.Cache.Providers
 {
     using System;
     using System.Collections;
@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Web;
 
-    using Merchello.Core.Threading;
+    using Merchello.Core.Acquired.Threading;
 
     /// <summary>
     /// A cache provider that caches items in the HttpContext.Items

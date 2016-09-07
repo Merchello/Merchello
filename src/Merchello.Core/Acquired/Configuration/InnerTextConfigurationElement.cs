@@ -1,8 +1,10 @@
-namespace Merchello.Core.Configuration
+namespace Merchello.Core.Acquired.Configuration
 {
     using System;
     using System.Xml;
     using System.Xml.Linq;
+
+    using Merchello.Core.Configuration;
 
     /// <summary>
     /// A full config section is required for any full element and we have some elements that are defined like this:

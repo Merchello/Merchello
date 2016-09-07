@@ -1,7 +1,10 @@
-namespace Merchello.Core.Logging
+namespace Merchello.Core.Acquired
 {
     using System;
     using System.Diagnostics;
+
+    using Merchello.Core.Acquired.Logging;
+    using Merchello.Core.Logging;
 
     /// <summary>
 	/// Starts the timer and invokes a  callback upon disposal. Provides a simple way of timing an operation by wrapping it in a <code>using</code> (C#) statement.

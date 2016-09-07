@@ -3,6 +3,8 @@
     using System;
     using System.Web;
 
+    using Merchello.Core.Acquired.Cache.Providers;
+
     /// <summary>
     /// The cache manager.
     /// </summary>

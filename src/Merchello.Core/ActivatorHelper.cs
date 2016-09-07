@@ -4,6 +4,8 @@
     using System.Linq;
     using System.Reflection;
 
+    using Merchello.Core.Acquired;
+
     /// <summary>
     /// Helper methods for Activation
     /// </summary>

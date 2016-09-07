@@ -1,10 +1,12 @@
-﻿namespace Merchello.Core.Cache
+﻿namespace Merchello.Core.Acquired.Cache.Providers
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
+
+    using Merchello.Core.Cache;
 
     /// <summary>
     /// Represents a cache provider that statically caches item in a concurrent dictionary.

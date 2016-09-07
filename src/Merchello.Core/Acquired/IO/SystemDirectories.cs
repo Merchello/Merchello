@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.IO
+﻿namespace Merchello.Core.Acquired.IO
 {
     using System.Web;
 
@@ -9,7 +9,7 @@
     /// All paths has a starting but no trailing /
     /// Partial UMBRACO_SRC
     /// </remarks>
-    public class SystemDirectories
+    internal class SystemDirectories
     {
         /// <summary>
         /// The root.

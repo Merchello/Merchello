@@ -2,6 +2,7 @@
 {
     using System;
 
+    using Merchello.Core.Acquired;
     using Merchello.Core.Logging;
     using Merchello.Core.Services;
 

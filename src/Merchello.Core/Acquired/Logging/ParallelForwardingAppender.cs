@@ -1,4 +1,4 @@
-namespace Merchello.Core.Logging
+namespace Merchello.Core.Acquired.Logging
 {
     using System;
     using System.Collections.Concurrent;

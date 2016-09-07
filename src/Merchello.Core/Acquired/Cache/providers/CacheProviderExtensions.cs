@@ -1,9 +1,11 @@
-﻿namespace Merchello.Core.Cache
+﻿namespace Merchello.Core.Acquired.Cache.Providers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Caching;
+
+    using Merchello.Core.Cache;
 
     /// <summary>
     /// Extensions for strongly typed access

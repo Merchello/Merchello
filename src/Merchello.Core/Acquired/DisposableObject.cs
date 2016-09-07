@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core
+﻿namespace Merchello.Core.Acquired
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -33,7 +33,7 @@
         /// </summary>
         ~DisposableObject()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         /// </remarks>
         internal bool Disposed
         {
-            get { return _disposed; }
+            get { return this._disposed; }
         }
         
         /// <summary>
@@ -52,7 +52,7 @@
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -76,16 +76,16 @@
         /// </param>
         private void Dispose(bool disposing)
         {
-            lock (_locko)
+            lock (this._locko)
             {
-                if (_disposed) return;
-                _disposed = true;
+                if (this._disposed) return;
+                this._disposed = true;
             }
 
-            DisposeUnmanagedResources();
+            this.DisposeUnmanagedResources();
 
             if (disposing)
-                DisposeResources();
+                this.DisposeResources();
         }
     }
 }

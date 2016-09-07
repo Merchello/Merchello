@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Configuration
+﻿namespace Merchello.Core.Acquired.Configuration
 {
     using System;
     using System.ComponentModel;

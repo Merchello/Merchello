@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Cache
+﻿namespace Merchello.Core.Acquired.Cache.Providers
 {
     using System;
     using System.Collections;
@@ -6,7 +6,8 @@
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using Merchello.Core.Extensibility;
+    using Merchello.Core.Acquired.Plugins;
+    using Merchello.Core.Cache;
 
     /// <summary>
     /// The dictionary cache provider base.

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Threading
+﻿namespace Merchello.Core.Acquired.Threading
 {
     using System;
     using System.Threading;

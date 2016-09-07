@@ -3,7 +3,7 @@
     using System.Collections.Specialized;
     using System.Threading;
 
-    using Merchello.Core.Threading;
+    using Merchello.Core.Acquired.Threading;
 
     /// <summary>
     /// Defines a collection of <see cref="IProvince"/>

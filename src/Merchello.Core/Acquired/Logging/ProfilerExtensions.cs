@@ -1,6 +1,8 @@
-﻿namespace Merchello.Core.Logging
+﻿namespace Merchello.Core.Acquired.Logging
 {
     using System;
+
+    using Merchello.Core.Logging;
 
     /// <summary>
     /// Profiler extensions.

@@ -4,8 +4,8 @@
     using System.Collections.ObjectModel;
     using System.Threading;
 
+    using Merchello.Core.Acquired.Threading;
     using Merchello.Core.Models.Interfaces;
-    using Merchello.Core.Threading;
 
     /// <summary>
     /// The specified filter attribute collection.

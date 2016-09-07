@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-
-namespace Merchello.Core
+namespace Merchello.Core.Acquired
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Represents a simple <see cref="LambdaExpression"/> in a form which is suitable for using as a dictionary key
     /// by exposing the return type, argument types and expression string form in a single concatenated string.
@@ -14,18 +14,18 @@ namespace Merchello.Core
 	{
 		public LambdaExpressionCacheKey(string returnType, string expression, params string[] argTypes)
 		{
-			ReturnType = returnType;
-			ExpressionAsString = expression;
-			ArgTypes = new HashSet<string>(argTypes);
-			_toString = null;
+			this.ReturnType = returnType;
+			this.ExpressionAsString = expression;
+			this.ArgTypes = new HashSet<string>(argTypes);
+			this._toString = null;
 		}
 
 		public LambdaExpressionCacheKey(LambdaExpression obj)
 		{
-			ReturnType = obj.ReturnType.FullName;
-			ExpressionAsString = obj.ToString();
-			ArgTypes = new HashSet<string>(obj.Parameters.Select(x => x.Type.FullName));
-			_toString = null;
+			this.ReturnType = obj.ReturnType.FullName;
+			this.ExpressionAsString = obj.ToString();
+			this.ArgTypes = new HashSet<string>(obj.Parameters.Select(x => x.Type.FullName));
+			this._toString = null;
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Merchello.Core
 		/// </returns>
 		public override string ToString()
 		{
-			return _toString ?? (_toString = String.Concat(String.Join("|", ArgTypes), ",", ReturnType, ",", ExpressionAsString));
+			return this._toString ?? (this._toString = String.Concat(String.Join("|", this.ArgTypes), ",", this.ReturnType, ",", this.ExpressionAsString));
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Merchello.Core
 		{
 			if (ReferenceEquals(obj, null)) return false;
 			var casted = (LambdaExpressionCacheKey)obj;
-			return casted.ToString() == ToString();
+			return casted.ToString() == this.ToString();
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace Merchello.Core
 		/// </returns>
 		public override int GetHashCode()
 		{
-			return ToString().GetHashCode();
+			return this.ToString().GetHashCode();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Extensibility
+﻿namespace Merchello.Core.Acquired.Plugins
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,7 @@
     using System.Web;
     using System.Web.Compilation;
 
-    using Merchello.Core.IO;
+    using Merchello.Core.Acquired.IO;
 
     /// <summary>
     /// A utility class to find all classes of a certain type by reflection in the current bin folder

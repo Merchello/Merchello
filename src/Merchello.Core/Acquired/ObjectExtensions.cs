@@ -1,4 +1,4 @@
-namespace Merchello.Core
+namespace Merchello.Core.Acquired
 {
     using System;
     using System.Collections;
@@ -9,7 +9,7 @@ namespace Merchello.Core
     using System.Reflection;
     using System.Xml;
 
-    using Merchello.Core.Extensibility;
+    using Merchello.Core.Acquired.Plugins;
 
     /// <summary>
 	/// Provides object extension methods.

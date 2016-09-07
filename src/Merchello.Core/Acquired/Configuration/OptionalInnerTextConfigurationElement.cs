@@ -1,4 +1,4 @@
-namespace Merchello.Core.Configuration
+namespace Merchello.Core.Acquired.Configuration
 {
     /// <summary>
     /// This is used to supply optional/default values when using InnerTextConfigurationElement

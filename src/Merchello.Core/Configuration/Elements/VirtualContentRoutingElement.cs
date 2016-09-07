@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Xml.Linq;
 
+    using Merchello.Core.Acquired.Configuration;
     using Merchello.Core.Configuration.Sections;
     using Merchello.Core.Models.Interfaces;
 

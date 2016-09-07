@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Threading
+﻿namespace Merchello.Core.Acquired.Threading
 {
     using System;
     using System.Threading;
@@ -24,8 +24,8 @@
         /// <param name="rwLock">The <see cref="ReaderWriterLock"/>.</param>
         public WriteLock(ReaderWriterLockSlim rwLock)
         {
-            _rwLock = rwLock;
-            _rwLock.EnterWriteLock();
+            this._rwLock = rwLock;
+            this._rwLock.EnterWriteLock();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@
         /// </summary>
         void IDisposable.Dispose()
         {
-            _rwLock.ExitWriteLock();
+            this._rwLock.ExitWriteLock();
         }
     }
 }

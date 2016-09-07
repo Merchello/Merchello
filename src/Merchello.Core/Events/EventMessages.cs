@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using Merchello.Core.Acquired;
+
     /// <summary>
     /// Event messages collection
     /// </summary>

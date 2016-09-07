@@ -1,4 +1,4 @@
-namespace Merchello.Core.Logging
+namespace Merchello.Core.Acquired.Logging
 {
     using System;
     using System.Runtime.Remoting.Messaging;
@@ -6,6 +6,8 @@ namespace Merchello.Core.Logging
     using log4net.Appender;
     using log4net.Core;
     using log4net.Util;
+
+    using Merchello.Core.Logging;
 
     /// <summary>
     /// Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8 REFACTOR remove when V8 Released

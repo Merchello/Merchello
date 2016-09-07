@@ -1,10 +1,11 @@
-namespace Merchello.Core.Configuration
+namespace Merchello.Core.Acquired.Configuration
 {
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Configuration;
 
+    using Merchello.Core.Configuration;
 
     /// <summary>
     /// Defines a configuration section that contains inner text that is comma delimited

@@ -5,8 +5,7 @@
     using System.Linq;
     using System.Threading;
 
-    using Merchello.Core.Threading;
-
+    using Merchello.Core.Acquired.Threading;
 
     /// <summary>
     /// The order collection.

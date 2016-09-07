@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Cache
+﻿namespace Merchello.Core.Acquired.Cache.Providers
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +8,9 @@
     using System.Threading;
     using System.Web.Caching;
 
-    using Merchello.Core.Extensibility;
-    using Merchello.Core.Threading;
+    using Merchello.Core.Acquired.Plugins;
+    using Merchello.Core.Acquired.Threading;
+    using Merchello.Core.Cache;
 
     using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 

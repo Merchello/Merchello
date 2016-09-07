@@ -6,7 +6,7 @@
     using System.Runtime.Serialization;
     using System.Threading;
 
-    using Merchello.Core.Threading;
+    using Merchello.Core.Acquired.Threading;
 
     /// <summary>
     /// Defines a product attribute collection

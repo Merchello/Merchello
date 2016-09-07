@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Extensibility
+﻿namespace Merchello.Core.Acquired.Plugins
 {
     using System;
     using System.Collections.Concurrent;
