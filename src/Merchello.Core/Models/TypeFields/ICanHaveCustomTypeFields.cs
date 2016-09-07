@@ -1,14 +1,12 @@
-﻿namespace Merchello.Core.Models.TypeFields
+namespace Merchello.Core.Models.TypeFields
 {
-    using Merchello.Core.Models.TypeFields.Interfaces;
-
     /// <summary>
-    /// Represents a custom type field, usually added via configuration.
+    /// Identifies a type field or type field that can have custom type fields added through configuration.
     /// </summary>
-    public interface ICustomTypeField
+    public interface ICanHaveCustomTypeFields
     {
         /// <summary>
-        /// Gets the <see cref="ITypeField"/> by it's alias.
+        /// Returns a custom <see cref="ITypeField"/> from the merchelloExtensibility configuration
         /// </summary>
         /// <param name="alias">
         /// The alias.

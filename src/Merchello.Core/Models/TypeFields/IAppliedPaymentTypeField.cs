@@ -1,34 +1,32 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
-    using Merchello.Core.Models.TypeFields.Interfaces;
-
     /// <summary>
-    /// Represents the type field for AppliedPayments
+    /// Represents an AppliedPayment type field
     /// </summary>
     public interface IAppliedPaymentTypeField : ITypeFieldMapper<AppliedPaymentType>
     {
         /// <summary>
-        /// Gets the Credit type field
+        /// Gets the credit <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Credit { get; }
 
         /// <summary>
-        /// Gets The Debit type field
+        /// Gets the debit <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Debit { get; }
-   
+
         /// <summary>
-        /// Gets the Void Type field
+        /// Gets the void <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Void { get; }
 
         /// <summary>
-        /// Gets the Denied Type field
+        /// Gets the denied <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Denied { get; }
 
         /// <summary>
-        /// Gets the Refund Type field
+        /// Gets the refund <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Refund { get; }
     }

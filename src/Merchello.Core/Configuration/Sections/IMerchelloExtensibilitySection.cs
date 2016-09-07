@@ -29,6 +29,6 @@
         ITaskChainSection TaskChains { get; }
 
         /// <inheritdoc/>
-        ITypeFieldsSection CustomTypeFields { get; }
+        ITypeFieldsSection TypeFields { get; }
     }
 }

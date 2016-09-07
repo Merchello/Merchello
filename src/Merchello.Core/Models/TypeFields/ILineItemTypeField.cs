@@ -1,36 +1,33 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
-    using Merchello.Core.Models.TypeFields.Interfaces;
-
     /// <summary>
-    /// Represents a line item type field
+    /// Represents a LineItemTypeField.
     /// </summary>
-    public interface ILineItemTypeField : ITypeFieldMapper<LineItemType>
+    public interface ILineItemTypeField : IExtendedTypeFieldMapper<LineItemType>
     {
         /// <summary>
-        /// Gets the product line item type
+        /// Gets the product line item <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Product { get; }
 
         /// <summary>
-        /// Gets the shipping line item type
+        /// Gets the shipping line item <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Shipping { get; }
 
         /// <summary>
-        /// Gets the tax line item type
+        /// Gets the tax line item <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Tax { get; }
 
         /// <summary>
-        /// Gets the discount line item type
+        /// Gets the discount line item <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Discount { get;  }
 
         /// <summary>
-        /// Gets the adjustment line item type.
+        /// Gets the adjustment line item <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Adjustment { get; }
-   
     }
 }

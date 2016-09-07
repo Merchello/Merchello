@@ -1,30 +1,27 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
-    using Merchello.Core.Models.TypeFields.Interfaces;
-
     /// <summary>
-    /// Represents a gateway provider type field
+    /// Represents an GatewayProviderTypeField
     /// </summary>
     public interface IGatewayProviderTypeField : ITypeFieldMapper<GatewayProviderType>
     {
         /// <summary>
-        /// Gets the <see cref="ITypeField"/> for the payment providers
+        /// Gets the payment <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Payment { get; }
 
         /// <summary>
-        /// Gets the <see cref="ITypeField"/> for the notification providers
+        /// Gets the notification <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Notification { get; }
 
         /// <summary>
-        /// Gets the <see cref="ITypeField"/> for shipping providers
+        /// Gets the shipping <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Shipping { get; }
 
-
         /// <summary>
-        /// Gets the <see cref="ITypeField"/> for the taxation providers
+        /// Gets the taxation <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Taxation { get; }
     }

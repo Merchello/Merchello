@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Configuration.Outline
 {
+    using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics.CodeAnalysis;
@@ -9,6 +10,7 @@
     /// The type field collection.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+    [Obsolete]
     public class TypeFieldCollection : ConfigurationElementCollection
     {
         /// <summary>

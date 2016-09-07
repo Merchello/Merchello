@@ -1,12 +1,8 @@
 ﻿namespace Merchello.Core.EntityCollections
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.TypeFields;
-
-    using Umbraco.Core;
 
     /// <summary>
     /// An attribute to decorate entity collection providers for resolution.
@@ -87,9 +83,9 @@
             string localizedNameKey = "",
             string editorView = "")
         {
-            Mandate.ParameterNotNullOrEmpty(key, "key");
-            Mandate.ParameterNotNullOrEmpty(entityTfKey, "entityTfKey");
-            Mandate.ParameterNotNullOrEmpty(name, "name");
+            Ensure.ParameterNotNullOrEmpty(key, "key");
+            Ensure.ParameterNotNullOrEmpty(entityTfKey, "entityTfKey");
+            Ensure.ParameterNotNullOrEmpty(name, "name");
             this.Key = new Guid(key);
             this.EntityTfKey = new Guid(entityTfKey);
             this.Name = name;

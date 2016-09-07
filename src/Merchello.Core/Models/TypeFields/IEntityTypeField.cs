@@ -1,64 +1,62 @@
 ﻿namespace Merchello.Core.Models.TypeFields
 {
-    using Merchello.Core.Models.TypeFields.Interfaces;
-
     /// <summary>
-    /// Represents an entity type field
+    /// Represents an EntityTypeField
     /// </summary>
     public interface IEntityTypeField : ITypeFieldMapper<EntityType>
     {
         /// <summary>
-        /// Gets the customer entity type
+        /// Gets the customer <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Customer { get; }
 
         /// <summary>
-        /// Gets the entity collection entity type.
+        /// Gets the entity collection <see cref="ITypeField"/>.
         /// </summary>
         ITypeField EntityCollection { get; }
 
         /// <summary>
-        /// Gets the GatewayProvider entity type
+        /// Gets the GatewayProvider <see cref="ITypeField"/>.
         /// </summary>
         ITypeField GatewayProvider { get; }
 
         /// <summary>
-        /// Gets the Invoice entity type
+        /// Gets the Invoice <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Invoice { get; }
 
         /// <summary>
-        /// Gets the ItemCache entity type
+        /// Gets the ItemCache <see cref="ITypeField"/>.
         /// </summary>
         ITypeField ItemCache { get; }
 
         /// <summary>
-        /// Gets the Order entity type
+        /// Gets the Order <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Order { get; }
 
         /// <summary>
-        /// Gets the Payment entity type
+        /// Gets the Payment <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Payment { get; }
 
         /// <summary>
-        /// Gets the Product entity type
+        /// Gets the Product <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Product { get;  }
 
         /// <summary>
-        /// Gets the Shipment Entity type
+        /// Gets the Shipment <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Shipment { get; }
 
         /// <summary>
-        /// Gets the Warehouse Entity type
+        /// Gets the Warehouse <see cref="ITypeField"/>.
         /// </summary>
         ITypeField Warehouse { get; }
 
         /// <summary>
-        /// Gets the WarehouseCatalog entity type
+        /// Gets the WarehouseCatalog <see cref="ITypeField"/>.
         /// </summary>
         ITypeField WarehouseCatalog { get; }
     }
