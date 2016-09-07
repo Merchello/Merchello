@@ -11,7 +11,7 @@
     /// <summary>
     /// An attribute to decorate entity collection providers for resolution.
     /// </summary>
-    public class EntityCollectionProviderAttribute : Attribute, IHasEntityTypeField
+    public class EntityCollectionProviderAttribute : Attribute, IEntityCollectionProviderMeta
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProviderAttribute"/> class.

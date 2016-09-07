@@ -372,6 +372,8 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
+    <Compile Include="EntityCollections\IEntityCollectionProviderAttribute.cs" />
+    <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
@@ -1267,7 +1269,6 @@
     <Compile Include="Services\AppliedPaymentService.cs" />
     <Compile Include="Services\Interfaces\IProductOptionService.cs" />
     <Compile Include="Services\Interfaces\IUaaSItemProviderService.cs" />
-    <Compile Include="Logging\ILoggerProvider.cs" />
     <Compile Include="Services\NoteService.cs" />
     <Compile Include="Services\AuditLogService.cs" />
     <Compile Include="Services\CustomerAddressService.cs" />
