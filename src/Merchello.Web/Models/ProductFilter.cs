@@ -6,7 +6,7 @@
     /// <summary>
     /// Represents a product filter.
     /// </summary>
-    internal class ProductFilter : EntityCollectionProxyBase, IProductFilter
+    public class ProductFilter : EntityCollectionProxyBase, IProductFilter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilter"/> class.

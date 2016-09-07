@@ -6,7 +6,7 @@
     /// <summary>
     /// The product collection.
     /// </summary>
-    internal class ProductCollection : EntityCollectionProxyBase, IProductCollection
+    public class ProductCollection : EntityCollectionProxyBase, IProductCollection
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductCollection"/> class.
