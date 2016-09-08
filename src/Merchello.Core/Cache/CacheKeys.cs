@@ -151,7 +151,7 @@
         /// </returns>
         internal static string ShippingGatewayProviderShippingRateQuoteCacheKey(Guid shipmentKey, Guid shipMethodKey, Guid versionKey, string addressArgs)
         {
-            return string.Format("merchello.shippingratequote.{0}.{1}.{2}", shipmentKey, shipMethodKey, versionKey);
+            return string.Format("merchello.shippingratequote.{0}.{1}.{2}.{3}", shipmentKey, shipMethodKey, versionKey, addressArgs);
         }
 
         /// <summary>
