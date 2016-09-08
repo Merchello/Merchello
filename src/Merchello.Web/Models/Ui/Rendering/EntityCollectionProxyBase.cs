@@ -8,7 +8,7 @@ namespace Merchello.Web.Models.Ui.Rendering
     /// <summary>
     /// A base class for proxy entity collections.
     /// </summary>
-    internal abstract class EntityCollectionProxyBase : IEntityCollectionProxy
+    public abstract class EntityCollectionProxyBase : IEntityCollectionProxy
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityCollectionProxyBase"/> class.

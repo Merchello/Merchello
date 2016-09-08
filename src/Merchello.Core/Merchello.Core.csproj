@@ -372,6 +372,7 @@
     <Compile Include="Configuration\Outline\TreeElement.cs" />
     <Compile Include="CurrencyContext.cs" />
     <Compile Include="CurrencyHelper.cs" />
+    <Compile Include="EntityCollections\IEntityCollectionProviderAttribute.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
