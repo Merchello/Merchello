@@ -70,6 +70,8 @@
     <Compile Include="Configuration\Elements\CheckoutContextElement.cs" />
     <Compile Include="Configuration\Elements\CheckoutElement.cs" />
     <Compile Include="Configuration\Elements\CustomersElement.cs" />
+    <Compile Include="Configuration\Elements\GenericTypeDictionaryElement.cs" />
+    <Compile Include="Configuration\Elements\TaskChainsElement.cs" />
     <Compile Include="Configuration\Elements\TypeFieldsElement.cs" />
     <Compile Include="Configuration\Elements\FiltersElement.cs" />
     <Compile Include="Configuration\Elements\MvcElement.cs" />
@@ -97,9 +99,7 @@
     <Compile Include="Configuration\Sections\IProductsSection.cs" />
     <Compile Include="Configuration\Sections\IVirtualContentRoutingSection.cs" />
     <Compile Include="Configuration\Sections\ISalesSection.cs" />
-    <Compile Include="Configuration\Sections\ITaskChainSection.cs" />
     <Compile Include="Configuration\Sections\ITreesSection.cs" />
-    <Compile Include="Configuration\ITypeReference.cs" />
     <Compile Include="Configuration\Sections\ITypeFieldsSection.cs" />
     <Compile Include="Configuration\Sections\IViewsSection.cs" />
     <Compile Include="Configuration\Sections\IVirtualContentSection.cs" />

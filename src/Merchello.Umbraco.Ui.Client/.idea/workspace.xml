@@ -23,32 +23,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="merchelloSettings.config" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/config/merchelloSettings.config">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1100">
-              <caret line="50" column="14" selection-start-line="50" selection-start-column="14" selection-end-line="50" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="merchelloExtensibility.config" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/config/merchelloExtensibility.config">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="129" selection-end-column="19" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="merchelloCountries.config" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/config/merchelloCountries.config">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="53" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="53" />
-              <folding />
+            <state relative-caret-position="273">
+              <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="14" />
+              <folding>
+                <element signature="n#taskChains#0;n#merchelloExtensibility#0;n#!!top" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -61,6 +43,7 @@
         <option value="$PROJECT_DIR$/src/config/merchello.config" />
         <option value="$PROJECT_DIR$/src/config/merchelloCountries.config" />
         <option value="$PROJECT_DIR$/src/config/merchelloSettings.config" />
+        <option value="$PROJECT_DIR$/src/config/merchelloBackOffice.config" />
         <option value="$PROJECT_DIR$/src/config/merchelloExtensibility.config" />
       </list>
     </option>
@@ -72,10 +55,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-98" />
-    <option name="y" value="5" />
+    <option name="x" value="-8" />
     <option name="width" value="1932" />
-    <option name="height" value="1048" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -102,6 +84,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -140,8 +124,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -227,14 +209,16 @@
       <workItem from="1473122441269" duration="2085000" />
       <workItem from="1473174068209" duration="3320000" />
       <workItem from="1473252364514" duration="1199000" />
+      <workItem from="1473284976597" duration="11000" />
+      <workItem from="1473322876911" duration="3804000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14121000" />
+    <option name="totallyTimeSpent" value="17936000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-98" y="5" width="1932" height="1048" extended-state="0" />
+    <frame x="-8" y="0" width="1932" height="1038" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2503979" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -288,7 +272,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="n#taskChains#0;n#merchelloExtensibility#0;n#!!top" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -300,33 +286,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/world.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/world.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/world.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/merchelloCountries.config">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="53" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
-    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
     <entry file="file://$PROJECT_DIR$/src/config/merchelloSettings.config">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1100">
@@ -337,9 +296,98 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/config/merchelloExtensibility.config">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="126" column="0" selection-start-line="126" selection-start-column="0" selection-end-line="129" selection-end-column="19" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#taskChains#0;n#merchelloExtensibility#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloCountries.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="53" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="53" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloSettings.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1100">
+          <caret line="50" column="14" selection-start-line="50" selection-start-column="14" selection-end-line="50" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloExtensibility.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#taskChains#0;n#merchelloExtensibility#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloCountries.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="53" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/world.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/world.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/world.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloCountries.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="53" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/rough/workflows.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/ioc.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchello.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/rough/merchelloSettings.config" />
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloBackOffice.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="726">
+          <caret line="42" column="14" selection-start-line="42" selection-start-column="14" selection-end-line="42" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloSettings.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="23" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/merchelloExtensibility.config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="14" />
+          <folding>
+            <element signature="n#taskChains#0;n#merchelloExtensibility#0;n#!!top" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

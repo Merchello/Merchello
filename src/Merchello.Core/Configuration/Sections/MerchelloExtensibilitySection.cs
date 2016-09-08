@@ -1,6 +1,10 @@
 ﻿namespace Merchello.Core.Configuration.Sections
 {
+    using System;
     using System.Collections.Generic;
+    using System.Configuration;
+
+    using Merchello.Core.Configuration.Elements;
 
     /// <inheritdoc/>
     internal class MerchelloExtensibilitySection : MerchelloConfigurationSection, IMerchelloExtensibilitySection
@@ -9,15 +13,79 @@
         IBackOfficeSection IMerchelloExtensibilitySection.BackOffice { get; }
 
         /// <inheritdoc/>
-        IDictionary<string, ITypeReference> IMerchelloExtensibilitySection.PluggableObjects { get; }
+        IDictionary<string, Type> IMerchelloExtensibilitySection.Pluggable
+        {
+            get
+            {
+                return this.Pluggable.CreateDictionary("object");
+            }
+        }
 
         /// <inheritdoc/>
-        IDictionary<string, ITypeReference> IMerchelloExtensibilitySection.Strategies { get; }
+        IDictionary<string, Type> IMerchelloExtensibilitySection.Strategies
+        {
+            get
+            {
+                return this.Strategies.CreateDictionary("strategy");
+            }
+        }
 
         /// <inheritdoc/>
-        ITaskChainSection IMerchelloExtensibilitySection.TaskChains { get; }
+        IDictionary<string, IEnumerable<Type>> IMerchelloExtensibilitySection.TaskChains
+        {
+            get
+            {
+                return this.TaskChains.ChainsDictionary;
+            }
+        }
 
         /// <inheritdoc/>
-        ITypeFieldsSection IMerchelloExtensibilitySection.TypeFields { get; }
+        ITypeFieldsSection IMerchelloExtensibilitySection.TypeFields
+        {
+            get
+            {
+                return this.TypeFields;
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("pluggable", IsRequired = true)]
+        internal GenericTypeDictionaryElement Pluggable
+        {
+            get
+            {
+                return (GenericTypeDictionaryElement)this["pluggable"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("strategies", IsRequired = true)]
+        internal GenericTypeDictionaryElement Strategies
+        {
+            get
+            {
+                return (GenericTypeDictionaryElement)this["strategies"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("taskChains", IsRequired = true)]
+        internal TaskChainsElement TaskChains
+        {
+            get
+            {
+                return (TaskChainsElement)this["taskChains"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("typeFields", IsRequired = false)]
+        internal TypeFieldsElement TypeFields
+        {
+            get
+            {
+                return (TypeFieldsElement)this["typeFields"];
+            }
+        }
     }
 }

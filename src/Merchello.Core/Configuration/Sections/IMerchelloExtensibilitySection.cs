@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Configuration.Sections
 {
+    using System;
     using System.Collections.Generic;
 
     using Merchello.Core.Models.TypeFields;
@@ -18,15 +19,15 @@
         /// <summary>
         /// Gets the pluggable objects.
         /// </summary>
-        IDictionary<string, ITypeReference> PluggableObjects { get; }
+        IDictionary<string, Type> Pluggable { get; }
 
         /// <summary>
         /// Gets the strategies.
         /// </summary>
-        IDictionary<string, ITypeReference> Strategies { get; }
+        IDictionary<string, Type> Strategies { get; }
 
         /// <inheritdoc/>
-        ITaskChainSection TaskChains { get; }
+        IDictionary<string, IEnumerable<Type>> TaskChains { get; }
 
         /// <inheritdoc/>
         ITypeFieldsSection TypeFields { get; }

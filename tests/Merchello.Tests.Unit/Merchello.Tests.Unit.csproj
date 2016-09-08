@@ -50,6 +50,7 @@
     <Compile Include="Logging\ParallelForwarderTest.cs" />
     <Compile Include="Logging\RingBufferTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScratchTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
