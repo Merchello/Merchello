@@ -57,7 +57,6 @@
         <add name="MerchelloCustomerSearcher" type="Examine.LuceneEngine.Providers.LuceneSearcher, Examine" />
       </MerchelloSearchProviders>
     </Action>
-    <Action runat="install" undo="true" alias="Merchello_AddLanguageFileKey" language="en" position="end" area="sections" key="merchello" value="Merchello" />
     <!--Action runat="install" undo="true" alias="Merchello_AddLocalizationAreas" /-->
     
     <!-- TODO: TEST TO SEE IF THIS IS TRANSFERABLE IN UAAS -->
