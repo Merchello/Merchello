@@ -301,6 +301,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\IDashboardConfiguration.cs" />
     <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
     <Compile Include="Cache\IPagedKeyQueryCache.cs" />
     <Compile Include="Cache\PagedKeyQueryCache.cs" />
