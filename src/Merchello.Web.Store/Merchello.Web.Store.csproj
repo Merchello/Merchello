@@ -256,14 +256,14 @@
   <ItemGroup>
     <Compile Include="Controllers\Api\CountryRegionApiController.cs" />
     <Compile Include="Controllers\Api\ProductDataTableApiController.cs" />
-    <Compile Include="Controllers\BasketController.cs" />
+    <Compile Include="Controllers\StoreBasketController.cs" />
     <Compile Include="Controllers\CheckoutDiscountController.cs" />
     <Compile Include="Controllers\CheckoutResolvePaymentController.cs" />
     <Compile Include="Controllers\CustomerMembershipController.cs" />
     <Compile Include="Controllers\Payment\BraintreePaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\CashPaymentControllerBase{T}.cs" />
     <Compile Include="Controllers\Payment\PayPalExpressPaymentController.cs" />
-    <Compile Include="Controllers\WishListController.cs" />
+    <Compile Include="Controllers\StoreWishListController.cs" />
     <Compile Include="Factories\BraintreePaymentModelFactory.cs" />
     <Compile Include="Factories\ItemCacheModelFactory.cs" />
     <Compile Include="Localization\StoreFormsResource.Designer.cs">

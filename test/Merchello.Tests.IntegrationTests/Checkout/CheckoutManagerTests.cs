@@ -235,5 +235,58 @@
             Assert.IsTrue(invoice.PrefixedInvoiceNumber().StartsWith("rss"));
 
         }
+
+
+        /// <summary>
+        /// Relates to M-1105
+        /// </summary>
+        [Test]
+        public void Can_Add_Custom_Discount_ToBasket_And_Transfer_It_To_CheckoutManager()
+        {
+            //// Arrange
+            var basket = CurrentCustomer.Basket();
+
+            var discount = new ItemCacheLineItem(LineItemType.Discount, "Test discount", "test", 1, 2, new ExtendedDataCollection());
+            basket.AddItem(_product1, 10);
+            basket.AddItem(_product2, 5);
+            basket.AddItem(_product3, 1);
+
+            var preDiscountTotal = basket.TotalBasketPrice;
+           
+            basket.AddItem(discount);
+
+            var postDiscountTotal = basket.TotalBasketPrice;
+
+            Assert.AreEqual(postDiscountTotal, preDiscountTotal - 2, "Discount failed to calculate correctly");
+
+            var total = CurrentCustomer.Basket().TotalBasketPrice;
+            this.CurrentCustomer.Basket().Save();
+            Assert.AreEqual(4, CurrentCustomer.Basket().Items.Count());
+            //
+
+            var shipping = MockAddressMaker.GetAddress("US");
+            var billing = MockAddressMaker.GetAddress("US");
+
+            var checkoutManager = this.CurrentCustomer.Basket().GetCheckoutManager();
+
+            checkoutManager.Customer.SaveShipToAddress(shipping);
+            checkoutManager.Customer.SaveBillToAddress(billing);
+
+            var shipment = this.CurrentCustomer.Basket().PackageBasket(shipping).FirstOrDefault();
+            var quotes = shipment.ShipmentRateQuotes().ToArray();
+            Assert.NotNull(quotes);
+            Assert.IsTrue(quotes.Any(), "The collection of quotes was empty");
+
+            checkoutManager.Shipping.SaveShipmentRateQuote(quotes.First());
+
+            //// Act
+            checkoutManager.Context.Settings.InvoiceNumberPrefix = "rss";
+            var invoice = checkoutManager.Payment.PrepareInvoice();
+
+            //// Assert
+            Assert.NotNull(invoice);
+            Assert.IsTrue(invoice.PrefixedInvoiceNumber().StartsWith("rss"));
+
+        }
     }
 }

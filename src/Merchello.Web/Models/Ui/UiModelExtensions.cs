@@ -58,7 +58,10 @@
         public static decimal Total<TLineItemModel>(this IItemCacheModel<TLineItemModel> itemCache)
             where TLineItemModel : class, ILineItemModel, new()
         {
-            return itemCache.Items.Sum(x => x.Total());
+            var subTotal = itemCache.Items.Where(x => x.LineItemType != LineItemType.Discount).Sum(x => x.Total());
+            var discounts = itemCache.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.Total());
+
+            return subTotal - discounts;
         }
 
         /// <summary>

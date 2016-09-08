@@ -58,6 +58,7 @@
                     Name = lineItem.Name,
                     Amount = lineItem.Price,
                     Quantity = lineItem.Quantity,
+                    LineItemType = lineItem.LineItemType, // M-1105 - can't assume this is a product
                     ExtendedData = lineItem.ExtendedData.AsEnumerable()
                 };
 
