@@ -66,7 +66,14 @@
     <Compile Include="Acquired\Cache\Providers\StaticCacheProvider.cs" />
     <Compile Include="Acquired\Configuration\CaseInsensitiveEnumConfigConverter.cs" />
     <Compile Include="Acquired\Configuration\CommaDelimitedConfigurationElement.cs" />
+    <Compile Include="Configuration\BackOffice\DashboardTreeNode.cs" />
+    <Compile Include="Configuration\BackOffice\DashboardTreeNodeKeyLink.cs" />
+    <Compile Include="Configuration\BackOffice\IDashboardTreeNodeKeyLink.cs" />
+    <Compile Include="Configuration\BackOffice\IDashboardTreeNodeLink.cs" />
+    <Compile Include="Configuration\BackOffice\IDashboardTreeNode.cs" />
     <Compile Include="Configuration\ContentFinderRouteBasePath.cs" />
+    <Compile Include="Configuration\Elements\BackOfficeElement.cs" />
+    <Compile Include="Configuration\Elements\BackOfficeTreesElement.cs" />
     <Compile Include="Configuration\Elements\CheckoutContextElement.cs" />
     <Compile Include="Configuration\Elements\CheckoutElement.cs" />
     <Compile Include="Configuration\Elements\CustomersElement.cs" />
@@ -82,6 +89,7 @@
     <Compile Include="Acquired\Configuration\OptionalCommaDelimitedConfigurationElement.cs" />
     <Compile Include="Acquired\Configuration\OptionalInnerTextConfigurationElement.cs" />
     <Compile Include="Acquired\Configuration\RawXmlConfigurationElement.cs" />
+    <Compile Include="Configuration\BackOffice\IDashboardTreeNodeMeta.cs" />
     <Compile Include="Configuration\Sections\IMerchelloCountriesSection.cs" />
     <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="Configuration\Sections\IBackOfficeSection.cs" />

@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
 
-    using Merchello.Core.Models.TypeFields;
-
     /// <summary>
     /// Represents a Merchello settings configuration section.
     /// </summary>

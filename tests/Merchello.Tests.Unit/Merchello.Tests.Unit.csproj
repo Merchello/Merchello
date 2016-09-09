@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="BootManagers\CoreBootManagerTests.cs" />
     <Compile Include="BootManagers\WebBootManagerTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\MerchelloSettingsTests.cs" />
     <Compile Include="Logging\DebugAppender.cs" />
     <Compile Include="Logging\ParallelForwarderTest.cs" />
     <Compile Include="Logging\RingBufferTest.cs" />
@@ -70,7 +71,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Configurations\" />
     <Folder Include="TestHelpers\Entities\" />
     <Folder Include="TestHelpers\Stubs\" />
   </ItemGroup>

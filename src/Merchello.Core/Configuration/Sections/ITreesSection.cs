@@ -5,5 +5,6 @@ namespace Merchello.Core.Configuration.Sections
     /// </summary>
     public interface ITreesSection : IMerchelloConfigurationSection
     {
+
     }
 }
