@@ -165,3 +165,4 @@ $RECYCLE.BIN/
 src/.vs/*
 scrap/
 *project.lock.json
+src/Merchello.Umbraco.Ui.Client/.idea/
