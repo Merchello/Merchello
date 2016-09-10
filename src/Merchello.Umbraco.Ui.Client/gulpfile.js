@@ -89,12 +89,9 @@ gulp.task('copy:tests', function() {
 
 
 
-/*
-------------------------------------------------------
-UTILITY
-------------------------------------------------------
- */
-
+/********************************************************
+*    UTILITY
+*********************************************************/
 
 // Code checker that finds common mistakes in scripts
 gulp.task('lint', function() {
@@ -175,15 +172,19 @@ gulp.task('sloc', function(){
         .pipe(sloc());
 });
 
-gulp.task('dev', function() {
+/********************************************************
+ *    USE
+ *    ?> gulp test      -- not implemented
+ *    ?> gulp dev
+ *    ?> gulp release   -- not implemented
+ *    ?> gulp
+ *********************************************************/
+
+gulp.task('dev', ['copy:tests'], function() {
 
 });
 
-
-
-// Init
-// The default gulp task
-gulp.task('default', ['clean'], function() {
+gulp.task('default', ['clean', 'copy:tests'], function() {
     // place code for your default task here
 
 
