@@ -31,11 +31,11 @@
 
                 if (RawXml == null) return dictionary;
 
-                dictionary.Add(CustomTypeFieldType.Address, Build("address/type"));
-                dictionary.Add(CustomTypeFieldType.ItemCache, Build("itemCache/type"));
-                dictionary.Add(CustomTypeFieldType.LineItem, Build("lineItem/type"));
-                dictionary.Add(CustomTypeFieldType.PaymentMethod, Build("paymentMethod/type"));
-                dictionary.Add(CustomTypeFieldType.Product, Build("product/type"));
+                //dictionary.Add(CustomTypeFieldType.Address, Build("address/type"));
+                //dictionary.Add(CustomTypeFieldType.ItemCache, Build("itemCache/type"));
+                //dictionary.Add(CustomTypeFieldType.LineItem, Build("lineItem/type"));
+                //dictionary.Add(CustomTypeFieldType.PaymentMethod, Build("paymentMethod/type"));
+                //dictionary.Add(CustomTypeFieldType.Product, Build("product/type"));
 
                 return dictionary;
             }

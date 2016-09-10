@@ -8,42 +8,42 @@
     public class MerchelloExtensibilitySectionTests : MerchelloExtensibilityTests
     {
         [Test]
-        public void Views()
+        public void Mvc()
         {
-            Assert.NotNull(MerchelloConfig.For.Extensibility.Mvc);
+            Assert.NotNull(ExtensibilitySection.Mvc);
         }
 
         [Test]
         public void BackOffice()
         {
-            Assert.NotNull(MerchelloConfig.For.Extensibility.BackOffice);
+            Assert.NotNull(ExtensibilitySection.BackOffice);
         }
 
         /// TODO-remove when add LightInject
         [Test]
         public void Pluggable()
         {
-            Assert.NotNull(MerchelloConfig.For.Extensibility.Pluggable);
+            Assert.NotNull(ExtensibilitySection.Pluggable);
         }
 
         /// TODO-remove when add LightInject
         [Test]
         public void Strategies()
         {
-            Assert.NotNull(MerchelloConfig.For.Extensibility.Strategies);
+            Assert.NotNull(ExtensibilitySection.Strategies);
         }
 
 
         [Test]
         public void TaskChains()
         {
-            Assert.NotNull(MerchelloConfig.For.Extensibility.TaskChains);
+            Assert.NotNull(ExtensibilitySection.TaskChains);
         }
 
         [Test]
         public void TypeFields()
         {
-            Assert.NotNull(MerchelloConfig.For.Extensibility.TypeFields);
+            Assert.NotNull(ExtensibilitySection.TypeFields);
         }
     }
 }

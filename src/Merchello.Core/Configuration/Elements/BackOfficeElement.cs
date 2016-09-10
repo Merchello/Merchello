@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Core.Configuration.Elements
 {
-    using System;
     using System.Collections.Generic;
     using System.Configuration;
 
@@ -49,7 +48,7 @@
         }
 
         /// <inheritdoc/>
-        [ConfigurationProperty("enableProductOptionUiElementSelection", IsRequired = false, DefaultValue = false)]
+        [ConfigurationProperty("enableProductOptionUiElementSelection")]
         internal InnerTextConfigurationElement<bool> EnableProductOptionUiElementSelection
         {
             get

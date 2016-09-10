@@ -32,7 +32,7 @@
         {
             get
             {
-                return (InnerTextConfigurationElement<string>)this["basePath"];
+                return (InnerTextConfigurationElement<string>)this["defaultPath"];
             }
         }
 

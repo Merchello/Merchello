@@ -74,12 +74,12 @@
         }
 
         /// <inheritdoc />
-        [ConfigurationProperty("backoffice", IsRequired = true)]
+        [ConfigurationProperty("backOffice", IsRequired = true)]
         internal BackOfficeElement BackOffice
         {
             get
             {
-                return (BackOfficeElement)this["backoffice"];
+                return (BackOfficeElement)this["backOffice"];
             }
         }
 
