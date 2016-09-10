@@ -4,11 +4,14 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
     using System.Web.Security;
+	using System.Net.Mail;
+	using System.Linq;
 
     using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-    using Merchello.FastTrack.Factories;
+	using Merchello.Core.Gateways.Notification.Smtp;
+	using Merchello.FastTrack.Factories;
     using Merchello.FastTrack.Models;
     using Merchello.FastTrack.Models.Membership;
     using Merchello.Web.Controllers;
@@ -21,16 +24,16 @@
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
-    using LoginModel = Merchello.FastTrack.Models.Membership.LoginModel;
+	using LoginModel = Merchello.FastTrack.Models.Membership.LoginModel;
 
-    /// <summary>
-    /// A controller responsible for rendering and handling membership operations.
-    /// </summary>
-    /// <remarks>
-    /// This controller is included for example purposes.  It is very likely that membership requirements
-    /// for store implementations will vary.
-    /// </remarks>
-    [PluginController("FastTrack")]
+	/// <summary>
+	/// A controller responsible for rendering and handling membership operations.
+	/// </summary>
+	/// <remarks>
+	/// This controller is included for example purposes.  It is very likely that membership requirements
+	/// for store implementations will vary.
+	/// </remarks>
+	[PluginController("FastTrack")]
     public class CustomerMembershipController : CustomerMembershipControllerBase
     {
         /// <summary>
@@ -304,5 +307,136 @@
 
             return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
         }
-    }
+
+		/// <summary>
+		/// Handles the membership change password operation.
+		/// </summary>
+		/// <param name="model">
+		/// The <see cref="Models.Membership.ChangePasswordModel"/>.
+		/// </param>
+		/// <returns>
+		/// The <see cref="ActionResult"/>.
+		/// </returns>
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public virtual ActionResult ChangePassword(ChangePasswordModel model)
+		{
+			if (!ModelState.IsValid) return CurrentUmbracoPage();
+			var viewData = new StoreViewData();
+
+			if (!((model.Password.Length >= Membership.MinRequiredPasswordLength) &&
+				(model.Password.ToCharArray().Count(c => !Char.IsLetterOrDigit(c)) >= Membership.MinRequiredNonAlphanumericCharacters)))
+			{
+				viewData.Success = false;
+				viewData.Messages = new[] { String.Format("New password invalid. Minimum length {0} characters", Membership.MinRequiredPasswordLength) };
+				ViewData["MerchelloViewData"] = viewData;
+				return CurrentUmbracoPage();
+			}
+
+			// change password seems to have a bug that will allow it to change the password even if the supplied 
+			// old password is wrong!
+			// so use the login to check the old password as a hack
+			var currentUser = Membership.GetUser();
+			if (!Members.Login(currentUser.UserName, model.OldPassword))
+			{
+				viewData.Success = false;
+				viewData.Messages = new[] { "Current password incorrect." };
+				ViewData["MerchelloViewData"] = viewData;
+				return CurrentUmbracoPage();
+			}
+
+			if (!currentUser.ChangePassword(model.OldPassword, model.Password))
+			{
+				viewData.Success = false;
+				viewData.Messages = new[] { "Change password failed. Please try again." };
+				ViewData["MerchelloViewData"] = viewData;
+				return CurrentUmbracoPage();
+			}
+
+			viewData.Success = true;
+			viewData.Messages = new[] { "Password updated successfully" };
+			ViewData["MerchelloViewData"] = viewData;
+			return CurrentUmbracoPage();
+		}
+
+		/// <summary>
+		/// Handles the membership forgot password operation.
+		/// </summary>
+		/// <param name="model">
+		/// The <see cref="Models.Membership.ForgotPasswordModel"/>.
+		/// </param>
+		/// <returns>
+		/// The <see cref="ActionResult"/>.
+		/// </returns>
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public virtual ActionResult ForgotPassword(ForgotPasswordModel model)
+		{
+			if (!ModelState.IsValid) return CurrentUmbracoPage();
+			var viewData = new StoreViewData();
+			var member = Members.GetByUsername(model.Username);
+			if (member == null)
+			{
+				viewData.Success = false;
+				viewData.Messages = new[] { "Unknown email address." };
+				ViewData["MerchelloViewData"] = viewData;
+				return CurrentUmbracoPage();
+			}
+
+			var newPassword = Membership.GeneratePassword(Membership.MinRequiredPasswordLength, 0);
+			var user = Membership.GetUser(model.Username);
+			user.ChangePassword(newPassword, newPassword);
+
+			//assumes you have set the smpt settings in web.config and supplied a default "from" email
+			var msg = new MailMessage
+			{
+				Subject = String.Format("New Password for {0}", Request.Url.Host),
+				Body = String.Format("Your new password is: {0}", newPassword),
+				IsBodyHtml = false
+			};
+			msg.To.Add(new MailAddress(model.Username));
+			using (var smtpClient = new SmtpClient())
+			{
+				smtpClient.Send(msg);
+			}
+
+			viewData.Success = true;
+			viewData.Messages = new[] { "A new password has been emailed to you." };
+			ViewData["MerchelloViewData"] = viewData;
+			return CurrentUmbracoPage();
+		}
+
+		/// <summary>
+		/// Renders the change password form.
+		/// </summary>
+		/// <param name="view">
+		/// The optional view.
+		/// </param>
+		/// <returns>
+		/// The <see cref="ActionResult"/>.
+		/// </returns>
+		[ChildActionOnly]
+		public virtual ActionResult ChangePasswordForm(string view = "")
+		{
+			var model = new ChangePasswordModel();
+			return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+		}
+
+		/// <summary>
+		/// Renders the forgot password form.
+		/// </summary>
+		/// <param name="view">
+		/// The optional view.
+		/// </param>
+		/// <returns>
+		/// The <see cref="ActionResult"/>.
+		/// </returns>
+		[ChildActionOnly]
+		public virtual ActionResult ForgotPasswordForm(string view = "")
+		{
+			var model = new ForgotPasswordModel();
+			return view.IsNullOrWhiteSpace() ? PartialView(model) : PartialView(view, model);
+		}
+	}
 }
