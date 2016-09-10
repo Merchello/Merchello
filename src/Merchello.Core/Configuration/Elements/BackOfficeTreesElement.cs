@@ -37,6 +37,9 @@
             // sort order
             var sort = xt.Attribute("sortOrder").Value.TryConvertTo<int>();
 
+            var providers = xt.Element("selfManagedEntityCollectionProviders");
+
+
             var node = new DashboardTreeNode
             {
                 RouteId = xt.Attribute("id").Value,
@@ -46,8 +49,9 @@
                 SortOrder = sort.Success ? sort.Result : 0,
                 Visible = !visible.Success || visible.Result,
                 SelfManagedProvidersBeforeStaticProviders = smb.Success && smb.Result,
-                SelfManagedEntityCollectionProviders = xt.Elements("selfManagedEntityCollectionProviders/entityCollectionProvider")
-                            .Select(this.BuildLink)
+                SelfManagedEntityCollectionProviders = 
+                            providers?.Elements("entityCollectionProvider").Select(this.BuildLink) 
+                            ?? Enumerable.Empty<IDashboardTreeNodeKeyLink>()
             };
             
 

@@ -14,7 +14,7 @@
     internal class VirtualContentRoutingElement : RawXmlConfigurationElement, IVirtualContentRoutingSection
     {
         /// <inheritdoc/>
-        public IEnumerable<ICultureRouteBasePath> SlugContentFinderRouteBasePath
+        public IEnumerable<ICultureRouteBasePath> ProductSlugRoutes
         {
             get
             {

@@ -10,6 +10,6 @@
     public interface IVirtualContentRoutingSection : IMerchelloSection
     {
         /// <inheritdoc/>
-        IEnumerable<ICultureRouteBasePath> SlugContentFinderRouteBasePath { get; }
+        IEnumerable<ICultureRouteBasePath> ProductSlugRoutes { get; }
     }
 }

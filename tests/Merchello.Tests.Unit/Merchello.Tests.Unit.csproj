@@ -48,6 +48,11 @@
     <Compile Include="BootManagers\WebBootManagerTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\MerchelloExtensibilityTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\MerchelloExtensibilitySectionTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\MvcElementTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\RoutingElementTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\TreesElementTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\ViewsElementTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\VirtualContentElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CheckoutContextElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CurrencyElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CustomersElementTests.cs" />
