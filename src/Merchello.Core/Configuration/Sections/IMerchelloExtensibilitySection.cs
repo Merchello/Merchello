@@ -11,6 +11,10 @@
     /// </remarks>
     public interface IMerchelloExtensibilitySection : IMerchelloSection
     {
+
+        /// <inheritdoc/>
+        IMvcSection Mvc { get; }
+
         /// <inheritdoc/>
         IBackOfficeSection BackOffice { get; }
 

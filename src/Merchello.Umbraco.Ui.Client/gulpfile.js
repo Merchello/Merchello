@@ -2,6 +2,9 @@
 
 var pkg = require('./package.json');
 
+// build configuration
+var debug = 'bin/Debug/';
+var release = 'bin/Release/';
 
 // source locations
 var allSrc = 'src/**/*.js';
@@ -34,23 +37,54 @@ gulp.task('copy:tests', function() {
     var copy = require('gulp-copy');
     var rename = require('gulp-rename');
 
+    var paths = {
+        settings: 'Configurations/MerchelloSettings/',
+        extensibility: 'Configurations/ExtensibilitySettings/',
+        countries: 'Configurations/CountrySettings/'
+    }
+
+    var tdebug = tests + debug;
+    var trelease = tests + release;
+
+    // -------------------
+    // setttings
+    // -------------------
+    // merchelloSettings.config
     gulp.src(configs + 'merchelloSettings.config')
-        .pipe(gulp.dest(tests + 'bin/debug/Configurations/MerchelloSettings/'))
-        .pipe(gulp.dest(tests + 'bin/release/Configurations/MerchelloSettings/'));
+        .pipe(gulp.dest(tdebug + paths.settings))
+        .pipe(gulp.dest(tdebug + paths.settings));
 
-
+    // web.config
     gulp.src(configs + 'tests/web.settings.config')
-        //.pipe(rename('build/temp/config/settings/web.config'))
-        .pipe(gulp.dest(tests + 'bind/debug/Configurations/'))
-        .pipe(gulp.dest(tests + 'bind/release/Configurations/'));
+        .pipe(rename('web.config'))
+        .pipe(gulp.dest(tdebug + 'Configurations/MerchelloSettings/'))
+        .pipe(gulp.dest(trelease + 'Configurations/MerchelloSettings/'));
 
+    // -------------------
+    // extensibility
+    // -------------------
     gulp.src(configs + 'merchelloExtensibility.config')
-        .pipe(gulp.dest(tests + 'bin/debug/Configurations/MerchelloExtensibility/'))
-        .pipe(gulp.dest(tests + 'bin/release/Configurations/MerchelloExtensibility/'));
+        .pipe(gulp.dest(tdebug + 'Configurations/MerchelloExtensibility/'))
+        .pipe(gulp.dest(trelease + 'Configurations/MerchelloExtensibility/'));
 
+    // web.config
+    gulp.src(configs + 'tests/web.extensibility.config')
+        .pipe(rename('web.config'))
+        .pipe(gulp.dest(tdebug + 'Configurations/MerchelloExtensibility/'))
+        .pipe(gulp.dest(trelease + 'Configurations/MerchelloExtensibility/'));
+
+    // -------------------
+    // countries
+    // -------------------
     gulp.src(configs + 'merchelloCountries.config')
         .pipe(gulp.dest(tests + 'bin/debug/Configurations/MerchelloCountries/'))
         .pipe(gulp.dest(tests + 'bin/release/Configurations/MerchelloCountries/'));
+
+    // web.config
+    gulp.src(configs + 'tests/web.countries.config')
+        .pipe(rename('web.config'))
+        .pipe(gulp.dest(tdebug + 'Configurations/MerchelloCountries/'))
+        .pipe(gulp.dest(trelease + 'Configurations/MerchelloCountries/'));
 });
 
 

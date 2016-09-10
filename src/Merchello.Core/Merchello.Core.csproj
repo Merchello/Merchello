@@ -76,8 +76,10 @@
     <Compile Include="Configuration\Elements\BackOfficeTreesElement.cs" />
     <Compile Include="Configuration\Elements\CheckoutContextElement.cs" />
     <Compile Include="Configuration\Elements\CheckoutElement.cs" />
+    <Compile Include="Configuration\Elements\CurrencyFormatsElement.cs" />
     <Compile Include="Configuration\Elements\CustomersElement.cs" />
     <Compile Include="Configuration\Elements\GenericTypeDictionaryElement.cs" />
+    <Compile Include="Configuration\Elements\MigrationsElement.cs" />
     <Compile Include="Configuration\Elements\TaskChainsElement.cs" />
     <Compile Include="Configuration\Elements\TypeFieldsElement.cs" />
     <Compile Include="Configuration\Elements\FiltersElement.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Acquired\Configuration\OptionalInnerTextConfigurationElement.cs" />
     <Compile Include="Acquired\Configuration\RawXmlConfigurationElement.cs" />
     <Compile Include="Configuration\BackOffice\IDashboardTreeNodeMeta.cs" />
+    <Compile Include="Configuration\Elements\XElmentExtensions.cs" />
     <Compile Include="Configuration\Sections\IMerchelloCountriesSection.cs" />
     <Compile Include="Configuration\MerchelloVersion.cs" />
     <Compile Include="Configuration\Sections\IBackOfficeSection.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
     <Compile Include="Boot\MerchelloBootstrapper.cs" />
+    <Compile Include="Models\CurrencyFormat.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\IDetachedContent.cs" />

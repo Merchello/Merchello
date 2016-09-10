@@ -8,7 +8,6 @@
     using Merchello.Core.Acquired;
     using Merchello.Core.Acquired.Configuration;
     using Merchello.Core.Configuration.BackOffice;
-    using Merchello.Core.EntityCollections;
 
     /// <summary>
     /// Represents a configuration element for parsing the back office tree configuration XML.

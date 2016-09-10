@@ -10,6 +10,9 @@
     internal class MerchelloExtensibilitySection : MerchelloSection, IMerchelloExtensibilitySection
     {
         /// <inheritdoc/>
+        IMvcSection IMerchelloExtensibilitySection.Mvc { get; }
+
+        /// <inheritdoc/>
         IBackOfficeSection IMerchelloExtensibilitySection.BackOffice { get; }
 
         /// <inheritdoc/>
@@ -45,6 +48,16 @@
             get
             {
                 return this.TypeFields;
+            }
+        }
+
+        /// <inheritdoc />
+        [ConfigurationProperty("mvc", IsRequired = false)]
+        internal MvcElement Mvc
+        {
+            get
+            {
+                return (MvcElement)this["mvc"];
             }
         }
 

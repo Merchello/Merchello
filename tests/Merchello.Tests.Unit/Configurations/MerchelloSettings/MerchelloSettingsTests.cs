@@ -26,16 +26,16 @@
 
             if (TestingDefaults)
             {
-                SettingsSection = configuration.GetSection("merchello/defaultSettings") as MerchelloSettingsSection;
+                SettingsSection = configuration.GetSection("merchello/defaultMerchelloSettings") as MerchelloSettingsSection;
             }
             else
             {
-                SettingsSection = configuration.GetSection("merchello/settings") as MerchelloSettingsSection;
+                SettingsSection = configuration.GetSection("merchello/merchelloSettings") as MerchelloSettingsSection;
             }
 
 
 
-            //Assert.IsNotNull(SettingsSection);
+            Assert.IsNotNull(SettingsSection, "Settings section was null");
         }
 
         protected IMerchelloSettingsSection SettingsSection { get; private set; }

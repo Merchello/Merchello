@@ -15,7 +15,7 @@
             var value = SettingsSection.Products.DefaultSkuSeparator;
 
             //// Assert
-            Assert.Equals(expected, value);
+            Assert.AreEqual(expected, value, "DefaultSkuSeparator did not match expected value.");
         }
     }
 }

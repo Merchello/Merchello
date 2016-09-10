@@ -46,8 +46,14 @@
   <ItemGroup>
     <Compile Include="BootManagers\CoreBootManagerTests.cs" />
     <Compile Include="BootManagers\WebBootManagerTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\CheckoutContextElementTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\CurrencyElementTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\CustomersElementTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\FiltersElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\MerchelloSettingsTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\MigrationsElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\ProductsElementTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\SalesElement.cs" />
     <Compile Include="Logging\DebugAppender.cs" />
     <Compile Include="Logging\ParallelForwarderTest.cs" />
     <Compile Include="Logging\RingBufferTest.cs" />
@@ -56,7 +62,6 @@
     <Compile Include="TestHelpers\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Configurations\MerchelloSettings\web.config" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>

@@ -45,9 +45,6 @@
         /// <inheritdoc/>
         IMigrationsSection Migrations { get; }
 
-        /// <inheritdoc/>
-        IMvcSection Mvc { get; }
-
         /// <summary>
         /// Gets the custom currency formats.
         /// </summary>
