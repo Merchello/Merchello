@@ -10,10 +10,22 @@
     internal class MerchelloExtensibilitySection : MerchelloSection, IMerchelloExtensibilitySection
     {
         /// <inheritdoc/>
-        IMvcSection IMerchelloExtensibilitySection.Mvc { get; }
+        IMvcSection IMerchelloExtensibilitySection.Mvc
+        {
+            get
+            {
+                return this.Mvc;
+            }
+        }
 
         /// <inheritdoc/>
-        IBackOfficeSection IMerchelloExtensibilitySection.BackOffice { get; }
+        IBackOfficeSection IMerchelloExtensibilitySection.BackOffice
+        {
+            get
+            {
+                return this.BackOffice;
+            }
+        }
 
         /// <inheritdoc/>
         IDictionary<string, Type> IMerchelloExtensibilitySection.Pluggable
@@ -52,12 +64,22 @@
         }
 
         /// <inheritdoc />
-        [ConfigurationProperty("mvc", IsRequired = false)]
+        [ConfigurationProperty("mvc", IsRequired = true)]
         internal MvcElement Mvc
         {
             get
             {
                 return (MvcElement)this["mvc"];
+            }
+        }
+
+        /// <inheritdoc />
+        [ConfigurationProperty("backoffice", IsRequired = true)]
+        internal BackOfficeElement BackOffice
+        {
+            get
+            {
+                return (BackOfficeElement)this["backoffice"];
             }
         }
 

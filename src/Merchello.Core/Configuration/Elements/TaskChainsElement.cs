@@ -25,9 +25,12 @@
                 foreach (var chain in chains)
                 {
                     var key = chain.Attribute("alias").Value;
-                    var xtasks = chain.Elements("tasks/task");
+                    var xtasks = chain.Element("tasks");
+                    if (xtasks == null) throw new NullReferenceException("chainTask does not contain a tasks element");
 
-                    d.Add(key, Build(xtasks));
+                    var tasks = xtasks.Elements("task");
+
+                    d.Add(key, Build(tasks));
                 }
 
 

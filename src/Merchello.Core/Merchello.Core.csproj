@@ -71,6 +71,8 @@
     <Compile Include="Configuration\BackOffice\IDashboardTreeNodeKeyLink.cs" />
     <Compile Include="Configuration\BackOffice\IDashboardTreeNodeLink.cs" />
     <Compile Include="Configuration\BackOffice\IDashboardTreeNode.cs" />
+    <Compile Include="Configuration\Elements\KeyValuePairCollectionElement.cs" />
+    <Compile Include="Configuration\Elements\ViewsElement.cs" />
     <Compile Include="Configuration\Mvc\CultureRouteBasePath.cs" />
     <Compile Include="Configuration\Elements\BackOfficeElement.cs" />
     <Compile Include="Configuration\Elements\BackOfficeTreesElement.cs" />

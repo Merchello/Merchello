@@ -34,7 +34,7 @@
         {
             get
             {
-                throw new NotImplementedException();
+                return ProductOptionUi.GetKeyValuePairs("input", "alias", "type");
             }
         }
 
@@ -55,6 +55,16 @@
             get
             {
                 return (InnerTextConfigurationElement<bool>)this["enableProductOptionUiElementSelection"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("productOptionUi", IsRequired = true)]
+        internal KeyValuePairCollectionElement<string, string> ProductOptionUi
+        {
+            get
+            {
+                return (KeyValuePairCollectionElement<string, string>)this["productOptionUi"];
             }
         }
     }

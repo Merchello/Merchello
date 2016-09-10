@@ -10,7 +10,10 @@
         /// <inheritdoc/>
         IViewsSection IMvcSection.Views
         {
-            get;
+            get
+            {
+                return this.Views;
+            }
         }
 
         /// <inheritdoc/>
@@ -19,6 +22,16 @@
             get
             {
                 return this.VirtualContent;
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("views", IsRequired = true)]
+        internal ViewsElement Views
+        {
+            get
+            {
+                return (ViewsElement)this["views"];
             }
         }
 

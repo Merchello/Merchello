@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="BootManagers\CoreBootManagerTests.cs" />
     <Compile Include="BootManagers\WebBootManagerTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\MerchelloExtensibilityTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\MerchelloExtensibilitySectionTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CheckoutContextElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CurrencyElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CustomersElementTests.cs" />
@@ -80,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\MerchelloCountries\" />
-    <Folder Include="Configurations\MerchelloExtensibility\" />
     <Folder Include="TestHelpers\Entities\" />
     <Folder Include="TestHelpers\Stubs\" />
   </ItemGroup>
