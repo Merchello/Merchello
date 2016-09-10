@@ -7,7 +7,7 @@ namespace Merchello.Core.Configuration.Sections
     /// <summary>
     /// Represents a configuration section for Merchello back office configurations.
     /// </summary>
-    public interface IBackOfficeSection : IMerchelloConfigurationSection
+    public interface IBackOfficeSection : IMerchelloSection
     {
         /// <summary>
         /// Gets the a collection of back office tree nodes.

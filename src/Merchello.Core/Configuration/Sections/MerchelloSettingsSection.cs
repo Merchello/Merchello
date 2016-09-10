@@ -13,7 +13,7 @@
     /// <remarks>
     /// Responsible for the merchelloSettings.config
     /// </remarks>
-    internal class MerchelloSettingsSection : MerchelloConfigurationSection, IMerchelloSettingsSection
+    internal class MerchelloSettingsSection : MerchelloSection, IMerchelloSettingsSection
     {
         // advanced use attributes on the merchelloSettings.config root
 

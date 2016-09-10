@@ -3,7 +3,7 @@ namespace Merchello.Core.Configuration.Sections
     /// <summary>
     /// Represents a configuration section for configurations related to Merchello "CheckoutContext". .
     /// </summary>
-    public interface ICheckoutContextSection : IMerchelloConfigurationSection
+    public interface ICheckoutContextSection : IMerchelloSection
     {
         /// <summary>
         /// Gets the default invoice number prefix to be used when generating invoice numbers.

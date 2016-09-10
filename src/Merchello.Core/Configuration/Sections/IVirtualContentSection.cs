@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a configuration section for Merchello virtual (or detached) content configurations.
     /// </summary>
-    public interface IVirtualContentSection : IMerchelloConfigurationSection
+    public interface IVirtualContentSection : IMerchelloSection
     {
         /// <summary>
         /// Gets the custom routing configurations for virtual content.

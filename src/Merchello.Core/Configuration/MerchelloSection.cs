@@ -1,5 +1,7 @@
-﻿namespace Merchello.Core.Configuration.Sections
+﻿namespace Merchello.Core.Configuration
 {
+    using System.Configuration;
+
     /// <summary>
     /// Represents a Merchello section within the configuration file.
     /// </summary>
@@ -11,7 +13,22 @@
     /// <para>The <c>MerchelloSettings.For{T}</c> method will return a section, either one that
     /// is in the configuration file, or a section that was created with default values.</para>
     /// </remarks>
-    public interface IMerchelloConfigurationSection
-    { 
+    public interface IMerchelloSection
+    {
+    }
+
+    /// <inheritdoc/>
+    public abstract class MerchelloSection : ConfigurationSection, IMerchelloSection
+    {
+        /// <summary>
+        /// Gets a value indicating whether the section actually is in the configuration file.
+        /// </summary>
+        protected bool IsPresent
+        {
+            get
+            {
+                return this.ElementInformation.IsPresent;
+            }
+        }
     }
 }

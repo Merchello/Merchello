@@ -47,13 +47,16 @@
     <Compile Include="BootManagers\CoreBootManagerTests.cs" />
     <Compile Include="BootManagers\WebBootManagerTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\MerchelloSettingsTests.cs" />
+    <Compile Include="Configurations\MerchelloSettings\ProductsElementTests.cs" />
     <Compile Include="Logging\DebugAppender.cs" />
     <Compile Include="Logging\ParallelForwarderTest.cs" />
     <Compile Include="Logging\RingBufferTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScratchTests.cs" />
+    <Compile Include="TestHelpers\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Configurations\MerchelloSettings\web.config" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +74,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Configurations\MerchelloCountries\" />
+    <Folder Include="Configurations\MerchelloExtensibility\" />
     <Folder Include="TestHelpers\Entities\" />
     <Folder Include="TestHelpers\Stubs\" />
   </ItemGroup>

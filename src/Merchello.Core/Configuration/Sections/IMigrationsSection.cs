@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a configuration section for configurations related to Merchello "migrations" (upgrade process). 
     /// </summary>
-    public interface IMigrationsSection : IMerchelloConfigurationSection
+    public interface IMigrationsSection : IMerchelloSection
     {
 
         /// <summary>

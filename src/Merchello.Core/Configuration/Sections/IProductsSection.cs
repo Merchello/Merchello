@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a configuration section for configurations related to Merchello "products". 
     /// </summary>
-    public interface IProductsSection : IMerchelloConfigurationSection
+    public interface IProductsSection : IMerchelloSection
     {
         /// <summary>
         /// Gets the default SKU separator used when generating product variants based off product options.

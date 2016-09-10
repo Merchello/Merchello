@@ -98,7 +98,6 @@
     <Compile Include="Configuration\Sections\ICollectionsSection.cs" />
     <Compile Include="Configuration\Sections\ICustomersSection.cs" />
     <Compile Include="Configuration\Sections\IFiltersSection.cs" />
-    <Compile Include="Configuration\Sections\IMerchelloConfigurationSection.cs" />
     <Compile Include="Configuration\MerchelloConfig.cs" />
     <Compile Include="Configuration\Sections\IMerchelloExtensibilitySection.cs" />
     <Compile Include="Configuration\Sections\IMigrationsSection.cs" />
@@ -111,7 +110,7 @@
     <Compile Include="Configuration\Sections\ITypeFieldsSection.cs" />
     <Compile Include="Configuration\Sections\IViewsSection.cs" />
     <Compile Include="Configuration\Sections\IVirtualContentSection.cs" />
-    <Compile Include="Configuration\Sections\MerchelloConfigurationSection.cs" />
+    <Compile Include="Configuration\MerchelloSection.cs" />
     <Compile Include="Configuration\Outline\ContentFinderCultureCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatCollection.cs" />
     <Compile Include="Configuration\Outline\CurrencyFormatElement.cs" />

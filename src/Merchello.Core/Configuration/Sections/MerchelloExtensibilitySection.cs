@@ -7,7 +7,7 @@
     using Merchello.Core.Configuration.Elements;
 
     /// <inheritdoc/>
-    internal class MerchelloExtensibilitySection : MerchelloConfigurationSection, IMerchelloExtensibilitySection
+    internal class MerchelloExtensibilitySection : MerchelloSection, IMerchelloExtensibilitySection
     {
         /// <inheritdoc/>
         IBackOfficeSection IMerchelloExtensibilitySection.BackOffice { get; }

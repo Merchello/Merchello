@@ -9,7 +9,7 @@
     /// <remarks>
     /// Responsible for the merchelloExtensibility.config
     /// </remarks>
-    public interface IMerchelloExtensibilitySection : IMerchelloConfigurationSection
+    public interface IMerchelloExtensibilitySection : IMerchelloSection
     {
         /// <inheritdoc/>
         IBackOfficeSection BackOffice { get; }

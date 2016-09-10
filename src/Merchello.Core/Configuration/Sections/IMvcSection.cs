@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a configuration section for configurations related to the Merchello MVC integrations.
     /// </summary>
-    public interface IMvcSection : IMerchelloConfigurationSection
+    public interface IMvcSection : IMerchelloSection
     {
         /// <inheritdoc/>
         IViewsSection Views { get; }
