@@ -1,7 +1,7 @@
-namespace Merchello.Core.Configuration
+namespace Merchello.Core.Configuration.Mvc
 {
     /// <inheritdoc/>
-    internal class ContentFinderRouteBasePath : IContentFinderRouteBasePath
+    internal class CultureRouteBasePath : ICultureRouteBasePath
     {
         /// <inheritdoc/>
         public string CultureName { get; set; }

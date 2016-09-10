@@ -1,9 +1,9 @@
-﻿namespace Merchello.Core.Configuration
+﻿namespace Merchello.Core.Configuration.Mvc
 {
     /// <summary>
     /// Represents a route prefix to be used in culture based routing.
     /// </summary>
-    public interface IContentFinderRouteBasePath
+    public interface ICultureRouteBasePath
     {
         /// <summary>
         /// Gets or sets the culture name.

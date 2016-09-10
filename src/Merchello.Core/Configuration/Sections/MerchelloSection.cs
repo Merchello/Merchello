@@ -1,4 +1,4 @@
-﻿namespace Merchello.Core.Configuration
+﻿namespace Merchello.Core.Configuration.Sections
 {
     using System.Configuration;
 
@@ -18,7 +18,7 @@
     }
 
     /// <inheritdoc/>
-    public abstract class MerchelloSection : ConfigurationSection, IMerchelloSection
+    internal abstract class MerchelloSection : ConfigurationSection, IMerchelloSection
     {
         /// <summary>
         /// Gets a value indicating whether the section actually is in the configuration file.

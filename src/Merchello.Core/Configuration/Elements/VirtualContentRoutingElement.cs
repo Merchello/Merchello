@@ -6,6 +6,7 @@
     using System.Xml.Linq;
 
     using Merchello.Core.Acquired.Configuration;
+    using Merchello.Core.Configuration.Mvc;
     using Merchello.Core.Configuration.Sections;
     using Merchello.Core.Models.Interfaces;
 
@@ -13,20 +14,20 @@
     internal class VirtualContentRoutingElement : RawXmlConfigurationElement, IVirtualContentRoutingSection
     {
         /// <inheritdoc/>
-        public IEnumerable<IContentFinderRouteBasePath> SlugContentFinderRouteBasePath
+        public IEnumerable<ICultureRouteBasePath> SlugContentFinderRouteBasePath
         {
             get
             {
-                var basePaths = new List<IContentFinderRouteBasePath>();
+                var basePaths = new List<ICultureRouteBasePath>();
 
-                if (RawXml == null) return Enumerable.Empty<IContentFinderRouteBasePath>();
+                if (RawXml == null) return Enumerable.Empty<ICultureRouteBasePath>();
                 
                     var routes = RawXml.Elements("route").ToArray();
 
                     basePaths.AddRange(
                         routes.Select(
                             r => 
-                            new ContentFinderRouteBasePath
+                            new CultureRouteBasePath
                                 {
                                     CultureName = r.Attribute("cultureName").Value,
                                     BasePath = r.Attribute("productSlugPrefix").Value
