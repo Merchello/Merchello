@@ -8,7 +8,7 @@ namespace Merchello.Core.Acquired.Configuration
     /// A configuration section that simply exposes the entire raw xml of the section itself which inheritors can use
     /// to do with as they please.
     /// </summary>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal abstract class RawXmlConfigurationElement : ConfigurationElement
     {
         /// <summary>

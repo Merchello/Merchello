@@ -5,7 +5,7 @@ namespace Merchello.Core.Acquired
     /// <summary>
     /// Extension methods for integer types.
     /// </summary>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal static class IntExtensions
 	{
 		/// <summary>

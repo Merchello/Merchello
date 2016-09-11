@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired.Logging
     /// <remarks>
     /// Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8 REFACTOR remove when V8 Released
     /// </remarks>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal sealed class LoggingEventHelper
     {
         // needs to be a seperate class so that location is determined correctly by log4net when required

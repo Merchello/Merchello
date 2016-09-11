@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired
     /// </summary>
     /// <typeparam name="T">The type of the attempted operation result.</typeparam>
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/Attempt%7BT%7D.cs"/>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     [Serializable]
 	public struct Attempt<T>
 	{

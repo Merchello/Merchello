@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents a cache provider that does not cache anything.
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     public class NullCacheProvider : IRuntimeCacheProvider
     {
         /// <inheritdoc/>

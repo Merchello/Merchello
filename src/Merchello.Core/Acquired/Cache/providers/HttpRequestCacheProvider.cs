@@ -11,7 +11,7 @@
     /// <summary>
     /// A cache provider that caches items in the HttpContext.Items
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     internal class HttpRequestCacheProvider : DictionaryCacheProviderBase
     {
 

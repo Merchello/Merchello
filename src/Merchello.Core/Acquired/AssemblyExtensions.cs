@@ -8,7 +8,7 @@ namespace Merchello.Core.Acquired
     /// Extension methods for <see cref="Assembly"/>.
     /// </summary>
     /// <remarks>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/AssemblyExtensions.cs"/>
     internal static class AssemblyExtensions

@@ -15,7 +15,7 @@
     /// <remarks>
     /// Class ported to Merchello core so that we can reduce the number of dependencies on the UmbracoCms.Core package.
     /// </remarks>
-    /// UMBRACO_SRC
+    /// UMBRACO
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/Logging/Logger.cs"/>
     public class Logger : ILogger
     {

@@ -7,7 +7,7 @@
     /// </summary>
     /// <remarks>
     /// All paths has a starting but no trailing /
-    /// Partial UMBRACO_SRC
+    /// Partial UMBRACO
     /// </remarks>
     internal class SystemDirectories
     {

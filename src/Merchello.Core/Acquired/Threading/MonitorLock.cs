@@ -8,7 +8,7 @@
     /// <remarks>
     /// Ie replace <c>lock (o) {...}</c> by <c>using (new MonitorLock(o)) { ... }</c>
     /// </remarks>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     public class MonitorLock : IDisposable
     {
         private readonly object _locker;

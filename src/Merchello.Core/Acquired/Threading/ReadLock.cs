@@ -8,7 +8,7 @@
     /// </summary>
     /// <remarks>
     /// Intended as an infrastructure class.
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
     internal class ReadLock : IDisposable
     {

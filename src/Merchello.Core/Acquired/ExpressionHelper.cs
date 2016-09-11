@@ -11,7 +11,7 @@ namespace Merchello.Core.Acquired
     /// A set of helper methods for dealing with expressions
     /// </summary>
     /// <remarks>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
     internal static class ExpressionHelper
     {

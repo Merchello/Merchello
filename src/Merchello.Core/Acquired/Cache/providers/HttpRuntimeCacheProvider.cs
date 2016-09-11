@@ -15,7 +15,7 @@
     /// <summary>
     /// A CacheProvider that wraps the logic of the HttpRuntime.Cache
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     internal class HttpRuntimeCacheProvider : DictionaryCacheProviderBase, IRuntimeCacheProvider
     {
         // locker object that supports upgradeable read locking

@@ -5,7 +5,7 @@
     /// <summary>
     /// Extension methods for 'If' checking like checking If something is null or not null
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     public static class IfExtensions
     {
 

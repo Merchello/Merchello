@@ -11,7 +11,7 @@
     /// than doing a manual type check in c#
     /// </summary>
     /// <remarks>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v8/src/Umbraco.Core/Plugins/TypeHelper.cs"/>
     internal static class TypeHelper

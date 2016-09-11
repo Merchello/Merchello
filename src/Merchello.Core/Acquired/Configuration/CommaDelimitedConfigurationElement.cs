@@ -10,7 +10,7 @@ namespace Merchello.Core.Acquired.Configuration
     /// <summary>
     /// Defines a configuration section that contains inner text that is comma delimited
     /// </summary>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal class CommaDelimitedConfigurationElement : InnerTextConfigurationElement<CommaDelimitedStringCollection>, IEnumerable<string>
     {
         /// <summary>

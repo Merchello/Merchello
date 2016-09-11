@@ -15,7 +15,7 @@ namespace Merchello.Core.Acquired
 	/// Provides object extension methods.
 	/// </summary>
 	/// <remarks>
-	/// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+	/// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
 	/// </remarks>
 	/// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v8/src/Umbraco.Core/ObjectExtensions.cs"/>
 	public static class ObjectExtensions

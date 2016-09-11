@@ -17,7 +17,7 @@
     /// of the web application.
     /// </summary>
     /// <remarks>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
     public static class TypeFinder
     {

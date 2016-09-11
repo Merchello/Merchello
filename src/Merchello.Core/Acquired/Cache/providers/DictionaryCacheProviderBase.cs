@@ -12,7 +12,7 @@
     /// <summary>
     /// The dictionary cache provider base.
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     internal abstract class DictionaryCacheProviderBase : ICacheProvider
     {
         // prefix cache keys so we know which one are ours

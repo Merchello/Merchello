@@ -14,7 +14,7 @@ namespace Merchello.Core.Acquired.Logging
     /// <remarks>
     /// Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8 REFACTOR remove when V8 Released
     /// </remarks>
-    /// UMBRACO_SRC
+    /// UMBRACO
     public class ParallelForwardingAppender : AsyncForwardingAppenderBase, IDisposable
     {
         #region Private Members

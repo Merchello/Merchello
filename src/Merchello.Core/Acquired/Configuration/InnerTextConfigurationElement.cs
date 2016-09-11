@@ -13,7 +13,7 @@ namespace Merchello.Core.Acquired.Configuration
     /// <typeparam name="T">
     /// Resulting type to convert the inner text into.
     /// </typeparam>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal class InnerTextConfigurationElement<T> : RawXmlConfigurationElement
     {
         /// <summary>

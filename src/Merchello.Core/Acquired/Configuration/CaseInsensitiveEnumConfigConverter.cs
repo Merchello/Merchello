@@ -10,7 +10,7 @@
     /// A case-insensitive configuration converter for enumerations.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal class CaseInsensitiveEnumConfigConverter<T> : ConfigurationConverterBase
         where T : struct
     {

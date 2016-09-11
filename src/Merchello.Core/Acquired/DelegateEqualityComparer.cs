@@ -9,7 +9,7 @@ namespace Merchello.Core.Acquired
     /// <typeparam name="T">
     /// The type to compare
     /// </typeparam>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     public class DelegateEqualityComparer<T> : IEqualityComparer<T>
     {
         private readonly Func<T, T, bool> _equals;

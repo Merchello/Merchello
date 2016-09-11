@@ -4,7 +4,7 @@ namespace Merchello.Core.Acquired.Logging
     /// Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// UMBRACO_SRC
+    /// UMBRACO
     /// REFACTOR-remove when Umbraco V8 is released
     internal interface IQueue<T>
     {

@@ -10,7 +10,7 @@
     /// <summary>
     /// Extensions for strongly typed access
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     public static class CacheProviderExtensions
     {
         public static T GetCacheItem<T>(this IRuntimeCacheProvider provider,

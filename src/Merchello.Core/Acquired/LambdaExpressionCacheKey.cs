@@ -9,7 +9,7 @@ namespace Merchello.Core.Acquired
     /// Represents a simple <see cref="LambdaExpression"/> in a form which is suitable for using as a dictionary key
     /// by exposing the return type, argument types and expression string form in a single concatenated string.
     /// </summary>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     internal struct LambdaExpressionCacheKey
 	{
 		public LambdaExpressionCacheKey(string returnType, string expression, params string[] argTypes)

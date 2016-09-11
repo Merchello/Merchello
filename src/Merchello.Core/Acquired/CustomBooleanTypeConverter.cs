@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired
 	/// Allows for converting string representations of 0 and 1 to boolean
 	/// </summary>
 	/// <remarks>
-	/// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+	/// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
 	/// </remarks>
 	internal class CustomBooleanTypeConverter : BooleanConverter
 	{

@@ -6,7 +6,7 @@ namespace Merchello.Core.Acquired.Logging
     /// Borrowed from https://github.com/cjbhaines/Log4Net.Async - will reference Nuget packages directly in v8 REFACTOR remove when V8 Released
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal sealed class RingBuffer<T> : IQueue<T>
     {
         private readonly object lockObject = new object();

@@ -5,7 +5,7 @@ namespace Merchello.Core.Acquired.Configuration
     /// <summary>
     /// Used for specifying default values for comma delimited config
     /// </summary>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal class OptionalCommaDelimitedConfigurationElement : CommaDelimitedConfigurationElement
     {
         /// <summary>

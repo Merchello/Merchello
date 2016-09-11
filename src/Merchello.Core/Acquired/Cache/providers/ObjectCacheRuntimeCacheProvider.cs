@@ -22,7 +22,7 @@
     /// used to retrieve configuration options. It does not identify the memory cache, i.e.
     /// each instance of this class has its own, independent, memory cache.
     /// </remarks>
-    /// UMBRACO_SRC Direct port of Umbraco internal interface to get rid of hard dependency
+    /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     public class ObjectCacheRuntimeCacheProvider : IRuntimeCacheProvider
     {
         private readonly ReaderWriterLockSlim _locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);

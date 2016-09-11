@@ -6,7 +6,7 @@ namespace Merchello.Core.Acquired.Configuration
     /// <typeparam name="T">
     /// The type of the inner text result
     /// </typeparam>
-    /// UMBRACO_SRC
+    /// UMBRACO
     internal class OptionalInnerTextConfigurationElement<T> : InnerTextConfigurationElement<T>
     {
         /// <summary>
