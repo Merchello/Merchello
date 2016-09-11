@@ -46,6 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acquired\Threading\MonitorLock.cs" />
+    <Compile Include="Acquired\Threading\ReadLock.cs" />
+    <Compile Include="Acquired\Threading\UpgradeableReadLock.cs" />
+    <Compile Include="Acquired\Threading\WriteLock.cs" />
     <Compile Include="ActivatorHelper.cs" />
     <Compile Include="Acquired\AssemblyExtensions.cs" />
     <Compile Include="Acquired\Attempt.cs" />
@@ -56,7 +60,9 @@
     <Compile Include="Cache\CacheHelper.cs" />
     <Compile Include="Cache\ICacheHelper.cs" />
     <Compile Include="Acquired\Cache\Providers\CacheProviderExtensions.cs" />
-    <Compile Include="Acquired\Cache\Providers\DictionaryCacheProviderBase.cs" />
+    <Compile Include="Acquired\Cache\Providers\DictionaryCacheProviderBase.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Acquired\Cache\Providers\HttpRequestCacheProvider.cs" />
     <Compile Include="Acquired\Cache\Providers\HttpRuntimeCacheProvider.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
@@ -310,11 +316,8 @@
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="RateAdjustmentType.cs" />
     <Compile Include="Acquired\Plugins\TypeHelper.cs" />
-    <Compile Include="Acquired\Threading\MonitorLock.cs" />
-    <Compile Include="Acquired\Threading\ReadLock.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="Acquired\Threading\WriteLock.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\LambdaTreeNodeVisitor.cs" />
@@ -324,7 +327,6 @@
     <Compile Include="Trees\TreeNodeFactory{T}.cs" />
     <Compile Include="Trees\TreeNodeVistorBase.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="Acquired\Threading\UpgradeableReadLock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Cache\readme.md" />
