@@ -1,9 +1,10 @@
 {
   "locked": false,
-  "version": 1,
+  "version": 2,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
       "LightInject/4.1.0": {
+        "type": "package",
         "compile": {
           "lib/net46/LightInject.dll": {}
         },
@@ -12,6 +13,7 @@
         }
       },
       "LightInject.Annotation/1.0.0.4": {
+        "type": "package",
         "dependencies": {
           "LightInject": "3.0.1.7"
         },
@@ -22,48 +24,19 @@
           "lib/net45/LightInject.Annotation.dll": {}
         }
       },
-      "MiniProfiler/2.1.0": {
-        "compile": {
-          "lib/net40/MiniProfiler.dll": {}
-        },
-        "runtime": {
-          "lib/net40/MiniProfiler.dll": {}
-        }
-      },
       "Newtonsoft.Json/8.0.3": {
+        "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NPoco/3.4.1": {
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Data",
-          "System.Runtime.Caching",
-          "System.Runtime.Serialization",
-          "System.Xml"
-        ],
-        "compile": {
-          "lib/net45/NPoco.dll": {}
-        },
-        "runtime": {
-          "lib/net45/NPoco.dll": {}
-        }
-      },
-      "semver/1.1.2": {
-        "compile": {
-          "lib/net451/Semver.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Semver.dll": {}
         }
       }
     },
     ".NETFramework,Version=v4.6.1/win": {
       "LightInject/4.1.0": {
+        "type": "package",
         "compile": {
           "lib/net46/LightInject.dll": {}
         },
@@ -72,6 +45,7 @@
         }
       },
       "LightInject.Annotation/1.0.0.4": {
+        "type": "package",
         "dependencies": {
           "LightInject": "3.0.1.7"
         },
@@ -82,48 +56,19 @@
           "lib/net45/LightInject.Annotation.dll": {}
         }
       },
-      "MiniProfiler/2.1.0": {
-        "compile": {
-          "lib/net40/MiniProfiler.dll": {}
-        },
-        "runtime": {
-          "lib/net40/MiniProfiler.dll": {}
-        }
-      },
       "Newtonsoft.Json/8.0.3": {
+        "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NPoco/3.4.1": {
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Data",
-          "System.Runtime.Caching",
-          "System.Runtime.Serialization",
-          "System.Xml"
-        ],
-        "compile": {
-          "lib/net45/NPoco.dll": {}
-        },
-        "runtime": {
-          "lib/net45/NPoco.dll": {}
-        }
-      },
-      "semver/1.1.2": {
-        "compile": {
-          "lib/net451/Semver.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Semver.dll": {}
         }
       }
     },
     ".NETFramework,Version=v4.6.1/win-anycpu": {
       "LightInject/4.1.0": {
+        "type": "package",
         "compile": {
           "lib/net46/LightInject.dll": {}
         },
@@ -132,6 +77,7 @@
         }
       },
       "LightInject.Annotation/1.0.0.4": {
+        "type": "package",
         "dependencies": {
           "LightInject": "3.0.1.7"
         },
@@ -142,43 +88,13 @@
           "lib/net45/LightInject.Annotation.dll": {}
         }
       },
-      "MiniProfiler/2.1.0": {
-        "compile": {
-          "lib/net40/MiniProfiler.dll": {}
-        },
-        "runtime": {
-          "lib/net40/MiniProfiler.dll": {}
-        }
-      },
       "Newtonsoft.Json/8.0.3": {
+        "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NPoco/3.4.1": {
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Data",
-          "System.Runtime.Caching",
-          "System.Runtime.Serialization",
-          "System.Xml"
-        ],
-        "compile": {
-          "lib/net45/NPoco.dll": {}
-        },
-        "runtime": {
-          "lib/net45/NPoco.dll": {}
-        }
-      },
-      "semver/1.1.2": {
-        "compile": {
-          "lib/net451/Semver.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Semver.dll": {}
         }
       }
     }
@@ -236,17 +152,6 @@
         "lib/windowsphone8/LightInject.Annotation.xml"
       ]
     },
-    "MiniProfiler/2.1.0": {
-      "sha512": "uTw6C4g2bGVaeonKRDZnWK68t4KllcptOI/kBWlD2jCl2PJOOM0u6StbYw8pi01niPOsYKiQZYE9GsVKPmUXSg==",
-      "type": "package",
-      "files": [
-        "MiniProfiler.2.1.0.nupkg.sha512",
-        "MiniProfiler.nuspec",
-        "lib/net40/MiniProfiler.dll",
-        "lib/net40/MiniProfiler.pdb",
-        "lib/net40/MiniProfiler.xml"
-      ]
-    },
     "Newtonsoft.Json/8.0.3": {
       "sha512": "KGsYQdS2zLH+H8x2cZaSI7e+YZ4SFIbyy1YJQYl6GYBWjf5o4H1A68nxyq+WTyVSOJQ4GqS/DiPE+UseUizgMg==",
       "type": "package",
@@ -266,31 +171,6 @@
         "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll",
         "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.xml",
         "tools/install.ps1"
-      ]
-    },
-    "NPoco/3.4.1": {
-      "sha512": "Wdzbx0/LGh2iz5LnKREFmBQ9eMq54FSLOufgAjs64HhaQrRlDHcSR55ZbfY1hsiug/BBNm8/yxMgrIhF+1touA==",
-      "type": "package",
-      "files": [
-        "NPoco.3.4.1.nupkg.sha512",
-        "NPoco.nuspec",
-        "lib/net35/NPoco.dll",
-        "lib/net40/NPoco.dll",
-        "lib/net45/NPoco.dll",
-        "lib/netstandard1.3/NPoco.dll"
-      ]
-    },
-    "semver/1.1.2": {
-      "sha512": "6sibgNDegzGvmeAfBmWNnuuRS3JfgF5W4O7Lw6qGC5rqqG2WlQp0P++ouPKHessO5G8C0LylkEb/G2ylb7UF2Q==",
-      "type": "package",
-      "files": [
-        "lib/net20/Semver.dll",
-        "lib/net35/Semver.dll",
-        "lib/net40/Semver.dll",
-        "lib/net45/Semver.dll",
-        "lib/net451/Semver.dll",
-        "semver.1.1.2.nupkg.sha512",
-        "semver.nuspec"
       ]
     }
   },

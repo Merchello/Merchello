@@ -1,9 +1,10 @@
 {
   "locked": false,
-  "version": 1,
+  "version": 2,
   "targets": {
     ".NETFramework,Version=v4.6.1": {
       "AutoMapper/3.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/AutoMapper.Net4.dll": {},
           "lib/net40/AutoMapper.dll": {}
@@ -14,6 +15,7 @@
         }
       },
       "ClientDependency/1.9.1": {
+        "type": "package",
         "compile": {
           "lib/net45/ClientDependency.Core.dll": {}
         },
@@ -22,6 +24,7 @@
         }
       },
       "ClientDependency-Mvc5/1.8.0": {
+        "type": "package",
         "dependencies": {
           "ClientDependency": "1.8.0",
           "Microsoft.AspNet.Mvc": "5.0.0"
@@ -34,6 +37,7 @@
         }
       },
       "Examine/0.1.69": {
+        "type": "package",
         "dependencies": {
           "Lucene.Net": "2.9.4.1"
         },
@@ -45,6 +49,7 @@
         }
       },
       "HtmlAgilityPack/1.4.9": {
+        "type": "package",
         "compile": {
           "lib/Net45/HtmlAgilityPack.dll": {}
         },
@@ -53,6 +58,7 @@
         }
       },
       "ImageProcessor/2.4.4": {
+        "type": "package",
         "compile": {
           "lib/net45/ImageProcessor.dll": {}
         },
@@ -61,6 +67,7 @@
         }
       },
       "ImageProcessor.Web/4.6.4": {
+        "type": "package",
         "dependencies": {
           "ImageProcessor": "2.4.4"
         },
@@ -72,6 +79,7 @@
         }
       },
       "LightInject/4.1.0": {
+        "type": "package",
         "compile": {
           "lib/net46/LightInject.dll": {}
         },
@@ -80,6 +88,7 @@
         }
       },
       "LightInject.Annotation/1.0.0.4": {
+        "type": "package",
         "dependencies": {
           "LightInject": "3.0.1.7"
         },
@@ -91,6 +100,7 @@
         }
       },
       "Lucene.Net/2.9.4.1": {
+        "type": "package",
         "dependencies": {
           "SharpZipLib": "0.86.0"
         },
@@ -102,6 +112,7 @@
         }
       },
       "Markdown/1.14.4": {
+        "type": "package",
         "compile": {
           "lib/net45/MarkdownSharp.dll": {}
         },
@@ -110,6 +121,7 @@
         }
       },
       "Microsoft.AspNet.Identity.Core/2.2.1": {
+        "type": "package",
         "compile": {
           "lib/net45/Microsoft.AspNet.Identity.Core.dll": {}
         },
@@ -118,6 +130,7 @@
         }
       },
       "Microsoft.AspNet.Identity.Owin/2.2.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Identity.Core": "2.2.1",
           "Microsoft.Owin.Security": "2.1.0",
@@ -132,6 +145,7 @@
         }
       },
       "Microsoft.AspNet.Mvc/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Razor": "[3.2.3, 3.3.0)",
           "Microsoft.AspNet.WebPages": "[3.2.3, 3.3.0)"
@@ -144,6 +158,7 @@
         }
       },
       "Microsoft.AspNet.Razor/3.2.3": {
+        "type": "package",
         "compile": {
           "lib/net45/System.Web.Razor.dll": {}
         },
@@ -152,11 +167,13 @@
         }
       },
       "Microsoft.AspNet.WebApi/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.WebHost": "[5.2.3, 5.3.0)"
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "6.0.4"
         },
@@ -171,6 +188,7 @@
         }
       },
       "Microsoft.AspNet.WebApi.Core/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Client": "5.2.3"
         },
@@ -182,6 +200,7 @@
         }
       },
       "Microsoft.AspNet.WebApi.WebHost/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "[5.2.3, 5.3.0)"
         },
@@ -193,6 +212,7 @@
         }
       },
       "Microsoft.AspNet.WebPages/3.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Razor": "[3.2.3, 3.3.0)",
           "Microsoft.Web.Infrastructure": "1.0.0"
@@ -211,6 +231,7 @@
         }
       },
       "Microsoft.Owin/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Owin": "1.0.0"
         },
@@ -222,6 +243,7 @@
         }
       },
       "Microsoft.Owin.Host.SystemWeb/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Owin": "1.0.0"
@@ -234,6 +256,7 @@
         }
       },
       "Microsoft.Owin.Security/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Owin": "1.0.0"
@@ -246,6 +269,7 @@
         }
       },
       "Microsoft.Owin.Security.Cookies/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Microsoft.Owin.Security": "3.0.1",
@@ -259,6 +283,7 @@
         }
       },
       "Microsoft.Owin.Security.OAuth/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Microsoft.Owin.Security": "3.0.1",
@@ -273,6 +298,7 @@
         }
       },
       "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/Microsoft.Web.Infrastructure.dll": {}
         },
@@ -281,6 +307,7 @@
         }
       },
       "MiniProfiler/2.1.0": {
+        "type": "package",
         "compile": {
           "lib/net40/MiniProfiler.dll": {}
         },
@@ -289,6 +316,7 @@
         }
       },
       "MySql.Data/6.9.8": {
+        "type": "package",
         "compile": {
           "lib/net45/MySql.Data.dll": {}
         },
@@ -297,29 +325,16 @@
         }
       },
       "Newtonsoft.Json/8.0.3": {
+        "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NPoco/3.4.1": {
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Data",
-          "System.Runtime.Caching",
-          "System.Runtime.Serialization",
-          "System.Xml"
-        ],
-        "compile": {
-          "lib/net45/NPoco.dll": {}
-        },
-        "runtime": {
-          "lib/net45/NPoco.dll": {}
         }
       },
       "Owin/1.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/Owin.dll": {}
         },
@@ -328,6 +343,7 @@
         }
       },
       "semver/1.1.2": {
+        "type": "package",
         "compile": {
           "lib/net451/Semver.dll": {}
         },
@@ -336,6 +352,7 @@
         }
       },
       "SharpZipLib/0.86.0": {
+        "type": "package",
         "compile": {
           "lib/20/ICSharpCode.SharpZipLib.dll": {}
         },
@@ -344,6 +361,7 @@
         }
       },
       "UmbracoCms.Core/7.5.3": {
+        "type": "package",
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
           "ClientDependency": "[1.9.1, 2.0.0)",
@@ -410,6 +428,7 @@
         }
       },
       "UrlRewritingNet/2.0.7": {
+        "type": "package",
         "compile": {
           "lib/UrlRewritingNet.UrlRewriter.dll": {}
         },
@@ -418,6 +437,7 @@
         }
       },
       "xmlrpcnet/2.5.0": {
+        "type": "package",
         "compile": {
           "lib/net20/CookComputing.XmlRpcV2.dll": {}
         },
@@ -428,6 +448,7 @@
     },
     ".NETFramework,Version=v4.6.1/win": {
       "AutoMapper/3.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/AutoMapper.Net4.dll": {},
           "lib/net40/AutoMapper.dll": {}
@@ -438,6 +459,7 @@
         }
       },
       "ClientDependency/1.9.1": {
+        "type": "package",
         "compile": {
           "lib/net45/ClientDependency.Core.dll": {}
         },
@@ -446,6 +468,7 @@
         }
       },
       "ClientDependency-Mvc5/1.8.0": {
+        "type": "package",
         "dependencies": {
           "ClientDependency": "1.8.0",
           "Microsoft.AspNet.Mvc": "5.0.0"
@@ -458,6 +481,7 @@
         }
       },
       "Examine/0.1.69": {
+        "type": "package",
         "dependencies": {
           "Lucene.Net": "2.9.4.1"
         },
@@ -469,6 +493,7 @@
         }
       },
       "HtmlAgilityPack/1.4.9": {
+        "type": "package",
         "compile": {
           "lib/Net45/HtmlAgilityPack.dll": {}
         },
@@ -477,6 +502,7 @@
         }
       },
       "ImageProcessor/2.4.4": {
+        "type": "package",
         "compile": {
           "lib/net45/ImageProcessor.dll": {}
         },
@@ -485,6 +511,7 @@
         }
       },
       "ImageProcessor.Web/4.6.4": {
+        "type": "package",
         "dependencies": {
           "ImageProcessor": "2.4.4"
         },
@@ -496,6 +523,7 @@
         }
       },
       "LightInject/4.1.0": {
+        "type": "package",
         "compile": {
           "lib/net46/LightInject.dll": {}
         },
@@ -504,6 +532,7 @@
         }
       },
       "LightInject.Annotation/1.0.0.4": {
+        "type": "package",
         "dependencies": {
           "LightInject": "3.0.1.7"
         },
@@ -515,6 +544,7 @@
         }
       },
       "Lucene.Net/2.9.4.1": {
+        "type": "package",
         "dependencies": {
           "SharpZipLib": "0.86.0"
         },
@@ -526,6 +556,7 @@
         }
       },
       "Markdown/1.14.4": {
+        "type": "package",
         "compile": {
           "lib/net45/MarkdownSharp.dll": {}
         },
@@ -534,6 +565,7 @@
         }
       },
       "Microsoft.AspNet.Identity.Core/2.2.1": {
+        "type": "package",
         "compile": {
           "lib/net45/Microsoft.AspNet.Identity.Core.dll": {}
         },
@@ -542,6 +574,7 @@
         }
       },
       "Microsoft.AspNet.Identity.Owin/2.2.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Identity.Core": "2.2.1",
           "Microsoft.Owin.Security": "2.1.0",
@@ -556,6 +589,7 @@
         }
       },
       "Microsoft.AspNet.Mvc/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Razor": "[3.2.3, 3.3.0)",
           "Microsoft.AspNet.WebPages": "[3.2.3, 3.3.0)"
@@ -568,6 +602,7 @@
         }
       },
       "Microsoft.AspNet.Razor/3.2.3": {
+        "type": "package",
         "compile": {
           "lib/net45/System.Web.Razor.dll": {}
         },
@@ -576,11 +611,13 @@
         }
       },
       "Microsoft.AspNet.WebApi/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.WebHost": "[5.2.3, 5.3.0)"
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "6.0.4"
         },
@@ -595,6 +632,7 @@
         }
       },
       "Microsoft.AspNet.WebApi.Core/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Client": "5.2.3"
         },
@@ -606,6 +644,7 @@
         }
       },
       "Microsoft.AspNet.WebApi.WebHost/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "[5.2.3, 5.3.0)"
         },
@@ -617,6 +656,7 @@
         }
       },
       "Microsoft.AspNet.WebPages/3.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Razor": "[3.2.3, 3.3.0)",
           "Microsoft.Web.Infrastructure": "1.0.0"
@@ -635,6 +675,7 @@
         }
       },
       "Microsoft.Owin/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Owin": "1.0.0"
         },
@@ -646,6 +687,7 @@
         }
       },
       "Microsoft.Owin.Host.SystemWeb/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Owin": "1.0.0"
@@ -658,6 +700,7 @@
         }
       },
       "Microsoft.Owin.Security/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Owin": "1.0.0"
@@ -670,6 +713,7 @@
         }
       },
       "Microsoft.Owin.Security.Cookies/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Microsoft.Owin.Security": "3.0.1",
@@ -683,6 +727,7 @@
         }
       },
       "Microsoft.Owin.Security.OAuth/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Microsoft.Owin.Security": "3.0.1",
@@ -697,6 +742,7 @@
         }
       },
       "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/Microsoft.Web.Infrastructure.dll": {}
         },
@@ -705,6 +751,7 @@
         }
       },
       "MiniProfiler/2.1.0": {
+        "type": "package",
         "compile": {
           "lib/net40/MiniProfiler.dll": {}
         },
@@ -713,6 +760,7 @@
         }
       },
       "MySql.Data/6.9.8": {
+        "type": "package",
         "compile": {
           "lib/net45/MySql.Data.dll": {}
         },
@@ -721,29 +769,16 @@
         }
       },
       "Newtonsoft.Json/8.0.3": {
+        "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NPoco/3.4.1": {
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Data",
-          "System.Runtime.Caching",
-          "System.Runtime.Serialization",
-          "System.Xml"
-        ],
-        "compile": {
-          "lib/net45/NPoco.dll": {}
-        },
-        "runtime": {
-          "lib/net45/NPoco.dll": {}
         }
       },
       "Owin/1.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/Owin.dll": {}
         },
@@ -752,6 +787,7 @@
         }
       },
       "semver/1.1.2": {
+        "type": "package",
         "compile": {
           "lib/net451/Semver.dll": {}
         },
@@ -760,6 +796,7 @@
         }
       },
       "SharpZipLib/0.86.0": {
+        "type": "package",
         "compile": {
           "lib/20/ICSharpCode.SharpZipLib.dll": {}
         },
@@ -768,6 +805,7 @@
         }
       },
       "UmbracoCms.Core/7.5.3": {
+        "type": "package",
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
           "ClientDependency": "[1.9.1, 2.0.0)",
@@ -834,6 +872,7 @@
         }
       },
       "UrlRewritingNet/2.0.7": {
+        "type": "package",
         "compile": {
           "lib/UrlRewritingNet.UrlRewriter.dll": {}
         },
@@ -842,6 +881,7 @@
         }
       },
       "xmlrpcnet/2.5.0": {
+        "type": "package",
         "compile": {
           "lib/net20/CookComputing.XmlRpcV2.dll": {}
         },
@@ -852,6 +892,7 @@
     },
     ".NETFramework,Version=v4.6.1/win-anycpu": {
       "AutoMapper/3.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/AutoMapper.Net4.dll": {},
           "lib/net40/AutoMapper.dll": {}
@@ -862,6 +903,7 @@
         }
       },
       "ClientDependency/1.9.1": {
+        "type": "package",
         "compile": {
           "lib/net45/ClientDependency.Core.dll": {}
         },
@@ -870,6 +912,7 @@
         }
       },
       "ClientDependency-Mvc5/1.8.0": {
+        "type": "package",
         "dependencies": {
           "ClientDependency": "1.8.0",
           "Microsoft.AspNet.Mvc": "5.0.0"
@@ -882,6 +925,7 @@
         }
       },
       "Examine/0.1.69": {
+        "type": "package",
         "dependencies": {
           "Lucene.Net": "2.9.4.1"
         },
@@ -893,6 +937,7 @@
         }
       },
       "HtmlAgilityPack/1.4.9": {
+        "type": "package",
         "compile": {
           "lib/Net45/HtmlAgilityPack.dll": {}
         },
@@ -901,6 +946,7 @@
         }
       },
       "ImageProcessor/2.4.4": {
+        "type": "package",
         "compile": {
           "lib/net45/ImageProcessor.dll": {}
         },
@@ -909,6 +955,7 @@
         }
       },
       "ImageProcessor.Web/4.6.4": {
+        "type": "package",
         "dependencies": {
           "ImageProcessor": "2.4.4"
         },
@@ -920,6 +967,7 @@
         }
       },
       "LightInject/4.1.0": {
+        "type": "package",
         "compile": {
           "lib/net46/LightInject.dll": {}
         },
@@ -928,6 +976,7 @@
         }
       },
       "LightInject.Annotation/1.0.0.4": {
+        "type": "package",
         "dependencies": {
           "LightInject": "3.0.1.7"
         },
@@ -939,6 +988,7 @@
         }
       },
       "Lucene.Net/2.9.4.1": {
+        "type": "package",
         "dependencies": {
           "SharpZipLib": "0.86.0"
         },
@@ -950,6 +1000,7 @@
         }
       },
       "Markdown/1.14.4": {
+        "type": "package",
         "compile": {
           "lib/net45/MarkdownSharp.dll": {}
         },
@@ -958,6 +1009,7 @@
         }
       },
       "Microsoft.AspNet.Identity.Core/2.2.1": {
+        "type": "package",
         "compile": {
           "lib/net45/Microsoft.AspNet.Identity.Core.dll": {}
         },
@@ -966,6 +1018,7 @@
         }
       },
       "Microsoft.AspNet.Identity.Owin/2.2.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Identity.Core": "2.2.1",
           "Microsoft.Owin.Security": "2.1.0",
@@ -980,6 +1033,7 @@
         }
       },
       "Microsoft.AspNet.Mvc/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Razor": "[3.2.3, 3.3.0)",
           "Microsoft.AspNet.WebPages": "[3.2.3, 3.3.0)"
@@ -992,6 +1046,7 @@
         }
       },
       "Microsoft.AspNet.Razor/3.2.3": {
+        "type": "package",
         "compile": {
           "lib/net45/System.Web.Razor.dll": {}
         },
@@ -1000,11 +1055,13 @@
         }
       },
       "Microsoft.AspNet.WebApi/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.WebHost": "[5.2.3, 5.3.0)"
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "6.0.4"
         },
@@ -1019,6 +1076,7 @@
         }
       },
       "Microsoft.AspNet.WebApi.Core/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Client": "5.2.3"
         },
@@ -1030,6 +1088,7 @@
         }
       },
       "Microsoft.AspNet.WebApi.WebHost/5.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.WebApi.Core": "[5.2.3, 5.3.0)"
         },
@@ -1041,6 +1100,7 @@
         }
       },
       "Microsoft.AspNet.WebPages/3.2.3": {
+        "type": "package",
         "dependencies": {
           "Microsoft.AspNet.Razor": "[3.2.3, 3.3.0)",
           "Microsoft.Web.Infrastructure": "1.0.0"
@@ -1059,6 +1119,7 @@
         }
       },
       "Microsoft.Owin/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Owin": "1.0.0"
         },
@@ -1070,6 +1131,7 @@
         }
       },
       "Microsoft.Owin.Host.SystemWeb/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Owin": "1.0.0"
@@ -1082,6 +1144,7 @@
         }
       },
       "Microsoft.Owin.Security/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Owin": "1.0.0"
@@ -1094,6 +1157,7 @@
         }
       },
       "Microsoft.Owin.Security.Cookies/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Microsoft.Owin.Security": "3.0.1",
@@ -1107,6 +1171,7 @@
         }
       },
       "Microsoft.Owin.Security.OAuth/3.0.1": {
+        "type": "package",
         "dependencies": {
           "Microsoft.Owin": "3.0.1",
           "Microsoft.Owin.Security": "3.0.1",
@@ -1121,6 +1186,7 @@
         }
       },
       "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/Microsoft.Web.Infrastructure.dll": {}
         },
@@ -1129,6 +1195,7 @@
         }
       },
       "MiniProfiler/2.1.0": {
+        "type": "package",
         "compile": {
           "lib/net40/MiniProfiler.dll": {}
         },
@@ -1137,6 +1204,7 @@
         }
       },
       "MySql.Data/6.9.8": {
+        "type": "package",
         "compile": {
           "lib/net45/MySql.Data.dll": {}
         },
@@ -1145,29 +1213,16 @@
         }
       },
       "Newtonsoft.Json/8.0.3": {
+        "type": "package",
         "compile": {
           "lib/net45/Newtonsoft.Json.dll": {}
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
-        }
-      },
-      "NPoco/3.4.1": {
-        "frameworkAssemblies": [
-          "System.Configuration",
-          "System.Data",
-          "System.Runtime.Caching",
-          "System.Runtime.Serialization",
-          "System.Xml"
-        ],
-        "compile": {
-          "lib/net45/NPoco.dll": {}
-        },
-        "runtime": {
-          "lib/net45/NPoco.dll": {}
         }
       },
       "Owin/1.0.0": {
+        "type": "package",
         "compile": {
           "lib/net40/Owin.dll": {}
         },
@@ -1176,6 +1231,7 @@
         }
       },
       "semver/1.1.2": {
+        "type": "package",
         "compile": {
           "lib/net451/Semver.dll": {}
         },
@@ -1184,6 +1240,7 @@
         }
       },
       "SharpZipLib/0.86.0": {
+        "type": "package",
         "compile": {
           "lib/20/ICSharpCode.SharpZipLib.dll": {}
         },
@@ -1192,6 +1249,7 @@
         }
       },
       "UmbracoCms.Core/7.5.3": {
+        "type": "package",
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
           "ClientDependency": "[1.9.1, 2.0.0)",
@@ -1258,6 +1316,7 @@
         }
       },
       "UrlRewritingNet/2.0.7": {
+        "type": "package",
         "compile": {
           "lib/UrlRewritingNet.UrlRewriter.dll": {}
         },
@@ -1266,6 +1325,7 @@
         }
       },
       "xmlrpcnet/2.5.0": {
+        "type": "package",
         "compile": {
           "lib/net20/CookComputing.XmlRpcV2.dll": {}
         },
@@ -1371,7 +1431,7 @@
       ]
     },
     "ImageProcessor/2.4.4": {
-      "sha512": "k7bz7tveaRWsofPQQgFBZxba00fMg9IFBaj7ior/1bZuQ+j8mhHhlmt+I7v9hPxT00SMGyShvM5O4rYrvSUq2Q==",
+      "sha512": "eflRSDzqquWgbP3sxhUYKycxEGkrjuJjBaprbKiaH+vmg51W4ZRDgR9ocLHMpk5KRk5QeryXRIGpYRtgGvkgwA==",
       "type": "package",
       "files": [
         "ImageProcessor.2.4.4.nupkg.sha512",
@@ -1667,18 +1727,6 @@
         "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll",
         "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.xml",
         "tools/install.ps1"
-      ]
-    },
-    "NPoco/3.4.1": {
-      "sha512": "Wdzbx0/LGh2iz5LnKREFmBQ9eMq54FSLOufgAjs64HhaQrRlDHcSR55ZbfY1hsiug/BBNm8/yxMgrIhF+1touA==",
-      "type": "package",
-      "files": [
-        "NPoco.3.4.1.nupkg.sha512",
-        "NPoco.nuspec",
-        "lib/net35/NPoco.dll",
-        "lib/net40/NPoco.dll",
-        "lib/net45/NPoco.dll",
-        "lib/netstandard1.3/NPoco.dll"
       ]
     },
     "Owin/1.0.0": {
