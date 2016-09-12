@@ -23,6 +23,12 @@
         string Name { get; }
 
         /// <summary>
+        /// Gets the International Organization for Standardization code.
+        /// </summary>
+        [DataMember]
+        int Iso { get; }
+
+        /// <summary>
         /// Gets the label associated with the province list.  (e.g. for US this would be 'States')
         /// </summary>
         string ProvinceLabel { get; }

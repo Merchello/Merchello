@@ -46,11 +46,14 @@
   <ItemGroup>
     <Compile Include="BootManagers\CoreBootManagerTests.cs" />
     <Compile Include="BootManagers\WebBootManagerTests.cs" />
+    <Compile Include="Configurations\MerchelloCountries\CountriesElementTests.cs" />
+    <Compile Include="Configurations\MerchelloCountries\MerchelloCountriesTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\BackOfficeElementTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\MerchelloExtensibilityTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\MerchelloExtensibilitySectionTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\MvcElementTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\RoutingElementTests.cs" />
-    <Compile Include="Configurations\MerchelloExtensibility\TreesElementTests.cs" />
+    <Compile Include="Configurations\MerchelloExtensibility\BackOfficeTreesElementTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\ViewsElementTests.cs" />
     <Compile Include="Configurations\MerchelloExtensibility\VirtualContentElementTests.cs" />
     <Compile Include="Configurations\MerchelloSettings\CheckoutContextElementTests.cs" />
@@ -86,7 +89,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Configurations\MerchelloCountries\" />
     <Folder Include="TestHelpers\Entities\" />
     <Folder Include="TestHelpers\Stubs\" />
   </ItemGroup>

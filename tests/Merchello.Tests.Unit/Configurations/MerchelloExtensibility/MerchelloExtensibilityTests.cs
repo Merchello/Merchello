@@ -34,7 +34,7 @@
 
 
 
-            Assert.IsNotNull(this.ExtensibilitySection, "Settings section was null");
+            Assert.That(this.ExtensibilitySection, Is.Not.Null, "Extensibility section was null");
         }
 
         protected IMerchelloExtensibilitySection ExtensibilitySection { get; private set; }

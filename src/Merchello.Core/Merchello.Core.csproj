@@ -77,6 +77,7 @@
     <Compile Include="Configuration\BackOffice\IDashboardTreeNodeKeyLink.cs" />
     <Compile Include="Configuration\BackOffice\IDashboardTreeNodeLink.cs" />
     <Compile Include="Configuration\BackOffice\IDashboardTreeNode.cs" />
+    <Compile Include="Configuration\Elements\CountriesElement.cs" />
     <Compile Include="Configuration\Elements\KeyValuePairCollectionElement.cs" />
     <Compile Include="Configuration\Elements\ViewsElement.cs" />
     <Compile Include="Configuration\Mvc\CultureRouteBasePath.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Configuration\Sections\ITypeFieldsSection.cs" />
     <Compile Include="Configuration\Sections\IViewsSection.cs" />
     <Compile Include="Configuration\Sections\IVirtualContentSection.cs" />
+    <Compile Include="Configuration\Sections\MerchelloCountriesSection.cs" />
     <Compile Include="Configuration\Sections\MerchelloSection.cs" />
     <Compile Include="Configuration\Sections\MerchelloExtensibilitySection.cs" />
     <Compile Include="Configuration\Sections\MerchelloSettingsSection.cs" />
@@ -197,12 +199,15 @@
     <Compile Include="Marketing\Offer\OfferComponentConfiguration.cs" />
     <Compile Include="Marketing\Offer\OfferComponentDefinition.cs" />
     <Compile Include="Boot\MerchelloBootstrapper.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\CountryBase.cs" />
     <Compile Include="Models\CurrencyFormat.cs" />
     <Compile Include="Models\DetachedContent\DetachedContentCollection.cs" />
     <Compile Include="Models\DetachedContent\DetachedDataValuesCollection.cs" />
     <Compile Include="Models\DetachedContent\IDetachedContent.cs" />
     <Compile Include="Models\DetachedContent\IDetachedContentType.cs" />
     <Compile Include="Models\DetachedContent\IProductVariantDetachedContent.cs" />
+    <Compile Include="Models\EntityBase\Entity.cs" />
     <Compile Include="Models\EntityBase\IEntity.cs" />
     <Compile Include="Models\EntityBase\IHasKeyId.cs" />
     <Compile Include="Models\EntityBase\ITracksDirty.cs" />
@@ -244,6 +249,7 @@
     <Compile Include="Models\ProductAttributeCollection.cs" />
     <Compile Include="Models\ProductOptionCollection.cs" />
     <Compile Include="Models\ProductVariantCollection.cs" />
+    <Compile Include="Models\Province.cs" />
     <Compile Include="Models\ProvinceCollection.cs" />
     <Compile Include="Models\Rdbms\IEntityDto.cs" />
     <Compile Include="Models\Rdbms\IExtendedDataDto.cs" />

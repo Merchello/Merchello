@@ -2,7 +2,6 @@
 {
     using System.Configuration;
     using System.IO;
-    using System.Net.Configuration;
 
     using Merchello.Core.Configuration.Sections;
     using Merchello.Tests.Unit.TestHelpers;
@@ -34,8 +33,7 @@
             }
 
 
-
-            Assert.IsNotNull(SettingsSection, "Settings section was null");
+            Assert.That(SettingsSection, Is.Not.Null, "Settings section was null");
         }
 
         protected IMerchelloSettingsSection SettingsSection { get; private set; }

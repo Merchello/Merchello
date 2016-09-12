@@ -88,7 +88,7 @@
             return new DashboardTreeNodeKeyLink
                        {
                            Key = key.Result,
-                           Title = xp.Attribute("title").Value,
+                           Title = xp.Attribute("ref").Value,
                            Icon = xp.Attribute("icon").Value,
                            Visible = !visible.Success || visible.Result
                        };
