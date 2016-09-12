@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Core", "Merchello.Core\Merchello.Core.csproj", "{D921B972-B572-487F-AF14-613713E1B4E7}"
 EndProject
@@ -50,8 +50,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6
 		..\build\build-grunt.cmd = ..\build\build-grunt.cmd
 		..\build\build.cmd = ..\build\build.cmd
 		..\build\Merchello.proj = ..\build\Merchello.proj
+		..\build\MerchelloVersion.txt = ..\build\MerchelloVersion.txt
 		..\build\package.proj = ..\build\package.proj
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack.Ui", "Merchello.FastTrack.Ui\Merchello.FastTrack.Ui.csproj", "{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +89,10 @@ Global
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

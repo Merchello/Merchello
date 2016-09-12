@@ -1,0 +1,12 @@
+﻿{
+  "dependencies": {
+    "UmbracoCms": "7.5.3"
+  },
+  "frameworks": {
+    "net461": {}
+  },
+  "runtimes": {
+    "win": {},
+    "win-anycpu": {}
+  }
+}

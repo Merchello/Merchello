@@ -1,6 +1,7 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>dll</Value>
       <Value>dto</Value>
       <Value>Lucene</Value>
       <Value>merch</Value>
@@ -8,9 +9,9 @@
       <Value>Merchello's</Value>
       <Value>PetaPoco</Value>
       <Value>Queryable</Value>
+      <Value>sku</Value>
       <Value>Smtp</Value>
       <Value>Umbraco</Value>
-      <Value>sku</Value>
       <Value>Umbraco's</Value>
       <Value>YouTrack</Value>
     </CollectionProperty>

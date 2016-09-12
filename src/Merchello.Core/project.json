@@ -5,7 +5,7 @@
     "MiniProfiler": "2.1.0",
     "Newtonsoft.Json": "8.0.*",
     "NPoco": "3.4.1",
-    "SqlServerCE": "4.0.0.1"
+    "semver": "1.*"
   },
   "frameworks": {
     "net461": {}

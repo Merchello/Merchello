@@ -343,16 +343,6 @@
           "lib/20/ICSharpCode.SharpZipLib.dll": {}
         }
       },
-      "SqlServerCE/4.0.0.1": {
-        "compile": {
-          "lib/System.Data.SqlServerCe.Entity.dll": {},
-          "lib/System.Data.SqlServerCe.dll": {}
-        },
-        "runtime": {
-          "lib/System.Data.SqlServerCe.Entity.dll": {},
-          "lib/System.Data.SqlServerCe.dll": {}
-        }
-      },
       "UmbracoCms.Core/7.5.3": {
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
@@ -777,16 +767,6 @@
           "lib/20/ICSharpCode.SharpZipLib.dll": {}
         }
       },
-      "SqlServerCE/4.0.0.1": {
-        "compile": {
-          "lib/System.Data.SqlServerCe.Entity.dll": {},
-          "lib/System.Data.SqlServerCe.dll": {}
-        },
-        "runtime": {
-          "lib/System.Data.SqlServerCe.Entity.dll": {},
-          "lib/System.Data.SqlServerCe.dll": {}
-        }
-      },
       "UmbracoCms.Core/7.5.3": {
         "dependencies": {
           "AutoMapper": "[3.0.0, 3.1.0)",
@@ -1209,16 +1189,6 @@
         },
         "runtime": {
           "lib/20/ICSharpCode.SharpZipLib.dll": {}
-        }
-      },
-      "SqlServerCE/4.0.0.1": {
-        "compile": {
-          "lib/System.Data.SqlServerCe.Entity.dll": {},
-          "lib/System.Data.SqlServerCe.dll": {}
-        },
-        "runtime": {
-          "lib/System.Data.SqlServerCe.Entity.dll": {},
-          "lib/System.Data.SqlServerCe.dll": {}
         }
       },
       "UmbracoCms.Core/7.5.3": {
@@ -1743,34 +1713,6 @@
         "lib/20/ICSharpCode.SharpZipLib.dll",
         "lib/SL3/SharpZipLib.Silverlight3.dll",
         "lib/SL4/SharpZipLib.Silverlight4.dll"
-      ]
-    },
-    "SqlServerCE/4.0.0.1": {
-      "sha512": "GkChWv9XCx2ETQ3GLvMeHPwECXxLSldMOXxQj+ojJHj3tJ9E3pbPyEq15mFDWxs1dDKXOq98KkJGGlYeTLkSFg==",
-      "type": "package",
-      "files": [
-        "SqlServerCE.4.0.0.1.nupkg.sha512",
-        "SqlServerCE.nuspec",
-        "amd64/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest",
-        "amd64/Microsoft.VC90.CRT/README_ENU.txt",
-        "amd64/Microsoft.VC90.CRT/msvcr90.dll",
-        "amd64/sqlceca40.dll",
-        "amd64/sqlcecompact40.dll",
-        "amd64/sqlceer40EN.dll",
-        "amd64/sqlceme40.dll",
-        "amd64/sqlceqp40.dll",
-        "amd64/sqlcese40.dll",
-        "lib/System.Data.SqlServerCe.Entity.dll",
-        "lib/System.Data.SqlServerCe.dll",
-        "x86/Microsoft.VC90.CRT/Microsoft.VC90.CRT.manifest",
-        "x86/Microsoft.VC90.CRT/README_ENU.txt",
-        "x86/Microsoft.VC90.CRT/msvcr90.dll",
-        "x86/sqlceca40.dll",
-        "x86/sqlcecompact40.dll",
-        "x86/sqlceer40EN.dll",
-        "x86/sqlceme40.dll",
-        "x86/sqlceqp40.dll",
-        "x86/sqlcese40.dll"
       ]
     },
     "UmbracoCms.Core/7.5.3": {
