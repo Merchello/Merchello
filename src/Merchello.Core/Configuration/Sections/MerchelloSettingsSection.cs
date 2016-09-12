@@ -13,7 +13,7 @@
     /// <remarks>
     /// Responsible for the merchelloSettings.config
     /// </remarks>
-    internal class MerchelloSettingsSection : MerchelloConfigurationSection, IMerchelloSettingsSection
+    internal class MerchelloSettingsSection : MerchelloSection, IMerchelloSettingsSection
     {
         // advanced use attributes on the merchelloSettings.config root
 
@@ -74,7 +74,7 @@
         {
             get
             {
-                throw new NotImplementedException();
+                return this.Filters;
             }
         }
 
@@ -83,16 +83,7 @@
         {
             get
             {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <inheritdoc/>
-        IMvcSection IMerchelloSettingsSection.Mvc
-        {
-            get
-            {
-                return this.Mvc;
+                return Migrations;
             }
         }
 
@@ -101,7 +92,7 @@
         {
             get
             {
-                throw new NotImplementedException();
+                return this.CurrencyFormats.GetCurrencyFormats();
             }
         }
 
@@ -145,13 +136,33 @@
             }
         }
 
-        /// <inheritdoc />
-        [ConfigurationProperty("mvc", IsRequired = false)]
-        internal MvcElement Mvc
+        /// <inheritdoc/>
+        [ConfigurationProperty("filters", IsRequired = true)]
+        internal FiltersElement Filters
         {
             get
             {
-                return (MvcElement)this["mvc"];
+                return (FiltersElement)this["filters"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("migrations", IsRequired = false)]
+        internal MigrationsElement Migrations
+        {
+            get
+            {
+                return (MigrationsElement)this["migrations"];
+            }
+        }
+
+        /// <inheritdoc/>
+        [ConfigurationProperty("currencyFormats", IsRequired = true)]
+        internal CurrencyFormatsElement CurrencyFormats
+        {
+            get
+            {
+                return (CurrencyFormatsElement)this["currencyFormats"];
             }
         }
     }

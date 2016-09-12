@@ -8,6 +8,7 @@
         /// <summary>
         /// Gets the Umbraco <see cref="ILogger"/>.
         /// </summary>
+        /// REFACTOR-change this to Logger
         ILogger UmbracoLogger { get; }
 
         /// <summary>

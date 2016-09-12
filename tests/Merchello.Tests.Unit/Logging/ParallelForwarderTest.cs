@@ -12,6 +12,7 @@ namespace Merchello.Tests.Unit.Logging
     using log4net.Filter;
     using log4net.Repository;
 
+    using Merchello.Core.Acquired.Logging;
     using Merchello.Core.Logging;
 
     using Moq;

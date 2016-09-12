@@ -11,7 +11,7 @@
     /// <remarks>
     /// Responsible for the merchelloSettings.config
     /// </remarks>
-    public interface IMerchelloSettingsSection : IMerchelloConfigurationSection
+    public interface IMerchelloSettingsSection : IMerchelloSection
     {
         /// <summary>
         /// Gets the default connection string name for Merchello database connectivity.
@@ -44,9 +44,6 @@
 
         /// <inheritdoc/>
         IMigrationsSection Migrations { get; }
-
-        /// <inheritdoc/>
-        IMvcSection Mvc { get; }
 
         /// <summary>
         /// Gets the custom currency formats.

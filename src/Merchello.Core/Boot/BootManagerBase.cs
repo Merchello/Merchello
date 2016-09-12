@@ -55,8 +55,7 @@
         /// The <see cref="IBootManager"/>.
         /// </returns>
         public abstract IBootManager Complete(Action<IMerchelloContext> afterComplete);
-
-
+ 
         /// <summary>
         /// Developers can override this method to modify objects on startup
         /// </summary>
@@ -86,7 +85,7 @@
         }
 
         /// <summary>
-        /// Called to raise the MerchelloInit event
+        /// Called to raise the Merchello Initialize event
         /// </summary>        
         protected void OnMerchelloInit()
         {

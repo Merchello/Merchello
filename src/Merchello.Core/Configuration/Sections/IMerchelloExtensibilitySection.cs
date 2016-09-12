@@ -1,8 +1,7 @@
 ﻿namespace Merchello.Core.Configuration.Sections
 {
+    using System;
     using System.Collections.Generic;
-
-    using Merchello.Core.Models.TypeFields;
 
     /// <summary>
     /// Represents a Merchello settings configuration section.
@@ -10,25 +9,29 @@
     /// <remarks>
     /// Responsible for the merchelloExtensibility.config
     /// </remarks>
-    public interface IMerchelloExtensibilitySection : IMerchelloConfigurationSection
+    public interface IMerchelloExtensibilitySection : IMerchelloSection
     {
+
+        /// <inheritdoc/>
+        IMvcSection Mvc { get; }
+
         /// <inheritdoc/>
         IBackOfficeSection BackOffice { get; }
 
         /// <summary>
         /// Gets the pluggable objects.
         /// </summary>
-        IDictionary<string, ITypeReference> PluggableObjects { get; }
+        IDictionary<string, Type> Pluggable { get; }
 
         /// <summary>
         /// Gets the strategies.
         /// </summary>
-        IDictionary<string, ITypeReference> Strategies { get; }
+        IDictionary<string, Type> Strategies { get; }
 
         /// <inheritdoc/>
-        ITaskChainSection TaskChains { get; }
+        IDictionary<string, IEnumerable<Type>> TaskChains { get; }
 
         /// <inheritdoc/>
-        ITypeFieldsSection CustomTypeFields { get; }
+        ITypeFieldsSection TypeFields { get; }
     }
 }

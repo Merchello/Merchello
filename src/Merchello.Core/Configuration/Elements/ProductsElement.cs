@@ -2,10 +2,11 @@
 {
     using System.Configuration;
 
+    using Merchello.Core.Acquired.Configuration;
     using Merchello.Core.Configuration.Sections;
 
     /// <inheritdoc/>
-    internal class ProductsElement : ConfigurationSection, IProductsSection
+    internal class ProductsElement : ConfigurationElement, IProductsSection
     {
         /// <summary>
         /// Gets the SKU separator.

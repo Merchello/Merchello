@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Umbraco.Adapters
 {
     using Merchello.Core;
+    using Merchello.Core.Acquired;
 
     /// <summary>
     /// Extension method to map <see cref="Attempt{T}"/> to Umbraco's <see>

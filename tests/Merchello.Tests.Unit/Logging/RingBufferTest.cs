@@ -6,6 +6,7 @@ namespace Merchello.Tests.Unit.Logging
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Merchello.Core.Acquired.Logging;
     using Merchello.Core.Logging;
 
     using NUnit.Framework;

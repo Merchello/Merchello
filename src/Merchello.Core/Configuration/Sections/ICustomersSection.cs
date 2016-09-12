@@ -5,7 +5,7 @@
     /// <summary>
     /// Represents a configuration section for configurations related to Merchello "customers". 
     /// </summary>
-    public interface ICustomersSection : IMerchelloConfigurationSection
+    public interface ICustomersSection : IMerchelloSection
     {
         /// <summary>
         /// Gets the number of days to persist Anonymous customers.

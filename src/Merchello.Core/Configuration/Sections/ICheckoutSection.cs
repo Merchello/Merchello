@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a configuration section for configurations related to Merchello "checkout". .
     /// </summary>
-    public interface ICheckoutSection : IMerchelloConfigurationSection
+    public interface ICheckoutSection : IMerchelloSection
     {
         /// <inheritdoc/>
         ICheckoutContextSection CheckoutContext { get; }

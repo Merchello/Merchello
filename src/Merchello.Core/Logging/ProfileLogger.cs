@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Merchello.Core.Acquired;
+
     /// <summary>
     /// Used to create DisposableTimer instances for debugging or tracing durations
     /// </summary>

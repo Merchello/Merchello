@@ -5,7 +5,7 @@
     using Merchello.Core.Configuration.Sections;
 
     /// <inheritdoc/>
-    internal class CheckoutElement : ConfigurationSection, ICheckoutSection
+    internal class CheckoutElement : ConfigurationElement, ICheckoutSection
     {
         /// <inheritdoc/>
         ICheckoutContextSection ICheckoutSection.CheckoutContext

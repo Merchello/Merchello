@@ -60,17 +60,17 @@
         {
             if (_settings == null)
             {
-                _settings = ConfigurationManager.GetSection("merchello/merchelloSettings") as IMerchelloSettingsSection;
+                _settings = ConfigurationManager.GetSection("merchello/settings") as IMerchelloSettingsSection;
             }
 
             if (_extensibility == null)
             {
-                _extensibility = ConfigurationManager.GetSection("merchello/merchelloExtensibility") as IMerchelloExtensibilitySection;
+                _extensibility = ConfigurationManager.GetSection("merchello/extensibility") as IMerchelloExtensibilitySection;
             }
 
             if (_countries == null)
             {
-                _countries = ConfigurationManager.GetSection("merchello/merchelloCountries") as IMerchelloCountriesSection;
+                _countries = ConfigurationManager.GetSection("merchello/countries") as IMerchelloCountriesSection;
             }
         } 
 

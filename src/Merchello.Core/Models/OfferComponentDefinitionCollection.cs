@@ -4,8 +4,8 @@
     using System.Collections.Specialized;
     using System.Threading;
 
+    using Merchello.Core.Acquired.Threading;
     using Merchello.Core.Marketing.Offer;
-    using Merchello.Core.Threading;
 
     /// <summary>
     /// A collection of <see cref="OfferComponentConfiguration"/>s.

@@ -2,6 +2,7 @@
 {
     using System.Configuration;
 
+    using Merchello.Core.Acquired.Configuration;
     using Merchello.Core.Configuration.Sections;
 
     /// <inheritdoc/>
