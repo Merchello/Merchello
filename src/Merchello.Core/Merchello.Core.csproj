@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acquired\ObjectResolution\Resolution.cs" />
+    <Compile Include="Acquired\ObjectResolution\ResolverBase.cs" />
+    <Compile Include="Acquired\ObjectResolution\ResolverCollection.cs" />
     <Compile Include="Acquired\Threading\MonitorLock.cs" />
     <Compile Include="Acquired\Threading\ReadLock.cs" />
     <Compile Include="Acquired\Threading\UpgradeableReadLock.cs" />
