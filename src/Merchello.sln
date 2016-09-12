@@ -52,6 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6
 		..\build\Merchello.proj = ..\build\Merchello.proj
 		..\build\MerchelloVersion.txt = ..\build\MerchelloVersion.txt
 		..\build\package.proj = ..\build\package.proj
+		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack.Ui", "Merchello.FastTrack.Ui\Merchello.FastTrack.Ui.csproj", "{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}"
