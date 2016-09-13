@@ -6,7 +6,7 @@
     public interface IExtendedDataDto
     {
         /// <summary>
-        /// Gets or sets the extended data.
+        /// Gets or sets the serialized extended data collection contents.
         /// </summary>
         string ExtendedData { get; set; } 
     }

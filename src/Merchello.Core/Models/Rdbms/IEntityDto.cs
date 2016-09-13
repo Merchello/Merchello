@@ -5,9 +5,9 @@
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
-    /// Defines a DTO object that represents a <see cref="IEntity"/>.
+    /// Represents a POCO object that represents an <see cref="IEntity"/>.
     /// </summary>
-    public interface IEntityDto : IKeyDto
+    internal interface IEntityDto : IKeyDto
     {
         /// <summary>
         /// Gets or sets the update date.

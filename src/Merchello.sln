@@ -55,8 +55,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6
 		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.FastTrack.Ui", "Merchello.FastTrack.Ui\Merchello.FastTrack.Ui.csproj", "{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,10 +88,6 @@ Global
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CCCFE442-273D-4694-8E9D-D2CE11B49A8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

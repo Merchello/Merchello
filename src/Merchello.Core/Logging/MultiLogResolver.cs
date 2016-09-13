@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Logging
 {
+    using Merchello.Core.Acquired.ObjectResolution;
 
     /// <summary>
     /// The multi logger resolver.

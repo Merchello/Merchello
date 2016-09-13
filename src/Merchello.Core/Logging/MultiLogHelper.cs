@@ -10,11 +10,11 @@
         /// <summary>
         /// Gets the Umbraco <see cref="ILogger"/>.
         /// </summary>
-        public static ILogger UmbracoLogger
+        public static ILogger Logger
         {
             get
             {
-                if (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false) Logger.CreateWithDefaultLog4NetConfiguration();
+                if (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false) Logging.Logger.CreateWithDefaultLog4NetConfiguration();
                 return MultiLogResolver.Current.Logger.UmbracoLogger;
             }
         }
@@ -41,7 +41,7 @@
         /// The exception.
         /// </param>
         /// <typeparam name="T">
-        /// The calling type
+        /// The type of the calling instance.
         /// </typeparam>
         public static void Error<T>(string message, Exception exception)
         {
@@ -52,7 +52,7 @@
         /// Logs and error.
         /// </summary>
         /// <param name="callingType">
-        /// The calling Type.
+        /// The type of the calling instance.
         /// </param>
         /// <param name="message">
         /// The message.
@@ -76,7 +76,7 @@
         /// The format items.
         /// </param>
         /// <typeparam name="T">
-        /// The calling type
+        /// The type of the calling instance.
         /// </typeparam>
         public static void Warn<T>(string message, params Func<object>[] formatItems)
         {
@@ -87,7 +87,7 @@
         /// Logs a warning
         /// </summary>
         /// <param name="callingType">
-        /// The calling Type.
+        /// The type of the calling instance.
         /// </param>
         /// <param name="message">
         /// The message.
@@ -114,7 +114,7 @@
         /// The format items.
         /// </param>
         /// <typeparam name="T">
-        /// The calling type
+        /// The type of the calling instance.
         /// </typeparam>
         public static void WarnWithException<T>(string message, Exception e, params Func<object>[] formatItems)
         {
@@ -125,7 +125,7 @@
         /// Logs a warning with an exception.
         /// </summary>
         /// <param name="callingType">
-        /// The calling Type.
+        /// The type of the calling instance.
         /// </param>
         /// <param name="message">
         /// The message.
@@ -149,6 +149,7 @@
         /// The message.
         /// </param>
         /// <typeparam name="T">
+        /// The type of the calling instance.
         /// </typeparam>
         public static void Info<T>(string message)
         {

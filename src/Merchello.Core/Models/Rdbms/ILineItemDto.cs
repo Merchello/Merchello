@@ -3,8 +3,11 @@
     using System;
 
     /// <summary>
-    /// Defines a DTO object used to represent line items
+    /// Represents a DTO object used to represent line items.
     /// </summary>
+    /// <remarks>
+    /// ItemCache, Invoice, Orders, Shipments
+    /// </remarks>
     internal interface ILineItemDto : IExtendedDataDto, IEntityDto
     {
         /// <summary>

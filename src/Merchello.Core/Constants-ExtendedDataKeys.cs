@@ -7,7 +7,7 @@
     /// Merchello ExtendedData constants
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:ElementsMustBeOrderedByAccess", Justification = "Reviewed. Suppression is OK here.")]
-    public partial class Constants
+    public static partial class Constants
     {
         /// <summary>
         /// Gets the collection of Merchello "Reserved" ExtendedDataCollection keys

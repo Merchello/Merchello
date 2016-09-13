@@ -142,6 +142,16 @@
             return input.EnsureNotStartsWith(value).EnsureNotEndsWith(value);
         }
 
+        public static bool IsLowerCase(this char ch)
+        {
+            return ch.ToString(CultureInfo.InvariantCulture) == ch.ToString(CultureInfo.InvariantCulture).ToLowerInvariant();
+        }
+
+        public static bool IsUpperCase(this char ch)
+        {
+            return ch.ToString(CultureInfo.InvariantCulture) == ch.ToString(CultureInfo.InvariantCulture).ToUpperInvariant();
+        }
+
         /// <summary>Is null or white space.</summary>
         /// <param name="str">The str.</param>
         /// <returns>The is null or white space.</returns>

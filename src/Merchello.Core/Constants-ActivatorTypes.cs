@@ -3,7 +3,7 @@
     /// <summary>
     /// Merchello constants.
     /// </summary>
-    public partial class Constants
+    public static partial class Constants
     {
         /// <summary>
         /// Default strategies
