@@ -375,6 +375,7 @@
     <Compile Include="CurrencyHelper.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderAttribute.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
+    <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
@@ -553,7 +554,6 @@
     <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
-    <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\Invoice2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\OfferRedeemedDto.cs" />
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
