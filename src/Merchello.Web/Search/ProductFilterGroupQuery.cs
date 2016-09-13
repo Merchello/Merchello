@@ -18,6 +18,11 @@
     internal class ProductFilterGroupQuery : ProxyCollectionQueryBase, IProductFilterGroupQuery
     {
         /// <summary>
+        /// The <see cref="IProductService"/>
+        /// </summary>
+        private readonly IProductService _productService;
+
+        /// <summary>
         /// Collection provider keys that designate a collection is a filter.
         /// </summary>
         private Guid[] _filterProviderKeys;
@@ -37,27 +42,33 @@
         /// The merchello context.
         /// </param>
         public ProductFilterGroupQuery(IMerchelloContext merchelloContext)
-            : this(merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
-        {
-        }
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
-        /// </summary>
-        /// <param name="entityCollectionService">
-        /// The  <see cref="IEntityCollectionService"/>.
-        /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
-        public ProductFilterGroupQuery(IEntityCollectionService entityCollectionService, ICacheProvider cache)
-            : this(entityCollectionService, cache, EntityCollectionProviderResolver.Current)
+            : this(merchelloContext.Services.ProductService, merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
         /// </summary>
+        /// <param name="productService">
+        /// The <see cref="IProductService"/>
+        /// </param>
+        /// <param name="entityCollectionService">
+        /// The  <see cref="IEntityCollectionService"/>.
+        /// </param>
+        /// <param name="cache">
+        /// The cache.
+        /// </param>
+        public ProductFilterGroupQuery(IProductService productService, IEntityCollectionService entityCollectionService, ICacheProvider cache)
+            : this(productService, entityCollectionService, cache, EntityCollectionProviderResolver.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
+        /// </summary>
+        /// <param name="productService">
+        /// The <see cref="IProductService"/>
+        /// </param>
         /// <param name="entityCollectionService">
         /// The <see cref="IEntityCollectionService"/>.
         /// </param>
@@ -67,9 +78,10 @@
         /// <param name="resolver">
         /// The resolver.
         /// </param>
-        public ProductFilterGroupQuery(IEntityCollectionService entityCollectionService, ICacheProvider cache, EntityCollectionProviderResolver resolver)
+        public ProductFilterGroupQuery(IProductService productService, IEntityCollectionService entityCollectionService, ICacheProvider cache, EntityCollectionProviderResolver resolver)
             : base(entityCollectionService, cache)
         {
+            Ensure.ParameterNotNull(productService, "productService");
             this.Initialize(resolver);
         }
 

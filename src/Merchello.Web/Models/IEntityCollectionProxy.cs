@@ -1,8 +1,5 @@
 ﻿namespace Merchello.Web.Models
 {
-    using System;
-    using System.Runtime.Serialization;
-
     using Merchello.Core.Models;
 
     /// <summary>

@@ -377,7 +377,7 @@
     <Compile Include="Models\IProviderMeta.cs" />
     <Compile Include="Models\Ui\Rendering\ICustomerSalesHistory.cs" />
     <Compile Include="Models\IEntityProxy.cs" />
-    <Compile Include="Models\IFilterCollection.cs" />
+    <Compile Include="Models\IProductFilterGroup.cs" />
     <Compile Include="Models\IProductCollection.cs" />
     <Compile Include="Models\IProductFilter.cs" />
     <Compile Include="Models\IEntityCollectionProxy.cs" />
@@ -559,10 +559,11 @@
     <Compile Include="PropertyConverters\ProductCollectionValueConverter.cs" />
     <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
     <Compile Include="PropertyEditors\ProductCollectionPicker.cs" />
+    <Compile Include="Search\IProductCollectionTreeQuery.cs" />
+    <Compile Include="Search\IProductFilterTreeQuery.cs" />
     <Compile Include="Search\ProxyQueryBase.cs" />
     <Compile Include="Search\ProxyQueryManagerExtensions.cs" />
     <Compile Include="Search\IEntityProxyQuery.cs" />
-    <Compile Include="Search\IProductCollectionTreeQuery.cs" />
     <Compile Include="Search\ProductCollectionTreeQuery.cs" />
     <Compile Include="QueryBuilderExtensions.cs" />
     <Compile Include="Search\CmsContentQueryBuilderBase.cs" />

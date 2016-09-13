@@ -1,6 +1,7 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
+    using System.Collections.Generic;
 
     using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Persistence.Querying;
