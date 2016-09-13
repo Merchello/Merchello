@@ -9,7 +9,7 @@
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
-    /// The detached content collection.
+    /// Represents a collection of detached content.
     /// </summary>
     /// <typeparam name="T">
     /// The type of detached content

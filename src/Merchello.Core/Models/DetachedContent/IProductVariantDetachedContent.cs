@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     /// <summary>
-    /// Defines a ProductVariantDetachedContent.
+    /// Represents product variant detached content.
     /// </summary>
     public interface IProductVariantDetachedContent : IDetachedContent
     {

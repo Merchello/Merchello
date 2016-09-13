@@ -5,7 +5,7 @@
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
-    /// Defines DetachedContent.
+    /// Represents detached content.
     /// </summary>
     public interface IDetachedContent : IEntity 
     {

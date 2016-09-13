@@ -6,7 +6,7 @@
     using Merchello.Core.Models.Interfaces;
 
     /// <summary>
-    /// Defines detached content.
+    /// Represents a detached content type.
     /// </summary>
     public interface IDetachedContentType : IHasEntityTypeField, IEntity
     {        
