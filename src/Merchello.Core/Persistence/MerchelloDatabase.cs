@@ -21,7 +21,9 @@
     /// </remarks>
     public class MerchelloDatabase : Database
     {
-        // Merchello's default isolation level is RepeatableRead
+        /// <summary>
+        /// The default isolation level.
+        /// </summary>
         private const IsolationLevel DefaultIsolationLevel = IsolationLevel.RepeatableRead;
 
         /// <summary>
@@ -34,12 +36,31 @@
         /// </summary>
         private readonly Guid _instanceId = Guid.NewGuid();
 
-
+        /// <summary>
+        /// A value indicating if command executions should be counted.
+        /// </summary>
         private bool _enableCount;
 
-        // used by DefaultDatabaseFactory
-        // creates one instance per request
-        // also used by DatabaseContext for creating DBs and upgrading
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloDatabase"/> class.
+        /// </summary>
+        /// <param name="connectionString">
+        /// The connection string.
+        /// </param>
+        /// <param name="databaseType">
+        /// The database type.
+        /// </param>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <remarks>
+        /// used by DefaultDatabaseFactory
+        /// creates one instance per request
+        /// also used by DatabaseContext for creating DBs and upgrading
+        /// </remarks>
         public MerchelloDatabase(string connectionString, DatabaseType databaseType, DbProviderFactory provider, ILogger logger)
             : base(connectionString, databaseType, provider, DefaultIsolationLevel)
         {
@@ -47,9 +68,25 @@
             this.EnableSqlTrace = false;
         }
 
-        // INTERNAL FOR UNIT TESTS
-        internal MerchelloDatabase(DbConnection connection, DatabaseType databaseType, DbProviderFactory provider,
-            ILogger logger)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MerchelloDatabase"/> class.
+        /// </summary>
+        /// <param name="connection">
+        /// The connection.
+        /// </param>
+        /// <param name="databaseType">
+        /// The database type.
+        /// </param>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        /// <remarks>
+        /// INTERNAL FOR UNIT TESTS
+        /// </remarks>
+        internal MerchelloDatabase(DbConnection connection, DatabaseType databaseType, DbProviderFactory provider, ILogger logger)
             : base(connection, databaseType, provider, DefaultIsolationLevel)
         {
             this._logger = logger;
