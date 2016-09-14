@@ -1,23 +1,27 @@
 namespace Merchello.Core.Persistence
 {
     using System;
+    using System.Configuration;
+    using System.Data.Common;
+    using System.Threading;
     using System.Web;
 
     using Merchello.Core.Acquired;
+    using Merchello.Core.Acquired.Persistence;
+    using Merchello.Core.Acquired.Persistence.Mappers;
+    using Merchello.Core.Acquired.Threading;
     using Merchello.Core.Configuration;
     using Merchello.Core.Logging;
 
     using NPoco;
+    using NPoco.FluentMappings;
 
     /// <summary>
-	/// The default implementation for the IDatabaseFactory
-	/// </summary>
-	/// <remarks>
-	/// If we are running in an http context
-	/// it will create one per context, otherwise it will be a global singleton object which is NOT thread safe
-	/// since we need (at least) a new instance of the database object per thread.
-	/// </remarks>
-	internal class DefaultDatabaseFactory : DisposableObject, IDatabaseFactory
+    /// The default implementation for the IDatabaseFactory
+    /// </summary>
+    /// REFACTOR-todo watch Umbraco for changes here.  V8 version has some tricky threading assurances
+    /// to assert single new instance of each database object per thread and unique model mappers are present.  Also  retry policies. 
+    internal class DefaultDatabaseFactory : DisposableObject, IDatabaseFactory
 	{
         /// <summary>
         /// The thread locker.
@@ -33,11 +37,13 @@ namespace Merchello.Core.Persistence
         /// </remarks>
         [ThreadStatic]
         private static volatile MerchelloDatabase _nonHttpInstance;
-
-        /// <summary>
-        ///  Name of the connection string in web.config.
-        /// </summary>
-        private readonly string _connectionStringName;
+        private IPocoDataFactory _pocoDataFactory;
+        private DatabaseFactory _databaseFactory;
+        private string _connectionString;
+        private string _providerName;
+        private DbProviderFactory _dbProviderFactory;
+        private DatabaseType _databaseType;
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         /// <summary>
         /// The <see cref="ILogger"/>.
@@ -74,44 +80,20 @@ namespace Merchello.Core.Persistence
 		{
 	        if (logger == null) throw new ArgumentNullException(nameof(logger));
 	        Ensure.ParameterNotNullOrEmpty(connectionStringName, "connectionStringName");
-			_connectionStringName = connectionStringName;
+
+            var settings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (settings == null)
+                return; // not configured
+
+           
 	        _logger = logger;
+
+            Configure(settings.ConnectionString, settings.ProviderName);
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultDatabaseFactory"/> class.
-        /// </summary>
-        /// <param name="connectionString">
-        /// Name of the connection string in web.config
-        /// </param>
-        /// <param name="providerName">
-        /// The provider name.
-        /// </param>
-        /// <param name="logger">
-        /// The <see cref="ILogger"/>.
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// Throws an exception if either the logger or connection string are null.
-        /// </exception>
-        public DefaultDatabaseFactory(string connectionString, string providerName, ILogger logger)
-		{
-	        if (logger == null) throw new ArgumentNullException(nameof(logger));
-	        Ensure.ParameterNotNullOrEmpty(connectionString, nameof(connectionString));
-            Ensure.ParameterNotNullOrEmpty(providerName, nameof(providerName));
-			ConnectionString = connectionString;
-			ProviderName = providerName;
-            _logger = logger;
-		}
+        public bool Configured { get; private set; }
 
-        /// <summary>
-        /// Gets the connection string.
-        /// </summary>
-        public string ConnectionString { get; private set; }
-
-        /// <summary>
-        /// Gets the provider name.
-        /// </summary>
-        public string ProviderName { get; private set; }
+        public bool CanConnect => Configured && DbConnectionExtensions.IsConnectionAvailable(_connectionString, _providerName);
 
         /// <summary>
         /// Creates an instance of the <see cref="MerchelloDatabase"/>.
@@ -128,13 +110,13 @@ namespace Merchello.Core.Persistence
 				{
 					lock (Locker)
 					{
-						//double check
+						// double check
                         if (_nonHttpInstance == null)
 						{
                             //_nonHttpInstance = string.IsNullOrEmpty(ConnectionString) == false && string.IsNullOrEmpty(ProviderName) == false
-                            //                      ? new UmbracoDatabase(ConnectionString, ProviderName, _logger)
-                            //                      : new UmbracoDatabase(_connectionStringName, _logger);
-						}
+                            //                      ? new MerchelloDatabase(ConnectionString, ProviderName, _logger)
+                            //                      : new MerchelloDatabase(_connectionStringName, _logger);
+                        }
 					}
 				}
                 return _nonHttpInstance;
@@ -143,13 +125,56 @@ namespace Merchello.Core.Persistence
 			// we have an http context, so only create one per request
 			if (HttpContext.Current.Items.Contains(typeof(DefaultDatabaseFactory)) == false)
 			{
-			    //HttpContext.Current.Items.Add(typeof (DefaultDatabaseFactory),
-			    //                              string.IsNullOrEmpty(ConnectionString) == false && string.IsNullOrEmpty(ProviderName) == false
-       //                                           ? new Database(ConnectionString, ProviderName, _logger)
-       //                                           : new UmbracoDatabase(_connectionStringName, _logger));
-			}
+                //HttpContext.Current.Items.Add(
+                //    typeof(DefaultDatabaseFactory),
+                //    string.IsNullOrEmpty(ConnectionString) == false && string.IsNullOrEmpty(ProviderName) == false
+                //        ? new Database(ConnectionString, ProviderName, _logger)
+                //        : new UmbracoDatabase(_connectionStringName, _logger));
+            }
 			return (MerchelloDatabase)HttpContext.Current.Items[typeof(DefaultDatabaseFactory)];
 		}
+
+        public void Configure(string connectionString, string providerName)
+        {
+            using (new WriteLock(_lock))
+            {
+                _logger.Debug<DefaultDatabaseFactory>("Configuring!");
+
+                if (Configured) throw new InvalidOperationException("Already configured.");
+
+                if (connectionString.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(connectionString));
+                if (providerName.IsNullOrWhiteSpace()) throw new ArgumentNullException(nameof(providerName));
+
+                _connectionString = connectionString;
+                _providerName = providerName;
+
+
+                _dbProviderFactory = DbProviderFactories.GetFactory(_providerName);
+                if (_dbProviderFactory == null)
+                    throw new Exception($"Can't find a provider factory for provider name \"{_providerName}\".");
+                _databaseType = DatabaseType.Resolve(_dbProviderFactory.GetType().Name, _providerName);
+                if (_databaseType == null)
+                    throw new Exception($"Can't find an NPoco database type for provider name \"{_providerName}\".");
+
+
+                // ensure we have only 1 set of mappers, and 1 PocoDataFactory, for all database
+                // so that everything NPoco is properly cached for the lifetime of the application
+                var mappers = new MapperCollection { new PocoMapper() };
+                var factory = new FluentPocoDataFactory((type, iPocoDataFactory) => new PocoDataBuilder(type, mappers).Init());
+                _pocoDataFactory = factory;
+                var config = new FluentConfig(xmappers => factory);
+
+                // create the database factory
+                _databaseFactory = DatabaseFactory.Config(x => x
+                    .UsingDatabase(CreateDatabaseInstance) // creating UmbracoDatabase instances
+                    .WithFluentConfig(config)); // with proper configuration
+
+                if (_databaseFactory == null) throw new NullReferenceException("The call to DatabaseFactory.Config yielded a null DatabaseFactory instance");
+
+                _logger.Debug<DefaultDatabaseFactory>("Created _nonHttpInstance");
+                Configured = true;
+            }
+        }
 
         /// <summary>
         /// Disposes the database.
@@ -168,5 +193,12 @@ namespace Merchello.Core.Persistence
 				}
 			}
 		}
-	}
+
+        // method used by NPoco's DatabaseFactory to actually create the database instance
+        private MerchelloDatabase CreateDatabaseInstance()
+        {
+            return new MerchelloDatabase(_connectionString, _databaseType, _dbProviderFactory, _logger);
+        }
+
+    }
 }

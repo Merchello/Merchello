@@ -21,7 +21,7 @@ namespace Merchello.Core.Acquired.Plugins
     /// <remarks>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     /// </remarks>
-    public static class TypeFinder
+    internal static class TypeFinder
     {
         private static volatile HashSet<Assembly> _localFilteredAssemblyCache = null;
         private static readonly object LocalFilteredAssemblyCacheLocker = new object();

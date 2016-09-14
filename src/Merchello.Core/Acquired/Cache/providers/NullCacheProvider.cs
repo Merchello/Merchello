@@ -12,7 +12,7 @@ namespace Merchello.Core.Acquired.Cache.Providers
     /// Represents a cache provider that does not cache anything.
     /// </summary>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
-    public class NullCacheProvider : IRuntimeCacheProvider
+    internal class NullCacheProvider : IRuntimeCacheProvider
     {
         /// <inheritdoc/>
         public virtual void ClearAllCache()

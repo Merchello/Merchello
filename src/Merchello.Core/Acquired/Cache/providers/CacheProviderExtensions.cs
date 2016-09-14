@@ -12,7 +12,7 @@ namespace Merchello.Core.Acquired.Cache.Providers
     /// Extensions for strongly typed access
     /// </summary>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
-    public static class CacheProviderExtensions
+    internal static class CacheProviderExtensions
     {
         public static T GetCacheItem<T>(this IRuntimeCacheProvider provider,
             string cacheKey,

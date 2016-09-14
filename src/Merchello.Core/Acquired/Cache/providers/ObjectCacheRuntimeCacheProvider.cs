@@ -24,7 +24,7 @@ namespace Merchello.Core.Acquired.Cache.Providers
     /// each instance of this class has its own, independent, memory cache.
     /// </remarks>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
-    public class ObjectCacheRuntimeCacheProvider : IRuntimeCacheProvider
+    internal class ObjectCacheRuntimeCacheProvider : IRuntimeCacheProvider
     {
         private readonly ReaderWriterLockSlim _locker = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         internal ObjectCache MemoryCache;

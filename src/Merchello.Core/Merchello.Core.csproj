@@ -75,6 +75,8 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ModificationType.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
+    <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
+    <Compile Include="Acquired\Persistence\Mappers\PocoMapper.cs" />
     <Compile Include="Acquired\Threading\MonitorLock.cs" />
     <Compile Include="Acquired\Threading\ReadLock.cs" />
     <Compile Include="Acquired\Threading\UpgradeableReadLock.cs" />
@@ -421,7 +423,6 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
-    <Compile Include="Trees\LambdaTreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
     <Compile Include="Trees\TreeNode.cs" />
     <Compile Include="Trees\TreeNodeExtensions.cs" />

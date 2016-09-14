@@ -13,7 +13,7 @@ namespace Merchello.Core.Acquired.Cache.Providers
     /// Represents a cache provider that statically caches item in a concurrent dictionary.
     /// </summary>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
-    public class StaticCacheProvider : ICacheProvider
+    internal class StaticCacheProvider : ICacheProvider
     {
         internal readonly ConcurrentDictionary<string, object> StaticCache = new ConcurrentDictionary<string, object>();
 

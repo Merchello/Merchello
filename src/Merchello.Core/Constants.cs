@@ -37,5 +37,21 @@
                 get { return "ELSE"; }
             }
         }
+
+        /// <summary>
+        /// Database provider names supported by Merchello.
+        /// </summary>
+        public static class DbProviderNames
+        {
+            /// <summary>
+            /// MS Sql Server.
+            /// </summary>
+            public const string SqlServer = "System.Data.SqlClient";
+
+            /// <summary>
+            /// MS SqlCe.
+            /// </summary>
+            public const string SqlCe = "System.Data.SqlServerCe.4.0";
+        }
     }
 }

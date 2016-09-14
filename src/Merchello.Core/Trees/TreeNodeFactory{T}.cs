@@ -7,7 +7,7 @@
     using Merchello.Core.Models.EntityBase;
 
     /// <summary>
-    /// Defines a factory capable of building a Tree of <see cref="TreeNode{T}"/>.
+    /// Represents a factory capable of building a Tree of <see cref="TreeNode{T}"/>.
     /// </summary>
     /// <typeparam name="TNode">
     /// Type type of the tree node value
