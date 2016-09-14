@@ -407,6 +407,9 @@
     <Compile Include="Models\TypeFields\TypeField.cs" />
     <Compile Include="Models\TypeFields\TypeFieldMapper.cs" />
     <Compile Include="Models\TypeFields\TypeFieldMapperBase.cs" />
+    <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
+    <Compile Include="Persistence\IDatabaseFactory.cs" />
+    <Compile Include="Persistence\MerchelloDatabase.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Acquired\Plugins\TypeFinder.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />

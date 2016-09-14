@@ -91,7 +91,7 @@ ECHO.
 
 
 SET MSBUILD="C:\Program Files (x86)\MSBuild\14.0\Bin\MsBuild.exe"
-SET PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+::SET PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 
 :: FastTrack
 :: ReplaceIISExpressPortNumber.exe ..\src\Merchello.FastTrack.UI\Merchello.FastTrack.UI.csproj %RELEASE%

@@ -1,6 +1,7 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>Db</Value>
       <Value>dll</Value>
       <Value>dto</Value>
       <Value>Lucene</Value>
@@ -8,6 +9,7 @@
       <Value>Merchello</Value>
       <Value>Merchello's</Value>
       <Value>PetaPoco</Value>
+      <Value>poco</Value>
       <Value>Queryable</Value>
       <Value>sku</Value>
       <Value>Smtp</Value>
