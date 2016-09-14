@@ -49,9 +49,9 @@
     <Compile Include="Adapters\LoggerAdapter.cs" />
     <Compile Include="Adapters\UmbracoAttemptExtensions.cs" />
     <Compile Include="Boot\Boot-SettingsAndAdapters.cs">
-      <DependentUpon>Boot.cs</DependentUpon>
+      <DependentUpon>UmbracoBoot.cs</DependentUpon>
     </Compile>
-    <Compile Include="Boot\Boot.cs" />
+    <Compile Include="Boot\UmbracoBoot.cs" />
     <Compile Include="Boot\UmbracoBootManager.cs" />
     <Compile Include="Boot\BootSettings.cs" />
     <Compile Include="Boot\IBootSettings.cs" />

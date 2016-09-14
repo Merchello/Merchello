@@ -9,7 +9,7 @@ namespace Merchello.Core.Acquired.Persistence.Mappers
     /// <summary>
     /// Extends NPoco default mapper and ensures that nullable dates are not saved to the database.
     /// </summary>
-    public class PocoMapper : DefaultMapper
+    internal class PocoMapper : DefaultMapper
     {
         public override Func<object, object> GetToDbConverter(Type destType, MemberInfo sourceMemberInfo)
         {

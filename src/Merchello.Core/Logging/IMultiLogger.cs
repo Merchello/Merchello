@@ -8,8 +8,7 @@
         /// <summary>
         /// Gets the Umbraco <see cref="ILogger"/>.
         /// </summary>
-        /// REFACTOR-change this to Logger
-        ILogger UmbracoLogger { get; }
+        ILogger Logger { get; }
 
         /// <summary>
         /// Gets the remote logger.

@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core.Boot
 {
+    using Merchello.Core.Acquired.Persistence.SqlSyntax;
     using Merchello.Core.Cache;
     using Merchello.Core.Logging;
 
@@ -28,10 +29,7 @@
         public ILogger Logger { get; set; }
 
         /// <inheritdoc/>
-        public ICacheHelper CacheHelper { get; set; }
-
-        /// <inheritdoc/>
-        public object SqlSyntaxProvider { get; set; }
+        public ISqlSyntaxProvider SqlSyntaxProvider { get; set; }
 
         /// <inheritdoc/>
         public bool IsForTesting { get; set; }

@@ -10,7 +10,7 @@ namespace Merchello.Core.Acquired
 
     using Merchello.Core.Acquired.Plugins;
 
-    public static class TypeExtensions
+    internal static class TypeExtensions
 	{
         /// <summary>
         /// Tries to return a value based on a property name for an object but ignores case sensitivity

@@ -40,7 +40,7 @@
         /// <summary>
         /// The timer.
         /// </summary>
-        private DisposableTimer _timer;
+        private IDisposableTimer _timer;
 
         /// <summary>
         /// The is complete.

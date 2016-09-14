@@ -8,7 +8,7 @@ namespace Merchello.Core.Acquired
     /// <summary>
     /// Extensions for enumerable sources.
     /// </summary>
-    public static class EnumerableExtensions
+    internal static class EnumerableExtensions
     {
         public static IEnumerable<IEnumerable<T>> InGroupsOf<T>(this IEnumerable<T> source, int groupSize)
         {

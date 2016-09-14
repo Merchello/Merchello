@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Umbraco.Boot
 {
-    using Merchello.Core.Logging;
     using Merchello.Web.Boot;
 
     /// <summary>

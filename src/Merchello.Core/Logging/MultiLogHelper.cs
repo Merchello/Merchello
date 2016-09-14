@@ -15,7 +15,7 @@
             get
             {
                 if (MultiLogResolver.HasCurrent == false || MultiLogResolver.Current.HasValue == false) Logging.Logger.CreateWithDefaultLog4NetConfiguration();
-                return MultiLogResolver.Current.Logger.UmbracoLogger;
+                return MultiLogResolver.Current.Logger.Logger;
             }
         }
 

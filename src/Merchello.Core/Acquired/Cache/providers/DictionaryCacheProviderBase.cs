@@ -17,7 +17,8 @@ namespace Merchello.Core.Acquired.Cache.Providers
     internal abstract class DictionaryCacheProviderBase : ICacheProvider
     {
         // prefix cache keys so we know which one are ours
-        protected const string CacheItemPrefix = "umbrtmche";
+        // FYI altered to assert seperate from Umbraco's
+        protected const string CacheItemPrefix = "merchrtmche";
 
         // an object that represent a value that has not been created yet
         protected internal static readonly object ValueNotCreated = new object();

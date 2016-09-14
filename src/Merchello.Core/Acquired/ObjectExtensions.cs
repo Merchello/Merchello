@@ -19,7 +19,7 @@ namespace Merchello.Core.Acquired
 	/// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
 	/// </remarks>
 	/// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v8/src/Umbraco.Core/ObjectExtensions.cs"/>
-	public static class ObjectExtensions
+	internal static class ObjectExtensions
 	{
 		//private static readonly ConcurrentDictionary<Type, Func<object>> ObjectFactoryCache = new ConcurrentDictionary<Type, Func<object>>();
 

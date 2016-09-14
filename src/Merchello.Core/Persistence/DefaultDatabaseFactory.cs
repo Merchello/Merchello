@@ -19,24 +19,15 @@ namespace Merchello.Core.Persistence
     /// <summary>
     /// The default implementation for the IDatabaseFactory
     /// </summary>
-    /// REFACTOR-todo watch Umbraco for changes here.  V8 version has some tricky threading assurances
-    /// to assert single new instance of each database object per thread and unique model mappers are present.  Also  retry policies. 
+    /// <remarks>
+    /// This is a simplified version of Umbraco's DefautDatabaseFactory
+    /// </remarks>
+    /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v8/src/Umbraco.Core/Persistence/DefaultDatabaseFactory.cs"/> 
     internal class DefaultDatabaseFactory : DisposableObject, IDatabaseFactory
 	{
-        /// <summary>
-        /// The thread locker.
-        /// </summary>
-        private static readonly object Locker = new object();
+        private const string HttpItemKey = "Merchello.Core.Persistence.DefaultDatabaseFactory";
 
-        /// <summary>
-        /// Holds the non http instance.
-        /// </summary>
-        /// <remarks>
-        /// very important to have ThreadStatic:
-        /// see: http://issues.umbraco.org/issue/U4-2172
-        /// </remarks>
-        [ThreadStatic]
-        private static volatile MerchelloDatabase _nonHttpInstance;
+        private readonly IScopeContextAdapter _scopeContextAdapter;
         private IPocoDataFactory _pocoDataFactory;
         private DatabaseFactory _databaseFactory;
         private string _connectionString;
@@ -56,11 +47,15 @@ namespace Merchello.Core.Persistence
         /// <param name="logger">
         /// The logger.
         /// </param>
+        /// <param name="scopeContextAdapter">
+        /// An adapter for managing the scope that database objects are instantiated or retrieved - either in the HttpContext or 
+        /// assures that there is a unique db object per thread.
+        /// </param>
         /// <remarks>
         /// Uses MerchelloConfig.For.Settings.DefaultConnectionStringName which defaults to 'umbracoDbDSN'
         /// </remarks>
-        public DefaultDatabaseFactory(ILogger logger) 
-            : this(MerchelloConfig.For.Settings.DefaultConnectionStringName, logger)
+        public DefaultDatabaseFactory(ILogger logger, IScopeContextAdapter scopeContextAdapter) 
+            : this(MerchelloConfig.For.Settings.DefaultConnectionStringName, logger, scopeContextAdapter)
 		{
 		}
 
@@ -73,19 +68,25 @@ namespace Merchello.Core.Persistence
         /// <param name="logger">
         /// The <see cref="ILogger"/>.
         /// </param>
+        /// <param name="scopeContextAdapter">
+        /// An adapter for managing the scope that database objects are instantiated or retrieved - either in the HttpContext or 
+        /// assures that there is a unique db object per thread.
+        /// </param>
         /// <exception cref="ArgumentNullException">
         /// Throws an exception where the connection string name is null.
         /// </exception>
-        public DefaultDatabaseFactory(string connectionStringName, ILogger logger)
+        public DefaultDatabaseFactory(string connectionStringName, ILogger logger, IScopeContextAdapter scopeContextAdapter)
 		{
 	        if (logger == null) throw new ArgumentNullException(nameof(logger));
-	        Ensure.ParameterNotNullOrEmpty(connectionStringName, "connectionStringName");
+	        Ensure.ParameterNotNullOrEmpty(connectionStringName, nameof(connectionStringName));
+            Ensure.ParameterNotNull(scopeContextAdapter, nameof(scopeContextAdapter));
+
+            _scopeContextAdapter = scopeContextAdapter;
 
             var settings = ConfigurationManager.ConnectionStrings[connectionStringName];
             if (settings == null)
                 return; // not configured
 
-           
 	        _logger = logger;
 
             Configure(settings.ConnectionString, settings.ProviderName);
@@ -96,43 +97,20 @@ namespace Merchello.Core.Persistence
         public bool CanConnect => Configured && DbConnectionExtensions.IsConnectionAvailable(_connectionString, _providerName);
 
         /// <summary>
-        /// Creates an instance of the <see cref="MerchelloDatabase"/>.
+        /// Gets (creates or retrieves) the "ambient" database connection.
         /// </summary>
-        /// <returns>
-        /// The <see cref="MerchelloDatabase"/>.
-        /// </returns>
-        public MerchelloDatabase CreateDatabase()
-		{
-			// no http context, create the singleton global object
-			if (HttpContext.Current == null)
-			{
-                if (_nonHttpInstance == null)
-				{
-					lock (Locker)
-					{
-						// double check
-                        if (_nonHttpInstance == null)
-						{
-                            //_nonHttpInstance = string.IsNullOrEmpty(ConnectionString) == false && string.IsNullOrEmpty(ProviderName) == false
-                            //                      ? new MerchelloDatabase(ConnectionString, ProviderName, _logger)
-                            //                      : new MerchelloDatabase(_connectionStringName, _logger);
-                        }
-					}
-				}
-                return _nonHttpInstance;
-			}
+        /// <returns>The "ambient" database connection.</returns>
+        public MerchelloDatabase GetDatabase()
+        {
+            EnsureConfigured();
 
-			// we have an http context, so only create one per request
-			if (HttpContext.Current.Items.Contains(typeof(DefaultDatabaseFactory)) == false)
-			{
-                //HttpContext.Current.Items.Add(
-                //    typeof(DefaultDatabaseFactory),
-                //    string.IsNullOrEmpty(ConnectionString) == false && string.IsNullOrEmpty(ProviderName) == false
-                //        ? new Database(ConnectionString, ProviderName, _logger)
-                //        : new UmbracoDatabase(_connectionStringName, _logger));
-            }
-			return (MerchelloDatabase)HttpContext.Current.Items[typeof(DefaultDatabaseFactory)];
-		}
+            // check if it's in scope
+            var db = _scopeContextAdapter.Get(HttpItemKey) as MerchelloDatabase;
+            if (db != null) return db;
+            db = (MerchelloDatabase)_databaseFactory.GetDatabase();
+            _scopeContextAdapter.Set(HttpItemKey, db);
+            return db;
+        }
 
         public void Configure(string connectionString, string providerName)
         {
@@ -171,28 +149,34 @@ namespace Merchello.Core.Persistence
 
                 if (_databaseFactory == null) throw new NullReferenceException("The call to DatabaseFactory.Config yielded a null DatabaseFactory instance");
 
-                _logger.Debug<DefaultDatabaseFactory>("Created _nonHttpInstance");
+                _logger.Debug<DefaultDatabaseFactory>("Created non Http Instance");
                 Configured = true;
             }
         }
 
-        /// <summary>
-        /// Disposes the database.
-        /// </summary>
+
+        private void EnsureConfigured()
+        {
+            using (new ReadLock(_lock))
+            {
+                if (Configured == false)
+                    throw new InvalidOperationException("Not configured.");
+            }
+        }
+
         protected override void DisposeResources()
-		{
-			if (HttpContext.Current == null)
-			{
-                _nonHttpInstance.Dispose();
-			}
-			else
-			{
-				if (HttpContext.Current.Items.Contains(typeof(DefaultDatabaseFactory)))
-				{
-					((Database)HttpContext.Current.Items[typeof(DefaultDatabaseFactory)]).Dispose();
-				}
-			}
-		}
+        {
+            // this is weird, because the non http instance is thread-static, so we would need
+            // to dispose the factory in each thread where a database has been used - else
+            // it only disposes the current thread's database instance.
+            //
+            // besides, we don't really want to dispose the factory, which is a singleton...
+
+            var db = _scopeContextAdapter.Get(HttpItemKey) as MerchelloDatabase;
+            _scopeContextAdapter.Clear(HttpItemKey);
+            db?.Dispose();
+            Configured = false;
+        }
 
         // method used by NPoco's DatabaseFactory to actually create the database instance
         private MerchelloDatabase CreateDatabaseInstance()

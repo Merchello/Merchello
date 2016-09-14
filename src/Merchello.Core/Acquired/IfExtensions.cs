@@ -7,7 +7,7 @@ namespace Merchello.Core.Acquired
     /// Extension methods for 'If' checking like checking If something is null or not null
     /// </summary>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
-    public static class IfExtensions
+    internal static class IfExtensions
     {
 
         /// <summary>The if not null.</summary>

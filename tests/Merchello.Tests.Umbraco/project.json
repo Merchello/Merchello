@@ -1,0 +1,13 @@
+﻿{
+  "dependencies": {
+    "Moq": "4.5.21",
+    "NUnit": "3.4.1"
+  },
+  "frameworks": {
+    "net461": {}
+  },
+  "runtimes": {
+    "win": {},
+    "win-anycpu": {}
+  }
+}

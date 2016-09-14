@@ -11,16 +11,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F10CD53F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Providers", "Merchello.Providers\Merchello.Providers.csproj", "{94E933DD-A2D6-4267-9AB4-E4B32E1B68B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Umbraco", "Merchello.Umbraco\Merchello.Umbraco.csproj", "{332EECFD-F193-4DCF-9B0B-11484584C600}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Integration.Umbraco", "..\tests\Merchello.Tests.Integration.Umbraco\Merchello.Tests.Integration.Umbraco.csproj", "{3C6D3787-BD15-4593-99A4-B33A4132F217}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Unit", "..\tests\Merchello.Tests.Unit\Merchello.Tests.Unit.csproj", "{DD560559-1756-4030-9823-36AFB363575A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependency", "Dependency", "{46BDA924-5FFB-4D3F-9817-C9C6196EA82A}"
 	ProjectSection(SolutionItems) = preProject
 		Library\log4net.dll = Library\log4net.dll
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6-26C7-43A9-AB5C-A024F1598FBF}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\appveyor.yml = ..\build\appveyor.yml
+		..\build\build-appveyor.cmd = ..\build\build-appveyor.cmd
+		..\build\build-grunt.cmd = ..\build\build-grunt.cmd
+		..\build\build.cmd = ..\build\build.cmd
+		..\build\Merchello.proj = ..\build\Merchello.proj
+		..\build\MerchelloVersion.txt = ..\build\MerchelloVersion.txt
+		..\build\package.proj = ..\build\package.proj
+		SolutionInfo.cs = SolutionInfo.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Umbraco", "..\tests\Merchello.Tests.Umbraco\Merchello.Tests.Umbraco.csproj", "{6D5423A4-AC83-4355-8E2A-BD50C487E129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Solo", "..\tests\Merchello.Tests.Solo\Merchello.Tests.Solo.csproj", "{72E4864B-41F3-431D-934C-B67F0E8E9CF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Solo", "Merchello.Solo\Merchello.Solo.csproj", "{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Umbraco", "Merchello.Umbraco\Merchello.Umbraco.csproj", "{332EECFD-F193-4DCF-9B0B-11484584C600}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Umbraco.Ui.Client", "Merchello.Umbraco.Ui.Client\", "{71FF72A1-8293-437C-9DE2-91981C061123}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -43,18 +59,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Umbraco.Ui.Client
 		SlnRelativePath = "Merchello.Umbraco.Ui.Client\"
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{316576E6-26C7-43A9-AB5C-A024F1598FBF}"
-	ProjectSection(SolutionItems) = preProject
-		..\build\appveyor.yml = ..\build\appveyor.yml
-		..\build\build-appveyor.cmd = ..\build\build-appveyor.cmd
-		..\build\build-grunt.cmd = ..\build\build-grunt.cmd
-		..\build\build.cmd = ..\build\build.cmd
-		..\build\Merchello.proj = ..\build\Merchello.proj
-		..\build\MerchelloVersion.txt = ..\build\MerchelloVersion.txt
-		..\build\package.proj = ..\build\package.proj
-		SolutionInfo.cs = SolutionInfo.cs
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,18 +77,26 @@ Global
 		{94E933DD-A2D6-4267-9AB4-E4B32E1B68B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94E933DD-A2D6-4267-9AB4-E4B32E1B68B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94E933DD-A2D6-4267-9AB4-E4B32E1B68B1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{332EECFD-F193-4DCF-9B0B-11484584C600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{332EECFD-F193-4DCF-9B0B-11484584C600}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{332EECFD-F193-4DCF-9B0B-11484584C600}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{332EECFD-F193-4DCF-9B0B-11484584C600}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C6D3787-BD15-4593-99A4-B33A4132F217}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C6D3787-BD15-4593-99A4-B33A4132F217}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C6D3787-BD15-4593-99A4-B33A4132F217}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C6D3787-BD15-4593-99A4-B33A4132F217}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DD560559-1756-4030-9823-36AFB363575A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD560559-1756-4030-9823-36AFB363575A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD560559-1756-4030-9823-36AFB363575A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD560559-1756-4030-9823-36AFB363575A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D5423A4-AC83-4355-8E2A-BD50C487E129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D5423A4-AC83-4355-8E2A-BD50C487E129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D5423A4-AC83-4355-8E2A-BD50C487E129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D5423A4-AC83-4355-8E2A-BD50C487E129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{332EECFD-F193-4DCF-9B0B-11484584C600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{332EECFD-F193-4DCF-9B0B-11484584C600}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{332EECFD-F193-4DCF-9B0B-11484584C600}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{332EECFD-F193-4DCF-9B0B-11484584C600}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.Build.0 = Debug|Any CPU
@@ -93,7 +105,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3C6D3787-BD15-4593-99A4-B33A4132F217} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
 		{DD560559-1756-4030-9823-36AFB363575A} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
+		{6D5423A4-AC83-4355-8E2A-BD50C487E129} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
+		{72E4864B-41F3-431D-934C-B67F0E8E9CF0} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
 	EndGlobalSection
 EndGlobal
