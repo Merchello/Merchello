@@ -34,6 +34,6 @@
         IEnumerable<IProductFilterGroup> GetFilterGroupsNotContainingProduct(Guid productKey);
 
 
-        Task<IEnumerable<IPrimedProductFilterGroup>> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys);
+        IEnumerable<IPrimedProductFilterGroup> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys);
     }
 }

@@ -167,9 +167,9 @@
                             productKey)));
         }
 
-        public async Task<IEnumerable<IPrimedProductFilterGroup>> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys)
+        public IEnumerable<IPrimedProductFilterGroup> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys)
         {
-            var tree = await _primedTree.GetTree(collectionKeys);
+            var tree = _primedTree.GetTree(collectionKeys);
 
             return tree.Children.Select(x => x.Value.Item);
         }
@@ -227,8 +227,8 @@
         /// </param>
         private void Initialize(IMerchelloContext merchelloContext, IEntityCollectionProviderResolver resolver)
         {
-            this._primedTree = new PrimedProductFilterGroupTree(merchelloContext, this.All);
             this._filterProviderKeys = resolver.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
+            this._primedTree = new PrimedProductFilterGroupTree(merchelloContext, this.All);
         }
     }
 }

@@ -2,16 +2,21 @@ namespace Merchello.Web.Search.Provisional
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Merchello.Core;
+    using Merchello.Core.Acquired;
     using Merchello.Core.Logging;
     using Merchello.Core.Services;
     using Merchello.Core.Trees;
     using Merchello.Web.Models;
 
+    using Newtonsoft.Json;
+
     using Umbraco.Core.Cache;
+    using Umbraco.Core.IO;
 
     /// <inheritdoc/>
     internal class PrimedProductFilterGroupTree : IPrimedProductFilterGroupTree
@@ -36,6 +41,8 @@ namespace Merchello.Web.Search.Provisional
         /// </summary>
         private readonly IRuntimeCacheProvider _cache;
 
+        private TreeNode<ProductFilterGroupNode> _root;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrimedProductFilterGroupTree"/> class.
         /// </summary>
@@ -45,30 +52,32 @@ namespace Merchello.Web.Search.Provisional
         /// <param name="getAll">
         /// A function to get all of the product filter groups.
         /// </param>
-        public PrimedProductFilterGroupTree(IMerchelloContext merchelloContext, Func<IEnumerable<IProductFilterGroup>> getAll)
+        internal PrimedProductFilterGroupTree(IMerchelloContext merchelloContext, Func<IEnumerable<IProductFilterGroup>> getAll)
         {
             Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
             Ensure.ParameterNotNull(getAll, "getAll");
 
             _productService = merchelloContext.Services.ProductService;
             _getter = getAll;
+            _cache = merchelloContext.Cache.RuntimeCache; 
         }
 
         /// <inheritdoc/>
-        public async Task<TreeNode<ProductFilterGroupNode>> GetTreeByValue(IProductFilterGroup value, params Guid[] collectionKeys)
+        public TreeNode<ProductFilterGroupNode> GetTreeByValue(IProductFilterGroup value, params Guid[] collectionKeys)
         {
-            var tree = await GetTree(collectionKeys);
+            var tree = GetTree(collectionKeys);
 
             throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
-        public async Task<TreeNode<ProductFilterGroupNode>> GetTree(params Guid[] collectionKeys)
+        public TreeNode<ProductFilterGroupNode> GetTree(params Guid[] collectionKeys)
         {
             var cacheKey = GetCacheKey(collectionKeys);
 
             var tree = (TreeNode<ProductFilterGroupNode>)_cache.GetCacheItem(cacheKey);
             if (tree != null) return tree;
+
 
             // get all of the filter groups
             var filterGroups = _getter.Invoke().ToArray();
@@ -76,7 +85,7 @@ namespace Merchello.Web.Search.Provisional
             // create a specific context for each filter group and filter (within the group)
             var contextKeys = GetContextKeys(filterGroups, collectionKeys);
 
-            var tuples = await CountKeysThatExistInAllCollections(contextKeys);
+            var tuples = CountKeysThatExistInAllCollections(contextKeys);
             
             tree = BuildTreeNode(filterGroups, tuples, collectionKeys);
 
@@ -160,9 +169,9 @@ namespace Merchello.Web.Search.Provisional
         }
 
 
-        private Task<IEnumerable<Tuple<IEnumerable<Guid>, int>>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> contextKeys)
+        private IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> contextKeys)
         {
-            return Task.Run(() => ((ProductService)_productService).CountKeysThatExistInAllCollections(contextKeys));
+            return  ((ProductService)_productService).CountKeysThatExistInAllCollections(contextKeys);
         }
 
         /// <summary>
@@ -181,11 +190,13 @@ namespace Merchello.Web.Search.Provisional
         {
             var contextKeys = new List<Guid[]>();
 
+            var cks = !collectionKeys.Any() ? new Guid[] { } : collectionKeys;
+
             var groups = filterGroups as IProductFilterGroup[] ?? filterGroups.ToArray();
 
             try
             {
-                if (!groups.Any()) return Enumerable.Empty<Guid[]>();
+                if (!groups.Any()) return new[] { cks };
 
                 // we need individual sets of filter group keys, eached combined with the collection keys
                 // to create the context for the filter groups
@@ -203,16 +214,16 @@ namespace Merchello.Web.Search.Provisional
                 // individual filter groups
                 foreach (var fgk in groupKeys)
                 {
-                    var groupContext = collectionKeys.Select(x => x).ToList();
+                    var groupContext = cks.Select(x => x).ToList();
                     groupContext.Add(fgk);
 
                     contextKeys.Add(groupContext.ToArray());
                 }
 
                 // individual filters where keys are not already part of the collection keys (that would be a duplicate query)
-                foreach (var fk in filterKeys.Where(x => !collectionKeys.Contains(x)))
+                foreach (var fk in filterKeys.Where(x => !cks.Contains(x)))
                 {
-                    var filterContext = collectionKeys.Select(x => x).ToList();
+                    var filterContext = cks.Select(x => x).ToList();
                     filterContext.Add(fk);
 
                     contextKeys.Add(filterContext.ToArray());
@@ -240,5 +251,6 @@ namespace Merchello.Web.Search.Provisional
             var suffix = keys.Select(x => x.ToString()).OrderBy(x => x);
             return string.Format("{0}.{1}", CacheKeyBase, string.Join(string.Empty, suffix));
         }
+        
     }
 }

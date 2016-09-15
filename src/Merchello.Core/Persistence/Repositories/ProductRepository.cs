@@ -989,7 +989,12 @@
             foreach (var group in keysGroups)
             {
                 if (sql.SQL.Length > 0) sql.Append("UNION");
-                sql.Append("SELECT {0} as Hash, {1} as Count", group.GetHashCode(), SqlForKeysThatExistInAllCollections(group, true));
+                sql.Append("SELECT @hash as Hash", new { @hash = group.GetHashCode() })
+                    .Append(", T1.Count")
+                    .Append("FROM (")
+                    .Append(SqlForKeysThatExistInAllCollections(group, true))
+                    .Append(") AS T1");
+
             }
 
             var dtos = Database.Fetch<CountDto>(sql);
@@ -1015,8 +1020,8 @@
         private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false)
         {
             var sql = new Sql();
-            sql.Select(isCount ? "COUNT(*)" : "*")
-             .Append("FROM [merchProductVariant]")
+            sql.Select(isCount ? "COUNT(*) AS Count" : "*")
+                .Append("FROM [merchProductVariant]")
                .Append("WHERE [merchProductVariant].[productKey] IN (")
                .Append("SELECT [productKey]")
                .Append("FROM [merchProduct2EntityCollection]")

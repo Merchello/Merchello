@@ -22,7 +22,7 @@
         /// <remarks>
         /// With no key parameters, the context is assumed to be with no constraining collections.
         /// </remarks>
-        Task<TreeNode<ProductFilterGroupNode>> GetTreeByValue(IProductFilterGroup value, params Guid[] collectionKeys);
+        TreeNode<ProductFilterGroupNode> GetTreeByValue(IProductFilterGroup value, params Guid[] collectionKeys);
 
         /// <summary>
         /// Gets the tree node value for the entire filtering context.
@@ -36,7 +36,7 @@
         /// <remarks>
         /// With no key parameters, the context is assumed to be with no constraining collections.
         /// </remarks>
-        Task<TreeNode<ProductFilterGroupNode>> GetTree(params Guid[] collectionKeys);
+        TreeNode<ProductFilterGroupNode> GetTree(params Guid[] collectionKeys);
 
         /// <summary>
         /// Clears the cache.
