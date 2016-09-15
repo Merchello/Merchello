@@ -3,12 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Merchello.Core;
     using Merchello.Core.EntityCollections;
     using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Services;
     using Merchello.Web.Models;
+    using Merchello.Web.Search.Provisional;
 
     using Umbraco.Core.Cache;
 
@@ -17,15 +19,14 @@
     /// </summary>
     internal class ProductFilterGroupQuery : ProxyCollectionQueryBase, IProductFilterGroupQuery
     {
-        /// <summary>
-        /// The <see cref="IProductService"/>
-        /// </summary>
-        private readonly IProductService _productService;
 
         /// <summary>
         /// Collection provider keys that designate a collection is a filter.
         /// </summary>
         private Guid[] _filterProviderKeys;
+
+
+        private IPrimedProductFilterGroupTree _primedTree;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
@@ -42,47 +43,25 @@
         /// The merchello context.
         /// </param>
         public ProductFilterGroupQuery(IMerchelloContext merchelloContext)
-            : this(merchelloContext.Services.ProductService, merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
+            : this(merchelloContext, EntityCollectionProviderResolver.Current)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
         /// </summary>
-        /// <param name="productService">
-        /// The <see cref="IProductService"/>
-        /// </param>
-        /// <param name="entityCollectionService">
-        /// The  <see cref="IEntityCollectionService"/>.
-        /// </param>
-        /// <param name="cache">
-        /// The cache.
-        /// </param>
-        public ProductFilterGroupQuery(IProductService productService, IEntityCollectionService entityCollectionService, ICacheProvider cache)
-            : this(productService, entityCollectionService, cache, EntityCollectionProviderResolver.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ProductFilterGroupQuery"/> class.
-        /// </summary>
-        /// <param name="productService">
-        /// The <see cref="IProductService"/>
-        /// </param>
-        /// <param name="entityCollectionService">
-        /// The <see cref="IEntityCollectionService"/>.
-        /// </param>
-        /// <param name="cache">
-        /// The cache.
+        /// <param name="merchelloContext">
+        /// The merchello Context.
         /// </param>
         /// <param name="resolver">
         /// The resolver.
         /// </param>
-        public ProductFilterGroupQuery(IProductService productService, IEntityCollectionService entityCollectionService, ICacheProvider cache, EntityCollectionProviderResolver resolver)
-            : base(entityCollectionService, cache)
+        internal ProductFilterGroupQuery(IMerchelloContext merchelloContext, EntityCollectionProviderResolver resolver)
+            : base(merchelloContext.Services.EntityCollectionService, merchelloContext.Cache.RequestCache)
         {
-            Ensure.ParameterNotNull(productService, "productService");
-            this.Initialize(resolver);
+            Ensure.ParameterNotNull(merchelloContext, "merchelloContext");
+            Ensure.ParameterNotNull(resolver, "resolver");
+            this.Initialize(merchelloContext, resolver);
         }
 
         /// <summary>
@@ -188,6 +167,13 @@
                             productKey)));
         }
 
+        public async Task<IEnumerable<IPrimedProductFilterGroup>> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys)
+        {
+            var tree = await _primedTree.GetTree(collectionKeys);
+
+            return tree.Children.Select(x => x.Value.Item);
+        }
+
         /// <summary>
         /// Maps <see cref="IEntityFilterGroup"/> to <see cref="IProductFilterGroup"/>.
         /// </summary>
@@ -220,13 +206,28 @@
         }
 
         /// <summary>
+        /// Used as a delegate for the tree.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{IProductFilterGroup}"/>.
+        /// </returns>
+        private IEnumerable<IProductFilterGroup> All()
+        {
+            return GetAll();
+        }
+
+        /// <summary>
         /// Initializes the service.
         /// </summary>
+        /// <param name="merchelloContext">
+        /// The <see cref="IMerchelloContext"/>.
+        /// </param>
         /// <param name="resolver">
         /// The <see cref="IEntityCollectionProviderResolver"/>.
         /// </param>
-        private void Initialize(IEntityCollectionProviderResolver resolver)
+        private void Initialize(IMerchelloContext merchelloContext, IEntityCollectionProviderResolver resolver)
         {
+            this._primedTree = new PrimedProductFilterGroupTree(merchelloContext, this.All);
             this._filterProviderKeys = resolver.GetProviderKeys<IEntityFilterGroupProvider>().ToArray();
         }
     }

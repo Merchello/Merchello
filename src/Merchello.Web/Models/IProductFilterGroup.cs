@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Web.Models
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>

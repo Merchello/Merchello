@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using Merchello.Web.Models;
 
@@ -31,5 +32,8 @@
         /// The <see cref="IEnumerable{IProductFilterGroup}"/>.
         /// </returns>
         IEnumerable<IProductFilterGroup> GetFilterGroupsNotContainingProduct(Guid productKey);
+
+
+        Task<IEnumerable<IPrimedProductFilterGroup>> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys);
     }
 }

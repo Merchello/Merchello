@@ -282,6 +282,8 @@
     <Compile Include="ApplicationContextExtensions.cs" />
     <Compile Include="Caching\IVirtualContentCache{T}.cs" />
     <Compile Include="Caching\IVirtualProductContentCache.cs" />
+    <Compile Include="Models\PrimedProductFilter.cs" />
+    <Compile Include="Search\ProductFilterGroupNode.cs" />
     <Compile Include="Caching\VirtualContentCache{T}.cs" />
     <Compile Include="Caching\VirtualProductContentCache.cs" />
     <Compile Include="Controllers\Api\CountryRegionApiControllerBase.cs" />
@@ -365,11 +367,14 @@
     <Compile Include="Models\ContentEditing\Content\ProductContentSaveItemBase.cs" />
     <Compile Include="Models\ContentEditing\Content\DetachedContentDisplayExtensions.cs" />
     <Compile Include="Models\ContentEditing\Operations\EntityCrudOperation.cs" />
+    <Compile Include="Models\IPrimedProductFilter.cs" />
+    <Compile Include="Models\IPrimedProductFilterGroup.cs" />
     <Compile Include="Models\MapperResolvers\DetachedContent\ProductAttributeDetachedDataValuesResolver.cs" />
     <Compile Include="Models\MapperResolvers\DialogEditorViews\EntityCollectionProviderDialogEditorViewResolver.cs" />
     <Compile Include="Models\MapperResolvers\EntityCollections\EntityFilterGroupFiltersValueResolver.cs" />
     <Compile Include="Models\MapperResolvers\ProductOptions\ProductOptionSharedCountResolver.cs" />
     <Compile Include="Models\PagedCollection.cs" />
+    <Compile Include="Models\PrimedProductFilterGroup.cs" />
     <Compile Include="Models\Ui\Async\PaymentResultAsyncResponse.cs" />
     <Compile Include="Models\Ui\IItemCacheModel.cs" />
     <Compile Include="Models\Ui\IWishListModel.cs" />
@@ -560,7 +565,10 @@
     <Compile Include="PropertyEditors\CheckoutWorkflowStagePicker.cs" />
     <Compile Include="PropertyEditors\ProductCollectionPicker.cs" />
     <Compile Include="Search\IProductCollectionTreeQuery.cs" />
-    <Compile Include="Search\IProductFilterTreeQuery.cs" />
+    <Compile Include="Search\Provisional\IPrimedProductFilterGroupTree.cs" />
+    <Compile Include="Caching\IMultiKeyCacheItem.cs" />
+    <Compile Include="Search\Provisional\PrimedProductFilterGroupTree.cs" />
+    <Compile Include="Search\Provisional\PrimedProductFilterGroupVisitor.cs" />
     <Compile Include="Search\ProxyQueryBase.cs" />
     <Compile Include="Search\ProxyQueryManagerExtensions.cs" />
     <Compile Include="Search\IEntityProxyQuery.cs" />
