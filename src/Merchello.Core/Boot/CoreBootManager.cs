@@ -2,11 +2,18 @@
 {
     using System;
 
+    using LightInject;
+
     using Merchello.Core.Acquired;
+    using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
+    using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Core.Services;
 
     using NPoco;
+
+    using Ensure = Merchello.Core.Ensure;
+
     //using Cache;
     //using Configuration;
     //using Gateways;
@@ -37,10 +44,17 @@
         /// </summary>
         private readonly ILogger _logger;
 
+        private readonly IServiceContainer _container;
+
         /// <summary>
         /// The timer.
         /// </summary>
         private IDisposableTimer _timer;
+
+        /// <summary>
+        /// The SqlSyntaxProvider - usually an adapted version of Umbraco's SqlSyntaxProvider.
+        /// </summary>
+        private ISqlSyntaxProvider _sqlSyntaxProvider;
 
         /// <summary>
         /// The is complete.
@@ -73,7 +87,7 @@
             this._logger = settings.Logger;
             this.IsForTesting = settings.IsForTesting;
 
-            //_sqlSyntaxProvider = sqlSyntaxProvider;
+            _sqlSyntaxProvider = settings.SqlSyntaxProvider;
 
             this.SetUnitOfWorkProvider();
         }
@@ -93,27 +107,27 @@
         /// </summary>
         internal bool IsForTesting { get; }
 
-        ///// <summary>
-        ///// Gets the logger.
-        ///// </summary>
-        //internal ILogger Logger
-        //{
-        //    get
-        //    {
-        //        return _logger;
-        //    }
-        //}
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        internal ILogger Logger
+        {
+            get
+            {
+                return _logger;
+            }
+        }
 
-        ///// <summary>
-        ///// Gets the sql syntax.
-        ///// </summary>
-        //internal ISqlSyntaxProvider SqlSyntax
-        //{
-        //    get
-        //    {
-        //        return _sqlSyntaxProvider;
-        //    }
-        //}
+        /// <summary>
+        /// Gets the sql syntax.
+        /// </summary>
+        internal ISqlSyntaxProvider SqlSyntax
+        {
+            get
+            {
+                return _sqlSyntaxProvider;
+            }
+        }
 
         /// <summary>
         /// The initialize.
@@ -133,7 +147,10 @@
             
             //// create the service context for the MerchelloAppContext          
 
-            //var logger = GetMultiLogger();
+            var logger = GetMultiLogger(_logger);
+            InitializeLoggerResolver(logger);
+
+
 
             //var cache = ApplicationContext.Current == null
             //    ? new CacheHelper(
@@ -146,11 +163,9 @@
             //var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
 
-            //InitializeLoggerResolver(logger);
-
 
             //InitializeGatewayResolver(serviceContext, cache);
-            
+
             //CreateMerchelloContext(serviceContext, cache);
 
             //InitialCurrencyContext(serviceContext.StoreSettingService);
@@ -215,6 +230,18 @@
         }
 
         /// <summary>
+        /// Build the core container which contains all core things required to build the MerchelloContext
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        internal virtual void ConfigureCoreServices(ServiceContainer container)
+        {
+            // Configuration
+            container.RegisterFrom<ConfigurationCompositionRoot>();
+        }
+
+        /// <summary>
         /// Creates the MerchelloPluginContext (singleton)
         /// </summary>
         /// <param name="serviceContext">The service context</param>
@@ -243,31 +270,19 @@
         //    CurrencyContext.Current = new CurrencyContext(storeSettingService);
         //}
 
-        ///// <summary>
-        ///// Initializes the logger resolver.
-        ///// </summary>
-        ///// <param name="logger">
-        ///// The logger.
-        ///// </param>
-        //protected virtual void InitializeLoggerResolver(IMultiLogger logger)
-        //{
-        //    if (MultiLogResolver.HasCurrent)
-        //    MultiLogResolver.Current = new MultiLogResolver(logger);
-        //}
+        /// <summary>
+        /// Initializes the logger resolver.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        protected virtual void InitializeLoggerResolver(IMultiLogger logger)
+        {
+            if (!MultiLogResolver.HasCurrent)
+                MultiLogResolver.Current = new MultiLogResolver(logger);
+        }
 
-        ///// <summary>
-        ///// Gets the <see cref="MultiLogger"/>.
-        ///// </summary>
-        ///// <returns>
-        ///// The <see cref="IMultiLogger"/>.
-        ///// </returns>
-        ///// <remarks>
-        ///// We need to do this outside of the resolver due to internal resolution "Freeze"
-        ///// </remarks>
-        //protected virtual IMultiLogger GetMultiLogger()
-        //{
-        //    return new MultiLogger();
-        //}
+
 
         /// <summary>
         /// Responsible for initializing resolvers.
@@ -313,16 +328,19 @@
             //LogHelper.Info<Umbraco.Core.CoreBootManager>("Finished subscribing Monitors to Triggers");            
         }
 
+
         /// <summary>
-        /// Gets the database.
+        /// Gets the <see cref="MultiLogger"/>.
         /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
         /// <returns>
-        /// The <see cref="Database"/>.
+        /// The <see cref="IMultiLogger"/>.
         /// </returns>
-        protected Database GetDatabase()
+        protected virtual IMultiLogger GetMultiLogger(ILogger logger)
         {
-            //if (_unitOfWorkProvider == null) throw new NullReferenceException("Unit of work provider has not been set");
-            return new Database("umbracoDbDSN"); //_unitOfWorkProvider.GetUnitOfWork().Database;
+            return new MultiLogger(logger);
         }
 
         /// <summary>

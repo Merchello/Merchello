@@ -6,7 +6,7 @@
     using System.Reflection;
 
     using Merchello.Core.Acquired;
-    using Merchello.Core.Acquired.Persistence.SqlSyntax;
+    using Merchello.Core.Persistence.SqlSyntax;
 
     using NPoco;
 

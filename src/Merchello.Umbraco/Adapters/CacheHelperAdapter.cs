@@ -3,8 +3,11 @@
     using Merchello.Core.Cache;
 
     /// <summary>
-    /// The cache helper adapter.
+    /// Represents an adapter for Umbraco's CacheHelper.
     /// </summary>
+    /// <remarks>
+    /// This is for legacy purposes only. MerchelloContext.Current.Cache is obsolete.
+    /// </remarks>
     internal class CacheHelperAdapter : CacheHelper
     {
         /// <summary>

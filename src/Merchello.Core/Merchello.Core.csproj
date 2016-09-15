@@ -48,10 +48,17 @@
   <ItemGroup>
     <Compile Include="Acquired\IScopeContextAdapter.cs" />
     <Compile Include="Acquired\ObjectExtensions.cs" />
+    <Compile Include="Acquired\ObjectResolution\ContainerLazyManyObjectsResolver.cs" />
+    <Compile Include="Acquired\ObjectResolution\ContainerManyObjectsResolver.cs" />
+    <Compile Include="Acquired\ObjectResolution\ContainerSingleObjectResolver.cs" />
+    <Compile Include="Acquired\ObjectResolution\LazyManyObjectsResolverbase.cs" />
+    <Compile Include="Acquired\ObjectResolution\ManyObjectsResolverBase.cs" />
+    <Compile Include="Acquired\ObjectResolution\ObjectLifetimeScope.cs" />
     <Compile Include="Acquired\ObjectResolution\Resolution.cs" />
     <Compile Include="Acquired\ObjectResolution\ResolverBase.cs" />
     <Compile Include="Acquired\ObjectResolution\ResolverCollection.cs" />
     <Compile Include="Acquired\ObjectResolution\SingleObjectResolverBase.cs" />
+    <Compile Include="Acquired\ObjectResolution\WeightedPluginAttribute.cs" />
     <Compile Include="Acquired\Persistence\DatabaseAnnotations\ConstraintAttribute.cs" />
     <Compile Include="Acquired\Persistence\DatabaseAnnotations\ForeignKeyAttribute.cs" />
     <Compile Include="Acquired\Persistence\DatabaseAnnotations\IndexAttribute.cs" />
@@ -78,12 +85,24 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
     <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
-    <Compile Include="Acquired\Persistence\Mappers\IMappingResolver.cs" />
+    <Compile Include="Acquired\ServiceProviderExtensions.cs" />
+    <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
+    <Compile Include="DependencyInjection\LightInjectExtensions.cs" />
+    <Compile Include="Logging\ExtendedLoggerData.cs" />
+    <Compile Include="Logging\MultiLogger.cs" />
+    <Compile Include="Persistence\IDatabaseContext.cs" />
+    <Compile Include="Acquired\Persistence\Mappers\BaseExpressionHelper.cs" />
+    <Compile Include="Persistence\Mappers\IMappingResolver.cs" />
     <Compile Include="Acquired\Persistence\Mappers\PocoMapper.cs" />
-    <Compile Include="Acquired\Persistence\Querying\IQuery.cs" />
-    <Compile Include="Acquired\Persistence\Querying\IQueryFactory.cs" />
+    <Compile Include="Acquired\Persistence\Mappers\ModelToSqlExpressionHelper.cs" />
+    <Compile Include="Persistence\Mappers\MapperForAttribute.cs" />
+    <Compile Include="Persistence\Mappers\MappingResolver.cs" />
+    <Compile Include="Persistence\Querying\IQuery.cs" />
+    <Compile Include="Persistence\Querying\IQueryFactory.cs" />
     <Compile Include="Acquired\Persistence\Querying\TextColumnType.cs" />
-    <Compile Include="Acquired\Persistence\SqlSyntax\ISqlSyntaxProvider.cs" />
+    <Compile Include="Persistence\Querying\Query.cs" />
+    <Compile Include="Persistence\Querying\QueryFactory.cs" />
+    <Compile Include="Persistence\SqlSyntax\ISqlSyntaxProvider.cs" />
     <Compile Include="Acquired\Plugins\TypeFinder.cs" />
     <Compile Include="Acquired\Plugins\TypeHelper.cs" />
     <Compile Include="Acquired\Threading\MonitorLock.cs" />
@@ -95,6 +114,7 @@
     <Compile Include="Acquired\AssemblyExtensions.cs" />
     <Compile Include="Acquired\Attempt.cs" />
     <Compile Include="Acquired\Attempt{T}.cs" />
+    <Compile Include="Adapters\DatabaseContextAdapterBase.cs" />
     <Compile Include="Boot\BootManagerBase.cs" />
     <Compile Include="Boot\CoreBootSettings.cs" />
     <Compile Include="Boot\ICoreBootSettings.cs" />
@@ -409,11 +429,10 @@
     <Compile Include="Models\TypeFields\TypeField.cs" />
     <Compile Include="Models\TypeFields\TypeFieldMapper.cs" />
     <Compile Include="Models\TypeFields\TypeFieldMapperBase.cs" />
-    <Compile Include="Persistence\DefaultDatabaseFactory.cs" />
+    <Compile Include="Persistence\DatabaseFactoryBase.cs" />
     <Compile Include="Persistence\IDatabaseFactory.cs" />
     <Compile Include="Persistence\Mappers\BaseMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
-    <Compile Include="Persistence\MerchelloDatabase.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -431,11 +450,12 @@
     <Compile Include="Enums.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Acquired\ObjectResolution\readme.md" />
     <None Include="Cache\readme.md" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Acquired\Logging\" />
+    <Folder Include="Adapters\Persistence\SqlSyntax\" />
     <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

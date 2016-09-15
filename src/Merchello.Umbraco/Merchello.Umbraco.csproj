@@ -47,6 +47,7 @@
     <Compile Include="Adapters\ProfileLoggerAdapter.cs" />
     <Compile Include="Adapters\RuntimeCacheProviderAdapter.cs" />
     <Compile Include="Adapters\LoggerAdapter.cs" />
+    <Compile Include="Adapters\SqlSyntaxProviderAdapter.cs" />
     <Compile Include="Adapters\UmbracoAttemptExtensions.cs" />
     <Compile Include="Boot\Boot-SettingsAndAdapters.cs">
       <DependentUpon>UmbracoBoot.cs</DependentUpon>

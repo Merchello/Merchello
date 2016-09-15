@@ -4,6 +4,7 @@
     using System.Configuration;
 
     using Merchello.Core.Configuration.Sections;
+    using Merchello.Core.Logging;
 
     /// <summary>
     /// Provides access to configurations in the Merchello configuration files.
@@ -19,17 +20,17 @@
         /// <summary>
         /// The settings section.
         /// </summary>
-        private IMerchelloSettingsSection _settings;
+        private IMerchelloSettingsSection _merchelloSettings;
 
         /// <summary>
         /// The extensibility section.
         /// </summary>
-        private IMerchelloExtensibilitySection _extensibility;
+        private IMerchelloExtensibilitySection _merchelloExtensibility;
 
         /// <summary>
         /// The countries section.
         /// </summary>
-        private IMerchelloCountriesSection _countries;
+        private IMerchelloCountriesSection _merchelloCountries;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloConfig"/> class.
@@ -58,19 +59,19 @@
         /// </summary>
         private MerchelloConfig()
         {
-            if (_settings == null)
+            if (this._merchelloSettings == null)
             {
-                _settings = ConfigurationManager.GetSection("merchello/settings") as IMerchelloSettingsSection;
+                this._merchelloSettings = ConfigurationManager.GetSection("merchello/settings") as IMerchelloSettingsSection;
             }
 
-            if (_extensibility == null)
+            if (this._merchelloExtensibility == null)
             {
-                _extensibility = ConfigurationManager.GetSection("merchello/extensibility") as IMerchelloExtensibilitySection;
+                this._merchelloExtensibility = ConfigurationManager.GetSection("merchello/extensibility") as IMerchelloExtensibilitySection;
             }
 
-            if (_countries == null)
+            if (this._merchelloCountries == null)
             {
-                _countries = ConfigurationManager.GetSection("merchello/countries") as IMerchelloCountriesSection;
+                this._merchelloCountries = ConfigurationManager.GetSection("merchello/countries") as IMerchelloCountriesSection;
             }
         } 
 
@@ -86,36 +87,66 @@
         }
 
         /// <summary>
-        /// Gets the Merchello <see cref="IMerchelloSettingsSection"/>.
+        /// Gets the Merchello Settings configuration section.
         /// </summary>
-        public IMerchelloSettingsSection Settings
+        /// <returns>
+        /// The <see cref="IMerchelloSettingsSection"/>.
+        /// </returns>
+        /// <exception cref="ConfigurationErrorsException">
+        /// Throws if the MerchelloSettingsSection is null
+        /// </exception>
+        public IMerchelloSettingsSection MerchelloSettings()
         {
-            get
+            if (_merchelloSettings == null)
             {
-                return _settings;
+                var ex = new ConfigurationErrorsException("Could not load the " + typeof(IMerchelloSettingsSection) + " from config file, ensure the web.config and merchelloSettings.config files are formatted correctly");
+                MultiLogHelper.Error<MerchelloConfig>("Config error", ex);
+                throw ex;
             }
+
+            return _merchelloSettings;
         }
 
         /// <summary>
-        /// Gets the Merchello <see cref="IMerchelloExtensibilitySection"/>.
+        /// Gets the Merchello Extensibility configuration section.
         /// </summary>
-        public IMerchelloExtensibilitySection Extensibility
+        /// <returns>
+        /// The <see cref="IMerchelloExtensibilitySection"/>.
+        /// </returns>
+        /// <exception cref="ConfigurationErrorsException">
+        /// Throws if the MerchelloExtensibilitySection is null
+        /// </exception>
+        public IMerchelloExtensibilitySection MerchelloExtensibility()
         {
-            get
+            if (_merchelloExtensibility == null)
             {
-                return _extensibility;
+                var ex = new ConfigurationErrorsException("Could not load the " + typeof(IMerchelloExtensibilitySection) + " from config file, ensure the web.config and merchelloExtensibility.config files are formatted correctly");
+                MultiLogHelper.Error<MerchelloConfig>("Config error", ex);
+                throw ex;
             }
+
+            return _merchelloExtensibility;
         }
 
         /// <summary>
-        /// Gets the Merchello <see cref="IMerchelloCountriesSection"/>.
+        /// Gets the Merchello Countries Configuration Section.
         /// </summary>
-        public IMerchelloCountriesSection Countries
+        /// <returns>
+        /// The <see cref="IMerchelloCountriesSection"/>.
+        /// </returns>
+        /// <exception cref="ConfigurationErrorsException">
+        /// Throws if the MerchelloCountriesSection is null
+        /// </exception>
+        public IMerchelloCountriesSection MerchelloCountries()
         {
-            get
+            if (_merchelloCountries == null)
             {
-                return _countries;
+                var ex = new ConfigurationErrorsException("Could not load the " + typeof(IMerchelloCountriesSection) + " from config file, ensure the web.config and merchelloCountries.config files are formatted correctly");
+                MultiLogHelper.Error<MerchelloConfig>("Config error", ex);
+                throw ex;
             }
+
+            return _merchelloCountries;
         }
 
         /// <summary>
@@ -129,7 +160,7 @@
         /// </remarks>
         public void SetMerchelloSettings(IMerchelloSettingsSection value)
         {
-            _settings = value;
+            this._merchelloSettings = value;
         }
 
         /// <summary>
@@ -143,7 +174,7 @@
         /// </remarks>
         public void SetMerchelloExtensibility(IMerchelloExtensibilitySection value)
         {
-            _extensibility = value;
+            this._merchelloExtensibility = value;
         }
 
         /// <summary>
@@ -157,7 +188,7 @@
         /// </remarks>
         public void SetMerchelloCountries(IMerchelloCountriesSection value)
         {
-            _countries = value;
+            this._merchelloCountries = value;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Merchello.Core.Acquired.ObjectResolution
 	/// <remarks>
 	/// Resolves "single" objects ie objects for which there is only one application-wide instance, such as the MVC Controller factory.
 	/// </remarks>
-	public abstract class SingleObjectResolverBase<TResolver, TResolved> : ResolverBase<TResolver>
+	internal abstract class SingleObjectResolverBase<TResolver, TResolved> : ResolverBase<TResolver>
 		where TResolved : class
         where TResolver : ResolverBase
 	{

@@ -5,6 +5,8 @@
       <Value>Db</Value>
       <Value>dll</Value>
       <Value>dto</Value>
+      <Value>ioc</Value>
+      <Value>Linq</Value>
       <Value>Lucene</Value>
       <Value>merch</Value>
       <Value>Merchello</Value>

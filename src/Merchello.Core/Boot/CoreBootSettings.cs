@@ -1,8 +1,13 @@
 ﻿namespace Merchello.Core.Boot
 {
-    using Merchello.Core.Acquired.Persistence.SqlSyntax;
+    using System;
+    using System.Collections.Generic;
+
+    using LightInject;
+
     using Merchello.Core.Cache;
     using Merchello.Core.Logging;
+    using Merchello.Core.Persistence.SqlSyntax;
 
     /// <inheritdoc/>
     internal class CoreBootSettings : ICoreBootSettings
@@ -30,6 +35,9 @@
 
         /// <inheritdoc/>
         public ISqlSyntaxProvider SqlSyntaxProvider { get; set; }
+
+        /// <inheritdoc/>
+        public IServiceContainer Container { get; set; }
 
         /// <inheritdoc/>
         public bool IsForTesting { get; set; }

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\DatabaseContextAdapter.cs" />
     <Compile Include="Boot\BootSettings.cs" />
     <Compile Include="Boot\IBootSettings.cs" />
     <Compile Include="Boot\SoloBootManager.cs" />
@@ -74,6 +75,9 @@
   <ItemGroup>
     <None Include="project.json" />
     <None Include="readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Persistence\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

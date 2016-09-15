@@ -1,5 +1,7 @@
 ﻿namespace Merchello.Web.Boot
 {
+    using System;
+
     using Merchello.Core.Boot;
     using Merchello.Core.Logging;
     //using Merchello.Core;
@@ -89,24 +91,25 @@
             //    OfferComponentResolver.Current = new OfferComponentResolver(PluginManager.Current.ResolveOfferComponents(), OfferProviderResolver.Current);
         }
 
-        ///// <summary>
-        ///// Overrides the base GetMultiLogger.
-        ///// </summary>
-        ///// <returns>
-        ///// The <see cref="IMultiLogger"/>.
-        ///// </returns>
-        //protected override IMultiLogger GetMultiLogger()
-        //{
-        //    try
-        //    {
-        //        var remoteLogger = PluggableObjectHelper.GetInstance<RemoteLoggerBase>("RemoteLogger");
-        //        return new MultiLogger(Logger, remoteLogger);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.WarnWithException<WebBootManager>("Failed to instantiate remote logger. Returning default logger", ex, () => new object[] { });
-        //        return new MultiLogger();
-        //    }
-        //}
+        /// <summary>
+        /// Overrides the base GetMultiLogger.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IMultiLogger"/>.
+        /// </returns>
+        protected override IMultiLogger GetMultiLogger(ILogger logger)
+        {
+            return base.GetMultiLogger(logger);
+            //try
+            //{
+            //    var remoteLogger = PluggableObjectHelper.GetInstance<RemoteLoggerBase>("RemoteLogger");
+            //    return new MultiLogger(Logger, remoteLogger);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.WarnWithException<WebBootManager>("Failed to instantiate remote logger. Returning default logger", ex, () => new object[] { });
+            //    return new MultiLogger();
+            //}
+        }
     }
 }
