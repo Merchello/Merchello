@@ -5,13 +5,15 @@
 
     using Merchello.Core.Events;
     using Merchello.Core.Models;
+    using Merchello.Providers.Exceptions;
     using Merchello.Providers.Payment.PayPal.Factories;
     using Merchello.Providers.Payment.PayPal.Models;
 
     using global::PayPal.PayPalAPIInterfaceService;
+
     using global::PayPal.PayPalAPIInterfaceService.Model;
 
-    using Merchello.Providers.Exceptions;
+    using Merchello.Core.Logging;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -444,7 +446,7 @@
                         ReturnURL = returnUrl,
                         CancelURL = cancelUrl,
                         PaymentDetails = paymentDetailsList,
-                        AddressOverride = "0"
+                        AddressOverride = "1"
                     };
 
             // Trigger the event to allow for overriding ecDetails
@@ -468,9 +470,25 @@
             {
                 var service = GetPayPalService();
                 var response = service.SetExpressCheckout(wrapper);
+
                 record.SetExpressCheckout = _responseFactory.Build(response, response.Token);
-                record.Data.Token = response.Token;
-                record.SetExpressCheckout.RedirectUrl = GetRedirectUrl(response.Token);
+                if (record.SetExpressCheckout.Success())
+                {
+                    record.Data.Token = response.Token;
+                    record.SetExpressCheckout.RedirectUrl = GetRedirectUrl(response.Token);
+                }
+                else
+                {
+                    foreach (var et in record.SetExpressCheckout.ErrorTypes)
+                    {
+                        var code = et.ErrorCode;
+                        var sm = et.ShortMessage;
+                        var lm = et.LongMessage;
+                        MultiLogHelper.Warn<PayPalExpressCheckoutService>(string.Format("{0} {1} {2}", code, lm, sm));
+                    }
+
+                    record.Success = false;
+                }
             }
             catch (Exception ex)
             {
