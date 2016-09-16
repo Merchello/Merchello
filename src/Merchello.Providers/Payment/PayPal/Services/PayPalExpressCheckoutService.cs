@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Merchello.Core.Events;
+    using Merchello.Core.Logging;
     using Merchello.Core.Models;
     using Merchello.Providers.Exceptions;
     using Merchello.Providers.Payment.PayPal.Factories;
@@ -12,8 +13,6 @@
     using global::PayPal.PayPalAPIInterfaceService;
 
     using global::PayPal.PayPalAPIInterfaceService.Model;
-
-    using Merchello.Core.Logging;
 
     using Umbraco.Core;
     using Umbraco.Core.Events;
@@ -73,6 +72,11 @@
         /// Occurs before adding the PayPal Express Checkout details to the request
         /// </summary>
         public static event TypedEventHandler<IPayPalExpressCheckoutService, ObjectEventArgs<PayPalExpressCheckoutRequestDetailsOverride>> SettingCheckoutRequestDetails;
+
+        ///// <summary>
+        ///// Occurs before adding the PayPal Express Checkout Details to the DoExpressCheckoutExpress.
+        ///// </summary>
+        //public static event TypedEventHandler<IPayPalApiPaymentService, ObjectEventArgs<PayPalExpressCheckoutRequestDetailsOverride>> SettingDoExpressCheckoutRequestDetails;
 
         /// <summary>
         /// Performs the setup for an express checkout.
@@ -438,9 +442,6 @@
             var paymentDetailsList = new List<PaymentDetailsType>() { paymentDetailsType };
 
             // ExpressCheckout details
-            //// We do not want the customer to be able to reset their shipping address at PayPal
-            //// due to the fact that it could affect shipping charges and in some cases tax rates.
-            //// This is the AddressOverride = "0" - NOT WORKING!
             var ecDetails = new SetExpressCheckoutRequestDetailsType()
                     {
                         ReturnURL = returnUrl,
