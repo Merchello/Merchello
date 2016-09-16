@@ -491,6 +491,7 @@
         /// <returns>
         /// The <see cref="IProductContent"/>.
         /// </returns>
+        [Obsolete("This method will be removed in version 3.0.0")]
         public static IProductContent AsProductContent(this ProductDisplay display)
         {
             return display.AsProductContent(new ProductContentFactory());
@@ -508,6 +509,7 @@
         /// <returns>
         /// The <see cref="IProductContent"/>.
         /// </returns>
+        [Obsolete("This method will be removed in version 3.0.0")]
         public static IProductContent AsProductContent(this ProductDisplay display, ProductContentFactory factory)
         {
             if (!display.HasVirtualContent()) return null;
