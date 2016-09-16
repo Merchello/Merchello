@@ -850,7 +850,7 @@
         /// </returns>
         public static decimal TotalItemPrice(this IInvoice invoice)
         {                                                                 
-            return invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice);
+            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Product).Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -864,7 +864,7 @@
         /// </returns>
         public static decimal TotalCustomItemPrice(this IInvoice invoice)
         {
-            return invoice.Items.Where(x => x.LineItemType == LineItemType.Custom).Sum(x => x.TotalPrice);
+            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Custom).Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -878,7 +878,7 @@
         /// </returns>
         public static decimal TotalAdjustmentItemPrice(this IInvoice invoice)
         {
-            return invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).Sum(x => x.TotalPrice);
+            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Adjustment).Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -892,7 +892,7 @@
         /// </returns>
         public static decimal TotalShipping(this IInvoice invoice)
         {
-            return invoice.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice);
+            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Shipping).Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -906,7 +906,7 @@
         /// </returns>
         public static decimal TotalTax(this IInvoice invoice)
         {
-            return invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice);
+            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Tax).Sum(x => x.TotalPrice));
         }
 
         /// <summary>
@@ -920,7 +920,7 @@
         /// </returns>
         public static decimal TotalDiscounts(this IInvoice invoice)
         {
-            return invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice);
+            return Ensure2Places(invoice.Items.Where(x => x.LineItemType == LineItemType.Discount).Sum(x => x.TotalPrice));
         }
         
         #endregion
@@ -1111,5 +1111,12 @@
         }
 
         #endregion
+
+        private static decimal Ensure2Places(decimal value)
+        {
+            var ensured = value.ToString("N2");
+
+            return decimal.Parse(ensured);
+        }
     }
 }
