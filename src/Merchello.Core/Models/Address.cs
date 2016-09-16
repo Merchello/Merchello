@@ -3,42 +3,30 @@
     using System;
     using System.Runtime.Serialization;
 
-    /// <summary>
-    /// Represents an address
-    /// </summary>
+    /// <inheritdoc/>
     [Serializable]
     [DataContract(IsReference = true)]
     public class Address : IAddress
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Address"/> class.
-        /// </summary>
+        /// <inheritdoc/>
         public Address()
         {
             AddressType = AddressType.Shipping;
         }
 
-        /// <summary>
-        /// Gets or sets he name for the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the first address line
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Address1 { get; set; }
 
-        /// <summary>
-        /// Gets or sets second address line
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Address2 { get; set; }
 
-        /// <summary>
-        /// Gets or sets the city or locality of the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Locality { get; set; }
 
@@ -48,48 +36,31 @@
         [DataMember]
         public string Region { get; set; }
 
-        /// <summary>
-        /// Gets or sets the postal code of the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string PostalCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the country code of the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string CountryCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the telephone number of the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Phone { get; set; }
 
-        /// <summary>
-        /// Gets or sets the email address associated with the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Email { get; set; }
 
-        /// <summary>
-        /// Gets or sets the organization or company name associated with the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public string Organization { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not this record represents commercial or business address
-        /// </summary>
-        /// <remarks>
-        /// Used by certain shipping providers in shipping rate quotations
-        /// </remarks>
+        /// <inheritdoc/>
         [DataMember]
         public bool IsCommercial { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="AddressType"/> of the address
-        /// </summary>
+        /// <inheritdoc/>
         [DataMember]
         public AddressType AddressType { get; set; }
 
