@@ -5,6 +5,7 @@
     using LightInject;
 
     using Merchello.Core.Acquired;
+    using Merchello.Core.Cache;
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.SqlSyntax;
@@ -39,38 +40,21 @@
     {
         #region Fields
 
-        /// <summary>
-        /// The <see cref="ILogger"/>
-        /// </summary>
-        private readonly ILogger _logger;
+        private readonly ICoreBootSettings _settings;
 
-        private readonly IServiceContainer _container;
+        private MultiLogResolver _muliLogResolver;
 
         /// <summary>
         /// The timer.
         /// </summary>
         private IDisposableTimer _timer;
 
-        /// <summary>
-        /// The SqlSyntaxProvider - usually an adapted version of Umbraco's SqlSyntaxProvider.
-        /// </summary>
-        private ISqlSyntaxProvider _sqlSyntaxProvider;
 
         /// <summary>
         /// The is complete.
         /// </summary>
         private bool _isComplete;
 
-        ///// <summary>
-        ///// The merchello context.
-        ///// </summary>
-        //private MerchelloContext _merchelloContext;
-
-        ///// <summary>
-        ///// The peta poco unit of work provider.
-        ///// </summary>
-        //[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        //private PetaPocoUnitOfWorkProvider _unitOfWorkProvider;
 
         #endregion
 
@@ -84,10 +68,13 @@
         {
             Ensure.ParameterNotNull(settings, nameof(settings));
 
-            this._logger = settings.Logger;
-            this.IsForTesting = settings.IsForTesting;
+            _settings = settings;
 
-            _sqlSyntaxProvider = settings.SqlSyntaxProvider;
+            // singleton to for required application objects needed for the Merchello instance
+            ServiceLocator.Current = new ServiceLocator(new ServiceContainer());
+
+            this.IsForTesting = settings.IsForTesting;
+            
 
             this.SetUnitOfWorkProvider();
         }
@@ -107,27 +94,6 @@
         /// </summary>
         internal bool IsForTesting { get; }
 
-        /// <summary>
-        /// Gets the logger.
-        /// </summary>
-        internal ILogger Logger
-        {
-            get
-            {
-                return _logger;
-            }
-        }
-
-        /// <summary>
-        /// Gets the sql syntax.
-        /// </summary>
-        internal ISqlSyntaxProvider SqlSyntax
-        {
-            get
-            {
-                return _sqlSyntaxProvider;
-            }
-        }
 
         /// <summary>
         /// The initialize.
@@ -144,20 +110,10 @@
                 throw new InvalidOperationException("The Merchello core boot manager has already been initialized");
 
             OnMerchelloInit();
-            
-            //// create the service context for the MerchelloAppContext          
 
-            var logger = GetMultiLogger(_logger);
-            InitializeLoggerResolver(logger);
+            _muliLogResolver = new MultiLogResolver(GetMultiLogger(_settings.Logger));
 
-
-
-            //var cache = ApplicationContext.Current == null
-            //    ? new CacheHelper(
-            //            new ObjectCacheRuntimeCacheProvider(),
-            //            new StaticCacheProvider(),
-            //            new NullCacheProvider())
-            //    : ApplicationContext.Current.ApplicationCache;
+            ConfigureCoreServices(ServiceLocator.Current.Container);
 
 
             //var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
@@ -235,8 +191,20 @@
         /// <param name="container">
         /// The container.
         /// </param>
-        internal virtual void ConfigureCoreServices(ServiceContainer container)
+        internal virtual void ConfigureCoreServices(IServiceContainer container)
         {
+            // Container
+            container.Register<IServiceContainer>(factory => container);
+
+            // CMS provided
+            container.Register<ISqlSyntaxProvider>(factory => _settings.SqlSyntaxProvider);
+            container.Register<CacheHelper>(factory => _settings.CacheHelper);
+            container.RegisterSingleton<ILogger>(factory => _settings.Logger);
+
+            // Logger
+            container.RegisterSingleton<MultiLogResolver>(factory => _muliLogResolver);
+
+
             // Configuration
             container.RegisterFrom<ConfigurationCompositionRoot>();
         }

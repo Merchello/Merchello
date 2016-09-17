@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Adapters\CacheHelperAdapter.cs" />
     <Compile Include="Adapters\CacheProviderAdapter.cs" />
+    <Compile Include="Adapters\DatabaseContextAdapter.cs" />
     <Compile Include="Adapters\IUmbracoAdapter.cs" />
     <Compile Include="Adapters\ProfileLoggerAdapter.cs" />
     <Compile Include="Adapters\RuntimeCacheProviderAdapter.cs" />

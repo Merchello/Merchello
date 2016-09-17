@@ -39,6 +39,11 @@
         /// <inheritdoc/>
         public IServiceContainer Container { get; set; }
 
+        /// <summary>
+        /// Gets or sets the cache helper.
+        /// </summary>
+        public CacheHelper CacheHelper { get; set; }
+
         /// <inheritdoc/>
         public bool IsForTesting { get; set; }
     }

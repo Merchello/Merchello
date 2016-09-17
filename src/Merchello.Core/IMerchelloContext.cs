@@ -1,6 +1,8 @@
 ﻿namespace Merchello.Core
 {
     using System;
+
+    using Merchello.Core.Cache;
     //using Gateways;
     using Services;
 

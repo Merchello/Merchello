@@ -5,6 +5,7 @@
 
     using LightInject;
 
+    using Merchello.Core.Cache;
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.SqlSyntax;
 
@@ -27,6 +28,11 @@
         /// Gets or sets the ioc container.
         /// </summary>
         IServiceContainer Container { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cache helper.
+        /// </summary>
+        CacheHelper CacheHelper { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the boot manager is being used in tests.

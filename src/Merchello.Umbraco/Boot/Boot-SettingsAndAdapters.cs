@@ -29,7 +29,9 @@
             return new BootSettings(isForTesting)
             {
                 // Adapt Umbraco's logger
-                Logger = new LoggerAdapter(appContext.ProfilingLogger.Logger)
+                Logger = new LoggerAdapter(appContext.ProfilingLogger.Logger),
+
+                CacheHelper = new CacheHelperAdapter(appContext.ApplicationCache)
             };
         }
     }

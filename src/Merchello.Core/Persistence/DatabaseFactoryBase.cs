@@ -13,7 +13,6 @@
     /// </summary>
     internal abstract class DatabaseFactoryBase : IDatabaseFactory
     {
-
         /// <summary>
         /// The locker.
         /// </summary>
@@ -70,7 +69,12 @@
         /// </summary>
         public abstract void Dispose();
 
-
+        /// <summary>
+        /// Ensures the database is configured.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Throws exception if the database is not configured.
+        /// </exception>
         private void EnsureConfigured()
         {
             using (new ReadLock(_lock))

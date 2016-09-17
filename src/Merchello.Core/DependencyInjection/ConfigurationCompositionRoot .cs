@@ -8,7 +8,7 @@
     /// <summary>
     /// Adds configurations to the service container
     /// </summary>
-    public class ConfigurationCompositionRoot : ICompositionRoot
+    public sealed class ConfigurationCompositionRoot : ICompositionRoot
     {
         /// <summary>
         /// Composes configuration services by adding services to the <paramref name="container"/>.

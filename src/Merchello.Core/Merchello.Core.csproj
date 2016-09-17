@@ -88,8 +88,10 @@
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
     <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
     <Compile Include="DependencyInjection\LightInjectExtensions.cs" />
+    <Compile Include="DependencyInjection\RepositoryCompositionRoot.cs" />
     <Compile Include="Logging\ExtendedLoggerData.cs" />
     <Compile Include="Logging\MultiLogger.cs" />
+    <Compile Include="ServiceLocator.cs" />
     <Compile Include="Persistence\IDatabaseContext.cs" />
     <Compile Include="Acquired\Persistence\Mappers\BaseExpressionHelper.cs" />
     <Compile Include="Persistence\Mappers\IMappingResolver.cs" />

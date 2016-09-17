@@ -8,7 +8,7 @@
     /// <remarks>
     /// This is for legacy purposes only. MerchelloContext.Current.Cache is obsolete.
     /// </remarks>
-    internal class CacheHelperAdapter : CacheHelper
+    internal sealed class CacheHelperAdapter : CacheHelper, IUmbracoAdapter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CacheHelperAdapter"/> class. 

@@ -11,34 +11,93 @@
 
     using NPoco;
 
+    /// <summary>
+    /// An adapter for adapting Umbraco's <see>
+    ///         <cref>global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider</cref>
+    ///     </see> to <see cref="ISqlSyntaxProvider"/>.
+    /// </summary>
     internal class SqlSyntaxProviderAdapter : ISqlSyntaxProvider
     {
+        /// <summary>
+        /// The Umbraco's SqlSyntaxProvider.
+        /// </summary>
         private readonly global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider _provider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlSyntaxProviderAdapter"/> class.
+        /// </summary>
+        /// <param name="provider">
+        /// Umbraco's SqlSyntaxProvider..
+        /// </param>
         public SqlSyntaxProviderAdapter(global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider provider)
         {
             Ensure.ParameterNotNull(provider, nameof(provider));
             _provider = provider;
         }
 
+        /// <summary>
+        /// Escapes a string value.
+        /// </summary>
+        /// <param name="val">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The escaped <see cref="string"/>.
+        /// </returns>
         public string EscapeString(string val)
         {
-            throw new NotImplementedException();
+            return _provider.EscapeString(val);
         }
 
+        /// <summary>
+        /// Gets a wildcard placeholder.
+        /// </summary>
+        /// <returns>
+        /// The placeholder.
+        /// </returns>
         public string GetWildcardPlaceholder()
         {
-            throw new NotImplementedException();
+            return _provider.GetWildcardPlaceholder();
         }
 
+        /// <summary>
+        /// Gets a string equals comparison.
+        /// </summary>
+        /// <param name="column">
+        /// The column.
+        /// </param>
+        /// <param name="paramIndex">
+        /// The parameter index.
+        /// </param>
+        /// <param name="columnType">
+        /// The column type.
+        /// </param>
+        /// <returns>
+        /// The string equals comparison.
+        /// </returns>
         public string GetStringColumnEqualComparison(string column, int paramIndex, TextColumnType columnType)
         {
-            throw new NotImplementedException();
+            return _provider.GetStringColumnEqualComparison(column, paramIndex, Convert(columnType));
         }
 
+        /// <summary>
+        /// Gets the string column wildcard comparison.
+        /// </summary>
+        /// <param name="column">
+        /// The column.
+        /// </param>
+        /// <param name="paramIndex">
+        /// The parameter index.
+        /// </param>
+        /// <param name="columnType">
+        /// The column type.
+        /// </param>
+        /// <returns>
+        /// The string column wildcard comparison..
+        /// </returns>
         public string GetStringColumnWildcardComparison(string column, int paramIndex, TextColumnType columnType)
         {
-            throw new NotImplementedException();
+            return _provider.GetStringColumnWildcardComparison(column, paramIndex, Convert(columnType));
         }
 
         public string GetConcat(params string[] args)
@@ -220,6 +279,13 @@
         public IEnumerable<Tuple<string, string, string, bool>> GetDefinedIndexes(Database db)
         {
             throw new NotImplementedException();
+        }
+
+        private global::Umbraco.Core.Persistence.Querying.TextColumnType Convert(TextColumnType textColumType)
+        {
+            return textColumType == TextColumnType.NText
+                       ? global::Umbraco.Core.Persistence.Querying.TextColumnType.NText
+                       : global::Umbraco.Core.Persistence.Querying.TextColumnType.NVarchar;
         }
     }
 }
