@@ -71,8 +71,8 @@
 
             this.CoreBootSettings = settings;
 
-            // singleton to for required application objects needed for the Merchello instance
-            ServiceLocator.Current = new ServiceLocator(new ServiceContainer());
+            // "Service Registry" - singleton to for required application objects needed for the Merchello instance
+            SR.Current = new SR(new ServiceContainer());
 
             this.IsForTesting = settings.IsForTesting;
             
@@ -116,13 +116,17 @@
 
             OnMerchelloInit();
 
-            _muliLogResolver = new MultiLogResolver(GetMultiLogger(this.CoreBootSettings.Logger));
+            // Grab everythin we need from Umbraco
+            ConfigureCmsServices(SR.Current.Container);
 
-            ConfigureCmsServices(ServiceLocator.Current.Container);
-            ConfigureCoreServices(ServiceLocator.Current.Container);
+            _muliLogResolver = new MultiLogResolver(GetMultiLogger(SR.Current.Container.GetInstance<ILogger>()));
 
+            ConfigureCoreServices(SR.Current.Container);
 
+            // this may happen too late since the SqlSyntaxProviderAdapter is done above and it requires
+            // automapper mappings - but if nothing kicks off ... needs testing.
             InitializeAutoMapperMappers();
+
             //var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
 
@@ -225,7 +229,7 @@
         /// </summary>
         protected void InitializeAutoMapperMappers()
         {
-            var container = ServiceLocator.Current.Container;
+            var container = SR.Current.Container;
 
             Mapper.Initialize(configuration =>
                 {

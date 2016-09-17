@@ -26,16 +26,7 @@
         {
             Ensure.ParameterNotNull(appContext, nameof(appContext));
 
-            return new BootSettings(isForTesting)
-            {
-                // Adapt Umbraco's logger
-                Logger = new LoggerAdapter(appContext.ProfilingLogger.Logger),
-
-                // Adapt Umbraco's CacheHelper
-                CacheHelper = new CacheHelperAdapter(appContext.ApplicationCache),
-
-                Container = new LightInject.ServiceContainer()
-            };
+            return new BootSettings(isForTesting);
         }
     }
 }

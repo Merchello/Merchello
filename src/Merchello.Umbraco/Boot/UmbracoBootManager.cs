@@ -11,6 +11,9 @@
     using Merchello.Web.Boot;
 
     using global::Umbraco.Core;
+    using global::Umbraco.Core.Plugins;
+
+    using Merchello.Core.Plugins;
 
     /// <summary>
     /// Starts the Merchello Umbraco CMS Package.
@@ -49,6 +52,9 @@
             container.Register<global::Umbraco.Core.Cache.CacheHelper>(factory => ApplicationContext.Current.ApplicationCache);
             container.Register<global::Umbraco.Core.Logging.ILogger>(factory => ApplicationContext.Current.ProfilingLogger.Logger);
             container.Register<global::Umbraco.Core.DatabaseContext>(factory => ApplicationContext.Current.DatabaseContext);
+
+            container.Register<global::Umbraco.Core.Plugins.PluginManager>(factory => PluginManager.Current);
+            container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
 
             container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
             container.RegisterSingleton<CacheHelper, CacheHelperAdapter>();

@@ -8,17 +8,17 @@
     using Merchello.Core.Persistence.SqlSyntax;
 
     /// <summary>
-    /// An internal singleton to store the Service Resolver.
+    /// An internal "service registry" singleton to store the Service Resolver.
     /// </summary>
-    internal class ServiceLocator : SingleObjectResolverBase<ServiceLocator, ServiceLocator>
+    internal class SR : SingleObjectResolverBase<SR, SR>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceLocator"/> class.
+        /// Initializes a new instance of the <see cref="SR"/> class.
         /// </summary>
         /// <param name="container">
         /// The container.
         /// </param>
-        internal ServiceLocator(IServiceContainer container)
+        internal SR(IServiceContainer container)
         {
             Ensure.ParameterNotNull(container, nameof(container));
            
