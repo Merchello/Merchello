@@ -1,6 +1,7 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <CollectionProperty Name="RecognizedWords">
+      <Value>db</Value>
       <Value>dto</Value>
       <Value>Lucene</Value>
       <Value>merch</Value>

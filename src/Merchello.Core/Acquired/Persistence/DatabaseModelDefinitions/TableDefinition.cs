@@ -8,7 +8,9 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
         public TableDefinition()
         {
             this.Columns = new List<ColumnDefinition>();
+
             this.ForeignKeys = new List<ForeignKeyDefinition>();
+
             this.Indexes = new List<IndexDefinition>();
         }
 

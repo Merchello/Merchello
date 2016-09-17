@@ -44,19 +44,25 @@
     <Compile Include="Adapters\CacheHelperAdapter.cs" />
     <Compile Include="Adapters\CacheProviderAdapter.cs" />
     <Compile Include="Adapters\DatabaseContextAdapter.cs" />
+    <Compile Include="Adapters\Converter.cs" />
     <Compile Include="Adapters\IUmbracoAdapter.cs" />
     <Compile Include="Adapters\ProfileLoggerAdapter.cs" />
     <Compile Include="Adapters\RuntimeCacheProviderAdapter.cs" />
     <Compile Include="Adapters\LoggerAdapter.cs" />
     <Compile Include="Adapters\SqlSyntaxProviderAdapter.cs" />
     <Compile Include="Adapters\UmbracoAttemptExtensions.cs" />
-    <Compile Include="Boot\Boot-SettingsAndAdapters.cs">
+    <Compile Include="Boot\UmbracoBoot-MapperConfigurations.cs">
+      <DependentUpon>UmbracoBoot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Boot\UmbracoBoot-SettingsAndAdapters.cs">
       <DependentUpon>UmbracoBoot.cs</DependentUpon>
     </Compile>
     <Compile Include="Boot\UmbracoBoot.cs" />
     <Compile Include="Boot\UmbracoBootManager.cs" />
     <Compile Include="Boot\BootSettings.cs" />
     <Compile Include="Boot\IBootSettings.cs" />
+    <Compile Include="DependencyInjection\UmbracoNativeMappingCompositionRoot.cs" />
+    <Compile Include="Mapping\UmbracoNativeMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
   </ItemGroup>

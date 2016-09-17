@@ -36,6 +36,226 @@
         }
 
         /// <summary>
+        /// Gets the create table string.
+        /// </summary>
+        public string CreateTable
+        {
+            get
+            {
+                return _provider.CreateTable;
+            }
+        }
+
+        /// <summary>
+        /// Gets the drop table string.
+        /// </summary>
+        public string DropTable
+        {
+            get
+            {
+                return _provider.DropTable;
+            }
+        }
+
+        /// <summary>
+        /// Gets the add column string.
+        /// </summary>
+        public string AddColumn
+        {
+            get
+            {
+                return _provider.AddColumn;
+            }
+        }
+
+        /// <summary>
+        /// Gets the drop column string.
+        /// </summary>
+        public string DropColumn
+        {
+            get
+            {
+                return _provider.DropColumn;
+            }
+        }
+
+        /// <summary>
+        /// Gets the alter column string.
+        /// </summary>
+        public string AlterColumn
+        {
+            get
+            {
+                return _provider.AlterColumn;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rename column string.
+        /// </summary>
+        public string RenameColumn
+        {
+            get
+            {
+                return _provider.RenameColumn;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rename table.
+        /// </summary>
+        public string RenameTable
+        {
+            get
+            {
+                return _provider.RenameTable;
+            }
+        }
+
+        /// <summary>
+        /// Gets the create schema string.
+        /// </summary>
+        public string CreateSchema
+        {
+            get
+            {
+                return _provider.CreateSchema;
+            }
+        }
+
+        /// <summary>
+        /// Gets the alter schema string.
+        /// </summary>
+        public string AlterSchema
+        {
+            get
+            {
+                return _provider.AlterSchema;
+            }
+        }
+
+        /// <summary>
+        /// Gets the drop schema string.
+        /// </summary>
+        public string DropSchema
+        {
+            get
+            {
+                return _provider.DropSchema;
+            }
+        }
+
+        /// <summary>
+        /// Gets the create index string.
+        /// </summary>
+        public string CreateIndex
+        {
+            get
+            {
+                return _provider.CreateIndex;
+            }
+        }
+
+        /// <summary>
+        /// Gets the drop index string.
+        /// </summary>
+        public string DropIndex
+        {
+            get
+            {
+                return _provider.DropIndex;
+            }
+        }
+
+        /// <summary>
+        /// Gets the insert data string.
+        /// </summary>
+        public string InsertData
+        {
+            get
+            {
+                return _provider.InsertData;
+            }
+        }
+
+        /// <summary>
+        /// Gets the update data string.
+        /// </summary>
+        public string UpdateData
+        {
+            get
+            {
+                return _provider.UpdateData;
+            }
+        }
+
+        /// <summary>
+        /// Gets the delete data string.
+        /// </summary>
+        public string DeleteData
+        {
+            get
+            {
+                return _provider.DeleteData;
+            }
+        }
+
+        /// <summary>
+        /// Gets the truncate table string.
+        /// </summary>
+        public string TruncateTable
+        {
+            get
+            {
+                return _provider.TruncateTable;
+            }
+        }
+
+        /// <summary>
+        /// Gets the create constraint string.
+        /// </summary>
+        public string CreateConstraint
+        {
+            get
+            {
+                return _provider.CreateConstraint;
+            }
+        }
+
+        /// <summary>
+        /// Gets the delete constraint string.
+        /// </summary>
+        public string DeleteConstraint
+        {
+            get
+            {
+                return _provider.DeleteConstraint;
+            }
+        }
+
+        /// <summary>
+        /// Gets the create foreign key constraint.
+        /// </summary>
+        public string CreateForeignKeyConstraint
+        {
+            get
+            {
+                return _provider.CreateForeignKeyConstraint;
+            }
+        }
+
+        /// <summary>
+        /// Gets the delete default constraint string.
+        /// </summary>
+        public string DeleteDefaultConstraint
+        {
+            get
+            {
+                return _provider.DeleteDefaultConstraint;
+            }
+        }
+
+        /// <summary>
         /// Escapes a string value.
         /// </summary>
         /// <param name="val">
@@ -77,7 +297,7 @@
         /// </returns>
         public string GetStringColumnEqualComparison(string column, int paramIndex, TextColumnType columnType)
         {
-            return _provider.GetStringColumnEqualComparison(column, paramIndex, Convert(columnType));
+            return _provider.GetStringColumnEqualComparison(column, paramIndex, Converter.Convert(columnType));
         }
 
         /// <summary>
@@ -97,91 +317,133 @@
         /// </returns>
         public string GetStringColumnWildcardComparison(string column, int paramIndex, TextColumnType columnType)
         {
-            return _provider.GetStringColumnWildcardComparison(column, paramIndex, Convert(columnType));
+            return _provider.GetStringColumnWildcardComparison(column, paramIndex, Converter.Convert(columnType));
         }
 
+        /// <summary>
+        /// Concatenates strings.
+        /// </summary>
+        /// <param name="args">
+        /// The arguments.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        /// REFACTOR- this is new to Umbraco V8
         public string GetConcat(params string[] args)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the quoted table name.
+        /// </summary>
+        /// <param name="tableName">
+        /// The table name.
+        /// </param>
+        /// <returns>
+        /// The quoted table name.
+        /// </returns>
         public string GetQuotedTableName(string tableName)
         {
-            throw new NotImplementedException();
+            return _provider.GetQuotedTableName(tableName);
         }
 
+        /// <summary>
+        /// Get the quoted column name.
+        /// </summary>
+        /// <param name="columnName">
+        /// The column name.
+        /// </param>
+        /// <returns>
+        /// The quoted column name.
+        /// </returns>
         public string GetQuotedColumnName(string columnName)
         {
-            throw new NotImplementedException();
+            return _provider.GetQuotedColumnName(columnName);
         }
 
+        /// <summary>
+        /// Gets a quoted name.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The quoted name.
+        /// </returns>]
         public string GetQuotedName(string name)
         {
-            throw new NotImplementedException();
+            return _provider.GetQuotedName(name);
         }
 
+        /// <summary>
+        /// Returns a value indicating if a table exists.
+        /// </summary>
+        /// <param name="db">
+        /// The database.
+        /// </param>
+        /// <param name="tableName">
+        /// The table name.
+        /// </param>
+        /// <returns>
+        /// A value indicating whether the table exists in the database.
+        /// </returns>
+        /// REFACTOR Umbraco V8 changes to NPoco
         public bool DoesTableExist(Database db, string tableName)
         {
             throw new NotImplementedException();
+            //// return _provider.DoesTableExist(db, tableName);
         }
 
+        /// <summary>
+        /// The get index type.
+        /// </summary>
+        /// <param name="indexTypes">
+        /// The index types.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetIndexType(IndexTypes indexTypes)
         {
-            throw new NotImplementedException();
+            return _provider.GetIndexType(Converter.Convert(indexTypes));
         }
 
+        /// <summary>
+        /// Gets the special db types.
+        /// </summary>
+        /// <param name="dbTypes">
+        /// The db types.
+        /// </param>
+        /// <returns>
+        /// The special db type.
+        /// </returns>
         public string GetSpecialDbType(SpecialDbTypes dbTypes)
         {
-            throw new NotImplementedException();
+            return _provider.GetSpecialDbType(Converter.Convert(dbTypes));
         }
 
-        public string CreateTable { get; }
-
-        public string DropTable { get; }
-
-        public string AddColumn { get; }
-
-        public string DropColumn { get; }
-
-        public string AlterColumn { get; }
-
-        public string RenameColumn { get; }
-
-        public string RenameTable { get; }
-
-        public string CreateSchema { get; }
-
-        public string AlterSchema { get; }
-
-        public string DropSchema { get; }
-
-        public string CreateIndex { get; }
-
-        public string DropIndex { get; }
-
-        public string InsertData { get; }
-
-        public string UpdateData { get; }
-
-        public string DeleteData { get; }
-
-        public string TruncateTable { get; }
-
-        public string CreateConstraint { get; }
-
-        public string DeleteConstraint { get; }
-
-        public string CreateForeignKeyConstraint { get; }
-
-        public string DeleteDefaultConstraint { get; }
-
+        /// <summary>
+        /// Formats date time.
+        /// </summary>
+        /// <param name="date">
+        /// The date.
+        /// </param>
+        /// <param name="includeTime">
+        /// The include time.
+        /// </param>
+        /// <returns>
+        /// The formatted string.
+        /// </returns>
         public string FormatDateTime(DateTime date, bool includeTime = true)
         {
-            throw new NotImplementedException();
+            return _provider.FormatDateTime(date, includeTime);
         }
 
         public string Format(TableDefinition table)
         {
+            //return _provider.Format(table)
             throw new NotImplementedException();
         }
 
@@ -279,13 +541,6 @@
         public IEnumerable<Tuple<string, string, string, bool>> GetDefinedIndexes(Database db)
         {
             throw new NotImplementedException();
-        }
-
-        private global::Umbraco.Core.Persistence.Querying.TextColumnType Convert(TextColumnType textColumType)
-        {
-            return textColumType == TextColumnType.NText
-                       ? global::Umbraco.Core.Persistence.Querying.TextColumnType.NText
-                       : global::Umbraco.Core.Persistence.Querying.TextColumnType.NVarchar;
         }
     }
 }

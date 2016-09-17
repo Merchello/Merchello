@@ -2,12 +2,15 @@
 {
     using System;
 
+    using AutoMapper;
+
     using LightInject;
 
     using Merchello.Core.Acquired;
     using Merchello.Core.Cache;
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
+    using Merchello.Core.Mapping;
     using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Core.Services;
 
@@ -40,8 +43,6 @@
     {
         #region Fields
 
-        private readonly ICoreBootSettings _settings;
-
         private MultiLogResolver _muliLogResolver;
 
         /// <summary>
@@ -68,7 +69,7 @@
         {
             Ensure.ParameterNotNull(settings, nameof(settings));
 
-            _settings = settings;
+            this.CoreBootSettings = settings;
 
             // singleton to for required application objects needed for the Merchello instance
             ServiceLocator.Current = new ServiceLocator(new ServiceContainer());
@@ -94,6 +95,10 @@
         /// </summary>
         internal bool IsForTesting { get; }
 
+        /// <summary>
+        /// Gets the core boot settings.
+        /// </summary>
+        protected ICoreBootSettings CoreBootSettings { get; }
 
         /// <summary>
         /// The initialize.
@@ -111,11 +116,13 @@
 
             OnMerchelloInit();
 
-            _muliLogResolver = new MultiLogResolver(GetMultiLogger(_settings.Logger));
+            _muliLogResolver = new MultiLogResolver(GetMultiLogger(this.CoreBootSettings.Logger));
 
+            ConfigureCmsServices(ServiceLocator.Current.Container);
             ConfigureCoreServices(ServiceLocator.Current.Container);
 
 
+            InitializeAutoMapperMappers();
             //var serviceContext = new ServiceContext(new RepositoryFactory(cache, logger, _sqlSyntaxProvider), _unitOfWorkProvider, logger, new TransientMessageFactory());
 
 
@@ -186,6 +193,18 @@
         }
 
         /// <summary>
+        /// Allows for injection of CMS Foundation services that Merchello relies on.
+        /// </summary>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        internal virtual void ConfigureCmsServices(IServiceContainer container)
+        {
+            // Container
+            container.Register<IServiceContainer>(factory => container);
+        }
+
+        /// <summary>
         /// Build the core container which contains all core things required to build the MerchelloContext
         /// </summary>
         /// <param name="container">
@@ -193,20 +212,28 @@
         /// </param>
         internal virtual void ConfigureCoreServices(IServiceContainer container)
         {
-            // Container
-            container.Register<IServiceContainer>(factory => container);
-
-            // CMS provided
-            container.Register<ISqlSyntaxProvider>(factory => _settings.SqlSyntaxProvider);
-            container.Register<CacheHelper>(factory => _settings.CacheHelper);
-            container.RegisterSingleton<ILogger>(factory => _settings.Logger);
-
             // Logger
             container.RegisterSingleton<MultiLogResolver>(factory => _muliLogResolver);
 
 
             // Configuration
             container.RegisterFrom<ConfigurationCompositionRoot>();
+        }
+
+        /// <summary>
+        /// The initializes the AutoMapper mappings.
+        /// </summary>
+        protected void InitializeAutoMapperMappers()
+        {
+            var container = ServiceLocator.Current.Container;
+
+            Mapper.Initialize(configuration =>
+                {
+                    foreach (var mc in container.GetAllInstances<MerchelloMapperConfiguration>())
+                    {
+                        mc.ConfigureMappings(configuration);
+                    }
+                });
         }
 
         /// <summary>

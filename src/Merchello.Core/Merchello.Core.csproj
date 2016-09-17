@@ -91,6 +91,7 @@
     <Compile Include="DependencyInjection\RepositoryCompositionRoot.cs" />
     <Compile Include="Logging\ExtendedLoggerData.cs" />
     <Compile Include="Logging\MultiLogger.cs" />
+    <Compile Include="Mapping\MerchelloMapperConfiguration.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="Persistence\IDatabaseContext.cs" />
     <Compile Include="Acquired\Persistence\Mappers\BaseExpressionHelper.cs" />

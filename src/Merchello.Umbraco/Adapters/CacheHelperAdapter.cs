@@ -20,8 +20,7 @@
         /// <param name="umbCacheHelper">
         /// The umb Cache Helper.
         /// </param>
-        /// TODO CacheHelper has moved to Cache namespace in V8
-        public CacheHelperAdapter(global::Umbraco.Core.CacheHelper umbCacheHelper)
+        public CacheHelperAdapter(global::Umbraco.Core.Cache.CacheHelper umbCacheHelper)
             : base(
                   new RuntimeCacheProviderAdapter(umbCacheHelper.RuntimeCache),
                   new CacheProviderAdapter(umbCacheHelper.StaticCache),
