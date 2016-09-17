@@ -4,6 +4,7 @@
 
     using Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions;
     using Merchello.Core.Mapping;
+    using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Umbraco.Adapters;
 
     /// <summary>
@@ -14,6 +15,7 @@
         /// <inheritdoc/>
         public override void ConfigureMappings(IMapperConfiguration config)
         {
+            // TO Umbraco
             config.CreateMap<ColumnDefinition, global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ColumnDefinition>()
                 .ForMember(def => def.ModificationType, expression => expression.MapFrom(def => Converter.Convert(def.ModificationType)));
 
@@ -22,6 +24,9 @@
             config.CreateMap<IndexDefinition, global::Umbraco.Core.Persistence.DatabaseModelDefinitions.IndexDefinition>();
 
             config.CreateMap<TableDefinition, global::Umbraco.Core.Persistence.DatabaseModelDefinitions.TableDefinition>();
+
+            // FROM Umbraco
+            config.CreateMap<global::Umbraco.Core.Persistence.SqlSyntax.ColumnInfo, ColumnInfo>();
         }
     }
 }

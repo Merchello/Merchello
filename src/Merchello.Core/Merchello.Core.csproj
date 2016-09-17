@@ -85,6 +85,7 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
     <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
+    <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
     <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
     <Compile Include="DependencyInjection\LightInjectExtensions.cs" />

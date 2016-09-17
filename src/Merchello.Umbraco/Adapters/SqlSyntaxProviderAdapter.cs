@@ -1,7 +1,11 @@
 ﻿namespace Merchello.Umbraco.Adapters
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
+
+    using AutoMapper;
 
     using Merchello.Core;
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
@@ -10,6 +14,8 @@
     using Merchello.Core.Persistence.SqlSyntax;
 
     using NPoco;
+
+    using ColumnInfo = Merchello.Core.Persistence.SqlSyntax.ColumnInfo;
 
     /// <summary>
     /// An adapter for adapting Umbraco's <see>
@@ -255,6 +261,33 @@
             }
         }
 
+        /// <inheritdoc/>
+        public string ConvertIntegerToOrderableString
+        {
+            get
+            {
+                return _provider.ConvertIntegerToOrderableString;
+            }
+        }
+
+        /// <inheritdoc/>
+        public string ConvertDateToOrderableString
+        {
+            get
+            {
+                return _provider.ConvertDateToOrderableString;
+            }
+        }
+
+        /// <inheritdoc/>
+        public string ConvertDecimalToOrderableString
+        {
+            get
+            {
+                return _provider.ConvertDecimalToOrderableString;
+            }
+        }
+
         /// <summary>
         /// Escapes a string value.
         /// </summary>
@@ -329,10 +362,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        /// REFACTOR- this is new to Umbraco V8
         public string GetConcat(params string[] args)
         {
-            throw new NotImplementedException();
+            return _provider.GetConcat(args);
         }
 
         /// <summary>
@@ -389,11 +421,9 @@
         /// <returns>
         /// A value indicating whether the table exists in the database.
         /// </returns>
-        /// REFACTOR Umbraco V8 changes to NPoco
         public bool DoesTableExist(Database db, string tableName)
         {
-            throw new NotImplementedException();
-            //// return _provider.DoesTableExist(db, tableName);
+            return _provider.DoesTableExist(db, tableName);
         }
 
         /// <summary>
@@ -441,106 +471,276 @@
             return _provider.FormatDateTime(date, includeTime);
         }
 
+        /// <summary>
+        /// Formats a table definition.
+        /// </summary>
+        /// <param name="table">
+        /// The table.
+        /// </param>
+        /// <returns>
+        /// The formatted string.
+        /// </returns>
         public string Format(TableDefinition table)
         {
-            //return _provider.Format(table)
-            throw new NotImplementedException();
+            return _provider.Format(Converter.Convert(table));
         }
 
+        /// <summary>
+        /// Formats column definitions.
+        /// </summary>
+        /// <param name="columns">
+        /// The columns.
+        /// </param>
+        /// <returns>
+        /// The formatted string.
+        /// </returns>
         public string Format(IEnumerable<ColumnDefinition> columns)
         {
-            throw new NotImplementedException();
+            var cdefs = columns.Select(Converter.Convert);
+            return _provider.Format(cdefs);
         }
 
+        /// <summary>
+        /// Formats index definitions.
+        /// </summary>
+        /// <param name="indexes">
+        /// The indexes.
+        /// </param>
+        /// <returns>
+        /// A list of formatted index definitions.
+        /// </returns>
         public List<string> Format(IEnumerable<IndexDefinition> indexes)
         {
-            throw new NotImplementedException();
+            var idxdefs = indexes.Select(Converter.Convert);
+            return _provider.Format(idxdefs);
         }
 
+        /// <summary>
+        /// Formats foreign keys.
+        /// </summary>
+        /// <param name="foreignKeys">
+        /// The foreign keys.
+        /// </param>
+        /// <returns>
+        /// The formatted list of foreign keys.
+        /// </returns>
         public List<string> Format(IEnumerable<ForeignKeyDefinition> foreignKeys)
         {
-            throw new NotImplementedException();
+            var fkdefs = foreignKeys.Select(Converter.Convert);
+            return _provider.Format(fkdefs);
         }
 
+        /// <summary>
+        /// Formats a primary key.
+        /// </summary>
+        /// <param name="table">
+        /// The table.
+        /// </param>
+        /// <returns>
+        /// The formatted primary key.
+        /// </returns>
         public string FormatPrimaryKey(TableDefinition table)
         {
-            throw new NotImplementedException();
+            return _provider.FormatPrimaryKey(Converter.Convert(table));
         }
 
+        /// <summary>
+        /// Gets a quoted value.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The quoted value.
+        /// </returns>
         public string GetQuotedValue(string value)
         {
-            throw new NotImplementedException();
+            return _provider.GetQuotedValue(value);
         }
 
+        /// <summary>
+        /// Formats a column definition.
+        /// </summary>
+        /// <param name="column">
+        /// The column.
+        /// </param>
+        /// <returns>
+        /// The formatted column definition.
+        /// </returns>
         public string Format(ColumnDefinition column)
         {
-            throw new NotImplementedException();
+            return _provider.Format(Converter.Convert(column));
         }
 
+        /// <summary>
+        /// Formats an index definition.
+        /// </summary>
+        /// <param name="index">
+        /// The index.
+        /// </param>
+        /// <returns>
+        /// The formatted index definition.
+        /// </returns>
         public string Format(IndexDefinition index)
         {
-            throw new NotImplementedException();
+            return _provider.Format(Converter.Convert(index));
         }
 
+        /// <summary>
+        /// Formats a foreign key definition.
+        /// </summary>
+        /// <param name="foreignKey">
+        /// The foreign key.
+        /// </param>
+        /// <returns>
+        /// The formatted foreign key definition.
+        /// </returns>
         public string Format(ForeignKeyDefinition foreignKey)
         {
-            throw new NotImplementedException();
+            return _provider.Format(Converter.Convert(foreignKey));
         }
 
+        /// <summary>
+        /// Formats a column rename string.
+        /// </summary>
+        /// <param name="tableName">
+        /// The table name.
+        /// </param>
+        /// <param name="oldName">
+        /// The old name.
+        /// </param>
+        /// <param name="newName">
+        /// The new name.
+        /// </param>
+        /// <returns>
+        /// The formatted column rename string.
+        /// </returns>
         public string FormatColumnRename(string tableName, string oldName, string newName)
         {
-            throw new NotImplementedException();
+            return _provider.FormatColumnRename(tableName, oldName, newName);
         }
 
+        /// <summary>
+        /// Formats a table rename string.
+        /// </summary>
+        /// <param name="oldName">
+        /// The old name.
+        /// </param>
+        /// <param name="newName">
+        /// The new name.
+        /// </param>
+        /// <returns>
+        /// The formatted table rename string.
+        /// </returns>
         public string FormatTableRename(string oldName, string newName)
         {
-            throw new NotImplementedException();
+            return _provider.FormatTableRename(oldName, newName);
         }
 
+        /// <summary>
+        /// Returns a value indicating whether the database supports clustered indexes.
+        /// </summary>
+        /// <returns>
+        /// A value indicating whether the database supports clustered indexes.
+        /// </returns>
         public bool SupportsClustered()
         {
-            throw new NotImplementedException();
+            return _provider.SupportsClustered();
         }
 
+        /// <summary>
+        /// Returns a value indicating whether the database supports identity insert.
+        /// </summary>
+        /// <returns>
+        /// A value indicating whether the database supports identity insert.
+        /// </returns>
         public bool SupportsIdentityInsert()
         {
-            throw new NotImplementedException();
+            return _provider.SupportsIdentityInsert();
         }
 
+        /// <summary>
+        /// Returns a value indication whether the database supports case insensitive queries.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        /// <returns>
+        /// A a value indication whether the database supports case insensitive queries or null.
+        /// </returns>
         public bool? SupportsCaseInsensitiveQueries(Database db)
         {
-            throw new NotImplementedException();
+            return _provider.SupportsCaseInsensitiveQueries(db);
         }
 
-        public string ConvertIntegerToOrderableString { get; }
-
-        public string ConvertDateToOrderableString { get; }
-
-        public string ConvertDecimalToOrderableString { get; }
-
+        /// <summary>
+        /// Gets the tables in the database schema.
+        /// </summary>
+        /// <param name="db">
+        /// The database.
+        /// </param>
+        /// <returns>
+        /// The collection of tables.
+        /// </returns>
         public IEnumerable<string> GetTablesInSchema(Database db)
         {
-            throw new NotImplementedException();
+            return _provider.GetTablesInSchema(db);
         }
 
+        /// <summary>
+        /// Gets the columns in the database schema.
+        /// </summary>
+        /// <param name="db">
+        /// The database.
+        /// </param>
+        /// <returns>
+        /// The collection of <see cref="ColumnInfo"/> in the database schema.
+        /// </returns>
         public IEnumerable<ColumnInfo> GetColumnsInSchema(Database db)
         {
-            throw new NotImplementedException();
+            return _provider.GetColumnsInSchema(db).Select(Converter.Convert);
         }
 
+        /// <summary>
+        /// Gets a collection of constraints for a table.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        /// <returns>
+        /// The collection of table constraints.
+        /// </returns>
         public IEnumerable<Tuple<string, string>> GetConstraintsPerTable(Database db)
         {
-            throw new NotImplementedException();
+            return _provider.GetConstraintsPerTable(db);
         }
 
+        /// <summary>
+        /// Gets a collection of constraints per column.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        /// <returns>
+        /// The collection of constraints per column.
+        /// </returns>
         public IEnumerable<Tuple<string, string, string>> GetConstraintsPerColumn(Database db)
         {
-            throw new NotImplementedException();
+            return _provider.GetConstraintsPerColumn(db);
         }
 
+        /// <summary>
+        /// Gets a collection of defined indexes.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        /// <returns>
+        /// The collection of defined indexes.
+        /// </returns>
         public IEnumerable<Tuple<string, string, string, bool>> GetDefinedIndexes(Database db)
         {
-            throw new NotImplementedException();
+            return _provider.GetDefinedIndexes(db);
         }
     }
 }

@@ -1,14 +1,101 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco
 {
+    using AutoMapper;
+
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
     using Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions;
     using Merchello.Core.Acquired.Persistence.Querying;
+    using Merchello.Core.Persistence.SqlSyntax;
 
     /// <summary>
-    /// Represents a converter for enum value conversion.
+    /// Represents a converter for Umbraco Core value and type conversions.
     /// </summary>
     internal static class Converter
     {
+        #region Database Definitions and Annotations
+
+        /// <summary>
+        /// Converts Merchello's TableDefinition to Umbraco's table definition.
+        /// </summary>
+        /// <param name="table">
+        /// The table.
+        /// </param>
+        /// <returns>
+        /// The converted <see>
+        ///         <cref>global::Umbraco.Core.Persistence.DatabaseModelDefinitions.TableDefinition</cref>
+        ///     </see>.
+        /// </returns>
+        public static global::Umbraco.Core.Persistence.DatabaseModelDefinitions.TableDefinition Convert(TableDefinition table)
+        {
+            return Mapper.Map<global::Umbraco.Core.Persistence.DatabaseModelDefinitions.TableDefinition>(table);
+        }
+
+        /// <summary>
+        /// Converts Merchello's ForeignKeyDefinition to Umbraco's ForeignKeyDefinition.
+        /// </summary>
+        /// <param name="foreignKey">
+        /// The foreign key.
+        /// </param>
+        /// <returns>
+        /// The converted <see>
+        ///         <cref>global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ForeignKeyDefinition</cref>
+        ///     </see>.
+        /// </returns>
+        public static global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ForeignKeyDefinition Convert(ForeignKeyDefinition foreignKey)
+        {
+            return Mapper.Map<global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ForeignKeyDefinition>(foreignKey);
+        }
+
+        /// <summary>
+        /// Converts Merchello's IndexDefinition to Umbraco's IndexDefinition.
+        /// </summary>
+        /// <param name="index">
+        /// The index.
+        /// </param>
+        /// <returns>
+        /// The converted <see>
+        ///         <cref>global::Umbraco.Core.Persistence.DatabaseModelDefinitions.IndexDefinition</cref>
+        ///     </see>.
+        /// </returns>
+        public static global::Umbraco.Core.Persistence.DatabaseModelDefinitions.IndexDefinition Convert(IndexDefinition index)
+        {
+            return Mapper.Map<global::Umbraco.Core.Persistence.DatabaseModelDefinitions.IndexDefinition>(index);
+        }
+
+        /// <summary>
+        /// Converts Merchello's ColumnDefinition to Umbraco's ColumnDefinition.
+        /// </summary>
+        /// <param name="column">
+        /// The column.
+        /// </param>
+        /// <returns>
+        /// The converted <see>
+        ///         <cref>global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ColumnDefinition</cref>
+        ///     </see>.
+        /// </returns>
+        public static global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ColumnDefinition Convert(ColumnDefinition column)
+        {
+            return Mapper.Map<global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ColumnDefinition>(column);
+        }
+
+        /// <summary>
+        /// Converts Umbraco's ColumnInfo to Merchello's ColumnInfo.
+        /// </summary>
+        /// <param name="info">
+        /// The info.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ColumnInfo"/>.
+        /// </returns>
+        public static ColumnInfo Convert(global::Umbraco.Core.Persistence.SqlSyntax.ColumnInfo info)
+        {
+            return Mapper.Map<ColumnInfo>(info);
+        }
+
+        #endregion
+
+        #region enums
+
         /// <summary>
         /// Converts Merchello's TextColumnType to Umbraco's TextColumnType.
         /// </summary>
@@ -96,5 +183,7 @@
                     return global::Umbraco.Core.Persistence.DatabaseModelDefinitions.ModificationType.Alter;
             }
         }
+
+        #endregion
     }
 }
