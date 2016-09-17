@@ -1,11 +1,8 @@
 ﻿namespace Merchello.Umbraco.Adapters
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-
-    using AutoMapper;
 
     using Merchello.Core;
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
