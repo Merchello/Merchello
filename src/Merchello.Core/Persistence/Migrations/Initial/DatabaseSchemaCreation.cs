@@ -4,12 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Configuration;
     using DatabaseModelDefinitions;
     using Events;
     using Models.Rdbms;
-
-    using umbraco;
 
     using Umbraco.Core;
     using Umbraco.Core.Logging;

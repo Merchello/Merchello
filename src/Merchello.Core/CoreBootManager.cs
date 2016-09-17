@@ -259,7 +259,7 @@
         /// </param>
         protected virtual void InitializeLoggerResolver(IMultiLogger logger)
         {
-            if (MultiLogResolver.HasCurrent)
+            if (!MultiLogResolver.HasCurrent)
             MultiLogResolver.Current = new MultiLogResolver(logger);
         }
 

@@ -300,7 +300,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acquired\NetworkHelper.cs" />
     <Compile Include="ActivatorHelper.cs" />
+    <Compile Include="Configuration\IDashboardConfiguration.cs" />
     <Compile Include="Builders\CheckoutInvoiceBuilderChain.cs" />
     <Compile Include="Cache\IPagedKeyQueryCache.cs" />
     <Compile Include="Cache\PagedKeyQueryCache.cs" />
@@ -374,6 +376,7 @@
     <Compile Include="CurrencyHelper.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderAttribute.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
+    <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />
@@ -552,7 +555,6 @@
     <Compile Include="Models\Rdbms\KeyDto.cs" />
     <Compile Include="Models\Rdbms\NoteDto.cs" />
     <Compile Include="Models\Rdbms\DetachedContentTypeDto.cs" />
-    <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Models\Rdbms\Invoice2EntityCollectionDto.cs" />
     <Compile Include="Models\Rdbms\OfferRedeemedDto.cs" />
     <Compile Include="Models\Rdbms\OfferSettngsDto.cs" />
@@ -1411,6 +1413,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

@@ -31,7 +31,7 @@
             : base(merchelloContext, queryManager)
         {
             Ensure.ParameterNotNull(collectionProviderResolver, "The IEntityCollectionProviderResolver was null");
-            this.Initialize(collectionProviderResolver);
+            this.Initialize(merchelloContext, collectionProviderResolver);
         }
 
         /// <summary>
@@ -48,12 +48,15 @@
         /// <summary>
         /// Initializes the manager.
         /// </summary>
+        /// <param name="merchelloContext">
+        /// The merchello Context.
+        /// </param>
         /// <param name="collectionProviderResolver">
         /// The <see cref="IEntityCollectionProviderResolver"/>.
         /// </param>
-        private void Initialize(IEntityCollectionProviderResolver collectionProviderResolver)
+        private void Initialize(IMerchelloContext merchelloContext, IEntityCollectionProviderResolver collectionProviderResolver)
         {
-            _productFilterGroupService = new Lazy<IProductFilterGroupQuery>(() => this.QueryManager.Instance<ProductFilterGroupQuery>(new object[] { this.Services.EntityCollectionService, this.Cache, collectionProviderResolver }));
+            _productFilterGroupService = new Lazy<IProductFilterGroupQuery>(() => this.QueryManager.Instance<ProductFilterGroupQuery>(new object[] { merchelloContext }));
         }
     }
 }

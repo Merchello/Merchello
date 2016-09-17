@@ -51,6 +51,17 @@
         public IEnumerable<IProductFilter> Filters { get; private set; }
 
         /// <summary>
+        /// Gets the parent key.
+        /// </summary>
+        public Guid? ParentKey
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Initializes the model.
         /// </summary>
         /// <param name="filters">

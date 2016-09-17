@@ -9,6 +9,6 @@
 @Html.Partial("_Headline")
 
 <div class="container-fluid">
-
+    @Html.Partial("CategoryFilterCollections", Model.Products.CollectionKey)
     @Html.Partial("_ProductBoxList", Model.Products)
 </div>

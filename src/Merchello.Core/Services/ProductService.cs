@@ -1751,6 +1751,14 @@
             }
         }
 
+        internal IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups)
+        {
+            using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
+            {
+                return repository.CountKeysThatExistInAllCollections(collectionKeysGroups);
+            }
+        }
+
         /// <summary>
         /// Gets a page of product keys
         /// </summary>

@@ -4,6 +4,7 @@
     var allCollections = Merchello.Collections.Product.GetAll();
     var rootCollections = Merchello.Collections.Product.GetRootLevelCollections();
 
+    var primed = Merchello.Filters.Product.GetFilterGroupsForCollectionContext(new Guid[] { Model });
 }
 
 <h2>@Model.ToString()</h2>
@@ -24,4 +25,20 @@
     }
 </ul>
 
+<h3>"Primed" Filters</h3>
+<ul>
+    @foreach (var fg in primed)
+    {
+        <li>
+            @fg.Name (@fg.Count)
+
+            <ul>
+                @foreach (var f in fg.Filters)
+                {
+                    <li>@f.Name (@f.Count)</li>
+                }
+            </ul>
+        </li>
+    }
+</ul>
 
