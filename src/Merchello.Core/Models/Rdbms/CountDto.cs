@@ -1,7 +1,7 @@
 ﻿namespace Merchello.Core.Models.Rdbms
 {
 
-    public class CountDto
+    internal class CountDto
     {
         public int Hash { get; set; }
 
