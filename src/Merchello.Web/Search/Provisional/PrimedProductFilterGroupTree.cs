@@ -200,7 +200,7 @@ namespace Merchello.Web.Search.Provisional
 
                 // we need individual sets of filter group keys, eached combined with the collection keys
                 // to create the context for the filter groups
-                var groupKeys = groups.Select(x => x.Key);
+                var groupKeys = groups.Select(x => x.Key).ToArray();
 
                 // then we need the individual filter keys, again combined with the collection keys
                 // to create the context for the individual filters

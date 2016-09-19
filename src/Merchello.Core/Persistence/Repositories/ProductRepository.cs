@@ -1003,7 +1003,7 @@
                        .Append(")")
                        .Append("AND [merchProductVariant].[master] = 1")
                     .Append(") AS T1");
-
+ 
             }
 
             var dtos = Database.Fetch<CountDto>(sql);
