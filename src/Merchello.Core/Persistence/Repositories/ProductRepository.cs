@@ -992,7 +992,16 @@
                 sql.Append(string.Format("SELECT {0} as Hash", group.GetHashCode())) // can't paramertize this SqlCE chokes but it should not matter since it's just a value.
                     .Append(", T1.Count")
                     .Append("FROM (")
-                    .Append(SqlForKeysThatExistInAllCollections(group, true))
+                    .Append("SELECT COUNT(*) AS Count")
+                       .Append("FROM [merchProductVariant]")
+                       .Append("WHERE [merchProductVariant].[productKey] IN (")
+                       .Append("SELECT [productKey]")
+                       .Append("FROM [merchProduct2EntityCollection]")
+                       .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = group })
+                       .Append("GROUP BY productKey")
+                       .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = group.Count() })
+                       .Append(")")
+                       .Append("AND [merchProductVariant].[master] = 1")
                     .Append(") AS T1");
 
             }
