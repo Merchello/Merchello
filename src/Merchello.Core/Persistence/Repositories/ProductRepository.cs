@@ -989,7 +989,7 @@
             foreach (var group in keysGroups)
             {
                 if (sql.SQL.Length > 0) sql.Append("UNION");
-                sql.Append("SELECT @hash as Hash", new { @hash = group.GetHashCode() })
+                sql.Append(string.Format("SELECT {0} as Hash", group.GetHashCode())) // can't paramertize this SqlCE chokes but it should not matter since it's just a value.
                     .Append(", T1.Count")
                     .Append("FROM (")
                     .Append(SqlForKeysThatExistInAllCollections(group, true))
