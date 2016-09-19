@@ -170,6 +170,14 @@
         /// </summary>
         public static event TypedEventHandler<IProductService, DeleteEventArgs<IProduct>> Deleted;
 
+        internal static event EventHandler AddingToCollection;
+
+        internal static event EventHandler RemovingFromCollection;
+
+        internal static event EventHandler AddedToCollection;
+
+        internal static event EventHandler RemovedFromCollection;
+
         #endregion
 
         /// <summary>
@@ -625,10 +633,14 @@
         /// </param>
         public void AddToCollection(Guid productKey, Guid collectionKey)
         {
+            if (AddingToCollection != null) AddingToCollection.Invoke(this, new EventArgs());
+           
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.AddToCollection(productKey, collectionKey);
             }
+
+            if (AddedToCollection != null) AddedToCollection.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -710,10 +722,15 @@
         /// </param>
         public void RemoveFromCollection(Guid productKey, Guid collectionKey)
         {
+            if (RemovingFromCollection != null) RemovingFromCollection.Invoke(this, new EventArgs());
+
             using (var repository = RepositoryFactory.CreateProductRepository(UowProvider.GetUnitOfWork()))
             {
                 repository.RemoveFromCollection(productKey, collectionKey);
             }
+
+            if (RemovedFromCollection != null) RemovedFromCollection.Invoke(this, new EventArgs());
+
         }
 
         /// <summary>

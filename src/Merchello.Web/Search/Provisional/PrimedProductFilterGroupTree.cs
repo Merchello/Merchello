@@ -171,7 +171,7 @@ namespace Merchello.Web.Search.Provisional
 
         private IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> contextKeys)
         {
-            return  ((ProductService)_productService).CountKeysThatExistInAllCollections(contextKeys);
+            return ((ProductService)_productService).CountKeysThatExistInAllCollections(contextKeys);
         }
 
         /// <summary>
