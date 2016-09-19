@@ -33,7 +33,15 @@
         /// </returns>
         IEnumerable<IProductFilterGroup> GetFilterGroupsNotContainingProduct(Guid productKey);
 
-
+        /// <summary>
+        /// Gets a collection of FilterGroups with information relating to the context in which they are going to be applied.
+        /// </summary>
+        /// <param name="collectionKeys">
+        /// The collection keys.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{IPrimedProductFilterGroup}"/>.
+        /// </returns>
         IEnumerable<IPrimedProductFilterGroup> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys);
     }
 }

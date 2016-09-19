@@ -167,11 +167,20 @@
                             productKey)));
         }
 
+        /// <inheritdoc/>
         public IEnumerable<IPrimedProductFilterGroup> GetFilterGroupsForCollectionContext(params Guid[] collectionKeys)
         {
             var tree = _primedTree.GetTree(collectionKeys);
 
             return tree.Children.Select(x => x.Value.Item);
+        }
+
+        /// <summary>
+        /// Clears the runtime cache for the filters.
+        /// </summary>
+        internal void ClearFilterTreeCache()
+        {
+            _primedTree.ClearCache();
         }
 
         /// <summary>

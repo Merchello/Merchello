@@ -1010,13 +1010,6 @@
             return results;
         }
 
-        private class CountDto
-        {
-            public int Hash { get; set; }
-
-            public int Count { get; set; }
-        }
-
         private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false)
         {
             var sql = new Sql();

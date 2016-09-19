@@ -13,6 +13,7 @@
         /// <summary>
         /// Gets the Umbraco <see cref="CacheHelper"/>
         /// </summary>
+        [Obsolete("Use Umbraco's CacheHelper directly - ApplicationContext.Current.ApplicationCache")]
         CacheHelper Cache { get; }
 
         /// <summary>

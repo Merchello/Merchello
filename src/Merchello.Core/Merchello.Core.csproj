@@ -376,6 +376,7 @@
     <Compile Include="CurrencyHelper.cs" />
     <Compile Include="EntityCollections\IEntityCollectionProviderAttribute.cs" />
     <Compile Include="Logging\IRemoteLogger.cs" />
+    <Compile Include="Models\Rdbms\CountDto.cs" />
     <Compile Include="Models\Rdbms\DigitalMediaDto.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
