@@ -72,7 +72,9 @@
             this.CoreBootSettings = settings;
 
             // "Service Registry" - singleton to for required application objects needed for the Merchello instance
-            SR.Current = new SR(new ServiceContainer());
+            var container = new ServiceContainer();
+            container.EnableAnnotatedConstructorInjection();
+            SR.Current = new SR(container);
 
             this.IsForTesting = settings.IsForTesting;
             

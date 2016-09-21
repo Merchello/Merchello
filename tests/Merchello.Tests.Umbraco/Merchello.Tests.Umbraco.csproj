@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,10 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\CacheHelperAdapterTests.cs" />
+    <Compile Include="Adapters\CacheProviderAdapterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scrap.cs" />
+    <Compile Include="TestHelpers\DbSyntax.cs" />
+    <Compile Include="TestHelpers\TestDatabaseFactory.cs" />
     <Compile Include="TestHelpers\TestHelper.cs" />
+    <Compile Include="TestHelpers\UmbracoInstanceBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -51,10 +59,17 @@
       <Project>{d921b972-b572-487f-af14-613713e1b4e7}</Project>
       <Name>Merchello.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Merchello.Umbraco\Merchello.Umbraco.csproj">
+      <Project>{332eecfd-f193-4dcf-9b0b-11484584c600}</Project>
+      <Name>Merchello.Umbraco</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
       <Project>{9dceac26-70c0-4b2f-88f5-fd2a2e2a30df}</Project>
       <Name>Merchello.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestHelpers\remove\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,14 +6,14 @@
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.SqlSyntax;
+    using Merchello.Core.Plugins;
     using Merchello.Umbraco.Adapters;
     using Merchello.Umbraco.DependencyInjection;
     using Merchello.Web.Boot;
 
     using global::Umbraco.Core;
-    using global::Umbraco.Core.Plugins;
 
-    using Merchello.Core.Plugins;
+    using global::Umbraco.Core.Plugins;
 
     /// <summary>
     /// Starts the Merchello Umbraco CMS Package.
