@@ -34,8 +34,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Umbraco", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Tests.Solo", "..\tests\Merchello.Tests.Solo\Merchello.Tests.Solo.csproj", "{72E4864B-41F3-431D-934C-B67F0E8E9CF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Solo", "Merchello.Solo\Merchello.Solo.csproj", "{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Umbraco", "Merchello.Umbraco\Merchello.Umbraco.csproj", "{332EECFD-F193-4DCF-9B0B-11484584C600}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Umbraco.Ui.Client", "Merchello.Umbraco.Ui.Client\", "{71FF72A1-8293-437C-9DE2-91981C061123}"
@@ -58,6 +56,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Merchello.Umbraco.Ui.Client
 		VWDPort = "8288"
 		SlnRelativePath = "Merchello.Umbraco.Ui.Client\"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merchello.Solo", "Merchello.Solo\Merchello.Solo.csproj", "{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,10 +89,6 @@ Global
 		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72E4864B-41F3-431D-934C-B67F0E8E9CF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Release|Any CPU.Build.0 = Release|Any CPU
 		{332EECFD-F193-4DCF-9B0B-11484584C600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{332EECFD-F193-4DCF-9B0B-11484584C600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{332EECFD-F193-4DCF-9B0B-11484584C600}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -100,6 +96,10 @@ Global
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{71FF72A1-8293-437C-9DE2-91981C061123}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +108,6 @@ Global
 		{DD560559-1756-4030-9823-36AFB363575A} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
 		{6D5423A4-AC83-4355-8E2A-BD50C487E129} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
 		{72E4864B-41F3-431D-934C-B67F0E8E9CF0} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
+		{EDE1398C-B8C1-46FD-8C77-7A1BB84F8F41} = {F10CD53F-992E-4FFD-99F6-5538708D0A76}
 	EndGlobalSection
 EndGlobal

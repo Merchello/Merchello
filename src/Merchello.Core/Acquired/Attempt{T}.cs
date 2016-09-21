@@ -9,8 +9,8 @@ namespace Merchello.Core.Acquired
     /// <seealso cref="https://github.com/umbraco/Umbraco-CMS/blob/dev-v7/src/Umbraco.Core/Attempt%7BT%7D.cs"/>
     /// UMBRACO Direct port of Umbraco internal interface to get rid of hard dependency
     [Serializable]
-	public struct Attempt<T>
-	{
+	public struct Attempt<T> : IAttempt<T>
+    {
         /// <summary>
         /// optimize, use a singleton failed attempt
         /// </summary>
@@ -39,19 +39,13 @@ namespace Merchello.Core.Acquired
         }
 
 
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="Attempt{T}"/> was successful.
-        /// </summary>
+        /// <inheritdoc/>
         public bool Success { get; }
 
-        /// <summary>
-        /// Gets the exception associated with an unsuccessful attempt.
-        /// </summary>
+        /// <inheritdoc/>
         public Exception Exception { get; }
 
-        /// <summary>
-        /// Gets the attempt result.
-        /// </summary>
+        /// <inheritdoc/>
         public T Result { get; }
 
         /// <summary>

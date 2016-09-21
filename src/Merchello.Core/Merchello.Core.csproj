@@ -46,7 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acquired\IScopeContextAdapter.cs" />
+    <Compile Include="IAttempt.cs" />
+    <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
     <Compile Include="Acquired\ObjectExtensions.cs" />
     <Compile Include="Acquired\ObjectResolution\ContainerLazyManyObjectsResolver.cs" />
     <Compile Include="Acquired\ObjectResolution\ContainerManyObjectsResolver.cs" />
@@ -85,6 +86,8 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
     <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
+    <Compile Include="Models\Cache\CacheModelBase.cs" />
+    <Compile Include="Models\Cache\ICacheModel.cs" />
     <Compile Include="Models\IDeepCloneable.cs" />
     <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
@@ -124,19 +127,10 @@
     <Compile Include="Boot\BootManagerBase.cs" />
     <Compile Include="Boot\CoreBootSettings.cs" />
     <Compile Include="Boot\ICoreBootSettings.cs" />
-    <Compile Include="Cache\CacheHelper.cs" />
     <Compile Include="Cache\ICacheHelper.cs" />
-    <Compile Include="Acquired\Cache\Providers\CacheProviderExtensions.cs" />
-    <Compile Include="Acquired\Cache\Providers\DictionaryCacheProviderBase.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Acquired\Cache\Providers\HttpRequestCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\HttpRuntimeCacheProvider.cs" />
+    <Compile Include="Acquired\Cache\CacheProviderExtensions.cs" />
     <Compile Include="Cache\ICacheProvider.cs" />
     <Compile Include="Cache\IRuntimeCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\NullCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\ObjectCacheRuntimeCacheProvider.cs" />
-    <Compile Include="Acquired\Cache\Providers\StaticCacheProvider.cs" />
     <Compile Include="Acquired\Configuration\CaseInsensitiveEnumConfigConverter.cs" />
     <Compile Include="Acquired\Configuration\CommaDelimitedConfigurationElement.cs" />
     <Compile Include="Configuration\BackOffice\DashboardTreeNode.cs" />

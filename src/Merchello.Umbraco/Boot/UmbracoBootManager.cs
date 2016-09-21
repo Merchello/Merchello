@@ -57,7 +57,7 @@
             container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
 
             container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
-            container.RegisterSingleton<CacheHelper, CacheHelperAdapter>();
+            container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();
             container.RegisterSingleton<ILogger, LoggerAdapter>();
         }
 

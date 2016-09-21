@@ -15,7 +15,7 @@
     /// This allows Umbraco to manage the database instances, retries etc. between various threads or the HttpContext.
     /// Essentially this lets Umbraco do all the work for providing the database.
     /// </remarks>
-    internal sealed class DatabaseContextAdapter : IDatabaseFactory
+    internal sealed class DatabaseContextAdapter : IDatabaseFactory, IUmbracoAdapter
     {
         /// <summary>
         /// Umbraco's database context.

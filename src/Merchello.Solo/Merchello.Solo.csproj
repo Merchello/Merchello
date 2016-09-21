@@ -48,7 +48,6 @@
     <Compile Include="Boot\BootSettings.cs" />
     <Compile Include="Boot\IBootSettings.cs" />
     <Compile Include="Boot\SoloBootManager.cs" />
-    <Compile Include="DefaultScopeContextAdapter.cs" />
     <Compile Include="DisposableTimer.cs" />
     <Compile Include="Logging\AsyncForwardingAppenderBase.cs" />
     <Compile Include="Logging\IQueue.cs" />

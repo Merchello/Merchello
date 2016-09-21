@@ -10,7 +10,7 @@
     using global::Umbraco.Core.Plugins;
 
     /// <inheritdoc/>
-    internal sealed class PluginManagerAdapter : IPluginManager
+    internal sealed class PluginManagerAdapter : IPluginManager, IUmbracoAdapter
     {
         /// <summary>
         /// Umbraco's PluginManager.

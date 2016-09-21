@@ -6,7 +6,7 @@
     /// <summary>
     /// An interface for implementing a basic cache provider
     /// </summary>
-    public interface ICacheProvider
+    internal interface ICacheProvider
     {
         /// <summary>
         /// Removes all items from the cache.

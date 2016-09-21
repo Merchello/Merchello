@@ -19,7 +19,7 @@
     ///         <cref>global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider</cref>
     ///     </see> to <see cref="ISqlSyntaxProvider"/>.
     /// </summary>
-    internal class SqlSyntaxProviderAdapter : ISqlSyntaxProvider
+    internal class SqlSyntaxProviderAdapter : ISqlSyntaxProvider, IUmbracoAdapter
     {
         /// <summary>
         /// The Umbraco's SqlSyntaxProvider.

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelpers\TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
