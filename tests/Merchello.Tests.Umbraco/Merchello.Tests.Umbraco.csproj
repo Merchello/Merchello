@@ -41,11 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapters\CacheHelperAdapterTests.cs" />
-    <Compile Include="Adapters\CacheProviderAdapterTests.cs" />
-    <Compile Include="Adapters\ObjectCacheProviderAdapterTests.cs" />
-    <Compile Include="Adapters\RuntimeCacheProviderAdapterTests.cs" />
-    <Compile Include="Adapters\StaticCacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\Cache\CacheHelperAdapterTests.cs" />
+    <Compile Include="Adapters\Cache\CacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\Cache\ObjectCacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\Cache\RuntimeCacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\Cache\StaticCacheProviderAdapterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrap.cs" />
     <Compile Include="TestHelpers\DbSyntax.cs" />

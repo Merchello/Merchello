@@ -1,7 +1,5 @@
-﻿namespace Merchello.Tests.Umbraco.Adapters
+﻿namespace Merchello.Tests.Umbraco.Adapters.Cache
 {
-    using System.Linq;
-
     using Merchello.Core.Cache;
     using Merchello.Umbraco.Adapters;
 
@@ -18,7 +16,7 @@
         {
             get
             {
-                return _provider;
+                return this._provider;
             }
         }
 
@@ -26,7 +24,7 @@
         {
             get
             {
-                return _provider;
+                return this._provider;
             }
         }
 
@@ -36,7 +34,7 @@
         {
             base.Setup();
 
-            _provider = new RuntimeCacheProviderAdapter(CacheHelper.RuntimeCache);
+            this._provider = new RuntimeCacheProviderAdapter(this.CacheHelper.RuntimeCache);
 
         }
     }

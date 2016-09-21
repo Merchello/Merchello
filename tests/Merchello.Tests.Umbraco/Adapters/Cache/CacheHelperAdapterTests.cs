@@ -1,6 +1,5 @@
-﻿namespace Merchello.Tests.Umbraco.Adapters
+﻿namespace Merchello.Tests.Umbraco.Adapters.Cache
 {
-    using Merchello.Core.Cache;
     using Merchello.Tests.Umbraco.TestHelpers;
     using Merchello.Umbraco.Adapters;
 
@@ -14,7 +13,7 @@
         [Test]
         public void CacheHelperAdapter()
         {
-            var adapted = new CacheHelperAdapter(CacheHelper);
+            var adapted = new CacheHelperAdapter(this.CacheHelper);
 
             Assert.NotNull(adapted.RuntimeCache);
             Assert.NotNull(adapted.StaticCache);

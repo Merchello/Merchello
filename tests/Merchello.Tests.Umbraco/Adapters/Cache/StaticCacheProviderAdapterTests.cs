@@ -1,4 +1,4 @@
-﻿namespace Merchello.Tests.Umbraco.Adapters
+﻿namespace Merchello.Tests.Umbraco.Adapters.Cache
 {
     using Merchello.Core.Cache;
     using Merchello.Umbraco.Adapters;
@@ -14,7 +14,7 @@
         {
             get
             {
-                return _staticCacheProvider;
+                return this._staticCacheProvider;
             }
         }
 
@@ -23,7 +23,7 @@
         {
             base.Setup();
 
-            _staticCacheProvider = new CacheProviderAdapter(CacheHelper.StaticCache);
+            this._staticCacheProvider = new CacheProviderAdapter(this.CacheHelper.StaticCache);
         }
     }
 }

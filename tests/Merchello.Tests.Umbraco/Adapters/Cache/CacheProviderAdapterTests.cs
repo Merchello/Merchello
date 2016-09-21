@@ -1,12 +1,10 @@
-﻿namespace Merchello.Tests.Umbraco.Adapters
+﻿namespace Merchello.Tests.Umbraco.Adapters.Cache
 {
     using System;
     using System.Linq;
     using System.Web.UI;
 
     using global::Umbraco.Core.Cache;
-
-    using Merchello.Tests.Umbraco.TestHelpers;
 
     using NUnit.Framework;
 
@@ -26,7 +24,7 @@
         {
             get
             {
-                return Provider.GetCacheItemsByKeySearch("").Count();
+                return this.Provider.GetCacheItemsByKeySearch("").Count();
             }
         }
 
@@ -51,22 +49,22 @@
         [TearDown]
         public virtual void TearDown()
         {
-            Provider.ClearAllCache();
+            this.Provider.ClearAllCache();
         }
 
         [Test]
         public void Throws_On_Reentry()
         {
             // don't run for StaticCacheProvider - not making sense
-            if (GetType() == typeof(StaticCacheProviderAdapterTests))
+            if (this.GetType() == typeof(StaticCacheProviderAdapterTests))
                 Assert.Ignore("Do not run for StaticCacheProviderAdapter.");
 
             Exception exception = null;
-            var result = Provider.GetCacheItem("blah", () =>
+            var result = this.Provider.GetCacheItem("blah", () =>
             {
                 try
                 {
-                    var result2 = Provider.GetCacheItem("blah");
+                    var result2 = this.Provider.GetCacheItem("blah");
                 }
                 catch (Exception e)
                 {
@@ -86,7 +84,7 @@
             object result;
             try
             {
-                result = Provider.GetCacheItem("Blah", () =>
+                result = this.Provider.GetCacheItem("Blah", () =>
                 {
                     counter++;
                     throw new Exception("Do not cache this");
@@ -96,7 +94,7 @@
 
             try
             {
-                result = Provider.GetCacheItem("Blah", () =>
+                result = this.Provider.GetCacheItem("Blah", () =>
                 {
                     counter++;
                     throw new Exception("Do not cache this");
@@ -115,13 +113,13 @@
 
             object result;
 
-            result = Provider.GetCacheItem("Blah", () =>
+            result = this.Provider.GetCacheItem("Blah", () =>
             {
                 counter++;
                 return "";
             });
 
-            result = Provider.GetCacheItem("Blah", () =>
+            result = this.Provider.GetCacheItem("Blah", () =>
             {
                 counter++;
                 return "";
@@ -138,14 +136,14 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Provider.GetCacheItem("Tester2", () => cacheContent2);
-            Provider.GetCacheItem("Tes3", () => cacheContent3);
-            Provider.GetCacheItem("different4", () => cacheContent4);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            this.Provider.GetCacheItem("Tester2", () => cacheContent2);
+            this.Provider.GetCacheItem("Tes3", () => cacheContent3);
+            this.Provider.GetCacheItem("different4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
-            var result = Provider.GetCacheItemsByKeySearch("Tes");
+            var result = this.Provider.GetCacheItemsByKeySearch("Tes");
 
             Assert.AreEqual(3, result.Count());
         }
@@ -157,16 +155,16 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("TTes1t", () => cacheContent1);
-            Provider.GetCacheItem("Tester2", () => cacheContent2);
-            Provider.GetCacheItem("Tes3", () => cacheContent3);
-            Provider.GetCacheItem("different4", () => cacheContent4);
+            this.Provider.GetCacheItem("TTes1t", () => cacheContent1);
+            this.Provider.GetCacheItem("Tester2", () => cacheContent2);
+            this.Provider.GetCacheItem("Tes3", () => cacheContent3);
+            this.Provider.GetCacheItem("different4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
-            Provider.ClearCacheByKeyExpression("^\\w+es\\d.*");
+            this.Provider.ClearCacheByKeyExpression("^\\w+es\\d.*");
 
-            Assert.AreEqual(2, GetTotalItemCount);
+            Assert.AreEqual(2, this.GetTotalItemCount);
         }
 
         [Test]
@@ -176,16 +174,16 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Provider.GetCacheItem("Tester2", () => cacheContent2);
-            Provider.GetCacheItem("Tes3", () => cacheContent3);
-            Provider.GetCacheItem("different4", () => cacheContent4);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            this.Provider.GetCacheItem("Tester2", () => cacheContent2);
+            this.Provider.GetCacheItem("Tes3", () => cacheContent3);
+            this.Provider.GetCacheItem("different4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
-            Provider.ClearCacheByKeySearch("Test");
+            this.Provider.ClearCacheByKeySearch("Test");
 
-            Assert.AreEqual(2, GetTotalItemCount);
+            Assert.AreEqual(2, this.GetTotalItemCount);
         }
 
         [Test]
@@ -195,17 +193,17 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Provider.GetCacheItem("Test2", () => cacheContent2);
-            Provider.GetCacheItem("Test3", () => cacheContent3);
-            Provider.GetCacheItem("Test4", () => cacheContent4);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            this.Provider.GetCacheItem("Test2", () => cacheContent2);
+            this.Provider.GetCacheItem("Test3", () => cacheContent3);
+            this.Provider.GetCacheItem("Test4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
-            Provider.ClearCacheItem("Test1");
-            Provider.ClearCacheItem("Test2");
+            this.Provider.ClearCacheItem("Test1");
+            this.Provider.ClearCacheItem("Test2");
 
-            Assert.AreEqual(2, GetTotalItemCount);
+            Assert.AreEqual(2, this.GetTotalItemCount);
         }
 
         [Test]
@@ -215,33 +213,33 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Provider.GetCacheItem("Test2", () => cacheContent2);
-            Provider.GetCacheItem("Test3", () => cacheContent3);
-            Provider.GetCacheItem("Test4", () => cacheContent4);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            this.Provider.GetCacheItem("Test2", () => cacheContent2);
+            this.Provider.GetCacheItem("Test3", () => cacheContent3);
+            this.Provider.GetCacheItem("Test4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
-            Provider.ClearAllCache();
+            this.Provider.ClearAllCache();
 
-            Assert.AreEqual(0, GetTotalItemCount);
+            Assert.AreEqual(0, this.GetTotalItemCount);
         }
 
         [Test]
         public void Can_Add_When_Not_Available()
         {
             var cacheContent1 = new MacroCacheContent(new LiteralControl(), "Test1");
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Assert.AreEqual(1, GetTotalItemCount);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            Assert.AreEqual(1, this.GetTotalItemCount);
         }
 
         [Test]
         public void Can_Get_When_Available()
         {
             var cacheContent1 = new MacroCacheContent(new LiteralControl(), "Test1");
-            var result = Provider.GetCacheItem("Test1", () => cacheContent1);
-            var result2 = Provider.GetCacheItem("Test1", () => cacheContent1);
-            Assert.AreEqual(1, GetTotalItemCount);
+            var result = this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            var result2 = this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            Assert.AreEqual(1, this.GetTotalItemCount);
             Assert.AreEqual(result, result2);
         }
 
@@ -252,17 +250,17 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Provider.GetCacheItem("Test2", () => cacheContent2);
-            Provider.GetCacheItem("Test3", () => cacheContent3);
-            Provider.GetCacheItem("Test4", () => cacheContent4);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            this.Provider.GetCacheItem("Test2", () => cacheContent2);
+            this.Provider.GetCacheItem("Test3", () => cacheContent3);
+            this.Provider.GetCacheItem("Test4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
             //Provider.ClearCacheObjectTypes("umbraco.MacroCacheContent");
-            Provider.ClearCacheObjectTypes(typeof(MacroCacheContent).ToString());
+            this.Provider.ClearCacheObjectTypes(typeof(MacroCacheContent).ToString());
 
-            Assert.AreEqual(1, GetTotalItemCount);
+            Assert.AreEqual(1, this.GetTotalItemCount);
         }
 
         [Test]
@@ -272,16 +270,16 @@
             var cacheContent2 = new MacroCacheContent(new LiteralControl(), "Test2");
             var cacheContent3 = new MacroCacheContent(new LiteralControl(), "Test3");
             var cacheContent4 = new LiteralControl();
-            Provider.GetCacheItem("Test1", () => cacheContent1);
-            Provider.GetCacheItem("Test2", () => cacheContent2);
-            Provider.GetCacheItem("Test3", () => cacheContent3);
-            Provider.GetCacheItem("Test4", () => cacheContent4);
+            this.Provider.GetCacheItem("Test1", () => cacheContent1);
+            this.Provider.GetCacheItem("Test2", () => cacheContent2);
+            this.Provider.GetCacheItem("Test3", () => cacheContent3);
+            this.Provider.GetCacheItem("Test4", () => cacheContent4);
 
-            Assert.AreEqual(4, GetTotalItemCount);
+            Assert.AreEqual(4, this.GetTotalItemCount);
 
-            Provider.ClearCacheObjectTypes<MacroCacheContent>();
+            this.Provider.ClearCacheObjectTypes<MacroCacheContent>();
 
-            Assert.AreEqual(1, GetTotalItemCount);
+            Assert.AreEqual(1, this.GetTotalItemCount);
         }
     }
 }
