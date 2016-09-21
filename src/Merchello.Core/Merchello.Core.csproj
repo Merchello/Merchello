@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IAttempt.cs" />
     <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
     <Compile Include="Acquired\ObjectExtensions.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
     <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
+    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Cache\CacheModelBase.cs" />
     <Compile Include="Models\Cache\ICacheModel.cs" />
     <Compile Include="Models\IDeepCloneable.cs" />
