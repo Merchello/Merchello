@@ -7,7 +7,7 @@
     /// <summary>
     /// Extension methods for IEnumerable types
     /// </summary>
-    public static class EnumerableExtensions
+    internal static class EnumerableExtensions
     {
         /// <summary>
         /// An enumerable representing the cartesian product of the sequences
