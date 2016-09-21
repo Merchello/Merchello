@@ -17,13 +17,9 @@
             var adapted = new CacheHelperAdapter(CacheHelper);
 
             Assert.NotNull(adapted.RuntimeCache);
-            Assert.NotNull(adapted.RuntimeCache as IRuntimeCacheProvider);
             Assert.NotNull(adapted.StaticCache);
-            Assert.NotNull(adapted.StaticCache as ICacheProvider);
             Assert.NotNull(adapted.RequestCache);
-            Assert.NotNull(adapted.RequestCache as ICacheProvider);
             Assert.NotNull(adapted.IsolatedRuntimeCache);
-            Assert.NotNull(adapted.IsolatedRuntimeCache as IIsolatedRuntimeCache);
         }
     }
 }

@@ -43,9 +43,13 @@
   <ItemGroup>
     <Compile Include="Adapters\CacheHelperAdapterTests.cs" />
     <Compile Include="Adapters\CacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\ObjectCacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\RuntimeCacheProviderAdapterTests.cs" />
+    <Compile Include="Adapters\StaticCacheProviderAdapterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scrap.cs" />
     <Compile Include="TestHelpers\DbSyntax.cs" />
+    <Compile Include="TestHelpers\FakeHttpContextFactory.cs" />
     <Compile Include="TestHelpers\TestDatabaseFactory.cs" />
     <Compile Include="TestHelpers\TestHelper.cs" />
     <Compile Include="TestHelpers\UmbracoInstanceBase.cs" />
