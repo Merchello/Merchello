@@ -1,6 +1,13 @@
 ﻿namespace Merchello.Core.DependencyInjection
 {
+    using System;
+    using System.Linq;
+
     using LightInject;
+
+    using Merchello.Core.Logging;
+    using Merchello.Core.Persistence.Mappers;
+    using Merchello.Core.Persistence.Querying;
 
     /// <summary>
     /// Sets the IoC container for the Merchello data layer/repositories/sql/database/etc...
@@ -15,7 +22,16 @@
         /// </param>
         public void Compose(IServiceRegistry container)
         {
-            throw new System.NotImplementedException();
+            // register mapping resover as IMappingResolver
+            container.RegisterSingleton<IMappingResolver>(
+                factory =>
+                new MappingResolver(
+                    factory.GetInstance<IServiceContainer>(),
+                    factory.GetInstance<ILogger>(),
+                    Enumerable.Empty<Type>));
+
+            // Query Factory
+            container.Register<IQueryFactory, QueryFactory>();
         }
     }
 }

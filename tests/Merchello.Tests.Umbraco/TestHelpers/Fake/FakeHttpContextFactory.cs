@@ -1,4 +1,4 @@
-﻿namespace Merchello.Tests.Umbraco.TestHelpers
+﻿namespace Merchello.Tests.Umbraco.TestHelpers.Fake
 {
     using System;
     using System.Collections;

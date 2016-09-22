@@ -47,9 +47,13 @@
     <Compile Include="Adapters\Cache\RuntimeCacheProviderAdapterTests.cs" />
     <Compile Include="Adapters\Cache\StaticCacheProviderAdapterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScratchTests.cs" />
+    <Compile Include="TestHelpers\Adapter\LogProfilerAdapter.cs" />
+    <Compile Include="TestHelpers\Boot\TestBoot.cs" />
     <Compile Include="TestHelpers\DbSyntax.cs" />
-    <Compile Include="TestHelpers\FakeHttpContextFactory.cs" />
-    <Compile Include="TestHelpers\TestDatabaseFactory.cs" />
+    <Compile Include="TestHelpers\Fake\FakeHttpContextFactory.cs" />
+    <Compile Include="TestHelpers\Fake\FakeQueryFactory.cs" />
+    <Compile Include="TestHelpers\TestUmbracoDatabaseFactory.cs" />
     <Compile Include="TestHelpers\TestHelper.cs" />
     <Compile Include="TestHelpers\UmbracoInstanceBase.cs" />
   </ItemGroup>
@@ -72,6 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="bin\" />
     <Folder Include="TestHelpers\remove\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

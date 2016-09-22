@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Acquired\DisposableTimer.cs" />
+    <Compile Include="Acquired\Logging\LogProfiler.cs" />
+    <Compile Include="Acquired\Logging\ProfilerExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IAttempt.cs" />
     <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
@@ -91,6 +94,7 @@
     <Compile Include="Models\Cache\CacheModelBase.cs" />
     <Compile Include="Models\Cache\ICacheModel.cs" />
     <Compile Include="Models\IDeepCloneable.cs" />
+    <Compile Include="Persistence\IDatabaseSchemaHelper.cs" />
     <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
     <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
@@ -100,7 +104,7 @@
     <Compile Include="Logging\MultiLogger.cs" />
     <Compile Include="Mapping\MerchelloMapperConfiguration.cs" />
     <Compile Include="Plugins\IPluginManager.cs" />
-    <Compile Include="ServiceLocator.cs" />
+    <Compile Include="DependencyInjection\IoC.cs" />
     <Compile Include="Persistence\IDatabaseContext.cs" />
     <Compile Include="Acquired\Persistence\Mappers\BaseExpressionHelper.cs" />
     <Compile Include="Persistence\Mappers\IMappingResolver.cs" />

@@ -15,7 +15,7 @@
     /// This allows Umbraco to manage the database instances, retries etc. between various threads or the HttpContext.
     /// Essentially this lets Umbraco do all the work for providing the database.
     /// </remarks>
-    internal sealed class DatabaseContextAdapter : IDatabaseFactory, IUmbracoAdapter
+    internal sealed class DatabaseContextAdapter : DatabaseFactoryBase, IUmbracoAdapter
     {
         /// <summary>
         /// Umbraco's database context.
@@ -32,19 +32,18 @@
         /// Merchello's query factory.
         /// </param>
         public DatabaseContextAdapter(DatabaseContext dbContext, IQueryFactory queryFactory)
+            : base(queryFactory)
         {
             Ensure.ParameterNotNull(dbContext, nameof(dbContext));
             Ensure.ParameterNotNull(queryFactory, nameof(queryFactory));
 
             _dbContext = dbContext;
-
-            this.QueryFactory = queryFactory;
         }
 
         /// <summary>
         /// Gets a value indicating whether the database is configured.
         /// </summary>
-        public bool Configured
+        public override bool Configured
         {
             get
             {
@@ -55,7 +54,7 @@
         /// <summary>
         /// Gets a value indicating whether can a connection can be made to the database.
         /// </summary>
-        public bool CanConnect
+        public override bool CanConnect
         {
             get
             {
@@ -64,21 +63,12 @@
         }
 
         /// <summary>
-        /// Gets the Merchello's Query Factory.
-        /// </summary>
-        /// <remarks>
-        /// We need our own query factory here since we have our own model mappers that Umbraco
-        /// does not know anything about.
-        /// </remarks>
-        public IQueryFactory QueryFactory { get; }
-
-        /// <summary>
         /// Gets the database from Umbraco's DatabaseContext.
         /// </summary>
         /// <returns>
         /// The <see cref="Database"/>.
         /// </returns>
-        public Database GetDatabase()
+        public override Database GetDatabase()
         {
             return _dbContext.Database;
         }
@@ -86,7 +76,7 @@
         /// <summary>
         /// Disposes resources.
         /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
             // Handled by the DatabaseContext
         }

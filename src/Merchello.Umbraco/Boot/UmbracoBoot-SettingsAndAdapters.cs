@@ -13,19 +13,14 @@
         /// <summary>
         /// Gets <see cref="IBootSettings"/> for Merchello startup.
         /// </summary>
-        /// <param name="appContext">
-        /// Umbraco's <see cref="ApplicationContext"/>.
-        /// </param>
         /// <param name="isForTesting">
         /// A value indicating this is startup is going to be used for testing.
         /// </param>
         /// <returns>
         /// The <see cref="IBootSettings"/>.
         /// </returns>
-        private static IBootSettings GetBootSettings(ApplicationContext appContext, bool isForTesting = false)
+        private static IBootSettings GetBootSettings(bool isForTesting = false)
         {
-            Ensure.ParameterNotNull(appContext, nameof(appContext));
-
             return new BootSettings(isForTesting);
         }
     }

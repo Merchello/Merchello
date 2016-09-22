@@ -19,7 +19,7 @@
     /// <summary>
     /// The web boot manager.
     /// </summary>
-    internal class WebBootManager : Core.Boot.CoreBootManager
+    internal class WebBootManager : CoreBootManager
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WebBootManager"/> class. 

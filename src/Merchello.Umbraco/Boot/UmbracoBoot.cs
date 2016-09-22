@@ -46,9 +46,9 @@
                 Log.Info("Attempting to initialize Merchello Umbraco Package");
 
                 // Build the settings and adapt Umbraco singleton instances
-                var settings = GetBootSettings(applicationContext);
+                var settings = GetBootSettings();
 
-                MerchelloBootstrapper.Init(new UmbracoBootManager(settings));
+                MerchelloBootstrapper.Init(new UmbracoBootManager(settings, applicationContext));
                 
                 Log.Info("Initialization of Merchello Umbraco Package complete");
             }

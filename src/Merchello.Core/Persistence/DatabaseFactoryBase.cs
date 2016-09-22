@@ -21,7 +21,7 @@
         /// <summary>
         /// The Merchello's query factory.
         /// </summary>
-        private IQueryFactory _queryFactory;
+        private readonly IQueryFactory _queryFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseFactoryBase"/> class.

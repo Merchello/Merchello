@@ -57,6 +57,10 @@
       <Project>{d921b972-b572-487f-af14-613713e1b4e7}</Project>
       <Name>Merchello.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Merchello.Solo\Merchello.Solo.csproj">
+      <Project>{ede1398c-b8c1-46fd-8c77-7a1bb84f8f41}</Project>
+      <Name>Merchello.Solo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Merchello.Web\Merchello.Web.csproj">
       <Project>{9dceac26-70c0-4b2f-88f5-fd2a2e2a30df}</Project>
       <Name>Merchello.Web</Name>

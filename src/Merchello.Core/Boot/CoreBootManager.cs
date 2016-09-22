@@ -1,16 +1,20 @@
 ﻿namespace Merchello.Core.Boot
 {
     using System;
+    using System.Linq;
 
     using AutoMapper;
 
     using LightInject;
 
     using Merchello.Core.Acquired;
+    using Merchello.Core.Acquired.ObjectResolution;
     using Merchello.Core.Cache;
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
     using Merchello.Core.Mapping;
+    using Merchello.Core.Persistence.Mappers;
+    using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Core.Services;
 
@@ -74,7 +78,7 @@
             // "Service Registry" - singleton to for required application objects needed for the Merchello instance
             var container = new ServiceContainer();
             container.EnableAnnotatedConstructorInjection();
-            SR.Current = new SR(container);
+            IoC.Current = new IoC(container);
 
             this.IsForTesting = settings.IsForTesting;
             
@@ -119,11 +123,13 @@
             OnMerchelloInit();
 
             // Grab everythin we need from Umbraco
-            ConfigureCmsServices(SR.Current.Container);
+            ConfigureCmsServices(IoC.Container);
 
-            _muliLogResolver = new MultiLogResolver(GetMultiLogger(SR.Current.Container.GetInstance<ILogger>()));
+            _muliLogResolver = new MultiLogResolver(GetMultiLogger(IoC.Container.GetInstance<ILogger>()));
 
-            ConfigureCoreServices(SR.Current.Container);
+            ConfigureCoreServices(IoC.Container);
+
+            InitializeResolvers();
 
             // this may happen too late since the SqlSyntaxProviderAdapter is done above and it requires
             // automapper mappings - but if nothing kicks off ... needs testing.
@@ -188,6 +194,8 @@
             if (this._isComplete)
                 throw new InvalidOperationException("The boot manager has already been completed");
 
+            FreezeResolution();
+
             //if (afterComplete != null)
             //{
             //    afterComplete(MerchelloContext.Current);
@@ -224,6 +232,9 @@
 
             // Configuration
             container.RegisterFrom<ConfigurationCompositionRoot>();
+
+            // Repositories
+            container.RegisterFrom<RepositoryCompositionRoot>();
         }
 
         /// <summary>
@@ -231,7 +242,7 @@
         /// </summary>
         protected void InitializeAutoMapperMappers()
         {
-            var container = SR.Current.Container;
+            var container = IoC.Container;
 
             Mapper.Initialize(configuration =>
                 {
@@ -290,6 +301,10 @@
         /// </summary>
         protected virtual void InitializeResolvers()
         {
+            var container = IoC.Container;
+
+            MappingResolver.Current = (MappingResolver)container.GetInstance<IMappingResolver>();
+
             //if (!TriggerResolver.HasCurrent)
             //TriggerResolver.Current = new TriggerResolver(PluginManager.Current.ResolveObservableTriggers());
 
@@ -342,6 +357,14 @@
         protected virtual IMultiLogger GetMultiLogger(ILogger logger)
         {
             return new MultiLogger(logger);
+        }
+
+        /// <summary>
+        /// Freeze resolution to not allow Resolvers to be modified
+        /// </summary>
+        protected virtual void FreezeResolution()
+        {
+            Resolution.Freeze();
         }
 
         /// <summary>
