@@ -8,12 +8,14 @@
     /// <remarks>
     /// This cannot be adapted since we are not using Umbraco's attributes.
     /// </remarks>
-    internal interface IDatabaseSchemaHelper
+    internal interface IDatabaseSchemaManager
     {
-       //// REFACTOR - these two methods are the entry point for installing the database schema
-       //// and we don't need the application context
-       // void CreateDatabaseSchema(ApplicationContext applicationContext);
-       // void CreateDatabaseSchema(bool guardConfiguration, ApplicationContext applicationContext);
+        //// REFACTOR - these two methods are the entry point for installing the database schema
+        //// and we don't need the application context
+        // void CreateDatabaseSchema(ApplicationContext applicationContext);
+        // void CreateDatabaseSchema(bool guardConfiguration, ApplicationContext applicationContext);
+
+        bool TableExist(string tableName);
 
         /// <summary>
         /// Creates a table in the database.
@@ -29,6 +31,5 @@
         void CreateTable<T>(bool overwrite) where T : new();
         void DropTable(string tableName);
         void DropTable<T>() where T : new();
-        bool TableExist(string tableName);
     }
 }

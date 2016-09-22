@@ -49,6 +49,13 @@
     <Compile Include="Acquired\DisposableTimer.cs" />
     <Compile Include="Acquired\Logging\LogProfiler.cs" />
     <Compile Include="Acquired\Logging\ProfilerExtensions.cs" />
+    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
+    <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
+    <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
+    <Compile Include="ActivatorServiceProvider.cs" />
+    <Compile Include="Constants-Migrations.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IAttempt.cs" />
     <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
@@ -79,7 +86,6 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ConstraintDefinition.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ConstraintType.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DbIndexDefinition.cs" />
-    <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DeletionDataDefinition.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\Direction.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\ForeignKeyDefinition.cs" />
@@ -91,10 +97,20 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
     <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\Cache\CacheModelBase.cs" />
     <Compile Include="Models\Cache\ICacheModel.cs" />
+    <Compile Include="Models\CustomerBase.cs" />
+    <Compile Include="Models\EntityBase\IDateStamped.cs" />
     <Compile Include="Models\IDeepCloneable.cs" />
-    <Compile Include="Persistence\IDatabaseSchemaHelper.cs" />
+    <Compile Include="Models\Migration\IMigrationStatus.cs" />
+    <Compile Include="Models\Migration\MigrationStatus.cs" />
+    <Compile Include="Models\Rdbms\MigrationStatusDto.cs" />
+    <Compile Include="Persistence\DatabaseSchemaManager.cs" />
+    <Compile Include="Persistence\IDatabaseSchemaManager.cs" />
+    <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
+    <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
+    <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaResult.cs" />
     <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
     <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
@@ -441,9 +457,11 @@
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
     <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
+    <Compile Include="Plugins\PluginManagerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
     <Compile Include="RateAdjustmentType.cs" />
+    <Compile Include="Services\Migration\IMigrationStatusService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />

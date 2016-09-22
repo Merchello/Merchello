@@ -22,20 +22,6 @@
 
     using Ensure = Merchello.Core.Ensure;
 
-    //using Cache;
-    //using Configuration;
-    //using Gateways;
-
-    //using Merchello.Core.Chains.OfferConstraints;
-    //using Merchello.Core.EntityCollections;
-    //using Merchello.Core.Events;
-    //using Merchello.Core.Logging;
-    //using Merchello.Core.ValueConverters;
-
-    //using Observation;
-    //using Persistence.UnitOfWork;
-
-    //using RepositoryFactory = Merchello.Core.Persistence.RepositoryFactory;
 
     /// <summary>
     /// Application boot strap for the Merchello Plugin which initializes all objects to be used in the Merchello Core
@@ -232,6 +218,11 @@
 
             // Configuration
             container.RegisterFrom<ConfigurationCompositionRoot>();
+
+            // Cache
+            // FYI-ICacheHelper registered in ConfigureSmsServices
+            container.RegisterSingleton<IRuntimeCacheProvider>(factory => factory.GetInstance<ICacheHelper>().RuntimeCache);
+
 
             // Repositories
             container.RegisterFrom<RepositoryCompositionRoot>();

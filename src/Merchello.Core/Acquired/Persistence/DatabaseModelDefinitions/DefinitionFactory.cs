@@ -6,12 +6,13 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
     using System.Reflection;
 
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
+    using Merchello.Core.Persistence.SqlSyntax;
 
     using NPoco;
 
     internal static class DefinitionFactory
     {
-        public static TableDefinition GetTableDefinition(Type modelType)
+        public static TableDefinition GetTableDefinition(Type modelType, ISqlSyntaxProvider sqlSyntax)
         {
             //Looks for NPoco's TableNameAtribute for the name of the table
             //If no attribute is set we use the name of the Type as the default convention
@@ -34,7 +35,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
                 //Otherwise use the name of the property itself as the default convention
                 var columnAttribute = propertyInfo.FirstAttribute<ColumnAttribute>();
                 string columnName = columnAttribute != null ? columnAttribute.Name : propertyInfo.Name;
-                var columnDefinition = GetColumnDefinition(modelType, propertyInfo, columnName, tableName);
+                var columnDefinition = GetColumnDefinition(modelType, propertyInfo, columnName, tableName, sqlSyntax);
                 tableDefinition.Columns.Add(columnDefinition);
 
                 //Creates a foreignkey definition and adds it to the collection on the table definition
@@ -60,7 +61,7 @@ namespace Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions
             return tableDefinition;
         }
 
-        public static ColumnDefinition GetColumnDefinition(Type modelType, PropertyInfo propertyInfo, string columnName, string tableName)
+        public static ColumnDefinition GetColumnDefinition(Type modelType, PropertyInfo propertyInfo, string columnName, string tableName, ISqlSyntaxProvider sqlSyntax)
         {
             var definition = new ColumnDefinition{ Name = columnName, TableName = tableName, ModificationType = ModificationType.Create };
 

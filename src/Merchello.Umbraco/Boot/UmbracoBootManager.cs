@@ -5,6 +5,7 @@
     using Merchello.Core.Cache;
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
+    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Core.Plugins;
     using Merchello.Umbraco.Adapters;
@@ -14,8 +15,6 @@
     using global::Umbraco.Core;
 
     using global::Umbraco.Core.Plugins;
-
-    using Merchello.Core.Persistence;
 
     /// <summary>
     /// Starts the Merchello Umbraco CMS Package.
@@ -28,10 +27,29 @@
         private readonly ApplicationContext _appContext;
 
         /// <summary>
+        /// Umbraco's <see cref="PluginManager"/>.
+        /// </summary>
+        private readonly PluginManager _pluginManager;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="UmbracoBootManager"/> class.
         /// </summary>
         public UmbracoBootManager()
-            : this(new BootSettings(), ApplicationContext.Current)
+            : this(new BootSettings(), ApplicationContext.Current, PluginManager.Current)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UmbracoBootManager"/> class.
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <param name="appContext">
+        /// The app context.
+        /// </param>
+        public UmbracoBootManager(IBootSettings settings, ApplicationContext appContext)
+            : this(settings, appContext, PluginManager.Current)
         {
         }
 
@@ -44,11 +62,17 @@
         /// <param name="appContext">
         /// Umbraco's ApplicationContext.
         /// </param>
-        public UmbracoBootManager(IBootSettings settings, ApplicationContext appContext)
+        /// <param name="pluginManager">
+        /// Umbraco's PluginManager
+        /// </param>
+        public UmbracoBootManager(IBootSettings settings, ApplicationContext appContext, PluginManager pluginManager)
             : base(settings)
         {
             Core.Ensure.ParameterNotNull(appContext, nameof(appContext));
+            Core.Ensure.ParameterNotNull(pluginManager, nameof(pluginManager));
+
             _appContext = appContext;
+            _pluginManager = pluginManager;
         }
 
         /// <inheritdoc/>
@@ -59,13 +83,12 @@
             container.RegisterFrom<UmbracoNativeMappingCompositionRoot>();
 
             // CMS provided
-            // TODO figure out if we need to register these as singletons as they already are singletons in Umbraco
-            container.Register<global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider>(factory => _appContext.DatabaseContext.SqlSyntax);
-            container.Register<global::Umbraco.Core.Cache.CacheHelper>(factory => _appContext.ApplicationCache);
-            container.Register<global::Umbraco.Core.Logging.ILogger>(factory => _appContext.ProfilingLogger.Logger);
-            container.Register<global::Umbraco.Core.DatabaseContext>(factory => _appContext.DatabaseContext);
+            container.RegisterSingleton<global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider>(factory => _appContext.DatabaseContext.SqlSyntax);
+            container.RegisterSingleton<global::Umbraco.Core.Cache.CacheHelper>(factory => _appContext.ApplicationCache);
+            container.RegisterSingleton<global::Umbraco.Core.Logging.ILogger>(factory => _appContext.ProfilingLogger.Logger);
+            container.RegisterSingleton<global::Umbraco.Core.DatabaseContext>(factory => _appContext.DatabaseContext);
             
-            container.Register<global::Umbraco.Core.Plugins.PluginManager>(factory => PluginManager.Current);
+            container.RegisterSingleton<global::Umbraco.Core.Plugins.PluginManager>(factory => _pluginManager);
             container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
             container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
             container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();

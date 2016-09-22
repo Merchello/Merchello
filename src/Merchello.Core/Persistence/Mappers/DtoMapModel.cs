@@ -31,16 +31,16 @@
         /// <summary>
         /// Gets or sets the source property name.
         /// </summary>
-        public string SourcePropertyName { get; set; }
-
+        public string SourcePropertyName { get; private set; }
+		
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
-        public Type Type { get; set; }
+        public Type Type { get; private set; }
 
         /// <summary>
         /// Gets or sets the property info.
         /// </summary>
-        public PropertyInfo PropertyInfo { get; set; }
+        public PropertyInfo PropertyInfo { get; private set; }
     }
 }

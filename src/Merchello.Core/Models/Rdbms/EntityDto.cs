@@ -3,7 +3,7 @@ namespace Merchello.Core.Models.Rdbms
     using System;
 
     /// <inheritdoc/>
-    internal abstract class EntityDto : KeyDto, IEntityDto
+    public abstract class EntityDto : KeyDto, IEntityDto
     {
         /// <inheritdoc/>
         public DateTime UpdateDate { get; set; }

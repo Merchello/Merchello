@@ -8,6 +8,7 @@
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.Mappers;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Plugins;
 
     /// <summary>
     /// Sets the IoC container for the Merchello data layer/repositories/sql/database/etc...
@@ -28,7 +29,7 @@
                 new MappingResolver(
                     factory.GetInstance<IServiceContainer>(),
                     factory.GetInstance<ILogger>(),
-                    Enumerable.Empty<Type>));
+                    () => factory.GetInstance<IPluginManager>().ResolveBaseMappers()));
 
             // Query Factory
             container.Register<IQueryFactory, QueryFactory>();

@@ -1,14 +1,14 @@
 ﻿namespace Merchello.Tests.Umbraco.TestHelpers.Boot
 {
     using global::Umbraco.Core;
+    using global::Umbraco.Core.Plugins;
 
     using Merchello.Umbraco.Boot;
-    using Merchello.Web.Boot;
 
     internal class TestBoot : UmbracoBootManager
     {
-        public TestBoot(ApplicationContext appContext)
-            : base(new BootSettings { IsForTesting = true }, appContext)
+        public TestBoot(ApplicationContext appContext, PluginManager pluginManager)
+            : base(new BootSettings { IsForTesting = true }, appContext, pluginManager)
         {
         }
     }

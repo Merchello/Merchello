@@ -39,6 +39,8 @@
 
         protected ApplicationContext ApplicationContext { get; private set; }
 
+        protected PluginManager PluginManager { get; private set; }
+
         protected virtual bool EnableCache
         {
             get
@@ -52,6 +54,7 @@
         {
             var syntax = (DbSyntax)Enum.Parse(typeof(DbSyntax), ConfigurationManager.AppSettings["syntax"]);
 
+            // Create a SqlSyntaxProvider for either SqlCe or SqlServer depending on App.config setting
             this.SqlSyntaxProvider = syntax == DbSyntax.SqlCe
                                          ? (ISqlSyntaxProvider)new SqlCeSyntaxProvider()
                                          : (ISqlSyntaxProvider)new SqlServerSyntaxProvider(new Lazy<IDatabaseFactory>(() => null));
@@ -60,16 +63,20 @@
 
             var queryFactory = new FakeQueryFactory(SqlSyntaxProvider);
 
+            // Create a Query factory - active database
             this.DatabaseFactory = new TestUmbracoDatabaseFactory(Logger, queryFactory);
 
+            // Create an Umbraco Database Context using a fake Umbraco query factory
             DatabaseContext = new DatabaseContext(DatabaseFactory, Logger);
 
+            var serviceProvider = new global::Merchello.Core.ActivatorServiceProvider();
 
             if (this.DatabaseFactory.CanConnect)
             {
                 Console.WriteLine("Can connect to the database.");
             }
 
+            // Create an Umbraco CacheHelper
             this.CacheHelper = EnableCache
                                    ? new CacheHelper(
                                          new ObjectCacheRuntimeCacheProvider(),
@@ -78,17 +85,24 @@
                                          new IsolatedRuntimeCache(type => new ObjectCacheRuntimeCacheProvider()))
                                    : CacheHelper.CreateDisabledCacheHelper();
 
-            ApplicationContext = BuildApplicationContext();
 
-            MerchelloBootstrapper.Init(new TestBoot(ApplicationContext));
-        }
-
-        private ApplicationContext BuildApplicationContext()
-        {
             // Goofy way to get around internals
             var profiler = new Core.Acquired.Logging.LogProfiler(new LoggerAdapter(Logger));
             var profileLogger = new ProfilingLogger(Logger, new LogProfilerAdapter(profiler));
 
+            // Umbraco's Plugin Manager
+            PluginManager = new PluginManager(serviceProvider, CacheHelper.RuntimeCache, profileLogger, true);
+
+            // The application context (note: ALL of the Umbraco services are null)
+            ApplicationContext = BuildApplicationContext(profileLogger);
+
+            // Boot Merchello
+            MerchelloBootstrapper.Init(new TestBoot(ApplicationContext, PluginManager));
+        }
+
+        /// Creates the Umbraco ApplicationContext
+        private ApplicationContext BuildApplicationContext(ProfilingLogger profileLogger)
+        {
             var serviceContext = new ServiceContext();
 
             return new ApplicationContext(DatabaseContext, serviceContext, CacheHelper, profileLogger);

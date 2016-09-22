@@ -1,92 +1,90 @@
-﻿namespace Merchello.Core.Persistence.Migrations.Initial
+namespace Merchello.Core.Persistence.Migrations.Initial
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using DatabaseModelDefinitions;
-    using Events;
-    using Models.Rdbms;
+    using Merchello.Core.Acquired;
+    using Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions;
+    using Merchello.Core.Events;
+    using Merchello.Core.Logging;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.SqlSyntax;
 
-    using Umbraco.Core;
-    using Umbraco.Core.Logging;
-    using Umbraco.Core.Persistence;
-    using Umbraco.Core.Persistence.SqlSyntax;
-
-
+    using NPoco;
 
     /// <summary>
-    /// Represents the initial database schema creation by running CreateTable for all DTOs against the database.
+    /// Represents the initial database schema creation by running CreateTable for all DTOs against the db.
     /// </summary>
     internal class DatabaseSchemaCreation
     {
-        #region Private Members
+        #region All Ordered Tables
 
         /// <summary>
         /// The ordered tables.
         /// </summary>
         private static readonly Dictionary<int, Type> OrderedTables = new Dictionary<int, Type>
         {
-            { 0, typeof(TypeFieldDto) },
-            { 1, typeof(DetachedContentTypeDto) },
-            { 2, typeof(AnonymousCustomerDto) },
-            { 3, typeof(CustomerDto) },
-            { 4, typeof(CustomerIndexDto) },             
-            { 5, typeof(CustomerAddressDto) },
-            { 6, typeof(ItemCacheDto) },
-            { 7, typeof(ItemCacheItemDto) },
-            { 8, typeof(GatewayProviderSettingsDto) },
-            { 9, typeof(WarehouseDto) },
-            { 10, typeof(WarehouseCatalogDto) },                
-            { 11, typeof(ShipCountryDto) },
-            { 12, typeof(ShipMethodDto) },
-            { 13, typeof(ShipRateTierDto) },                
-            { 14, typeof(InvoiceStatusDto) },  
-            { 15, typeof(InvoiceDto) },                   
-            { 16, typeof(InvoiceItemDto) },
-            { 17, typeof(InvoiceIndexDto) },
-            { 18, typeof(OrderStatusDto) },
-            { 19, typeof(OrderDto) },    
-            { 20, typeof(ShipmentStatusDto) },                              
-            { 21, typeof(ShipmentDto) },                 
-            { 22, typeof(OrderItemDto) },
-            { 23, typeof(PaymentMethodDto) }, 
-            { 24, typeof(PaymentDto) },                
-            { 25, typeof(ProductDto) },
-            { 26, typeof(ProductVariantDto) },
-            { 27, typeof(ProductOptionDto) },
-            { 28, typeof(ProductAttributeDto) },
-            { 29, typeof(Product2ProductOptionDto) },
-            { 30, typeof(CatalogInventoryDto) },
-            { 31, typeof(TaxMethodDto) },
-            { 32, typeof(ProductVariant2ProductAttributeDto) },           
-            { 33, typeof(AppliedPaymentDto) },
-            { 34, typeof(ProductVariantIndexDto) },
-            { 35, typeof(StoreSettingDto) },
-            { 36, typeof(OrderIndexDto) },
-            { 37, typeof(NotificationMethodDto) },
-            { 38, typeof(NotificationMessageDto) },
-            { 39, typeof(AuditLogDto) },
-            { 40, typeof(OfferSettingsDto) },
-            { 41, typeof(OfferRedeemedDto) },
-            { 42, typeof(EntityCollectionDto) },
-            { 43, typeof(Product2EntityCollectionDto) },
-            { 44, typeof(Invoice2EntityCollectionDto) },
-            { 45, typeof(Customer2EntityCollectionDto) },
-            { 46, typeof(ProductVariantDetachedContentDto) },
-            { 47, typeof(NoteDto) },
-            { 48, typeof(ProductOptionAttributeShareDto) }
+            { 1, typeof(MigrationStatusDto) },
+            { 10, typeof(TypeFieldDto) },
+            { 20, typeof(DetachedContentTypeDto) },
+            { 30, typeof(AnonymousCustomerDto) },
+            { 40, typeof(CustomerDto) },
+            { 50, typeof(CustomerAddressDto) },
+            { 60, typeof(ItemCacheDto) },
+            { 70, typeof(ItemCacheItemDto) },
+            { 80, typeof(GatewayProviderSettingsDto) },
+            { 90, typeof(WarehouseDto) },
+            { 100, typeof(WarehouseCatalogDto) },
+            { 110, typeof(ShipCountryDto) },
+            { 120, typeof(ShipMethodDto) },
+            { 130, typeof(ShipRateTierDto) },
+            { 140, typeof(InvoiceStatusDto) },
+            { 150, typeof(InvoiceDto) },
+            { 160, typeof(InvoiceItemDto) },
+            { 170, typeof(OrderStatusDto) },
+            { 180, typeof(OrderDto) },
+            { 190, typeof(ShipmentStatusDto) },
+            { 200, typeof(ShipmentDto) },
+            { 210, typeof(OrderItemDto) },
+            { 220, typeof(PaymentMethodDto) },
+            { 230, typeof(PaymentDto) },
+            { 240, typeof(ProductDto) },
+            { 250, typeof(ProductVariantDto) },
+            { 260, typeof(ProductOptionDto) },
+            { 270, typeof(ProductAttributeDto) },
+            { 280, typeof(Product2ProductOptionDto) },
+            { 290, typeof(CatalogInventoryDto) },
+            { 300, typeof(TaxMethodDto) },
+            { 310, typeof(ProductVariant2ProductAttributeDto) },
+            { 320, typeof(AppliedPaymentDto) },
+            { 330, typeof(ProductVariantIndexDto) },
+            { 340, typeof(StoreSettingDto) },
+            { 350, typeof(NotificationMethodDto) },
+            { 360, typeof(NotificationMessageDto) },
+            { 370, typeof(AuditLogDto) },
+            { 380, typeof(OfferSettingsDto) },
+            { 390, typeof(OfferRedeemedDto) },
+            { 400, typeof(EntityCollectionDto) },
+            { 410, typeof(Product2EntityCollectionDto) },
+            { 420, typeof(Invoice2EntityCollectionDto) },
+            { 430, typeof(Customer2EntityCollectionDto) },
+            { 440, typeof(ProductVariantDetachedContentDto) },
+            { 450, typeof(NoteDto) },
+            { 460, typeof(ProductOptionAttributeShareDto) }
         };
 
-        /// <summary>
-        /// The database.
-        /// </summary>
-        private readonly Database _database;
+        #endregion
 
         /// <summary>
-        /// The Umbraco's <see cref="DatabaseSchemaHelper"/>.
+        /// The <see cref="IDatabaseSchemaManager"/>.
         /// </summary>
-        private readonly DatabaseSchemaHelper _umbSchemaHelper;
+        private readonly IDatabaseSchemaManager _schemaManager;
+
+        /// <summary>
+        /// The <see cref="Database"/>.
+        /// </summary>
+        private readonly Database _database;
 
         /// <summary>
         /// The <see cref="ILogger"/>.
@@ -96,165 +94,171 @@
         /// <summary>
         /// The <see cref="ISqlSyntaxProvider"/>.
         /// </summary>
-        private readonly ISqlSyntaxProvider _sqlSyntax;
+        private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseSchemaCreation"/> class.
+        /// </summary>
+        /// <param name="dbFactory">
+        /// The <see cref="IDatabaseFactory"/>.
+        /// </param>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/>.
+        /// </param>
+        /// <param name="schemaManager">
+        /// The <see cref="IDatabaseSchemaManager"/>.
+        /// </param>
+        public DatabaseSchemaCreation(IDatabaseFactory dbFactory, ILogger logger, IDatabaseSchemaManager schemaManager)
+        {
+            this._database = dbFactory.GetDatabase();
+            this._sqlSyntaxProvider = dbFactory.QueryFactory.SqlSyntax;
+            this._logger = logger;
+            this._schemaManager = schemaManager;
+        }
+
+
+        #region Events
+
+        /// <summary>
+        /// The save event handler
+        /// </summary>
+        /// <param name="e">
+        /// The database creation event arguments.
+        /// </param>
+        internal delegate void DatabaseEventHandler(DatabaseCreationEventArgs e);
+
+        /// <summary>
+        /// Occurs when [before save].
+        /// </summary>
+        internal static event DatabaseEventHandler BeforeCreation;
+
+        /// <summary>
+        /// Occurs when [after save].
+        /// </summary>
+        internal static event DatabaseEventHandler AfterCreation;
+
 
 
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseSchemaCreation"/> class.
-        /// </summary>
-        /// <param name="database">
-        /// The database.
-        /// </param>
-        /// <param name="logger">
-        /// The logger.
-        /// </param>
-        /// <param name="databaseSchemaHelper">
-        /// The database Schema Helper.
-        /// </param>
-        public DatabaseSchemaCreation(Database database, ILogger logger, DatabaseSchemaHelper databaseSchemaHelper, ISqlSyntaxProvider sqlSyntax)
-        {
-            _database = database;
-            _logger = logger;
-            _umbSchemaHelper = databaseSchemaHelper;
-            _sqlSyntax = sqlSyntax;
-        }
-
-
-        /// <summary>
-        /// Drops all Merchello tables in the database
-        /// </summary>
-        internal void UninstallDatabaseSchema()
-        {
-            _logger.Info<DatabaseSchemaCreation>("Start UninstallDatabaseSchema");
-
-            foreach (var item in OrderedTables.OrderByDescending(x => x.Key))
-            {
-                var tableNameAttribute = item.Value.FirstAttribute<TableNameAttribute>();
-
-                string tableName = tableNameAttribute == null ? item.Value.Name : tableNameAttribute.Value;
-
-                _logger.Info<DatabaseSchemaCreation>("Uninstall" + tableName);
-
-                try
-                {
-                    if (_umbSchemaHelper.TableExist(tableName))
-                    {
-                        _umbSchemaHelper.DropTable(tableName);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error<DatabaseSchemaCreation>("Could not drop table " + tableName, ex);
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Initialize the database by creating the umbraco database schema
+        /// Initializes the database by creating the umbraco db schema.
         /// </summary>
         public void InitializeDatabaseSchema()
         {
             var e = new DatabaseCreationEventArgs();
-            FireBeforeCreation(e);
+            this.FireBeforeCreation(e);
 
-            if (!e.Cancel)
+            if (e.Cancel == false)
             {
                 foreach (var item in OrderedTables.OrderBy(x => x.Key))
                 {
-                    _umbSchemaHelper.CreateTable(false, item.Value);   
+                    this._schemaManager.CreateTable(false, item.Value);
                 }
             }
 
-            FireAfterCreation(e);
+            this.FireAfterCreation(e);
         }
 
         /// <summary>
-        /// Validates the schema of the current database
+        /// Validates the schema of the current database.
         /// </summary>
         /// <returns>
-        /// The <see cref="MerchelloDatabaseSchemaResult"/>.
+        /// The <see cref="DatabaseSchemaResult"/>.
         /// </returns>
-        public MerchelloDatabaseSchemaResult ValidateSchema()
+        public DatabaseSchemaResult ValidateSchema()
         {
-            var result = new MerchelloDatabaseSchemaResult(_database)
-            {
-                DbIndexDefinitions = SqlSyntaxContext.SqlSyntaxProvider.GetDefinedIndexes(_database)
-                    .Select(x => new DbIndexDefinition()
-                    {
-                        TableName = x.Item1,
-                        IndexName = x.Item2,
-                        ColumnName = x.Item3,
-                        IsUnique = x.Item4
-                    }).ToArray()
-            };
+            // ReSharper disable once UseObjectOrCollectionInitializer
+            var result = new DatabaseSchemaResult(_sqlSyntaxProvider);
 
-            //get the db index defs
+            // get the db index defs
+            result.DbIndexDefinitions = _sqlSyntaxProvider.GetDefinedIndexes(this._database)
+                .Select(x => new DbIndexDefinition
+                {
+                    TableName = x.Item1,
+                    IndexName = x.Item2,
+                    ColumnName = x.Item3,
+                    IsUnique = x.Item4
+                }).ToArray();
 
-            foreach (var item in OrderedTables.OrderBy(x => x.Key))
-            {
-                var tableDefinition = DefinitionFactory.GetTableDefinition(item.Value);
-                result.TableDefinitions.Add(tableDefinition);
-            }
+            result.TableDefinitions.AddRange(OrderedTables
+                .OrderBy(x => x.Key)
+                .Select(x => DefinitionFactory.GetTableDefinition(x.Value, _sqlSyntaxProvider)));
 
-            ValidateDbTables(result);
-
-            ValidateDbColumns(result);
-
-            ValidateDbIndexes(result);
-
-            ValidateDbConstraints(result);
-
-            if (
-                !result.MerchelloErrors.Any(
-                    x => x.Item1.Equals("Table") && x.Item2.InvariantEquals("merchStoreSetting")))
-            {
-                // catch this so it doesn't kick off on an install
-                LoadMerchelloData(result);
-            }
-            else
-            {
-                result.StoreSettings = Enumerable.Empty<StoreSettingDto>();
-                result.TypeFields = Enumerable.Empty<TypeFieldDto>();
-            }
-
+            this.ValidateDbTables(result);
+            this.ValidateDbColumns(result);
+            this.ValidateDbIndexes(result);
+            this.ValidateDbConstraints(result);
 
             return result;
         }
 
         /// <summary>
-        /// The load merchello data.
+        /// Drops all Merchello tables in the database.
         /// </summary>
-        /// <param name="result">
-        /// The result.
-        /// </param>
-        private void LoadMerchelloData(MerchelloDatabaseSchemaResult result)
+        internal void UninstallDatabaseSchema()
         {
-            var sqlSettings = new Sql();
-            sqlSettings.Select("*")
-                .From<StoreSettingDto>(_sqlSyntax);
+            this._logger.Info<DatabaseSchemaCreation>("Start Merchello UninstallDatabaseSchema");
 
-            result.StoreSettings = _database.Fetch<StoreSettingDto>(sqlSettings);
+            foreach (var item in OrderedTables.OrderByDescending(x => x.Key))
+            {
+                var tableNameAttribute = item.Value.FirstAttribute<TableNameAttribute>();
 
-            var sqlTypeFields = new Sql();
-            sqlSettings.Select("*")
-                .From<TypeFieldDto>(_sqlSyntax);
+                var tableName = tableNameAttribute == null ? item.Value.Name : tableNameAttribute.Value;
 
-            result.TypeFields = _database.Fetch<TypeFieldDto>(sqlTypeFields);
+                this._logger.Info<DatabaseSchemaCreation>("Uninstall" + tableName);
+
+                try
+                {
+                    if (this._schemaManager.TableExist(tableName))
+                    {
+                        this._schemaManager.DropTable(tableName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // swallow this for now, not sure how best to handle this with diff databases... though this is internal
+                    // and only used for unit tests. If this fails its because the table doesn't exist... generally!
+                    this._logger.Error<DatabaseSchemaCreation>("Could not drop table " + tableName, ex);
+                }
+            }
         }
 
-        private void ValidateDbConstraints(MerchelloDatabaseSchemaResult result)
-        {
-            //MySql doesn't conform to the "normal" naming of constraints, so there is currently no point in doing these checks.
-            //TODO: At a later point we do other checks for MySql, but ideally it should be necessary to do special checks for different providers.
-            // ALso note that to get the constraints for MySql we have to open a connection which we currently have not.
-            if (_sqlSyntax is MySqlSyntaxProvider)
-                return;
 
-            //Check constraints in configured database against constraints in schema
-            var constraintsInDatabase = _sqlSyntax.GetConstraintsPerColumn(_database).DistinctBy(x => x.Item3).ToList();
+        /// <summary>
+        /// Raises the <see cref="BeforeCreation"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected internal virtual void FireBeforeCreation(DatabaseCreationEventArgs e)
+        {
+            if (BeforeCreation != null)
+            {
+                BeforeCreation(e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="AfterCreation"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected virtual void FireAfterCreation(DatabaseCreationEventArgs e)
+        {
+            if (AfterCreation != null)
+            {
+                AfterCreation(e);
+            }
+        }
+
+        /// <summary>
+        /// Validates database constraints.
+        /// </summary>
+        /// <param name="result">
+        /// The <see cref="DatabaseSchemaResult"/>.
+        /// </param>
+        private void ValidateDbConstraints(DatabaseSchemaResult result)
+        {
+            // Check constraints in configured database against constraints in schema
+            var constraintsInDatabase = _sqlSyntaxProvider.GetConstraintsPerColumn(this._database).DistinctBy(x => x.Item3).ToList();
             var foreignKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("FK_")).Select(x => x.Item3).ToList();
             var primaryKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("PK_")).Select(x => x.Item3).ToList();
             var indexesInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("IX_")).Select(x => x.Item3).ToList();
@@ -268,7 +272,9 @@
             var primaryKeysInSchema = result.TableDefinitions.SelectMany(x => x.Columns.Select(y => y.PrimaryKeyName))
                 .Where(x => x.IsNullOrWhiteSpace() == false).ToList();
 
-            //Add valid and invalid foreign key differences to the result object
+            // Add valid and invalid foreign key differences to the result object
+            // We'll need to do invariant contains with case insensitivity because foreign key, primary key, and even index naming w/ MySQL is not standardized
+            // In theory you could have: FK_ or fk_ ...or really any standard that your development department (or developer) chooses to use.
             foreach (var unknown in unknownConstraintsInDatabase)
             {
                 if (foreignKeysInSchema.InvariantContains(unknown) || primaryKeysInSchema.InvariantContains(unknown) || indexesInSchema.InvariantContains(unknown))
@@ -281,13 +287,13 @@
                 }
             }
 
-            //Foreign keys:
-
+            // Foreign keys:
             var validForeignKeyDifferences = foreignKeysInDatabase.Intersect(foreignKeysInSchema, StringComparer.InvariantCultureIgnoreCase);
             foreach (var foreignKey in validForeignKeyDifferences)
             {
                 result.ValidConstraints.Add(foreignKey);
             }
+
             var invalidForeignKeyDifferences =
                 foreignKeysInDatabase.Except(foreignKeysInSchema, StringComparer.InvariantCultureIgnoreCase)
                                 .Union(foreignKeysInSchema.Except(foreignKeysInDatabase, StringComparer.InvariantCultureIgnoreCase));
@@ -296,15 +302,14 @@
                 result.Errors.Add(new Tuple<string, string>("Constraint", foreignKey));
             }
 
-
-            //Primary keys:
-
-            //Add valid and invalid primary key differences to the result object
+            // Primary keys:
+            // Add valid and invalid primary key differences to the result object
             var validPrimaryKeyDifferences = primaryKeysInDatabase.Intersect(primaryKeysInSchema, StringComparer.InvariantCultureIgnoreCase);
             foreach (var primaryKey in validPrimaryKeyDifferences)
             {
                 result.ValidConstraints.Add(primaryKey);
             }
+
             var invalidPrimaryKeyDifferences =
                 primaryKeysInDatabase.Except(primaryKeysInSchema, StringComparer.InvariantCultureIgnoreCase)
                                 .Union(primaryKeysInSchema.Except(primaryKeysInDatabase, StringComparer.InvariantCultureIgnoreCase));
@@ -313,16 +318,17 @@
                 result.Errors.Add(new Tuple<string, string>("Constraint", primaryKey));
             }
 
-            //Constaints:
-
-            //NOTE: SD: The colIndex checks above should really take care of this but I need to keep this here because it was here before
+            // Constaints:
+            // REFACTOR - should be able to remove these since we should have not legacy
+            // NOTE: SD: The colIndex checks above should really take care of this but I need to keep this here because it was here before
             // and some schema validation checks might rely on this data remaining here!
-            //Add valid and invalid index differences to the result object
+            // Add valid and invalid index differences to the result object
             var validIndexDifferences = indexesInDatabase.Intersect(indexesInSchema, StringComparer.InvariantCultureIgnoreCase);
             foreach (var index in validIndexDifferences)
             {
                 result.ValidConstraints.Add(index);
             }
+
             var invalidIndexDifferences =
                 indexesInDatabase.Except(indexesInSchema, StringComparer.InvariantCultureIgnoreCase)
                                 .Union(indexesInSchema.Except(indexesInDatabase, StringComparer.InvariantCultureIgnoreCase));
@@ -332,13 +338,20 @@
             }
         }
 
-        private void ValidateDbColumns(MerchelloDatabaseSchemaResult result)
+        /// <summary>
+        /// Validates database columns.
+        /// </summary>
+        /// <param name="result">
+        /// The <see cref="DatabaseSchemaResult"/>.
+        /// </param>
+        private void ValidateDbColumns(DatabaseSchemaResult result)
         {
-            //Check columns in configured database against columns in schema
-            var columnsInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetColumnsInSchema(_database);
+            // Check columns in configured database against columns in schema
+            var columnsInDatabase = _sqlSyntaxProvider.GetColumnsInSchema(this._database);
             var columnsPerTableInDatabase = columnsInDatabase.Select(x => string.Concat(x.TableName, ",", x.ColumnName)).ToList();
             var columnsPerTableInSchema = result.TableDefinitions.SelectMany(x => x.Columns.Select(y => string.Concat(y.TableName, ",", y.Name))).ToList();
-            //Add valid and invalid column differences to the result object
+            
+            // Add valid and invalid column differences to the result object
             var validColumnDifferences = columnsPerTableInDatabase.Intersect(columnsPerTableInSchema, StringComparer.InvariantCultureIgnoreCase);
             foreach (var column in validColumnDifferences)
             {
@@ -354,12 +367,19 @@
             }
         }
 
-        private void ValidateDbTables(MerchelloDatabaseSchemaResult result)
+        /// <summary>
+        /// Validates the database tables.
+        /// </summary>
+        /// <param name="result">
+        /// The <see cref="DatabaseSchemaResult"/>.
+        /// </param>
+        private void ValidateDbTables(DatabaseSchemaResult result)
         {
-            //Check tables in configured database against tables in schema
-            var tablesInDatabase = SqlSyntaxContext.SqlSyntaxProvider.GetTablesInSchema(_database).ToList();
+            // Check tables in configured database against tables in schema
+            var tablesInDatabase = _sqlSyntaxProvider.GetTablesInSchema(this._database).ToList();
             var tablesInSchema = result.TableDefinitions.Select(x => x.Name).ToList();
-            //Add valid and invalid table differences to the result object
+
+            // Add valid and invalid table differences to the result object
             var validTableDifferences = tablesInDatabase.Intersect(tablesInSchema, StringComparer.InvariantCultureIgnoreCase);
             foreach (var tableName in validTableDifferences)
             {
@@ -375,14 +395,19 @@
             }
         }
 
-        private void ValidateDbIndexes(MerchelloDatabaseSchemaResult result)
+        /// <summary>
+        /// Validates the database indexes
+        /// </summary>
+        /// <param name="result">
+        /// The <see cref="DatabaseSchemaResult"/>.
+        /// </param>
+        private void ValidateDbIndexes(DatabaseSchemaResult result)
         {
-            //These are just column indexes NOT constraints or Keys
-            //var colIndexesInDatabase = result.DbIndexDefinitions.Where(x => x.IndexName.InvariantStartsWith("IX_")).Select(x => x.IndexName).ToList();
+            // These are just column indexes NOT constraints or Keys
             var colIndexesInDatabase = result.DbIndexDefinitions.Select(x => x.IndexName).ToList();
             var indexesInSchema = result.TableDefinitions.SelectMany(x => x.Indexes.Select(y => y.Name)).ToList();
 
-            //Add valid and invalid index differences to the result object
+            // Add valid and invalid index differences to the result object
             var validColIndexDifferences = colIndexesInDatabase.Intersect(indexesInSchema, StringComparer.InvariantCultureIgnoreCase);
             foreach (var index in validColIndexDifferences)
             {
@@ -397,47 +422,5 @@
                 result.Errors.Add(new Tuple<string, string>("Index", index));
             }
         }
-
-        #region Events
-
-        /// <summary>
-        /// The save event handler
-        /// </summary>
-        internal delegate void DatabaseEventHandler(DatabaseCreationEventArgs e);
-
-        /// <summary>
-        /// Occurs when [before save].
-        /// </summary>
-        internal static event DatabaseEventHandler BeforeCreation;
-        /// <summary>
-        /// Raises the <see cref="BeforeCreation"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal virtual void FireBeforeCreation(DatabaseCreationEventArgs e)
-        {
-            if (BeforeCreation != null)
-            {
-                BeforeCreation(e);
-            }
-        }
-
-        /// <summary>
-        /// Occurs when [after save].
-        /// </summary>
-        internal static event DatabaseEventHandler AfterCreation;
-        /// <summary>
-        /// Raises the <see cref="AfterCreation"/> event.
-        /// </summary>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void FireAfterCreation(DatabaseCreationEventArgs e)
-        {
-            if (AfterCreation != null)
-            {
-                AfterCreation(e);
-            }
-        }
-
-        #endregion
     }
-
 }
