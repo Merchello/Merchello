@@ -114,6 +114,10 @@
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaResult.cs" />
+    <Compile Include="Persistence\Repositories\IReadRepository.cs" />
+    <Compile Include="Persistence\Repositories\IRepository.cs" />
+    <Compile Include="Persistence\Repositories\IWriteRepository.cs" />
+    <Compile Include="Persistence\RepositoryFactory.cs" />
     <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
     <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />
@@ -122,6 +126,14 @@
     <Compile Include="Logging\ExtendedLoggerData.cs" />
     <Compile Include="Logging\MultiLogger.cs" />
     <Compile Include="Mapping\MerchelloMapperConfiguration.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\IDatabaseUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\IUnitOfWorkRepository.cs" />
+    <Compile Include="Persistence\UnitOfWork\NPocoUnitOfWork.cs" />
+    <Compile Include="Persistence\UnitOfWork\NPocoUnitOfWorkProvider.cs" />
+    <Compile Include="Persistence\UnitOfWork\UnitOfWorkBase.cs" />
     <Compile Include="Plugins\IPluginManager.cs" />
     <Compile Include="DependencyInjection\IoC.cs" />
     <Compile Include="Persistence\IDatabaseContext.cs" />
@@ -481,9 +493,7 @@
     <None Include="Cache\readme.md" />
     <None Include="project.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Persistence\Repositories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
