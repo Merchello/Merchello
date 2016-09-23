@@ -58,7 +58,6 @@
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Events\CreateTableEventArgs.cs" />
     <Compile Include="IAttempt.cs" />
     <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
     <Compile Include="Acquired\ObjectExtensions.cs" />
