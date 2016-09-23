@@ -57,6 +57,7 @@
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Events\CreateTableEventArgs.cs" />
     <Compile Include="IAttempt.cs" />
     <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
     <Compile Include="Acquired\ObjectExtensions.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="Models\Migration\IMigrationStatus.cs" />
     <Compile Include="Models\Migration\MigrationStatus.cs" />
     <Compile Include="Models\Rdbms\MigrationStatusDto.cs" />
-    <Compile Include="Persistence\DatabaseSchemaManager.cs" />
+    <Compile Include="Persistence\DatabaseSchemaManagerBase.cs" />
     <Compile Include="Persistence\IDatabaseSchemaManager.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />

@@ -10,7 +10,7 @@
     /// The table definition and "POCO" for database operations associated with the "merchProductOptionAttributeShare" table.
     /// </summary>
     [TableName("merchProductOptionAttributeShare")]
-    [PrimaryKey("optionKey", AutoIncrement = false)]
+    [PrimaryKey("productKey,optionKey,attributeKey", AutoIncrement = false)]
     [ExplicitColumns]
     internal class ProductOptionAttributeShareDto : IDto
     {

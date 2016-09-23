@@ -15,10 +15,18 @@
     internal class OrderDto : EntityDto, IPageableDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the invoice key.
         /// </summary>
         [Column("invoiceKey")]
-        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchOrder_merchInvoice",Column = "pk")]
+        [ForeignKey(typeof(InvoiceDto), Name = "FK_merchOrder_merchInvoice", Column = "pk")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public Guid InvoiceKey { get; set; }
 

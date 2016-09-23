@@ -15,6 +15,14 @@
     internal class PaymentMethodDto : EntityDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the provider key.
         /// </summary>
         [Column("providerKey")]

@@ -1,20 +1,20 @@
 ﻿namespace Merchello.Tests.Umbraco
 {
-    using System.Linq;
+    using System;
 
     using global::Umbraco.Core.Logging;
 
-    using Merchello.Core;
     using Merchello.Core.DependencyInjection;
-    using Merchello.Core.Models;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Mappers;
-    using Merchello.Tests.Umbraco.TestHelpers;
+    using Merchello.Tests.Umbraco.TestHelpers.Base;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class ScratchTests : UmbracoInstanceBase
+    public class ScratchTests : UmbracoApplicationContextBase
     {
         [Test]
         public void LogTest()
@@ -33,6 +33,13 @@
 
             var dbFactory = IoC.Container.GetInstance<IDatabaseFactory>();
             Assert.NotNull(dbFactory);
+
+            Console.WriteLine(dbFactory.CanConnect);
+
+            var manager = IoC.Container.GetInstance<IDatabaseSchemaManager>();
+            manager.UninstallDatabaseSchema();
+            manager.InstallDatabaseSchema();
+            Assert.NotNull(manager);
         }
     }
 }

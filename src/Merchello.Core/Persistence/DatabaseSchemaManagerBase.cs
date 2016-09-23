@@ -5,6 +5,7 @@ namespace Merchello.Core.Persistence
 
     using Merchello.Core.Acquired;
     using Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions;
+    using Merchello.Core.Events;
     using Merchello.Core.Logging;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Migrations.Initial;
@@ -38,7 +39,7 @@ namespace Merchello.Core.Persistence
         private readonly ISqlSyntaxProvider _sqlSyntax;
 
         /// <summary>
-        /// Installer for Merchello's setup (required) data.
+        /// A class for adding the default data.
         /// </summary>
         private Lazy<BaseDataCreation> _baseDataCreation;
 
@@ -64,11 +65,17 @@ namespace Merchello.Core.Persistence
             this.Initialize();
         }
 
+        /// <inheritdoc/>
+        internal BaseDataCreation BaseDataCreation
+        {
+            get
+            {
+                return _baseDataCreation.Value;
+            }
+        }
 
         /// <inheritdoc/>
         public abstract bool TableExist(string tableName);
-
-
 
         /// <inheritdoc/>
         public abstract void CreateTable<T>(bool overwrite) where T : new();
@@ -115,10 +122,6 @@ namespace Merchello.Core.Persistence
                     if (this._sqlSyntax.SupportsIdentityInsert() && tableDefinition.Columns.Any(x => x.IsIdentity))
                         this._database.Execute(new Sql($"SET IDENTITY_INSERT {this._sqlSyntax.GetQuotedTableName(tableName)} ON "));
 
-                    // Call the NewTable-event to trigger the insert of base/default data
-                    // OnNewTable(tableName, _db, e, _logger);
-                    this._baseDataCreation.Value.InitializeBaseData(tableName);
-
                     // Turn off identity insert if db provider is not mysql
                     if (this._sqlSyntax.SupportsIdentityInsert() && tableDefinition.Columns.Any(x => x.IsIdentity))
                         this._database.Execute(new Sql($"SET IDENTITY_INSERT {this._sqlSyntax.GetQuotedTableName(tableName)} OFF;"));
@@ -140,6 +143,8 @@ namespace Merchello.Core.Persistence
 
                     transaction.Complete();
                 }
+
+                //this._baseDataCreation.Value.InitializeBaseData(tableName);
             }
 
             this._logger.Info<Database>($"New table '{tableName}' was created");
@@ -163,17 +168,28 @@ namespace Merchello.Core.Persistence
         public abstract void DropTable(string tableName);
 
         /// <summary>
+        /// Installs the Merchello database schema.
+        /// </summary>
+        public void InstallDatabaseSchema()
+        {
+            var creation = new DatabaseSchemaCreation(_dbFactory, _logger, this);
+            creation.InitializeDatabaseSchema();
+
+            _baseDataCreation.Value.InitializeBaseData();
+        }
+
+        /// <summary>
         /// Uninstalls the Merchello database schema.
         /// </summary>
-        internal void UninstallDatabaseSchema()
+        public void UninstallDatabaseSchema()
         {
-            // fixme
-            // weird to create a DatabaseSchemaCreation here, since it creates
-            // a circular dependency with DatabaseSchemaHelper?
             var creation = new DatabaseSchemaCreation(_dbFactory, _logger, this);
             creation.UninstallDatabaseSchema();
         }
 
+        /// <summary>
+        /// Initializes the manager.
+        /// </summary>
         private void Initialize()
         {
             _baseDataCreation = new Lazy<BaseDataCreation>(() => new BaseDataCreation(_dbFactory.GetDatabase(), _logger));

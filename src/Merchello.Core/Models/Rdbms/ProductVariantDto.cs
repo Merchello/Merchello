@@ -15,6 +15,14 @@
     internal class ProductVariantDto : EntityDto, IPageableDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the product key.
         /// </summary>
         [Column("productKey")]

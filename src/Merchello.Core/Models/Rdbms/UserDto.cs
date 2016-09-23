@@ -10,7 +10,7 @@
     [TableName("umbracoUser")]
     [PrimaryKey("id", AutoIncrement = true)]
     [ExplicitColumns]
-    internal class UserDto
+    internal class UserDto : IDto
     {
         /// <summary>
         /// Gets or sets the id.

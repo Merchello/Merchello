@@ -10,7 +10,7 @@
     /// <summary>
     /// Represents AutoMapper mapping for Merchello versions of Umbraco class to Umbraco classes.
     /// </summary>
-    public class UmbracoNativeMappings : MerchelloMapperConfiguration
+    public class UmbracoAdapterAutoMapperMappings : MerchelloMapperConfiguration
     {
         /// <inheritdoc/>
         public override void ConfigureMappings(IMapperConfiguration config)
@@ -24,6 +24,8 @@
             config.CreateMap<IndexDefinition, global::Umbraco.Core.Persistence.DatabaseModelDefinitions.IndexDefinition>();
 
             config.CreateMap<TableDefinition, global::Umbraco.Core.Persistence.DatabaseModelDefinitions.TableDefinition>();
+
+            config.CreateMap<IndexColumnDefinition, global::Umbraco.Core.Persistence.DatabaseModelDefinitions.IndexColumnDefinition>();
 
             // FROM Umbraco
             config.CreateMap<global::Umbraco.Core.Persistence.SqlSyntax.ColumnInfo, ColumnInfo>();

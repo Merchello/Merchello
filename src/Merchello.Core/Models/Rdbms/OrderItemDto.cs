@@ -15,6 +15,14 @@
     internal class OrderItemDto : LineItemDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the order key which represents the container for the line item.
         /// </summary>
         [Column("orderKey")]
@@ -33,7 +41,7 @@
         /// Gets or sets the sku.
         /// </summary>
         [Column("sku")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchOrderItemSku")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchOrderItemSku")]
         public override string Sku { get; set; }
     }
 }

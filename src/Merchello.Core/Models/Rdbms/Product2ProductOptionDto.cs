@@ -10,7 +10,7 @@
     /// The table definition and "POCO" for database operations associated with the "merchProduct2ProductOption" table.
     /// </summary>
     [TableName("merchProduct2ProductOption")]
-    [PrimaryKey("productKey", AutoIncrement = false)]
+    [PrimaryKey("productKey,optionKey", AutoIncrement = false)]
     [ExplicitColumns]
     internal class Product2ProductOptionDto
     {

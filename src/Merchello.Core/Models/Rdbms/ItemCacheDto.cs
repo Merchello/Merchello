@@ -15,10 +15,18 @@
     internal class ItemCacheDto : EntityDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the entity key.
         /// </summary>
         [Column("entityKey")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchItemCacheEntityKey")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchItemCacheEntityKey")]
         public Guid EntityKey { get; set; }
 
         /// <summary>

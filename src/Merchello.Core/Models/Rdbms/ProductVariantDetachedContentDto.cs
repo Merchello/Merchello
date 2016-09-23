@@ -24,7 +24,7 @@
         /// </remarks>
         [Column("pk")]
         [Index(IndexTypes.UniqueNonClustered, Name = "IX_merchProductVariantDetachedContentKey")]
-        public new Guid Key { get; set; }
+        public override Guid Key { get; set; }
 
         /// <summary>
         /// Gets or sets the product variant key.

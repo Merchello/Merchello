@@ -1,12 +1,13 @@
 ﻿namespace Merchello.Tests.Umbraco.Adapters.Cache
 {
     using Merchello.Tests.Umbraco.TestHelpers;
+    using Merchello.Tests.Umbraco.TestHelpers.Base;
     using Merchello.Umbraco.Adapters;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class CacheHelperAdapterTests : UmbracoInstanceBase
+    public class CacheHelperAdapterTests : UmbracoApplicationContextBase
     {
         protected override bool EnableCache { get { return false; } }
 

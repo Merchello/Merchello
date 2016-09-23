@@ -53,9 +53,13 @@
     <Compile Include="TestHelpers\DbSyntax.cs" />
     <Compile Include="TestHelpers\Fake\FakeHttpContextFactory.cs" />
     <Compile Include="TestHelpers\Fake\FakeQueryFactory.cs" />
-    <Compile Include="TestHelpers\TestUmbracoDatabaseFactory.cs" />
+    <Compile Include="TestHelpers\Base\TestUmbracoDatabaseFactory.cs" />
     <Compile Include="TestHelpers\TestHelper.cs" />
-    <Compile Include="TestHelpers\UmbracoInstanceBase.cs" />
+    <Compile Include="TestHelpers\Base\UmbracoCacheTestBase.cs" />
+    <Compile Include="TestHelpers\Base\UmbracoDataContextTestBase.cs" />
+    <Compile Include="TestHelpers\Base\UmbracoApplicationContextBase.cs" />
+    <Compile Include="TestHelpers\Base\UmbracoLoggerTestBase.cs" />
+    <Compile Include="TestHelpers\Base\UmbracoPluginManagerTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

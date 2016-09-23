@@ -1,17 +1,15 @@
-﻿namespace Merchello.Tests.Umbraco.TestHelpers
+﻿namespace Merchello.Tests.Umbraco.TestHelpers.Base
 {
     using System;
     using System.Configuration;
     using System.Data.Common;
-
-    using Merchello.Core.Acquired.Persistence;
 
     using global::Umbraco.Core.Logging;
     using global::Umbraco.Core.Persistence;
     using global::Umbraco.Core.Persistence.Querying;
     using global::Umbraco.Core.Persistence.SqlSyntax;
 
-    using Moq;
+    using Merchello.Core.Acquired.Persistence;
 
     using NPoco;
 
@@ -35,15 +33,17 @@
 
         public TestUmbracoDatabaseFactory(ILogger logger, IQueryFactory queryFactory)
         {
-            _logger = logger;
+            this._logger = logger;
 
             var settings = ConfigurationManager.ConnectionStrings["umbracoDbDSN"];
 
             this.Configured = false;
-            _connectionString = settings.ConnectionString;
-            _providerName = settings.ProviderName;
+            this._connectionString = settings.ConnectionString;
+            this._providerName = settings.ProviderName;
 
-           _queryFactory = queryFactory;
+           this._queryFactory = queryFactory;
+
+            Configured = false;
         }
 
         public bool Configured { get; private set; }
@@ -52,7 +52,7 @@
         {
             get
             {
-                return DbConnectionExtensions.IsConnectionAvailable(_connectionString, _providerName);
+                return DbConnectionExtensions.IsConnectionAvailable(this._connectionString, this._providerName);
             }
         }
 
@@ -60,26 +60,35 @@
         {
             get
             {
-                return _queryFactory;
+                EnsureConfigured();
+                return this._queryFactory;
             }
         }
         
         public UmbracoDatabase GetDatabase()
-        {            
-            return new UmbracoDatabase(_connectionString, _sqlSyntax, _databaseType, _dbProviderFactory, _logger);
+        {
+            EnsureConfigured();
+            return new UmbracoDatabase(this._connectionString, this._sqlSyntax, this._databaseType, this._dbProviderFactory, this._logger);
         }
 
         public void Configure(string connectionString, string providerName)
         {
-            _connectionString = connectionString;
-            _providerName = providerName;
-            _dbProviderFactory = DbProviderFactories.GetFactory(_providerName);
-            _databaseType = DatabaseType.Resolve(_dbProviderFactory.GetType().Name, _providerName);
+            this._connectionString = connectionString;
+            this._providerName = providerName;
+            this._dbProviderFactory = DbProviderFactories.GetFactory(this._providerName);
+            this._databaseType = DatabaseType.Resolve(this._dbProviderFactory.GetType().Name, this._providerName);
 
-            _sqlSyntax = _databaseType == DatabaseType.SQLCe
+            this._sqlSyntax = this._databaseType == DatabaseType.SQLCe
                              ? (ISqlSyntaxProvider)new SqlCeSyntaxProvider()
                              : new SqlServerSyntaxProvider(new Lazy<IDatabaseFactory>(() => null));
             this.Configured = true;
+        }
+
+        private void EnsureConfigured()
+        {
+            if (Configured) return;
+
+            Configure(_connectionString, _providerName);
         }
 
 

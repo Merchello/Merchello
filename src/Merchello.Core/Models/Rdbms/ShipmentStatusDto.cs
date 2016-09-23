@@ -1,5 +1,9 @@
 ﻿namespace Merchello.Core.Models.Rdbms
 {
+    using System;
+
+    using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
+
     using NPoco;
 
     /// <summary>
@@ -10,6 +14,14 @@
     [ExplicitColumns]
     internal class ShipmentStatusDto : EntityDto
     {
+        /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>

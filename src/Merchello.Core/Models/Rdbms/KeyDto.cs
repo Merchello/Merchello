@@ -4,6 +4,8 @@
 
     using Merchello.Core.Acquired.Persistence.DatabaseAnnotations;
 
+    using NPoco;
+
     /// <summary>
     /// A POCO for Key queries and Key based table definitions.
     /// </summary>
@@ -13,6 +15,7 @@
         /// Gets or sets the key.
         /// </summary>
         [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
         [Constraint(Default = "newid()")]
         public Guid Key { get; set; }
     }

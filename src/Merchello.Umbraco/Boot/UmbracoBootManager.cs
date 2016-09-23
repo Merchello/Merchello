@@ -13,8 +13,10 @@
     using Merchello.Web.Boot;
 
     using global::Umbraco.Core;
-
+    using global::Umbraco.Core.Persistence;
     using global::Umbraco.Core.Plugins;
+
+    using IDatabaseFactory = Merchello.Core.Persistence.IDatabaseFactory;
 
     /// <summary>
     /// Starts the Merchello Umbraco CMS Package.
@@ -80,19 +82,14 @@
         {
             base.ConfigureCmsServices(container);
 
-            container.RegisterFrom<UmbracoNativeMappingCompositionRoot>();
-
-            // CMS provided
+            // ApplicationContext direct
             container.RegisterSingleton<global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider>(factory => _appContext.DatabaseContext.SqlSyntax);
             container.RegisterSingleton<global::Umbraco.Core.Cache.CacheHelper>(factory => _appContext.ApplicationCache);
             container.RegisterSingleton<global::Umbraco.Core.Logging.ILogger>(factory => _appContext.ProfilingLogger.Logger);
             container.RegisterSingleton<global::Umbraco.Core.DatabaseContext>(factory => _appContext.DatabaseContext);
-            
             container.RegisterSingleton<global::Umbraco.Core.Plugins.PluginManager>(factory => _pluginManager);
-            container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
-            container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
-            container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();
-            container.RegisterSingleton<ILogger, LoggerAdapter>();
+
+            container.RegisterFrom<UmbracoCompositionRoot>();
         }
 
         /// <inheritdoc/>
@@ -102,6 +99,7 @@
             base.ConfigureCoreServices(container);
 
             container.RegisterSingleton<IDatabaseFactory, DatabaseContextAdapter>();
+            container.Register<IDatabaseSchemaManager, DatabaseSchemaHelperAdapter>();
         }
     }
 }

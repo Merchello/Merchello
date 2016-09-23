@@ -10,7 +10,7 @@
     /// The table definition and "POCO" for database operations associated with the "merchCustomer2EntityCollection" table.
     /// </summary>
     [TableName("merchCustomer2EntityCollection")]
-    [PrimaryKey("customerKey", AutoIncrement = false)]
+    [PrimaryKey("customerKey,entityCollectionKey", AutoIncrement = false)]
     [ExplicitColumns]
     internal class Customer2EntityCollectionDto : IDto
     {

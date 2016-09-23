@@ -15,6 +15,14 @@
     internal class InvoiceItemDto : LineItemDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the invoice key which represents the container for the line item.
         /// </summary>
         [Column("invoiceKey")]
@@ -24,7 +32,7 @@
 
         /// <inheritdoc/>
         [Column("sku")]
-        [IndexAttribute(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemSku")]
+        [Index(IndexTypes.NonClustered, Name = "IX_merchInvoiceItemSku")]
         public override string Sku { get; set; }
 
         /// <summary>

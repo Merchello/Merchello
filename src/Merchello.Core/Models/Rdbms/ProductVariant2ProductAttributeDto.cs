@@ -10,7 +10,7 @@
     /// The table definition and "POCO" for database operations associated with the "merchProductVariant2ProductAttribute" table.
     /// </summary>
     [TableName("merchProductVariant2ProductAttribute")]
-    [PrimaryKey("productVariantKey", AutoIncrement = false)]
+    [PrimaryKey("productVariantKey,optionKey", AutoIncrement = false)]
     [ExplicitColumns]
     internal class ProductVariant2ProductAttributeDto : IDto
     {

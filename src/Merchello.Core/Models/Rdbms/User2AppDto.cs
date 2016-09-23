@@ -9,7 +9,7 @@
     /// </summary>
     [TableName("umbracoUser2app")]
     [ExplicitColumns]
-    internal class User2AppDto
+    internal class User2AppDto : IDto
     {
         /// <summary>
         /// Gets or sets the user id.

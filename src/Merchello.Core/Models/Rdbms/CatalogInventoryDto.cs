@@ -10,7 +10,7 @@
     /// The table definition and "POCO" for database operations associated with the "merchCatalogInventory" table.
     /// </summary>
     [TableName("merchCatalogInventory")]
-    [PrimaryKey("catalogKey", AutoIncrement = false)]
+    [PrimaryKey("catalogKey,productVariantKey", AutoIncrement = false)]
     [ExplicitColumns]
     internal class CatalogInventoryDto : IDto
     {

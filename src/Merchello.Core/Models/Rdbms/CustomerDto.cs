@@ -15,10 +15,18 @@
     internal class CustomerDto : EntityDto, IPageableDto
     {
         /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        [PrimaryKeyColumn(AutoIncrement = false)]
+        [Column("pk")]
+        [Constraint(Default = "newid()")]
+        public override Guid Key { get; set; }
+
+        /// <summary>
         /// Gets or sets the login name.
         /// </summary>
         [Column("loginName")]
-        [IndexAttribute(IndexTypes.UniqueNonClustered, Name = "IX_merchCustomerLoginName")]
+        [Index(IndexTypes.UniqueNonClustered, Name = "IX_merchCustomerLoginName")]
         public string LoginName { get; set; }
 
         /// <summary>

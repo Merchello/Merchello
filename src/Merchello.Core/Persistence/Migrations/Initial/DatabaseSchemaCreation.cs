@@ -196,7 +196,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         /// <summary>
         /// Drops all Merchello tables in the database.
         /// </summary>
-        internal void UninstallDatabaseSchema()
+        public void UninstallDatabaseSchema()
         {
             this._logger.Info<DatabaseSchemaCreation>("Start Merchello UninstallDatabaseSchema");
 
