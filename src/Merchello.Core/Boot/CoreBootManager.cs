@@ -10,6 +10,7 @@
     using Merchello.Core.Acquired;
     using Merchello.Core.Acquired.ObjectResolution;
     using Merchello.Core.Cache;
+    using Merchello.Core.Configuration;
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
     using Merchello.Core.Mapping;
@@ -33,6 +34,9 @@
     {
         #region Fields
 
+        /// <summary>
+        /// The multi log resolver.
+        /// </summary>
         private MultiLogResolver _muliLogResolver;
 
         /// <summary>
@@ -110,6 +114,12 @@
 
             // Grab everythin we need from Umbraco
             ConfigureCmsServices(IoC.Container);
+
+            _timer =
+                IoC.Container.GetInstance<IProfilingLogger>()
+                    .TraceDuration<CoreBootManager>(
+                        $"Merchello {MerchelloVersion.GetSemanticVersion()} application starting on {NetworkHelper.MachineName}",
+                        "Merchello application startup complete");
 
             _muliLogResolver = new MultiLogResolver(GetMultiLogger(IoC.Container.GetInstance<ILogger>()));
 
@@ -189,6 +199,8 @@
 
             this._isComplete = true;
 
+            //stop the timer and log the output
+            _timer.Dispose();
             return this;
         }
 

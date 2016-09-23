@@ -1,5 +1,6 @@
 ﻿namespace Merchello.Core
 {
+    using System;
     using System.Diagnostics;
 
     /// <summary>
@@ -8,7 +9,7 @@
     /// <remarks>
     /// Used for profiling.
     /// </remarks>
-    public interface IDisposableTimer
+    public interface IDisposableTimer : IDisposable
     {
         /// <summary>
         /// Gets the <see cref="Stopwatch"/>.

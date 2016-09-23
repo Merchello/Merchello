@@ -16,5 +16,12 @@ namespace Merchello.Tests.Umbraco.TestHelpers.Base
             // Umbraco's Plugin Manager
             this.PluginManager = new PluginManager(serviceProvider, this.CacheHelper.RuntimeCache, this.ProfileLogger, true);
         }
+
+        public override void TearDown()
+        {
+            base.TearDown();
+
+            
+        }
     }
 }

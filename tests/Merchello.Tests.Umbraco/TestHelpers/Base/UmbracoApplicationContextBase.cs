@@ -5,6 +5,7 @@
     using global::Umbraco.Core.Services;
 
     using Merchello.Core.Boot;
+    using Merchello.Core.DependencyInjection;
     using Merchello.Tests.Umbraco.TestHelpers.Boot;
 
     public abstract class UmbracoApplicationContextBase : UmbracoPluginManagerTestBase
@@ -29,6 +30,15 @@
             var serviceContext = new ServiceContext();
 
             return new ApplicationContext(this.DatabaseContext, serviceContext, this.CacheHelper, profileLogger);
+        }
+
+        public override void TearDown()
+        {
+            IoC.Container.Dispose();
+            base.TearDown();
+
+       
+
         }
     }
 }

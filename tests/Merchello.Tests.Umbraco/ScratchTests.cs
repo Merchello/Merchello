@@ -5,8 +5,6 @@
     using global::Umbraco.Core.Logging;
 
     using Merchello.Core.DependencyInjection;
-    using Merchello.Core.Models.Rdbms;
-    using Merchello.Core.Models.TypeFields;
     using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Mappers;
     using Merchello.Tests.Umbraco.TestHelpers.Base;

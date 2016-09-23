@@ -45,8 +45,10 @@
     <Compile Include="Adapters\CacheProviderAdapter.cs" />
     <Compile Include="Adapters\DatabaseContextAdapter.cs" />
     <Compile Include="Adapters\DatabaseSchemaHelperAdapter.cs" />
+    <Compile Include="Adapters\DisposableTimerAdapter.cs" />
     <Compile Include="Adapters\IsolatedCacheProviderAdapter.cs" />
     <Compile Include="Adapters\PluginManagerAdapter.cs" />
+    <Compile Include="Adapters\ProfilingLoggerAdapter.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Adapters\IUmbracoAdapter.cs" />
     <Compile Include="Adapters\ProfileLoggerAdapter.cs" />

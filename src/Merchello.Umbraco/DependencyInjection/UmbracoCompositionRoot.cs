@@ -30,6 +30,7 @@
             container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
             container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
             container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();
+            container.RegisterSingleton<IProfilingLogger, ProfilingLoggerAdapter>();
             container.RegisterSingleton<ILogger, LoggerAdapter>();
         }
     }

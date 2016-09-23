@@ -4,6 +4,8 @@
 
     using global::Umbraco.Core.Logging;
 
+    using Merchello.Core.Acquired.ObjectResolution;
+    using Merchello.Core.DependencyInjection;
     using Merchello.Tests.Umbraco.TestHelpers.Adapter;
     using Merchello.Umbraco.Adapters;
 
@@ -24,6 +26,13 @@
             // Goofy way to get around internals
             var profiler = new Core.Acquired.Logging.LogProfiler(new LoggerAdapter(this.Logger));
             this.ProfileLogger = new ProfilingLogger(this.Logger, new LogProfilerAdapter(profiler));
+        }
+
+        [OneTimeTearDown]
+        public virtual void TearDown()
+        {
+            Resolution.Reset();
+            ResolverCollection.ResetAll();
         }
     }
 }

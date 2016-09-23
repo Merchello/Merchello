@@ -49,6 +49,7 @@
     <Compile Include="Acquired\DisposableTimer.cs" />
     <Compile Include="Acquired\Logging\LogProfiler.cs" />
     <Compile Include="Acquired\Logging\ProfilerExtensions.cs" />
+    <Compile Include="Acquired\NetworkHelper.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
     <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\SystemMethods.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\TableDefinition.cs" />
     <Compile Include="Acquired\Persistence\DbConnectionExtensions.cs" />
+    <Compile Include="Logging\IProfilingLogger.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\AnonymousCustomer.cs" />
     <Compile Include="Models\Cache\CacheModelBase.cs" />

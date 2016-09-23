@@ -294,5 +294,14 @@ namespace Merchello.Core
 
             return chars.Aggregate(text, (current, c) => current.Replace(c, replacement));
         }
+
+        internal static string ReplaceNonAlphanumericChars(this string input, char replacement)
+        {
+            var inputArray = input.ToCharArray();
+            var outputArray = new char[input.Length];
+            for (var i = 0; i < inputArray.Length; i++)
+                outputArray[i] = char.IsLetterOrDigit(inputArray[i]) ? inputArray[i] : replacement;
+            return new string(outputArray);
+        }
     }
 }
