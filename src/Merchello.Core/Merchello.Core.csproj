@@ -482,7 +482,6 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Adapters\Persistence\SqlSyntax\" />
     <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
