@@ -24,14 +24,14 @@
         /// <param name="schemaHelper">
         /// Umbraco's DatabaseSchemaHelper.
         /// </param>
-        /// <param name="dbFactory">
-        /// Merchello database factory.
+        /// <param name="database">
+        /// Merchello;s database.
         /// </param>
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public DatabaseSchemaHelperAdapter(DatabaseSchemaHelper schemaHelper, global::Merchello.Core.Persistence.IDatabaseFactory dbFactory, ILogger logger)
-            : base(dbFactory, logger)
+        public DatabaseSchemaHelperAdapter(DatabaseSchemaHelper schemaHelper, IMerchelloDatabase database, ILogger logger)
+            : base(database, logger)
         {
             Ensure.ParameterNotNull(schemaHelper, nameof(schemaHelper));
             _helper = schemaHelper;

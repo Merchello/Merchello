@@ -1,12 +1,6 @@
 ﻿namespace Merchello.Core.Persistence.UnitOfWork
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Merchello.Core.Logging;
     using Merchello.Core.Persistence;
-    using Merchello.Core.Persistence.Mappers;
-    using Merchello.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Represents a <see cref="IDatabaseUnitOfWork"/> provider that creates <see cref="NPocoUnitOfWork"/> instances.

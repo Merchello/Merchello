@@ -19,6 +19,7 @@
       <Value>Smtp</Value>
       <Value>Sql</Value>
       <Value>SqlCe</Value>
+      <Value>UaaS</Value>
       <Value>Umbraco</Value>
       <Value>Umbraco's</Value>
       <Value>YouTrack</Value>

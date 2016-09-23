@@ -49,6 +49,7 @@
     <Compile Include="Adapters\IsolatedCacheProviderAdapter.cs" />
     <Compile Include="Adapters\PluginManagerAdapter.cs" />
     <Compile Include="Adapters\ProfilingLoggerAdapter.cs" />
+    <Compile Include="Adapters\UmbracoDatabaseAdapter.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Adapters\IUmbracoAdapter.cs" />
     <Compile Include="Adapters\ProfileLoggerAdapter.cs" />

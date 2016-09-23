@@ -110,9 +110,12 @@
     <Compile Include="Models\Rdbms\MigrationStatusDto.cs" />
     <Compile Include="Persistence\DatabaseSchemaManagerBase.cs" />
     <Compile Include="Persistence\IDatabaseSchemaManager.cs" />
+    <Compile Include="Persistence\IExposeSqlSyntax.cs" />
+    <Compile Include="Persistence\IMerchelloDatabase.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaResult.cs" />
+    <Compile Include="Persistence\Migrations\Initial\IDatabaseSchemaCreation.cs" />
     <Compile Include="Persistence\Repositories\IReadRepository.cs" />
     <Compile Include="Persistence\Repositories\IRepository.cs" />
     <Compile Include="Persistence\Repositories\IWriteRepository.cs" />

@@ -12,6 +12,8 @@
 
     using global::Umbraco.Core;
 
+    using Merchello.Core.Persistence;
+
     /// <summary>
     /// Adds Umbraco native class mappings to the container
     /// </summary>
@@ -27,6 +29,8 @@
             container.Register<global::Umbraco.Core.Persistence.DatabaseSchemaHelper>();
 
             // Adapters
+            container.Register<IMerchelloDatabase, UmbracoDatabaseAdapter>();
+            container.Register<IDatabaseSchemaManager, DatabaseSchemaHelperAdapter>();
             container.RegisterSingleton<IPluginManager, PluginManagerAdapter>();
             container.RegisterSingleton<ISqlSyntaxProvider, SqlSyntaxProviderAdapter>();
             container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();

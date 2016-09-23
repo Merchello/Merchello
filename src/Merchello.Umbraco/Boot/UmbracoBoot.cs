@@ -8,6 +8,7 @@
     using Merchello.Core.Boot;
 
     using global::Umbraco.Core;
+    using global::Umbraco.Core.Persistence.SqlSyntax;
 
     /// <summary>
     /// Handles Umbraco's Initialized event to start Merchello's bootstrap process.

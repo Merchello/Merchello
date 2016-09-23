@@ -2,18 +2,12 @@
 {
     using LightInject;
 
-    using Merchello.Core.Cache;
     using Merchello.Core.DependencyInjection;
-    using Merchello.Core.Logging;
-    using Merchello.Core.Persistence;
-    using Merchello.Core.Persistence.SqlSyntax;
-    using Merchello.Core.Plugins;
     using Merchello.Umbraco.Adapters;
     using Merchello.Umbraco.DependencyInjection;
     using Merchello.Web.Boot;
 
     using global::Umbraco.Core;
-    using global::Umbraco.Core.Persistence;
     using global::Umbraco.Core.Plugins;
 
     using IDatabaseFactory = Merchello.Core.Persistence.IDatabaseFactory;
@@ -72,7 +66,7 @@
         {
             Core.Ensure.ParameterNotNull(appContext, nameof(appContext));
             Core.Ensure.ParameterNotNull(pluginManager, nameof(pluginManager));
-
+            
             _appContext = appContext;
             _pluginManager = pluginManager;
         }
@@ -99,8 +93,8 @@
         {
             base.ConfigureCoreServices(container);
 
+            // Need to wait for Merchello's IQueryFactory to be defined
             container.RegisterSingleton<IDatabaseFactory, DatabaseContextAdapter>();
-            container.Register<IDatabaseSchemaManager, DatabaseSchemaHelperAdapter>();
         }
     }
 }

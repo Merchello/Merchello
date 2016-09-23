@@ -13,10 +13,8 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
     using NPoco;
 
-    /// <summary>
-    /// Represents the initial database schema creation by running CreateTable for all DTOs against the db.
-    /// </summary>
-    internal class DatabaseSchemaCreation
+    /// <inheritdoc/>
+    internal class DatabaseSchemaCreation : IDatabaseSchemaCreation
     {
         #region All Ordered Tables
 
@@ -84,7 +82,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         /// <summary>
         /// The <see cref="Database"/>.
         /// </summary>
-        private readonly Database _database;
+        private readonly IMerchelloDatabase _db;
 
         /// <summary>
         /// The <see cref="ILogger"/>.
@@ -92,15 +90,10 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private readonly ILogger _logger;
 
         /// <summary>
-        /// The <see cref="ISqlSyntaxProvider"/>.
-        /// </summary>
-        private readonly ISqlSyntaxProvider _sqlSyntaxProvider;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseSchemaCreation"/> class.
         /// </summary>
-        /// <param name="dbFactory">
-        /// The <see cref="IDatabaseFactory"/>.
+        /// <param name="database">
+        /// The <see cref="IMerchelloDatabase"/>.
         /// </param>
         /// <param name="logger">
         /// The <see cref="ILogger"/>.
@@ -108,10 +101,10 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         /// <param name="schemaManager">
         /// The <see cref="IDatabaseSchemaManager"/>.
         /// </param>
-        public DatabaseSchemaCreation(IDatabaseFactory dbFactory, ILogger logger, IDatabaseSchemaManager schemaManager)
+        public DatabaseSchemaCreation(IMerchelloDatabase database, ILogger logger, IDatabaseSchemaManager schemaManager)
         {
-            this._database = dbFactory.GetDatabase();
-            this._sqlSyntaxProvider = dbFactory.QueryFactory.SqlSyntax;
+            Ensure.ParameterNotNull(database, nameof(database));
+            this._db = database;
             this._logger = logger;
             this._schemaManager = schemaManager;
         }
@@ -169,10 +162,10 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         public DatabaseSchemaResult ValidateSchema()
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
-            var result = new DatabaseSchemaResult(_sqlSyntaxProvider);
+            var result = new DatabaseSchemaResult(this._db.SqlSyntax);
 
             // get the db index defs
-            result.DbIndexDefinitions = _sqlSyntaxProvider.GetDefinedIndexes(this._database)
+            result.DbIndexDefinitions = this._db.SqlSyntax.GetDefinedIndexes(this._db.Database)
                 .Select(x => new DbIndexDefinition
                 {
                     TableName = x.Item1,
@@ -183,7 +176,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
 
             result.TableDefinitions.AddRange(OrderedTables
                 .OrderBy(x => x.Key)
-                .Select(x => DefinitionFactory.GetTableDefinition(x.Value, _sqlSyntaxProvider)));
+                .Select(x => DefinitionFactory.GetTableDefinition(x.Value, this._db.SqlSyntax)));
 
             this.ValidateDbTables(result);
             this.ValidateDbColumns(result);
@@ -258,7 +251,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private void ValidateDbConstraints(DatabaseSchemaResult result)
         {
             // Check constraints in configured database against constraints in schema
-            var constraintsInDatabase = _sqlSyntaxProvider.GetConstraintsPerColumn(this._database).DistinctBy(x => x.Item3).ToList();
+            var constraintsInDatabase = this._db.SqlSyntax.GetConstraintsPerColumn(this._db.Database).DistinctBy(x => x.Item3).ToList();
             var foreignKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("FK_")).Select(x => x.Item3).ToList();
             var primaryKeysInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("PK_")).Select(x => x.Item3).ToList();
             var indexesInDatabase = constraintsInDatabase.Where(x => x.Item3.InvariantStartsWith("IX_")).Select(x => x.Item3).ToList();
@@ -347,7 +340,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private void ValidateDbColumns(DatabaseSchemaResult result)
         {
             // Check columns in configured database against columns in schema
-            var columnsInDatabase = _sqlSyntaxProvider.GetColumnsInSchema(this._database);
+            var columnsInDatabase = _db.SqlSyntax.GetColumnsInSchema(this._db.Database);
             var columnsPerTableInDatabase = columnsInDatabase.Select(x => string.Concat(x.TableName, ",", x.ColumnName)).ToList();
             var columnsPerTableInSchema = result.TableDefinitions.SelectMany(x => x.Columns.Select(y => string.Concat(y.TableName, ",", y.Name))).ToList();
             
@@ -376,7 +369,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
         private void ValidateDbTables(DatabaseSchemaResult result)
         {
             // Check tables in configured database against tables in schema
-            var tablesInDatabase = _sqlSyntaxProvider.GetTablesInSchema(this._database).ToList();
+            var tablesInDatabase = _db.SqlSyntax.GetTablesInSchema(this._db.Database).ToList();
             var tablesInSchema = result.TableDefinitions.Select(x => x.Name).ToList();
 
             // Add valid and invalid table differences to the result object

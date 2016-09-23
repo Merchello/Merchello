@@ -7,6 +7,7 @@
 
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence.Mappers;
+    using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Plugins;
 
@@ -23,6 +24,8 @@
         /// </param>
         public void Compose(IServiceRegistry container)
         {
+            container.Register<IDatabaseSchemaCreation, DatabaseSchemaCreation>();
+
             // register mapping resover as IMappingResolver
             container.RegisterSingleton<IMappingResolver>(
                 factory =>
