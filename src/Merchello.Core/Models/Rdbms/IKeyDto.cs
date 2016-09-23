@@ -2,8 +2,6 @@
 {
     using System;
 
-    using NPoco;
-
     /// <summary>
     /// Define a DTO object is identified by a GUID primary key.
     /// </summary>
@@ -12,7 +10,6 @@
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
-        [Column("pk")]
         Guid Key { get; set; } 
     }
 }
