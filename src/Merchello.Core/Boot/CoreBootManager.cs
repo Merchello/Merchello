@@ -1,7 +1,6 @@
 ﻿namespace Merchello.Core.Boot
 {
     using System;
-    using System.Linq;
 
     using AutoMapper;
 
@@ -15,11 +14,7 @@
     using Merchello.Core.Logging;
     using Merchello.Core.Mapping;
     using Merchello.Core.Persistence.Mappers;
-    using Merchello.Core.Persistence.Querying;
-    using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Core.Services;
-
-    using NPoco;
 
     using Ensure = Merchello.Core.Ensure;
 
