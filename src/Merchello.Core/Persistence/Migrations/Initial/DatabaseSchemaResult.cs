@@ -8,7 +8,7 @@ namespace Merchello.Core.Persistence.Migrations.Initial
     using Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions;
     using Merchello.Core.Configuration;
     using Merchello.Core.Persistence.SqlSyntax;
-    using Merchello.Core.Services.Migration;
+    using Merchello.Core.Services;
 
     using Semver;
 

@@ -1,8 +1,7 @@
-﻿namespace Merchello.Core.Services.Migration
+﻿namespace Merchello.Core.Services
 {
     using System.Collections.Generic;
 
-    using Merchello.Core.Models.Interfaces;
     using Merchello.Core.Models.Migration;
 
     using Semver;

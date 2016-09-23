@@ -6,7 +6,7 @@
     /// Represents the result of an operation attempt.
     /// </summary>
     /// <typeparam name="T">The type of the attempted operation result.</typeparam>
-    public interface IAttempt<T>
+    internal interface IAttempt<T>
     {
         /// <summary>
         /// Gets the exception associated with an unsuccessful attempt.
