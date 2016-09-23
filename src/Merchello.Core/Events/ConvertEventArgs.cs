@@ -61,8 +61,14 @@
         }
 
         /// <summary>
-        /// Gets the coverted entities.
+        /// Gets the converted entities.
         /// </summary>
-        public IEnumerable<T> CovertedEntities { get { return EventObject; } }
+        public IEnumerable<T> CovertedEntities
+        {
+            get
+            {
+                return EventObject;
+            }
+        }
     }
 }
