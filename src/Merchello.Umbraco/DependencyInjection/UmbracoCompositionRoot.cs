@@ -5,6 +5,7 @@
     using Merchello.Core.Cache;
     using Merchello.Core.DependencyInjection;
     using Merchello.Core.Logging;
+    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.SqlSyntax;
     using Merchello.Core.Plugins;
     using Merchello.Umbraco.Adapters;
@@ -12,7 +13,7 @@
 
     using global::Umbraco.Core;
 
-    using Merchello.Core.Persistence;
+    using global::Umbraco.Core.Cache;
 
     /// <summary>
     /// Adds Umbraco native class mappings to the container
@@ -36,6 +37,8 @@
             container.RegisterSingleton<ICacheHelper, CacheHelperAdapter>();
             container.RegisterSingleton<IProfilingLogger, ProfilingLoggerAdapter>();
             container.RegisterSingleton<ILogger, LoggerAdapter>();
+
+            container.RegisterSingleton(factory => new CacheHelperAdapter(CacheHelper.CreateDisabledCacheHelper()), Core.Constants.Repository.DisabledCache);
         }
     }
 }
