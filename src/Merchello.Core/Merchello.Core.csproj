@@ -54,7 +54,49 @@
     <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
     <Compile Include="ActivatorServiceProvider.cs" />
+    <Compile Include="Constants-CountryCodes.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Database.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-DetachedPublishedContent.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-InvoiceStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-NotificationTriggers.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-OrderStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Providers.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Repositories.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-ShipmentStatus.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-StoreSettings.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Strategies.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants-Migrations.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-TaskChains.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-TypeFields.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants-Warehouse.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="EnumerableExtensions.cs" />
@@ -228,13 +270,7 @@
     <Compile Include="Configuration\Sections\MerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Sections\IMerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Elements\ProductsElement.cs" />
-    <Compile Include="Constants-ActivatorTypes.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
     <Compile Include="Constants-ExtendedDataKeys.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Constants-Keys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />

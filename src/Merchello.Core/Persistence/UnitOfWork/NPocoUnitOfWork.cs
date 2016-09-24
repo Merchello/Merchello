@@ -31,6 +31,18 @@
         /// </summary>
         public Database Database { get; }
 
+        /// <inheritdoc/>
+        public void ReadLock(params int[] lockIds)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void WriteLock(params int[] lockIds)
+        {
+            throw new System.NotImplementedException();
+        }
+
         /// <summary>
         /// Creates a repository.
         /// </summary>

@@ -1,14 +1,13 @@
 ﻿namespace Merchello.Core.DependencyInjection
 {
-    using System;
-    using System.Linq;
-
     using LightInject;
 
     using Merchello.Core.Logging;
+    using Merchello.Core.Persistence;
     using Merchello.Core.Persistence.Mappers;
     using Merchello.Core.Persistence.Migrations.Initial;
     using Merchello.Core.Persistence.Querying;
+    using Merchello.Core.Persistence.UnitOfWork;
     using Merchello.Core.Plugins;
 
     /// <summary>
@@ -16,6 +15,11 @@
     /// </summary>
     public sealed class RepositoryCompositionRoot : ICompositionRoot
     {
+        /// <summary>
+        /// Injection parameter for repositories to indicate disabled CacheHelper.
+        /// </summary>
+        public const string DisabledCache = "DisabledCache";
+
         /// <summary>
         /// Composes configuration services by adding services to the <paramref name="container"/>.
         /// </summary>
@@ -25,6 +29,11 @@
         public void Compose(IServiceRegistry container)
         {
             container.Register<IDatabaseSchemaCreation, DatabaseSchemaCreation>();
+
+            // register repository factory
+            container.RegisterSingleton<RepositoryFactory>();
+
+            container.RegisterSingleton<IDatabaseUnitOfWorkProvider, NPocoUnitOfWorkProvider>();
 
             // register mapping resover as IMappingResolver
             container.RegisterSingleton<IMappingResolver>(
@@ -36,6 +45,25 @@
 
             // Query Factory
             container.Register<IQueryFactory, QueryFactory>();
+
+            //// register cache helpers
+            //// the main cache helper is registered by CoreBootManager and is used by most repositories
+            //// the disabled one is used by those repositories that have an annotated ctor parameter
+            //container.RegisterSingleton(factory => CacheHelper.CreateDisabledCacheHelper(), DisabledCache);
+
+            // resolve ctor dependency from GetInstance() runtimeArguments, if possible - 'factory' is
+            // the container, 'info' describes the ctor argument, and 'args' contains the args that
+            // were passed to GetInstance() - use first arg if it is the right type,
+            //
+            // for IDatabaseUnitOfWork
+            container.RegisterConstructorDependency((factory, info, args) => args.Length > 0 ? args[0] as IDatabaseUnitOfWork : null);
+
+            // for IUnitOfWork
+            container.RegisterConstructorDependency((factory, info, args) => args.Length > 0 ? args[0] as IUnitOfWork : null);
+
+            // register repositories
+            // repos depend on various things, and a IDatabaseUnitOfWork (registered above)
+            // some repositories have an annotated ctor parameter to pick the right cache helper
         }
     }
 }

@@ -7,9 +7,25 @@ namespace Merchello.Core.Persistence.UnitOfWork
 	/// </summary>
 	internal interface IDatabaseUnitOfWork : IUnitOfWork
 	{
-		Database Database { get; }
+        /// <summary>
+        /// Gets the database.
+        /// </summary>
+        Database Database { get; }
 
-	    //void ReadLock(params int[] lockIds);
-	    //void WriteLock(params int[] lockIds);
+        /// <summary>
+        /// Read lock to prevent dirty read.
+        /// </summary>
+        /// <param name="lockIds">
+        /// The lock ids.
+        /// </param>
+        void ReadLock(params int[] lockIds);
+
+        /// <summary>
+        /// Database write lock.
+        /// </summary>
+        /// <param name="lockIds">
+        /// The lock ids.
+        /// </param>
+        void WriteLock(params int[] lockIds);
     }
 }
