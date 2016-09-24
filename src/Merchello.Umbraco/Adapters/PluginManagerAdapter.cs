@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.Reflection;
 
+    using global::Umbraco.Core.Plugins;
+
     using Merchello.Core;
     using Merchello.Core.Plugins;
-
-    using global::Umbraco.Core.Plugins;
 
     /// <inheritdoc/>
     internal sealed class PluginManagerAdapter : IPluginManager, IUmbracoAdapter
@@ -27,31 +27,31 @@
         {
             Ensure.ParameterNotNull(pluginManager, nameof(pluginManager));
 
-            _pluginManager = pluginManager;
+            this._pluginManager = pluginManager;
         }
 
         /// <inheritdoc/>
         public void ClearPluginCache()
         {
-            _pluginManager.ClearPluginCache();
+            this._pluginManager.ClearPluginCache();
         }
 
         /// <inheritdoc/>
         public IEnumerable<Type> ResolveAttributedTypes<TAttribute>(bool cacheResult = true, IEnumerable<Assembly> specificAssemblies = null) where TAttribute : Attribute
         {
-            return _pluginManager.ResolveAttributedTypes<TAttribute>(cacheResult, specificAssemblies);
+            return this._pluginManager.ResolveAttributedTypes<TAttribute>(cacheResult, specificAssemblies);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Type> ResolveTypes<T>(bool cacheResult = true, IEnumerable<Assembly> specificAssemblies = null)
         {
-            return _pluginManager.ResolveTypes<T>(cacheResult, specificAssemblies);
+            return this._pluginManager.ResolveTypes<T>(cacheResult, specificAssemblies);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Type> ResolveTypesWithAttribute<T, TAttribute>(bool cacheResult = true, IEnumerable<Assembly> specificAssemblies = null) where TAttribute : Attribute
         {
-            return _pluginManager.ResolveTypesWithAttribute<T, TAttribute>(cacheResult, specificAssemblies);
+            return this._pluginManager.ResolveTypesWithAttribute<T, TAttribute>(cacheResult, specificAssemblies);
         }
     }
 }

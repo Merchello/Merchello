@@ -1,10 +1,5 @@
 ﻿namespace Merchello.Umbraco.Boot
 {
-    using Merchello.Core;
-    using Merchello.Umbraco.Adapters;
-
-    using global::Umbraco.Core;
-
     /// <summary>
     /// Methods for getting boot manager settings and adapting Umbraco's instantiated objects.
     /// </summary>

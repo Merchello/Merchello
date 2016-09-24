@@ -1,16 +1,11 @@
 ﻿namespace Merchello.Umbraco.Adapters
 {
-    using System;
-
     using Merchello.Core;
     using Merchello.Core.Cache;
 
     /// <summary>
     /// Represents an adapter for Umbraco's CacheHelper.
     /// </summary>
-    /// <remarks>
-    /// This is for legacy purposes only. MerchelloContext.Current.Cache is obsolete.
-    /// </remarks>
     internal sealed class CacheHelperAdapter : ICacheHelper, IUmbracoAdapter
     {
         /// <summary>
@@ -32,7 +27,7 @@
         {
             Ensure.ParameterNotNull(cache, "cache");
 
-            _cacheHelper = cache;
+            this._cacheHelper = cache;
         }
 
         /// <inheritdoc/>
@@ -40,7 +35,7 @@
         {
             get
             {
-                return new CacheProviderAdapter(_cacheHelper.RequestCache);
+                return new CacheProviderAdapter(this._cacheHelper.RequestCache);
             }
         }
 
@@ -49,7 +44,7 @@
         {
             get
             {
-                return new RuntimeCacheProviderAdapter(_cacheHelper.RuntimeCache);
+                return new RuntimeCacheProviderAdapter(this._cacheHelper.RuntimeCache);
             }
         }
 
@@ -58,7 +53,7 @@
         {
             get
             {
-                return new CacheProviderAdapter(_cacheHelper.StaticCache);
+                return new CacheProviderAdapter(this._cacheHelper.StaticCache);
             }
         }
 
@@ -67,7 +62,7 @@
         {
             get
             {
-                return new IsolatedRuntimeCacheAdapter(_cacheHelper.IsolatedRuntimeCache);
+                return new IsolatedRuntimeCacheAdapter(this._cacheHelper.IsolatedRuntimeCache);
             }
         }
     }

@@ -28,7 +28,7 @@
             : base(cacheProvider)
         {
             Ensure.ParameterNotNull(cacheProvider, nameof(cacheProvider));
-            _cacheProvider = cacheProvider;
+            this._cacheProvider = cacheProvider;
         }
 
         /// <inheritdoc/>
@@ -41,7 +41,7 @@
             CacheItemRemovedCallback removedCallback = null,
             string[] dependentFiles = null)
         {
-            return _cacheProvider.GetCacheItem(
+            return this._cacheProvider.GetCacheItem(
                 cacheKey,
                 getCacheItem,
                 timeout,
@@ -61,7 +61,7 @@
             CacheItemRemovedCallback removedCallback = null,
             string[] dependentFiles = null)
         {
-            _cacheProvider.InsertCacheItem(
+            this._cacheProvider.InsertCacheItem(
                 cacheKey,
                 getCacheItem,
                 timeout,

@@ -1,7 +1,5 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco.Adapters.Persistence
 {
-    using System;
-
     using Merchello.Core;
     using Merchello.Core.Logging;
     using Merchello.Core.Persistence;
@@ -34,31 +32,31 @@
             : base(database, logger)
         {
             Ensure.ParameterNotNull(schemaHelper, nameof(schemaHelper));
-            _helper = schemaHelper;
+            this._helper = schemaHelper;
         }
 
         /// <inheritdoc/>
         public override bool TableExist(string tableName)
         {
-            return _helper.TableExist(tableName);
+            return this._helper.TableExist(tableName);
         }
 
         /// <inheritdoc/>
         public override void CreateTable<T>(bool overwrite)
         {
-            _helper.CreateTable<T>(overwrite);
+            this._helper.CreateTable<T>(overwrite);
         }
 
         /// <inheritdoc/>
         public override void DropTable(string tableName)
         {
-            _helper.DropTable(tableName);
+            this._helper.DropTable(tableName);
         }
 
         /// <inheritdoc/>
         public override void CreateTable<T>()
         {
-            _helper.CreateTable<T>();
+            this._helper.CreateTable<T>();
         }
     }
 }

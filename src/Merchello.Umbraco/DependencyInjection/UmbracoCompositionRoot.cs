@@ -15,6 +15,9 @@
 
     using global::Umbraco.Core.Cache;
 
+    using Merchello.Umbraco.Adapters.Logging;
+    using Merchello.Umbraco.Adapters.Persistence;
+
     /// <summary>
     /// Adds Umbraco native class mappings to the container
     /// </summary>

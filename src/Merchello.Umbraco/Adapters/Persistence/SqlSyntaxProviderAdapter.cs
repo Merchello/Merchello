@@ -1,4 +1,4 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco.Adapters.Persistence
 {
     using System;
     using System.Collections.Generic;
@@ -35,7 +35,7 @@
         public SqlSyntaxProviderAdapter(global::Umbraco.Core.Persistence.SqlSyntax.ISqlSyntaxProvider provider)
         {
             Ensure.ParameterNotNull(provider, nameof(provider));
-            _provider = provider;
+            this._provider = provider;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@
         {
             get
             {
-                return _provider.CreateTable;
+                return this._provider.CreateTable;
             }
         }
 
@@ -56,7 +56,7 @@
         {
             get
             {
-                return _provider.DropTable;
+                return this._provider.DropTable;
             }
         }
 
@@ -67,7 +67,7 @@
         {
             get
             {
-                return _provider.AddColumn;
+                return this._provider.AddColumn;
             }
         }
 
@@ -78,7 +78,7 @@
         {
             get
             {
-                return _provider.DropColumn;
+                return this._provider.DropColumn;
             }
         }
 
@@ -89,7 +89,7 @@
         {
             get
             {
-                return _provider.AlterColumn;
+                return this._provider.AlterColumn;
             }
         }
 
@@ -100,7 +100,7 @@
         {
             get
             {
-                return _provider.RenameColumn;
+                return this._provider.RenameColumn;
             }
         }
 
@@ -111,7 +111,7 @@
         {
             get
             {
-                return _provider.RenameTable;
+                return this._provider.RenameTable;
             }
         }
 
@@ -122,7 +122,7 @@
         {
             get
             {
-                return _provider.CreateSchema;
+                return this._provider.CreateSchema;
             }
         }
 
@@ -133,7 +133,7 @@
         {
             get
             {
-                return _provider.AlterSchema;
+                return this._provider.AlterSchema;
             }
         }
 
@@ -144,7 +144,7 @@
         {
             get
             {
-                return _provider.DropSchema;
+                return this._provider.DropSchema;
             }
         }
 
@@ -155,7 +155,7 @@
         {
             get
             {
-                return _provider.CreateIndex;
+                return this._provider.CreateIndex;
             }
         }
 
@@ -166,7 +166,7 @@
         {
             get
             {
-                return _provider.DropIndex;
+                return this._provider.DropIndex;
             }
         }
 
@@ -177,7 +177,7 @@
         {
             get
             {
-                return _provider.InsertData;
+                return this._provider.InsertData;
             }
         }
 
@@ -188,7 +188,7 @@
         {
             get
             {
-                return _provider.UpdateData;
+                return this._provider.UpdateData;
             }
         }
 
@@ -199,7 +199,7 @@
         {
             get
             {
-                return _provider.DeleteData;
+                return this._provider.DeleteData;
             }
         }
 
@@ -210,7 +210,7 @@
         {
             get
             {
-                return _provider.TruncateTable;
+                return this._provider.TruncateTable;
             }
         }
 
@@ -221,7 +221,7 @@
         {
             get
             {
-                return _provider.CreateConstraint;
+                return this._provider.CreateConstraint;
             }
         }
 
@@ -232,7 +232,7 @@
         {
             get
             {
-                return _provider.DeleteConstraint;
+                return this._provider.DeleteConstraint;
             }
         }
 
@@ -243,7 +243,7 @@
         {
             get
             {
-                return _provider.CreateForeignKeyConstraint;
+                return this._provider.CreateForeignKeyConstraint;
             }
         }
 
@@ -254,7 +254,7 @@
         {
             get
             {
-                return _provider.DeleteDefaultConstraint;
+                return this._provider.DeleteDefaultConstraint;
             }
         }
 
@@ -263,7 +263,7 @@
         {
             get
             {
-                return _provider.ConvertIntegerToOrderableString;
+                return this._provider.ConvertIntegerToOrderableString;
             }
         }
 
@@ -272,7 +272,7 @@
         {
             get
             {
-                return _provider.ConvertDateToOrderableString;
+                return this._provider.ConvertDateToOrderableString;
             }
         }
 
@@ -281,7 +281,191 @@
         {
             get
             {
-                return _provider.ConvertDecimalToOrderableString;
+                return this._provider.ConvertDecimalToOrderableString;
+            }
+        }
+
+        string ISqlSyntaxProvider.CreateTable
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DropTable
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.AddColumn
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DropColumn
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.AlterColumn
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.RenameColumn
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.RenameTable
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.CreateSchema
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.AlterSchema
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DropSchema
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.CreateIndex
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DropIndex
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.InsertData
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.UpdateData
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DeleteData
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.TruncateTable
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.CreateConstraint
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DeleteConstraint
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.CreateForeignKeyConstraint
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.DeleteDefaultConstraint
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.ConvertIntegerToOrderableString
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.ConvertDateToOrderableString
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        string ISqlSyntaxProvider.ConvertDecimalToOrderableString
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -296,7 +480,7 @@
         /// </returns>
         public string EscapeString(string val)
         {
-            return _provider.EscapeString(val);
+            return this._provider.EscapeString(val);
         }
 
         /// <summary>
@@ -307,7 +491,7 @@
         /// </returns>
         public string GetWildcardPlaceholder()
         {
-            return _provider.GetWildcardPlaceholder();
+            return this._provider.GetWildcardPlaceholder();
         }
 
         /// <summary>
@@ -327,7 +511,7 @@
         /// </returns>
         public string GetStringColumnEqualComparison(string column, int paramIndex, TextColumnType columnType)
         {
-            return _provider.GetStringColumnEqualComparison(column, paramIndex, Converter.Convert(columnType));
+            return this._provider.GetStringColumnEqualComparison(column, paramIndex, Converter.Convert(columnType));
         }
 
         /// <summary>
@@ -347,7 +531,7 @@
         /// </returns>
         public string GetStringColumnWildcardComparison(string column, int paramIndex, TextColumnType columnType)
         {
-            return _provider.GetStringColumnWildcardComparison(column, paramIndex, Converter.Convert(columnType));
+            return this._provider.GetStringColumnWildcardComparison(column, paramIndex, Converter.Convert(columnType));
         }
 
         /// <summary>
@@ -361,7 +545,7 @@
         /// </returns>
         public string GetConcat(params string[] args)
         {
-            return _provider.GetConcat(args);
+            return this._provider.GetConcat(args);
         }
 
         /// <summary>
@@ -375,7 +559,7 @@
         /// </returns>
         public string GetQuotedTableName(string tableName)
         {
-            return _provider.GetQuotedTableName(tableName);
+            return this._provider.GetQuotedTableName(tableName);
         }
 
         /// <summary>
@@ -389,7 +573,7 @@
         /// </returns>
         public string GetQuotedColumnName(string columnName)
         {
-            return _provider.GetQuotedColumnName(columnName);
+            return this._provider.GetQuotedColumnName(columnName);
         }
 
         /// <summary>
@@ -403,7 +587,7 @@
         /// </returns>]
         public string GetQuotedName(string name)
         {
-            return _provider.GetQuotedName(name);
+            return this._provider.GetQuotedName(name);
         }
 
         /// <summary>
@@ -420,7 +604,7 @@
         /// </returns>
         public bool DoesTableExist(Database db, string tableName)
         {
-            return _provider.DoesTableExist(db, tableName);
+            return this._provider.DoesTableExist(db, tableName);
         }
 
         /// <summary>
@@ -434,7 +618,7 @@
         /// </returns>
         public string GetIndexType(IndexTypes indexTypes)
         {
-            return _provider.GetIndexType(Converter.Convert(indexTypes));
+            return this._provider.GetIndexType(Converter.Convert(indexTypes));
         }
 
         /// <summary>
@@ -448,7 +632,7 @@
         /// </returns>
         public string GetSpecialDbType(SpecialDbTypes dbTypes)
         {
-            return _provider.GetSpecialDbType(Converter.Convert(dbTypes));
+            return this._provider.GetSpecialDbType(Converter.Convert(dbTypes));
         }
 
         /// <summary>
@@ -465,7 +649,7 @@
         /// </returns>
         public string FormatDateTime(DateTime date, bool includeTime = true)
         {
-            return _provider.FormatDateTime(date, includeTime);
+            return this._provider.FormatDateTime(date, includeTime);
         }
 
         /// <summary>
@@ -479,7 +663,7 @@
         /// </returns>
         public string Format(TableDefinition table)
         {
-            return _provider.Format(Converter.Convert(table));
+            return this._provider.Format(Converter.Convert(table));
         }
 
         /// <summary>
@@ -494,7 +678,7 @@
         public string Format(IEnumerable<ColumnDefinition> columns)
         {
             var cdefs = columns.Select(Converter.Convert);
-            return _provider.Format(cdefs);
+            return this._provider.Format(cdefs);
         }
 
         /// <summary>
@@ -509,7 +693,7 @@
         public List<string> Format(IEnumerable<IndexDefinition> indexes)
         {
             var idxdefs = indexes.Select(Converter.Convert);
-            return _provider.Format(idxdefs);
+            return this._provider.Format(idxdefs);
         }
 
         /// <summary>
@@ -524,7 +708,7 @@
         public List<string> Format(IEnumerable<ForeignKeyDefinition> foreignKeys)
         {
             var fkdefs = foreignKeys.Select(Converter.Convert);
-            return _provider.Format(fkdefs);
+            return this._provider.Format(fkdefs);
         }
 
         /// <summary>
@@ -538,7 +722,7 @@
         /// </returns>
         public string FormatPrimaryKey(TableDefinition table)
         {
-            return _provider.FormatPrimaryKey(Converter.Convert(table));
+            return this._provider.FormatPrimaryKey(Converter.Convert(table));
         }
 
         /// <summary>
@@ -552,7 +736,7 @@
         /// </returns>
         public string GetQuotedValue(string value)
         {
-            return _provider.GetQuotedValue(value);
+            return this._provider.GetQuotedValue(value);
         }
 
         /// <summary>
@@ -566,7 +750,7 @@
         /// </returns>
         public string Format(ColumnDefinition column)
         {
-            return _provider.Format(Converter.Convert(column));
+            return this._provider.Format(Converter.Convert(column));
         }
 
         /// <summary>
@@ -580,7 +764,7 @@
         /// </returns>
         public string Format(IndexDefinition index)
         {
-            return _provider.Format(Converter.Convert(index));
+            return this._provider.Format(Converter.Convert(index));
         }
 
         /// <summary>
@@ -594,7 +778,7 @@
         /// </returns>
         public string Format(ForeignKeyDefinition foreignKey)
         {
-            return _provider.Format(Converter.Convert(foreignKey));
+            return this._provider.Format(Converter.Convert(foreignKey));
         }
 
         /// <summary>
@@ -614,7 +798,7 @@
         /// </returns>
         public string FormatColumnRename(string tableName, string oldName, string newName)
         {
-            return _provider.FormatColumnRename(tableName, oldName, newName);
+            return this._provider.FormatColumnRename(tableName, oldName, newName);
         }
 
         /// <summary>
@@ -631,7 +815,7 @@
         /// </returns>
         public string FormatTableRename(string oldName, string newName)
         {
-            return _provider.FormatTableRename(oldName, newName);
+            return this._provider.FormatTableRename(oldName, newName);
         }
 
         /// <summary>
@@ -642,7 +826,7 @@
         /// </returns>
         public bool SupportsClustered()
         {
-            return _provider.SupportsClustered();
+            return this._provider.SupportsClustered();
         }
 
         /// <summary>
@@ -653,7 +837,7 @@
         /// </returns>
         public bool SupportsIdentityInsert()
         {
-            return _provider.SupportsIdentityInsert();
+            return this._provider.SupportsIdentityInsert();
         }
 
         /// <summary>
@@ -667,7 +851,7 @@
         /// </returns>
         public bool? SupportsCaseInsensitiveQueries(Database db)
         {
-            return _provider.SupportsCaseInsensitiveQueries(db);
+            return this._provider.SupportsCaseInsensitiveQueries(db);
         }
 
         /// <summary>
@@ -681,7 +865,7 @@
         /// </returns>
         public IEnumerable<string> GetTablesInSchema(Database db)
         {
-            return _provider.GetTablesInSchema(db);
+            return this._provider.GetTablesInSchema(db);
         }
 
         /// <summary>
@@ -695,7 +879,7 @@
         /// </returns>
         public IEnumerable<ColumnInfo> GetColumnsInSchema(Database db)
         {
-            return _provider.GetColumnsInSchema(db).Select(Converter.Convert);
+            return this._provider.GetColumnsInSchema(db).Select(Converter.Convert);
         }
 
         /// <summary>
@@ -709,7 +893,7 @@
         /// </returns>
         public IEnumerable<Tuple<string, string>> GetConstraintsPerTable(Database db)
         {
-            return _provider.GetConstraintsPerTable(db);
+            return this._provider.GetConstraintsPerTable(db);
         }
 
         /// <summary>
@@ -723,7 +907,7 @@
         /// </returns>
         public IEnumerable<Tuple<string, string, string>> GetConstraintsPerColumn(Database db)
         {
-            return _provider.GetConstraintsPerColumn(db);
+            return this._provider.GetConstraintsPerColumn(db);
         }
 
         /// <summary>
@@ -737,7 +921,162 @@
         /// </returns>
         public IEnumerable<Tuple<string, string, string, bool>> GetDefinedIndexes(Database db)
         {
-            return _provider.GetDefinedIndexes(db);
+            return this._provider.GetDefinedIndexes(db);
+        }
+
+        string ISqlSyntaxProvider.EscapeString(string val)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetWildcardPlaceholder()
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetStringColumnEqualComparison(string column, int paramIndex, TextColumnType columnType)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetStringColumnWildcardComparison(string column, int paramIndex, TextColumnType columnType)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetConcat(params string[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetQuotedTableName(string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetQuotedColumnName(string columnName)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetQuotedName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ISqlSyntaxProvider.DoesTableExist(Database db, string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetIndexType(IndexTypes indexTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetSpecialDbType(SpecialDbTypes dbTypes)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.FormatDateTime(DateTime date, bool includeTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.Format(TableDefinition table)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.Format(IEnumerable<ColumnDefinition> columns)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<string> ISqlSyntaxProvider.Format(IEnumerable<IndexDefinition> indexes)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<string> ISqlSyntaxProvider.Format(IEnumerable<ForeignKeyDefinition> foreignKeys)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.FormatPrimaryKey(TableDefinition table)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.GetQuotedValue(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.Format(ColumnDefinition column)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.Format(IndexDefinition index)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.Format(ForeignKeyDefinition foreignKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.FormatColumnRename(string tableName, string oldName, string newName)
+        {
+            throw new NotImplementedException();
+        }
+
+        string ISqlSyntaxProvider.FormatTableRename(string oldName, string newName)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ISqlSyntaxProvider.SupportsClustered()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ISqlSyntaxProvider.SupportsIdentityInsert()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool? ISqlSyntaxProvider.SupportsCaseInsensitiveQueries(Database db)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<string> ISqlSyntaxProvider.GetTablesInSchema(Database db)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<ColumnInfo> ISqlSyntaxProvider.GetColumnsInSchema(Database db)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<Tuple<string, string>> ISqlSyntaxProvider.GetConstraintsPerTable(Database db)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<Tuple<string, string, string>> ISqlSyntaxProvider.GetConstraintsPerColumn(Database db)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<Tuple<string, string, string, bool>> ISqlSyntaxProvider.GetDefinedIndexes(Database db)
+        {
+            throw new NotImplementedException();
         }
     }
 }

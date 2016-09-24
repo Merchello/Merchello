@@ -54,7 +54,12 @@
     <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
     <Compile Include="ActivatorServiceProvider.cs" />
+    <Compile Include="Cache\CacheRefresherBase.cs" />
     <Compile Include="Cache\DefaultRepositoryCachePolicy.cs" />
+    <Compile Include="Cache\ICacheRefresher.cs" />
+    <Compile Include="Cache\IJsonCacheRefresher.cs" />
+    <Compile Include="Cache\IPayloadCacheRefresher.cs" />
+    <Compile Include="Cache\JsonCacheRefresherBase.cs" />
     <Compile Include="Cache\RepositoryCachePolicyBase.cs" />
     <Compile Include="Cache\RepositoryCachePolicyOptions.cs" />
     <Compile Include="Constants-CountryCodes.cs">
@@ -66,6 +71,7 @@
     <Compile Include="Constants-DetachedPublishedContent.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
+    <Compile Include="Constants-DistributedCache.cs" />
     <Compile Include="Constants-InvoiceStatus.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
@@ -103,6 +109,8 @@
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Events\CacheRefresherEventArgs.cs" />
+    <Compile Include="Events\TypedEventHandler.cs" />
     <Compile Include="IAttempt.cs" />
     <Compile Include="Cache\IIsolatedRuntimeCache.cs" />
     <Compile Include="Acquired\ObjectExtensions.cs" />
@@ -525,6 +533,7 @@
     <Compile Include="Services\Interfaces\IMigrationStatusService.cs" />
     <Compile Include="Services\Interfaces\IServiceContext.cs" />
     <Compile Include="StringExtensions.cs" />
+    <Compile Include="Sync\MessageType.cs" />
     <Compile Include="Trees\FirstByValueTreeNodeVisitor.cs" />
     <Compile Include="Trees\ITreeNodeVisitor.cs" />
     <Compile Include="Trees\NodeAggregatorTreeNodeVisitor.cs" />

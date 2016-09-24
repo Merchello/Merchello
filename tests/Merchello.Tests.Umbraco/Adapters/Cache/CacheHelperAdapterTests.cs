@@ -1,6 +1,5 @@
 ﻿namespace Merchello.Tests.Umbraco.Adapters.Cache
 {
-    using Merchello.Tests.Umbraco.TestHelpers;
     using Merchello.Tests.Umbraco.TestHelpers.Base;
     using Merchello.Umbraco.Adapters;
 

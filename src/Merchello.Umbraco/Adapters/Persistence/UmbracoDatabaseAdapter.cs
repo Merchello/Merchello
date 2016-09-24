@@ -1,4 +1,4 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco.Adapters.Persistence
 {
     using System;
 
@@ -33,9 +33,9 @@
         {
             if (database == null) throw new ArgumentNullException(nameof(database));
 
-            _db = database;
+            this._db = database;
 
-            _sqlSyntax = new Lazy<ISqlSyntaxProvider>(() => new SqlSyntaxProviderAdapter(_db.SqlSyntax));
+            this._sqlSyntax = new Lazy<ISqlSyntaxProvider>(() => new SqlSyntaxProviderAdapter(this._db.SqlSyntax));
         }
 
         /// <inheritdoc/>
@@ -43,7 +43,7 @@
         {
             get
             {
-                return _db;
+                return this._db;
             }
         }
 
@@ -52,7 +52,7 @@
         {
             get
             {
-                return _sqlSyntax.Value;
+                return this._sqlSyntax.Value;
             }
         }
     }

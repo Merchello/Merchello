@@ -1,9 +1,10 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco.Adapters.Logging
 {
     using System;
 
     using Merchello.Core;
     using Merchello.Core.Logging;
+    using Merchello.Umbraco.Adapters;
 
     /// <summary>
     /// An adapter for using Umbraco's <see><cref>global::Umbraco.Core.Logging.ILogger</cref></see>

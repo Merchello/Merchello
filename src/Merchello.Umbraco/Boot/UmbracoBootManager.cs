@@ -10,6 +10,8 @@
     using global::Umbraco.Core;
     using global::Umbraco.Core.Plugins;
 
+    using Merchello.Umbraco.Adapters.Persistence;
+
     using IDatabaseFactory = Merchello.Core.Persistence.IDatabaseFactory;
 
     /// <summary>

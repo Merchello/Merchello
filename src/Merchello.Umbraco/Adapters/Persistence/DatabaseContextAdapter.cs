@@ -1,4 +1,4 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco.Adapters.Persistence
 {
     using Merchello.Core;
     using Merchello.Core.Persistence;
@@ -37,7 +37,7 @@
             Ensure.ParameterNotNull(dbContext, nameof(dbContext));
             Ensure.ParameterNotNull(queryFactory, nameof(queryFactory));
 
-            _dbContext = dbContext;
+            this._dbContext = dbContext;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@
         {
             get
             {
-                return _dbContext.IsDatabaseConfigured;
+                return this._dbContext.IsDatabaseConfigured;
             }
         }
 
@@ -58,7 +58,7 @@
         {
             get
             {
-                return _dbContext.CanConnect;
+                return this._dbContext.CanConnect;
             }
         }
 
@@ -70,7 +70,7 @@
         /// </returns>
         public override Database GetDatabase()
         {
-            return _dbContext.Database;
+            return this._dbContext.Database;
         }
 
         /// <summary>

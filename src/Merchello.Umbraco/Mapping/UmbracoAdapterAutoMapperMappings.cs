@@ -5,7 +5,6 @@
     using Merchello.Core.Acquired.Persistence.DatabaseModelDefinitions;
     using Merchello.Core.Mapping;
     using Merchello.Core.Persistence.SqlSyntax;
-    using Merchello.Umbraco.Adapters;
 
     /// <summary>
     /// Represents AutoMapper mapping for Merchello versions of Umbraco class to Umbraco classes.

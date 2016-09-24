@@ -1,4 +1,4 @@
-﻿namespace Merchello.Umbraco.Adapters
+﻿namespace Merchello.Umbraco.Adapters.Logging
 {
     using System;
 
@@ -23,31 +23,31 @@
         {
             Ensure.ParameterNotNull(profiler, nameof(profiler));
 
-            _profiler = profiler;
+            this._profiler = profiler;
         }
 
         /// <inheritdoc/>
         public string Render()
         {
-            return _profiler.Render();
+            return this._profiler.Render();
         }
 
         /// <inheritdoc/>
         public IDisposable Step(string name)
         {
-            return _profiler.Step(name);
+            return this._profiler.Step(name);
         }
 
         /// <inheritdoc/>
         public void Start()
         {
-            _profiler.Start();
+            this._profiler.Start();
         }
 
         /// <inheritdoc/>
         public void Stop(bool discardResults = false)
         {
-            _profiler.Stop(discardResults);
+            this._profiler.Stop(discardResults);
         }
     }
 }

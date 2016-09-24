@@ -1,4 +1,4 @@
-﻿namespace Merchello.Umbraco.Adapters
+namespace Merchello.Umbraco.Adapters
 {
     using System;
     using System.Collections.Generic;
@@ -27,73 +27,73 @@
         public CacheProviderAdapter(global::Umbraco.Core.Cache.ICacheProvider cacheProvider)
         {
             Ensure.ParameterNotNull(cacheProvider, nameof(cacheProvider));
-            _cacheProvider = cacheProvider;
+            this._cacheProvider = cacheProvider;
         }
 
         /// <inheritdoc/>
         public void ClearAllCache()
         {
-            _cacheProvider.ClearAllCache();
+            this._cacheProvider.ClearAllCache();
         }
 
         /// <inheritdoc/>
         public void ClearCacheItem(string key)
         {
-            _cacheProvider.ClearCacheItem(key);
+            this._cacheProvider.ClearCacheItem(key);
         }
 
         /// <inheritdoc/>
         public void ClearCacheObjectTypes(string typeName)
         {
-            _cacheProvider.ClearCacheObjectTypes(typeName);
+            this._cacheProvider.ClearCacheObjectTypes(typeName);
         }
 
         /// <inheritdoc/>
         public void ClearCacheObjectTypes<T>()
         {
-            _cacheProvider.ClearCacheObjectTypes<T>();
+            this._cacheProvider.ClearCacheObjectTypes<T>();
         }
 
         /// <inheritdoc/>
         public void ClearCacheObjectTypes<T>(Func<string, T, bool> predicate)
         {
-            _cacheProvider.ClearCacheObjectTypes<T>(predicate);
+            this._cacheProvider.ClearCacheObjectTypes<T>(predicate);
         }
 
         /// <inheritdoc/>
         public void ClearCacheByKeySearch(string keyStartsWith)
         {
-            _cacheProvider.ClearCacheByKeySearch(keyStartsWith);
+            this._cacheProvider.ClearCacheByKeySearch(keyStartsWith);
         }
 
         /// <inheritdoc/>
         public void ClearCacheByKeyExpression(string regexString)
         {
-            _cacheProvider.ClearCacheByKeyExpression(regexString);
+            this._cacheProvider.ClearCacheByKeyExpression(regexString);
         }
 
         /// <inheritdoc/>
         public IEnumerable<object> GetCacheItemsByKeySearch(string keyStartsWith)
         {
-            return _cacheProvider.GetCacheItemsByKeySearch(keyStartsWith);
+            return this._cacheProvider.GetCacheItemsByKeySearch(keyStartsWith);
         }
 
         /// <inheritdoc/>
         public IEnumerable<object> GetCacheItemsByKeyExpression(string regexString)
         {
-            return _cacheProvider.GetCacheItemsByKeyExpression(regexString);
+            return this._cacheProvider.GetCacheItemsByKeyExpression(regexString);
         }
 
         /// <inheritdoc/>
         public object GetCacheItem(string cacheKey)
         {
-            return _cacheProvider.GetCacheItem(cacheKey);
+            return this._cacheProvider.GetCacheItem(cacheKey);
         }
 
         /// <inheritdoc/>
         public object GetCacheItem(string cacheKey, Func<object> getCacheItem)
         {
-            return _cacheProvider.GetCacheItem(cacheKey, getCacheItem);
+            return this._cacheProvider.GetCacheItem(cacheKey, getCacheItem);
         }
     }
 }

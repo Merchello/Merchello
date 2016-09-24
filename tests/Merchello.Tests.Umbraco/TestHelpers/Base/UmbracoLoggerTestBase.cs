@@ -5,9 +5,9 @@
     using global::Umbraco.Core.Logging;
 
     using Merchello.Core.Acquired.ObjectResolution;
-    using Merchello.Core.DependencyInjection;
     using Merchello.Tests.Umbraco.TestHelpers.Adapter;
     using Merchello.Umbraco.Adapters;
+    using Merchello.Umbraco.Adapters.Logging;
 
     using NUnit.Framework;
 
