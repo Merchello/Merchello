@@ -2,16 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Net.Mail;
     using System.Web.Mvc;
     using System.Web.Security;
-	using System.Net.Mail;
-	using System.Linq;
 
     using Merchello.Core;
+    using Merchello.Core.Gateways.Notification.Smtp;
     using Merchello.Core.Logging;
     using Merchello.Core.Models;
-	using Merchello.Core.Gateways.Notification.Smtp;
-	using Merchello.FastTrack.Factories;
+    using Merchello.FastTrack.Factories;
     using Merchello.FastTrack.Models;
     using Merchello.FastTrack.Models.Membership;
     using Merchello.Web.Controllers;
@@ -24,9 +24,9 @@
     using Umbraco.Web.Models;
     using Umbraco.Web.Mvc;
 
-	using LoginModel = Merchello.FastTrack.Models.Membership.LoginModel;
+    using LoginModel = Merchello.FastTrack.Models.Membership.LoginModel;
 
-	/// <summary>
+    /// <summary>
 	/// A controller responsible for rendering and handling membership operations.
 	/// </summary>
 	/// <remarks>
@@ -326,10 +326,10 @@
 			var viewData = new StoreViewData();
 
 			if (!((model.Password.Length >= Membership.MinRequiredPasswordLength) &&
-				(model.Password.ToCharArray().Count(c => !Char.IsLetterOrDigit(c)) >= Membership.MinRequiredNonAlphanumericCharacters)))
+				(model.Password.ToCharArray().Count(c => !char.IsLetterOrDigit(c)) >= Membership.MinRequiredNonAlphanumericCharacters)))
 			{
 				viewData.Success = false;
-				viewData.Messages = new[] { String.Format("New password invalid. Minimum length {0} characters", Membership.MinRequiredPasswordLength) };
+				viewData.Messages = new[] { string.Format("New password invalid. Minimum length {0} characters", Membership.MinRequiredPasswordLength) };
 				ViewData["MerchelloViewData"] = viewData;
 				return CurrentUmbracoPage();
 			}
@@ -388,11 +388,11 @@
 			var user = Membership.GetUser(model.Username);
 			user.ChangePassword(newPassword, newPassword);
 
-			//assumes you have set the smpt settings in web.config and supplied a default "from" email
+			// assumes you have set the SMTP settings in web.config and supplied a default "from" email
 			var msg = new MailMessage
 			{
-				Subject = String.Format("New Password for {0}", Request.Url.Host),
-				Body = String.Format("Your new password is: {0}", newPassword),
+				Subject = string.Format("New Password for {0}", Request.Url.Host),
+				Body = string.Format("Your new password is: {0}", newPassword),
 				IsBodyHtml = false
 			};
 			msg.To.Add(new MailAddress(model.Username));

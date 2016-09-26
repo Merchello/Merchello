@@ -92,7 +92,7 @@
         {
             _services = ApplicationContext.Current.Services;
 
-            var templates = new[] { "ftProduct", "ftPayment", "ftPaymentMethod", "ftBillingAddress", "ftShipRateQuote", "ftShippingAddress" };
+            var templates = new[] { "ftProduct", "ftPayment", "ftPaymentMethod", "ftBillingAddress", "ftShipRateQuote", "ftShippingAddress", "ftChangePassword", "ftForgotPassword" };
 
             _templates = ApplicationContext.Current.Services.FileService.GetTemplates(templates);
         }
