@@ -110,6 +110,17 @@
             }
 
             /// <summary>
+            /// Gets the first child of the account content section with the content type 'ftChangePassword'.
+            /// </summary>
+            /// <returns>
+            /// The <see cref="IPublishedContent"/>.
+            /// </returns>
+            public static IPublishedContent GetChangePassword()
+            {
+                return GetAccount().FirstChild(x => x.ContentType.Alias == FastTrackConfiguration.Current.ContentTypeAliasChangePassword);
+            }
+
+            /// <summary>
             /// Gets a category page by a collection key.
             /// </summary>
             /// <param name="collectionKey">
