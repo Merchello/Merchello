@@ -31,6 +31,6 @@
         /// Gets (creates or retrieves) the "ambient" database connection.
         /// </summary>
         /// <returns>The "ambient" database connection.</returns>
-		Database GetDatabase();
+		IMerchelloDatabase GetDatabase();
     }
 }

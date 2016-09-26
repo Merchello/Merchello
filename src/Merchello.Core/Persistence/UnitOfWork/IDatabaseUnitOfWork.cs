@@ -10,7 +10,7 @@ namespace Merchello.Core.Persistence.UnitOfWork
         /// <summary>
         /// Gets the database.
         /// </summary>
-        Database Database { get; }
+        IMerchelloDatabase Database { get; }
 
         /// <summary>
         /// Read lock to prevent dirty read.

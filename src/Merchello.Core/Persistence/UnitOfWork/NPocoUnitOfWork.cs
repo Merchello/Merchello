@@ -20,7 +20,7 @@
         /// <param name="database">A database.</param>
         /// <param name="factory">A repository factory.</param>
         /// <remarks>This should be used by the NPocoUnitOfWorkProvider exclusively.</remarks>
-        internal NPocoUnitOfWork(Database database, RepositoryFactory factory)
+        internal NPocoUnitOfWork(IMerchelloDatabase database, RepositoryFactory factory)
             : base(factory)
         {
             this.Database = database;
@@ -29,7 +29,7 @@
         /// <summary>
         /// Gets the unit of work underlying database.
         /// </summary>
-        public Database Database { get; }
+        public IMerchelloDatabase Database { get; }
 
         /// <inheritdoc/>
         public void ReadLock(params int[] lockIds)
@@ -62,7 +62,7 @@
             base.Begin();
 
             if (this._transaction == null)
-                this._transaction = this.Database.GetTransaction();
+                this._transaction = this.Database.Database.GetTransaction();
         }
 
         /// <summary>

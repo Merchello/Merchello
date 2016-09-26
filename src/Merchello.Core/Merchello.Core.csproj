@@ -53,6 +53,7 @@
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
     <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
+    <Compile Include="Acquired\Persistence\Querying\SqlTranslator.cs" />
     <Compile Include="ActivatorServiceProvider.cs" />
     <Compile Include="Cache\CacheRefresherBase.cs" />
     <Compile Include="Cache\DefaultRepositoryCachePolicy.cs" />
@@ -165,7 +166,9 @@
     <Compile Include="Persistence\IDatabaseSchemaManager.cs" />
     <Compile Include="Persistence\IExposeSqlSyntax.cs" />
     <Compile Include="Persistence\IMerchelloDatabase.cs" />
+    <Compile Include="Persistence\ISqlContext.cs" />
     <Compile Include="Persistence\Mappers\AnonymousCustomerMapper.cs" />
+    <Compile Include="Persistence\MerchelloDatabaseExtensions.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Migrations\Initial\IDatabaseSchemaCreation.cs" />
@@ -173,11 +176,14 @@
     <Compile Include="Persistence\Repositories\IRepository.cs" />
     <Compile Include="Cache\IRepositoryCachePolicy.cs" />
     <Compile Include="Persistence\Repositories\IRepositoryQueryable{T}.cs" />
-    <Compile Include="Persistence\Repositories\IWriteRepository.cs" />
+    <Compile Include="Persistence\Repositories\IRepositoryWritable{T}.cs" />
+    <Compile Include="Persistence\Repositories\NPocoRespositoryBase.cs" />
     <Compile Include="Persistence\Repositories\RepositoryQueryableBase.cs" />
     <Compile Include="Persistence\Repositories\RepositoryReadableBase.cs" />
     <Compile Include="Persistence\Repositories\RepositoryBase.cs" />
+    <Compile Include="Persistence\Repositories\RepositoryWritableBase.cs" />
     <Compile Include="Persistence\RepositoryFactory.cs" />
+    <Compile Include="Persistence\SqlContext.cs" />
     <Compile Include="Persistence\SqlSyntax\ColumnInfo.cs" />
     <Compile Include="Acquired\ServiceProviderExtensions.cs" />
     <Compile Include="DependencyInjection\ConfigurationCompositionRoot .cs" />

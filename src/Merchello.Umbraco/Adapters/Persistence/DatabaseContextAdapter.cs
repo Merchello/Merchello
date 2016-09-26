@@ -23,6 +23,11 @@
         private readonly DatabaseContext _dbContext;
 
         /// <summary>
+        /// The Merchello database.
+        /// </summary>
+        private readonly IMerchelloDatabase _db;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseContextAdapter"/> class.
         /// </summary>
         /// <param name="dbContext">
@@ -38,6 +43,7 @@
             Ensure.ParameterNotNull(queryFactory, nameof(queryFactory));
 
             this._dbContext = dbContext;
+            this._db = new UmbracoDatabaseAdapter(_dbContext.Database);
         }
 
         /// <summary>
@@ -68,9 +74,9 @@
         /// <returns>
         /// The <see cref="Database"/>.
         /// </returns>
-        public override Database GetDatabase()
+        public override IMerchelloDatabase GetDatabase()
         {
-            return this._dbContext.Database;
+            return _db;
         }
 
         /// <summary>

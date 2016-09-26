@@ -62,7 +62,7 @@
         /// <returns>
         /// The <see cref="Database"/>.
         /// </returns>
-        public abstract Database GetDatabase();
+        public abstract IMerchelloDatabase GetDatabase();
 
         /// <summary>
         /// Disposes resources.
