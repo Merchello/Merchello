@@ -1664,7 +1664,37 @@
             }
             else if (numbers.Any())
             {
-                sql.Where("invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal) ", new { @invNo = numbers.ToArray(), @postal = numbers.ToArray() });
+				if (numbers.Count() == 1)
+				{
+					int number = numbers[0];
+					// if there is only one number, use starts-with type logic so that the list descreases as more digits are inserted.
+					// invoiceNumber is indexed, so use index by including ranges. Query looks ugly, but more effectcient than casting
+					// invoiceNumber to a string and using a 'like' - which wouldn't use an index.
+					// postcode is a string and not indexed - so is doing a full table scan. If performance is an issue on large data sets,
+					//   consider removing postcode from lookup or enhancing with an index
+					sql.Where(
+						"invoiceNumber = @invNo OR invoiceNumber BETWEEN @invNo10 AND @invNo19 OR invoiceNumber BETWEEN @invNo100 AND @invNo199 OR invoiceNumber BETWEEN @invNo1000 AND @invNo1999 OR invoiceNumber BETWEEN @invNo10000 AND @invNo19999 OR invoiceNumber BETWEEN @invNo100000 AND @invNo199999 OR invoiceNumber BETWEEN @invNo1000000 AND @invNo1999999 OR billToPostalCode LIKE @postal ", 
+						new {
+							@invNo = number,
+							@invNo10 = number * 10,
+							@invNo19 = number * 10 + 9,
+							@invNo100 = number * 100,
+							@invNo199 = number * 100 + 99,
+							@invNo1000 = number * 1000,
+							@invNo1999 = number * 1000 + 999,
+							@invNo10000 = number * 10000,
+							@invNo19999 = number * 10000 + 9999,
+							@invNo100000 = number * 100000,
+							@invNo199999 = number * 100000 + 99999,
+							@invNo1000000 = number * 1000000,
+							@invNo1999999 = number * 1000000 + 999999,
+							@postal = string.Format("{0}%", number).Trim()
+						});
+				}
+				else
+				{
+					sql.Where("invoiceNumber IN (@invNo) OR billToPostalCode IN (@postal) ", new { @invNo = numbers.ToArray(), @postal = numbers.ToArray() });
+				}
             }
             else
             {

@@ -241,6 +241,15 @@ namespace Merchello.Web.Store.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current Password.
+        /// </summary>
+        public static string LabelOldPassword {
+            get {
+                return ResourceManager.GetString("LabelOldPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string LabelOrganization {
@@ -471,6 +480,15 @@ namespace Merchello.Web.Store.Localization {
         public static string RequiredOfferCode {
             get {
                 return ResourceManager.GetString("RequiredOfferCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Password is required.
+        /// </summary>
+        public static string RequiredOldPassword {
+            get {
+                return ResourceManager.GetString("RequiredOldPassword", resourceCulture);
             }
         }
         
