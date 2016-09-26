@@ -22,6 +22,7 @@
     /// <summary>
     /// Represents the ProductVariantService
     /// </summary>
+    [Obsolete("Use the product service")]
     public class ProductVariantService : MerchelloRepositoryService, IProductVariantService
     {
         /// <summary>
