@@ -5,15 +5,12 @@
     using System.Linq;
 
     using Merchello.Core.Models;
-    using Merchello.Core.Models.DetachedContent;
-    using Merchello.Core.Models.EntityBase;
     using Merchello.Core.Models.Rdbms;
     using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.UnitOfWork;
 
     using Umbraco.Core;
-    using Umbraco.Core.Cache;
     using Umbraco.Core.Logging;
     using Umbraco.Core.Persistence;
     using Umbraco.Core.Persistence.Querying;
@@ -978,6 +975,65 @@
             pagedKeys = GetPagedKeys(page, itemsPerPage, sql, orderExpression, sortDirection);
 
             return CachePageOfKeys(cacheKey, pagedKeys);
+        }
+
+        public int CountKeysThatExistInAllCollections(Guid[] collectionKeys)
+        {
+            return Database.ExecuteScalar<int>(SqlForKeysThatExistInAllCollections(collectionKeys, true));
+        }
+
+        public IEnumerable<Tuple<IEnumerable<Guid>, int>> CountKeysThatExistInAllCollections(IEnumerable<Guid[]> collectionKeysGroups)
+        {
+            var sql = new Sql();
+            var keysGroups = collectionKeysGroups as Guid[][] ?? collectionKeysGroups.ToArray();
+            foreach (var group in keysGroups)
+            {
+                if (sql.SQL.Length > 0) sql.Append("UNION");
+                sql.Append(string.Format("SELECT {0} as Hash", group.GetHashCode())) // can't paramertize this SqlCE chokes but it should not matter since it's just a value.
+                    .Append(", T1.Count")
+                    .Append("FROM (")
+                    .Append("SELECT COUNT(*) AS Count")
+                       .Append("FROM [merchProductVariant]")
+                       .Append("WHERE [merchProductVariant].[productKey] IN (")
+                       .Append("SELECT [productKey]")
+                       .Append("FROM [merchProduct2EntityCollection]")
+                       .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = group })
+                       .Append("GROUP BY productKey")
+                       .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = group.Count() })
+                       .Append(")")
+                       .Append("AND [merchProductVariant].[master] = 1")
+                    .Append(") AS T1");
+ 
+            }
+
+            var dtos = Database.Fetch<CountDto>(sql);
+
+            var results = new List<Tuple<IEnumerable<Guid>, int>>();
+            foreach (var group in keysGroups)
+            {
+                var hash = group.GetHashCode();
+                var dto = dtos.FirstOrDefault(x => x.Hash == hash);
+                if (dto != null) results.Add(new Tuple<IEnumerable<Guid>, int>(group, dto.Count));
+            }
+
+            return results;
+        }
+
+        private Sql SqlForKeysThatExistInAllCollections(Guid[] collectionKeys, bool isCount = false)
+        {
+            var sql = new Sql();
+            sql.Select(isCount ? "COUNT(*) AS Count" : "*")
+                .Append("FROM [merchProductVariant]")
+               .Append("WHERE [merchProductVariant].[productKey] IN (")
+               .Append("SELECT [productKey]")
+               .Append("FROM [merchProduct2EntityCollection]")
+               .Append("WHERE [merchProduct2EntityCollection].[entityCollectionKey] IN (@eckeys)", new { @eckeys = collectionKeys })
+               .Append("GROUP BY productKey")
+               .Append("HAVING COUNT(*) = @keyCount", new { @keyCount = collectionKeys.Count() })
+               .Append(")")
+               .Append("AND [merchProductVariant].[master] = 1");
+
+            return sql;
         }
 
         /// <summary>

@@ -12,7 +12,7 @@
     /// <summary>
     /// A resolver to ensure there is one instance of a proxy service per request.
     /// </summary>
-    //// REFACTOR remove this class in V3 and use container with request lifeftime scope
+    //// REFACTOR remove this class in V3
     internal class ProxyQueryManager : IProxyQueryManager
     {
         /// <summary>

@@ -85,6 +85,7 @@ namespace Merchello.Core.Models
                 CountryCode = shipment.ToCountryCode,
                 IsCommercial = shipment.ToIsCommercial,
                 Email = shipment.Email,
+                Phone = shipment.Phone,
                 Organization = shipment.ToOrganization,
                 AddressType = AddressType.Shipping
             };

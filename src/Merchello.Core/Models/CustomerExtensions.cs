@@ -353,7 +353,12 @@
 
             var addressList = new List<ICustomerAddress>();
 
-            var addresses = customer.Addresses.ToList();
+            // REFACTOR-v3
+            // Caching issue - customerAddresses can return with a null address in the list, usually caused from the
+            // redundant cache item created by customer's being retrieved from the customer context.  (Added note there).
+            // HACK remove the null addresses here as are caused from items being removed without cache cleared correctly and
+            // which will allow things to proceed normally (and the cache correct itself in a hacky way).
+            var addresses = customer.Addresses.Where(x => x != null).ToList();
             var isUpdate = false;
             foreach (var adr in addresses)
             {

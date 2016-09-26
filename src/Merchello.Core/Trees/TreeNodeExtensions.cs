@@ -13,6 +13,7 @@
     /// </summary>
     internal static class TreeNodeExtensions
     {
+
         /// <summary>
         /// Populates the tree from flattened data.
         /// </summary>

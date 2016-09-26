@@ -2,13 +2,15 @@
 {
     using System;
 
+    using Merchello.Core.Configuration;
+
     using Umbraco.Core;
 
     /// <summary>
     /// The report view attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class BackOfficeTreeAttribute : Attribute
+    public class BackOfficeTreeAttribute : Attribute, IDashboardConfiguration
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BackOfficeTreeAttribute"/> class.
