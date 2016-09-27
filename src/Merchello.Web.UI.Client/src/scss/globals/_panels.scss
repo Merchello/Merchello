@@ -488,6 +488,11 @@
                 &:hover {
                     display: inline-block !important;
                 }
+
+                // This is a bit of a hack to stop Umbraco hiding our icons
+                &:not(.handle):hover {
+                    display: inline-block !important;
+                }
             }
         }
     }
