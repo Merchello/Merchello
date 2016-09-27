@@ -276,6 +276,9 @@
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
     </Compile>
     <Compile Include="Caching\CacheKeys.cs" />
+    <Compile Include="Constants-PurchaseOrder.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Constants-AuthorizeNet.cs">
       <DependentUpon>Constants.cs</DependentUpon>
@@ -366,6 +369,12 @@
     <Compile Include="Payment\PayPal\Services\PayPalApiService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiServiceBase.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalExpressCheckoutService.cs" />
+    <Compile Include="Payment\PurchaseOrder\PurchaseOrderFormData.cs" />
+    <Compile Include="Payment\PurchaseOrder\PurchaseOrderInfoExtensions.cs" />
+    <Compile Include="Payment\PurchaseOrder\Provider\IPurchaseOrderPaymentGatewayMethod.cs" />
+    <Compile Include="Payment\PurchaseOrder\Provider\IPurchaseOrderPaymentGatewayProvider.cs" />
+    <Compile Include="Payment\PurchaseOrder\Provider\PurchaseOrderPaymentGatewayMethod.cs" />
+    <Compile Include="Payment\PurchaseOrder\Provider\PurchaseOrderPaymentGatewayProvider.cs" />
     <Compile Include="Payment\RedirectPaymentMethodBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyVisibility.cs" />
@@ -387,7 +396,6 @@
     <None Include="packages.config" />
     <None Include="Settings.StyleCop" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
