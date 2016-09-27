@@ -3,7 +3,12 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    public class PurchaseOrderPaymentModel : FastTrackPaymentModel
+    using Merchello.Web.Store.Models;
+
+    /// <summary>
+    /// Represents a purchase order payment.
+    /// </summary>
+    public class PurchaseOrderPaymentModel : FastTrackPaymentModel, IPurchaseOrderPaymentModel
     {
         /// <summary>
         /// Gets or sets the PO number.

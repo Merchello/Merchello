@@ -4,5 +4,6 @@
     /// Marker interface for the PurchaseOrderPaymentGatewayProvider
     /// </summary>
     public interface IPurchaseOrderPaymentGatewayProvider
-    { }
+    {
+    }
 }

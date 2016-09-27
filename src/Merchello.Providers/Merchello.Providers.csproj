@@ -276,6 +276,9 @@
       <DependentUpon>AutoMapperMappings.cs</DependentUpon>
     </Compile>
     <Compile Include="Caching\CacheKeys.cs" />
+    <Compile Include="Constants-PurchaseOrder.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Constants-AuthorizeNet.cs">
       <DependentUpon>Constants.cs</DependentUpon>
@@ -366,7 +369,6 @@
     <Compile Include="Payment\PayPal\Services\PayPalApiService.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalApiServiceBase.cs" />
     <Compile Include="Payment\PayPal\Services\PayPalExpressCheckoutService.cs" />
-    <Compile Include="Payment\PurchaseOrder\PurchaseOrderConstants.cs" />
     <Compile Include="Payment\PurchaseOrder\PurchaseOrderFormData.cs" />
     <Compile Include="Payment\PurchaseOrder\PurchaseOrderInfoExtensions.cs" />
     <Compile Include="Payment\PurchaseOrder\Provider\IPurchaseOrderPaymentGatewayMethod.cs" />
