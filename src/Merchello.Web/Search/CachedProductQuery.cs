@@ -27,6 +27,7 @@
     using Models.Querying;
 
     using Umbraco.Core.Cache;
+    using Umbraco.Core.Events;
 
     /// <summary>
     /// Represents a CachedProductQuery
@@ -51,7 +52,7 @@
         /// <summary>
         /// The <see cref="VirtualProductContentCache"/>.
         /// </summary>
-        private readonly VirtualProductContentCache _cache;
+        private VirtualProductContentCache _cache;
 
         /// <summary>
         /// The data modifier.
@@ -151,6 +152,8 @@
             this.Initialize();
         }
 
+        internal event TypedEventHandler<CachedProductQuery, bool> DataModifierChanged; 
+        
         /// <summary>
         /// Gets or sets a value indicating whether enable data modifiers.
         /// </summary>
@@ -163,8 +166,11 @@
 
             set
             {
-                _cache.ModifiedVersion = value;
                 base.EnableDataModifiers = value;
+                if (DataModifierChanged != null)
+                {
+                    DataModifierChanged.Invoke(this, value);
+                }
             }
         }
 
@@ -1650,7 +1656,13 @@
         private void Initialize()
         {
             if (MerchelloContext.HasCurrent)
-            _dataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));    
+            _dataModifier = new Lazy<IDataModifierChain<IProductVariantDataModifierData>>(() => new ProductVariantDataModifierChain(MerchelloContext.Current));
+            DataModifierChanged += OnDataModifierChanged;
+        }
+
+        private void OnDataModifierChanged(CachedProductQuery sender, bool e)
+        {
+            _cache.ModifiedVersion = e;
         }
     }
 }

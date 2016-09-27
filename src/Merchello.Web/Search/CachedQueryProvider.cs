@@ -97,7 +97,7 @@
         internal CachedQueryProvider(IMerchelloContext merchelloContext, bool enableDataModifiers, DetachedValuesConversionType conversionType)
         {
             Mandate.ParameterNotNull(merchelloContext, "MerchelloContext is not initialized");
-            _enableDataModifiers = enableDataModifiers;
+            this.DataModifiersEnabled = enableDataModifiers;
             _conversionType = conversionType;
             InitializeProvider(merchelloContext);
         }
@@ -137,6 +137,8 @@
             }
         }
 
+        internal bool DataModifiersEnabled { get; private set; } 
+
         /// <summary>
         /// Allows for externally setting the enable data modifiers property.
         /// </summary>
@@ -145,6 +147,8 @@
         /// </param>
         internal void SetDataModifiers(bool enabled = true)
         {
+            this.DataModifiersEnabled = enabled;
+
             // These are currently not used so there is no reason to instantiate the Lazy if we don't need
             // ((CachedQueryBase)_customerQuery.Value).EnableDataModifiers = enabled;
             // ((CachedQueryBase)_invoiceQuery.Value).EnableDataModifiers = enabled;
@@ -161,16 +165,16 @@
         private void InitializeProvider(IMerchelloContext merchelloContext)
         {
             if (_customerQuery == null)
-            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext, _enableDataModifiers));
+            _customerQuery = new Lazy<ICachedCustomerQuery>(() => new CachedCustomerQuery(merchelloContext, DataModifiersEnabled));
 
             if (_invoiceQuery == null)
-            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext, _enableDataModifiers));
+            _invoiceQuery = new Lazy<ICachedInvoiceQuery>(() => new CachedInvoiceQuery(merchelloContext, DataModifiersEnabled));
 
             if (_orderQuery == null)
-            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext, _enableDataModifiers));
+            _orderQuery = new Lazy<ICachedOrderQuery>(() => new CachedOrderQuery(merchelloContext, DataModifiersEnabled));
 
             if (_productQuery == null)
-            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(merchelloContext, _enableDataModifiers, _conversionType));
+            _productQuery = new Lazy<ICachedProductQuery>(() => new CachedProductQuery(merchelloContext, DataModifiersEnabled, _conversionType));
         }
     }
 }
