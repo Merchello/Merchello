@@ -432,6 +432,7 @@
         /// <returns>
         /// The iteration identifier
         /// </returns>
+        [Obsolete]
         internal static string GetFormatterIterationIdentifier(this ILineItemContainer container)
         {
             if (container is IInvoice) return "Invoice.Items";
@@ -454,6 +455,7 @@
         /// <returns>
         /// A collection of replaceable patterns
         /// </returns>
+        [Obsolete]
         internal static IEnumerable<IReplaceablePattern> LineItemReplaceablePatterns(this ILineItemContainer container, string currencySymbol)
         {
             var patterns = new List<IReplaceablePattern>();

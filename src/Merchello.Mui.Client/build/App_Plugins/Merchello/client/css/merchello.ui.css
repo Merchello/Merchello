@@ -64,7 +64,7 @@ form .mui-requirejs {
   font-weight: bold; }
 
 .basket-summary .h-card {
-  height: 180px; }
+  min-height: 180px; }
 
 .product-box {
   clear: both; }

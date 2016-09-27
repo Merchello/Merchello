@@ -169,6 +169,7 @@
         /// <returns>
         /// The collection of replaceable patterns
         /// </returns>
+        [Obsolete]
         internal static IEnumerable<IReplaceablePattern> ReplaceablePatterns(this IInvoice invoice, string currencySymbol)
         {
             
