@@ -193,7 +193,7 @@
         /// <param name="enabled">
         /// The enabled.
         /// </param>
-        internal void SetDataModifiers(bool enabled = true)
+        public void SetDataModifiers(bool enabled = true)
         {
             _enableDataModifiers = enabled;
             ((CachedQueryProvider)_queryProvider.Value).SetDataModifiers(enabled);
