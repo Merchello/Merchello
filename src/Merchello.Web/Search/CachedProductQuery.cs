@@ -152,6 +152,23 @@
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether enable data modifiers.
+        /// </summary>
+        internal override bool EnableDataModifiers
+        {
+            get
+            {
+                return base.EnableDataModifiers;
+            }
+
+            set
+            {
+                _cache.ModifiedVersion = value;
+                base.EnableDataModifiers = value;
+            }
+        }
+
+        /// <summary>
         /// Gets the key field in index.
         /// </summary>
         protected override string KeyFieldInIndex

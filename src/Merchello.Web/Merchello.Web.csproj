@@ -283,6 +283,7 @@
     <Compile Include="Caching\IVirtualContentCache{T}.cs" />
     <Compile Include="Caching\IVirtualProductContentCache.cs" />
     <Compile Include="Models\PrimedProductFilter.cs" />
+    <Compile Include="Search\CachedQueryBase.cs" />
     <Compile Include="Search\ProductFilterGroupNode.cs" />
     <Compile Include="Caching\VirtualContentCache{T}.cs" />
     <Compile Include="Caching\VirtualProductContentCache.cs" />
@@ -620,7 +621,7 @@
     <Compile Include="Search\CachedCustomerQuery.cs" />
     <Compile Include="Search\CachedOrderQuery.cs" />
     <Compile Include="Search\CachedProductQuery.cs" />
-    <Compile Include="Search\CachedQueryBase.cs" />
+    <Compile Include="Search\CachedQueryBase{T}.cs" />
     <Compile Include="Search\CachedInvoiceQuery.cs" />
     <Compile Include="Search\CachedQueryProvider.cs" />
     <Compile Include="Search\ICachedCollectionQuery.cs" />
