@@ -15,7 +15,6 @@
     /// <summary>
     /// A helper class that provides many useful methods and functionality for using Merchello in templates
     /// </summary>
-    //// REFACTOR this class is not technically a "helper" class since it has to be instantiated. 
     public class MerchelloHelper
     {
         /// <summary>
@@ -31,7 +30,7 @@
         /// <summary>
         /// A value indicating whether or not data modifiers are enabled.
         /// </summary>
-        private readonly bool _enableDataModifiers;
+        private bool _enableDataModifiers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MerchelloHelper"/> class.
@@ -153,6 +152,17 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether data modifiers are enabled.
+        /// </summary>
+        public bool DataModifiersEnabled
+        {
+            get
+            {
+                return _enableDataModifiers;
+            }
+        }
+
+        /// <summary>
         /// Gets the <see cref="IValidationHelper"/>.
         /// </summary>
         public IValidationHelper Validation
@@ -162,7 +172,6 @@
                 return _validationHelper.Value;
             }
         }
-
 
         /// <summary>
         /// Formats an amount based on Merchello store settings.
@@ -178,6 +187,17 @@
             return CurrencyHelper.FormatCurrency(amount);
         }
 
+        /// <summary>
+        /// Sets the data modifiers.
+        /// </summary>
+        /// <param name="enabled">
+        /// The enabled.
+        /// </param>
+        internal void SetDataModifiers(bool enabled = true)
+        {
+            _enableDataModifiers = enabled;
+            ((CachedQueryProvider)_queryProvider.Value).SetDataModifiers(enabled);
+        }
 
         /// <summary>
         /// Initializes the MerchelloHelper.

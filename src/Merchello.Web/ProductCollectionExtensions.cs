@@ -177,12 +177,15 @@ namespace Merchello.Web
         /// <param name="value">
         /// The <see cref="ProductCollection"/>.
         /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable data modifiers in the MerchelloHelper
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
-        public static IEnumerable<IProductContent> GetProducts(this IProductCollection value)
+        public static IEnumerable<IProductContent> GetProducts(this IProductCollection value, bool enableDataModifiers = true)
         {
-            return value.GetProducts(1, long.MaxValue);
+            return value.GetProducts(1, long.MaxValue, enableDataModifiers: enableDataModifiers);
         }
 
         /// <summary>
@@ -203,6 +206,9 @@ namespace Merchello.Web
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable data modifiers in the MerchelloHelper
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
@@ -211,9 +217,10 @@ namespace Merchello.Web
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool enableDataModifiers = true)
         {
-            return value.GetProductsPaged(page, itemsPerPage, sortBy, sortDirection).Items;
+            return value.GetProductsPaged(page, itemsPerPage, sortBy, sortDirection, enableDataModifiers).Items;
         }
 
         /// <summary>
@@ -234,6 +241,9 @@ namespace Merchello.Web
         /// <param name="sortDirection">
         /// The sort direction.
         /// </param>
+        /// <param name="enableDataModifiers">
+        /// A value indicating whether or not to enable data modifiers in the MerchelloHelper
+        /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{IProductContent}"/>.
         /// </returns>
@@ -242,9 +252,10 @@ namespace Merchello.Web
             long page,
             long itemsPerPage,
             string sortBy = "",
-            SortDirection sortDirection = SortDirection.Ascending)
+            SortDirection sortDirection = SortDirection.Ascending,
+            bool enableDataModifiers = true)
         {
-            var merchelloHelper = new MerchelloHelper();
+            var merchelloHelper = new MerchelloHelper(enableDataModifiers);
             return value.GetProducts(merchelloHelper, page, itemsPerPage, sortBy, sortDirection);
         }
 
@@ -320,7 +331,6 @@ namespace Merchello.Web
                     .Execute();
         }
 
-        
         /// <summary>
         /// Gets the <see cref="ProductCollection"/> by it's key.
         /// </summary>
