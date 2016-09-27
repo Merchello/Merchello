@@ -746,8 +746,7 @@
     <Content Include="Config\BaseRestExtensions.config" />
     <Content Include="Config\404handlers.config" />
     <Content Include="App_Plugins\FastTrack\config\fasttrack.config" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\ChangePasswordForm.cshtml" />
-    <Content Include="App_Plugins\FastTrack\Views\CustomerMembership\ForgotPasswordForm.cshtml" />
+    <Content Include="App_Plugins\FastTrack\Views\PurchaseOrderPayment\PaymentForm.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\jquery.creditCardValidator.js" />
@@ -812,8 +811,6 @@
     <Content Include="Views\Merchello\Notification\OrderConfirmation.cshtml" />
     <Content Include="Views\Merchello\Notification\OrderShipped.cshtml" />
     <Content Include="Views\Partials\CategoryFilterCollections.cshtml" />
-    <Content Include="Views\ftChangePassword.cshtml" />
-    <Content Include="Views\ftForgotPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
