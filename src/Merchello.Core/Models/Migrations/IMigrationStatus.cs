@@ -1,11 +1,11 @@
-﻿namespace Merchello.Core.Models.Migration
+﻿namespace Merchello.Core.Models.Migrations
 {
     using Merchello.Core.Models.EntityBase;
 
     using Semver;
 
     /// <summary>
-    /// The MigrationStatus interface.
+    /// Represents a migration status.
     /// </summary>
     public interface IMigrationStatus : IEntity
     {

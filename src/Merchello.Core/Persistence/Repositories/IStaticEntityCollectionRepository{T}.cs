@@ -1,12 +1,11 @@
 ﻿namespace Merchello.Core.Persistence.Repositories
 {
     using System;
-    using System.Collections.Generic;
+    using System.Web.UI.WebControls;
 
     using Merchello.Core.Models.EntityBase;
-    using Merchello.Core.Persistence.Querying;
 
-    using Umbraco.Core.Persistence;
+    using NPoco;
 
     /// <summary>
     /// Defines a repository the has static collections.
@@ -45,7 +44,7 @@
         bool ExistsInCollection(Guid entityKey, Guid[] collectionKeys);
 
         /// <summary>
-        /// Adds a entity to a static invoice collection.
+        /// Adds a entity to a static collection.
         /// </summary>
         /// <param name="entityKey">
         /// The entity key.
@@ -56,17 +55,15 @@
         void AddToCollection(Guid entityKey, Guid collectionKey);
 
         /// <summary>
-        /// The remove invoice from collection.
+        /// Removes an entity from a static collection.
         /// </summary>
         /// <param name="entityKey">
-        /// The invoice key.
+        /// The entity key.
         /// </param>
         /// <param name="collectionKey">
         /// The collection key.
         /// </param>
         void RemoveFromCollection(Guid entityKey, Guid collectionKey);
-
-
 
         /// <summary>
         /// Gets entity from collection.
@@ -103,7 +100,7 @@
         /// The collection key.
         /// </param>
         /// <param name="term">
-        /// The term.
+        /// A search term.
         /// </param>
         /// <param name="page">
         /// The page.
@@ -129,7 +126,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// Gets distinct entity from multiple collection.
+        /// Gets distinct entity from multiple collections.
         /// </summary>
         /// <param name="collectionKeys">
         /// The collection key.
@@ -161,7 +158,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// Gets a distinct entity from multiple collection.
+        /// Gets a distinct entity from multiple collections.
         /// </summary>
         /// <param name="collectionKeys">
         /// The collection keys.
@@ -189,7 +186,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// The get entity keys from collection.
+        /// Gets entity keys from collections.
         /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
@@ -209,6 +206,7 @@
         /// <returns>
         /// The <see cref="Page{T}"/>.
         /// </returns>
+        [Obsolete]
         Page<Guid> GetKeysFromCollection(
             Guid collectionKey,
             long page,
@@ -217,7 +215,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// The get entity keys from collection.
+        /// Gets entity keys from a collection.
         /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
@@ -250,7 +248,7 @@
 
 
         /// <summary>
-        /// The get keys not in collection.
+        /// Gets entity keys not in collection.
         /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
@@ -278,7 +276,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// The get keys not in collection.
+        /// Get entity keys not in collection.
         /// </summary>
         /// <param name="collectionKey">
         /// The collection key.
@@ -370,7 +368,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// The get keys not in multiple collection.
+        /// Gets entity keys not in multiple collections.
         /// </summary>
         /// <param name="collectionKeys">
         /// The collection key.
@@ -398,7 +396,7 @@
             SortDirection sortDirection = SortDirection.Descending);
 
         /// <summary>
-        /// The get keys not in multiple collections.
+        /// Gets entity keys not in multiple collections.
         /// </summary>
         /// <param name="collectionKeys">
         /// The collection key.

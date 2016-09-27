@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Merchello.Core.Models.Migration;
+    using Merchello.Core.Models.Migrations;
 
     using Semver;
 
@@ -37,7 +37,7 @@
         /// <returns>
         /// The <see cref="IMigrationStatus"/>.
         /// </returns>
-        IMigrationStatus FindEntry(string migrationName, SemVersion version);
+        IMigrationStatus FindStatus(string migrationName, SemVersion version);
 
         /// <summary>
         /// Gets all entries for a given migration name

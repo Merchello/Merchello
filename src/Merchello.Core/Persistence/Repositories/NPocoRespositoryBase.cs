@@ -7,6 +7,8 @@
     using Merchello.Core.Cache;
     using Merchello.Core.Logging;
     using Merchello.Core.Models.EntityBase;
+    using Merchello.Core.Models.Rdbms;
+    using Merchello.Core.Persistence.Factories;
     using Merchello.Core.Persistence.Mappers;
     using Merchello.Core.Persistence.Querying;
     using Merchello.Core.Persistence.SqlSyntax;
@@ -48,6 +50,12 @@
         /// Gets the query factory.
         /// </summary>
         public override IQueryFactory QueryFactory { get; }
+
+        /// <summary>
+        /// Creates a new query.
+        /// </summary>
+        /// <returns>A new query.</returns>
+        public override IQuery<TEntity> Query => QueryFactory.Create<TEntity>();
 
         /// <summary>
         /// Gets the repository's database sql syntax.

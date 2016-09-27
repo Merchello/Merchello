@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Merchello.Core.Persistence.Migrations.Analytics;
+    using Merchello.Core.Models.Migrations;
 
     /// <summary>
     /// The merchello migration event args.

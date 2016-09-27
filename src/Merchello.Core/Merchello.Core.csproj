@@ -63,50 +63,55 @@
     <Compile Include="Cache\JsonCacheRefresherBase.cs" />
     <Compile Include="Cache\RepositoryCachePolicyBase.cs" />
     <Compile Include="Cache\RepositoryCachePolicyOptions.cs" />
-    <Compile Include="Constants-CountryCodes.cs">
+    <Compile Include="Constants.CountryCodes.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-Database.cs">
+    <Compile Include="Constants.Database.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-DetachedPublishedContent.cs">
+    <Compile Include="Constants.DetachedPublishedContent.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-DistributedCache.cs" />
-    <Compile Include="Constants-InvoiceStatus.cs">
+    <Compile Include="Constants.DistributedCache.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-NotificationTriggers.cs">
+    <Compile Include="Constants.ExtendedDataKeys.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-OrderStatus.cs">
+    <Compile Include="Constants.InvoiceStatus.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-Providers.cs">
+    <Compile Include="Constants.Migrations.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-Repositories.cs">
+    <Compile Include="Constants.NotificationTriggers.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-ShipmentStatus.cs">
+    <Compile Include="Constants.OrderStatus.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-StoreSettings.cs">
+    <Compile Include="Constants.Providers.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-Strategies.cs">
+    <Compile Include="Constants.Repositories.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-Migrations.cs">
+    <Compile Include="Constants.ShipmentStatus.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-TaskChains.cs">
+    <Compile Include="Constants.StoreSettings.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-TypeFields.cs">
+    <Compile Include="Constants.Strategies.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants-Warehouse.cs">
+    <Compile Include="Constants.TaskChains.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.TypeFields.cs">
+      <DependentUpon>Constants.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Constants.Warehouse.cs">
       <DependentUpon>Constants.cs</DependentUpon>
     </Compile>
     <Compile Include="EnumerableExtensions.cs" />
@@ -159,10 +164,12 @@
     <Compile Include="Models\CustomerBase.cs" />
     <Compile Include="Models\EntityBase\IDateStamped.cs" />
     <Compile Include="Models\IDeepCloneable.cs" />
-    <Compile Include="Models\Migration\IMigrationStatus.cs" />
-    <Compile Include="Models\Migration\MigrationStatus.cs" />
+    <Compile Include="Models\Migrations\IMigrationStatus.cs" />
+    <Compile Include="Models\Migrations\MigrationStatus.cs" />
     <Compile Include="Models\Rdbms\MigrationStatusDto.cs" />
     <Compile Include="Persistence\DatabaseSchemaManagerBase.cs" />
+    <Compile Include="Persistence\Factories\IEntityFactory.cs" />
+    <Compile Include="Persistence\Factories\MigrationStatusFactory.cs" />
     <Compile Include="Persistence\IDatabaseSchemaManager.cs" />
     <Compile Include="Persistence\IExposeSqlSyntax.cs" />
     <Compile Include="Persistence\IMerchelloDatabase.cs" />
@@ -172,11 +179,18 @@
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaCreation.cs" />
     <Compile Include="Persistence\Migrations\Initial\DatabaseSchemaResult.cs" />
     <Compile Include="Persistence\Migrations\Initial\IDatabaseSchemaCreation.cs" />
+    <Compile Include="Persistence\Repositories\IMigrationStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\IStaticEntityCollectionRepository{T}.cs" />
     <Compile Include="Persistence\Repositories\IRepositoryReadable{T}.cs" />
     <Compile Include="Persistence\Repositories\IRepository.cs" />
     <Compile Include="Cache\IRepositoryCachePolicy.cs" />
     <Compile Include="Persistence\Repositories\IRepositoryQueryable{T}.cs" />
     <Compile Include="Persistence\Repositories\IRepositoryWritable{T}.cs" />
+    <Compile Include="Persistence\Repositories\MigrationStatusRepository.baseimp.cs">
+      <DependentUpon>MigrationStatusRepository.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Persistence\Repositories\MigrationStatusRepository.cs" />
+    <Compile Include="Persistence\Repositories\NPocoEntityRepositoryBase.cs" />
     <Compile Include="Persistence\Repositories\NPocoRespositoryBase.cs" />
     <Compile Include="Persistence\Repositories\RepositoryQueryableBase.cs" />
     <Compile Include="Persistence\Repositories\RepositoryReadableBase.cs" />
@@ -292,9 +306,6 @@
     <Compile Include="Configuration\Sections\MerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Sections\IMerchelloSettingsSection.cs" />
     <Compile Include="Configuration\Elements\ProductsElement.cs" />
-    <Compile Include="Constants-ExtendedDataKeys.cs">
-      <DependentUpon>Constants.cs</DependentUpon>
-    </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="Boot\CoreBootManager.cs" />
     <Compile Include="Acquired\CustomBooleanTypeConverter.cs" />
@@ -530,7 +541,7 @@
     <Compile Include="Persistence\IDatabaseFactory.cs" />
     <Compile Include="Persistence\Mappers\BaseMapper.cs" />
     <Compile Include="Persistence\Mappers\DtoMapModel.cs" />
-    <Compile Include="Persistence\Migrations\Analytics\MigrationRecord.cs" />
+    <Compile Include="Models\Migrations\MigrationRecord.cs" />
     <Compile Include="Persistence\Migrations\Initial\BaseDataCreation.cs" />
     <Compile Include="Plugins\PluginManagerExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -554,7 +565,9 @@
     <None Include="Cache\readme.md" />
     <None Include="project.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Persistence\Repositories\Interfaces\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
