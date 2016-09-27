@@ -51,8 +51,10 @@
     <Compile Include="Acquired\Logging\ProfilerExtensions.cs" />
     <Compile Include="Acquired\NetworkHelper.cs" />
     <Compile Include="Acquired\Persistence\DatabaseModelDefinitions\DefinitionFactory.cs" />
+    <Compile Include="Acquired\Persistence\NPocoSqlExtensions.cs" />
     <Compile Include="Acquired\Persistence\Querying\BaseExpressionHelper.cs" />
     <Compile Include="Acquired\Persistence\Querying\ModelToSqlExpressionHelper.cs" />
+    <Compile Include="Acquired\Persistence\Querying\PocoToSqlExpressionHelper.cs" />
     <Compile Include="Acquired\Persistence\Querying\SqlTranslator.cs" />
     <Compile Include="ActivatorServiceProvider.cs" />
     <Compile Include="Cache\CacheRefresherBase.cs" />

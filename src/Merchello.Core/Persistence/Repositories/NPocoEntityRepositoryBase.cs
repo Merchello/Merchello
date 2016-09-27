@@ -28,8 +28,8 @@
     /// The type of the factory
     /// </typeparam>
     internal abstract class NPocoEntityRepositoryBase<TEntity, TDto, TFactory> : NPocoRespositoryBase<TEntity>
-        where TEntity: class, IEntity
-        where TDto : class, IDto
+        where TEntity : class, IEntity
+        where TDto : class, IKeyDto
         where TFactory : class, IEntityFactory<TEntity, TDto>, new()
     {
         /// <summary>
@@ -89,8 +89,7 @@
                     .Select(x => factory.BuildEntity(x));
             }
 
-            return Database.Fetch<TDto>()
-                .Select(x => factory.BuildEntity(x));
+            return Database.Fetch<TDto>().Select(x => factory.BuildEntity(x));
         }
 
         /// <inheritdoc/>
@@ -105,10 +104,37 @@
             return dtos.Select(factory.BuildEntity);
         }
 
-        /// <inheritdoc/>
+
+        /// <summary>
+        /// Persist new note.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
         protected override void PersistNewItem(TEntity entity)
         {
-            throw new NotImplementedException();
+            var merchEntity = entity as Entity;
+            merchEntity?.AddingEntity();
+
+            var factory = new TFactory();
+            var dto = factory.BuildDto(entity);
+            Database.Insert(dto);
+            entity.Key = dto.Key;
+
+            entity.ResetDirtyProperties();
+        }
+
+        /// <inheritdoc/>
+        protected override void PersistUpdatedItem(TEntity entity)
+        {
+            var merchEntity = entity as Entity;
+            merchEntity?.UpdatingEntity();
+
+            var factory = new TFactory();
+            var dto = factory.BuildDto(entity);
+            Database.Update(dto);
+
+            entity.ResetDirtyProperties();
         }
     }
 }
