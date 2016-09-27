@@ -40,7 +40,8 @@
         /// <param name="runtimeCacheProvider">
         /// The runtime cache provider.
         /// </param>
-        public PurchaseOrderPaymentGatewayProvider(IGatewayProviderService gatewayProviderService, 
+        public PurchaseOrderPaymentGatewayProvider(
+            IGatewayProviderService gatewayProviderService, 
             IGatewayProviderSettings gatewayProviderSettings, 
             IRuntimeCacheProvider runtimeCacheProvider) 
             : base(gatewayProviderService, gatewayProviderSettings, runtimeCacheProvider)
@@ -103,7 +104,6 @@
             if (paymentMethod == null) throw new NullReferenceException("PaymentMethod not found");
 
             return new PurchaseOrderPaymentGatewayMethod(GatewayProviderService, paymentMethod);
-
         }
 
         /// <summary>
@@ -130,6 +130,5 @@
         {
             return AvailableResources;
         }
-
     }
 }

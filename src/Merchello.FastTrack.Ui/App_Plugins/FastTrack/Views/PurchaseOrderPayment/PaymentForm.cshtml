@@ -3,6 +3,7 @@
 @using Merchello.FastTrack.Controllers.Payment
 @using Merchello.FastTrack.Ui
 @using Merchello.Web.Models.Ui
+@using Merchello.Web.Store.Controllers.Payment
 @using Umbraco.Web
 @{
     Model.SuccessRedirectUrl = ExampleUiHelper.Content.GetReceipt().Url;
@@ -10,7 +11,7 @@
 <h3>Purchase Order Number</h3>
 @using (Html.BeginUmbracoForm<PurchaseOrderPaymentController>("Process", new { area = "FastTrack" }))
 {
-    
+
         @Html.AntiForgeryToken()
         @Html.HiddenFor(x => x.SuccessRedirectUrl)
 

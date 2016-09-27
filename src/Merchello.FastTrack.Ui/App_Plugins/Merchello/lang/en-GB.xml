@@ -662,7 +662,7 @@
     <key alias="notificationSettings" >Notification Settings</key>
     <key alias="notificationSettingsHelper" >Set who to send your notification to and when</key>
     <key alias="description" >Description</key>
-    <key alias="attachedEvent" >Attached Event</key>
+    <key alias="attachedEvent" >Attached Trigger</key>
     <key alias="resourceType"></key>
     <key alias="eventAlias" >Event Alias:</key>
     <key alias="sendTo" ><![CDATA[Send To <small>(i.e. orders@yourdomain.com)</small>]]></key>

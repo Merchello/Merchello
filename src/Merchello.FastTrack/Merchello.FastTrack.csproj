@@ -284,6 +284,8 @@
     <Compile Include="Models\FastTrackShipRateQuoteModel.cs" />
     <Compile Include="Models\IFastTrackCheckoutAddressModel.cs" />
     <Compile Include="Models\ISuccessRedirectUrl.cs" />
+    <Compile Include="Models\Membership\ChangePasswordModel.cs" />
+    <Compile Include="Models\Membership\ForgotPasswordModel.cs" />
     <Compile Include="Models\Membership\LoginModel.cs" />
     <Compile Include="Models\Membership\NewMemberModel.cs" />
     <Compile Include="Models\Payment\FastTrackPaymentModel.cs" />

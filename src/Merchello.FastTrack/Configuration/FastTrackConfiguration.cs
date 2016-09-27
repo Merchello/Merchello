@@ -98,6 +98,14 @@
         }
 
         /// <summary>
+        /// Gets the content type alias change password.
+        /// </summary>
+        public string ContentTypeAliasChangePassword
+        {
+            get { return Section.Settings["ContentTypeAliasChangePassword"].Value; }
+        }
+
+        /// <summary>
         /// The get setting.
         /// </summary>
         /// <param name="alias">
